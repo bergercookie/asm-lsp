@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:simpleType name="OperandType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="imm8" />
+			<xs:enumeration value="imm16" />
+			<xs:enumeration value="imm32" />
+			<xs:enumeration value="imm64" />
+			<xs:enumeration value="r8" />
+			<xs:enumeration value="r8l" />
+			<xs:enumeration value="r16" />
+			<xs:enumeration value="r16l" />
+			<xs:enumeration value="r32" />
+			<xs:enumeration value="r32l" />
+			<xs:enumeration value="r64" />
+			<xs:enumeration value="mm" />
+			<xs:enumeration value="xmm" />
+			<xs:enumeration value="ymm" />
+			<xs:enumeration value="moffs32" />
+			<xs:enumeration value="moffs64" />
+			<xs:enumeration value="m" />
+			<xs:enumeration value="m8" />
+			<xs:enumeration value="m16" />
+			<xs:enumeration value="m32" />
+			<xs:enumeration value="m64" />
+			<xs:enumeration value="m128" />
+			<xs:enumeration value="m256" />
+			<xs:enumeration value="rel8" />
+			<xs:enumeration value="rel32" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OperandFixed">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="1" />
+			<xs:enumeration value="3" />
+			<xs:enumeration value="al" />
+			<xs:enumeration value="ax" />
+			<xs:enumeration value="eax" />
+			<xs:enumeration value="rax" />
+			<xs:enumeration value="cl" />
+			<xs:enumeration value="ecx" />
+			<xs:enumeration value="xmm0" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OpcodeByte">
+		<xs:restriction base="xs:token">
+			<xs:pattern value="[0-9A-F]{2}" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PrefixByte">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="66" />
+			<xs:enumeration value="F2" />
+			<xs:enumeration value="F3" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Bit">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0" />
+			<xs:enumeration value="1" />
+			<xs:enumeration value="ignored" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OperandNumber">
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RegValue">
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="7"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Mode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="11" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="VVVV">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="1111" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="M-MMMM">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="00001" />
+			<xs:enumeration value="00010" />
+			<xs:enumeration value="00011" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PP">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="00" />
+			<xs:enumeration value="01" />
+			<xs:enumeration value="10" />
+			<xs:enumeration value="11" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ISAExtension">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="RDTSC" />
+			<xs:enumeration value="RDTSCP" />
+			<xs:enumeration value="CPUID" />
+			<xs:enumeration value="CMOV" />
+			<xs:enumeration value="MMX" />
+			<xs:enumeration value="SSE" />
+			<xs:enumeration value="SSE2" />
+			<xs:enumeration value="SSE3" />
+			<xs:enumeration value="SSSE3" />
+			<xs:enumeration value="SSE4.1" />
+			<xs:enumeration value="SSE4.2" />
+			<xs:enumeration value="AVX" />
+			<xs:enumeration value="AVX2" />
+			<xs:enumeration value="FMA3" />
+			<xs:enumeration value="F16C" />
+			<xs:enumeration value="PCLMULQDQ" />
+			<xs:enumeration value="AES" />
+			<xs:enumeration value="SHA" />
+			<xs:enumeration value="RDRAND" />
+			<xs:enumeration value="RDSEED" />
+			<xs:enumeration value="POPCNT" />
+			<xs:enumeration value="LZCNT" />
+			<xs:enumeration value="BMI" />
+			<xs:enumeration value="BMI2" />
+			<xs:enumeration value="ADX" />
+			<xs:enumeration value="PRFCHW" />
+			<xs:enumeration value="PREFETCHWT1" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="InstructionSet">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Instruction" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ISA" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Extension" maxOccurs="2">
+											<xs:complexType>
+												<xs:attribute name="id" type="ISAExtension" />
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Operands" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Operand" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:attribute name="type" type="OperandType" use="required" />
+												<xs:attribute name="fixed" type="OperandFixed" />
+												<xs:attribute name="input" type="xs:boolean" />
+												<xs:attribute name="output" type="xs:boolean" />
+												<xs:attribute name="implicit" type="xs:boolean" use="required" />
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Encodings">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Encoding" maxOccurs="2">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Prefix" minOccurs="0" maxOccurs="2">
+														<xs:complexType>
+															<xs:attribute name="byte" type="PrefixByte" use="required" />
+															<xs:attribute name="mandatory" type="xs:boolean" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="VEX" minOccurs="0">
+														<xs:complexType>
+															<xs:attribute name="W" type="Bit" use="required" />
+															<xs:attribute name="L" type="Bit" use="required" />
+															<xs:attribute name="m-mmmm" type="M-MMMM" use="required" />
+															<xs:attribute name="pp" type="PP" use="required" />
+															<xs:attribute name="R" type="Bit" />
+															<xs:attribute name="R-operand-number" type="OperandNumber" />
+															<xs:attribute name="X" type="Bit" />
+															<xs:attribute name="B" type="Bit" />
+															<xs:attribute name="B-operand-number" type="OperandNumber" />
+															<xs:attribute name="BX-operand-number" type="OperandNumber" />
+															<xs:attribute name="vvvv" type="VVVV" />
+															<xs:attribute name="vvvv-operand-number" type="OperandNumber" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="REX" minOccurs="0">
+														<xs:complexType>
+															<xs:attribute name="mandatory" type="xs:boolean" use="required" />
+															<xs:attribute name="W" type="Bit" use="required" />
+															<xs:attribute name="X" type="Bit" />
+															<xs:attribute name="B" type="Bit" />
+															<xs:attribute name="B-operand-number" type="OperandNumber" />
+															<xs:attribute name="BX-operand-number" type="OperandNumber" />
+															<xs:attribute name="R" type="Bit" />
+															<xs:attribute name="R-operand-number" type="OperandNumber" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Opcode" maxOccurs="4">
+														<xs:complexType>
+															<xs:attribute name="byte" type="OpcodeByte" use="required" />
+															<xs:attribute name="addend-operand-number" type="OperandNumber" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="ModRM" minOccurs="0">
+														<xs:complexType>
+															<xs:attribute name="mode" type="Mode" />
+															<xs:attribute name="mode-operand-number" type="OperandNumber" />
+															<xs:attribute name="reg-operand-number" type="OperandNumber" />
+															<xs:attribute name="reg" type="RegValue" />
+															<xs:attribute name="rm-operand-number" type="OperandNumber" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Immediate" minOccurs="0">
+														<xs:complexType>
+															<xs:attribute name="size" type="xs:int" use="required" />
+															<xs:attribute name="operand-number" type="OperandNumber" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="CodeOffset" minOccurs="0">
+														<xs:complexType>
+															<xs:attribute name="size" type="xs:int" use="required" />
+															<xs:attribute name="operand-number" type="OperandNumber" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="DataOffset" minOccurs="0">
+														<xs:complexType>
+															<xs:attribute name="size" type="xs:int" use="required" />
+															<xs:attribute name="operand-number" type="OperandNumber" use="required" />
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="peachpy-name" type="xs:string" />
+						<xs:attribute name="nasm-name" type="xs:string" />
+						<xs:attribute name="gas-name" type="xs:string" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,16 @@
+# Precompiled Python files
+*.pyc
+
+# PyCharm project files
+.idea/
+
+# Generated documentation
+doc/
+
+# Raw inputs
+raw/
+
+# Mercurial files
+.hg/
+.hgignore
+.hgeol
