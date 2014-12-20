@@ -244,6 +244,7 @@
 						<xs:attribute name="peachpy-name" type="xs:string" />
 						<xs:attribute name="nasm-name" type="xs:string" />
 						<xs:attribute name="gas-name" type="xs:string" />
+						<xs:attribute name="go-name" type="xs:string" />
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>

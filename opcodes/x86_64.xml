@@ -4844,6 +4844,27 @@
       </Encoding>
     </Encodings>
   </Instruction>
+  <Instruction peachpy-name="CLC" nasm-name="CLC" gas-name="clc">
+    <Encodings>
+      <Encoding>
+        <Opcode byte="F8"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="CLD" nasm-name="CLD" gas-name="cld">
+    <Encodings>
+      <Encoding>
+        <Opcode byte="FC"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="CMC" nasm-name="CMC" gas-name="cmc">
+    <Encodings>
+      <Encoding>
+        <Opcode byte="F5"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
   <Instruction peachpy-name="CMOVA" nasm-name="CMOVA" gas-name="cmovaw">
     <ISA>
       <Extension id="CMOV"/>
@@ -12159,7 +12180,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JB" nasm-name="JB" gas-name="jb">
+  <Instruction peachpy-name="JB" nasm-name="JB" gas-name="jb" go-name="JCS">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12170,7 +12191,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JBE" nasm-name="JBE" gas-name="jbe">
+  <Instruction peachpy-name="JBE" nasm-name="JBE" gas-name="jbe" go-name="JLS">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12247,7 +12268,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JL" nasm-name="JL" gas-name="jl">
+  <Instruction peachpy-name="JL" nasm-name="JL" gas-name="jl" go-name="JLT">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12258,7 +12279,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JLE" nasm-name="JLE" gas-name="jle">
+  <Instruction peachpy-name="JLE" nasm-name="JLE" gas-name="jle" go-name="JLE">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12291,7 +12312,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JNB" nasm-name="JNB" gas-name="jnb">
+  <Instruction peachpy-name="JNB" nasm-name="JNB" gas-name="jnb" go-name="JCC">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12302,7 +12323,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JNBE" nasm-name="JNBE" gas-name="jnbe">
+  <Instruction peachpy-name="JNBE" nasm-name="JNBE" gas-name="jnbe" go-name="JHI">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12357,7 +12378,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JNL" nasm-name="JNL" gas-name="jnl">
+  <Instruction peachpy-name="JNL" nasm-name="JNL" gas-name="jnl" go-name="JGE">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12368,7 +12389,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JNLE" nasm-name="JNLE" gas-name="jnle">
+  <Instruction peachpy-name="JNLE" nasm-name="JNLE" gas-name="jnle" go-name="JGT">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12379,7 +12400,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JNO" nasm-name="JNO" gas-name="jno">
+  <Instruction peachpy-name="JNO" nasm-name="JNO" gas-name="jno" go-name="JOC">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12390,7 +12411,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JNP" nasm-name="JNP" gas-name="jnp">
+  <Instruction peachpy-name="JNP" nasm-name="JNP" gas-name="jnp" go-name="JPC">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12401,7 +12422,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JNS" nasm-name="JNS" gas-name="jns">
+  <Instruction peachpy-name="JNS" nasm-name="JNS" gas-name="jns" go-name="JPL">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12412,7 +12433,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JNZ" nasm-name="JNZ" gas-name="jnz">
+  <Instruction peachpy-name="JNZ" nasm-name="JNZ" gas-name="jnz" go-name="JNE">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12423,7 +12444,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JO" nasm-name="JO" gas-name="jo">
+  <Instruction peachpy-name="JO" nasm-name="JO" gas-name="jo" go-name="JOS">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12434,7 +12455,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JP" nasm-name="JP" gas-name="jp">
+  <Instruction peachpy-name="JP" nasm-name="JP" gas-name="jp" go-name="JPS">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12467,7 +12488,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JS" nasm-name="JS" gas-name="js">
+  <Instruction peachpy-name="JS" nasm-name="JS" gas-name="js" go-name="JMI">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12478,7 +12499,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="JZ" nasm-name="JZ" gas-name="jz">
+  <Instruction peachpy-name="JZ" nasm-name="JZ" gas-name="jz" go-name="JEQ">
     <Operands>
       <Operand type="rel8" implicit="false"/>
     </Operands>
@@ -12665,6 +12686,15 @@
         <REX mandatory="true" W="1" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="8D"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="LFENCE" nasm-name="LFENCE" gas-name="lfence">
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="AE"/>
+        <Opcode byte="E8"/>
       </Encoding>
     </Encodings>
   </Instruction>
@@ -13121,6 +13151,15 @@
         <VEX W="ignored" L="ignored" m-mmmm="00001" pp="10" R-operand-number="0" BX-operand-number="2" vvvv-operand-number="1"/>
         <Opcode byte="5F"/>
         <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="MFENCE" nasm-name="MFENCE" gas-name="mfence">
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="AE"/>
+        <Opcode byte="F0"/>
       </Encoding>
     </Encodings>
   </Instruction>
@@ -17188,6 +17227,13 @@
       </Encoding>
     </Encodings>
   </Instruction>
+  <Instruction peachpy-name="NOP" nasm-name="NOP" gas-name="nop">
+    <Encodings>
+      <Encoding>
+        <Opcode byte="90"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
   <Instruction peachpy-name="NOT" nasm-name="NOT" gas-name="notb">
     <Operands>
       <Operand type="r8l" input="true" output="true" implicit="false"/>
@@ -20400,6 +20446,14 @@
         <VEX W="ignored" L="1" m-mmmm="00001" pp="01" R-operand-number="0" BX-operand-number="2" vvvv-operand-number="1"/>
         <Opcode byte="DF"/>
         <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="PAUSE" nasm-name="PAUSE" gas-name="pause">
+    <Encodings>
+      <Encoding>
+        <Prefix byte="F3" mandatory="true"/>
+        <Opcode byte="90"/>
       </Encoding>
     </Encodings>
   </Instruction>
@@ -34858,6 +34912,16 @@
       </Encoding>
     </Encodings>
   </Instruction>
+  <Instruction peachpy-name="RET" nasm-name="RET" gas-name="ret" go-name="RET">
+    <Encodings>
+      <Encoding>
+        <Opcode byte="C3"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="CB"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
   <Instruction peachpy-name="RET" nasm-name="RET" gas-name="ret">
     <Operands>
       <Operand type="imm16" implicit="false"/>
@@ -37898,7 +37962,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETB" nasm-name="SETB" gas-name="setb">
+  <Instruction peachpy-name="SETB" nasm-name="SETB" gas-name="setb" go-name="SETCS">
     <Operands>
       <Operand type="r8l" input="false" output="true" implicit="false"/>
     </Operands>
@@ -37910,7 +37974,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETB" nasm-name="SETB" gas-name="setb">
+  <Instruction peachpy-name="SETB" nasm-name="SETB" gas-name="setb" go-name="SETCS">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -37922,7 +37986,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETB" nasm-name="SETB" gas-name="setb">
+  <Instruction peachpy-name="SETB" nasm-name="SETB" gas-name="setb" go-name="SETCS">
     <Operands>
       <Operand type="r8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -37935,7 +37999,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETB" nasm-name="SETB" gas-name="setb">
+  <Instruction peachpy-name="SETB" nasm-name="SETB" gas-name="setb" go-name="SETCS">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -37948,7 +38012,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETBE" nasm-name="SETBE" gas-name="setbe">
+  <Instruction peachpy-name="SETBE" nasm-name="SETBE" gas-name="setbe" go-name="SETLS">
     <Operands>
       <Operand type="r8l" input="false" output="true" implicit="false"/>
     </Operands>
@@ -37960,7 +38024,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETBE" nasm-name="SETBE" gas-name="setbe">
+  <Instruction peachpy-name="SETBE" nasm-name="SETBE" gas-name="setbe" go-name="SETLS">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -37972,7 +38036,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETBE" nasm-name="SETBE" gas-name="setbe">
+  <Instruction peachpy-name="SETBE" nasm-name="SETBE" gas-name="setbe" go-name="SETLS">
     <Operands>
       <Operand type="r8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -37985,7 +38049,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETBE" nasm-name="SETBE" gas-name="setbe">
+  <Instruction peachpy-name="SETBE" nasm-name="SETBE" gas-name="setbe" go-name="SETLS">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38198,7 +38262,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETL" nasm-name="SETL" gas-name="setl">
+  <Instruction peachpy-name="SETL" nasm-name="SETL" gas-name="setl" go-name="SETLT">
     <Operands>
       <Operand type="r8l" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38210,7 +38274,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETL" nasm-name="SETL" gas-name="setl">
+  <Instruction peachpy-name="SETL" nasm-name="SETL" gas-name="setl" go-name="SETLT">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38222,7 +38286,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETL" nasm-name="SETL" gas-name="setl">
+  <Instruction peachpy-name="SETL" nasm-name="SETL" gas-name="setl" go-name="SETLT">
     <Operands>
       <Operand type="r8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38235,7 +38299,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETL" nasm-name="SETL" gas-name="setl">
+  <Instruction peachpy-name="SETL" nasm-name="SETL" gas-name="setl" go-name="SETLT">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38248,7 +38312,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETLE" nasm-name="SETLE" gas-name="setle">
+  <Instruction peachpy-name="SETLE" nasm-name="SETLE" gas-name="setle" go-name="SETLE">
     <Operands>
       <Operand type="r8l" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38260,7 +38324,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETLE" nasm-name="SETLE" gas-name="setle">
+  <Instruction peachpy-name="SETLE" nasm-name="SETLE" gas-name="setle" go-name="SETLE">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38272,7 +38336,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETLE" nasm-name="SETLE" gas-name="setle">
+  <Instruction peachpy-name="SETLE" nasm-name="SETLE" gas-name="setle" go-name="SETLE">
     <Operands>
       <Operand type="r8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38285,7 +38349,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETLE" nasm-name="SETLE" gas-name="setle">
+  <Instruction peachpy-name="SETLE" nasm-name="SETLE" gas-name="setle" go-name="SETLE">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38398,7 +38462,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETNB" nasm-name="SETNB" gas-name="setnb">
+  <Instruction peachpy-name="SETNB" nasm-name="SETNB" gas-name="setnb" go-name="SETCC">
     <Operands>
       <Operand type="r8l" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38410,7 +38474,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETNB" nasm-name="SETNB" gas-name="setnb">
+  <Instruction peachpy-name="SETNB" nasm-name="SETNB" gas-name="setnb" go-name="SETCC">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38422,7 +38486,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETNB" nasm-name="SETNB" gas-name="setnb">
+  <Instruction peachpy-name="SETNB" nasm-name="SETNB" gas-name="setnb" go-name="SETCC">
     <Operands>
       <Operand type="r8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38435,7 +38499,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETNB" nasm-name="SETNB" gas-name="setnb">
+  <Instruction peachpy-name="SETNB" nasm-name="SETNB" gas-name="setnb" go-name="SETCC">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38448,7 +38512,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETNBE" nasm-name="SETNBE" gas-name="setnbe">
+  <Instruction peachpy-name="SETNBE" nasm-name="SETNBE" gas-name="setnbe" go-name="SETHI">
     <Operands>
       <Operand type="r8l" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38460,7 +38524,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETNBE" nasm-name="SETNBE" gas-name="setnbe">
+  <Instruction peachpy-name="SETNBE" nasm-name="SETNBE" gas-name="setnbe" go-name="SETHI">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38472,7 +38536,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETNBE" nasm-name="SETNBE" gas-name="setnbe">
+  <Instruction peachpy-name="SETNBE" nasm-name="SETNBE" gas-name="setnbe" go-name="SETHI">
     <Operands>
       <Operand type="r8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38485,7 +38549,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETNBE" nasm-name="SETNBE" gas-name="setnbe">
+  <Instruction peachpy-name="SETNBE" nasm-name="SETNBE" gas-name="setnbe" go-name="SETHI">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38698,7 +38762,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETNL" nasm-name="SETNL" gas-name="setnl">
+  <Instruction peachpy-name="SETNL" nasm-name="SETNL" gas-name="setnl" go-name="SETGE">
     <Operands>
       <Operand type="r8l" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38710,7 +38774,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETNL" nasm-name="SETNL" gas-name="setnl">
+  <Instruction peachpy-name="SETNL" nasm-name="SETNL" gas-name="setnl" go-name="SETGE">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38722,7 +38786,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETNL" nasm-name="SETNL" gas-name="setnl">
+  <Instruction peachpy-name="SETNL" nasm-name="SETNL" gas-name="setnl" go-name="SETGE">
     <Operands>
       <Operand type="r8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38735,7 +38799,7 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETNL" nasm-name="SETNL" gas-name="setnl">
+  <Instruction peachpy-name="SETNL" nasm-name="SETNL" gas-name="setnl" go-name="SETGE">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
@@ -38748,29 +38812,562 @@
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETNLE" nasm-name="SETNLE" gas-name="setnle">
+  <Instruction peachpy-name="SETNLE" nasm-name="SETNLE" gas-name="setnle" go-name="SETGT">
     <Operands>
-      <Operand type="r8" input="false" output="true" implicit="false"/>
+      <Operand type="r8l" input="false" output="true" implicit="false"/>
     </Operands>
     <Encodings>
       <Encoding>
-        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="9F"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </Encodings>
   </Instruction>
-  <Instruction peachpy-name="SETNLE" nasm-name="SETNLE" gas-name="setnle">
+  <Instruction peachpy-name="SETNLE" nasm-name="SETNLE" gas-name="setnle" go-name="SETGT">
     <Operands>
       <Operand type="m8" input="false" output="true" implicit="false"/>
     </Operands>
     <Encodings>
       <Encoding>
-        <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="0F"/>
         <Opcode byte="9F"/>
         <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNLE" nasm-name="SETNLE" gas-name="setnle" go-name="SETGT">
+    <Operands>
+      <Operand type="r8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="9F"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNLE" nasm-name="SETNLE" gas-name="setnle" go-name="SETGT">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" BX-operand-number="0"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="9F"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNO" nasm-name="SETNO" gas-name="setno" go-name="SETOC">
+    <Operands>
+      <Operand type="r8l" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="91"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNO" nasm-name="SETNO" gas-name="setno" go-name="SETOC">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="91"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNO" nasm-name="SETNO" gas-name="setno" go-name="SETOC">
+    <Operands>
+      <Operand type="r8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="91"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNO" nasm-name="SETNO" gas-name="setno" go-name="SETOC">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" BX-operand-number="0"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="91"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNP" nasm-name="SETNP" gas-name="setnp" go-name="SETPC">
+    <Operands>
+      <Operand type="r8l" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="9B"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNP" nasm-name="SETNP" gas-name="setnp" go-name="SETPC">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="9B"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNP" nasm-name="SETNP" gas-name="setnp" go-name="SETPC">
+    <Operands>
+      <Operand type="r8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="9B"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNP" nasm-name="SETNP" gas-name="setnp" go-name="SETPC">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" BX-operand-number="0"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="9B"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNS" nasm-name="SETNS" gas-name="setns" go-name="SETPL">
+    <Operands>
+      <Operand type="r8l" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="99"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNS" nasm-name="SETNS" gas-name="setns" go-name="SETPL">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="99"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNS" nasm-name="SETNS" gas-name="setns" go-name="SETPL">
+    <Operands>
+      <Operand type="r8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="99"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNS" nasm-name="SETNS" gas-name="setns" go-name="SETPL">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" BX-operand-number="0"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="99"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNZ" nasm-name="SETNZ" gas-name="setnz" go-name="SETNE">
+    <Operands>
+      <Operand type="r8l" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="95"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNZ" nasm-name="SETNZ" gas-name="setnz" go-name="SETNE">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="95"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNZ" nasm-name="SETNZ" gas-name="setnz" go-name="SETNE">
+    <Operands>
+      <Operand type="r8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="95"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETNZ" nasm-name="SETNZ" gas-name="setnz" go-name="SETNE">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" BX-operand-number="0"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="95"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETO" nasm-name="SETO" gas-name="seto" go-name="SETOS">
+    <Operands>
+      <Operand type="r8l" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="90"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETO" nasm-name="SETO" gas-name="seto" go-name="SETOS">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="90"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETO" nasm-name="SETO" gas-name="seto" go-name="SETOS">
+    <Operands>
+      <Operand type="r8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="90"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETO" nasm-name="SETO" gas-name="seto" go-name="SETOS">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" BX-operand-number="0"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="90"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETP" nasm-name="SETP" gas-name="setp" go-name="SETPS">
+    <Operands>
+      <Operand type="r8l" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="9A"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETP" nasm-name="SETP" gas-name="setp" go-name="SETPS">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="9A"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETP" nasm-name="SETP" gas-name="setp" go-name="SETPS">
+    <Operands>
+      <Operand type="r8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="9A"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETP" nasm-name="SETP" gas-name="setp" go-name="SETPS">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" BX-operand-number="0"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="9A"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETPE" nasm-name="SETPE" gas-name="setpe">
+    <Operands>
+      <Operand type="r8l" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="9A"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETPE" nasm-name="SETPE" gas-name="setpe">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="9A"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETPE" nasm-name="SETPE" gas-name="setpe">
+    <Operands>
+      <Operand type="r8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="9A"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETPE" nasm-name="SETPE" gas-name="setpe">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" BX-operand-number="0"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="9A"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETPO" nasm-name="SETPO" gas-name="setpo">
+    <Operands>
+      <Operand type="r8l" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="9B"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETPO" nasm-name="SETPO" gas-name="setpo">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="9B"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETPO" nasm-name="SETPO" gas-name="setpo">
+    <Operands>
+      <Operand type="r8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="9B"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETPO" nasm-name="SETPO" gas-name="setpo">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" BX-operand-number="0"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="9B"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETS" nasm-name="SETS" gas-name="sets" go-name="SETMI">
+    <Operands>
+      <Operand type="r8l" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="98"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETS" nasm-name="SETS" gas-name="sets" go-name="SETMI">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="98"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETS" nasm-name="SETS" gas-name="sets" go-name="SETMI">
+    <Operands>
+      <Operand type="r8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="98"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETS" nasm-name="SETS" gas-name="sets" go-name="SETMI">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" BX-operand-number="0"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="98"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETZ" nasm-name="SETZ" gas-name="setz" go-name="SETEQ">
+    <Operands>
+      <Operand type="r8l" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="94"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETZ" nasm-name="SETZ" gas-name="setz" go-name="SETEQ">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="94"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETZ" nasm-name="SETZ" gas-name="setz" go-name="SETEQ">
+    <Operands>
+      <Operand type="r8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="94"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SETZ" nasm-name="SETZ" gas-name="setz" go-name="SETEQ">
+    <Operands>
+      <Operand type="m8" input="false" output="true" implicit="false"/>
+    </Operands>
+    <Encodings>
+      <Encoding>
+        <REX mandatory="true" W="0" R="ignored" BX-operand-number="0"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="94"/>
+        <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="SFENCE" nasm-name="SFENCE" gas-name="sfence">
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="AE"/>
+        <Opcode byte="F8"/>
       </Encoding>
     </Encodings>
   </Instruction>
@@ -39567,6 +40164,20 @@
         <VEX W="ignored" L="ignored" m-mmmm="00001" pp="10" R-operand-number="0" BX-operand-number="2" vvvv-operand-number="1"/>
         <Opcode byte="51"/>
         <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="STC" nasm-name="STC" gas-name="stc">
+    <Encodings>
+      <Encoding>
+        <Opcode byte="F9"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="STD" nasm-name="STD" gas-name="std">
+    <Encodings>
+      <Encoding>
+        <Opcode byte="FD"/>
       </Encoding>
     </Encodings>
   </Instruction>
@@ -40998,6 +41609,14 @@
         <VEX W="ignored" L="ignored" m-mmmm="00001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
         <Opcode byte="2E"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+    </Encodings>
+  </Instruction>
+  <Instruction peachpy-name="UD2" nasm-name="UD2" gas-name="ud2">
+    <Encodings>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="0B"/>
       </Encoding>
     </Encodings>
   </Instruction>

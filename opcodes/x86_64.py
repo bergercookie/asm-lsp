@@ -11,7 +11,7 @@ class Instruction:
     :ivar peachpy_name: instruction name in Peach-Py assembler.
     :ivar nasm_name: instruction name in NASM assembler.
     :ivar gas_name: instruction name in GNU assembler.
-    :ivar golang_name: instruction name in Golang/Plan 9 assembler.
+    :ivar go_name: instruction name in Go/Plan 9 assembler.
     :ivar operands: the list of instruction operands.
     :ivar isa_extensions: the list of ISA extension required to execute the instruction.
     :ivar encodings: the list of encodings for this instruction.
@@ -21,7 +21,7 @@ class Instruction:
         self.peachpy_name = None
         self.nasm_name = None
         self.gas_name = None
-        self.golang_name = None
+        self.go_name = None
         self.operands = []
         self.isa_extensions = []
         self.encodings = []
@@ -41,6 +41,18 @@ class Operand:
             (False, True): "[out] " + self.type,
             (True, True): "[in/out] " + self.type
         }[(self.is_input, self.is_output)]
+
+    @property
+    def is_variable(self):
+        return self.is_input or self.is_output
+
+    @property
+    def is_reg(self):
+        return self.type in {"r8", "r16", "r32", "r64", "r8l", "r16l", "r32l", "mm", "xmm", "ymm"}
+
+    @property
+    def is_mem(self):
+        return self.type in {"m", "m8", "m16", "m32", "m64", "m80", "m128", "m256", "m512"}
 
 
 class ISAExtension:
@@ -111,7 +123,7 @@ class REX:
         self.X = None
         self.B = None
 
-    def map_none(self, w=0, r=0, x=0, b=0):
+    def set_ignored(self, w=0, r=0, x=0, b=0):
         if self.W is None:
             self.W = w
         if self.R is None:
@@ -166,7 +178,7 @@ class VEX:
         self.B = None
         self.vvvv = None
 
-    def map_none(self, w=0, l=0, r=0, x=0, b=0, vvvv=0b1111):
+    def set_ignored(self, w=0, l=0, r=0, x=0, b=0, vvvv=0b1111):
         if self.W is None:
             self.W = w
         if self.L is None:
@@ -237,8 +249,8 @@ class DataOffset64:
         self.offset = None
 
 
-def read_instruction_set(filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), "x86-64.xml")):
-    xml_tree = ET.parse()
+def read_instruction_set(filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), "x86_64.xml")):
+    xml_tree = ET.parse(filename)
     xml_instruction_set = xml_tree.getroot()
     assert xml_instruction_set.tag == "InstructionSet"
     assert xml_instruction_set.attrib["name"] == "x86-64"
@@ -247,6 +259,11 @@ def read_instruction_set(filename = os.path.join(os.path.dirname(os.path.abspath
     for xml_instruction in xml_instruction_set:
         assert xml_instruction.tag == "Instruction"
         instruction = Instruction()
+        instruction.peachpy_name = xml_instruction.attrib["peachpy-name"]
+        instruction.nasm_name = xml_instruction.attrib["nasm-name"]
+        instruction.gas_name = xml_instruction.attrib["gas-name"]
+        if "go-name" in xml_instruction.attrib:
+            instruction.golang_name = xml_instruction.attrib["go-name"]
         for xml_operand in xml_instruction.findall("Operands/Operand"):
             assert "type" in xml_operand.attrib
             operand = Operand(xml_operand.attrib["type"])
@@ -477,13 +494,4 @@ def read_instruction_set(filename = os.path.join(os.path.dirname(os.path.abspath
 
             instruction.encodings.append(encoding)
         instruction_set.append(instruction)
-
-
-def is_reg_type(op_type):
-    return op_type in {
-        "al", "ax", "eax", "rax", "cl", "ecx", "xmm0",
-        "r8", "r16", "r32", "r64", "r8l", "r16l", "r32l", "mm", "xmm", "ymm"}
-
-
-def is_mem_type(op_type):
-    return op_type in {"m", "m8", "m16", "m32", "m64", "m80", "m128", "m256", "m512"}
+    return instruction_set
