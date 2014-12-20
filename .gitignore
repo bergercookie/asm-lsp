@@ -7,6 +7,10 @@
 # Generated documentation
 doc/
 
+# Generated distributions
+dist/
+MANIFEST
+
 # Raw inputs
 raw/
 
