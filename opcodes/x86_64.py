@@ -263,7 +263,7 @@ def read_instruction_set(filename = os.path.join(os.path.dirname(os.path.abspath
         instruction.nasm_name = xml_instruction.attrib["nasm-name"]
         instruction.gas_name = xml_instruction.attrib["gas-name"]
         if "go-name" in xml_instruction.attrib:
-            instruction.golang_name = xml_instruction.attrib["go-name"]
+            instruction.go_name = xml_instruction.attrib["go-name"]
         for xml_operand in xml_instruction.findall("Operands/Operand"):
             assert "type" in xml_operand.attrib
             operand = Operand(xml_operand.attrib["type"])
