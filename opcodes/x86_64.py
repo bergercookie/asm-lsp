@@ -11,10 +11,11 @@ class Instruction:
     :ivar peachpy_name: instruction name in Peach-Py assembler.
     :ivar nasm_name: instruction name in NASM assembler.
     :ivar gas_name: instruction name in GNU assembler.
-    :ivar go_name: instruction name in Go/Plan 9 assembler.
-    :ivar operands: the list of instruction operands.
-    :ivar isa_extensions: the list of ISA extension required to execute the instruction.
-    :ivar encodings: the list of encodings for this instruction.
+    :ivar go_name: instruction name in Go/Plan 9 assembler. None if instruction is not supported in Go/Plan 9 assembler.
+    :ivar operands: a list of :class:`Operand` objects representing the instruction operands.
+    :ivar isa_extensions: a list of :class:`ISAExtension` objects that represent the ISA extensions required to execute
+        the instruction.
+    :ivar encodings: a list of :class:`Encoding` objects representing the possible encodings for this instruction.
     """
 
     def __init__(self):
@@ -25,6 +26,16 @@ class Instruction:
         self.operands = []
         self.isa_extensions = []
         self.encodings = []
+
+    def __str__(self):
+        """Returns string representation of the instruction and its operands in Peach-Py assembler"""
+        if self.operands:
+            return self.peachpy_name + " " + ", ".join([operand.type for operand in self.operands])
+        else:
+            return self.peachpy_name
+
+    def __repr__(self):
+        return str(self)
 
 
 class Operand:
@@ -41,6 +52,9 @@ class Operand:
             (False, True): "[out] " + self.type,
             (True, True): "[in/out] " + self.type
         }[(self.is_input, self.is_output)]
+
+    def __repr__(self):
+        return str(self)
 
     @property
     def is_variable(self):
@@ -199,7 +213,10 @@ class Opcode:
         self.addend = None
 
     def __str__(self):
-        return "0x%02X".format(byte)
+        return "0x%02X".format(self.byte)
+
+    def __repr__(self):
+        return str(self)
 
 
 class ModRM:
@@ -249,7 +266,7 @@ class DataOffset64:
         self.offset = None
 
 
-def read_instruction_set(filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), "x86_64.xml")):
+def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), "x86_64.xml")):
     xml_tree = ET.parse(filename)
     xml_instruction_set = xml_tree.getroot()
     assert xml_instruction_set.tag == "InstructionSet"
@@ -490,7 +507,7 @@ def read_instruction_set(filename = os.path.join(os.path.dirname(os.path.abspath
                     else:
                         assert False
                 else:
-                    print(xml_component.tag)
+                    print("Unknown encoding tag: " + xml_component.tag)
 
             instruction.encodings.append(encoding)
         instruction_set.append(instruction)
