@@ -4,23 +4,35 @@ import os
 
 
 class Instruction:
-    """Instruction is a combination of mnemonic name and operand types.
+    def __init__(self, name):
+        self.name = name
+        self.forms = []
 
-    An instruction may have multiple possible encodings.
+    def __str__(self):
+        """Returns string representation of the instruction and the number of instruction forms"""
+        return "%s (%d forms)" % (self.name, len(self.forms))
 
-    :ivar peachpy_name: instruction name in Peach-Py assembler.
-    :ivar nasm_name: instruction name in NASM assembler.
-    :ivar gas_name: instruction name in GNU assembler.
-    :ivar go_name: instruction name in Go/Plan 9 assembler. None if instruction is not supported in Go/Plan 9 assembler.
+    def __repr__(self):
+        return str(self)
+
+
+class InstructionForm:
+    """Instruction form is a combination of mnemonic name and operand types.
+
+    An instruction form may have multiple possible encodings.
+
+    :ivar name: instruction name in Peach-Py, NASM and YASM assemblers.
+    :ivar gas_name: instruction form name in GNU assembler (gas).
+    :ivar go_name: instruction form name in Go/Plan 9 assembler (8a).
+        None if instruction is not supported in Go/Plan 9 assembler.
     :ivar operands: a list of :class:`Operand` objects representing the instruction operands.
     :ivar isa_extensions: a list of :class:`ISAExtension` objects that represent the ISA extensions required to execute
         the instruction.
     :ivar encodings: a list of :class:`Encoding` objects representing the possible encodings for this instruction.
     """
 
-    def __init__(self):
-        self.peachpy_name = None
-        self.nasm_name = None
+    def __init__(self, name):
+        self.name = name
         self.gas_name = None
         self.go_name = None
         self.operands = []
@@ -28,11 +40,11 @@ class Instruction:
         self.encodings = []
 
     def __str__(self):
-        """Returns string representation of the instruction and its operands in Peach-Py assembler"""
+        """Returns string representation of the instruction form and its operands in Intel-style assembly"""
         if self.operands:
-            return self.peachpy_name + " " + ", ".join([operand.type for operand in self.operands])
+            return self.name + " " + ", ".join([operand.type for operand in self.operands])
         else:
-            return self.peachpy_name
+            return self.name
 
     def __repr__(self):
         return str(self)
@@ -41,7 +53,6 @@ class Instruction:
 class Operand:
     def __init__(self, type):
         self.type = type
-        self.fixed = None
         self.is_input = False
         self.is_output = False
 
@@ -61,11 +72,11 @@ class Operand:
         return self.is_input or self.is_output
 
     @property
-    def is_reg(self):
-        return self.type in {"r8", "r16", "r32", "r64", "r8l", "r16l", "r32l", "mm", "xmm", "ymm"}
+    def is_register(self):
+        return self.type in {"al", "cl", "ax", "eax", "rax", "xmm0", "r8", "r16", "r32", "r64", "r8l", "r16l", "r32l", "mm", "xmm", "ymm"}
 
     @property
-    def is_mem(self):
+    def is_memory(self):
         return self.type in {"m", "m8", "m16", "m32", "m64", "m80", "m128", "m256", "m512"}
 
 
@@ -275,240 +286,241 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
     instruction_set = []
     for xml_instruction in xml_instruction_set:
         assert xml_instruction.tag == "Instruction"
-        instruction = Instruction()
-        instruction.peachpy_name = xml_instruction.attrib["peachpy-name"]
-        instruction.nasm_name = xml_instruction.attrib["nasm-name"]
-        instruction.gas_name = xml_instruction.attrib["gas-name"]
-        if "go-name" in xml_instruction.attrib:
-            instruction.go_name = xml_instruction.attrib["go-name"]
-        for xml_operand in xml_instruction.findall("Operands/Operand"):
-            assert "type" in xml_operand.attrib
-            operand = Operand(xml_operand.attrib["type"])
-            if "input" in xml_operand.attrib:
-                operand.is_input = {"true": True, "false": False}[xml_operand.attrib["input"]]
-            if "output" in xml_operand.attrib:
-                operand.is_output = {"true": True, "false": False}[xml_operand.attrib["output"]]
-            if "fixed" in xml_operand.attrib:
-                operand.fixed = xml_operand.attrib["fixed"]
-            instruction.operands.append(operand)
-        for xml_isa_extension in xml_instruction.findall("ISA/Extension"):
-            assert "id" in xml_isa_extension.attrib
-            isa_extension = ISAExtension(xml_isa_extension.attrib["id"])
-            instruction.isa_extensions.append(isa_extension)
-        for xml_encoding in xml_instruction.findall("Encodings/Encoding"):
-            encoding = Encoding()
-            for xml_component in xml_encoding:
-                if xml_component.tag == "Prefix":
-                    is_mandatory = {"true": True, "false": False}[xml_component.attrib["mandatory"]]
-                    byte = int(xml_component.attrib["byte"], 16)
-                    assert byte in {0x66, 0xF2, 0xF3}
-                    prefix = Prefix(byte, is_mandatory)
-                    encoding.components.append(prefix)
-                elif xml_component.tag == "REX":
-                    assert "mandatory" in xml_component.attrib
-                    is_mandatory = {"true": True, "false": False}[xml_component.attrib["mandatory"]]
+        instruction = Instruction(xml_instruction.attrib["name"])
+        for xml_instruction_form in xml_instruction:
+            instruction_form = InstructionForm(instruction.name)
+            instruction_form.gas_name = xml_instruction_form.attrib["gas-name"]
+            if "go-name" in xml_instruction_form.attrib:
+                instruction_form.go_name = xml_instruction_form.attrib["go-name"]
+            for xml_operand in xml_instruction_form.findall("Operands/Operand"):
+                assert "type" in xml_operand.attrib
+                operand = Operand(xml_operand.attrib["type"])
+                if "input" in xml_operand.attrib:
+                    operand.is_input = {"true": True, "false": False}[xml_operand.attrib["input"]]
+                if "output" in xml_operand.attrib:
+                    operand.is_output = {"true": True, "false": False}[xml_operand.attrib["output"]]
+                if "fixed" in xml_operand.attrib:
+                    operand.fixed = xml_operand.attrib["fixed"]
+                instruction_form.operands.append(operand)
+            for xml_isa_extension in xml_instruction_form.findall("ISA/Extension"):
+                assert "id" in xml_isa_extension.attrib
+                isa_extension = ISAExtension(xml_isa_extension.attrib["id"])
+                instruction_form.isa_extensions.append(isa_extension)
+            for xml_encoding in xml_instruction_form.findall("Encodings/Encoding"):
+                encoding = Encoding()
+                for xml_component in xml_encoding:
+                    if xml_component.tag == "Prefix":
+                        is_mandatory = {"true": True, "false": False}[xml_component.attrib["mandatory"]]
+                        byte = int(xml_component.attrib["byte"], 16)
+                        assert byte in {0x66, 0xF2, 0xF3}
+                        prefix = Prefix(byte, is_mandatory)
+                        encoding.components.append(prefix)
+                    elif xml_component.tag == "REX":
+                        assert "mandatory" in xml_component.attrib
+                        is_mandatory = {"true": True, "false": False}[xml_component.attrib["mandatory"]]
 
-                    rex = REX(is_mandatory)
+                        rex = REX(is_mandatory)
 
-                    assert "W" in xml_component.attrib
-                    rex.W = xml_component.attrib["W"]
-                    if rex.W == "ignored":
-                        rex.W = None
-                    else:
-                        rex.W = int(rex.W)
-
-                    if "R" in xml_component.attrib:
-                        assert "R-operand-number" not in xml_component.attrib
-                        rex.R = xml_component.attrib["R"]
-                        if rex.R == "ignored":
-                            rex.R = None
+                        assert "W" in xml_component.attrib
+                        rex.W = xml_component.attrib["W"]
+                        if rex.W == "ignored":
+                            rex.W = None
                         else:
-                            rex.R = int(rex.R)
-                    else:
-                        assert "R-operand-number" in xml_component.attrib
-                        rex.R = instruction.operands[int(xml_component.attrib["R-operand-number"])]
+                            rex.W = int(rex.W)
 
-                    if "B" in xml_component.attrib:
-                        assert "B-operand-number" not in xml_component.attrib
-                        assert "BX-operand-number" not in xml_component.attrib
-                        rex.B = xml_component.attrib["B"]
-                        if rex.B == "ignored":
-                            rex.B = None
+                        if "R" in xml_component.attrib:
+                            assert "R-operand-number" not in xml_component.attrib
+                            rex.R = xml_component.attrib["R"]
+                            if rex.R == "ignored":
+                                rex.R = None
+                            else:
+                                rex.R = int(rex.R)
                         else:
-                            rex.B = int(rex.B)
-                    elif "B-operand-number" in xml_component.attrib:
-                        assert "B" not in xml_component.attrib
-                        assert "BX-operand-number" not in xml_component.attrib
-                        rex.B = instruction.operands[int(xml_component.attrib["B-operand-number"])]
-                    else:
-                        assert "BX-operand-number" in xml_component.attrib
-                        assert "B-operand-number" not in xml_component.attrib
-                        assert "B" not in xml_component.attrib
-                        assert "X" not in xml_component.attrib
-                        rex.B = instruction.operands[int(xml_component.attrib["BX-operand-number"])]
+                            assert "R-operand-number" in xml_component.attrib
+                            rex.R = instruction_form.operands[int(xml_component.attrib["R-operand-number"])]
 
-                    if "X" in xml_component.attrib:
-                        assert "BX-operand-number" not in xml_component.attrib
-                        rex.X = xml_component.attrib["X"]
-                        if rex.X == "ignored":
-                            rex.X = None
+                        if "B" in xml_component.attrib:
+                            assert "B-operand-number" not in xml_component.attrib
+                            assert "BX-operand-number" not in xml_component.attrib
+                            rex.B = xml_component.attrib["B"]
+                            if rex.B == "ignored":
+                                rex.B = None
+                            else:
+                                rex.B = int(rex.B)
+                        elif "B-operand-number" in xml_component.attrib:
+                            assert "B" not in xml_component.attrib
+                            assert "BX-operand-number" not in xml_component.attrib
+                            rex.B = instruction_form.operands[int(xml_component.attrib["B-operand-number"])]
                         else:
-                            rex.X = int(rex.X)
-                    else:
-                        assert "BX-operand-number" in xml_component.attrib
-                        rex.X = instruction.operands[int(xml_component.attrib["BX-operand-number"])]
-                    encoding.components.append(rex)
-                elif xml_component.tag == "VEX":
-                    vex = VEX()
+                            assert "BX-operand-number" in xml_component.attrib
+                            assert "B-operand-number" not in xml_component.attrib
+                            assert "B" not in xml_component.attrib
+                            assert "X" not in xml_component.attrib
+                            rex.B = instruction_form.operands[int(xml_component.attrib["BX-operand-number"])]
 
-                    assert "W" in xml_component.attrib
-                    vex.W = xml_component.attrib["W"]
-                    if vex.W == "ignored":
-                        vex.W = None
-                    else:
-                        vex.W = int(vex.W)
-
-                    assert "L" in xml_component.attrib
-                    vex.L = xml_component.attrib["L"]
-                    if vex.L == "ignored":
-                        vex.L = None
-                    else:
-                        vex.L = int(vex.L)
-
-                    vex.mmmmm = int(xml_component.attrib["m-mmmm"], 2)
-                    vex.pp = int(xml_component.attrib["pp"], 2)
-
-                    if "R" in xml_component.attrib:
-                        assert "R-operand-number" not in xml_component.attrib
-                        vex.R = xml_component.attrib["R"]
-                        if vex.R == "ignored":
-                            vex.R = None
+                        if "X" in xml_component.attrib:
+                            assert "BX-operand-number" not in xml_component.attrib
+                            rex.X = xml_component.attrib["X"]
+                            if rex.X == "ignored":
+                                rex.X = None
+                            else:
+                                rex.X = int(rex.X)
                         else:
-                            vex.R = int(rex.R)
-                    else:
-                        assert "R-operand-number" in xml_component.attrib
-                        vex.R = instruction.operands[int(xml_component.attrib["R-operand-number"])]
+                            assert "BX-operand-number" in xml_component.attrib
+                            rex.X = instruction_form.operands[int(xml_component.attrib["BX-operand-number"])]
+                        encoding.components.append(rex)
+                    elif xml_component.tag == "VEX":
+                        vex = VEX()
 
-                    if "B" in xml_component.attrib:
-                        assert "B-operand-number" not in xml_component.attrib
-                        assert "BX-operand-number" not in xml_component.attrib
-                        vex.B = xml_component.attrib["B"]
-                        if vex.B == "ignored":
-                            vex.B = None
+                        assert "W" in xml_component.attrib
+                        vex.W = xml_component.attrib["W"]
+                        if vex.W == "ignored":
+                            vex.W = None
                         else:
-                            vex.B = int(rex.B)
-                    elif "B-operand-number" in xml_component.attrib:
-                        assert "B" not in xml_component.attrib
-                        assert "BX-operand-number" not in xml_component.attrib
-                        vex.B = instruction.operands[int(xml_component.attrib["B-operand-number"])]
-                    else:
-                        assert "BX-operand-number" in xml_component.attrib
-                        assert "B-operand-number" not in xml_component.attrib
-                        assert "B" not in xml_component.attrib
-                        assert "X" not in xml_component.attrib
-                        vex.B = instruction.operands[int(xml_component.attrib["BX-operand-number"])]
+                            vex.W = int(vex.W)
 
-                    if "X" in xml_component.attrib:
-                        assert "BX-operand-number" not in xml_component.attrib
-                        vex.X = xml_component.attrib["X"]
-                        if vex.X == "ignored":
-                            vex.X = None
+                        assert "L" in xml_component.attrib
+                        vex.L = xml_component.attrib["L"]
+                        if vex.L == "ignored":
+                            vex.L = None
                         else:
-                            vex.X = int(vex.X)
-                    else:
-                        assert "BX-operand-number" in xml_component.attrib
-                        vex.X = instruction.operands[int(xml_component.attrib["BX-operand-number"])]
+                            vex.L = int(vex.L)
 
-                    vex.vvvv = None
-                    if "vvvv" in xml_component.attrib:
-                        assert "vvvv-operand-number" not in xml_component.attrib
-                        assert xml_component.attrib["vvvv"] == "1111"
+                        vex.mmmmm = int(xml_component.attrib["m-mmmm"], 2)
+                        vex.pp = int(xml_component.attrib["pp"], 2)
+
+                        if "R" in xml_component.attrib:
+                            assert "R-operand-number" not in xml_component.attrib
+                            vex.R = xml_component.attrib["R"]
+                            if vex.R == "ignored":
+                                vex.R = None
+                            else:
+                                vex.R = int(rex.R)
+                        else:
+                            assert "R-operand-number" in xml_component.attrib
+                            vex.R = instruction_form.operands[int(xml_component.attrib["R-operand-number"])]
+
+                        if "B" in xml_component.attrib:
+                            assert "B-operand-number" not in xml_component.attrib
+                            assert "BX-operand-number" not in xml_component.attrib
+                            vex.B = xml_component.attrib["B"]
+                            if vex.B == "ignored":
+                                vex.B = None
+                            else:
+                                vex.B = int(rex.B)
+                        elif "B-operand-number" in xml_component.attrib:
+                            assert "B" not in xml_component.attrib
+                            assert "BX-operand-number" not in xml_component.attrib
+                            vex.B = instruction_form.operands[int(xml_component.attrib["B-operand-number"])]
+                        else:
+                            assert "BX-operand-number" in xml_component.attrib
+                            assert "B-operand-number" not in xml_component.attrib
+                            assert "B" not in xml_component.attrib
+                            assert "X" not in xml_component.attrib
+                            vex.B = instruction_form.operands[int(xml_component.attrib["BX-operand-number"])]
+
+                        if "X" in xml_component.attrib:
+                            assert "BX-operand-number" not in xml_component.attrib
+                            vex.X = xml_component.attrib["X"]
+                            if vex.X == "ignored":
+                                vex.X = None
+                            else:
+                                vex.X = int(vex.X)
+                        else:
+                            assert "BX-operand-number" in xml_component.attrib
+                            vex.X = instruction_form.operands[int(xml_component.attrib["BX-operand-number"])]
+
                         vex.vvvv = None
-                    else:
-                        assert "vvvv-operand-number" in xml_component.attrib
-                        vex.vvvv = instruction.operands[int(xml_component.attrib["vvvv-operand-number"])]
+                        if "vvvv" in xml_component.attrib:
+                            assert "vvvv-operand-number" not in xml_component.attrib
+                            assert xml_component.attrib["vvvv"] == "1111"
+                            vex.vvvv = None
+                        else:
+                            assert "vvvv-operand-number" in xml_component.attrib
+                            vex.vvvv = instruction_form.operands[int(xml_component.attrib["vvvv-operand-number"])]
 
-                    encoding.components.append(vex)
-                elif xml_component.tag == "Opcode":
-                    opcode = Opcode(int(xml_component.attrib["byte"], 16))
-                    if "addend-operand-number" in xml_component.attrib:
-                        opcode.addend = instruction.operands[int(xml_component.attrib["addend-operand-number"])]
-                    encoding.components.append(opcode)
-                elif xml_component.tag == "ModRM":
-                    modrm = ModRM()
-                    if "mode" in xml_component.attrib:
-                        modrm.mode = int(xml_component.attrib["mode"], 2)
-                        assert modrm.mode == 0b11
-                    else:
-                        assert "mode-operand-number" in xml_component.attrib
-                        assert xml_component.attrib["mode-operand-number"] == xml_component.attrib["rm-operand-number"]
-                        modrm.mode = instruction.operands[int(xml_component.attrib["mode-operand-number"])]
-                    if "reg" in xml_component.attrib:
-                        modrm.reg = int(xml_component.attrib["reg"])
-                        assert 0 <= modrm.reg <= 7
-                    else:
-                        assert "reg-operand-number" in xml_component.attrib
-                        modrm.reg = instruction.operands[int(xml_component.attrib["reg-operand-number"])]
-                    assert "rm-operand-number" in xml_component.attrib
-                    modrm.rm = instruction.operands[int(xml_component.attrib["rm-operand-number"])]
-                    encoding.components.append(modrm)
-                elif xml_component.tag == "Immediate":
-                    assert "size" in xml_component.attrib
-                    immediate_size = int(xml_component.attrib["size"])
-                    assert immediate_size in {1, 2, 4, 8}
-                    if immediate_size == 1:
-                        immediate_byte = ImmediateByte()
-                        if "operand-number" in xml_component.attrib:
-                            immediate_byte.byte = instruction.operands[int(xml_component.attrib["operand-number"])]
+                        encoding.components.append(vex)
+                    elif xml_component.tag == "Opcode":
+                        opcode = Opcode(int(xml_component.attrib["byte"], 16))
+                        if "addend-operand-number" in xml_component.attrib:
+                            opcode.addend = instruction_form.operands[int(xml_component.attrib["addend-operand-number"])]
+                        encoding.components.append(opcode)
+                    elif xml_component.tag == "ModRM":
+                        modrm = ModRM()
+                        if "mode" in xml_component.attrib:
+                            modrm.mode = int(xml_component.attrib["mode"], 2)
+                            assert modrm.mode == 0b11
+                        else:
+                            assert "mode-operand-number" in xml_component.attrib
+                            assert xml_component.attrib["mode-operand-number"] == xml_component.attrib["rm-operand-number"]
+                            modrm.mode = instruction_form.operands[int(xml_component.attrib["mode-operand-number"])]
+                        if "reg" in xml_component.attrib:
+                            modrm.reg = int(xml_component.attrib["reg"])
+                            assert 0 <= modrm.reg <= 7
+                        else:
+                            assert "reg-operand-number" in xml_component.attrib
+                            modrm.reg = instruction_form.operands[int(xml_component.attrib["reg-operand-number"])]
+                        assert "rm-operand-number" in xml_component.attrib
+                        modrm.rm = instruction_form.operands[int(xml_component.attrib["rm-operand-number"])]
+                        encoding.components.append(modrm)
+                    elif xml_component.tag == "Immediate":
+                        assert "size" in xml_component.attrib
+                        immediate_size = int(xml_component.attrib["size"])
+                        assert immediate_size in {1, 2, 4, 8}
+                        if immediate_size == 1:
+                            immediate_byte = ImmediateByte()
+                            if "operand-number" in xml_component.attrib:
+                                immediate_byte.byte = instruction_form.operands[int(xml_component.attrib["operand-number"])]
+                            else:
+                                assert False
+                            encoding.components.append(immediate_byte)
+                        elif immediate_size == 2:
+                            immediate_word = ImmediateWord()
+                            assert "operand-number" in xml_component.attrib
+                            immediate_word.word = instruction_form.operands[int(xml_component.attrib["operand-number"])]
+                            encoding.components.append(immediate_word)
+                        elif immediate_size == 4:
+                            immediate_dword = ImmediateDWord()
+                            assert "operand-number" in xml_component.attrib
+                            immediate_dword.dword = instruction_form.operands[int(xml_component.attrib["operand-number"])]
+                            encoding.components.append(immediate_dword)
+                        elif immediate_size == 8:
+                            immediate_qword = ImmediateQWord()
+                            assert "operand-number" in xml_component.attrib
+                            immediate_qword.qword = instruction_form.operands[int(xml_component.attrib["operand-number"])]
+                            encoding.components.append(immediate_qword)
                         else:
                             assert False
-                        encoding.components.append(immediate_byte)
-                    elif immediate_size == 2:
-                        immediate_word = ImmediateWord()
-                        assert "operand-number" in xml_component.attrib
-                        immediate_word.word = instruction.operands[int(xml_component.attrib["operand-number"])]
-                        encoding.components.append(immediate_word)
-                    elif immediate_size == 4:
-                        immediate_dword = ImmediateDWord()
-                        assert "operand-number" in xml_component.attrib
-                        immediate_dword.dword = instruction.operands[int(xml_component.attrib["operand-number"])]
-                        encoding.components.append(immediate_dword)
-                    elif immediate_size == 8:
-                        immediate_qword = ImmediateQWord()
-                        assert "operand-number" in xml_component.attrib
-                        immediate_qword.qword = instruction.operands[int(xml_component.attrib["operand-number"])]
-                        encoding.components.append(immediate_qword)
+                    elif xml_component.tag == "CodeOffset":
+                        offset_size = int(xml_component.attrib["size"])
+                        assert offset_size in {1, 4}
+                        if offset_size == 1:
+                            code_offset = CodeOffset8()
+                            code_offset.offset = instruction_form.operands[int(xml_component.attrib["operand-number"])]
+                            encoding.components.append(code_offset)
+                        elif offset_size == 4:
+                            code_offset = CodeOffset32()
+                            code_offset.offset = instruction_form.operands[int(xml_component.attrib["operand-number"])]
+                            encoding.components.append(code_offset)
+                        else:
+                            assert False
+                    elif xml_component.tag == "DataOffset":
+                        offset_size = int(xml_component.attrib["size"])
+                        assert offset_size in {4, 8}
+                        if offset_size == 4:
+                            data_offset = DataOffset32()
+                            data_offset.offset = instruction_form.operands[int(xml_component.attrib["operand-number"])]
+                            encoding.components.append(data_offset)
+                        elif offset_size == 8:
+                            data_offset = DataOffset64()
+                            data_offset.offset = instruction_form.operands[int(xml_component.attrib["operand-number"])]
+                            encoding.components.append(data_offset)
+                        else:
+                            assert False
                     else:
-                        assert False
-                elif xml_component.tag == "CodeOffset":
-                    offset_size = int(xml_component.attrib["size"])
-                    assert offset_size in {1, 4}
-                    if offset_size == 1:
-                        code_offset = CodeOffset8()
-                        code_offset.offset = instruction.operands[int(xml_component.attrib["operand-number"])]
-                        encoding.components.append(code_offset)
-                    elif offset_size == 4:
-                        code_offset = CodeOffset32()
-                        code_offset.offset = instruction.operands[int(xml_component.attrib["operand-number"])]
-                        encoding.components.append(code_offset)
-                    else:
-                        assert False
-                elif xml_component.tag == "DataOffset":
-                    offset_size = int(xml_component.attrib["size"])
-                    assert offset_size in {4, 8}
-                    if offset_size == 4:
-                        data_offset = DataOffset32()
-                        data_offset.offset = instruction.operands[int(xml_component.attrib["operand-number"])]
-                        encoding.components.append(data_offset)
-                    elif offset_size == 8:
-                        data_offset = DataOffset64()
-                        data_offset.offset = instruction.operands[int(xml_component.attrib["operand-number"])]
-                        encoding.components.append(data_offset)
-                    else:
-                        assert False
-                else:
-                    print("Unknown encoding tag: " + xml_component.tag)
+                        print("Unknown encoding tag: " + xml_component.tag)
 
-            instruction.encodings.append(encoding)
+                instruction_form.encodings.append(encoding)
+            instruction.forms.append(instruction_form)
         instruction_set.append(instruction)
     return instruction_set
