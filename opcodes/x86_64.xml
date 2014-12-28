@@ -9656,7 +9656,7 @@
       </Encodings>
     </InstructionForm>
   </Instruction>
-  <Instruction name="EMMS" summary="Empty MMX Technology State">
+  <Instruction name="EMMS" summary="Exit MMX State">
     <InstructionForm gas-name="emms" go-name="EMMS" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
@@ -9709,6 +9709,19 @@
           <Opcode byte="17"/>
           <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
           <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="FEMMS" summary="Fast Exit Multimedia State">
+    <InstructionForm gas-name="femms">
+      <ISA>
+        <Extension id="FEMMS"/>
+      </ISA>
+      <Encodings>
+        <Encoding>
+          <Opcode byte="0F"/>
+          <Opcode byte="0E"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -16339,6 +16352,44 @@
       </Encodings>
     </InstructionForm>
   </Instruction>
+  <Instruction name="PAVGUSB" summary="Average Packed Byte Integers">
+    <InstructionForm gas-name="pavgusb" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="BF"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pavgusb" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="BF"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="PAVGW" summary="Average Packed Word Integers">
     <InstructionForm gas-name="pavgw" go-name="PAVGW" mmx-mode="MMX">
       <ISA>
@@ -17588,6 +17639,728 @@
       </Encodings>
     </InstructionForm>
   </Instruction>
+  <Instruction name="PF2ID" summary="Packed Floating-Point to Integer Doubleword Converson">
+    <InstructionForm gas-name="pf2id" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="false" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="1D"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pf2id" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="1D"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PF2IW" summary="Packed Floating-Point to Integer Word Conversion">
+    <InstructionForm gas-name="pf2iw" go-name="PF2IW" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!+"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="false" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="1C"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pf2iw" go-name="PF2IW" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!+"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="1C"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFACC" summary="Packed Floating-Point Accumulate">
+    <InstructionForm gas-name="pfacc" go-name="PFACC" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="AE"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfacc" go-name="PFACC" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="AE"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFADD" summary="Packed Floating-Point Add">
+    <InstructionForm gas-name="pfadd" go-name="PFADD" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="9E"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfadd" go-name="PFADD" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="9E"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFCMPEQ" summary="Packed Floating-Point Compare for Equal">
+    <InstructionForm gas-name="pfcmpeq" go-name="PFCMPEQ" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="B0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfcmpeq" go-name="PFCMPEQ" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="B0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFCMPGE" summary="Packed Floating-Point Compare for Greater or Equal">
+    <InstructionForm gas-name="pfcmpge" go-name="PFCMPGE" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="90"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfcmpge" go-name="PFCMPGE" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="90"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFCMPGT" summary="Packed Floating-Point Compare for Greater Than">
+    <InstructionForm gas-name="pfcmpgt" go-name="PFCMPGT" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="A0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfcmpgt" go-name="PFCMPGT" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="A0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFMAX" summary="Packed Floating-Point Maximum">
+    <InstructionForm gas-name="pfmax" go-name="PFMAX" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="A4"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfmax" go-name="PFMAX" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="A4"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFMIN" summary="Packed Floating-Point Minimum">
+    <InstructionForm gas-name="pfmin" go-name="PFMIN" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="94"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfmin" go-name="PFMIN" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="94"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFMUL" summary="Packed Floating-Point Multiply">
+    <InstructionForm gas-name="pfmul" go-name="PFMUL" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="B4"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfmul" go-name="PFMUL" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="B4"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFNACC" summary="Packed Floating-Point Negative Accumulate">
+    <InstructionForm gas-name="pfnacc" go-name="PFNACC" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!+"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="8A"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfnacc" go-name="PFNACC" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!+"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="8A"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFPNACC" summary="Packed Floating-Point Positive-Negative Accumulate">
+    <InstructionForm gas-name="pfpnacc" go-name="PFPNACC" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!+"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="8E"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfpnacc" go-name="PFPNACC" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!+"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="8E"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFRCP" summary="Packed Floating-Point Reciprocal Approximation">
+    <InstructionForm gas-name="pfrcp" go-name="PFRCP" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="false" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="96"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfrcp" go-name="PFRCP" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="96"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFRCPIT1" summary="Packed Floating-Point Reciprocal Iteration 1">
+    <InstructionForm gas-name="pfrcpit1" go-name="PFRCPIT1" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="A6"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfrcpit1" go-name="PFRCPIT1" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="A6"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFRCPIT2" summary="Packed Floating-Point Reciprocal Iteration 2">
+    <InstructionForm gas-name="pfrcpit2" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="B6"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfrcpit2" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="B6"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFRSQIT1" summary="Packed Floating-Point Reciprocal Square Root Iteration 1">
+    <InstructionForm gas-name="pfrsqit1" go-name="PFRSQIT1" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="A7"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfrsqit1" go-name="PFRSQIT1" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="A7"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFRSQRT" summary="Packed Floating-Point Reciprocal Square Root Approximation">
+    <InstructionForm gas-name="pfrsqrt" go-name="PFRSQRT" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="false" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="97"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfrsqrt" go-name="PFRSQRT" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="97"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFSUB" summary="Packed Floating-Point Subtract">
+    <InstructionForm gas-name="pfsub" go-name="PFSUB" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="9A"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfsub" go-name="PFSUB" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="9A"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PFSUBR" summary="Packed Floating-Point Subtract Reverse">
+    <InstructionForm gas-name="pfsubr" go-name="PFSUBR" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="AA"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pfsubr" go-name="PFSUBR" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="AA"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="PHADDD" summary="Packed Horizontal Add Doubleword Integer">
     <InstructionForm gas-name="phaddd" mmx-mode="MMX">
       <ISA>
@@ -18080,6 +18853,82 @@
           <Opcode byte="38"/>
           <Opcode byte="05"/>
           <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PI2FD" summary="Packed Integer to Floating-Point Doubleword Conversion">
+    <InstructionForm gas-name="pi2fd" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="false" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="0D"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pi2fd" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="0D"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PI2FW" summary="Packed Integer to Floating-Point Word Conversion">
+    <InstructionForm gas-name="pi2fw" go-name="PI2FW" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!+"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="false" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="0C"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pi2fw" go-name="PI2FW" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!+"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="0C"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -19681,6 +20530,44 @@
           <Opcode byte="38"/>
           <Opcode byte="0B"/>
           <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PMULHRW" summary="Packed Multiply High Rounded Word">
+    <InstructionForm gas-name="pmulhrw" go-name="PMULHRW" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="B7"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pmulhrw" go-name="PMULHRW" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="B7"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -22391,6 +23278,44 @@
           <Opcode byte="0F"/>
           <Opcode byte="F9"/>
           <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="PSWAPD" summary="Packed Swap Doubleword">
+    <InstructionForm gas-name="pswapd" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!+"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="false" output="true"/>
+        <Operand type="mm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="BB"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="pswapd" mmx-mode="MMX">
+      <ISA>
+        <Extension id="3dnow!+"/>
+      </ISA>
+      <Operands>
+        <Operand type="mm" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="0F"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Opcode byte="BB"/>
         </Encoding>
       </Encodings>
     </InstructionForm>

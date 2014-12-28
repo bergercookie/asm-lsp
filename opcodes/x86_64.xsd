@@ -135,6 +135,9 @@
 			<xs:enumeration value="CMOV" />
 			<xs:enumeration value="MMX" />
 			<xs:enumeration value="MMX+" />
+			<xs:enumeration value="FEMMS" />
+			<xs:enumeration value="3dnow!" />
+			<xs:enumeration value="3dnow!+" />
 			<xs:enumeration value="SSE" />
 			<xs:enumeration value="SSE2" />
 			<xs:enumeration value="SSE3" />
@@ -252,6 +255,12 @@
 																		<xs:attribute name="reg-operand-number" type="OperandNumber" />
 																		<xs:attribute name="reg" type="RegValue" />
 																		<xs:attribute name="rm-operand-number" type="OperandNumber" use="required" />
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="Opcode" minOccurs="0" maxOccurs="1">
+																	<xs:complexType>
+																		<xs:attribute name="byte" type="OpcodeByte" use="required" />
+																		<xs:attribute name="addend-operand-number" type="OperandNumber" />
 																	</xs:complexType>
 																</xs:element>
 																<xs:element name="Immediate" minOccurs="0">
