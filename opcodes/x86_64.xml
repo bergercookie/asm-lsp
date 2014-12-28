@@ -32603,6 +32603,7 @@
           <VEX W="0" L="0" m-mmmm="00011" pp="01" R-operand-number="0" B-operand-number="2" X="ignored" vvvv-operand-number="1"/>
           <Opcode byte="4B"/>
           <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+          <RegisterByte register-operand-number="3" payload="ignored"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -32621,6 +32622,7 @@
           <VEX W="0" L="0" m-mmmm="00011" pp="01" R-operand-number="0" BX-operand-number="2" vvvv-operand-number="1"/>
           <Opcode byte="4B"/>
           <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
+          <RegisterByte register-operand-number="3" payload="ignored"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -32639,6 +32641,7 @@
           <VEX W="0" L="1" m-mmmm="00011" pp="01" R-operand-number="0" B-operand-number="2" X="ignored" vvvv-operand-number="1"/>
           <Opcode byte="4B"/>
           <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+          <RegisterByte register-operand-number="3" payload="ignored"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -32657,6 +32660,7 @@
           <VEX W="0" L="1" m-mmmm="00011" pp="01" R-operand-number="0" BX-operand-number="2" vvvv-operand-number="1"/>
           <Opcode byte="4B"/>
           <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
+          <RegisterByte register-operand-number="3" payload="ignored"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -32677,6 +32681,7 @@
           <VEX W="0" L="0" m-mmmm="00011" pp="01" R-operand-number="0" B-operand-number="2" X="ignored" vvvv-operand-number="1"/>
           <Opcode byte="4A"/>
           <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+          <RegisterByte register-operand-number="3" payload="ignored"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -32695,6 +32700,7 @@
           <VEX W="0" L="0" m-mmmm="00011" pp="01" R-operand-number="0" BX-operand-number="2" vvvv-operand-number="1"/>
           <Opcode byte="4A"/>
           <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
+          <RegisterByte register-operand-number="3" payload="ignored"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -32713,6 +32719,7 @@
           <VEX W="0" L="1" m-mmmm="00011" pp="01" R-operand-number="0" B-operand-number="2" X="ignored" vvvv-operand-number="1"/>
           <Opcode byte="4A"/>
           <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+          <RegisterByte register-operand-number="3" payload="ignored"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -32731,6 +32738,7 @@
           <VEX W="0" L="1" m-mmmm="00011" pp="01" R-operand-number="0" BX-operand-number="2" vvvv-operand-number="1"/>
           <Opcode byte="4A"/>
           <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
+          <RegisterByte register-operand-number="3" payload="ignored"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -42748,6 +42756,7 @@
           <VEX W="0" L="0" m-mmmm="00011" pp="01" R-operand-number="0" B-operand-number="2" X="ignored" vvvv-operand-number="1"/>
           <Opcode byte="4C"/>
           <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+          <RegisterByte register-operand-number="3" payload="ignored"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -42766,6 +42775,7 @@
           <VEX W="0" L="0" m-mmmm="00011" pp="01" R-operand-number="0" BX-operand-number="2" vvvv-operand-number="1"/>
           <Opcode byte="4C"/>
           <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
+          <RegisterByte register-operand-number="3" payload="ignored"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -42784,6 +42794,7 @@
           <VEX W="0" L="1" m-mmmm="00011" pp="01" R-operand-number="0" B-operand-number="2" X="ignored" vvvv-operand-number="1"/>
           <Opcode byte="4C"/>
           <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+          <RegisterByte register-operand-number="3" payload="ignored"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -42802,6 +42813,7 @@
           <VEX W="0" L="1" m-mmmm="00011" pp="01" R-operand-number="0" BX-operand-number="2" vvvv-operand-number="1"/>
           <Opcode byte="4C"/>
           <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
+          <RegisterByte register-operand-number="3" payload="ignored"/>
         </Encoding>
       </Encodings>
     </InstructionForm>

@@ -252,6 +252,7 @@ class ISAExtension:
         - "RDTSC"     := The `RDTSC` instruction.
         - "RDTSCP"    := The `RDTSCP` instruction.
         - "CPUID"     := The `CPUID` instruction.
+        - "FEMMS"     := The `FEMMS` instruction.
         - "POPCNT"    := The `POPCNT` instruction.
         - "LZCNT"     := The `LZCNT` instruction.
         - "PCLMULQDQ" := The `PCLMULQDQ` instruction.
@@ -259,7 +260,9 @@ class ISAExtension:
         - "RDSEED"    := The `RDSEED` instruction.
         - "CMOV"      := Conditional MOVe instructions.
         - "MMX"       := MultiMedia eXtension.
-        - "MMX+"      := MMX+ extension (AMD) / Integer SSE (Intel).
+        - "MMX+"      := AMD MMX+ extension / Integer SSE (Intel).
+        - "3dnow!"    := AMD 3dnow! extension.
+        - "3dnow+!"   := AMD 3dnow!+ extension.
         - "SSE"       := Streaming SIMD Extension.
         - "SSE2"      := Streaming SIMD Extension 2.
         - "SSE3"      := Streaming SIMD Extension 3.
@@ -530,6 +533,12 @@ class ImmediateQWord:
         self.qword = None
 
 
+class RegisterByte:
+    def __init__(self):
+        self.register = None
+        self.payload = None
+
+
 class CodeOffset32:
     def __init__(self):
         self.offset = None
@@ -766,6 +775,16 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                             encoding.components.append(immediate_qword)
                         else:
                             assert False
+                    elif xml_component.tag == "RegisterByte":
+                        register_byte = RegisterByte()
+                        register_byte.register = instruction_form.operands[int(xml_component.attrib["register-operand-number"])]
+                        assert "payload" in xml_component.attrib or "payload-operand-number" in xml_component.attrib
+                        if "payload" in xml_component.attrib:
+                            assert "payload-operand-number" not in xml_component.attrib
+                            assert xml_component.attrib["payload"] == "ignored"
+                            register_byte.payload = None
+                        else:
+                            register_byte.payload = instruction_form.operands[int(xml_component.attrib["payload-operand-number"])]
                     elif xml_component.tag == "CodeOffset":
                         offset_size = int(xml_component.attrib["size"])
                         assert offset_size in {1, 4}
