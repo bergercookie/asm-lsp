@@ -20,7 +20,17 @@ This project is a spin-off from `Peach-Py <https://bitbucket.org/MDukhan/peachpy
 Current status
 --------------
 
-The project provides descriptions for most user-mode x86-64 instructions up to AVX2, but excluding AMD and VIA extensions.
+The project provides descriptions for most user-mode x86-64 instructions up to AVX2 and SHA. The following instructions are currently **NOT** supported:
+
+- All priveledged instructions and user-mode system instructions (e.g. XSAVE, SLDT)
+- Legacy string/streaming instructions (MOVS/SCAS/CMPS/STOS/LODS)
+- LOCK and REP/REPZ/REPNZ prefixes
+- x87 FPU instructions
+- AMD 3dnow! and 3dnow!+ instructions
+- AMD XOP instructions
+- VIA Padlock instructions
+- Intel HTM instructions
+- Intel AVX-512 instructions
 
 For each instruction the following information is provided:
 
