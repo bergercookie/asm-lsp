@@ -8230,7 +8230,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTPD2PI" summary="Convert Packed Double-Precision FP Values to Packed Dword Integers">
-    <InstructionForm gas-name="cvtpd2pi" fpu-mode="MMX" xmm-mode="SSE">
+    <InstructionForm gas-name="cvtpd2pi" mmx-mode="MMX" xmm-mode="SSE">
       <ISA>
         <Extension id="SSE"/>
       </ISA>
@@ -8248,7 +8248,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="cvtpd2pi" fpu-mode="MMX">
+    <InstructionForm gas-name="cvtpd2pi" mmx-mode="MMX">
       <ISA>
         <Extension id="SSE"/>
       </ISA>
@@ -8306,7 +8306,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTPI2PD" summary="Convert Packed Dword Integers to Packed Double-Precision FP Values">
-    <InstructionForm gas-name="cvtpi2pd" fpu-mode="MMX" xmm-mode="SSE">
+    <InstructionForm gas-name="cvtpi2pd" mmx-mode="MMX" xmm-mode="SSE">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -8344,7 +8344,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTPI2PS" summary="Convert Packed Dword Integers to Packed Single-Precision FP Values">
-    <InstructionForm gas-name="cvtpi2ps" fpu-mode="MMX" xmm-mode="SSE">
+    <InstructionForm gas-name="cvtpi2ps" mmx-mode="MMX" xmm-mode="SSE">
       <ISA>
         <Extension id="SSE"/>
       </ISA>
@@ -8361,7 +8361,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="cvtpi2ps" fpu-mode="MMX" xmm-mode="SSE">
+    <InstructionForm gas-name="cvtpi2ps" mmx-mode="MMX" xmm-mode="SSE">
       <ISA>
         <Extension id="SSE"/>
       </ISA>
@@ -8454,7 +8454,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTPS2PI" summary="Convert Packed Single-Precision FP Values to Packed Dword Integers">
-    <InstructionForm gas-name="cvtps2pi" fpu-mode="MMX" xmm-mode="SSE">
+    <InstructionForm gas-name="cvtps2pi" mmx-mode="MMX" xmm-mode="SSE">
       <ISA>
         <Extension id="SSE"/>
       </ISA>
@@ -8471,7 +8471,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="cvtps2pi" fpu-mode="MMX">
+    <InstructionForm gas-name="cvtps2pi" mmx-mode="MMX">
       <ISA>
         <Extension id="SSE"/>
       </ISA>
@@ -8900,7 +8900,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTTPD2PI" summary="Convert with Truncation Packed Double-Precision FP Values to Packed Dword Integers">
-    <InstructionForm gas-name="cvttpd2pi" fpu-mode="MMX" xmm-mode="SSE">
+    <InstructionForm gas-name="cvttpd2pi" mmx-mode="MMX" xmm-mode="SSE">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -8918,7 +8918,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="cvttpd2pi" fpu-mode="MMX">
+    <InstructionForm gas-name="cvttpd2pi" mmx-mode="MMX">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -8976,7 +8976,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTTPS2PI" summary="Convert with Truncation Packed Single-Precision FP Values to Packed Dword Integers">
-    <InstructionForm gas-name="cvttps2pi" fpu-mode="MMX" xmm-mode="SSE">
+    <InstructionForm gas-name="cvttps2pi" mmx-mode="MMX" xmm-mode="SSE">
       <ISA>
         <Extension id="SSE"/>
       </ISA>
@@ -8993,7 +8993,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="cvttps2pi" fpu-mode="MMX">
+    <InstructionForm gas-name="cvttps2pi" mmx-mode="MMX">
       <ISA>
         <Extension id="SSE"/>
       </ISA>
@@ -9657,7 +9657,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="EMMS" summary="Empty MMX Technology State">
-    <InstructionForm gas-name="emms" go-name="EMMS" fpu-mode="MMX">
+    <InstructionForm gas-name="emms" go-name="EMMS" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -10868,7 +10868,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="MASKMOVQ" summary="Store Selected Bytes of Quadword">
-    <InstructionForm gas-name="maskmovq" go-name="MASKMOVQ" fpu-mode="MMX">
+    <InstructionForm gas-name="maskmovq" go-name="MASKMOVQ" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -11844,7 +11844,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="MOVD" summary="Move Doubleword">
-    <InstructionForm gas-name="movd" fpu-mode="MMX">
+    <InstructionForm gas-name="movd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -11879,7 +11879,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="movd" fpu-mode="MMX">
+    <InstructionForm gas-name="movd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -11896,7 +11896,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="movd" fpu-mode="MMX">
+    <InstructionForm gas-name="movd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -11949,7 +11949,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="movd" fpu-mode="MMX">
+    <InstructionForm gas-name="movd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -12024,7 +12024,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="MOVDQ2Q" summary="Move Quadword from XMM to MMX Technology Register">
-    <InstructionForm gas-name="movdq2q" fpu-mode="MMX" xmm-mode="SSE">
+    <InstructionForm gas-name="movdq2q" mmx-mode="MMX" xmm-mode="SSE">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -12505,7 +12505,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="MOVNTQ" summary="Store of Quadword Using Non-Temporal Hint">
-    <InstructionForm gas-name="movntq" go-name="MOVNTQ" fpu-mode="MMX">
+    <InstructionForm gas-name="movntq" go-name="MOVNTQ" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -12524,7 +12524,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="MOVQ" summary="Move Quadword">
-    <InstructionForm gas-name="movq" go-name="MOVQ" fpu-mode="MMX">
+    <InstructionForm gas-name="movq" go-name="MOVQ" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -12559,7 +12559,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="movq" go-name="MOVQ" fpu-mode="MMX">
+    <InstructionForm gas-name="movq" go-name="MOVQ" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -12576,7 +12576,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="movq" go-name="MOVQ" fpu-mode="MMX">
+    <InstructionForm gas-name="movq" go-name="MOVQ" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -12599,7 +12599,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="movq" go-name="MOVQ" fpu-mode="MMX">
+    <InstructionForm gas-name="movq" go-name="MOVQ" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -12690,7 +12690,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="movq" go-name="MOVQ" fpu-mode="MMX">
+    <InstructionForm gas-name="movq" go-name="MOVQ" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -12740,7 +12740,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="MOVQ2DQ" summary="Move Quadword from MMX Technology to XMM Register">
-    <InstructionForm gas-name="movq2dq" fpu-mode="MMX" xmm-mode="SSE">
+    <InstructionForm gas-name="movq2dq" mmx-mode="MMX" xmm-mode="SSE">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -14576,7 +14576,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PABSB" summary="Packed Absolute Value of Byte Integers">
-    <InstructionForm gas-name="pabsb" fpu-mode="MMX">
+    <InstructionForm gas-name="pabsb" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -14594,7 +14594,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pabsb" fpu-mode="MMX">
+    <InstructionForm gas-name="pabsb" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -14652,7 +14652,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PABSD" summary="Packed Absolute Value of Doubleword Integers">
-    <InstructionForm gas-name="pabsd" fpu-mode="MMX">
+    <InstructionForm gas-name="pabsd" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -14670,7 +14670,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pabsd" fpu-mode="MMX">
+    <InstructionForm gas-name="pabsd" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -14728,7 +14728,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PABSW" summary="Packed Absolute Value of Word Integers">
-    <InstructionForm gas-name="pabsw" fpu-mode="MMX">
+    <InstructionForm gas-name="pabsw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -14746,7 +14746,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pabsw" fpu-mode="MMX">
+    <InstructionForm gas-name="pabsw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -14804,7 +14804,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PACKSSDW" summary="Pack Doublewords into Words with Signed Saturation">
-    <InstructionForm gas-name="packssdw" fpu-mode="MMX">
+    <InstructionForm gas-name="packssdw" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -14821,7 +14821,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="packssdw" fpu-mode="MMX">
+    <InstructionForm gas-name="packssdw" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -14876,7 +14876,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PACKSSWB" summary="Pack Words into Bytes with Signed Saturation">
-    <InstructionForm gas-name="packsswb" go-name="PACKSSWB" fpu-mode="MMX">
+    <InstructionForm gas-name="packsswb" go-name="PACKSSWB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -14893,7 +14893,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="packsswb" go-name="PACKSSWB" fpu-mode="MMX">
+    <InstructionForm gas-name="packsswb" go-name="PACKSSWB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -14988,7 +14988,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PACKUSWB" summary="Pack Words into Bytes with Unsigned Saturation">
-    <InstructionForm gas-name="packuswb" go-name="PACKUSWB" fpu-mode="MMX">
+    <InstructionForm gas-name="packuswb" go-name="PACKUSWB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15005,7 +15005,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="packuswb" go-name="PACKUSWB" fpu-mode="MMX">
+    <InstructionForm gas-name="packuswb" go-name="PACKUSWB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15060,7 +15060,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PADDB" summary="Add Packed Byte Integers">
-    <InstructionForm gas-name="paddb" go-name="PADDB" fpu-mode="MMX">
+    <InstructionForm gas-name="paddb" go-name="PADDB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15077,7 +15077,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="paddb" go-name="PADDB" fpu-mode="MMX">
+    <InstructionForm gas-name="paddb" go-name="PADDB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15132,7 +15132,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PADDD" summary="Add Packed Doubleword Integers">
-    <InstructionForm gas-name="paddd" fpu-mode="MMX">
+    <InstructionForm gas-name="paddd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15149,7 +15149,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="paddd" fpu-mode="MMX">
+    <InstructionForm gas-name="paddd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15204,7 +15204,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PADDQ" summary="Add Packed Quadword Integers">
-    <InstructionForm gas-name="paddq" go-name="PADDQ" fpu-mode="MMX">
+    <InstructionForm gas-name="paddq" go-name="PADDQ" mmx-mode="MMX">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -15221,7 +15221,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="paddq" go-name="PADDQ" fpu-mode="MMX">
+    <InstructionForm gas-name="paddq" go-name="PADDQ" mmx-mode="MMX">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -15276,7 +15276,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PADDSB" summary="Add Packed Signed Byte Integers with Signed Saturation">
-    <InstructionForm gas-name="paddsb" go-name="PADDSB" fpu-mode="MMX">
+    <InstructionForm gas-name="paddsb" go-name="PADDSB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15293,7 +15293,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="paddsb" go-name="PADDSB" fpu-mode="MMX">
+    <InstructionForm gas-name="paddsb" go-name="PADDSB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15348,7 +15348,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PADDSW" summary="Add Packed Signed Word Integers with Signed Saturation">
-    <InstructionForm gas-name="paddsw" go-name="PADDSW" fpu-mode="MMX">
+    <InstructionForm gas-name="paddsw" go-name="PADDSW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15365,7 +15365,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="paddsw" go-name="PADDSW" fpu-mode="MMX">
+    <InstructionForm gas-name="paddsw" go-name="PADDSW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15420,7 +15420,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PADDUSB" summary="Add Packed Unsigned Byte Integers with Unsigned Saturation">
-    <InstructionForm gas-name="paddusb" go-name="PADDUSB" fpu-mode="MMX">
+    <InstructionForm gas-name="paddusb" go-name="PADDUSB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15437,7 +15437,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="paddusb" go-name="PADDUSB" fpu-mode="MMX">
+    <InstructionForm gas-name="paddusb" go-name="PADDUSB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15492,7 +15492,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PADDUSW" summary="Add Packed Unsigned Word Integers with Unsigned Saturation">
-    <InstructionForm gas-name="paddusw" go-name="PADDUSW" fpu-mode="MMX">
+    <InstructionForm gas-name="paddusw" go-name="PADDUSW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15509,7 +15509,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="paddusw" go-name="PADDUSW" fpu-mode="MMX">
+    <InstructionForm gas-name="paddusw" go-name="PADDUSW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15564,7 +15564,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PADDW" summary="Add Packed Word Integers">
-    <InstructionForm gas-name="paddw" go-name="PADDW" fpu-mode="MMX">
+    <InstructionForm gas-name="paddw" go-name="PADDW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15581,7 +15581,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="paddw" go-name="PADDW" fpu-mode="MMX">
+    <InstructionForm gas-name="paddw" go-name="PADDW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15636,7 +15636,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PALIGNR" summary="Packed Align Right">
-    <InstructionForm gas-name="palignr" fpu-mode="MMX">
+    <InstructionForm gas-name="palignr" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -15656,7 +15656,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="palignr" fpu-mode="MMX">
+    <InstructionForm gas-name="palignr" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -15720,7 +15720,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PAND" summary="Packed Logical AND">
-    <InstructionForm gas-name="pand" go-name="PAND" fpu-mode="MMX">
+    <InstructionForm gas-name="pand" go-name="PAND" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15737,7 +15737,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pand" go-name="PAND" fpu-mode="MMX">
+    <InstructionForm gas-name="pand" go-name="PAND" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15792,7 +15792,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PANDN" summary="Packed Logical AND NOT">
-    <InstructionForm gas-name="pandn" go-name="PANDN" fpu-mode="MMX">
+    <InstructionForm gas-name="pandn" go-name="PANDN" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15809,7 +15809,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pandn" go-name="PANDN" fpu-mode="MMX">
+    <InstructionForm gas-name="pandn" go-name="PANDN" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15874,7 +15874,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PAVGB" summary="Average Packed Byte Integers">
-    <InstructionForm gas-name="pavgb" go-name="PAVGB" fpu-mode="MMX">
+    <InstructionForm gas-name="pavgb" go-name="PAVGB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15891,7 +15891,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pavgb" go-name="PAVGB" fpu-mode="MMX">
+    <InstructionForm gas-name="pavgb" go-name="PAVGB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15946,7 +15946,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PAVGW" summary="Average Packed Word Integers">
-    <InstructionForm gas-name="pavgw" go-name="PAVGW" fpu-mode="MMX">
+    <InstructionForm gas-name="pavgw" go-name="PAVGW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -15963,7 +15963,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pavgw" go-name="PAVGW" fpu-mode="MMX">
+    <InstructionForm gas-name="pavgw" go-name="PAVGW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -16148,7 +16148,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPEQB" summary="Compare Packed Byte Data for Equality">
-    <InstructionForm gas-name="pcmpeqb" go-name="PCMPEQB" fpu-mode="MMX">
+    <InstructionForm gas-name="pcmpeqb" go-name="PCMPEQB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -16165,7 +16165,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpeqb" go-name="PCMPEQB" fpu-mode="MMX">
+    <InstructionForm gas-name="pcmpeqb" go-name="PCMPEQB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -16220,7 +16220,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPEQD" summary="Compare Packed Doubleword Data for Equality">
-    <InstructionForm gas-name="pcmpeqd" fpu-mode="MMX">
+    <InstructionForm gas-name="pcmpeqd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -16237,7 +16237,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpeqd" fpu-mode="MMX">
+    <InstructionForm gas-name="pcmpeqd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -16332,7 +16332,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPEQW" summary="Compare Packed Word Data for Equality">
-    <InstructionForm gas-name="pcmpeqw" go-name="PCMPEQW" fpu-mode="MMX">
+    <InstructionForm gas-name="pcmpeqw" go-name="PCMPEQW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -16349,7 +16349,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpeqw" go-name="PCMPEQW" fpu-mode="MMX">
+    <InstructionForm gas-name="pcmpeqw" go-name="PCMPEQW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -16504,7 +16504,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPGTB" summary="Compare Packed Signed Byte Integers for Greater Than">
-    <InstructionForm gas-name="pcmpgtb" go-name="PCMPGTB" fpu-mode="MMX">
+    <InstructionForm gas-name="pcmpgtb" go-name="PCMPGTB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -16521,7 +16521,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpgtb" go-name="PCMPGTB" fpu-mode="MMX">
+    <InstructionForm gas-name="pcmpgtb" go-name="PCMPGTB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -16576,7 +16576,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPGTD" summary="Compare Packed Signed Doubleword Integers for Greater Than">
-    <InstructionForm gas-name="pcmpgtd" fpu-mode="MMX">
+    <InstructionForm gas-name="pcmpgtd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -16593,7 +16593,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpgtd" fpu-mode="MMX">
+    <InstructionForm gas-name="pcmpgtd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -16688,7 +16688,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPGTW" summary="Compare Packed Signed Word Integers for Greater Than">
-    <InstructionForm gas-name="pcmpgtw" go-name="PCMPGTW" fpu-mode="MMX">
+    <InstructionForm gas-name="pcmpgtw" go-name="PCMPGTW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -16705,7 +16705,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpgtw" go-name="PCMPGTW" fpu-mode="MMX">
+    <InstructionForm gas-name="pcmpgtw" go-name="PCMPGTW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -17124,7 +17124,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PEXTRW" summary="Extract Word">
-    <InstructionForm gas-name="pextrw" go-name="PEXTRW" fpu-mode="MMX">
+    <InstructionForm gas-name="pextrw" go-name="PEXTRW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -17195,7 +17195,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PHADDD" summary="Packed Horizontal Add Doubleword Integer">
-    <InstructionForm gas-name="phaddd" fpu-mode="MMX">
+    <InstructionForm gas-name="phaddd" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -17213,7 +17213,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="phaddd" fpu-mode="MMX">
+    <InstructionForm gas-name="phaddd" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -17271,7 +17271,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PHADDSW" summary="Packed Horizontal Add Signed Word Integers with Signed Saturation">
-    <InstructionForm gas-name="phaddsw" fpu-mode="MMX">
+    <InstructionForm gas-name="phaddsw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -17289,7 +17289,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="phaddsw" fpu-mode="MMX">
+    <InstructionForm gas-name="phaddsw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -17347,7 +17347,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PHADDW" summary="Packed Horizontal Add Word Integers">
-    <InstructionForm gas-name="phaddw" fpu-mode="MMX">
+    <InstructionForm gas-name="phaddw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -17365,7 +17365,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="phaddw" fpu-mode="MMX">
+    <InstructionForm gas-name="phaddw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -17463,7 +17463,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PHSUBD" summary="Packed Horizontal Subtract Doubleword Integers">
-    <InstructionForm gas-name="phsubd" fpu-mode="MMX">
+    <InstructionForm gas-name="phsubd" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -17481,7 +17481,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="phsubd" fpu-mode="MMX">
+    <InstructionForm gas-name="phsubd" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -17539,7 +17539,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PHSUBSW" summary="Packed Horizontal Subtract Signed Word Integers with Signed Saturation">
-    <InstructionForm gas-name="phsubsw" fpu-mode="MMX">
+    <InstructionForm gas-name="phsubsw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -17557,7 +17557,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="phsubsw" fpu-mode="MMX">
+    <InstructionForm gas-name="phsubsw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -17615,7 +17615,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PHSUBW" summary="Packed Horizontal Subtract Word Integers">
-    <InstructionForm gas-name="phsubw" fpu-mode="MMX">
+    <InstructionForm gas-name="phsubw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -17633,7 +17633,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="phsubw" fpu-mode="MMX">
+    <InstructionForm gas-name="phsubw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -17823,7 +17823,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PINSRW" summary="Insert Word">
-    <InstructionForm gas-name="pinsrw" go-name="PINSRW" fpu-mode="MMX">
+    <InstructionForm gas-name="pinsrw" go-name="PINSRW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -17842,7 +17842,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pinsrw" go-name="PINSRW" fpu-mode="MMX">
+    <InstructionForm gas-name="pinsrw" go-name="PINSRW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -17903,7 +17903,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PMADDUBSW" summary="Multiply and Add Packed Signed and Unsigned Byte Integers">
-    <InstructionForm gas-name="pmaddubsw" fpu-mode="MMX">
+    <InstructionForm gas-name="pmaddubsw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -17921,7 +17921,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pmaddubsw" fpu-mode="MMX">
+    <InstructionForm gas-name="pmaddubsw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -17979,7 +17979,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PMADDWD" summary="Multiply and Add Packed Signed Word Integers">
-    <InstructionForm gas-name="pmaddwd" fpu-mode="MMX">
+    <InstructionForm gas-name="pmaddwd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -17996,7 +17996,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pmaddwd" fpu-mode="MMX">
+    <InstructionForm gas-name="pmaddwd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -18131,7 +18131,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PMAXSW" summary="Maximum of Packed Signed Word Integers">
-    <InstructionForm gas-name="pmaxsw" go-name="PMAXSW" fpu-mode="MMX">
+    <InstructionForm gas-name="pmaxsw" go-name="PMAXSW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -18148,7 +18148,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pmaxsw" go-name="PMAXSW" fpu-mode="MMX">
+    <InstructionForm gas-name="pmaxsw" go-name="PMAXSW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -18203,7 +18203,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PMAXUB" summary="Maximum of Packed Unsigned Byte Integers">
-    <InstructionForm gas-name="pmaxub" go-name="PMAXUB" fpu-mode="MMX">
+    <InstructionForm gas-name="pmaxub" go-name="PMAXUB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -18220,7 +18220,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pmaxub" go-name="PMAXUB" fpu-mode="MMX">
+    <InstructionForm gas-name="pmaxub" go-name="PMAXUB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -18435,7 +18435,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PMINSW" summary="Minimum of Packed Signed Word Integers">
-    <InstructionForm gas-name="pminsw" go-name="PMINSW" fpu-mode="MMX">
+    <InstructionForm gas-name="pminsw" go-name="PMINSW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -18452,7 +18452,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pminsw" go-name="PMINSW" fpu-mode="MMX">
+    <InstructionForm gas-name="pminsw" go-name="PMINSW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -18507,7 +18507,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PMINUB" summary="Minimum of Packed Unsigned Byte Integers">
-    <InstructionForm gas-name="pminub" go-name="PMINUB" fpu-mode="MMX">
+    <InstructionForm gas-name="pminub" go-name="PMINUB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -18524,7 +18524,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pminub" go-name="PMINUB" fpu-mode="MMX">
+    <InstructionForm gas-name="pminub" go-name="PMINUB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -18659,7 +18659,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PMOVMSKB" summary="Move Byte Mask">
-    <InstructionForm gas-name="pmovmskb" go-name="PMOVMSKB" fpu-mode="MMX">
+    <InstructionForm gas-name="pmovmskb" go-name="PMOVMSKB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -19216,7 +19216,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PMULHRSW" summary="Packed Multiply Signed Word Integers and Store High Result with Round and Scale">
-    <InstructionForm gas-name="pmulhrsw" fpu-mode="MMX">
+    <InstructionForm gas-name="pmulhrsw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -19234,7 +19234,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pmulhrsw" fpu-mode="MMX">
+    <InstructionForm gas-name="pmulhrsw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -19292,7 +19292,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PMULHUW" summary="Multiply Packed Unsigned Word Integers and Store High Result">
-    <InstructionForm gas-name="pmulhuw" go-name="PMULHUW" fpu-mode="MMX">
+    <InstructionForm gas-name="pmulhuw" go-name="PMULHUW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -19309,7 +19309,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pmulhuw" go-name="PMULHUW" fpu-mode="MMX">
+    <InstructionForm gas-name="pmulhuw" go-name="PMULHUW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -19364,7 +19364,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PMULHW" summary="Multiply Packed Signed Word Integers and Store High Result">
-    <InstructionForm gas-name="pmulhw" go-name="PMULHW" fpu-mode="MMX">
+    <InstructionForm gas-name="pmulhw" go-name="PMULHW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -19381,7 +19381,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pmulhw" go-name="PMULHW" fpu-mode="MMX">
+    <InstructionForm gas-name="pmulhw" go-name="PMULHW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -19476,7 +19476,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PMULLW" summary="Multiply Packed Signed Word Integers and Store Low Result">
-    <InstructionForm gas-name="pmullw" go-name="PMULLW" fpu-mode="MMX">
+    <InstructionForm gas-name="pmullw" go-name="PMULLW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -19493,7 +19493,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pmullw" go-name="PMULLW" fpu-mode="MMX">
+    <InstructionForm gas-name="pmullw" go-name="PMULLW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -19548,7 +19548,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PMULUDQ" summary="Multiply Packed Unsigned Doubleword Integers">
-    <InstructionForm gas-name="pmuludq" fpu-mode="MMX">
+    <InstructionForm gas-name="pmuludq" mmx-mode="MMX">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -19565,7 +19565,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pmuludq" fpu-mode="MMX">
+    <InstructionForm gas-name="pmuludq" mmx-mode="MMX">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -19790,7 +19790,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="POR" summary="Packed Bitwise Logical OR">
-    <InstructionForm gas-name="por" go-name="POR" fpu-mode="MMX">
+    <InstructionForm gas-name="por" go-name="POR" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -19807,7 +19807,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="por" go-name="POR" fpu-mode="MMX">
+    <InstructionForm gas-name="por" go-name="POR" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -19958,7 +19958,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSADBW" summary="Compute Sum of Absolute Differences">
-    <InstructionForm gas-name="psadbw" go-name="PSADBW" fpu-mode="MMX">
+    <InstructionForm gas-name="psadbw" go-name="PSADBW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -19975,7 +19975,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psadbw" go-name="PSADBW" fpu-mode="MMX">
+    <InstructionForm gas-name="psadbw" go-name="PSADBW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20030,7 +20030,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSHUFB" summary="Packed Shuffle Bytes">
-    <InstructionForm gas-name="pshufb" go-name="PSHUFB" fpu-mode="MMX">
+    <InstructionForm gas-name="pshufb" go-name="PSHUFB" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -20048,7 +20048,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pshufb" go-name="PSHUFB" fpu-mode="MMX">
+    <InstructionForm gas-name="pshufb" go-name="PSHUFB" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -20232,7 +20232,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSHUFW" summary="Shuffle Packed Words">
-    <InstructionForm gas-name="pshufw" go-name="PSHUFW" fpu-mode="MMX">
+    <InstructionForm gas-name="pshufw" go-name="PSHUFW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20251,7 +20251,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pshufw" go-name="PSHUFW" fpu-mode="MMX">
+    <InstructionForm gas-name="pshufw" go-name="PSHUFW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20272,7 +20272,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSIGNB" summary="Packed Sign of Byte Integers">
-    <InstructionForm gas-name="psignb" fpu-mode="MMX">
+    <InstructionForm gas-name="psignb" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -20290,7 +20290,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psignb" fpu-mode="MMX">
+    <InstructionForm gas-name="psignb" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -20348,7 +20348,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSIGND" summary="Packed Sign of Doubleword Integers">
-    <InstructionForm gas-name="psignd" fpu-mode="MMX">
+    <InstructionForm gas-name="psignd" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -20366,7 +20366,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psignd" fpu-mode="MMX">
+    <InstructionForm gas-name="psignd" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -20424,7 +20424,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSIGNW" summary="Packed Sign of Word Integers">
-    <InstructionForm gas-name="psignw" fpu-mode="MMX">
+    <InstructionForm gas-name="psignw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -20442,7 +20442,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psignw" fpu-mode="MMX">
+    <InstructionForm gas-name="psignw" mmx-mode="MMX">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -20500,7 +20500,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSLLD" summary="Shift Packed Doubleword Data Left Logical">
-    <InstructionForm gas-name="pslld" fpu-mode="MMX">
+    <InstructionForm gas-name="pslld" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20518,7 +20518,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pslld" fpu-mode="MMX">
+    <InstructionForm gas-name="pslld" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20535,7 +20535,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pslld" fpu-mode="MMX">
+    <InstructionForm gas-name="pslld" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20630,7 +20630,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSLLQ" summary="Shift Packed Quadword Data Left Logical">
-    <InstructionForm gas-name="psllq" go-name="PSLLQ" fpu-mode="MMX">
+    <InstructionForm gas-name="psllq" go-name="PSLLQ" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20648,7 +20648,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psllq" go-name="PSLLQ" fpu-mode="MMX">
+    <InstructionForm gas-name="psllq" go-name="PSLLQ" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20665,7 +20665,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psllq" go-name="PSLLQ" fpu-mode="MMX">
+    <InstructionForm gas-name="psllq" go-name="PSLLQ" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20739,7 +20739,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSLLW" summary="Shift Packed Word Data Left Logical">
-    <InstructionForm gas-name="psllw" go-name="PSLLW" fpu-mode="MMX">
+    <InstructionForm gas-name="psllw" go-name="PSLLW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20757,7 +20757,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psllw" go-name="PSLLW" fpu-mode="MMX">
+    <InstructionForm gas-name="psllw" go-name="PSLLW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20774,7 +20774,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psllw" go-name="PSLLW" fpu-mode="MMX">
+    <InstructionForm gas-name="psllw" go-name="PSLLW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20848,7 +20848,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSRAD" summary="Shift Packed Doubleword Data Right Arithmetic">
-    <InstructionForm gas-name="psrad" fpu-mode="MMX">
+    <InstructionForm gas-name="psrad" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20866,7 +20866,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psrad" fpu-mode="MMX">
+    <InstructionForm gas-name="psrad" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20883,7 +20883,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psrad" fpu-mode="MMX">
+    <InstructionForm gas-name="psrad" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20957,7 +20957,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSRAW" summary="Shift Packed Word Data Right Arithmetic">
-    <InstructionForm gas-name="psraw" go-name="PSRAW" fpu-mode="MMX">
+    <InstructionForm gas-name="psraw" go-name="PSRAW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20975,7 +20975,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psraw" go-name="PSRAW" fpu-mode="MMX">
+    <InstructionForm gas-name="psraw" go-name="PSRAW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20992,7 +20992,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psraw" go-name="PSRAW" fpu-mode="MMX">
+    <InstructionForm gas-name="psraw" go-name="PSRAW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21066,7 +21066,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSRLD" summary="Shift Packed Doubleword Data Right Logical">
-    <InstructionForm gas-name="psrld" fpu-mode="MMX">
+    <InstructionForm gas-name="psrld" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21084,7 +21084,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psrld" fpu-mode="MMX">
+    <InstructionForm gas-name="psrld" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21101,7 +21101,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psrld" fpu-mode="MMX">
+    <InstructionForm gas-name="psrld" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21196,7 +21196,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSRLQ" summary="Shift Packed Quadword Data Right Logical">
-    <InstructionForm gas-name="psrlq" go-name="PSRLQ" fpu-mode="MMX">
+    <InstructionForm gas-name="psrlq" go-name="PSRLQ" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21214,7 +21214,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psrlq" go-name="PSRLQ" fpu-mode="MMX">
+    <InstructionForm gas-name="psrlq" go-name="PSRLQ" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21231,7 +21231,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psrlq" go-name="PSRLQ" fpu-mode="MMX">
+    <InstructionForm gas-name="psrlq" go-name="PSRLQ" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21305,7 +21305,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSRLW" summary="Shift Packed Word Data Right Logical">
-    <InstructionForm gas-name="psrlw" go-name="PSRLW" fpu-mode="MMX">
+    <InstructionForm gas-name="psrlw" go-name="PSRLW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21323,7 +21323,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psrlw" go-name="PSRLW" fpu-mode="MMX">
+    <InstructionForm gas-name="psrlw" go-name="PSRLW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21340,7 +21340,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psrlw" go-name="PSRLW" fpu-mode="MMX">
+    <InstructionForm gas-name="psrlw" go-name="PSRLW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21414,7 +21414,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBB" summary="Subtract Packed Byte Integers">
-    <InstructionForm gas-name="psubb" go-name="PSUBB" fpu-mode="MMX">
+    <InstructionForm gas-name="psubb" go-name="PSUBB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21431,7 +21431,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubb" go-name="PSUBB" fpu-mode="MMX">
+    <InstructionForm gas-name="psubb" go-name="PSUBB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21486,7 +21486,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBD" summary="Subtract Packed Doubleword Integers">
-    <InstructionForm gas-name="psubd" fpu-mode="MMX">
+    <InstructionForm gas-name="psubd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21503,7 +21503,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubd" fpu-mode="MMX">
+    <InstructionForm gas-name="psubd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21558,7 +21558,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBQ" summary="Subtract Packed Quadword Integers">
-    <InstructionForm gas-name="psubq" go-name="PSUBQ" fpu-mode="MMX">
+    <InstructionForm gas-name="psubq" go-name="PSUBQ" mmx-mode="MMX">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -21575,7 +21575,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubq" go-name="PSUBQ" fpu-mode="MMX">
+    <InstructionForm gas-name="psubq" go-name="PSUBQ" mmx-mode="MMX">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -21630,7 +21630,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBSB" summary="Subtract Packed Signed Byte Integers with Signed Saturation">
-    <InstructionForm gas-name="psubsb" go-name="PSUBSB" fpu-mode="MMX">
+    <InstructionForm gas-name="psubsb" go-name="PSUBSB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21647,7 +21647,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubsb" go-name="PSUBSB" fpu-mode="MMX">
+    <InstructionForm gas-name="psubsb" go-name="PSUBSB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21702,7 +21702,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBSW" summary="Subtract Packed Signed Word Integers with Signed Saturation">
-    <InstructionForm gas-name="psubsw" go-name="PSUBSW" fpu-mode="MMX">
+    <InstructionForm gas-name="psubsw" go-name="PSUBSW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21719,7 +21719,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubsw" go-name="PSUBSW" fpu-mode="MMX">
+    <InstructionForm gas-name="psubsw" go-name="PSUBSW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21774,7 +21774,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBUSB" summary="Subtract Packed Unsigned Byte Integers with Unsigned Saturation">
-    <InstructionForm gas-name="psubusb" go-name="PSUBUSB" fpu-mode="MMX">
+    <InstructionForm gas-name="psubusb" go-name="PSUBUSB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21791,7 +21791,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubusb" go-name="PSUBUSB" fpu-mode="MMX">
+    <InstructionForm gas-name="psubusb" go-name="PSUBUSB" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21846,7 +21846,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBUSW" summary="Subtract Packed Unsigned Word Integers with Unsigned Saturation">
-    <InstructionForm gas-name="psubusw" go-name="PSUBUSW" fpu-mode="MMX">
+    <InstructionForm gas-name="psubusw" go-name="PSUBUSW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21863,7 +21863,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubusw" go-name="PSUBUSW" fpu-mode="MMX">
+    <InstructionForm gas-name="psubusw" go-name="PSUBUSW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21918,7 +21918,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBW" summary="Subtract Packed Word Integers">
-    <InstructionForm gas-name="psubw" go-name="PSUBW" fpu-mode="MMX">
+    <InstructionForm gas-name="psubw" go-name="PSUBW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -21935,7 +21935,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubw" go-name="PSUBW" fpu-mode="MMX">
+    <InstructionForm gas-name="psubw" go-name="PSUBW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -22030,7 +22030,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PUNPCKHBW" summary="Unpack and Interleave High-Order Bytes into Words">
-    <InstructionForm gas-name="punpckhbw" go-name="PUNPCKHBW" fpu-mode="MMX">
+    <InstructionForm gas-name="punpckhbw" go-name="PUNPCKHBW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -22047,7 +22047,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="punpckhbw" go-name="PUNPCKHBW" fpu-mode="MMX">
+    <InstructionForm gas-name="punpckhbw" go-name="PUNPCKHBW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -22102,7 +22102,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PUNPCKHDQ" summary="Unpack and Interleave High-Order Doublewords into Quadwords">
-    <InstructionForm gas-name="punpckhdq" fpu-mode="MMX">
+    <InstructionForm gas-name="punpckhdq" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -22119,7 +22119,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="punpckhdq" fpu-mode="MMX">
+    <InstructionForm gas-name="punpckhdq" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -22212,7 +22212,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PUNPCKHWD" summary="Unpack and Interleave High-Order Words into Doublewords">
-    <InstructionForm gas-name="punpckhwd" fpu-mode="MMX">
+    <InstructionForm gas-name="punpckhwd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -22229,7 +22229,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="punpckhwd" fpu-mode="MMX">
+    <InstructionForm gas-name="punpckhwd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -22284,7 +22284,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PUNPCKLBW" summary="Unpack and Interleave Low-Order Bytes into Words">
-    <InstructionForm gas-name="punpcklbw" go-name="PUNPCKLBW" fpu-mode="MMX">
+    <InstructionForm gas-name="punpcklbw" go-name="PUNPCKLBW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -22301,7 +22301,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="punpcklbw" go-name="PUNPCKLBW" fpu-mode="MMX">
+    <InstructionForm gas-name="punpcklbw" go-name="PUNPCKLBW" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -22356,7 +22356,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PUNPCKLDQ" summary="Unpack and Interleave Low-Order Doublewords into Quadwords">
-    <InstructionForm gas-name="punpckldq" fpu-mode="MMX">
+    <InstructionForm gas-name="punpckldq" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -22373,7 +22373,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="punpckldq" fpu-mode="MMX">
+    <InstructionForm gas-name="punpckldq" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -22466,7 +22466,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PUNPCKLWD" summary="Unpack and Interleave Low-Order Words into Doublewords">
-    <InstructionForm gas-name="punpcklwd" fpu-mode="MMX">
+    <InstructionForm gas-name="punpcklwd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -22483,7 +22483,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="punpcklwd" fpu-mode="MMX">
+    <InstructionForm gas-name="punpcklwd" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -22629,7 +22629,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PXOR" summary="Packed Logical Exclusive OR">
-    <InstructionForm gas-name="pxor" go-name="PXOR" fpu-mode="MMX">
+    <InstructionForm gas-name="pxor" go-name="PXOR" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -22646,7 +22646,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pxor" go-name="PXOR" fpu-mode="MMX">
+    <InstructionForm gas-name="pxor" go-name="PXOR" mmx-mode="MMX">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
