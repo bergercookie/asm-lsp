@@ -37,6 +37,36 @@
 			<xs:enumeration value="rel32" />
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="ImplicitOperandID">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="al" />
+			<xs:enumeration value="ax" />
+			<xs:enumeration value="eax" />
+			<xs:enumeration value="rax" />
+			<xs:enumeration value="ebx" />
+			<xs:enumeration value="rbx" />
+			<xs:enumeration value="ecx" />
+			<xs:enumeration value="rcx" />
+			<xs:enumeration value="dx" />
+			<xs:enumeration value="edx" />
+			<xs:enumeration value="rdx" />
+			<xs:enumeration value="rsi" />
+			<xs:enumeration value="rdi" />
+			<xs:enumeration value="xmm0" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FPUMode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="FPU" />
+			<xs:enumeration value="MMX" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="XMMMode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SSE" />
+			<xs:enumeration value="AVX" />
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="OpcodeByte">
 		<xs:restriction base="xs:token">
 			<xs:pattern value="[0-9A-F]{2}" />
@@ -147,11 +177,18 @@
 										<xs:element name="Operands" minOccurs="0">
 											<xs:complexType>
 												<xs:sequence>
-													<xs:element name="Operand" maxOccurs="unbounded">
+													<xs:element name="Operand" minOccurs="0" maxOccurs="unbounded">
 														<xs:complexType>
 															<xs:attribute name="type" type="OperandType" use="required" />
 															<xs:attribute name="input" type="xs:boolean" />
 															<xs:attribute name="output" type="xs:boolean" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="ImplicitOperand" minOccurs="0" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:attribute name="id" type="ImplicitOperandID" use="required" />
+															<xs:attribute name="input" type="xs:boolean" use="required" />
+															<xs:attribute name="output" type="xs:boolean" use="required" />
 														</xs:complexType>
 													</xs:element>
 												</xs:sequence>
@@ -239,6 +276,8 @@
 									</xs:sequence>
 									<xs:attribute name="gas-name" type="xs:string" use="required" />
 									<xs:attribute name="go-name" type="xs:string" />
+									<xs:attribute name="fpu-mode" type="FPUMode" />
+									<xs:attribute name="xmm-mode" type="XMMMode" />
 								</xs:complexType>
 							</xs:element>
 						</xs:sequence>

@@ -4,8 +4,17 @@ import os
 
 
 class Instruction:
+    """Instruction is defines by its mnemonic name (in Intel-style assembly).
+
+    An instruction may have multiple forms, that mainly differ by operand types.
+
+    :ivar name: instruction name in Intel-style assembly (Peach-Py, NASM and YASM assemblers).
+    :ivar summary: a summary description of the instruction name.
+    :ivar forms: a list of :class:`InstructionForm` objects representing the instruction forms.
+    """
     def __init__(self, name):
         self.name = name
+        self.summary = None
         self.forms = []
 
     def __str__(self):
@@ -36,6 +45,8 @@ class InstructionForm:
         self.gas_name = None
         self.go_name = None
         self.operands = []
+        self.implicit_inputs = set()
+        self.implicit_outputs = set()
         self.isa_extensions = []
         self.encodings = []
 
@@ -287,21 +298,21 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
     for xml_instruction in xml_instruction_set:
         assert xml_instruction.tag == "Instruction"
         instruction = Instruction(xml_instruction.attrib["name"])
+        instruction.summary = xml_instruction.attrib["summary"]
         for xml_instruction_form in xml_instruction:
             instruction_form = InstructionForm(instruction.name)
             instruction_form.gas_name = xml_instruction_form.attrib["gas-name"]
-            if "go-name" in xml_instruction_form.attrib:
-                instruction_form.go_name = xml_instruction_form.attrib["go-name"]
+            instruction_form.go_name = xml_instruction_form.attrib.get("go-name")
             for xml_operand in xml_instruction_form.findall("Operands/Operand"):
-                assert "type" in xml_operand.attrib
                 operand = Operand(xml_operand.attrib["type"])
-                if "input" in xml_operand.attrib:
-                    operand.is_input = {"true": True, "false": False}[xml_operand.attrib["input"]]
-                if "output" in xml_operand.attrib:
-                    operand.is_output = {"true": True, "false": False}[xml_operand.attrib["output"]]
-                if "fixed" in xml_operand.attrib:
-                    operand.fixed = xml_operand.attrib["fixed"]
+                operand.is_input = {"true": True, "false": False}[xml_operand.attrib.get("input", "false")]
+                operand.is_output = {"true": True, "false": False}[xml_operand.attrib.get("output", "false")]
                 instruction_form.operands.append(operand)
+            for xml_implicit_operand in xml_instruction_form.findall("Operands/ImplicitOperands"):
+                if xml_implicit_operand.attrib["input"] == "true":
+                    instruction_form.implicit_inputs.add(xml_implicit_operand.attrib["id"])
+                if xml_implicit_operand.attrib["output"] == "true":
+                    instruction_form.implicit_outputs.add(xml_implicit_operand.attrib["id"])
             for xml_isa_extension in xml_instruction_form.findall("ISA/Extension"):
                 assert "id" in xml_isa_extension.attrib
                 isa_extension = ISAExtension(xml_isa_extension.attrib["id"])
