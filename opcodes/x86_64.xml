@@ -9989,6 +9989,388 @@
       </Encodings>
     </InstructionForm>
   </Instruction>
+  <Instruction name="IMUL" summary="Signed Multiply">
+    <InstructionForm gas-name="imulb" go-name="IMULB">
+      <Operands>
+        <Operand type="r8" input="true" output="false"/>
+        <ImplicitOperand id="ax" input="false" output="true"/>
+        <ImplicitOperand id="al" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+          <Opcode byte="F6"/>
+          <ModRM mode="11" reg="5" rm-operand-number="0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulw" go-name="IMULW">
+      <Operands>
+        <Operand type="r16" input="true" output="false"/>
+        <ImplicitOperand id="ax" input="true" output="true"/>
+        <ImplicitOperand id="dx" input="false" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+          <Opcode byte="F7"/>
+          <ModRM mode="11" reg="5" rm-operand-number="0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imull" go-name="IMULL">
+      <Operands>
+        <Operand type="r32" input="true" output="false"/>
+        <ImplicitOperand id="eax" input="true" output="true"/>
+        <ImplicitOperand id="edx" input="false" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+          <Opcode byte="F7"/>
+          <ModRM mode="11" reg="5" rm-operand-number="0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulq" go-name="IMULQ">
+      <Operands>
+        <Operand type="r64" input="true" output="false"/>
+        <ImplicitOperand id="rax" input="true" output="true"/>
+        <ImplicitOperand id="rdx" input="false" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
+          <Opcode byte="F7"/>
+          <ModRM mode="11" reg="5" rm-operand-number="0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulb" go-name="IMULB">
+      <Operands>
+        <Operand type="m8" input="true" output="false"/>
+        <ImplicitOperand id="ax" input="false" output="true"/>
+        <ImplicitOperand id="al" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
+          <Opcode byte="F6"/>
+          <ModRM mode-operand-number="0" reg="5" rm-operand-number="0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulw" go-name="IMULW">
+      <Operands>
+        <Operand type="m16" input="true" output="false"/>
+        <ImplicitOperand id="ax" input="true" output="true"/>
+        <ImplicitOperand id="dx" input="false" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
+          <Opcode byte="F7"/>
+          <ModRM mode-operand-number="0" reg="5" rm-operand-number="0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imull" go-name="IMULL">
+      <Operands>
+        <Operand type="m32" input="true" output="false"/>
+        <ImplicitOperand id="eax" input="true" output="true"/>
+        <ImplicitOperand id="edx" input="false" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
+          <Opcode byte="F7"/>
+          <ModRM mode-operand-number="0" reg="5" rm-operand-number="0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulq" go-name="IMULQ">
+      <Operands>
+        <Operand type="m64" input="true" output="false"/>
+        <ImplicitOperand id="rax" input="true" output="true"/>
+        <ImplicitOperand id="rdx" input="false" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
+          <Opcode byte="F7"/>
+          <ModRM mode-operand-number="0" reg="5" rm-operand-number="0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulw" go-name="IMULW">
+      <Operands>
+        <Operand type="r16" input="true" output="true"/>
+        <Operand type="r16" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <Prefix byte="66" mandatory="false"/>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="AF"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulw" go-name="IMULW">
+      <Operands>
+        <Operand type="r16" input="true" output="true"/>
+        <Operand type="m16" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <Prefix byte="66" mandatory="false"/>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="AF"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imull" go-name="IMULL">
+      <Operands>
+        <Operand type="r32" input="true" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="AF"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imull" go-name="IMULL">
+      <Operands>
+        <Operand type="r32" input="true" output="true"/>
+        <Operand type="m32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="AF"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulq" go-name="IMULQ">
+      <Operands>
+        <Operand type="r64" input="true" output="true"/>
+        <Operand type="r64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="true" W="1" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="AF"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulq" go-name="IMULQ">
+      <Operands>
+        <Operand type="r64" input="true" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="true" W="1" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="AF"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulw" go-name="IMULW">
+      <Operands>
+        <Operand type="r16" input="false" output="true"/>
+        <Operand type="r16" input="true" output="false"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <Prefix byte="66" mandatory="false"/>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="6B"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulw" go-name="IMULW">
+      <Operands>
+        <Operand type="r16" input="false" output="true"/>
+        <Operand type="r16" input="true" output="false"/>
+        <Operand type="imm16"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="69"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="2" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulw" go-name="IMULW">
+      <Operands>
+        <Operand type="r16" input="false" output="true"/>
+        <Operand type="m16" input="true" output="false"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <Prefix byte="66" mandatory="false"/>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="6B"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulw" go-name="IMULW">
+      <Operands>
+        <Operand type="r16" input="false" output="true"/>
+        <Operand type="m16" input="true" output="false"/>
+        <Operand type="imm16"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="69"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="2" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imull" go-name="IMULL">
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="6B"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imull" go-name="IMULL">
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+        <Operand type="imm32"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="69"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="4" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imull" go-name="IMULL">
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="m32" input="true" output="false"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="6B"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imull" go-name="IMULL">
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="m32" input="true" output="false"/>
+        <Operand type="imm32"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="69"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="4" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulq" go-name="IMULQ">
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="r64" input="true" output="false"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="true" W="1" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="6B"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulq" go-name="IMULQ">
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="r64" input="true" output="false"/>
+        <Operand type="imm32"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="true" W="1" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="69"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="4" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulq" go-name="IMULQ">
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="true" W="1" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="6B"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="imulq" go-name="IMULQ">
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+        <Operand type="imm32"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="true" W="1" R-operand-number="0" BX-operand-number="1"/>
+          <Opcode byte="69"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="4" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="INC" summary="Increment by 1">
     <InstructionForm gas-name="incb" go-name="INCB">
       <Operands>
@@ -23633,9 +24015,6 @@
   <Instruction name="RET" summary="Return from Procedure">
     <InstructionForm gas-name="ret" go-name="RET">
       <Encodings>
-        <Encoding>
-          <Opcode byte="CB"/>
-        </Encoding>
         <Encoding>
           <Opcode byte="C3"/>
         </Encoding>
@@ -51452,6 +51831,31 @@
           <Opcode byte="0F"/>
           <Opcode byte="01"/>
           <Opcode byte="D0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="XLATB" summary="Table Look-up Translation">
+    <InstructionForm gas-name="xlatb">
+      <Operands>
+        <ImplicitOperand id="al" input="true" output="true"/>
+        <ImplicitOperand id="ebx" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <Opcode byte="D7"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="xlatb">
+      <Operands>
+        <ImplicitOperand id="al" input="true" output="true"/>
+        <ImplicitOperand id="rbx" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <REX mandatory="true" W="1" R="ignored" B="ignored" X="ignored"/>
+          <Opcode byte="D7"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
