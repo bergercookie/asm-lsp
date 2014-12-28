@@ -11107,6 +11107,9 @@
   </Instruction>
   <Instruction name="LFENCE" summary="Load Fence">
     <InstructionForm gas-name="lfence" go-name="LFENCE">
+      <ISA>
+        <Extension id="SSE2"/>
+      </ISA>
       <Encodings>
         <Encoding>
           <Opcode byte="0F"/>
@@ -11421,6 +11424,9 @@
   </Instruction>
   <Instruction name="MFENCE" summary="Memory Fence">
     <InstructionForm gas-name="mfence" go-name="MFENCE">
+      <ISA>
+        <Extension id="SSE2"/>
+      </ISA>
       <Encodings>
         <Encoding>
           <Opcode byte="0F"/>
@@ -12819,6 +12825,9 @@
   </Instruction>
   <Instruction name="MOVNTI" summary="Store Doubleword Using Non-Temporal Hint">
     <InstructionForm gas-name="movntil" go-name="MOVNTIL">
+      <ISA>
+        <Extension id="SSE2"/>
+      </ISA>
       <Operands>
         <Operand type="m32" input="false" output="true"/>
         <Operand type="r32" input="true" output="false"/>
@@ -12833,6 +12842,9 @@
       </Encodings>
     </InstructionForm>
     <InstructionForm gas-name="movntiq" go-name="MOVNTIQ">
+      <ISA>
+        <Extension id="SSE2"/>
+      </ISA>
       <Operands>
         <Operand type="m64" input="false" output="true"/>
         <Operand type="r64" input="true" output="false"/>
@@ -20245,6 +20257,9 @@
   </Instruction>
   <Instruction name="PREFETCHNTA" summary="Prefetch Data Into Caches using NTA Hint">
     <InstructionForm gas-name="prefetchnta" go-name="PREFETCHNTA">
+      <ISA>
+        <Extension id="MMX+"/>
+      </ISA>
       <Operands>
         <Operand type="m8" input="true" output="false"/>
       </Operands>
@@ -20260,6 +20275,9 @@
   </Instruction>
   <Instruction name="PREFETCHT0" summary="Prefetch Data Into Caches using T0 Hint">
     <InstructionForm gas-name="prefetcht0" go-name="PREFETCHT0">
+      <ISA>
+        <Extension id="MMX+"/>
+      </ISA>
       <Operands>
         <Operand type="m8" input="true" output="false"/>
       </Operands>
@@ -20275,6 +20293,9 @@
   </Instruction>
   <Instruction name="PREFETCHT1" summary="Prefetch Data Into Caches using T1 Hint">
     <InstructionForm gas-name="prefetcht1" go-name="PREFETCHT1">
+      <ISA>
+        <Extension id="MMX+"/>
+      </ISA>
       <Operands>
         <Operand type="m8" input="true" output="false"/>
       </Operands>
@@ -20290,6 +20311,9 @@
   </Instruction>
   <Instruction name="PREFETCHT2" summary="Prefetch Data Into Caches using T2 Hint">
     <InstructionForm gas-name="prefetcht2" go-name="PREFETCHT2">
+      <ISA>
+        <Extension id="MMX+"/>
+      </ISA>
       <Operands>
         <Operand type="m8" input="true" output="false"/>
       </Operands>
@@ -27548,6 +27572,9 @@
   </Instruction>
   <Instruction name="SFENCE" summary="Store Fence">
     <InstructionForm gas-name="sfence" go-name="SFENCE">
+      <ISA>
+        <Extension id="MMX+"/>
+      </ISA>
       <Encodings>
         <Encoding>
           <Opcode byte="0F"/>
