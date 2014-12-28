@@ -28,6 +28,7 @@ The project provides descriptions for most user-mode x86-64 instructions up to A
 - x87 FPU instructions
 - AMD 3dnow! and 3dnow!+ instructions
 - AMD XOP instructions
+- AMD TBM instructions
 - VIA Padlock instructions
 - Intel HTM instructions
 - Intel AVX-512 instructions
