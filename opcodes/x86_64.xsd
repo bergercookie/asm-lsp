@@ -33,6 +33,10 @@
 			<xs:enumeration value="m64" />
 			<xs:enumeration value="m128" />
 			<xs:enumeration value="m256" />
+			<xs:enumeration value="vm32x" />
+			<xs:enumeration value="vm64x" />
+			<xs:enumeration value="vm32y" />
+			<xs:enumeration value="vm64y" />
 			<xs:enumeration value="rel8" />
 			<xs:enumeration value="rel32" />
 		</xs:restriction>

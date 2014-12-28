@@ -37222,6 +37222,150 @@
       </Encodings>
     </InstructionForm>
   </Instruction>
+  <Instruction name="VGATHERDPD" summary="Gather Packed Double-Precision Floating-Point Values Using Signed Doubleword Indices">
+    <InstructionForm gas-name="vgatherdpd" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="xmm" input="true" output="true"/>
+        <Operand type="vm32x" input="true" output="false"/>
+        <Operand type="xmm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="1" L="0" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="92"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="vgatherdpd" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="ymm" input="true" output="true"/>
+        <Operand type="vm32x" input="true" output="false"/>
+        <Operand type="ymm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="1" L="1" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="92"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VGATHERDPS" summary="Gather Packed Single-Precision Floating-Point Values Using Signed Doubleword Indices">
+    <InstructionForm gas-name="vgatherdps" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="xmm" input="true" output="true"/>
+        <Operand type="vm32x" input="true" output="false"/>
+        <Operand type="xmm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="0" L="0" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="92"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="vgatherdps" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="ymm" input="true" output="true"/>
+        <Operand type="vm32y" input="true" output="false"/>
+        <Operand type="ymm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="0" L="1" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="92"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VGATHERQPD" summary="Gather Packed Double-Precision Floating-Point Values Using Signed Quadword Indices">
+    <InstructionForm gas-name="vgatherqpd" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="xmm" input="true" output="true"/>
+        <Operand type="vm64x" input="true" output="false"/>
+        <Operand type="xmm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="1" L="0" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="93"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="vgatherqpd" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="ymm" input="true" output="true"/>
+        <Operand type="vm64y" input="true" output="false"/>
+        <Operand type="ymm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="1" L="1" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="93"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VGATHERQPS" summary="Gather Packed Single-Precision Floating-Point Values Using Signed Quadword Indices">
+    <InstructionForm gas-name="vgatherqps" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="xmm" input="true" output="true"/>
+        <Operand type="vm64x" input="true" output="false"/>
+        <Operand type="xmm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="0" L="0" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="93"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="vgatherqps" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="xmm" input="true" output="true"/>
+        <Operand type="vm64y" input="true" output="false"/>
+        <Operand type="xmm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="0" L="1" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="93"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="VHADDPD" summary="Packed Double-FP Horizontal Add">
     <InstructionForm gas-name="vhaddpd" xmm-mode="AVX">
       <ISA>
@@ -43515,6 +43659,150 @@
           <Opcode byte="15"/>
           <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
           <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VPGATHERDD" summary="Gather Packed Doubleword Values Using Signed Doubleword Indices">
+    <InstructionForm gas-name="vpgatherdd" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="xmm" input="true" output="true"/>
+        <Operand type="vm32x" input="true" output="false"/>
+        <Operand type="xmm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="0" L="0" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="90"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="vpgatherdd" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="ymm" input="true" output="true"/>
+        <Operand type="vm32y" input="true" output="false"/>
+        <Operand type="ymm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="0" L="1" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="90"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VPGATHERDQ" summary="Gather Packed Quadword Values Using Signed Doubleword Indices">
+    <InstructionForm gas-name="vpgatherdq" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="xmm" input="true" output="true"/>
+        <Operand type="vm32x" input="true" output="false"/>
+        <Operand type="xmm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="1" L="0" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="90"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="vpgatherdq" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="ymm" input="true" output="true"/>
+        <Operand type="vm32x" input="true" output="false"/>
+        <Operand type="ymm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="1" L="1" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="90"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VPGATHERQD" summary="Gather Packed Doubleword Values Using Signed Quadword Indices">
+    <InstructionForm gas-name="vpgatherqd" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="xmm" input="true" output="true"/>
+        <Operand type="vm64x" input="true" output="false"/>
+        <Operand type="xmm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="0" L="0" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="91"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="vpgatherqd" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="xmm" input="true" output="true"/>
+        <Operand type="vm64y" input="true" output="false"/>
+        <Operand type="xmm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="0" L="1" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="91"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VPGATHERQQ" summary="Gather Packed Quadword Values Using Signed Quadword Indices">
+    <InstructionForm gas-name="vpgatherqq" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="xmm" input="true" output="true"/>
+        <Operand type="vm64x" input="true" output="false"/>
+        <Operand type="xmm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="1" L="0" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="91"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="vpgatherqq" xmm-mode="AVX">
+      <ISA>
+        <Extension id="AVX2"/>
+      </ISA>
+      <Operands>
+        <Operand type="ymm" input="true" output="true"/>
+        <Operand type="vm64y" input="true" output="false"/>
+        <Operand type="ymm" input="true" output="true"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX W="1" L="1" m-mmmm="00010" pp="01" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
+          <Opcode byte="91"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
         </Encoding>
       </Encodings>
     </InstructionForm>

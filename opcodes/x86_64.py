@@ -196,6 +196,18 @@ class Operand:
         "m512"
             A 512-bit memory operand.
 
+        "vm32x"
+            A vector of memory addresses using VSIB with 32-bit indices in XMM register.
+
+        "vm32y"
+            A vector of memory addresses using VSIB with 32-bit indices in YMM register.
+
+        "vm64x"
+            A vector of memory addresses using VSIB with 64-bit indices in XMM register.
+
+        "vm64y"
+            A vector of memory addresses using VSIB with 64-bit indices in YMM register.
+
     :ivar is_input: indicates if the instruction reads the variable specified by this operand.
     :ivar is_output: indicates if the instruction writes the variable specified by this operand.
     """
@@ -229,7 +241,7 @@ class Operand:
     @property
     def is_memory(self):
         """Indicates whether this operand specifies a memory location"""
-        return self.type in {"m", "m8", "m16", "m32", "m64", "m80", "m128", "m256", "m512"}
+        return self.type in {"m", "m8", "m16", "m32", "m64", "m80", "m128", "m256", "m512", "vm32x", "vm32y", "vm64x", "vm64y"}
 
 
 class ISAExtension:
