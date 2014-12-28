@@ -15,6 +15,8 @@ The goal of this project is to document instruction sets in a format convenient 
 - An XSD file that describes the structure of the XML file
 - A Python module that reads the XML file and represents it as a set of Python objects
 
+This project is a spin-off from `Peach-Py <https://bitbucket.org/MDukhan/peachpy>`_ assembler.
+
 Current status
 --------------
 
