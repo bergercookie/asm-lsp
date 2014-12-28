@@ -11252,7 +11252,7 @@
   <Instruction name="MASKMOVQ" summary="Store Selected Bytes of Quadword">
     <InstructionForm gas-name="maskmovq" go-name="MASKMOVQ" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="false"/>
@@ -12889,7 +12889,7 @@
   <Instruction name="MOVNTQ" summary="Store of Quadword Using Non-Temporal Hint">
     <InstructionForm gas-name="movntq" go-name="MOVNTQ" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="m64" input="false" output="true"/>
@@ -16258,7 +16258,7 @@
   <Instruction name="PAVGB" summary="Average Packed Byte Integers">
     <InstructionForm gas-name="pavgb" go-name="PAVGB" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -16275,7 +16275,7 @@
     </InstructionForm>
     <InstructionForm gas-name="pavgb" go-name="PAVGB" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -16330,7 +16330,7 @@
   <Instruction name="PAVGW" summary="Average Packed Word Integers">
     <InstructionForm gas-name="pavgw" go-name="PAVGW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -16347,7 +16347,7 @@
     </InstructionForm>
     <InstructionForm gas-name="pavgw" go-name="PAVGW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -17508,7 +17508,7 @@
   <Instruction name="PEXTRW" summary="Extract Word">
     <InstructionForm gas-name="pextrw" go-name="PEXTRW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="r32" input="false" output="true"/>
@@ -18207,7 +18207,7 @@
   <Instruction name="PINSRW" summary="Insert Word">
     <InstructionForm gas-name="pinsrw" go-name="PINSRW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -18226,7 +18226,7 @@
     </InstructionForm>
     <InstructionForm gas-name="pinsrw" go-name="PINSRW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -18515,7 +18515,7 @@
   <Instruction name="PMAXSW" summary="Maximum of Packed Signed Word Integers">
     <InstructionForm gas-name="pmaxsw" go-name="PMAXSW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -18532,7 +18532,7 @@
     </InstructionForm>
     <InstructionForm gas-name="pmaxsw" go-name="PMAXSW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -18587,7 +18587,7 @@
   <Instruction name="PMAXUB" summary="Maximum of Packed Unsigned Byte Integers">
     <InstructionForm gas-name="pmaxub" go-name="PMAXUB" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -18604,7 +18604,7 @@
     </InstructionForm>
     <InstructionForm gas-name="pmaxub" go-name="PMAXUB" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -18819,7 +18819,7 @@
   <Instruction name="PMINSW" summary="Minimum of Packed Signed Word Integers">
     <InstructionForm gas-name="pminsw" go-name="PMINSW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -18836,7 +18836,7 @@
     </InstructionForm>
     <InstructionForm gas-name="pminsw" go-name="PMINSW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -18891,7 +18891,7 @@
   <Instruction name="PMINUB" summary="Minimum of Packed Unsigned Byte Integers">
     <InstructionForm gas-name="pminub" go-name="PMINUB" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -18908,7 +18908,7 @@
     </InstructionForm>
     <InstructionForm gas-name="pminub" go-name="PMINUB" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -19043,7 +19043,7 @@
   <Instruction name="PMOVMSKB" summary="Move Byte Mask">
     <InstructionForm gas-name="pmovmskb" go-name="PMOVMSKB" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="r32" input="false" output="true"/>
@@ -19676,7 +19676,7 @@
   <Instruction name="PMULHUW" summary="Multiply Packed Unsigned Word Integers and Store High Result">
     <InstructionForm gas-name="pmulhuw" go-name="PMULHUW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -19693,7 +19693,7 @@
     </InstructionForm>
     <InstructionForm gas-name="pmulhuw" go-name="PMULHUW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -20342,7 +20342,7 @@
   <Instruction name="PSADBW" summary="Compute Sum of Absolute Differences">
     <InstructionForm gas-name="psadbw" go-name="PSADBW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -20359,7 +20359,7 @@
     </InstructionForm>
     <InstructionForm gas-name="psadbw" go-name="PSADBW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="true" output="true"/>
@@ -20616,7 +20616,7 @@
   <Instruction name="PSHUFW" summary="Shuffle Packed Words">
     <InstructionForm gas-name="pshufw" go-name="PSHUFW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="false" output="true"/>
@@ -20635,7 +20635,7 @@
     </InstructionForm>
     <InstructionForm gas-name="pshufw" go-name="PSHUFW" mmx-mode="MMX">
       <ISA>
-        <Extension id="MMX"/>
+        <Extension id="MMX+"/>
       </ISA>
       <Operands>
         <Operand type="mm" input="false" output="true"/>

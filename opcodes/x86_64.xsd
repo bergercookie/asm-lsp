@@ -130,6 +130,7 @@
 			<xs:enumeration value="CPUID" />
 			<xs:enumeration value="CMOV" />
 			<xs:enumeration value="MMX" />
+			<xs:enumeration value="MMX+" />
 			<xs:enumeration value="SSE" />
 			<xs:enumeration value="SSE2" />
 			<xs:enumeration value="SSE3" />

@@ -247,6 +247,7 @@ class ISAExtension:
         - "RDSEED"    := The `RDSEED` instruction.
         - "CMOV"      := Conditional MOVe instructions.
         - "MMX"       := MultiMedia eXtension.
+        - "MMX+"      := MMX+ extension (AMD) / Integer SSE (Intel).
         - "SSE"       := Streaming SIMD Extension.
         - "SSE2"      := Streaming SIMD Extension 2.
         - "SSE3"      := Streaming SIMD Extension 3.
