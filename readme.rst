@@ -2,6 +2,10 @@
    :alt: License
    :target: https://github.com/Maratyszcza/Opcodes/blob/master/license.rst
 
+.. image:: https://img.shields.io/pypi/v/opcodes.svg
+   :alt: PyPI Package
+   :target: https://pypi.python.org/pypi/opcodes
+
 .. image:: https://readthedocs.org/projects/opcodes/badge/?style
    :alt: Documentation
    :target: https://opcodes.readthedocs.org
