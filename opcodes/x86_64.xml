@@ -2287,6 +2287,24 @@
   <Instruction name="BEXTR" summary="Bit Field Extract">
     <InstructionForm gas-name="bextr">
       <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+        <Operand type="imm32"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01010" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="10"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="4" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="bextr">
+      <ISA>
         <Extension id="BMI"/>
       </ISA>
       <Operands>
@@ -2299,6 +2317,24 @@
           <VEX type="VEX" W="0" L="0" m-mmmm="00010" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv-operand-number="2"/>
           <Opcode byte="F7"/>
           <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="bextr">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="m32" input="true" output="false"/>
+        <Operand type="imm32"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01010" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="10"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="4" operand-number="2"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -2321,6 +2357,24 @@
     </InstructionForm>
     <InstructionForm gas-name="bextr">
       <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="r64" input="true" output="false"/>
+        <Operand type="imm32"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01010" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="10"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="4" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="bextr">
+      <ISA>
         <Extension id="BMI"/>
       </ISA>
       <Operands>
@@ -2338,6 +2392,24 @@
     </InstructionForm>
     <InstructionForm gas-name="bextr">
       <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+        <Operand type="imm32"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01010" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="10"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="4" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="bextr">
+      <ISA>
         <Extension id="BMI"/>
       </ISA>
       <Operands>
@@ -2349,6 +2421,336 @@
         <Encoding>
           <VEX type="VEX" W="1" L="0" m-mmmm="00010" pp="00" R-operand-number="0" BX-operand-number="1" vvvv-operand-number="2"/>
           <Opcode byte="F7"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="BLCFILL" summary="Fill From Lowest Clear Bit">
+    <InstructionForm gas-name="blcfill">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blcfill">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="m32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blcfill">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="r64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blcfill">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="BLCI" summary="Isolate Lowest Clear Bit">
+    <InstructionForm gas-name="blci">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="02"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blci">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="m32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="02"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blci">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="r64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="02"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blci">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="02"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="BLCIC" summary="Isolate Lowest Set Bit and Complement">
+    <InstructionForm gas-name="blcic">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blcic">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="m32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blcic">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="r64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blcic">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="BLCMSK" summary="Mask From Lowest Clear Bit">
+    <InstructionForm gas-name="blcmsk">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="02"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blcmsk">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="m32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="02"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blcmsk">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="r64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="02"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blcmsk">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="02"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="BLCS" summary="Set Lowest Clear Bit">
+    <InstructionForm gas-name="blcs">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blcs">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="m32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blcs">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="r64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blcs">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="01"/>
           <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
         </Encoding>
       </Encodings>
@@ -2526,7 +2928,73 @@
       </Encodings>
     </InstructionForm>
   </Instruction>
-  <Instruction name="BLSI" summary="Extract Lowest Set Isolated Bit">
+  <Instruction name="BLSFILL" summary="Fill From Lowest Set Bit">
+    <InstructionForm gas-name="blsfill">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blsfill">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="m32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blsfill">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="r64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blsfill">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="BLSI" summary="Isolate Lowest Set Bit">
     <InstructionForm gas-name="blsi">
       <ISA>
         <Extension id="BMI"/>
@@ -2592,7 +3060,73 @@
       </Encodings>
     </InstructionForm>
   </Instruction>
-  <Instruction name="BLSMSK" summary="Get Mask Up to Lowest Set Bit">
+  <Instruction name="BLSIC" summary="Isolate Lowest Set Bit and Complement">
+    <InstructionForm gas-name="blsic">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blsic">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="m32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blsic">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="r64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="blsic">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="BLSMSK" summary="Mask From Lowest Set Bit">
     <InstructionForm gas-name="blsmsk">
       <ISA>
         <Extension id="BMI"/>
@@ -31044,6 +31578,72 @@
       </Encodings>
     </InstructionForm>
   </Instruction>
+  <Instruction name="T1MSKC" summary="Inverse Mask From Trailing Ones">
+    <InstructionForm gas-name="t1mskc">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="t1mskc">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="m32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="t1mskc">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="r64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="t1mskc">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="TEST" summary="Logical Compare">
     <InstructionForm gas-name="testb" go-name="TESTB">
       <Operands>
@@ -31457,6 +32057,72 @@
           <Opcode byte="F3"/>
           <Opcode byte="0F"/>
           <Opcode byte="BC"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="TZMSK" summary="Mask From Trailing Zeros">
+    <InstructionForm gas-name="tzmsk">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="tzmsk">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="m32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="tzmsk">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="r64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="01"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="tzmsk">
+      <ISA>
+        <Extension id="TBM"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="01"/>
           <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
         </Encoding>
       </Encodings>

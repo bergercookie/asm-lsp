@@ -281,6 +281,7 @@ class ISAExtension:
         - "FMA4"      := Fused Multiply-Add instructions (4-operand).
         - "BMI"       := Bit Manipulation Instructions.
         - "BMI2"      := Bit Manipulation Instructions 2.
+        - "TBM"       := Trailing Bit Manipulation instructions.
         - "ADX"       := The `ADCX` and `ADOX` instructions.
         - "AES"       := `AES` instruction set.
         - "SHA"       := `SHA` instruction set.
@@ -417,7 +418,10 @@ class VEX:
             This value does not have opcode byte interpretation. Only XOP instructions use this value.
 
         0b01001
-            This value does not have opcode byte interpretation. Only XOP instructions use this value.
+            This value does not have opcode byte interpretation. Only XOP and TBM instructions use this value.
+
+        0b01010
+            This value does not have opcode byte interpretation. Only TBM instructions use this value.
 
         Only VEX prefix with m-mmmm equal to 0b00001 could be encoded in two bytes.
 
