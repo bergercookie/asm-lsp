@@ -9713,6 +9713,47 @@
       </Encodings>
     </InstructionForm>
   </Instruction>
+  <Instruction name="EXTRQ" summary="Extract Field">
+    <InstructionForm gas-name="extrq" xmm-mode="SSE">
+      <ISA>
+        <Extension id="SSE4A"/>
+      </ISA>
+      <Operands>
+        <Operand type="xmm" input="true" output="true"/>
+        <Operand type="xmm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <Prefix byte="66" mandatory="true"/>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="79"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="extrq" xmm-mode="SSE">
+      <ISA>
+        <Extension id="SSE4A"/>
+      </ISA>
+      <Operands>
+        <Operand type="xmm" input="true" output="true"/>
+        <Operand type="imm8"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <Prefix byte="66" mandatory="true"/>
+          <REX mandatory="false" W="0" R-operand-number="0" B="ignored" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="78"/>
+          <ModRM mode="ignored" reg-operand-number="0" rm="ignored"/>
+          <Immediate size="1" operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="FEMMS" summary="Fast Exit Multimedia State">
     <InstructionForm gas-name="femms">
       <ISA>
@@ -10533,6 +10574,48 @@
           <Opcode byte="21"/>
           <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
           <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="INSERTQ" summary="Insert Field">
+    <InstructionForm gas-name="insertq" xmm-mode="SSE">
+      <ISA>
+        <Extension id="SSE4A"/>
+      </ISA>
+      <Operands>
+        <Operand type="xmm" input="false" output="true"/>
+        <Operand type="xmm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <Prefix byte="F2" mandatory="true"/>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="79"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="insertq" xmm-mode="SSE">
+      <ISA>
+        <Extension id="SSE4A"/>
+      </ISA>
+      <Operands>
+        <Operand type="xmm" input="false" output="true"/>
+        <Operand type="xmm" input="true" output="false"/>
+        <Operand type="imm8"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <Prefix byte="F2" mandatory="true"/>
+          <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="78"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+          <Immediate size="1" operand-number="3"/>
         </Encoding>
       </Encodings>
     </InstructionForm>
@@ -12925,6 +13008,46 @@
           <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
           <Opcode byte="0F"/>
           <Opcode byte="E7"/>
+          <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="MOVNTSD" summary="Store Scalar Double-Precision Floating-Point Values Using Non-Temporal Hint">
+    <InstructionForm gas-name="movntsd" xmm-mode="SSE">
+      <ISA>
+        <Extension id="SSE4A"/>
+      </ISA>
+      <Operands>
+        <Operand type="m64" input="false" output="true"/>
+        <Operand type="xmm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <Prefix byte="F2" mandatory="true"/>
+          <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="2B"/>
+          <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="MOVNTSS" summary="Store Scalar Single-Precision Floating-Point Values Using Non-Temporal Hint">
+    <InstructionForm gas-name="movntss" xmm-mode="SSE">
+      <ISA>
+        <Extension id="SSE4A"/>
+      </ISA>
+      <Operands>
+        <Operand type="m32" input="false" output="true"/>
+        <Operand type="xmm" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <Prefix byte="F3" mandatory="true"/>
+          <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
+          <Opcode byte="0F"/>
+          <Opcode byte="2B"/>
           <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
         </Encoding>
       </Encodings>

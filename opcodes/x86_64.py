@@ -756,21 +756,30 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                     elif xml_component.tag == "ModRM":
                         modrm = ModRM()
                         if "mode" in xml_component.attrib:
-                            modrm.mode = int(xml_component.attrib["mode"], 2)
-                            assert modrm.mode == 0b11
+                            if xml_component.attrib["mode"] == "ignored":
+                                modrm.mode = None
+                            else:
+                                modrm.mode = int(xml_component.attrib["mode"], 2)
+                                assert modrm.mode == 0b11
                         else:
                             assert "mode-operand-number" in xml_component.attrib
                             assert xml_component.attrib["mode-operand-number"] == xml_component.attrib["rm-operand-number"]
                             modrm.mode = instruction_form.operands[int(xml_component.attrib["mode-operand-number"])]
                         if "reg" in xml_component.attrib:
+                            assert "reg-operand-number" not in xml_component.attrib
                             modrm.reg = int(xml_component.attrib["reg"])
                             assert 0 <= modrm.reg <= 7
                         else:
                             assert "reg-operand-number" in xml_component.attrib
                             modrm.reg = instruction_form.operands[int(xml_component.attrib["reg-operand-number"])]
-                        assert "rm-operand-number" in xml_component.attrib
-                        modrm.rm = instruction_form.operands[int(xml_component.attrib["rm-operand-number"])]
-                        encoding.components.append(modrm)
+                        if "rm" in xml_component.attrib:
+                            assert "rm-operand-number" not in xml_component.attrib
+                            assert xml_component.attrib["rm"] == "ignored"
+                            modrm.rm = None
+                        else:
+                            assert "rm-operand-number" in xml_component.attrib
+                            modrm.rm = instruction_form.operands[int(xml_component.attrib["rm-operand-number"])]
+                            encoding.components.append(modrm)
                     elif xml_component.tag == "Immediate":
                         assert "size" in xml_component.attrib
                         immediate_size = int(xml_component.attrib["size"])

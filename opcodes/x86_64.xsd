@@ -106,6 +106,7 @@
 	<xs:simpleType name="Mode">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="11" />
+			<xs:enumeration value="ignored" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="VVVV">
@@ -158,6 +159,7 @@
 			<xs:enumeration value="SSSE3" />
 			<xs:enumeration value="SSE4.1" />
 			<xs:enumeration value="SSE4.2" />
+			<xs:enumeration value="SSE4A" />
 			<xs:enumeration value="AVX" />
 			<xs:enumeration value="AVX2" />
 			<xs:enumeration value="XOP" />
@@ -271,7 +273,8 @@
 																		<xs:attribute name="mode-operand-number" type="OperandNumber" />
 																		<xs:attribute name="reg-operand-number" type="OperandNumber" />
 																		<xs:attribute name="reg" type="RegValue" />
-																		<xs:attribute name="rm-operand-number" type="OperandNumber" use="required" />
+																		<xs:attribute name="rm-operand-number" type="OperandNumber" />
+																		<xs:attribute name="rm" type="Ignored" />
 																	</xs:complexType>
 																</xs:element>
 																<xs:element name="Opcode" minOccurs="0" maxOccurs="1">
