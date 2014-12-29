@@ -1,1 +1,1 @@
-include license.rst opcodes/x86_64.xml opcodes/x86_64.xsd
+include license.rst readme.rst opcodes/x86_64.xml opcodes/x86_64.xsd
