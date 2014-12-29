@@ -4,6 +4,7 @@
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="1" />
 			<xs:enumeration value="3" />
+			<xs:enumeration value="imm4" />
 			<xs:enumeration value="imm8" />
 			<xs:enumeration value="imm16" />
 			<xs:enumeration value="imm32" />
@@ -117,6 +118,8 @@
 			<xs:enumeration value="00001" />
 			<xs:enumeration value="00010" />
 			<xs:enumeration value="00011" />
+			<xs:enumeration value="01000" />
+			<xs:enumeration value="01001" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="PP">
@@ -125,6 +128,12 @@
 			<xs:enumeration value="01" />
 			<xs:enumeration value="10" />
 			<xs:enumeration value="11" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="VEXPrefixType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="VEX" />
+			<xs:enumeration value="XOP" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="Ignored">
@@ -151,7 +160,9 @@
 			<xs:enumeration value="SSE4.2" />
 			<xs:enumeration value="AVX" />
 			<xs:enumeration value="AVX2" />
+			<xs:enumeration value="XOP" />
 			<xs:enumeration value="FMA3" />
+			<xs:enumeration value="FMA4" />
 			<xs:enumeration value="F16C" />
 			<xs:enumeration value="PCLMULQDQ" />
 			<xs:enumeration value="AES" />
@@ -221,6 +232,7 @@
 																</xs:element>
 																<xs:element name="VEX" minOccurs="0">
 																	<xs:complexType>
+																		<xs:attribute name="type" type="VEXPrefixType" use="required" />
 																		<xs:attribute name="W" type="Bit" use="required" />
 																		<xs:attribute name="L" type="Bit" use="required" />
 																		<xs:attribute name="m-mmmm" type="M-MMMM" use="required" />

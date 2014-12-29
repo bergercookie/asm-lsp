@@ -124,6 +124,9 @@ class Operand:
         "rel32"
             A 32-bit signed offset relative to the address of instruction end.
 
+        "imm4"
+            A 4-bit immediate value.
+
         "imm8"
             An 8-bit immediate value.
 
@@ -271,8 +274,10 @@ class ISAExtension:
         - "SSE4.2"    := Streaming SIMD Extension 4.2.
         - "AVX"       := Advanced Vector eXtension.
         - "AVX2"      := Advanced Vector eXtension 2.
+        - "XOP"       := eXtended OPerations extension.
         - "F16C"      := Half-Precision (F16) Conversion instructions.
         - "FMA3"      := Fused Multiply-Add instructions (3-operand).
+        - "FMA4"      := Fused Multiply-Add instructions (4-operand).
         - "BMI"       := Bit Manipulation Instructions.
         - "BMI2"      := Bit Manipulation Instructions 2.
         - "ADX"       := The `ADCX` and `ADOX` instructions.
@@ -381,12 +386,23 @@ class REX:
 
 
 class VEX:
-    """VEX prefix.
+    """VEX or XOP prefix.
+
+    VEX and XOP prefixes use the same format and differ only by leading byte.
+    The `type` property helps to differentiate between the two prefix types.
 
     Encoding may have only one VEX prefix and if present, it immediately precedes the opcode, and no other prefix is \
     allowed.
 
-    :ivar mmmmm: the VEX m-mmmm (implied leading opcode bytes) field. Possible values are:
+    :ivar type: the type of the leading byte for VEX encoding. Possible values are:
+
+        "VEX"
+            The VEX prefix (0xC4 or 0xC5) is used.
+
+        "XOP"
+            The XOP prefix (0x8F) is used.
+
+    :ivar mmmmm: the VEX m-mmmm (implied leading opcode bytes) field. In AMD documentation this field is called map_select. Possible values are:
 
         0b00001
             Implies 0x0F leading opcode byte.
@@ -396,6 +412,12 @@ class VEX:
 
         0b00011
             Implies 0x0F 0x3A leading opcode bytes.
+
+        0b01000
+            This value does not have opcode byte interpretation. Only XOP instructions use this value.
+
+        0b01001
+            This value does not have opcode byte interpretation. Only XOP instructions use this value.
 
         Only VEX prefix with m-mmmm equal to 0b00001 could be encoded in two bytes.
 
@@ -449,6 +471,7 @@ class VEX:
     """
 
     def __init__(self):
+        self.prefix_type = None
         self.mmmmm = None
         self.pp = None
         self.W = None
@@ -670,6 +693,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         else:
                             vex.L = int(vex.L)
 
+                        vex.type = xml_component.attrib["type"]
                         vex.mmmmm = int(xml_component.attrib["m-mmmm"], 2)
                         vex.pp = int(xml_component.attrib["pp"], 2)
 

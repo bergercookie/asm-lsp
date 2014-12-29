@@ -26,7 +26,7 @@ The project provides descriptions for most user-mode x86-64 instructions up to A
 - Legacy string/streaming instructions (MOVS/SCAS/CMPS/STOS/LODS)
 - LOCK and REP/REPZ/REPNZ prefixes
 - x87 FPU instructions
-- AMD XOP instructions
+- AMD SSE4A instructions
 - AMD TBM instructions
 - VIA Padlock instructions
 - Intel HTM instructions
