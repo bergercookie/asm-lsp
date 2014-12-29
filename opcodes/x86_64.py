@@ -272,6 +272,7 @@ class ISAExtension:
         - "SSSE3"     := Supplemental Streaming SIMD Extension 3.
         - "SSE4.1"    := Streaming SIMD Extension 4.1.
         - "SSE4.2"    := Streaming SIMD Extension 4.2.
+        - "SSE4A"     := Streaming SIMD Extension 4a.
         - "AVX"       := Advanced Vector eXtension.
         - "AVX2"      := Advanced Vector eXtension 2.
         - "XOP"       := eXtended OPerations extension.
@@ -297,8 +298,7 @@ class Encoding:
     """Instruction encoding
 
     :ivar components: a list of :class:`Prefix`, :class:`REX`, :class:`VEX`, :class:`Opcode`, :class:`ModRM`, \
-        :class:`ImmediateByte`, :class:`ImmediateWord`, :class:`ImmediateDWord`, :class:`ImmediateQWord`, \
-        :class:`DataOffset32`, :class:`DataOffset64`, :class:`CodeOffset8`, or :class:`CodeOffset32` objects that \
+        :class:`RegisterByte`, :class:`Immediate`, :class:`DataOffset32`, :class:`CodeOffset` objects that \
         specify the components of encoded instruction
     """
 
@@ -530,30 +530,63 @@ class Opcode:
 
 
 class ModRM:
+    """Mod R/M byte that can encode a register operand, a memory operand, or provide an opcode extension.
+
+    If memory operand requires SIB byte, the SIB byte immediately follows the Mod R/M byte in instruction encoding.
+
+    :ivar mode: addressing mode. Possible values are 0b11 or a reference to an instruction operand.
+
+        If mode value is 0b11, the Mod R/M encodes two register operands or a register operand and an opcode extension.
+
+        If mode is a reference to an instruction operand, the operand has memory type and its addressing mode must be \
+        coded instruction the Mod R/M mode field.
+
+    :ivar rm: a register or memory operand. Possible values are None or a reference to an instruction operand.
+
+        If rm is None, the field is ignored. Only one form of EXTRQ instruction from SSE4A uses this value.
+
+        If rm is a reference to an instruction operand, and the operand is of register type, rm specifies bits 0-2 of \
+        the register number. If the operand is of memory type, rm specifies bits 0-2 of the base register number \
+        unless a SIB byte is used.
+
+    :ivar reg: a register or an opcode extension. Possible values are an int value, or a reference to an instruction \
+        operand.
+
+        If reg is an int value, this value extends the opcode and must be directly coded in the reg field.
+
+        If reg is a reference to an instruction operand, the operand is of register type, and the reg field specifies \
+        bits 0-2 of the register number.
+    """
     def __init__(self):
         self.mode = None
         self.rm = None
         self.reg = None
 
+    def set_ignored(self, mode=0b11, rm=0):
+        """Sets values for ignored fields
 
-class ImmediateByte:
+        :param int mode: the value (0b00, 0b01, 0b10, or 0b11) to be assigned to Mod R/M mode field if it is ignored.
+        :param int rm: the value (an integer, 0 <= rm <= 7) to be assigned to Mod R/M rm field if it is ignored.
+        """
+        assert mode in {0b00, 0b01, 0b10, 0b11}, "Mod R/M mode must be 0b00, 0b01, 0b10 or 0b11"
+        assert rm in {0, 1, 2, 3, 4, 5, 6, 7}, "Mod R/M rm must be an integer in 0-7 range"
+        if self.mode is None:
+            self.mode = mode
+        if self.rm is None:
+            self.rm = rm
+
+
+class Immediate:
+    """Immediate constant embedded into instruction encoding.
+
+    :ivar size: size of the constant. Possible values are 1, 2, 4, or 8.
+    :ivar value: value of the constant. Can be an int value or a reference to an instruction operand.
+
+        If value is a reference to an instruction operand, the operand has "imm" type of the matching size.
+    """
     def __init__(self):
-        self.byte = None
-
-
-class ImmediateWord:
-    def __init__(self):
-        self.word = None
-
-
-class ImmediateDWord:
-    def __init__(self):
-        self.dword = None
-
-
-class ImmediateQWord:
-    def __init__(self):
-        self.qword = None
+        self.size = None
+        self.value = None
 
 
 class RegisterByte:
@@ -562,24 +595,34 @@ class RegisterByte:
         self.payload = None
 
 
-class CodeOffset32:
+class CodeOffset:
+    """Relative code offset embedded into instruction encoding.
+
+    Offset is relative to the end of the instruction.
+
+    :ivar size: size of the offset. Possible values are 1 or 4.
+    :ivar value: value of the offset. Must be a reference to an instruction operand.
+
+        The instruction operand has "rel" type of the matching size.
+    """
     def __init__(self):
-        self.offset = None
+        self.size = None
+        self.value = None
 
 
-class CodeOffset8:
+class DataOffset:
+    """Absolute data offset embedded into instruction encoding.
+
+    Only MOV instruction has forms that use direct data offset.
+
+    :ivar size: size of the offset. Possible values are 4 or 8.
+    :ivar value: value of the offset. Must be a reference to an instruction operand.
+
+        The instruction operand has "moffs" type of the matching size.
+    """
     def __init__(self):
-        self.offset = None
-
-
-class DataOffset32:
-    def __init__(self):
-        self.offset = None
-
-
-class DataOffset64:
-    def __init__(self):
-        self.offset = None
+        self.size = None
+        self.value = None
 
 
 def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), "x86_64.xml")):
@@ -782,32 +825,11 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                             encoding.components.append(modrm)
                     elif xml_component.tag == "Immediate":
                         assert "size" in xml_component.attrib
-                        immediate_size = int(xml_component.attrib["size"])
-                        assert immediate_size in {1, 2, 4, 8}
-                        if immediate_size == 1:
-                            immediate_byte = ImmediateByte()
-                            if "operand-number" in xml_component.attrib:
-                                immediate_byte.byte = instruction_form.operands[int(xml_component.attrib["operand-number"])]
-                            else:
-                                assert False
-                            encoding.components.append(immediate_byte)
-                        elif immediate_size == 2:
-                            immediate_word = ImmediateWord()
-                            assert "operand-number" in xml_component.attrib
-                            immediate_word.word = instruction_form.operands[int(xml_component.attrib["operand-number"])]
-                            encoding.components.append(immediate_word)
-                        elif immediate_size == 4:
-                            immediate_dword = ImmediateDWord()
-                            assert "operand-number" in xml_component.attrib
-                            immediate_dword.dword = instruction_form.operands[int(xml_component.attrib["operand-number"])]
-                            encoding.components.append(immediate_dword)
-                        elif immediate_size == 8:
-                            immediate_qword = ImmediateQWord()
-                            assert "operand-number" in xml_component.attrib
-                            immediate_qword.qword = instruction_form.operands[int(xml_component.attrib["operand-number"])]
-                            encoding.components.append(immediate_qword)
-                        else:
-                            assert False
+                        immediate = Immediate()
+                        immediate.size = int(xml_component.attrib["size"])
+                        assert immediate.size in {1, 2, 4, 8}
+                        assert "operand-number" in xml_component.attrib
+                        immediate.value = instruction_form.operands[int(xml_component.attrib["operand-number"])]
                     elif xml_component.tag == "RegisterByte":
                         register_byte = RegisterByte()
                         register_byte.register = instruction_form.operands[int(xml_component.attrib["register-operand-number"])]
@@ -819,31 +841,19 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         else:
                             register_byte.payload = instruction_form.operands[int(xml_component.attrib["payload-operand-number"])]
                     elif xml_component.tag == "CodeOffset":
-                        offset_size = int(xml_component.attrib["size"])
-                        assert offset_size in {1, 4}
-                        if offset_size == 1:
-                            code_offset = CodeOffset8()
-                            code_offset.offset = instruction_form.operands[int(xml_component.attrib["operand-number"])]
-                            encoding.components.append(code_offset)
-                        elif offset_size == 4:
-                            code_offset = CodeOffset32()
-                            code_offset.offset = instruction_form.operands[int(xml_component.attrib["operand-number"])]
-                            encoding.components.append(code_offset)
-                        else:
-                            assert False
+                        assert "size" in xml_component.attrib
+                        code_offset = CodeOffset()
+                        code_offset.size = int(xml_component.attrib["size"])
+                        assert code_offset.size in {1, 4}
+                        assert "operand-number" in xml_component.attrib
+                        code_offset.value = instruction_form.operands[int(xml_component.attrib["operand-number"])]
                     elif xml_component.tag == "DataOffset":
-                        offset_size = int(xml_component.attrib["size"])
-                        assert offset_size in {4, 8}
-                        if offset_size == 4:
-                            data_offset = DataOffset32()
-                            data_offset.offset = instruction_form.operands[int(xml_component.attrib["operand-number"])]
-                            encoding.components.append(data_offset)
-                        elif offset_size == 8:
-                            data_offset = DataOffset64()
-                            data_offset.offset = instruction_form.operands[int(xml_component.attrib["operand-number"])]
-                            encoding.components.append(data_offset)
-                        else:
-                            assert False
+                        assert "size" in xml_component.attrib
+                        data_offset = DataOffset()
+                        data_offset.size = int(xml_component.attrib["size"])
+                        assert data_offset.size in {4, 8}
+                        assert "operand-number" in xml_component.attrib
+                        data_offset.value = instruction_form.operands[int(xml_component.attrib["operand-number"])]
                     else:
                         print("Unknown encoding tag: " + xml_component.tag)
 
