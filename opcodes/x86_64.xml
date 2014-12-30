@@ -11655,6 +11655,1223 @@
       </Encodings>
     </InstructionForm>
   </Instruction>
+  <Instruction name="KADDB" summary="ADD Two 8-bit Masks">
+    <InstructionForm gas-name="kaddb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="1" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="4A"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KADDD" summary="ADD Two 32-bit Masks">
+    <InstructionForm gas-name="kaddd">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="1" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="4A"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KADDQ" summary="ADD Two 64-bit Masks">
+    <InstructionForm gas-name="kaddq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="1" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="4A"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KADDW" summary="ADD Two 16-bit Masks">
+    <InstructionForm gas-name="kaddw">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="1" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="4A"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KANDB" summary="Bitwise Logical AND 8-bit Masks">
+    <InstructionForm gas-name="kandb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="1" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="41"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KANDD" summary="Bitwise Logical AND 32-bit Masks">
+    <InstructionForm gas-name="kandd">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="1" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="41"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KANDNB" summary="Bitwise Logical AND NOT 8-bit Masks">
+    <InstructionForm gas-name="kandnb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="1" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="42"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KANDND" summary="Bitwise Logical AND NOT 32-bit Masks">
+    <InstructionForm gas-name="kandnd">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="1" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="42"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KANDNQ" summary="Bitwise Logical AND NOT 64-bit Masks">
+    <InstructionForm gas-name="kandnq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="1" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="42"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KANDNW" summary="Bitwise Logical AND NOT 16-bit Masks">
+    <InstructionForm gas-name="kandnw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="1" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="42"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KANDQ" summary="Bitwise Logical AND 64-bit Masks">
+    <InstructionForm gas-name="kandq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="1" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="41"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KANDW" summary="Bitwise Logical AND 16-bit Masks">
+    <InstructionForm gas-name="kandw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="1" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="41"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KMOVB" summary="Move 8-bit Mask">
+    <InstructionForm gas-name="kmovb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="90"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="01" R="1" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="92"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="m8" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="01" R="1" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="90"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="01" R-operand-number="0" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="93"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="m8" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="01" R="1" BX-operand-number="0" vvvv="1111"/>
+          <Opcode byte="91"/>
+          <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KMOVD" summary="Move 32-bit Mask">
+    <InstructionForm gas-name="kmovd">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="90"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovd">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="11" R="1" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="92"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovd">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="m32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00001" pp="01" R="1" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="90"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovd">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="11" R-operand-number="0" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="93"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovd">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="m32" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00001" pp="01" R="1" BX-operand-number="0" vvvv="1111"/>
+          <Opcode byte="91"/>
+          <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KMOVQ" summary="Move 64-bit Mask">
+    <InstructionForm gas-name="kmovq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="90"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="r64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00001" pp="11" R="1" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="92"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="m64" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00001" pp="00" R="1" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="90"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="r64" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00001" pp="11" R-operand-number="0" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="93"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="m64" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00001" pp="00" R="1" BX-operand-number="0" vvvv="1111"/>
+          <Opcode byte="91"/>
+          <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KMOVW" summary="Move 16-bit Mask">
+    <InstructionForm gas-name="kmovw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="90"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="r32" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="00" R="1" B-operand-number="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="92"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="m16" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="00" R="1" BX-operand-number="1" vvvv="1111"/>
+          <Opcode byte="90"/>
+          <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="r32" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="00" R-operand-number="0" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="93"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+    <InstructionForm gas-name="kmovw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="m16" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="00" R="1" BX-operand-number="0" vvvv="1111"/>
+          <Opcode byte="91"/>
+          <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KNOTB" summary="NOT 8-bit Mask Register">
+    <InstructionForm gas-name="knotb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="44"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KNOTD" summary="NOT 32-bit Mask Register">
+    <InstructionForm gas-name="knotd">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="44"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KNOTQ" summary="NOT 64-bit Mask Register">
+    <InstructionForm gas-name="knotq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="44"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KNOTW" summary="NOT 16-bit Mask Register">
+    <InstructionForm gas-name="knotw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="44"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KORB" summary="Bitwise Logical OR 8-bit Masks">
+    <InstructionForm gas-name="korb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="1" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="45"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KORD" summary="Bitwise Logical OR 32-bit Masks">
+    <InstructionForm gas-name="kord">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="1" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="45"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KORQ" summary="Bitwise Logical OR 64-bit Masks">
+    <InstructionForm gas-name="korq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="1" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="45"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KORTESTB" summary="OR 8-bit Masks and Set Flags">
+    <InstructionForm gas-name="kortestb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="98"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KORTESTD" summary="OR 32-bit Masks and Set Flags">
+    <InstructionForm gas-name="kortestd">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="98"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KORTESTQ" summary="OR 64-bit Masks and Set Flags">
+    <InstructionForm gas-name="kortestq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="98"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KORTESTW" summary="OR 16-bit Masks and Set Flags">
+    <InstructionForm gas-name="kortestw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="98"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KORW" summary="Bitwise Logical OR 16-bit Masks">
+    <InstructionForm gas-name="korw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="1" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="45"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KSHIFTLB" summary="Shift Left 8-bit Masks">
+    <InstructionForm gas-name="kshiftlb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00011" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="32"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KSHIFTLD" summary="Shift Left 32-bit Masks">
+    <InstructionForm gas-name="kshiftld">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00011" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="33"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KSHIFTLQ" summary="Shift Left 64-bit Masks">
+    <InstructionForm gas-name="kshiftlq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00011" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="33"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KSHIFTLW" summary="Shift Left 16-bit Masks">
+    <InstructionForm gas-name="kshiftlw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00011" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="32"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KSHIFTRB" summary="Shift Right 8-bit Masks">
+    <InstructionForm gas-name="kshiftrb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00011" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="30"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KSHIFTRD" summary="Shift Right 32-bit Masks">
+    <InstructionForm gas-name="kshiftrd">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00011" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="31"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KSHIFTRQ" summary="Shift Right 64-bit Masks">
+    <InstructionForm gas-name="kshiftrq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00011" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="31"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KSHIFTRW" summary="Shift Right 16-bit Masks">
+    <InstructionForm gas-name="kshiftrw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="imm8"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00011" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="30"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+          <Immediate size="1" operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KTESTB" summary="Bit Test 8-bit Masks and Set Flags">
+    <InstructionForm gas-name="ktestb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="99"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KTESTD" summary="Bit Test 32-bit Masks and Set Flags">
+    <InstructionForm gas-name="ktestd">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="99"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KTESTQ" summary="Bit Test 64-bit Masks and Set Flags">
+    <InstructionForm gas-name="ktestq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="0" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="99"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KTESTW" summary="Bit Test 16-bit Masks and Set Flags">
+    <InstructionForm gas-name="ktestw">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv="1111"/>
+          <Opcode byte="99"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KUNPCKBW" summary="Unpack and Interleave 8-bit Masks">
+    <InstructionForm gas-name="kunpckbw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="1" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="4B"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KUNPCKDQ" summary="Unpack and Interleave 32-bit Masks">
+    <InstructionForm gas-name="kunpckdq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="1" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="4B"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KUNPCKWD" summary="Unpack and Interleave 16-bit Masks">
+    <InstructionForm gas-name="kunpckwd">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="1" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="4B"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KXNORB" summary="Bitwise Logical XNOR 8-bit Masks">
+    <InstructionForm gas-name="kxnorb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="1" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="46"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KXNORD" summary="Bitwise Logical XNOR 32-bit Masks">
+    <InstructionForm gas-name="kxnord">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="1" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="46"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KXNORQ" summary="Bitwise Logical XNOR 64-bit Masks">
+    <InstructionForm gas-name="kxnorq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="1" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="46"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KXNORW" summary="Bitwise Logical XNOR 16-bit Masks">
+    <InstructionForm gas-name="kxnorw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="1" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="46"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KXORB" summary="Bitwise Logical XOR 8-bit Masks">
+    <InstructionForm gas-name="kxorb">
+      <ISA>
+        <Extension id="AVX512DQ"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="1" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="47"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KXORD" summary="Bitwise Logical XOR 32-bit Masks">
+    <InstructionForm gas-name="kxord">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="1" m-mmmm="00001" pp="01" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="47"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KXORQ" summary="Bitwise Logical XOR 64-bit Masks">
+    <InstructionForm gas-name="kxorq">
+      <ISA>
+        <Extension id="AVX512BW"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="1" L="1" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="47"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="KXORW" summary="Bitwise Logical XOR 16-bit Masks">
+    <InstructionForm gas-name="kxorw">
+      <ISA>
+        <Extension id="AVX512F"/>
+      </ISA>
+      <Operands>
+        <Operand type="k" input="false" output="true"/>
+        <Operand type="k" input="true" output="false"/>
+        <Operand type="k" input="true" output="false"/>
+      </Operands>
+      <Encodings>
+        <Encoding>
+          <VEX type="VEX" W="0" L="1" m-mmmm="00001" pp="00" R="1" B="1" X="ignored" vvvv-operand-number="1"/>
+          <Opcode byte="47"/>
+          <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        </Encoding>
+      </Encodings>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="LDDQU" summary="Load Unaligned Integer 128 Bits">
     <InstructionForm gas-name="lddqu" xmm-mode="SSE">
       <ISA>

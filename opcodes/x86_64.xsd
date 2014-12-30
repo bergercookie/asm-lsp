@@ -25,6 +25,8 @@
 			<xs:enumeration value="xmm0" />
 			<xs:enumeration value="xmm" />
 			<xs:enumeration value="ymm" />
+			<xs:enumeration value="zmm" />
+			<xs:enumeration value="k" />
 			<xs:enumeration value="moffs32" />
 			<xs:enumeration value="moffs64" />
 			<xs:enumeration value="m" />
@@ -180,6 +182,9 @@
 			<xs:enumeration value="ADX" />
 			<xs:enumeration value="PRFCHW" />
 			<xs:enumeration value="PREFETCHWT1" />
+			<xs:enumeration value="AVX512F" />
+			<xs:enumeration value="AVX512BW" />
+			<xs:enumeration value="AVX512DQ" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:element name="InstructionSet">

@@ -172,6 +172,9 @@ class Operand:
         "zmm"
             A 512-bit ZMM SIMD register (zmm0-zmm31).
 
+        "k"
+            An AVX-512 mask register (k1-k7).
+
         "m"
             A memory operand of any size.
 
@@ -275,6 +278,9 @@ class ISAExtension:
         - "SSE4A"     := Streaming SIMD Extension 4a.
         - "AVX"       := Advanced Vector eXtension.
         - "AVX2"      := Advanced Vector eXtension 2.
+        - "AVX512F"   := AVX-512 Foundation instructions.
+        - "AVX512BW"  := AVX-512 Byte and Word instructions.
+        - "AVX512DQ"  := AVX-512 Doubleword and Quadword instructions.
         - "XOP"       := eXtended OPerations extension.
         - "F16C"      := Half-Precision (F16) Conversion instructions.
         - "FMA3"      := Fused Multiply-Add instructions (3-operand).
@@ -485,7 +491,7 @@ class VEX:
         self.B = None
         self.vvvv = None
 
-    def set_ignored(self, w=0, l=0, r=0, x=0, b=0):
+    def set_ignored(self, w=0, l=0, r=1, x=1, b=1):
         """Sets values for ignored bits
 
         :param int w: the value (0 or 1) to be assigned to VEX.W bit if it is ignored.
