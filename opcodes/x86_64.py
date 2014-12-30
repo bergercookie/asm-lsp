@@ -630,6 +630,10 @@ class DataOffset:
 
 
 def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), "x86_64.xml")):
+    """Reads instruction set data from an XML file and returns a list of :class:`Instruction` objects
+
+    :param filename: path to an XML file with instruction set data
+    """
     xml_tree = ET.parse(filename)
     xml_instruction_set = xml_tree.getroot()
     assert xml_instruction_set.tag == "InstructionSet"
