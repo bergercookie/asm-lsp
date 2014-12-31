@@ -760,7 +760,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                             if vex.R == "ignored":
                                 vex.R = None
                             else:
-                                vex.R = int(rex.R)
+                                vex.R = int(vex.R)
                         else:
                             assert "R-operand-number" in xml_component.attrib
                             vex.R = instruction_form.operands[int(xml_component.attrib["R-operand-number"])]
@@ -772,7 +772,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                             if vex.B == "ignored":
                                 vex.B = None
                             else:
-                                vex.B = int(rex.B)
+                                vex.B = int(vex.B)
                         elif "B-operand-number" in xml_component.attrib:
                             assert "B" not in xml_component.attrib
                             assert "BX-operand-number" not in xml_component.attrib
