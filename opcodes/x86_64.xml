@@ -4243,7 +4243,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CALL" summary="Call Procedure">
-    <InstructionForm gas-name="callq">
+    <InstructionForm gas-name="call" go-name="CALL">
       <Operands>
         <Operand type="rel32"/>
       </Operands>
@@ -11334,7 +11334,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JMP" summary="Jump Unconditionally">
-    <InstructionForm gas-name="jmpq">
+    <InstructionForm gas-name="jmp" go-name="JMP">
       <Operands>
         <Operand type="rel8"/>
       </Operands>
@@ -11345,7 +11345,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="jmpq">
+    <InstructionForm gas-name="jmp" go-name="JMP">
       <Operands>
         <Operand type="rel32"/>
       </Operands>
