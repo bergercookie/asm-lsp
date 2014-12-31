@@ -242,7 +242,7 @@ class Operand:
     @property
     def is_register(self):
         """Indicates whether this operand specifies a register"""
-        return self.type in {"al", "cl", "ax", "eax", "rax", "xmm0", "r8", "r16", "r32", "r64", "r8l", "r16l", "r32l", "mm", "xmm", "ymm"}
+        return self.type in {"al", "cl", "ax", "eax", "rax", "xmm0", "r8", "r16", "r32", "r64", "r8l", "r16l", "r32l", "mm", "xmm", "ymm", "zmm", "k"}
 
     @property
     def is_memory(self):
@@ -251,6 +251,45 @@ class Operand:
 
 
 class ISAExtension:
+    _score_map = {
+        "CPUID": 1,
+        "RDTSC": 5,
+        "RDTSCP": 6,
+        "CMOV": 20,
+        "POPCNT": 100,
+        "LZCNT": 101,
+        "TBM": 102,
+        "BMI": 103,
+        "BMI2": 104,
+        "ADX": 105,
+        "MMX": 30,
+        "MMX+": 31,
+        "FEMMS": 40,
+        "3dnow!": 41,
+        "3dnow!+": 42,
+        "SSE": 50,
+        "SSE2": 51,
+        "SSE3": 52,
+        "SSSE3": 53,
+        "SSE4A": 54,
+        "SSE4.1": 55,
+        "SSE4.2": 56,
+        "FMA3": 60,
+        "FMA4": 61,
+        "XOP": 62,
+        "F16C": 63,
+        "AVX": 70,
+        "AVX2": 71,
+        "AVX512F": 72,
+        "AVX512BW": 73,
+        "AVX512DQ": 74,
+        "RDRAND": 80,
+        "RDSEED": 81,
+        "PCLMULQDQ": 90,
+        "AES": 91,
+        "SHA": 92,
+    }
+
     """An extension to x86-64 instruction set.
 
     :ivar name: name of the ISA extension. Possible values are:
@@ -300,12 +339,28 @@ class ISAExtension:
         """Returns the name of the ISA extension"""
         return self.name
 
+    def __repr__(self):
+        return str(self)
+
+    def __eq__(self, other):
+        return isinstance(other, ISAExtension) and self.name == other.name
+
+    def __ne__(self, other):
+        return not isinstance(other, ISAExtension) or self.name != other.name
+
+    def __hash__(self):
+        return hash(self.name)
+
+    @property
+    def score(self):
+        return self._score_map.get(self.name, 0)
+
 
 class Encoding:
     """Instruction encoding
 
     :ivar components: a list of :class:`Prefix`, :class:`REX`, :class:`VEX`, :class:`Opcode`, :class:`ModRM`, \
-        :class:`RegisterByte`, :class:`Immediate`, :class:`DataOffset32`, :class:`CodeOffset` objects that \
+        :class:`RegisterByte`, :class:`Immediate`, :class:`DataOffset`, :class:`CodeOffset` objects that \
         specify the components of encoded instruction
     """
 
@@ -589,7 +644,7 @@ class ModRM:
 class Immediate:
     """Immediate constant embedded into instruction encoding.
 
-    :ivar size: size of the constant. Possible values are 1, 2, 4, or 8.
+    :ivar size: size of the constant in bytes. Possible values are 1, 2, 4, or 8.
     :ivar value: value of the constant. Can be an int value or a reference to an instruction operand.
 
         If value is a reference to an instruction operand, the operand has "imm" type of the matching size.
@@ -610,7 +665,7 @@ class CodeOffset:
 
     Offset is relative to the end of the instruction.
 
-    :ivar size: size of the offset. Possible values are 1 or 4.
+    :ivar size: size of the offset in bytes. Possible values are 1 or 4.
     :ivar value: value of the offset. Must be a reference to an instruction operand.
 
         The instruction operand has "rel" type of the matching size.
@@ -625,7 +680,7 @@ class DataOffset:
 
     Only MOV instruction has forms that use direct data offset.
 
-    :ivar size: size of the offset. Possible values are 4 or 8.
+    :ivar size: size of the offset in bytes. Possible values are 4 or 8.
     :ivar value: value of the offset. Must be a reference to an instruction operand.
 
         The instruction operand has "moffs" type of the matching size.
