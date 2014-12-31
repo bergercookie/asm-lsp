@@ -24,7 +24,7 @@ This project is a spin-off from `Peach-Py <https://bitbucket.org/MDukhan/peachpy
 Current status
 --------------
 
-The project provides descriptions for most user-mode x86-64 instructions up to AVX2 and SHA (including 3dnow!+, XOP, FMA3, FMA4, TBM and BMI2). The following instructions are currently **NOT** supported:
+The project provides descriptions for most user-mode x86 and x86-64 instructions up to AVX2 and SHA (including 3dnow!+, XOP, FMA3, FMA4, TBM and BMI2). The following instructions are currently **NOT** supported:
 
 - All priveledged instructions and user-mode system instructions (e.g. XSAVE, SLDT)
 - Legacy string/streaming instructions (MOVS/SCAS/CMPS/STOS/LODS)
