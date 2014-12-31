@@ -10,6 +10,10 @@
    :alt: Documentation
    :target: https://opcodes.readthedocs.org
 
+.. image:: https://travis-ci.org/Maratyszcza/Opcodes.svg?branch=master
+   :alt: Test Status
+   :target: https://travis-ci.org/Maratyszcza/Opcodes
+
 Opcodes Project
 ===============
 
