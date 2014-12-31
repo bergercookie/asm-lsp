@@ -10,7 +10,7 @@
    :alt: Documentation
    :target: https://opcodes.readthedocs.org
 
-.. image:: https://travis-ci.org/Maratyszcza/Opcodes.svg?branch=master
+.. image:: https://img.shields.io/travis/Maratyszcza/Opcodes.svg
    :alt: Test Status
    :target: https://travis-ci.org/Maratyszcza/Opcodes
 
