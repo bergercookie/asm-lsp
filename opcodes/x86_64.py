@@ -353,6 +353,7 @@ class ISAExtension:
 
     @property
     def score(self):
+        """A number that can be used to order a list of ISA extensions"""
         return self._score_map.get(self.name, 0)
 
 
