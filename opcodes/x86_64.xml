@@ -18731,9 +18731,9 @@
         <Operand type="xmm" input="true" output="false"/>
         <Operand type="xmm" input="true" output="false"/>
         <Operand type="imm8"/>
-        <ImplicitOperand id="rax" input="true" output="false"/>
+        <ImplicitOperand id="eax" input="true" output="false"/>
         <ImplicitOperand id="ecx" input="false" output="true"/>
-        <ImplicitOperand id="rdx" input="true" output="false"/>
+        <ImplicitOperand id="edx" input="true" output="false"/>
       </Operands>
       <Encodings>
         <Encoding>
@@ -18755,9 +18755,9 @@
         <Operand type="xmm" input="true" output="false"/>
         <Operand type="m128" input="true" output="false"/>
         <Operand type="imm8"/>
-        <ImplicitOperand id="rax" input="true" output="false"/>
+        <ImplicitOperand id="eax" input="true" output="false"/>
         <ImplicitOperand id="ecx" input="false" output="true"/>
-        <ImplicitOperand id="rdx" input="true" output="false"/>
+        <ImplicitOperand id="edx" input="true" output="false"/>
       </Operands>
       <Encodings>
         <Encoding>
@@ -18781,8 +18781,8 @@
         <Operand type="xmm" input="true" output="false"/>
         <Operand type="xmm" input="true" output="false"/>
         <Operand type="imm8"/>
-        <ImplicitOperand id="rax" input="true" output="false"/>
-        <ImplicitOperand id="rdx" input="true" output="false"/>
+        <ImplicitOperand id="eax" input="true" output="false"/>
+        <ImplicitOperand id="edx" input="true" output="false"/>
         <ImplicitOperand id="xmm0" input="false" output="true"/>
       </Operands>
       <Encodings>
@@ -18805,8 +18805,8 @@
         <Operand type="xmm" input="true" output="false"/>
         <Operand type="m128" input="true" output="false"/>
         <Operand type="imm8"/>
-        <ImplicitOperand id="rax" input="true" output="false"/>
-        <ImplicitOperand id="rdx" input="true" output="false"/>
+        <ImplicitOperand id="eax" input="true" output="false"/>
+        <ImplicitOperand id="edx" input="true" output="false"/>
         <ImplicitOperand id="xmm0" input="false" output="true"/>
       </Operands>
       <Encodings>
@@ -47881,9 +47881,9 @@
         <Operand type="xmm" input="true" output="false"/>
         <Operand type="xmm" input="true" output="false"/>
         <Operand type="imm8"/>
-        <ImplicitOperand id="rax" input="true" output="false"/>
+        <ImplicitOperand id="eax" input="true" output="false"/>
         <ImplicitOperand id="ecx" input="false" output="true"/>
-        <ImplicitOperand id="rdx" input="true" output="false"/>
+        <ImplicitOperand id="edx" input="true" output="false"/>
       </Operands>
       <Encodings>
         <Encoding>
@@ -47902,9 +47902,9 @@
         <Operand type="xmm" input="true" output="false"/>
         <Operand type="m128" input="true" output="false"/>
         <Operand type="imm8"/>
-        <ImplicitOperand id="rax" input="true" output="false"/>
+        <ImplicitOperand id="eax" input="true" output="false"/>
         <ImplicitOperand id="ecx" input="false" output="true"/>
-        <ImplicitOperand id="rdx" input="true" output="false"/>
+        <ImplicitOperand id="edx" input="true" output="false"/>
       </Operands>
       <Encodings>
         <Encoding>
@@ -47925,8 +47925,8 @@
         <Operand type="xmm" input="true" output="false"/>
         <Operand type="xmm" input="true" output="false"/>
         <Operand type="imm8"/>
-        <ImplicitOperand id="rax" input="true" output="false"/>
-        <ImplicitOperand id="rdx" input="true" output="false"/>
+        <ImplicitOperand id="eax" input="true" output="false"/>
+        <ImplicitOperand id="edx" input="true" output="false"/>
         <ImplicitOperand id="xmm0" input="false" output="true"/>
       </Operands>
       <Encodings>
@@ -47946,8 +47946,8 @@
         <Operand type="xmm" input="true" output="false"/>
         <Operand type="m128" input="true" output="false"/>
         <Operand type="imm8"/>
-        <ImplicitOperand id="rax" input="true" output="false"/>
-        <ImplicitOperand id="rdx" input="true" output="false"/>
+        <ImplicitOperand id="eax" input="true" output="false"/>
+        <ImplicitOperand id="edx" input="true" output="false"/>
         <ImplicitOperand id="xmm0" input="false" output="true"/>
       </Operands>
       <Encodings>
