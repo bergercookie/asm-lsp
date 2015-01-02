@@ -1,7 +1,7 @@
 Opcodes Database license
 ========================
 
-Copyright (c) 2014, Georgia Institute of Technology
+Copyright (c) 2014-2015, Georgia Institute of Technology
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
