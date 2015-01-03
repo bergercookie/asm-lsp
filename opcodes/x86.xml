@@ -11293,7 +11293,7 @@
         <Extension id="SSE2"/>
       </ISA>
       <Operands>
-        <Operand type="xmm" input="true" output="true"/>
+        <Operand type="xmm" input="false" output="true"/>
         <Operand type="m64" input="true" output="false"/>
       </Operands>
       <Encodings>
@@ -11310,7 +11310,7 @@
         <Extension id="SSE2"/>
       </ISA>
       <Operands>
-        <Operand type="m64" input="true" output="true"/>
+        <Operand type="m64" input="false" output="true"/>
         <Operand type="xmm" input="true" output="false"/>
       </Operands>
       <Encodings>
@@ -11424,7 +11424,7 @@
         <Extension id="SSE"/>
       </ISA>
       <Operands>
-        <Operand type="xmm" input="true" output="true"/>
+        <Operand type="xmm" input="false" output="true"/>
         <Operand type="m32" input="true" output="false"/>
       </Operands>
       <Encodings>
@@ -11441,7 +11441,7 @@
         <Extension id="SSE"/>
       </ISA>
       <Operands>
-        <Operand type="m32" input="true" output="true"/>
+        <Operand type="m32" input="false" output="true"/>
         <Operand type="xmm" input="true" output="false"/>
       </Operands>
       <Encodings>
