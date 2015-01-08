@@ -616,21 +616,21 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
             instruction_form.mmx_mode = xml_instruction_form.attrib.get("mmx-mode")
             instruction_form.xmm_mode = xml_instruction_form.attrib.get("xmm-mode")
             instruction_form.cancelling_inputs = xml_instruction_form.attrib.get("cancelling-inputs", False)
-            for xml_operand in xml_instruction_form.findall("Operands/Operand"):
+            for xml_operand in xml_instruction_form.findall("Operand"):
                 operand = Operand(xml_operand.attrib["type"])
                 operand.is_input = {"true": True, "false": False}[xml_operand.attrib.get("input", "false")]
                 operand.is_output = {"true": True, "false": False}[xml_operand.attrib.get("output", "false")]
                 instruction_form.operands.append(operand)
-            for xml_implicit_operand in xml_instruction_form.findall("Operands/ImplicitOperands"):
+            for xml_implicit_operand in xml_instruction_form.findall("ImplicitOperands"):
                 if xml_implicit_operand.attrib["input"] == "true":
                     instruction_form.implicit_inputs.add(xml_implicit_operand.attrib["id"])
                 if xml_implicit_operand.attrib["output"] == "true":
                     instruction_form.implicit_outputs.add(xml_implicit_operand.attrib["id"])
-            for xml_isa_extension in xml_instruction_form.findall("ISA/Extension"):
+            for xml_isa_extension in xml_instruction_form.findall("Extension"):
                 assert "id" in xml_isa_extension.attrib
                 isa_extension = ISAExtension(xml_isa_extension.attrib["id"])
                 instruction_form.isa_extensions.append(isa_extension)
-            for xml_encoding in xml_instruction_form.findall("Encodings/Encoding"):
+            for xml_encoding in xml_instruction_form.findall("Encoding"):
                 encoding = Encoding()
                 for xml_component in xml_encoding:
                     if xml_component.tag == "Prefix":

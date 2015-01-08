@@ -193,126 +193,108 @@
 							<xs:element name="InstructionForm" maxOccurs="unbounded">
 								<xs:complexType>
 									<xs:sequence>
-										<xs:element name="ISA" minOccurs="0">
+										<xs:element name="ISA" minOccurs="0" maxOccurs="2">
 											<xs:complexType>
-												<xs:sequence>
-													<xs:element name="Extension" maxOccurs="2">
-														<xs:complexType>
-															<xs:attribute name="id" type="ISAExtension" />
-														</xs:complexType>
-													</xs:element>
-												</xs:sequence>
+												<xs:attribute name="id" type="ISAExtension" />
 											</xs:complexType>
 										</xs:element>
-										<xs:element name="Operands" minOccurs="0">
+										<xs:element name="Operand" minOccurs="0" maxOccurs="unbounded">
 											<xs:complexType>
-												<xs:sequence>
-													<xs:element name="Operand" minOccurs="0" maxOccurs="unbounded">
-														<xs:complexType>
-															<xs:attribute name="type" type="OperandType" use="required" />
-															<xs:attribute name="input" type="xs:boolean" />
-															<xs:attribute name="output" type="xs:boolean" />
-														</xs:complexType>
-													</xs:element>
-													<xs:element name="ImplicitOperand" minOccurs="0" maxOccurs="unbounded">
-														<xs:complexType>
-															<xs:attribute name="id" type="ImplicitOperandID" use="required" />
-															<xs:attribute name="input" type="xs:boolean" use="required" />
-															<xs:attribute name="output" type="xs:boolean" use="required" />
-														</xs:complexType>
-													</xs:element>
-												</xs:sequence>
+												<xs:attribute name="type" type="OperandType" use="required" />
+												<xs:attribute name="input" type="xs:boolean" />
+												<xs:attribute name="output" type="xs:boolean" />
 											</xs:complexType>
 										</xs:element>
-										<xs:element name="Encodings">
+										<xs:element name="ImplicitOperand" minOccurs="0" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:attribute name="id" type="ImplicitOperandID" use="required" />
+												<xs:attribute name="input" type="xs:boolean" use="required" />
+												<xs:attribute name="output" type="xs:boolean" use="required" />
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Encoding" maxOccurs="2">
 											<xs:complexType>
 												<xs:sequence>
-													<xs:element name="Encoding" maxOccurs="2">
+													<xs:element name="Prefix" minOccurs="0" maxOccurs="2">
 														<xs:complexType>
-															<xs:sequence>
-																<xs:element name="Prefix" minOccurs="0" maxOccurs="2">
-																	<xs:complexType>
-																		<xs:attribute name="byte" type="PrefixByte" use="required" />
-																		<xs:attribute name="mandatory" type="xs:boolean" use="required" />
-																	</xs:complexType>
-																</xs:element>
-																<xs:element name="VEX" minOccurs="0">
-																	<xs:complexType>
-																		<xs:attribute name="type" type="VEXPrefixType" use="required" />
-																		<xs:attribute name="W" type="Bit" use="required" />
-																		<xs:attribute name="L" type="Bit" use="required" />
-																		<xs:attribute name="m-mmmm" type="M-MMMM" use="required" />
-																		<xs:attribute name="pp" type="PP" use="required" />
-																		<xs:attribute name="R" type="Bit" />
-																		<xs:attribute name="R-operand-number" type="OperandNumber" />
-																		<xs:attribute name="X" type="Bit" />
-																		<xs:attribute name="B" type="Bit" />
-																		<xs:attribute name="B-operand-number" type="OperandNumber" />
-																		<xs:attribute name="BX-operand-number" type="OperandNumber" />
-																		<xs:attribute name="vvvv" type="VVVV" />
-																		<xs:attribute name="vvvv-operand-number" type="OperandNumber" />
-																	</xs:complexType>
-																</xs:element>
-																<xs:element name="REX" minOccurs="0">
-																	<xs:complexType>
-																		<xs:attribute name="mandatory" type="xs:boolean" use="required" />
-																		<xs:attribute name="W" type="Bit" use="required" />
-																		<xs:attribute name="X" type="Bit" />
-																		<xs:attribute name="B" type="Bit" />
-																		<xs:attribute name="B-operand-number" type="OperandNumber" />
-																		<xs:attribute name="BX-operand-number" type="OperandNumber" />
-																		<xs:attribute name="R" type="Bit" />
-																		<xs:attribute name="R-operand-number" type="OperandNumber" />
-																	</xs:complexType>
-																</xs:element>
-																<xs:element name="Opcode" maxOccurs="4">
-																	<xs:complexType>
-																		<xs:attribute name="byte" type="OpcodeByte" use="required" />
-																		<xs:attribute name="addend-operand-number" type="OperandNumber" />
-																	</xs:complexType>
-																</xs:element>
-																<xs:element name="ModRM" minOccurs="0">
-																	<xs:complexType>
-																		<xs:attribute name="mode" type="Mode" />
-																		<xs:attribute name="mode-operand-number" type="OperandNumber" />
-																		<xs:attribute name="reg-operand-number" type="OperandNumber" />
-																		<xs:attribute name="reg" type="RegValue" />
-																		<xs:attribute name="rm-operand-number" type="OperandNumber" />
-																		<xs:attribute name="rm" type="Ignored" />
-																	</xs:complexType>
-																</xs:element>
-																<xs:element name="Opcode" minOccurs="0" maxOccurs="1">
-																	<xs:complexType>
-																		<xs:attribute name="byte" type="OpcodeByte" use="required" />
-																		<xs:attribute name="addend-operand-number" type="OperandNumber" />
-																	</xs:complexType>
-																</xs:element>
-																<xs:element name="Immediate" minOccurs="0" maxOccurs="2">
-																	<xs:complexType>
-																		<xs:attribute name="size" type="xs:int" use="required" />
-																		<xs:attribute name="operand-number" type="OperandNumber" use="required" />
-																	</xs:complexType>
-																</xs:element>
-																<xs:element name="RegisterByte" minOccurs="0" maxOccurs="1">
-																	<xs:complexType>
-																		<xs:attribute name="register-operand-number" type="xs:int" use="required" />
-																		<xs:attribute name="payload" type="Ignored" />
-																		<xs:attribute name="payload-operand-number" type="xs:int" />
-																	</xs:complexType>
-																</xs:element>
-																<xs:element name="CodeOffset" minOccurs="0">
-																	<xs:complexType>
-																		<xs:attribute name="size" type="xs:int" use="required" />
-																		<xs:attribute name="operand-number" type="OperandNumber" use="required" />
-																	</xs:complexType>
-																</xs:element>
-																<xs:element name="DataOffset" minOccurs="0">
-																	<xs:complexType>
-																		<xs:attribute name="size" type="xs:int" use="required" />
-																		<xs:attribute name="operand-number" type="OperandNumber" use="required" />
-																	</xs:complexType>
-																</xs:element>
-															</xs:sequence>
+															<xs:attribute name="byte" type="PrefixByte" use="required" />
+															<xs:attribute name="mandatory" type="xs:boolean" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="VEX" minOccurs="0">
+														<xs:complexType>
+															<xs:attribute name="type" type="VEXPrefixType" use="required" />
+															<xs:attribute name="W" type="Bit" use="required" />
+															<xs:attribute name="L" type="Bit" use="required" />
+															<xs:attribute name="m-mmmm" type="M-MMMM" use="required" />
+															<xs:attribute name="pp" type="PP" use="required" />
+															<xs:attribute name="R" type="Bit" />
+															<xs:attribute name="R-operand-number" type="OperandNumber" />
+															<xs:attribute name="X" type="Bit" />
+															<xs:attribute name="B" type="Bit" />
+															<xs:attribute name="B-operand-number" type="OperandNumber" />
+															<xs:attribute name="BX-operand-number" type="OperandNumber" />
+															<xs:attribute name="vvvv" type="VVVV" />
+															<xs:attribute name="vvvv-operand-number" type="OperandNumber" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="REX" minOccurs="0">
+														<xs:complexType>
+															<xs:attribute name="mandatory" type="xs:boolean" use="required" />
+															<xs:attribute name="W" type="Bit" use="required" />
+															<xs:attribute name="X" type="Bit" />
+															<xs:attribute name="B" type="Bit" />
+															<xs:attribute name="B-operand-number" type="OperandNumber" />
+															<xs:attribute name="BX-operand-number" type="OperandNumber" />
+															<xs:attribute name="R" type="Bit" />
+															<xs:attribute name="R-operand-number" type="OperandNumber" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Opcode" maxOccurs="4">
+														<xs:complexType>
+															<xs:attribute name="byte" type="OpcodeByte" use="required" />
+															<xs:attribute name="addend-operand-number" type="OperandNumber" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="ModRM" minOccurs="0">
+														<xs:complexType>
+															<xs:attribute name="mode" type="Mode" />
+															<xs:attribute name="mode-operand-number" type="OperandNumber" />
+															<xs:attribute name="reg-operand-number" type="OperandNumber" />
+															<xs:attribute name="reg" type="RegValue" />
+															<xs:attribute name="rm-operand-number" type="OperandNumber" />
+															<xs:attribute name="rm" type="Ignored" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Opcode" minOccurs="0" maxOccurs="1">
+														<xs:complexType>
+															<xs:attribute name="byte" type="OpcodeByte" use="required" />
+															<xs:attribute name="addend-operand-number" type="OperandNumber" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Immediate" minOccurs="0" maxOccurs="2">
+														<xs:complexType>
+															<xs:attribute name="size" type="xs:int" use="required" />
+															<xs:attribute name="operand-number" type="OperandNumber" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="RegisterByte" minOccurs="0" maxOccurs="1">
+														<xs:complexType>
+															<xs:attribute name="register-operand-number" type="xs:int" use="required" />
+															<xs:attribute name="payload" type="Ignored" />
+															<xs:attribute name="payload-operand-number" type="xs:int" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="CodeOffset" minOccurs="0">
+														<xs:complexType>
+															<xs:attribute name="size" type="xs:int" use="required" />
+															<xs:attribute name="operand-number" type="OperandNumber" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="DataOffset" minOccurs="0">
+														<xs:complexType>
+															<xs:attribute name="size" type="xs:int" use="required" />
+															<xs:attribute name="operand-number" type="OperandNumber" use="required" />
 														</xs:complexType>
 													</xs:element>
 												</xs:sequence>
