@@ -907,6 +907,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         assert immediate.size in {1, 2, 4, 8}
                         assert "operand-number" in xml_component.attrib
                         immediate.value = instruction_form.operands[int(xml_component.attrib["operand-number"])]
+                        encoding.components.append(immediate)
                     elif xml_component.tag == "RegisterByte":
                         register_byte = RegisterByte()
                         register_byte.register = instruction_form.operands[int(xml_component.attrib["register-operand-number"])]
@@ -917,6 +918,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                             register_byte.payload = None
                         else:
                             register_byte.payload = instruction_form.operands[int(xml_component.attrib["payload-operand-number"])]
+                        encoding.components.append(register_byte)
                     elif xml_component.tag == "CodeOffset":
                         assert "size" in xml_component.attrib
                         code_offset = CodeOffset()
@@ -924,6 +926,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         assert code_offset.size in {1, 4}
                         assert "operand-number" in xml_component.attrib
                         code_offset.value = instruction_form.operands[int(xml_component.attrib["operand-number"])]
+                        encoding.components.append(code_offset)
                     elif xml_component.tag == "DataOffset":
                         assert "size" in xml_component.attrib
                         data_offset = DataOffset()
@@ -931,6 +934,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         assert data_offset.size in {4, 8}
                         assert "operand-number" in xml_component.attrib
                         data_offset.value = instruction_form.operands[int(xml_component.attrib["operand-number"])]
+                        encoding.components.append(data_offset)
                     else:
                         print("Unknown encoding tag: " + xml_component.tag)
 
