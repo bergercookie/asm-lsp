@@ -1011,7 +1011,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="ANDN" summary="Logical AND NOT">
-    <InstructionForm gas-name="andnl">
+    <InstructionForm gas-name="andnl" cancelling-inputs="true">
       <ISA id="BMI"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
