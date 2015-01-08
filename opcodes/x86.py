@@ -615,7 +615,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
             instruction_form.go_name = xml_instruction_form.attrib.get("go-name")
             instruction_form.mmx_mode = xml_instruction_form.attrib.get("mmx-mode")
             instruction_form.xmm_mode = xml_instruction_form.attrib.get("xmm-mode")
-            instruction_form.cancelling_inputs = xml_instruction_form.attrib.get("cancelling-inputs", False)
+            instruction_form.cancelling_inputs = xml_instruction_form.attrib.get("cancelling-inputs") == "true"
             for xml_operand in xml_instruction_form.findall("Operand"):
                 operand = Operand(xml_operand.attrib["type"])
                 operand.is_input = {"true": True, "false": False}[xml_operand.attrib.get("input", "false")]
