@@ -58,6 +58,11 @@ class InstructionForm:
         None
             Instruction does not affect XMM registers and does not change XMM registers access mode.
 
+    :ivar cancelling_inputs: indicates that the instruction form has not dependency on the values of input operands
+        when they refer to the same register. E.g. **VPXOR xmm1, xmm0, xmm0** does not depend on *xmm0*.
+
+        Instruction forms with cancelling inputs have only two input operands, which have the same register type.
+
     :ivar operands: a list of :class:`Operand` objects representing the instruction operands.
     :ivar implicit_inputs: a set of register names that are implicitly read by this instruction.
     :ivar implicit_outputs: a set of register names that are implicitly written by this instruction.
@@ -72,6 +77,7 @@ class InstructionForm:
         self.go_name = None
         self.mmx_mode = None
         self.xmm_mode = None
+        self.cancelling_inputs = None
         self.operands = []
         self.implicit_inputs = set()
         self.implicit_outputs = set()
@@ -609,6 +615,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
             instruction_form.go_name = xml_instruction_form.attrib.get("go-name")
             instruction_form.mmx_mode = xml_instruction_form.attrib.get("mmx-mode")
             instruction_form.xmm_mode = xml_instruction_form.attrib.get("xmm-mode")
+            instruction_form.cancelling_inputs = xml_instruction_form.attrib.get("cancelling-inputs", False)
             for xml_operand in xml_instruction_form.findall("Operands/Operand"):
                 operand = Operand(xml_operand.attrib["type"])
                 operand.is_input = {"true": True, "false": False}[xml_operand.attrib.get("input", "false")]

@@ -1495,7 +1495,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="ANDNPD" summary="Bitwise Logical AND NOT of Packed Double-Precision Floating-Point Values">
-    <InstructionForm gas-name="andnpd" go-name="ANDNPD" xmm-mode="SSE">
+    <InstructionForm gas-name="andnpd" go-name="ANDNPD" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -1531,7 +1531,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="ANDNPS" summary="Bitwise Logical AND NOT of Packed Single-Precision Floating-Point Values">
-    <InstructionForm gas-name="andnps" go-name="ANDNPS" xmm-mode="SSE">
+    <InstructionForm gas-name="andnps" go-name="ANDNPS" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE"/>
       </ISA>
@@ -5233,7 +5233,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="cmpb" go-name="CMPB">
+    <InstructionForm gas-name="cmpb" go-name="CMPB" cancelling-inputs="true">
       <Operands>
         <Operand type="r8" input="true" output="false"/>
         <Operand type="r8" input="true" output="false"/>
@@ -5299,7 +5299,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="cmpw" go-name="CMPW">
+    <InstructionForm gas-name="cmpw" go-name="CMPW" cancelling-inputs="true">
       <Operands>
         <Operand type="r16" input="true" output="false"/>
         <Operand type="r16" input="true" output="false"/>
@@ -5368,7 +5368,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="cmpl" go-name="CMPL">
+    <InstructionForm gas-name="cmpl" go-name="CMPL" cancelling-inputs="true">
       <Operands>
         <Operand type="r32" input="true" output="false"/>
         <Operand type="r32" input="true" output="false"/>
@@ -13692,7 +13692,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PANDN" summary="Packed Logical AND NOT">
-    <InstructionForm gas-name="pandn" mmx-mode="MMX">
+    <InstructionForm gas-name="pandn" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -13724,7 +13724,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pandn" xmm-mode="SSE">
+    <InstructionForm gas-name="pandn" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -14066,7 +14066,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPEQB" summary="Compare Packed Byte Data for Equality">
-    <InstructionForm gas-name="pcmpeqb" go-name="PCMPEQB" mmx-mode="MMX">
+    <InstructionForm gas-name="pcmpeqb" go-name="PCMPEQB" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -14098,7 +14098,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpeqb" go-name="PCMPEQB" xmm-mode="SSE">
+    <InstructionForm gas-name="pcmpeqb" go-name="PCMPEQB" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -14134,7 +14134,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPEQD" summary="Compare Packed Doubleword Data for Equality">
-    <InstructionForm gas-name="pcmpeqd" mmx-mode="MMX">
+    <InstructionForm gas-name="pcmpeqd" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -14166,7 +14166,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpeqd" xmm-mode="SSE">
+    <InstructionForm gas-name="pcmpeqd" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -14202,7 +14202,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPEQQ" summary="Compare Packed Quadword Data for Equality">
-    <InstructionForm gas-name="pcmpeqq" xmm-mode="SSE">
+    <InstructionForm gas-name="pcmpeqq" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE4.1"/>
       </ISA>
@@ -14240,7 +14240,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPEQW" summary="Compare Packed Word Data for Equality">
-    <InstructionForm gas-name="pcmpeqw" mmx-mode="MMX">
+    <InstructionForm gas-name="pcmpeqw" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -14272,7 +14272,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpeqw" xmm-mode="SSE">
+    <InstructionForm gas-name="pcmpeqw" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -14404,7 +14404,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPGTB" summary="Compare Packed Signed Byte Integers for Greater Than">
-    <InstructionForm gas-name="pcmpgtb" mmx-mode="MMX">
+    <InstructionForm gas-name="pcmpgtb" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -14436,7 +14436,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpgtb" xmm-mode="SSE">
+    <InstructionForm gas-name="pcmpgtb" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -14472,7 +14472,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPGTD" summary="Compare Packed Signed Doubleword Integers for Greater Than">
-    <InstructionForm gas-name="pcmpgtd" mmx-mode="MMX">
+    <InstructionForm gas-name="pcmpgtd" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -14504,7 +14504,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpgtd" xmm-mode="SSE">
+    <InstructionForm gas-name="pcmpgtd" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -14540,7 +14540,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPGTQ" summary="Compare Packed Data for Greater Than">
-    <InstructionForm gas-name="pcmpgtq" xmm-mode="SSE">
+    <InstructionForm gas-name="pcmpgtq" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE4.2"/>
       </ISA>
@@ -14578,7 +14578,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPGTW" summary="Compare Packed Signed Word Integers for Greater Than">
-    <InstructionForm gas-name="pcmpgtw" mmx-mode="MMX">
+    <InstructionForm gas-name="pcmpgtw" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -14610,7 +14610,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpgtw" xmm-mode="SSE">
+    <InstructionForm gas-name="pcmpgtw" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -15967,7 +15967,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PHSUBD" summary="Packed Horizontal Subtract Doubleword Integers">
-    <InstructionForm gas-name="phsubd" mmx-mode="MMX">
+    <InstructionForm gas-name="phsubd" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -16001,7 +16001,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="phsubd" xmm-mode="SSE">
+    <InstructionForm gas-name="phsubd" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -16039,7 +16039,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PHSUBSW" summary="Packed Horizontal Subtract Signed Word Integers with Signed Saturation">
-    <InstructionForm gas-name="phsubsw" mmx-mode="MMX">
+    <InstructionForm gas-name="phsubsw" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -16073,7 +16073,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="phsubsw" xmm-mode="SSE">
+    <InstructionForm gas-name="phsubsw" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -16111,7 +16111,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PHSUBW" summary="Packed Horizontal Subtract Word Integers">
-    <InstructionForm gas-name="phsubw" mmx-mode="MMX">
+    <InstructionForm gas-name="phsubw" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -16145,7 +16145,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="phsubw" xmm-mode="SSE">
+    <InstructionForm gas-name="phsubw" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSSE3"/>
       </ISA>
@@ -18372,7 +18372,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSADBW" summary="Compute Sum of Absolute Differences">
-    <InstructionForm gas-name="psadbw" go-name="PSADBW" mmx-mode="MMX">
+    <InstructionForm gas-name="psadbw" go-name="PSADBW" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX+"/>
       </ISA>
@@ -18404,7 +18404,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psadbw" go-name="PSADBW" xmm-mode="SSE">
+    <InstructionForm gas-name="psadbw" go-name="PSADBW" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -19750,7 +19750,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBB" summary="Subtract Packed Byte Integers">
-    <InstructionForm gas-name="psubb" go-name="PSUBB" mmx-mode="MMX">
+    <InstructionForm gas-name="psubb" go-name="PSUBB" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -19782,7 +19782,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubb" go-name="PSUBB" xmm-mode="SSE">
+    <InstructionForm gas-name="psubb" go-name="PSUBB" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -19818,7 +19818,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBD" summary="Subtract Packed Doubleword Integers">
-    <InstructionForm gas-name="psubd" mmx-mode="MMX">
+    <InstructionForm gas-name="psubd" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -19850,7 +19850,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubd" xmm-mode="SSE">
+    <InstructionForm gas-name="psubd" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -19886,7 +19886,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBQ" summary="Subtract Packed Quadword Integers">
-    <InstructionForm gas-name="psubq" go-name="PSUBQ" mmx-mode="MMX">
+    <InstructionForm gas-name="psubq" go-name="PSUBQ" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -19918,7 +19918,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubq" go-name="PSUBQ" xmm-mode="SSE">
+    <InstructionForm gas-name="psubq" go-name="PSUBQ" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -19954,7 +19954,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBSB" summary="Subtract Packed Signed Byte Integers with Signed Saturation">
-    <InstructionForm gas-name="psubsb" go-name="PSUBSB" mmx-mode="MMX">
+    <InstructionForm gas-name="psubsb" go-name="PSUBSB" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -19986,7 +19986,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubsb" go-name="PSUBSB" xmm-mode="SSE">
+    <InstructionForm gas-name="psubsb" go-name="PSUBSB" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -20022,7 +20022,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBSW" summary="Subtract Packed Signed Word Integers with Signed Saturation">
-    <InstructionForm gas-name="psubsw" go-name="PSUBSW" mmx-mode="MMX">
+    <InstructionForm gas-name="psubsw" go-name="PSUBSW" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20054,7 +20054,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubsw" go-name="PSUBSW" xmm-mode="SSE">
+    <InstructionForm gas-name="psubsw" go-name="PSUBSW" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -20090,7 +20090,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBUSB" summary="Subtract Packed Unsigned Byte Integers with Unsigned Saturation">
-    <InstructionForm gas-name="psubusb" go-name="PSUBUSB" mmx-mode="MMX">
+    <InstructionForm gas-name="psubusb" go-name="PSUBUSB" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20122,7 +20122,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubusb" go-name="PSUBUSB" xmm-mode="SSE">
+    <InstructionForm gas-name="psubusb" go-name="PSUBUSB" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -20158,7 +20158,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBUSW" summary="Subtract Packed Unsigned Word Integers with Unsigned Saturation">
-    <InstructionForm gas-name="psubusw" go-name="PSUBUSW" mmx-mode="MMX">
+    <InstructionForm gas-name="psubusw" go-name="PSUBUSW" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20190,7 +20190,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubusw" go-name="PSUBUSW" xmm-mode="SSE">
+    <InstructionForm gas-name="psubusw" go-name="PSUBUSW" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -20226,7 +20226,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBW" summary="Subtract Packed Word Integers">
-    <InstructionForm gas-name="psubw" go-name="PSUBW" mmx-mode="MMX">
+    <InstructionForm gas-name="psubw" go-name="PSUBW" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20258,7 +20258,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="psubw" go-name="PSUBW" xmm-mode="SSE">
+    <InstructionForm gas-name="psubw" go-name="PSUBW" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -20933,7 +20933,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PXOR" summary="Packed Logical Exclusive OR">
-    <InstructionForm gas-name="pxor" go-name="PXOR" mmx-mode="MMX">
+    <InstructionForm gas-name="pxor" go-name="PXOR" mmx-mode="MMX" cancelling-inputs="true">
       <ISA>
         <Extension id="MMX"/>
       </ISA>
@@ -20965,7 +20965,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="pxor" go-name="PXOR" xmm-mode="SSE">
+    <InstructionForm gas-name="pxor" go-name="PXOR" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -22887,7 +22887,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="sbbb" go-name="SBBB">
+    <InstructionForm gas-name="sbbb" go-name="SBBB" cancelling-inputs="true">
       <Operands>
         <Operand type="r8" input="true" output="true"/>
         <Operand type="r8" input="true" output="false"/>
@@ -22953,7 +22953,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="sbbw" go-name="SBBW">
+    <InstructionForm gas-name="sbbw" go-name="SBBW" cancelling-inputs="true">
       <Operands>
         <Operand type="r16" input="true" output="true"/>
         <Operand type="r16" input="true" output="false"/>
@@ -23022,7 +23022,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="sbbl" go-name="SBBL">
+    <InstructionForm gas-name="sbbl" go-name="SBBL" cancelling-inputs="true">
       <Operands>
         <Operand type="r32" input="true" output="true"/>
         <Operand type="r32" input="true" output="false"/>
@@ -25250,7 +25250,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="subb" go-name="SUBB">
+    <InstructionForm gas-name="subb" go-name="SUBB" cancelling-inputs="true">
       <Operands>
         <Operand type="r8" input="true" output="true"/>
         <Operand type="r8" input="true" output="false"/>
@@ -25316,7 +25316,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="subw" go-name="SUBW">
+    <InstructionForm gas-name="subw" go-name="SUBW" cancelling-inputs="true">
       <Operands>
         <Operand type="r16" input="true" output="true"/>
         <Operand type="r16" input="true" output="false"/>
@@ -25385,7 +25385,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="subl" go-name="SUBL">
+    <InstructionForm gas-name="subl" go-name="SUBL" cancelling-inputs="true">
       <Operands>
         <Operand type="r32" input="true" output="true"/>
         <Operand type="r32" input="true" output="false"/>
@@ -26853,7 +26853,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VANDNPD" summary="Bitwise Logical AND NOT of Packed Double-Precision Floating-Point Values">
-    <InstructionForm gas-name="vandnpd" xmm-mode="AVX">
+    <InstructionForm gas-name="vandnpd" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -26887,7 +26887,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vandnpd" xmm-mode="AVX">
+    <InstructionForm gas-name="vandnpd" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -26923,7 +26923,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VANDNPS" summary="Bitwise Logical AND NOT of Packed Single-Precision Floating-Point Values">
-    <InstructionForm gas-name="vandnps" xmm-mode="AVX">
+    <InstructionForm gas-name="vandnps" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -26957,7 +26957,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vandnps" xmm-mode="AVX">
+    <InstructionForm gas-name="vandnps" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -39172,7 +39172,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPANDN" summary="Packed Logical AND NOT">
-    <InstructionForm gas-name="vpandn" xmm-mode="AVX">
+    <InstructionForm gas-name="vpandn" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -39206,7 +39206,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpandn" xmm-mode="AVX">
+    <InstructionForm gas-name="vpandn" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -40050,7 +40050,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCMPEQB" summary="Compare Packed Byte Data for Equality">
-    <InstructionForm gas-name="vpcmpeqb" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpeqb" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -40084,7 +40084,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpcmpeqb" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpeqb" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -40120,7 +40120,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCMPEQD" summary="Compare Packed Doubleword Data for Equality">
-    <InstructionForm gas-name="vpcmpeqd" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpeqd" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -40154,7 +40154,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpcmpeqd" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpeqd" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -40190,7 +40190,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCMPEQQ" summary="Compare Packed Quadword Data for Equality">
-    <InstructionForm gas-name="vpcmpeqq" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpeqq" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -40224,7 +40224,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpcmpeqq" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpeqq" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -40260,7 +40260,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCMPEQW" summary="Compare Packed Word Data for Equality">
-    <InstructionForm gas-name="vpcmpeqw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpeqw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -40294,7 +40294,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpcmpeqw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpeqw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -40418,7 +40418,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCMPGTB" summary="Compare Packed Signed Byte Integers for Greater Than">
-    <InstructionForm gas-name="vpcmpgtb" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpgtb" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -40452,7 +40452,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpcmpgtb" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpgtb" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -40488,7 +40488,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCMPGTD" summary="Compare Packed Signed Doubleword Integers for Greater Than">
-    <InstructionForm gas-name="vpcmpgtd" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpgtd" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -40522,7 +40522,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpcmpgtd" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpgtd" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -40558,7 +40558,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCMPGTQ" summary="Compare Packed Data for Greater Than">
-    <InstructionForm gas-name="vpcmpgtq" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpgtq" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -40592,7 +40592,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpcmpgtq" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpgtq" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -40628,7 +40628,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCMPGTW" summary="Compare Packed Signed Word Integers for Greater Than">
-    <InstructionForm gas-name="vpcmpgtw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpgtw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -40662,7 +40662,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpcmpgtw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcmpgtw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -40778,7 +40778,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCOMB" summary="Compare Packed Signed Byte Integers">
-    <InstructionForm gas-name="vpcomb" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcomb" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="XOP"/>
       </ISA>
@@ -40818,7 +40818,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCOMD" summary="Compare Packed Signed Doubleword Integers">
-    <InstructionForm gas-name="vpcomd" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcomd" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="XOP"/>
       </ISA>
@@ -40858,7 +40858,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCOMQ" summary="Compare Packed Signed Quadword Integers">
-    <InstructionForm gas-name="vpcomq" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcomq" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="XOP"/>
       </ISA>
@@ -40898,7 +40898,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCOMUB" summary="Compare Packed Unsigned Byte Integers">
-    <InstructionForm gas-name="vpcomub" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcomub" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="XOP"/>
       </ISA>
@@ -40938,7 +40938,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCOMUD" summary="Compare Packed Unsigned Doubleword Integers">
-    <InstructionForm gas-name="vpcomud" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcomud" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="XOP"/>
       </ISA>
@@ -40978,7 +40978,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCOMUQ" summary="Compare Packed Unsigned Quadword Integers">
-    <InstructionForm gas-name="vpcomuq" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcomuq" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="XOP"/>
       </ISA>
@@ -41018,7 +41018,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCOMUW" summary="Compare Packed Unsigned Word Integers">
-    <InstructionForm gas-name="vpcomuw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcomuw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="XOP"/>
       </ISA>
@@ -41058,7 +41058,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPCOMW" summary="Compare Packed Signed Word Integers">
-    <InstructionForm gas-name="vpcomw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpcomw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="XOP"/>
       </ISA>
@@ -42794,7 +42794,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPHSUBD" summary="Packed Horizontal Subtract Doubleword Integers">
-    <InstructionForm gas-name="vphsubd" xmm-mode="AVX">
+    <InstructionForm gas-name="vphsubd" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -42828,7 +42828,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vphsubd" xmm-mode="AVX">
+    <InstructionForm gas-name="vphsubd" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -42898,7 +42898,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPHSUBSW" summary="Packed Horizontal Subtract Signed Word Integers with Signed Saturation">
-    <InstructionForm gas-name="vphsubsw" xmm-mode="AVX">
+    <InstructionForm gas-name="vphsubsw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -42932,7 +42932,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vphsubsw" xmm-mode="AVX">
+    <InstructionForm gas-name="vphsubsw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -42968,7 +42968,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPHSUBW" summary="Packed Horizontal Subtract Word Integers">
-    <InstructionForm gas-name="vphsubw" xmm-mode="AVX">
+    <InstructionForm gas-name="vphsubw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -43002,7 +43002,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vphsubw" xmm-mode="AVX">
+    <InstructionForm gas-name="vphsubw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -46619,7 +46619,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSADBW" summary="Compute Sum of Absolute Differences">
-    <InstructionForm gas-name="vpsadbw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsadbw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -46653,7 +46653,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpsadbw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsadbw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -48929,7 +48929,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSUBB" summary="Subtract Packed Byte Integers">
-    <InstructionForm gas-name="vpsubb" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubb" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -48963,7 +48963,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpsubb" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubb" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -48999,7 +48999,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSUBD" summary="Subtract Packed Doubleword Integers">
-    <InstructionForm gas-name="vpsubd" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubd" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -49033,7 +49033,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpsubd" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubd" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -49069,7 +49069,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSUBQ" summary="Subtract Packed Quadword Integers">
-    <InstructionForm gas-name="vpsubq" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubq" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -49103,7 +49103,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpsubq" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubq" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -49139,7 +49139,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSUBSB" summary="Subtract Packed Signed Byte Integers with Signed Saturation">
-    <InstructionForm gas-name="vpsubsb" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubsb" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -49173,7 +49173,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpsubsb" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubsb" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -49209,7 +49209,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSUBSW" summary="Subtract Packed Signed Word Integers with Signed Saturation">
-    <InstructionForm gas-name="vpsubsw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubsw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -49243,7 +49243,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpsubsw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubsw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -49279,7 +49279,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSUBUSB" summary="Subtract Packed Unsigned Byte Integers with Unsigned Saturation">
-    <InstructionForm gas-name="vpsubusb" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubusb" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -49313,7 +49313,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpsubusb" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubusb" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -49349,7 +49349,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSUBUSW" summary="Subtract Packed Unsigned Word Integers with Unsigned Saturation">
-    <InstructionForm gas-name="vpsubusw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubusw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -49383,7 +49383,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpsubusw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubusw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -49419,7 +49419,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSUBW" summary="Subtract Packed Word Integers">
-    <InstructionForm gas-name="vpsubw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -49453,7 +49453,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpsubw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsubw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -50115,7 +50115,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPXOR" summary="Packed Logical Exclusive OR">
-    <InstructionForm gas-name="vpxor" xmm-mode="AVX">
+    <InstructionForm gas-name="vpxor" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -50149,7 +50149,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vpxor" xmm-mode="AVX">
+    <InstructionForm gas-name="vpxor" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX2"/>
       </ISA>
@@ -51686,7 +51686,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VXORPD" summary="Bitwise Logical XOR for Double-Precision Floating-Point Values">
-    <InstructionForm gas-name="vxorpd" xmm-mode="AVX">
+    <InstructionForm gas-name="vxorpd" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -51720,7 +51720,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vxorpd" xmm-mode="AVX">
+    <InstructionForm gas-name="vxorpd" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -51756,7 +51756,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VXORPS" summary="Bitwise Logical XOR for Single-Precision Floating-Point Values">
-    <InstructionForm gas-name="vxorps" xmm-mode="AVX">
+    <InstructionForm gas-name="vxorps" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -51790,7 +51790,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="vxorps" xmm-mode="AVX">
+    <InstructionForm gas-name="vxorps" xmm-mode="AVX" cancelling-inputs="true">
       <ISA>
         <Extension id="AVX"/>
       </ISA>
@@ -52160,7 +52160,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="xorb" go-name="XORB">
+    <InstructionForm gas-name="xorb" go-name="XORB" cancelling-inputs="true">
       <Operands>
         <Operand type="r8" input="true" output="true"/>
         <Operand type="r8" input="true" output="false"/>
@@ -52226,7 +52226,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="xorw" go-name="XORW">
+    <InstructionForm gas-name="xorw" go-name="XORW" cancelling-inputs="true">
       <Operands>
         <Operand type="r16" input="true" output="true"/>
         <Operand type="r16" input="true" output="false"/>
@@ -52295,7 +52295,7 @@
         </Encoding>
       </Encodings>
     </InstructionForm>
-    <InstructionForm gas-name="xorl" go-name="XORL">
+    <InstructionForm gas-name="xorl" go-name="XORL" cancelling-inputs="true">
       <Operands>
         <Operand type="r32" input="true" output="true"/>
         <Operand type="r32" input="true" output="false"/>
@@ -52427,7 +52427,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="XORPD" summary="Bitwise Logical XOR for Double-Precision Floating-Point Values">
-    <InstructionForm gas-name="xorpd" go-name="XORPD" xmm-mode="SSE">
+    <InstructionForm gas-name="xorpd" go-name="XORPD" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE2"/>
       </ISA>
@@ -52463,7 +52463,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="XORPS" summary="Bitwise Logical XOR for Single-Precision Floating-Point Values">
-    <InstructionForm gas-name="xorps" go-name="XORPS" xmm-mode="SSE">
+    <InstructionForm gas-name="xorps" go-name="XORPS" xmm-mode="SSE" cancelling-inputs="true">
       <ISA>
         <Extension id="SSE"/>
       </ISA>
