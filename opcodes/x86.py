@@ -594,6 +594,14 @@ class DataOffset:
         self.value = None
 
 
+def _bool(xml_boolean):
+    """Converts strings "true" and "false" from XML files to Python bool"""
+
+    assert xml_boolean in {"true", "false"}, \
+        "The boolean string must be \"true\" or \"false\""
+    return {"true": True, "false": False}[xml_boolean]
+
+
 def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), "x86.xml")):
     """Reads instruction set data from an XML file and returns a list of :class:`Instruction` objects
 
@@ -615,16 +623,16 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
             instruction_form.go_name = xml_instruction_form.attrib.get("go-name")
             instruction_form.mmx_mode = xml_instruction_form.attrib.get("mmx-mode")
             instruction_form.xmm_mode = xml_instruction_form.attrib.get("xmm-mode")
-            instruction_form.cancelling_inputs = xml_instruction_form.attrib.get("cancelling-inputs") == "true"
+            instruction_form.cancelling_inputs = _bool(xml_instruction_form.attrib.get("cancelling-inputs", "false"))
             for xml_operand in xml_instruction_form.findall("Operand"):
                 operand = Operand(xml_operand.attrib["type"])
-                operand.is_input = {"true": True, "false": False}[xml_operand.attrib.get("input", "false")]
-                operand.is_output = {"true": True, "false": False}[xml_operand.attrib.get("output", "false")]
+                operand.is_input = _bool(xml_operand.attrib.get("input", "false"))
+                operand.is_output = _bool(xml_operand.attrib.get("output", "false"))
                 instruction_form.operands.append(operand)
             for xml_implicit_operand in xml_instruction_form.findall("ImplicitOperands"):
-                if xml_implicit_operand.attrib["input"] == "true":
+                if _bool(xml_implicit_operand.attrib["input"]):
                     instruction_form.implicit_inputs.add(xml_implicit_operand.attrib["id"])
-                if xml_implicit_operand.attrib["output"] == "true":
+                if _bool(xml_implicit_operand.attrib["output"]):
                     instruction_form.implicit_outputs.add(xml_implicit_operand.attrib["id"])
             for xml_isa_extension in xml_instruction_form.findall("Extension"):
                 assert "id" in xml_isa_extension.attrib
@@ -634,7 +642,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                 encoding = Encoding()
                 for xml_component in xml_encoding:
                     if xml_component.tag == "Prefix":
-                        is_mandatory = {"true": True, "false": False}[xml_component.attrib["mandatory"]]
+                        is_mandatory = _bool(xml_component.attrib["mandatory"])
                         byte = int(xml_component.attrib["byte"], 16)
                         assert byte in {0x66, 0xF2, 0xF3}
                         prefix = Prefix(byte, is_mandatory)
