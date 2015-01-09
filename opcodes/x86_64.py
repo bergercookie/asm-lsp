@@ -735,7 +735,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
             instruction_form.xmm_mode = xml_instruction_form.attrib.get("xmm-mode")
             instruction_form.cancelling_inputs = _bool(xml_instruction_form.attrib.get("cancelling-inputs", "false"))
             if "nacl-zero-extends-outputs" in xml_instruction_form.attrib:
-                instruction_form.nacl_zero_extends_outputs = _bool(xml_instruction_form["nacl-zero-extends-outputs"])
+                instruction_form.nacl_zero_extends_outputs = _bool(xml_instruction_form.attrib["nacl-zero-extends-outputs"])
             for xml_operand in xml_instruction_form.findall("Operand"):
                 operand = Operand(xml_operand.attrib["type"])
                 operand.is_input = _bool(xml_operand.attrib.get("input", "false"))
