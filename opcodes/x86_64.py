@@ -63,6 +63,12 @@ class InstructionForm:
 
         Instruction forms with cancelling inputs have only two input operands, which have the same register type.
 
+    :ivar nacl_zero_extends_outputs: indicates that Native Client validator recognizes that the instruction zeroes 
+        the upper 32 bits of the output registers.
+
+        In x86-64 Native Client SFI model this means that the subsequent instruction can use registers written by
+        this instruction for memory addressing.
+
     :ivar operands: a list of :class:`Operand` objects representing the instruction operands.
     :ivar implicit_inputs: a set of register names that are implicitly read by this instruction.
     :ivar implicit_outputs: a set of register names that are implicitly written by this instruction.
@@ -78,6 +84,7 @@ class InstructionForm:
         self.mmx_mode = None
         self.xmm_mode = None
         self.cancelling_inputs = None
+        self.nacl_zero_extends_outputs = None
         self.operands = []
         self.implicit_inputs = set()
         self.implicit_outputs = set()
@@ -727,6 +734,8 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
             instruction_form.mmx_mode = xml_instruction_form.attrib.get("mmx-mode")
             instruction_form.xmm_mode = xml_instruction_form.attrib.get("xmm-mode")
             instruction_form.cancelling_inputs = _bool(xml_instruction_form.attrib.get("cancelling-inputs", "false"))
+            if "nacl-zero-extends-outputs" in xml_instruction_form.attrib:
+                instruction_form.nacl_zero_extends_outputs = _bool(xml_instruction_form["nacl-zero-extends-outputs"])
             for xml_operand in xml_instruction_form.findall("Operand"):
                 operand = Operand(xml_operand.attrib["type"])
                 operand.is_input = _bool(xml_operand.attrib.get("input", "false"))

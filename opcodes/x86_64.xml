@@ -531,7 +531,7 @@
         <Immediate size="4" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="addl" go-name="ADDL">
+    <InstructionForm gas-name="addl" go-name="ADDL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
@@ -541,7 +541,7 @@
         <Immediate size="1" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="addl" go-name="ADDL">
+    <InstructionForm gas-name="addl" go-name="ADDL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="imm32"/>
       <Encoding>
@@ -551,7 +551,7 @@
         <Immediate size="4" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="addl" go-name="ADDL">
+    <InstructionForm gas-name="addl" go-name="ADDL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
@@ -565,7 +565,7 @@
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="addl" go-name="ADDL">
+    <InstructionForm gas-name="addl" go-name="ADDL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
@@ -1255,7 +1255,7 @@
         <Immediate size="4" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="andl" go-name="ANDL">
+    <InstructionForm gas-name="andl" go-name="ANDL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
@@ -1265,7 +1265,7 @@
         <Immediate size="1" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="andl" go-name="ANDL">
+    <InstructionForm gas-name="andl" go-name="ANDL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="imm32"/>
       <Encoding>
@@ -1275,7 +1275,7 @@
         <Immediate size="4" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="andl" go-name="ANDL">
+    <InstructionForm gas-name="andl" go-name="ANDL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
@@ -1289,7 +1289,7 @@
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="andl" go-name="ANDL">
+    <InstructionForm gas-name="andl" go-name="ANDL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
@@ -6695,7 +6695,7 @@
         <ModRM mode="11" reg="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="decl" go-name="DECL">
+    <InstructionForm gas-name="decl" go-name="DECL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -7372,7 +7372,7 @@
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imull" go-name="IMULL">
+    <InstructionForm gas-name="imull" go-name="IMULL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
@@ -7382,7 +7382,7 @@
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imull" go-name="IMULL">
+    <InstructionForm gas-name="imull" go-name="IMULL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
@@ -7458,7 +7458,7 @@
         <Immediate size="2" operand-number="2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imull" go-name="IMULL">
+    <InstructionForm gas-name="imull" go-name="IMULL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Operand type="imm8"/>
@@ -7469,7 +7469,7 @@
         <Immediate size="1" operand-number="2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imull" go-name="IMULL">
+    <InstructionForm gas-name="imull" go-name="IMULL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Operand type="imm32"/>
@@ -7480,7 +7480,7 @@
         <Immediate size="4" operand-number="2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imull" go-name="IMULL">
+    <InstructionForm gas-name="imull" go-name="IMULL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Operand type="imm8"/>
@@ -7491,7 +7491,7 @@
         <Immediate size="1" operand-number="2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imull" go-name="IMULL">
+    <InstructionForm gas-name="imull" go-name="IMULL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Operand type="imm32"/>
@@ -7571,7 +7571,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="incl" go-name="INCL">
+    <InstructionForm gas-name="incl" go-name="INCL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -8879,7 +8879,7 @@
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="leal" go-name="LEAL">
+    <InstructionForm gas-name="leal" go-name="LEAL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m" input="true" output="false"/>
       <Encoding>
@@ -9348,7 +9348,7 @@
         <DataOffset size="4" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movl" go-name="MOVL">
+    <InstructionForm gas-name="movl" go-name="MOVL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="imm32"/>
       <Encoding>
@@ -9363,7 +9363,7 @@
         <Immediate size="4" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movl" go-name="MOVL">
+    <InstructionForm gas-name="movl" go-name="MOVL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
@@ -9377,7 +9377,7 @@
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movl" go-name="MOVL">
+    <InstructionForm gas-name="movl" go-name="MOVL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
@@ -9697,7 +9697,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="MOVD" summary="Move Doubleword">
-    <InstructionForm gas-name="movd" mmx-mode="MMX">
+    <InstructionForm gas-name="movd" mmx-mode="MMX" nacl-zero-extends-outputs="true">
       <ISA id="MMX"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -9708,7 +9708,7 @@
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movd" xmm-mode="SSE">
+    <InstructionForm gas-name="movd" xmm-mode="SSE" nacl-zero-extends-outputs="true">
       <ISA id="SSE2"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -10529,7 +10529,7 @@
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movsbl">
+    <InstructionForm gas-name="movsbl" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
@@ -10539,7 +10539,7 @@
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movswl">
+    <InstructionForm gas-name="movswl" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
@@ -10549,7 +10549,7 @@
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movsbl">
+    <InstructionForm gas-name="movsbl" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
@@ -10559,7 +10559,7 @@
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movswl">
+    <InstructionForm gas-name="movswl" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
@@ -10739,7 +10739,7 @@
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movzbl">
+    <InstructionForm gas-name="movzbl" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
@@ -10749,7 +10749,7 @@
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movzwl">
+    <InstructionForm gas-name="movzwl" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
@@ -10759,7 +10759,7 @@
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movzbl">
+    <InstructionForm gas-name="movzbl" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
@@ -10769,7 +10769,7 @@
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movzwl">
+    <InstructionForm gas-name="movzwl" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
@@ -11119,7 +11119,7 @@
         <ModRM mode="11" reg="3" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="negl" go-name="NEGL">
+    <InstructionForm gas-name="negl" go-name="NEGL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -11199,7 +11199,7 @@
         <ModRM mode="11" reg="2" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="notl" go-name="NOTL">
+    <InstructionForm gas-name="notl" go-name="NOTL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -11381,7 +11381,7 @@
         <Immediate size="4" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="orl" go-name="ORL">
+    <InstructionForm gas-name="orl" go-name="ORL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
@@ -11391,7 +11391,7 @@
         <Immediate size="1" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="orl" go-name="ORL">
+    <InstructionForm gas-name="orl" go-name="ORL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="imm32"/>
       <Encoding>
@@ -11401,7 +11401,7 @@
         <Immediate size="4" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="orl" go-name="ORL">
+    <InstructionForm gas-name="orl" go-name="ORL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
@@ -11415,7 +11415,7 @@
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="orl" go-name="ORL">
+    <InstructionForm gas-name="orl" go-name="ORL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
@@ -22340,7 +22340,7 @@
         <Immediate size="4" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="subl" go-name="SUBL">
+    <InstructionForm gas-name="subl" go-name="SUBL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
@@ -22350,7 +22350,7 @@
         <Immediate size="1" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="subl" go-name="SUBL">
+    <InstructionForm gas-name="subl" go-name="SUBL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="imm32"/>
       <Encoding>
@@ -22360,7 +22360,7 @@
         <Immediate size="4" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="subl" go-name="SUBL" cancelling-inputs="true">
+    <InstructionForm gas-name="subl" go-name="SUBL" cancelling-inputs="true" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
@@ -22374,7 +22374,7 @@
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="subl" go-name="SUBL">
+    <InstructionForm gas-name="subl" go-name="SUBL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
@@ -30072,7 +30072,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VMOVD" summary="Move Doubleword">
-    <InstructionForm gas-name="vmovd" xmm-mode="AVX">
+    <InstructionForm gas-name="vmovd" xmm-mode="AVX" nacl-zero-extends-outputs="true">
       <ISA id="AVX"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -40517,7 +40517,7 @@
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="xaddl" go-name="XADDL">
+    <InstructionForm gas-name="xaddl" go-name="XADDL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
@@ -40692,7 +40692,7 @@
         <Opcode byte="90" addend-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="xchgl" go-name="XCHGL">
+    <InstructionForm gas-name="xchgl" go-name="XCHGL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="true"/>
       <Encoding>
@@ -40962,7 +40962,7 @@
         <Immediate size="4" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="xorl" go-name="XORL">
+    <InstructionForm gas-name="xorl" go-name="XORL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
@@ -40972,7 +40972,7 @@
         <Immediate size="1" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="xorl" go-name="XORL">
+    <InstructionForm gas-name="xorl" go-name="XORL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="imm32"/>
       <Encoding>
@@ -40982,7 +40982,7 @@
         <Immediate size="4" operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="xorl" go-name="XORL" cancelling-inputs="true">
+    <InstructionForm gas-name="xorl" go-name="XORL" cancelling-inputs="true" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
@@ -40996,7 +40996,7 @@
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="xorl" go-name="XORL">
+    <InstructionForm gas-name="xorl" go-name="XORL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>

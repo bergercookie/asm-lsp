@@ -309,6 +309,7 @@
 									<xs:attribute name="mmx-mode" type="MMXMode" />
 									<xs:attribute name="xmm-mode" type="XMMMode" />
 									<xs:attribute name="cancelling-inputs" type="xs:boolean" />
+									<xs:attribute name="nacl-zero-extends-outputs" type="xs:boolean" />
 								</xs:complexType>
 							</xs:element>
 						</xs:sequence>
