@@ -28499,6 +28499,28 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
+  <Instruction name="VPHADDDQ" summary="Packed Horizontal Add Signed Doubleword to Signed Quadword">
+    <InstructionForm gas-name="vphadddq" xmm-mode="AVX">
+      <ISA id="XOP"/>
+      <Operand type="xmm" input="false" output="true"/>
+      <Operand type="xmm" input="true" output="false"/>
+      <Encoding>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <Opcode byte="CB"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vphadddq" xmm-mode="AVX">
+      <ISA id="XOP"/>
+      <Operand type="xmm" input="false" output="true"/>
+      <Operand type="m128" input="true" output="false"/>
+      <Encoding>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <Opcode byte="CB"/>
+        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="VPHADDSW" summary="Packed Horizontal Add Signed Word Integers with Signed Saturation">
     <InstructionForm gas-name="vphaddsw" xmm-mode="AVX">
       <ISA id="AVX"/>
