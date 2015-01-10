@@ -7698,14 +7698,14 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JA" summary="Jump if above (CF == 0 and ZF == 0)">
-    <InstructionForm gas-name="ja">
+    <InstructionForm gas-name="ja" go-name="JHI">
       <Operand type="rel8"/>
       <Encoding>
         <Opcode byte="77"/>
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="ja">
+    <InstructionForm gas-name="ja" go-name="JHI">
       <Operand type="rel32"/>
       <Encoding>
         <Opcode byte="0F"/>
@@ -7715,7 +7715,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JAE" summary="Jump if above or equal (CF == 0)">
-    <InstructionForm gas-name="jae">
+    <InstructionForm gas-name="jae" go-name="JCC">
       <Operand type="rel8"/>
       <Encoding>
         <Opcode byte="73"/>
@@ -7742,7 +7742,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JC" summary="Jump if carry (CF == 1)">
-    <InstructionForm gas-name="jc">
+    <InstructionForm gas-name="jc" go-name="JCS">
       <Operand type="rel8"/>
       <Encoding>
         <Opcode byte="72"/>
@@ -7751,7 +7751,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JE" summary="Jump if equal (ZF == 1)">
-    <InstructionForm gas-name="je">
+    <InstructionForm gas-name="je" go-name="JEQ">
       <Operand type="rel8"/>
       <Encoding>
         <Opcode byte="74"/>
@@ -7760,7 +7760,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JECXZ" summary="Jump if ECX register is 0">
-    <InstructionForm gas-name="jecxz">
+    <InstructionForm gas-name="jecxz" go-name="JCXZL">
       <Operand type="rel8"/>
       <ImplicitOperand id="ecx" input="true" output="false"/>
       <Encoding>
@@ -7770,7 +7770,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JG" summary="Jump if greater (ZF == 0 and SF == OF)">
-    <InstructionForm gas-name="jg">
+    <InstructionForm gas-name="jg" go-name="JGT">
       <Operand type="rel8"/>
       <Encoding>
         <Opcode byte="7F"/>
@@ -7820,7 +7820,7 @@
         <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="jmpq">
+    <InstructionForm gas-name="jmpq" go-name="JMP">
       <Operand type="r64" input="true" output="false"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -7828,7 +7828,7 @@
         <ModRM mode="11" reg="4" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="jmpq">
+    <InstructionForm gas-name="jmpq" go-name="JMP">
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
@@ -7838,7 +7838,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JNA" summary="Jump if not above (CF == 1 or ZF == 1)">
-    <InstructionForm gas-name="jna">
+    <InstructionForm gas-name="jna" go-name="JLS">
       <Operand type="rel8"/>
       <Encoding>
         <Opcode byte="76"/>
@@ -7847,7 +7847,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JNAE" summary="Jump if not above or equal (CF == 1)">
-    <InstructionForm gas-name="jnae">
+    <InstructionForm gas-name="jnae" go-name="JCS">
       <Operand type="rel8"/>
       <Encoding>
         <Opcode byte="72"/>
@@ -7874,7 +7874,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JNC" summary="Jump if not carry (CF == 0)">
-    <InstructionForm gas-name="jnc">
+    <InstructionForm gas-name="jnc" go-name="JCC">
       <Operand type="rel8"/>
       <Encoding>
         <Opcode byte="73"/>
@@ -7892,7 +7892,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JNG" summary="Jump if not greater (ZF == 1 or SF != OF)">
-    <InstructionForm gas-name="jng">
+    <InstructionForm gas-name="jng" go-name="JLE">
       <Operand type="rel8"/>
       <Encoding>
         <Opcode byte="7E"/>
@@ -7901,7 +7901,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JNGE" summary="Jump if not greater or equal (SF != OF)">
-    <InstructionForm gas-name="jnge">
+    <InstructionForm gas-name="jnge" go-name="JLT">
       <Operand type="rel8"/>
       <Encoding>
         <Opcode byte="7C"/>
@@ -7982,7 +7982,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JPE" summary="Jump if parity even (PF == 1)">
-    <InstructionForm gas-name="jpe">
+    <InstructionForm gas-name="jpe" go-name="JPS">
       <Operand type="rel8"/>
       <Encoding>
         <Opcode byte="7A"/>
@@ -7991,7 +7991,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JPO" summary="Jump if parity odd (PF == 0)">
-    <InstructionForm gas-name="jpo">
+    <InstructionForm gas-name="jpo" go-name="JPC">
       <Operand type="rel8"/>
       <Encoding>
         <Opcode byte="7B"/>
@@ -8000,7 +8000,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="JRCXZ" summary="Jump if RCX register is 0">
-    <InstructionForm gas-name="jrcxz">
+    <InstructionForm gas-name="jrcxz" go-name="JCXZQ">
       <Operand type="rel8"/>
       <ImplicitOperand id="rcx" input="true" output="false"/>
       <Encoding>
@@ -20102,7 +20102,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="SETA" summary="Set byte if above (CF == 0 and ZF == 0)">
-    <InstructionForm gas-name="seta">
+    <InstructionForm gas-name="seta" go-name="SETHI">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -20111,7 +20111,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="seta">
+    <InstructionForm gas-name="seta" go-name="SETHI">
       <Operand type="r8l" input="false" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
@@ -20119,7 +20119,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="seta">
+    <InstructionForm gas-name="seta" go-name="SETHI">
       <Operand type="m8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
@@ -20130,7 +20130,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="SETAE" summary="Set byte if above or equal (CF == 0)">
-    <InstructionForm gas-name="setae">
+    <InstructionForm gas-name="setae" go-name="SETCC">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -20139,7 +20139,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setae">
+    <InstructionForm gas-name="setae" go-name="SETCC">
       <Operand type="r8l" input="false" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
@@ -20147,7 +20147,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setae">
+    <InstructionForm gas-name="setae" go-name="SETCC">
       <Operand type="m8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
@@ -20214,7 +20214,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="SETC" summary="Set byte if carry (CF == 1)">
-    <InstructionForm gas-name="setc">
+    <InstructionForm gas-name="setc" go-name="SETCS">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -20223,7 +20223,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setc">
+    <InstructionForm gas-name="setc" go-name="SETCS">
       <Operand type="r8l" input="false" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
@@ -20231,7 +20231,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setc">
+    <InstructionForm gas-name="setc" go-name="SETCS">
       <Operand type="m8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
@@ -20242,7 +20242,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="SETE" summary="Set byte if equal (ZF == 1)">
-    <InstructionForm gas-name="sete">
+    <InstructionForm gas-name="sete" go-name="SETEQ">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -20251,7 +20251,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="sete">
+    <InstructionForm gas-name="sete" go-name="SETEQ">
       <Operand type="r8l" input="false" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
@@ -20259,7 +20259,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="sete">
+    <InstructionForm gas-name="sete" go-name="SETEQ">
       <Operand type="m8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
@@ -20270,7 +20270,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="SETG" summary="Set byte if greater (ZF == 0 and SF == OF)">
-    <InstructionForm gas-name="setg">
+    <InstructionForm gas-name="setg" go-name="SETGT">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -20279,7 +20279,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setg">
+    <InstructionForm gas-name="setg" go-name="SETGT">
       <Operand type="r8l" input="false" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
@@ -20287,7 +20287,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setg">
+    <InstructionForm gas-name="setg" go-name="SETGT">
       <Operand type="m8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
@@ -20382,7 +20382,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="SETNA" summary="Set byte if not above (CF == 1 or ZF == 1)">
-    <InstructionForm gas-name="setna">
+    <InstructionForm gas-name="setna" go-name="SETLS">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -20391,7 +20391,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setna">
+    <InstructionForm gas-name="setna" go-name="SETLS">
       <Operand type="r8l" input="false" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
@@ -20399,7 +20399,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setna">
+    <InstructionForm gas-name="setna" go-name="SETLS">
       <Operand type="m8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
@@ -20410,7 +20410,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="SETNAE" summary="Set byte if not above or equal (CF == 1)">
-    <InstructionForm gas-name="setnae">
+    <InstructionForm gas-name="setnae" go-name="SETCS">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -20419,7 +20419,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setnae">
+    <InstructionForm gas-name="setnae" go-name="SETCS">
       <Operand type="r8l" input="false" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
@@ -20427,7 +20427,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setnae">
+    <InstructionForm gas-name="setnae" go-name="SETCS">
       <Operand type="m8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
@@ -20494,7 +20494,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="SETNC" summary="Set byte if not carry (CF == 0)">
-    <InstructionForm gas-name="setnc">
+    <InstructionForm gas-name="setnc" go-name="SETCC">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -20503,7 +20503,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setnc">
+    <InstructionForm gas-name="setnc" go-name="SETCC">
       <Operand type="r8l" input="false" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
@@ -20511,7 +20511,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setnc">
+    <InstructionForm gas-name="setnc" go-name="SETCC">
       <Operand type="m8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
@@ -20550,7 +20550,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="SETNG" summary="Set byte if not greater (ZF == 1 or SF != OF)">
-    <InstructionForm gas-name="setng">
+    <InstructionForm gas-name="setng" go-name="SETLE">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -20559,7 +20559,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setng">
+    <InstructionForm gas-name="setng" go-name="SETLE">
       <Operand type="r8l" input="false" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
@@ -20567,7 +20567,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setng">
+    <InstructionForm gas-name="setng" go-name="SETLE">
       <Operand type="m8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
@@ -20578,7 +20578,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="SETNGE" summary="Set byte if not greater or equal (SF != OF)">
-    <InstructionForm gas-name="setnge">
+    <InstructionForm gas-name="setnge" go-name="SETLT">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -20587,7 +20587,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setnge">
+    <InstructionForm gas-name="setnge" go-name="SETLT">
       <Operand type="r8l" input="false" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
@@ -20595,7 +20595,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setnge">
+    <InstructionForm gas-name="setnge" go-name="SETLT">
       <Operand type="m8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
@@ -20830,7 +20830,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="SETPE" summary="Set byte if parity even (PF == 1)">
-    <InstructionForm gas-name="setpe">
+    <InstructionForm gas-name="setpe" go-name="SETPS">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -20839,7 +20839,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setpe">
+    <InstructionForm gas-name="setpe" go-name="SETPS">
       <Operand type="r8l" input="false" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
@@ -20847,7 +20847,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setpe">
+    <InstructionForm gas-name="setpe" go-name="SETPS">
       <Operand type="m8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
@@ -20858,7 +20858,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="SETPO" summary="Set byte if parity odd (PF == 0)">
-    <InstructionForm gas-name="setpo">
+    <InstructionForm gas-name="setpo" go-name="SETPC">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
@@ -20867,7 +20867,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setpo">
+    <InstructionForm gas-name="setpo" go-name="SETPC">
       <Operand type="r8l" input="false" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
@@ -20875,7 +20875,7 @@
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="setpo">
+    <InstructionForm gas-name="setpo" go-name="SETPC">
       <Operand type="m8" input="false" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
