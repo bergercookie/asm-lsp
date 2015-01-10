@@ -550,7 +550,7 @@ class VEX:
     """
 
     def __init__(self):
-        self.prefix_type = None
+        self.type = None
         self.mmmmm = None
         self.pp = None
         self.W = None
