@@ -5366,6 +5366,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="jae" go-name="JCC">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="83"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JB" summary="Jump if below (CF == 1)">
     <InstructionForm gas-name="jb" go-name="JCS">
@@ -5373,6 +5381,14 @@
       <Encoding>
         <Opcode byte="72"/>
         <CodeOffset size="1" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="jb" go-name="JCS">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="82"/>
+        <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -5384,6 +5400,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="jbe" go-name="JLS">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="86"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JC" summary="Jump if carry (CF == 1)">
     <InstructionForm gas-name="jc" go-name="JCS">
@@ -5393,6 +5417,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="jc" go-name="JCS">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="82"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JE" summary="Jump if equal (ZF == 1)">
     <InstructionForm gas-name="je" go-name="JEQ">
@@ -5400,6 +5432,14 @@
       <Encoding>
         <Opcode byte="74"/>
         <CodeOffset size="1" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="je" go-name="JEQ">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="84"/>
+        <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -5421,6 +5461,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="jg" go-name="JGT">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="8F"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JGE" summary="Jump if greater or equal (SF == OF)">
     <InstructionForm gas-name="jge" go-name="JGE">
@@ -5428,6 +5476,14 @@
       <Encoding>
         <Opcode byte="7D"/>
         <CodeOffset size="1" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="jge" go-name="JGE">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="8D"/>
+        <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -5439,6 +5495,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="jl" go-name="JLT">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="8C"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JLE" summary="Jump if less or equal (ZF == 1 or SF != OF)">
     <InstructionForm gas-name="jle" go-name="JLE">
@@ -5446,6 +5510,14 @@
       <Encoding>
         <Opcode byte="7E"/>
         <CodeOffset size="1" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="jle" go-name="JLE">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="8E"/>
+        <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -5487,6 +5559,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="jna" go-name="JLS">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="86"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JNAE" summary="Jump if not above or equal (CF == 1)">
     <InstructionForm gas-name="jnae" go-name="JCS">
@@ -5494,6 +5574,14 @@
       <Encoding>
         <Opcode byte="72"/>
         <CodeOffset size="1" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="jnae" go-name="JCS">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="82"/>
+        <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -5505,6 +5593,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="jnb" go-name="JCC">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="83"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JNBE" summary="Jump if not below or equal (CF == 0 and ZF == 0)">
     <InstructionForm gas-name="jnbe" go-name="JHI">
@@ -5512,6 +5608,14 @@
       <Encoding>
         <Opcode byte="77"/>
         <CodeOffset size="1" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="jnbe" go-name="JHI">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="87"/>
+        <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -5523,6 +5627,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="jnc" go-name="JCC">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="83"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JNE" summary="Jump if not equal (ZF == 0)">
     <InstructionForm gas-name="jne" go-name="JNE">
@@ -5530,6 +5642,14 @@
       <Encoding>
         <Opcode byte="75"/>
         <CodeOffset size="1" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="jne" go-name="JNE">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="85"/>
+        <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -5541,6 +5661,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="jng" go-name="JLE">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="8E"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JNGE" summary="Jump if not greater or equal (SF != OF)">
     <InstructionForm gas-name="jnge" go-name="JLT">
@@ -5548,6 +5676,14 @@
       <Encoding>
         <Opcode byte="7C"/>
         <CodeOffset size="1" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="jnge" go-name="JLT">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="8C"/>
+        <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -5559,6 +5695,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="jnl" go-name="JGE">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="8D"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JNLE" summary="Jump if not less or equal (ZF == 0 and SF == OF)">
     <InstructionForm gas-name="jnle" go-name="JGT">
@@ -5566,6 +5710,14 @@
       <Encoding>
         <Opcode byte="7F"/>
         <CodeOffset size="1" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="jnle" go-name="JGT">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="8F"/>
+        <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -5577,6 +5729,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="jno" go-name="JOC">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="81"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JNP" summary="Jump if not parity (PF == 0)">
     <InstructionForm gas-name="jnp" go-name="JPC">
@@ -5584,6 +5744,14 @@
       <Encoding>
         <Opcode byte="7B"/>
         <CodeOffset size="1" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="jnp" go-name="JPC">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="8B"/>
+        <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -5595,6 +5763,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="jns" go-name="JPL">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="89"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JNZ" summary="Jump if not zero (ZF == 0)">
     <InstructionForm gas-name="jnz" go-name="JNE">
@@ -5602,6 +5778,14 @@
       <Encoding>
         <Opcode byte="75"/>
         <CodeOffset size="1" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="jnz" go-name="JNE">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="85"/>
+        <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -5613,6 +5797,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="jo" go-name="JOS">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="80"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JP" summary="Jump if parity (PF == 1)">
     <InstructionForm gas-name="jp" go-name="JPS">
@@ -5620,6 +5812,14 @@
       <Encoding>
         <Opcode byte="7A"/>
         <CodeOffset size="1" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="jp" go-name="JPS">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="8A"/>
+        <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -5631,6 +5831,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="jpe" go-name="JPS">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="8A"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JPO" summary="Jump if parity odd (PF == 0)">
     <InstructionForm gas-name="jpo" go-name="JPC">
@@ -5638,6 +5846,14 @@
       <Encoding>
         <Opcode byte="7B"/>
         <CodeOffset size="1" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="jpo" go-name="JPC">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="8B"/>
+        <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -5649,6 +5865,14 @@
         <CodeOffset size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="js" go-name="JMI">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="88"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="JZ" summary="Jump if zero (ZF == 1)">
     <InstructionForm gas-name="jz" go-name="JEQ">
@@ -5656,6 +5880,19 @@
       <Encoding>
         <Opcode byte="74"/>
         <CodeOffset size="1" operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="jz" go-name="JEQ">
+      <Operand type="rel32"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="84"/>
+        <CodeOffset size="4" operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="84"/>
+        <CodeOffset size="4" operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
