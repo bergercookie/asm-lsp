@@ -1,5 +1,7 @@
 import sphinx_bootstrap_theme
 
+from opcodes import __version__
+
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
@@ -9,10 +11,10 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 project = u'CPU Opcodes'
-copyright = u'2014, Georgia Institute of Technology'
+copyright = u'2014-2015, Georgia Institute of Technology'
 
-version = '0.1.0'
-release = '0.1.0'
+version = __version__
+release = __version__
 
 pygments_style = 'sphinx'
 
