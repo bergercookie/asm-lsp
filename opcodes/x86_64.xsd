@@ -44,6 +44,13 @@
 			<xs:enumeration value="rel32" />
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="ExtendedSize">
+		<xs:restriction base="xs:int">
+			<xs:enumeration value="2" />
+			<xs:enumeration value="4" />
+			<xs:enumeration value="8" />
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="ImplicitOperandID">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="al" />
@@ -206,6 +213,7 @@
 												<xs:attribute name="type" type="OperandType" use="required" />
 												<xs:attribute name="input" type="xs:boolean" />
 												<xs:attribute name="output" type="xs:boolean" />
+												<xs:attribute name="extended-size" type="ExtendedSize" />
 											</xs:complexType>
 										</xs:element>
 										<xs:element name="ImplicitOperand" minOccurs="0" maxOccurs="unbounded">

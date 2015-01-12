@@ -204,11 +204,17 @@ class Operand:
 
     :ivar is_input: indicates if the instruction reads the variable specified by this operand.
     :ivar is_output: indicates if the instruction writes the variable specified by this operand.
+    :ivar extended_size: for immediate operands the size of the value in bytes after size-extension.
+
+        The extended size affects which operand values can be encoded. E.g. a signed imm8 operand 
+        would normally values in the [-128, 127] range. But if it is extended to 4 bytes, it can also
+        encode values in [2**32 - 128, 2**32 - 1] range.
     """
     def __init__(self, type):
         self.type = type
         self.is_input = False
         self.is_output = False
+        self.extended_size = None
 
     def __str__(self):
         """Return string representation of the operand type and its read/write attributes"""
@@ -628,6 +634,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                 operand = Operand(xml_operand.attrib["type"])
                 operand.is_input = _bool(xml_operand.attrib.get("input", "false"))
                 operand.is_output = _bool(xml_operand.attrib.get("output", "false"))
+                operand.extended_size = xml_operand.attrib.get("extended-size")
                 instruction_form.operands.append(operand)
             for xml_implicit_operand in xml_instruction_form.findall("ImplicitOperands"):
                 if _bool(xml_implicit_operand.attrib["input"]):

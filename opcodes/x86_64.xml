@@ -81,7 +81,7 @@
     </InstructionForm>
     <InstructionForm gas-name="adcw" go-name="ADCW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -135,7 +135,7 @@
     </InstructionForm>
     <InstructionForm gas-name="adcl" go-name="ADCL">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -187,7 +187,7 @@
     </InstructionForm>
     <InstructionForm gas-name="adcq" go-name="ADCQ">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -197,7 +197,7 @@
     </InstructionForm>
     <InstructionForm gas-name="adcq" go-name="ADCQ">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
@@ -257,7 +257,7 @@
     </InstructionForm>
     <InstructionForm gas-name="adcw" go-name="ADCW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -287,7 +287,7 @@
     </InstructionForm>
     <InstructionForm gas-name="adcl" go-name="ADCL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -316,7 +316,7 @@
     </InstructionForm>
     <InstructionForm gas-name="adcq" go-name="ADCQ">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -326,7 +326,7 @@
     </InstructionForm>
     <InstructionForm gas-name="adcq" go-name="ADCQ">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
@@ -479,7 +479,7 @@
     </InstructionForm>
     <InstructionForm gas-name="addw" go-name="ADDW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -533,7 +533,7 @@
     </InstructionForm>
     <InstructionForm gas-name="addl" go-name="ADDL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -585,7 +585,7 @@
     </InstructionForm>
     <InstructionForm gas-name="addq" go-name="ADDQ">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -595,7 +595,7 @@
     </InstructionForm>
     <InstructionForm gas-name="addq" go-name="ADDQ">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
@@ -655,7 +655,7 @@
     </InstructionForm>
     <InstructionForm gas-name="addw" go-name="ADDW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -685,7 +685,7 @@
     </InstructionForm>
     <InstructionForm gas-name="addl" go-name="ADDL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -714,7 +714,7 @@
     </InstructionForm>
     <InstructionForm gas-name="addq" go-name="ADDQ">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -724,7 +724,7 @@
     </InstructionForm>
     <InstructionForm gas-name="addq" go-name="ADDQ">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
@@ -1203,7 +1203,7 @@
     </InstructionForm>
     <InstructionForm gas-name="andw" go-name="ANDW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -1257,7 +1257,7 @@
     </InstructionForm>
     <InstructionForm gas-name="andl" go-name="ANDL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -1309,7 +1309,7 @@
     </InstructionForm>
     <InstructionForm gas-name="andq" go-name="ANDQ">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -1319,7 +1319,7 @@
     </InstructionForm>
     <InstructionForm gas-name="andq" go-name="ANDQ">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
@@ -1379,7 +1379,7 @@
     </InstructionForm>
     <InstructionForm gas-name="andw" go-name="ANDW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -1409,7 +1409,7 @@
     </InstructionForm>
     <InstructionForm gas-name="andl" go-name="ANDL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -1438,7 +1438,7 @@
     </InstructionForm>
     <InstructionForm gas-name="andq" go-name="ANDQ">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -1448,7 +1448,7 @@
     </InstructionForm>
     <InstructionForm gas-name="andq" go-name="ANDQ">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
@@ -5217,7 +5217,7 @@
     </InstructionForm>
     <InstructionForm gas-name="cmpw" go-name="CMPW">
       <Operand type="r16" input="true" output="false"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -5271,7 +5271,7 @@
     </InstructionForm>
     <InstructionForm gas-name="cmpl" go-name="CMPL">
       <Operand type="r32" input="true" output="false"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -5323,7 +5323,7 @@
     </InstructionForm>
     <InstructionForm gas-name="cmpq" go-name="CMPQ">
       <Operand type="r64" input="true" output="false"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -5333,7 +5333,7 @@
     </InstructionForm>
     <InstructionForm gas-name="cmpq" go-name="CMPQ">
       <Operand type="r64" input="true" output="false"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
@@ -5393,7 +5393,7 @@
     </InstructionForm>
     <InstructionForm gas-name="cmpw" go-name="CMPW">
       <Operand type="m16" input="true" output="false"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -5423,7 +5423,7 @@
     </InstructionForm>
     <InstructionForm gas-name="cmpl" go-name="CMPL">
       <Operand type="m32" input="true" output="false"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -5452,7 +5452,7 @@
     </InstructionForm>
     <InstructionForm gas-name="cmpq" go-name="CMPQ">
       <Operand type="m64" input="true" output="false"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -5462,7 +5462,7 @@
     </InstructionForm>
     <InstructionForm gas-name="cmpq" go-name="CMPQ">
       <Operand type="m64" input="true" output="false"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
@@ -7414,7 +7414,7 @@
     </InstructionForm>
     <InstructionForm gas-name="imulw" go-name="IMULW">
       <Operand type="r16" input="false" output="true"/>
-      <Operand type="r16" input="true" output="false"/>
+      <Operand type="r16" input="true" output="false" extended-size="2"/>
       <Operand type="imm8"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
@@ -7437,7 +7437,7 @@
     </InstructionForm>
     <InstructionForm gas-name="imulw" go-name="IMULW">
       <Operand type="r16" input="false" output="true"/>
-      <Operand type="m16" input="true" output="false"/>
+      <Operand type="m16" input="true" output="false" extended-size="2"/>
       <Operand type="imm8"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
@@ -7460,7 +7460,7 @@
     </InstructionForm>
     <InstructionForm gas-name="imull" go-name="IMULL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
-      <Operand type="r32" input="true" output="false"/>
+      <Operand type="r32" input="true" output="false" extended-size="4"/>
       <Operand type="imm8"/>
       <Encoding>
         <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
@@ -7482,7 +7482,7 @@
     </InstructionForm>
     <InstructionForm gas-name="imull" go-name="IMULL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
-      <Operand type="m32" input="true" output="false"/>
+      <Operand type="m32" input="true" output="false" extended-size="4"/>
       <Operand type="imm8"/>
       <Encoding>
         <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
@@ -7504,7 +7504,7 @@
     </InstructionForm>
     <InstructionForm gas-name="imulq" go-name="IMULQ">
       <Operand type="r64" input="false" output="true"/>
-      <Operand type="r64" input="true" output="false"/>
+      <Operand type="r64" input="true" output="false" extended-size="8"/>
       <Operand type="imm8"/>
       <Encoding>
         <REX mandatory="true" W="1" R-operand-number="0" B-operand-number="1" X="ignored"/>
@@ -7515,7 +7515,7 @@
     </InstructionForm>
     <InstructionForm gas-name="imulq" go-name="IMULQ">
       <Operand type="r64" input="false" output="true"/>
-      <Operand type="r64" input="true" output="false"/>
+      <Operand type="r64" input="true" output="false" extended-size="8"/>
       <Operand type="imm32"/>
       <Encoding>
         <REX mandatory="true" W="1" R-operand-number="0" B-operand-number="1" X="ignored"/>
@@ -7526,7 +7526,7 @@
     </InstructionForm>
     <InstructionForm gas-name="imulq" go-name="IMULQ">
       <Operand type="r64" input="false" output="true"/>
-      <Operand type="m64" input="true" output="false"/>
+      <Operand type="m64" input="true" output="false" extended-size="8"/>
       <Operand type="imm8"/>
       <Encoding>
         <REX mandatory="true" W="1" R-operand-number="0" BX-operand-number="1"/>
@@ -7537,7 +7537,7 @@
     </InstructionForm>
     <InstructionForm gas-name="imulq" go-name="IMULQ">
       <Operand type="r64" input="false" output="true"/>
-      <Operand type="m64" input="true" output="false"/>
+      <Operand type="m64" input="true" output="false" extended-size="8"/>
       <Operand type="imm32"/>
       <Encoding>
         <REX mandatory="true" W="1" R-operand-number="0" BX-operand-number="1"/>
@@ -9634,7 +9634,7 @@
     </InstructionForm>
     <InstructionForm gas-name="movq" go-name="MOVQ">
       <Operand type="r64" input="false" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="C7"/>
@@ -9742,7 +9742,7 @@
     </InstructionForm>
     <InstructionForm gas-name="movq" go-name="MOVQ">
       <Operand type="m64" input="false" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="C7"/>
@@ -11566,7 +11566,7 @@
     </InstructionForm>
     <InstructionForm gas-name="orw" go-name="ORW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -11620,7 +11620,7 @@
     </InstructionForm>
     <InstructionForm gas-name="orl" go-name="ORL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -11672,7 +11672,7 @@
     </InstructionForm>
     <InstructionForm gas-name="orq" go-name="ORQ">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -11682,7 +11682,7 @@
     </InstructionForm>
     <InstructionForm gas-name="orq" go-name="ORQ">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
@@ -11742,7 +11742,7 @@
     </InstructionForm>
     <InstructionForm gas-name="orw" go-name="ORW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -11772,7 +11772,7 @@
     </InstructionForm>
     <InstructionForm gas-name="orl" go-name="ORL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -11801,7 +11801,7 @@
     </InstructionForm>
     <InstructionForm gas-name="orq" go-name="ORQ">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -11811,7 +11811,7 @@
     </InstructionForm>
     <InstructionForm gas-name="orq" go-name="ORQ">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
@@ -17947,21 +17947,21 @@
   </Instruction>
   <Instruction name="PUSH" summary="Push Value Onto the Stack">
     <InstructionForm gas-name="pushq" go-name="PUSHQ">
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <Opcode byte="6A"/>
         <Immediate size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="pushw" go-name="PUSHW">
-      <Operand type="imm16"/>
+      <Operand type="imm16" extended-size="8"/>
       <Encoding>
         <Opcode byte="68"/>
         <Immediate size="2" operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="pushq" go-name="PUSHQ">
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <Opcode byte="68"/>
         <Immediate size="4" operand-number="0"/>
@@ -20075,7 +20075,7 @@
     </InstructionForm>
     <InstructionForm gas-name="sbbw" go-name="SBBW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -20129,7 +20129,7 @@
     </InstructionForm>
     <InstructionForm gas-name="sbbl" go-name="SBBL">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -20181,7 +20181,7 @@
     </InstructionForm>
     <InstructionForm gas-name="sbbq" go-name="SBBQ">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -20191,7 +20191,7 @@
     </InstructionForm>
     <InstructionForm gas-name="sbbq" go-name="SBBQ">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
@@ -20251,7 +20251,7 @@
     </InstructionForm>
     <InstructionForm gas-name="sbbw" go-name="SBBW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -20281,7 +20281,7 @@
     </InstructionForm>
     <InstructionForm gas-name="sbbl" go-name="SBBL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -20310,7 +20310,7 @@
     </InstructionForm>
     <InstructionForm gas-name="sbbq" go-name="SBBQ">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -20320,7 +20320,7 @@
     </InstructionForm>
     <InstructionForm gas-name="sbbq" go-name="SBBQ">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
@@ -22525,7 +22525,7 @@
     </InstructionForm>
     <InstructionForm gas-name="subw" go-name="SUBW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -22579,7 +22579,7 @@
     </InstructionForm>
     <InstructionForm gas-name="subl" go-name="SUBL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -22631,7 +22631,7 @@
     </InstructionForm>
     <InstructionForm gas-name="subq" go-name="SUBQ">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -22641,7 +22641,7 @@
     </InstructionForm>
     <InstructionForm gas-name="subq" go-name="SUBQ">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
@@ -22701,7 +22701,7 @@
     </InstructionForm>
     <InstructionForm gas-name="subw" go-name="SUBW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -22731,7 +22731,7 @@
     </InstructionForm>
     <InstructionForm gas-name="subl" go-name="SUBL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -22760,7 +22760,7 @@
     </InstructionForm>
     <InstructionForm gas-name="subq" go-name="SUBQ">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -22770,7 +22770,7 @@
     </InstructionForm>
     <InstructionForm gas-name="subq" go-name="SUBQ">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
@@ -23043,7 +23043,7 @@
     </InstructionForm>
     <InstructionForm gas-name="testq" go-name="TESTQ">
       <Operand type="r64" input="true" output="false"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="F7"/>
@@ -23128,7 +23128,7 @@
     </InstructionForm>
     <InstructionForm gas-name="testq" go-name="TESTQ">
       <Operand type="m64" input="true" output="false"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="F7"/>
@@ -41169,7 +41169,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xorw" go-name="XORW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -41223,7 +41223,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xorl" go-name="XORL" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -41275,7 +41275,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xorq" go-name="XORQ">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="83"/>
@@ -41285,7 +41285,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xorq" go-name="XORQ">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
@@ -41345,7 +41345,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xorw" go-name="XORW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -41375,7 +41375,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xorl" go-name="XORL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -41404,7 +41404,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xorq" go-name="XORQ">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="83"/>
@@ -41414,7 +41414,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xorq" go-name="XORQ">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="imm32"/>
+      <Operand type="imm32" extended-size="8"/>
       <Encoding>
         <REX mandatory="true" W="1" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>

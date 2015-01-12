@@ -92,7 +92,7 @@
     </InstructionForm>
     <InstructionForm gas-name="adcw" go-name="ADCW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="2" rm-operand-number="0"/>
@@ -141,7 +141,7 @@
     </InstructionForm>
     <InstructionForm gas-name="adcl" go-name="ADCL">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="2" rm-operand-number="0"/>
@@ -196,7 +196,7 @@
     </InstructionForm>
     <InstructionForm gas-name="adcw" go-name="ADCW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="2" rm-operand-number="0"/>
@@ -223,7 +223,7 @@
     </InstructionForm>
     <InstructionForm gas-name="adcl" go-name="ADCL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="2" rm-operand-number="0"/>
@@ -322,7 +322,7 @@
     </InstructionForm>
     <InstructionForm gas-name="addw" go-name="ADDW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -371,7 +371,7 @@
     </InstructionForm>
     <InstructionForm gas-name="addl" go-name="ADDL">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -426,7 +426,7 @@
     </InstructionForm>
     <InstructionForm gas-name="addw" go-name="ADDW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
@@ -453,7 +453,7 @@
     </InstructionForm>
     <InstructionForm gas-name="addl" go-name="ADDL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
@@ -854,7 +854,7 @@
     </InstructionForm>
     <InstructionForm gas-name="andw" go-name="ANDW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="4" rm-operand-number="0"/>
@@ -903,7 +903,7 @@
     </InstructionForm>
     <InstructionForm gas-name="andl" go-name="ANDL">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="4" rm-operand-number="0"/>
@@ -958,7 +958,7 @@
     </InstructionForm>
     <InstructionForm gas-name="andw" go-name="ANDW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="4" rm-operand-number="0"/>
@@ -985,7 +985,7 @@
     </InstructionForm>
     <InstructionForm gas-name="andl" go-name="ANDL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="4" rm-operand-number="0"/>
@@ -3537,7 +3537,7 @@
     </InstructionForm>
     <InstructionForm gas-name="cmpw" go-name="CMPW">
       <Operand type="r16" input="true" output="false"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="7" rm-operand-number="0"/>
@@ -3586,7 +3586,7 @@
     </InstructionForm>
     <InstructionForm gas-name="cmpl" go-name="CMPL">
       <Operand type="r32" input="true" output="false"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="7" rm-operand-number="0"/>
@@ -3641,7 +3641,7 @@
     </InstructionForm>
     <InstructionForm gas-name="cmpw" go-name="CMPW">
       <Operand type="m16" input="true" output="false"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="7" rm-operand-number="0"/>
@@ -3668,7 +3668,7 @@
     </InstructionForm>
     <InstructionForm gas-name="cmpl" go-name="CMPL">
       <Operand type="m32" input="true" output="false"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="7" rm-operand-number="0"/>
@@ -5130,7 +5130,7 @@
     </InstructionForm>
     <InstructionForm gas-name="imulw" go-name="IMULW">
       <Operand type="r16" input="false" output="true"/>
-      <Operand type="r16" input="true" output="false"/>
+      <Operand type="r16" input="true" output="false" extended-size="2"/>
       <Operand type="imm8"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
@@ -5151,7 +5151,7 @@
     </InstructionForm>
     <InstructionForm gas-name="imulw" go-name="IMULW">
       <Operand type="r16" input="false" output="true"/>
-      <Operand type="m16" input="true" output="false"/>
+      <Operand type="m16" input="true" output="false" extended-size="2"/>
       <Operand type="imm8"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
@@ -5172,7 +5172,7 @@
     </InstructionForm>
     <InstructionForm gas-name="imull" go-name="IMULL">
       <Operand type="r32" input="false" output="true"/>
-      <Operand type="r32" input="true" output="false"/>
+      <Operand type="r32" input="true" output="false" extended-size="4"/>
       <Operand type="imm8"/>
       <Encoding>
         <Opcode byte="6B"/>
@@ -5192,7 +5192,7 @@
     </InstructionForm>
     <InstructionForm gas-name="imull" go-name="IMULL">
       <Operand type="r32" input="false" output="true"/>
-      <Operand type="m32" input="true" output="false"/>
+      <Operand type="m32" input="true" output="false" extended-size="4"/>
       <Operand type="imm8"/>
       <Encoding>
         <Opcode byte="6B"/>
@@ -8528,7 +8528,7 @@
     </InstructionForm>
     <InstructionForm gas-name="orw" go-name="ORW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="1" rm-operand-number="0"/>
@@ -8577,7 +8577,7 @@
     </InstructionForm>
     <InstructionForm gas-name="orl" go-name="ORL">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="1" rm-operand-number="0"/>
@@ -8632,7 +8632,7 @@
     </InstructionForm>
     <InstructionForm gas-name="orw" go-name="ORW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="1" rm-operand-number="0"/>
@@ -8659,7 +8659,7 @@
     </InstructionForm>
     <InstructionForm gas-name="orl" go-name="ORL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="1" rm-operand-number="0"/>
@@ -14254,14 +14254,14 @@
   </Instruction>
   <Instruction name="PUSH" summary="Push Value Onto the Stack">
     <InstructionForm gas-name="pushq">
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="6A"/>
         <Immediate size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="pushw" go-name="PUSHW">
-      <Operand type="imm16"/>
+      <Operand type="imm16" extended-size="4"/>
       <Encoding>
         <Opcode byte="68"/>
         <Immediate size="2" operand-number="0"/>
@@ -15666,7 +15666,7 @@
     </InstructionForm>
     <InstructionForm gas-name="sbbw" go-name="SBBW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="3" rm-operand-number="0"/>
@@ -15715,7 +15715,7 @@
     </InstructionForm>
     <InstructionForm gas-name="sbbl" go-name="SBBL">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="3" rm-operand-number="0"/>
@@ -15770,7 +15770,7 @@
     </InstructionForm>
     <InstructionForm gas-name="sbbw" go-name="SBBW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="3" rm-operand-number="0"/>
@@ -15797,7 +15797,7 @@
     </InstructionForm>
     <InstructionForm gas-name="sbbl" go-name="SBBL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="3" rm-operand-number="0"/>
@@ -17299,7 +17299,7 @@
     </InstructionForm>
     <InstructionForm gas-name="subw" go-name="SUBW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="5" rm-operand-number="0"/>
@@ -17348,7 +17348,7 @@
     </InstructionForm>
     <InstructionForm gas-name="subl" go-name="SUBL">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="5" rm-operand-number="0"/>
@@ -17403,7 +17403,7 @@
     </InstructionForm>
     <InstructionForm gas-name="subw" go-name="SUBW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="5" rm-operand-number="0"/>
@@ -17430,7 +17430,7 @@
     </InstructionForm>
     <InstructionForm gas-name="subl" go-name="SUBL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="5" rm-operand-number="0"/>
@@ -35319,7 +35319,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xorw" go-name="XORW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="6" rm-operand-number="0"/>
@@ -35368,7 +35368,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xorl" go-name="XORL">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode="11" reg="6" rm-operand-number="0"/>
@@ -35423,7 +35423,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xorw" go-name="XORW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="2"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="6" rm-operand-number="0"/>
@@ -35450,7 +35450,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xorl" go-name="XORL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="imm8"/>
+      <Operand type="imm8" extended-size="4"/>
       <Encoding>
         <Opcode byte="83"/>
         <ModRM mode-operand-number="0" reg="6" rm-operand-number="0"/>

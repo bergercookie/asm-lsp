@@ -101,6 +101,16 @@ class InstructionForm:
     def __repr__(self):
         return str(self)
 
+    def __hash__(self):
+        import operator
+        return reduce(operator.xor, map(hash, self.operands), hash(self.name))
+
+    def __eq__(self, other):
+        return isinstance(other, InstructionForm) and self.name == other.name and self.operands == other.operands
+
+    def __ne__(self, other):
+        return not isinstance(other, InstructionForm) or self.name != other.name or self.operands != other.operands
+
 
 class Operand:
     """An explicit instruction operand.
@@ -229,11 +239,17 @@ class Operand:
 
     :ivar is_input: indicates if the instruction reads the variable specified by this operand.
     :ivar is_output: indicates if the instruction writes the variable specified by this operand.
+    :ivar extended_size: for immediate operands the size of the value in bytes after size-extension.
+
+        The extended size affects which operand values can be encoded. E.g. a signed imm8 operand 
+        would normally values in the [-128, 127] range. But if it is extended to 4 bytes, it can also
+        encode values in [2**32 - 128, 2**32 - 1] range.
     """
     def __init__(self, type):
         self.type = type
         self.is_input = False
         self.is_output = False
+        self.extended_size = None
 
     def __str__(self):
         """Return string representation of the operand type and its read/write attributes"""
@@ -262,6 +278,16 @@ class Operand:
         """Indicates whether this operand specifies a memory location"""
         return self.type in {"m", "m8", "m16", "m32", "m64", "m80", "m128", "m256", "m512", "vm32x", "vm32y", "vm64x", "vm64y"}
 
+    def __hash__(self):
+        return hash(self.type) ^ hash(self.is_input) ^ hash(self.is_output)
+
+    def __eq__(self, other):
+        return isinstance(other, Operand) and \
+            (self.type, self.is_input, self.is_output) == (other.type, other.is_input, other.is_output)
+
+    def __ne__(self, other):
+        return not isinstance(other, Operand) or \
+            (self.type, self.is_input, self.is_output) != (other.type, other.is_input, other.is_output)
 
 class ISAExtension:
     _score_map = {
@@ -740,6 +766,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                 operand = Operand(xml_operand.attrib["type"])
                 operand.is_input = _bool(xml_operand.attrib.get("input", "false"))
                 operand.is_output = _bool(xml_operand.attrib.get("output", "false"))
+                operand.extended_size = xml_operand.attrib.get("extended-size")
                 instruction_form.operands.append(operand)
             for xml_implicit_operand in xml_instruction_form.findall("ImplicitOperands"):
                 if _bool(xml_implicit_operand.attrib["input"]):
