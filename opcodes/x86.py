@@ -94,6 +94,16 @@ class InstructionForm:
     def __repr__(self):
         return str(self)
 
+    def __hash__(self):
+        import operator
+        return reduce(operator.xor, map(hash, self.operands), hash(self.name))
+
+    def __eq__(self, other):
+        return isinstance(other, InstructionForm) and self.name == other.name and self.operands == other.operands
+
+    def __ne__(self, other):
+        return not isinstance(other, InstructionForm) or self.name != other.name or self.operands != other.operands
+
 
 class Operand:
     """An explicit instruction operand.
@@ -228,6 +238,17 @@ class Operand:
     def __repr__(self):
         return str(self)
 
+    def __hash__(self):
+        return hash(self.type) ^ hash(self.is_input) ^ hash(self.is_output)
+
+    def __eq__(self, other):
+        return isinstance(other, Operand) and \
+            (self.type, self.is_input, self.is_output) == (other.type, other.is_input, other.is_output)
+
+    def __ne__(self, other):
+        return not isinstance(other, Operand) or \
+            (self.type, self.is_input, self.is_output) != (other.type, other.is_input, other.is_output)
+
     @property
     def is_variable(self):
         """Indicates whether this operand refers to a variable (i.e. specifies either a register or a memory location)"""
@@ -242,6 +263,11 @@ class Operand:
     def is_memory(self):
         """Indicates whether this operand specifies a memory location"""
         return self.type in {"m", "m8", "m16", "m32", "m64", "m80", "m128", "m256", "m512", "vm32x", "vm32y", "vm64x", "vm64y"}
+
+    @property
+    def is_immediate(self):
+        """Indicates whether this operand is an immediate constant"""
+        return self.type in {"imm4", "imm8", "imm16", "imm32"}
 
 
 class ISAExtension:
