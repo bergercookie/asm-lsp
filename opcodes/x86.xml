@@ -5889,11 +5889,6 @@
         <Opcode byte="84"/>
         <CodeOffset size="4" operand-number="0"/>
       </Encoding>
-      <Encoding>
-        <Opcode byte="0F"/>
-        <Opcode byte="84"/>
-        <CodeOffset size="4" operand-number="0"/>
-      </Encoding>
     </InstructionForm>
   </Instruction>
   <Instruction name="KADDB" summary="ADD Two 8-bit Masks">
