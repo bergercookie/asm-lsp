@@ -4870,7 +4870,7 @@
         <Prefix byte="66" mandatory="true"/>
         <Opcode byte="0F"/>
         <Opcode byte="78"/>
-        <ModRM mode="ignored" reg-operand-number="0" rm="ignored"/>
+        <ModRM mode="11" reg="0" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
         <Immediate size="1" operand-number="2"/>
       </Encoding>

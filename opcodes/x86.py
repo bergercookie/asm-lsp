@@ -521,13 +521,10 @@ class ModRM:
         If mode is a reference to an instruction operand, the operand has memory type and its addressing mode must be \
         coded instruction the Mod R/M mode field.
 
-    :ivar rm: a register or memory operand. Possible values are None or a reference to an instruction operand.
+    :ivar rm: a register or memory operand. Must be a reference to an instruction operand.
 
-        If rm is None, the field is ignored. Only one form of EXTRQ instruction from SSE4A uses this value.
-
-        If rm is a reference to an instruction operand, and the operand is of register type, rm specifies bits 0-2 of \
-        the register number. If the operand is of memory type, rm specifies bits 0-2 of the base register number \
-        unless a SIB byte is used.
+        If rm is a reference to a operand, rm specifies bits 0-2 of the register number. If the operand is of memory \
+        type, rm specifies bits 0-2 of the base register number unless a SIB byte is used.
 
     :ivar reg: a register or an opcode extension. Possible values are an int value, or a reference to an instruction \
         operand.
@@ -724,14 +721,8 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         else:
                             assert "reg-operand-number" in xml_component.attrib
                             modrm.reg = instruction_form.operands[int(xml_component.attrib["reg-operand-number"])]
-                        if "rm" in xml_component.attrib:
-                            assert "rm-operand-number" not in xml_component.attrib
-                            assert xml_component.attrib["rm"] == "ignored"
-                            modrm.rm = None
-                        else:
-                            assert "rm-operand-number" in xml_component.attrib
-                            modrm.rm = instruction_form.operands[int(xml_component.attrib["rm-operand-number"])]
-                            encoding.components.append(modrm)
+                        modrm.rm = instruction_form.operands[int(xml_component.attrib["rm-operand-number"])]
+                        encoding.components.append(modrm)
                     elif xml_component.tag == "Immediate":
                         assert "size" in xml_component.attrib
                         immediate = Immediate()

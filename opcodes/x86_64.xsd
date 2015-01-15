@@ -274,7 +274,6 @@
 															<xs:attribute name="reg-operand-number" type="OperandNumber" />
 															<xs:attribute name="reg" type="RegValue" />
 															<xs:attribute name="rm-operand-number" type="OperandNumber" />
-															<xs:attribute name="rm" type="Ignored" />
 														</xs:complexType>
 													</xs:element>
 													<xs:element name="Opcode" minOccurs="0" maxOccurs="1">
