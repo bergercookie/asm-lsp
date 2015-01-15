@@ -48,4 +48,5 @@ For each instruction the following information is provided:
 - Whether the instruction operates on FPU or MMX state
 - Whether the instruction operates on AVX or legacy SSE state
 - Whether the instruction has no dependency on input values when input operands refer to the same register (e.g. `XOR eax, eax` has no dependency on `eax`)
+- Whether the instruction is supported by Native Client validator and when the support was introduced
 - Whether the instruction that writes to a 32-bit register is recognized by x86-64 Native Client validator as zero-extending
