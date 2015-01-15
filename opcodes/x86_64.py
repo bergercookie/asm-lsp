@@ -63,6 +63,13 @@ class InstructionForm:
 
         Instruction forms with cancelling inputs have only two input operands, which have the same register type.
 
+    :ivar nacl_version: indicates the earliest Pepper API version where validator supports this instruction.
+
+        Possible values are integers >= 33 or None. Pepper 33 is the earliest version for which information on
+        supported instructions is available; if instruction forms supported before Pepper 33 would have
+        nacl_version == 33. None means instruction is either not yet supported by Native Client validator, or
+        is forbidden in Native Client SFI model.
+
     :ivar nacl_zero_extends_outputs: indicates that Native Client validator recognizes that the instruction zeroes 
         the upper 32 bits of the output registers.
 
@@ -84,6 +91,7 @@ class InstructionForm:
         self.mmx_mode = None
         self.xmm_mode = None
         self.cancelling_inputs = None
+        self.nacl_version = None
         self.nacl_zero_extends_outputs = None
         self.operands = []
         self.implicit_inputs = set()
@@ -719,7 +727,6 @@ def _bool(xml_boolean):
         "The boolean string must be \"true\" or \"false\""
     return {"true": True, "false": False}[xml_boolean]
 
-
 def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), "x86_64.xml")):
     """Reads instruction set data from an XML file and returns a list of :class:`Instruction` objects
 
@@ -742,6 +749,8 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
             instruction_form.mmx_mode = xml_instruction_form.attrib.get("mmx-mode")
             instruction_form.xmm_mode = xml_instruction_form.attrib.get("xmm-mode")
             instruction_form.cancelling_inputs = _bool(xml_instruction_form.attrib.get("cancelling-inputs", "false"))
+            if "nacl-version" in xml_instruction_form.attrib:
+                instruction_form.nacl_version = int(xml_instruction_form.attrib["nacl-version"])
             if "nacl-zero-extends-outputs" in xml_instruction_form.attrib:
                 instruction_form.nacl_zero_extends_outputs = _bool(xml_instruction_form.attrib["nacl-zero-extends-outputs"])
             for xml_operand in xml_instruction_form.findall("Operand"):

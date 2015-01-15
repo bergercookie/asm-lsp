@@ -81,6 +81,13 @@
 			<xs:enumeration value="AVX" />
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="NaClVersion">
+		<xs:restriction base="xs:int">
+			<xs:enumeration value="33" />
+			<xs:enumeration value="40" />
+			<xs:enumeration value="41" />
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="OpcodeByte">
 		<xs:restriction base="xs:token">
 			<xs:pattern value="[0-9A-F]{2}" />
@@ -316,6 +323,7 @@
 									<xs:attribute name="mmx-mode" type="MMXMode" />
 									<xs:attribute name="xmm-mode" type="XMMMode" />
 									<xs:attribute name="cancelling-inputs" type="xs:boolean" />
+									<xs:attribute name="nacl-version" type="NaClVersion" />
 									<xs:attribute name="nacl-zero-extends-outputs" type="xs:boolean" />
 								</xs:complexType>
 							</xs:element>
