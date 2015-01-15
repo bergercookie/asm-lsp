@@ -9196,8 +9196,8 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r64" input="true" output="false"/>
       <Encoding>
+        <Prefix byte="F3" mandatory="true"/>
         <REX mandatory="true" W="1" R-operand-number="0" B-operand-number="1" X="ignored"/>
-        <Opcode byte="F3"/>
         <Opcode byte="0F"/>
         <Opcode byte="BD"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
@@ -9208,8 +9208,8 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
+        <Prefix byte="F3" mandatory="true"/>
         <REX mandatory="true" W="1" R-operand-number="0" BX-operand-number="1"/>
-        <Opcode byte="F3"/>
         <Opcode byte="0F"/>
         <Opcode byte="BD"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
@@ -23197,8 +23197,8 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r64" input="true" output="false"/>
       <Encoding>
+        <Prefix byte="F3" mandatory="true"/>
         <REX mandatory="true" W="1" R-operand-number="0" B-operand-number="1" X="ignored"/>
-        <Opcode byte="F3"/>
         <Opcode byte="0F"/>
         <Opcode byte="BC"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
@@ -23209,8 +23209,8 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
+        <Prefix byte="F3" mandatory="true"/>
         <REX mandatory="true" W="1" R-operand-number="0" BX-operand-number="1"/>
-        <Opcode byte="F3"/>
         <Opcode byte="0F"/>
         <Opcode byte="BC"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
