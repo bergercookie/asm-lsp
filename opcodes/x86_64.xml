@@ -33387,7 +33387,7 @@
       <Operand type="imm8"/>
       <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01000" pp="00" R-operand-number="0" B-operand-number="2" X="ignored" vvvv-operand-number="1"/>
-        <Opcode byte="6C"/>
+        <Opcode byte="EC"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
         <Immediate size="1" operand-number="3"/>
       </Encoding>
@@ -33400,7 +33400,7 @@
       <Operand type="imm8"/>
       <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01000" pp="00" R-operand-number="0" BX-operand-number="2" vvvv-operand-number="1"/>
-        <Opcode byte="6C"/>
+        <Opcode byte="EC"/>
         <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
         <Immediate size="1" operand-number="3"/>
       </Encoding>
@@ -33415,7 +33415,7 @@
       <Operand type="imm8"/>
       <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01000" pp="00" R-operand-number="0" B-operand-number="2" X="ignored" vvvv-operand-number="1"/>
-        <Opcode byte="6E"/>
+        <Opcode byte="EE"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
         <Immediate size="1" operand-number="3"/>
       </Encoding>
@@ -33428,7 +33428,7 @@
       <Operand type="imm8"/>
       <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01000" pp="00" R-operand-number="0" BX-operand-number="2" vvvv-operand-number="1"/>
-        <Opcode byte="6E"/>
+        <Opcode byte="EE"/>
         <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
         <Immediate size="1" operand-number="3"/>
       </Encoding>
@@ -33443,7 +33443,7 @@
       <Operand type="imm8"/>
       <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01000" pp="00" R-operand-number="0" B-operand-number="2" X="ignored" vvvv-operand-number="1"/>
-        <Opcode byte="6F"/>
+        <Opcode byte="EF"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
         <Immediate size="1" operand-number="3"/>
       </Encoding>
@@ -33456,7 +33456,7 @@
       <Operand type="imm8"/>
       <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01000" pp="00" R-operand-number="0" BX-operand-number="2" vvvv-operand-number="1"/>
-        <Opcode byte="6F"/>
+        <Opcode byte="EF"/>
         <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
         <Immediate size="1" operand-number="3"/>
       </Encoding>
@@ -33471,7 +33471,7 @@
       <Operand type="imm8"/>
       <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01000" pp="00" R-operand-number="0" B-operand-number="2" X="ignored" vvvv-operand-number="1"/>
-        <Opcode byte="6D"/>
+        <Opcode byte="ED"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
         <Immediate size="1" operand-number="3"/>
       </Encoding>
@@ -33484,7 +33484,7 @@
       <Operand type="imm8"/>
       <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01000" pp="00" R-operand-number="0" BX-operand-number="2" vvvv-operand-number="1"/>
-        <Opcode byte="6D"/>
+        <Opcode byte="ED"/>
         <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
         <Immediate size="1" operand-number="3"/>
       </Encoding>
@@ -34763,7 +34763,7 @@
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" B-operand-number="1" X="ignored" vvvv="1111"/>
-        <Opcode byte="DB"/>
+        <Opcode byte="E3"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
@@ -34773,7 +34773,7 @@
       <Operand type="m128" input="true" output="false"/>
       <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R-operand-number="0" BX-operand-number="1" vvvv="1111"/>
-        <Opcode byte="DB"/>
+        <Opcode byte="E3"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
