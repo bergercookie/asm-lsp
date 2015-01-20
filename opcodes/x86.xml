@@ -6752,8 +6752,8 @@
       <Operand type="r16" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
-        <Prefix byte="F3" mandatory="true"/>
         <Prefix byte="66" mandatory="false"/>
+        <Prefix byte="F3" mandatory="true"/>
         <Opcode byte="0F"/>
         <Opcode byte="BD"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
@@ -6764,8 +6764,8 @@
       <Operand type="r16" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
-        <Prefix byte="F3" mandatory="true"/>
         <Prefix byte="66" mandatory="false"/>
+        <Prefix byte="F3" mandatory="true"/>
         <Opcode byte="0F"/>
         <Opcode byte="BD"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
@@ -12471,8 +12471,8 @@
       <Operand type="r16" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
-        <Prefix byte="F3" mandatory="true"/>
         <Prefix byte="66" mandatory="false"/>
+        <Prefix byte="F3" mandatory="true"/>
         <Opcode byte="0F"/>
         <Opcode byte="B8"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
@@ -12483,8 +12483,8 @@
       <Operand type="r16" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
-        <Prefix byte="F3" mandatory="true"/>
         <Prefix byte="66" mandatory="false"/>
+        <Prefix byte="F3" mandatory="true"/>
         <Opcode byte="0F"/>
         <Opcode byte="B8"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
@@ -17722,8 +17722,8 @@
       <Operand type="r16" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
-        <Prefix byte="F3" mandatory="true"/>
         <Prefix byte="66" mandatory="false"/>
+        <Prefix byte="F3" mandatory="true"/>
         <Opcode byte="0F"/>
         <Opcode byte="BC"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
@@ -17734,8 +17734,8 @@
       <Operand type="r16" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
-        <Prefix byte="F3" mandatory="true"/>
         <Prefix byte="66" mandatory="false"/>
+        <Prefix byte="F3" mandatory="true"/>
         <Opcode byte="0F"/>
         <Opcode byte="BC"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>

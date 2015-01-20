@@ -9146,8 +9146,8 @@
       <Operand type="r16" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
-        <Prefix byte="F3" mandatory="true"/>
         <Prefix byte="66" mandatory="false"/>
+        <Prefix byte="F3" mandatory="true"/>
         <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="BD"/>
@@ -9159,8 +9159,8 @@
       <Operand type="r16" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
-        <Prefix byte="F3" mandatory="true"/>
         <Prefix byte="66" mandatory="false"/>
+        <Prefix byte="F3" mandatory="true"/>
         <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="0F"/>
         <Opcode byte="BD"/>
@@ -15984,8 +15984,8 @@
       <Operand type="r16" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
-        <Prefix byte="F3" mandatory="true"/>
         <Prefix byte="66" mandatory="false"/>
+        <Prefix byte="F3" mandatory="true"/>
         <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="B8"/>
@@ -15997,8 +15997,8 @@
       <Operand type="r16" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
-        <Prefix byte="F3" mandatory="true"/>
         <Prefix byte="66" mandatory="false"/>
+        <Prefix byte="F3" mandatory="true"/>
         <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="0F"/>
         <Opcode byte="B8"/>
@@ -23147,8 +23147,8 @@
       <Operand type="r16" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
-        <Prefix byte="F3" mandatory="true"/>
         <Prefix byte="66" mandatory="false"/>
+        <Prefix byte="F3" mandatory="true"/>
         <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="BC"/>
@@ -23160,8 +23160,8 @@
       <Operand type="r16" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
-        <Prefix byte="F3" mandatory="true"/>
         <Prefix byte="66" mandatory="false"/>
+        <Prefix byte="F3" mandatory="true"/>
         <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="0F"/>
         <Opcode byte="BC"/>
