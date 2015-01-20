@@ -2992,6 +2992,7 @@
       <ImplicitOperand id="ax" input="false" output="true"/>
       <ImplicitOperand id="al" input="true" output="false"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="98"/>
       </Encoding>
     </InstructionForm>
@@ -6658,6 +6659,7 @@
       <ImplicitOperand id="ax" input="true" output="false"/>
       <ImplicitOperand id="dx" input="false" output="true"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="99"/>
       </Encoding>
     </InstructionForm>
