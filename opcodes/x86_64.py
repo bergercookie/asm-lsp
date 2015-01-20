@@ -760,7 +760,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                 if "extended-size" in xml_operand.attrib:
                     operand.extended_size = int(xml_operand.attrib.get("extended-size"))
                 instruction_form.operands.append(operand)
-            for xml_implicit_operand in xml_instruction_form.findall("ImplicitOperands"):
+            for xml_implicit_operand in xml_instruction_form.findall("ImplicitOperand"):
                 if _bool(xml_implicit_operand.attrib["input"]):
                     instruction_form.implicit_inputs.add(xml_implicit_operand.attrib["id"])
                 if _bool(xml_implicit_operand.attrib["output"]):
