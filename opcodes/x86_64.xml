@@ -7313,7 +7313,16 @@
       <ImplicitOperand id="ax" input="false" output="true"/>
       <ImplicitOperand id="al" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <Opcode byte="F6"/>
+        <ModRM mode="11" reg="5" rm-operand-number="0"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="imulb" go-name="IMULB" nacl-version="33">
+      <Operand type="r8l" input="true" output="false"/>
+      <ImplicitOperand id="ax" input="false" output="true"/>
+      <ImplicitOperand id="al" input="true" output="false"/>
+      <Encoding>
         <Opcode byte="F6"/>
         <ModRM mode="11" reg="5" rm-operand-number="0"/>
       </Encoding>
