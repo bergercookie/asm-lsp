@@ -9586,6 +9586,7 @@
         <Immediate size="2" operand-number="1"/>
       </Encoding>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="B8" addend-operand-number="0"/>
         <Immediate size="2" operand-number="1"/>
@@ -15997,6 +15998,7 @@
     <InstructionForm gas-name="popw" go-name="POPW" nacl-version="33">
       <Operand type="r16" input="false" output="true"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="58" addend-operand-number="0"/>
       </Encoding>
@@ -18025,6 +18027,7 @@
     <InstructionForm gas-name="pushw" go-name="PUSHW" nacl-version="33">
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="50" addend-operand-number="0"/>
       </Encoding>

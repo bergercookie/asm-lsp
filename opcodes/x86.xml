@@ -4595,6 +4595,7 @@
     <InstructionForm gas-name="decw" go-name="DECW">
       <Operand type="r16" input="true" output="true"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="48" addend-operand-number="0"/>
       </Encoding>
       <Encoding>
@@ -5264,6 +5265,7 @@
     <InstructionForm gas-name="incw" go-name="INCW">
       <Operand type="r16" input="true" output="true"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="40" addend-operand-number="0"/>
       </Encoding>
       <Encoding>
@@ -7107,6 +7109,7 @@
         <Immediate size="2" operand-number="1"/>
       </Encoding>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="B8" addend-operand-number="0"/>
         <Immediate size="2" operand-number="1"/>
       </Encoding>
@@ -12490,6 +12493,7 @@
     <InstructionForm gas-name="popw" go-name="POPW">
       <Operand type="r16" input="false" output="true"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="58" addend-operand-number="0"/>
       </Encoding>
       <Encoding>
@@ -14332,6 +14336,7 @@
     <InstructionForm gas-name="pushw" go-name="PUSHW">
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="50" addend-operand-number="0"/>
       </Encoding>
       <Encoding>
