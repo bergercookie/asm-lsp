@@ -20577,7 +20577,7 @@
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
-      <Operand type="m128" input="true" output="false"/>
+      <Operand type="m64" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="1" L="ignored" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
         <Opcode byte="6B"/>
@@ -20589,7 +20589,7 @@
       <ISA id="FMA4"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
-      <Operand type="m128" input="true" output="false"/>
+      <Operand type="m64" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="0" L="ignored" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
