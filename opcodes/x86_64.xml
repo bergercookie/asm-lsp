@@ -75,6 +75,7 @@
       <Operand type="ax" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="15"/>
         <Immediate size="2" operand-number="1"/>
       </Encoding>
@@ -94,6 +95,7 @@
       <Operand type="r16" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
         <ModRM mode="11" reg="2" rm-operand-number="0"/>
@@ -271,6 +273,7 @@
       <Operand type="m16" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
         <ModRM mode-operand-number="0" reg="2" rm-operand-number="0"/>
@@ -475,6 +478,7 @@
       <Operand type="ax" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="05"/>
         <Immediate size="2" operand-number="1"/>
       </Encoding>
@@ -494,6 +498,7 @@
       <Operand type="r16" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -671,6 +676,7 @@
       <Operand type="m16" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
         <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
@@ -1201,6 +1207,7 @@
       <Operand type="ax" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="25"/>
         <Immediate size="2" operand-number="1"/>
       </Encoding>
@@ -1220,6 +1227,7 @@
       <Operand type="r16" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
         <ModRM mode="11" reg="4" rm-operand-number="0"/>
@@ -1397,6 +1405,7 @@
       <Operand type="m16" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
         <ModRM mode-operand-number="0" reg="4" rm-operand-number="0"/>
@@ -5226,6 +5235,7 @@
       <Operand type="ax" input="true" output="false"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="3D"/>
         <Immediate size="2" operand-number="1"/>
       </Encoding>
@@ -5245,6 +5255,7 @@
       <Operand type="r16" input="true" output="false"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
         <ModRM mode="11" reg="7" rm-operand-number="0"/>
@@ -5422,6 +5433,7 @@
       <Operand type="m16" input="true" output="false"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
         <ModRM mode-operand-number="0" reg="7" rm-operand-number="0"/>
@@ -7457,6 +7469,7 @@
       <Operand type="r16" input="true" output="false"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="69"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
@@ -7480,6 +7493,7 @@
       <Operand type="m16" input="true" output="false"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="69"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
@@ -9565,6 +9579,7 @@
       <Operand type="r16" input="false" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="C7"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -9730,6 +9745,7 @@
       <Operand type="m16" input="false" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="C7"/>
         <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
@@ -11591,6 +11607,7 @@
       <Operand type="ax" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="0D"/>
         <Immediate size="2" operand-number="1"/>
       </Encoding>
@@ -11610,6 +11627,7 @@
       <Operand type="r16" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
         <ModRM mode="11" reg="1" rm-operand-number="0"/>
@@ -11787,6 +11805,7 @@
       <Operand type="m16" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
         <ModRM mode-operand-number="0" reg="1" rm-operand-number="0"/>
@@ -17991,6 +18010,7 @@
     <InstructionForm gas-name="pushw" go-name="PUSHW" nacl-version="33">
       <Operand type="imm16" extended-size="8"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="68"/>
         <Immediate size="2" operand-number="0"/>
       </Encoding>
@@ -20142,6 +20162,7 @@
       <Operand type="ax" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="1D"/>
         <Immediate size="2" operand-number="1"/>
       </Encoding>
@@ -20161,6 +20182,7 @@
       <Operand type="r16" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
         <ModRM mode="11" reg="3" rm-operand-number="0"/>
@@ -20338,6 +20360,7 @@
       <Operand type="m16" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
         <ModRM mode-operand-number="0" reg="3" rm-operand-number="0"/>
@@ -22606,6 +22629,7 @@
       <Operand type="ax" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="2D"/>
         <Immediate size="2" operand-number="1"/>
       </Encoding>
@@ -22625,6 +22649,7 @@
       <Operand type="r16" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
         <ModRM mode="11" reg="5" rm-operand-number="0"/>
@@ -22802,6 +22827,7 @@
       <Operand type="m16" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
         <ModRM mode-operand-number="0" reg="5" rm-operand-number="0"/>
@@ -23070,6 +23096,7 @@
       <Operand type="ax" input="true" output="false"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="A9"/>
         <Immediate size="2" operand-number="1"/>
       </Encoding>
@@ -23078,6 +23105,7 @@
       <Operand type="r16" input="true" output="false"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="F7"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -23180,6 +23208,7 @@
       <Operand type="m16" input="true" output="false"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="F7"/>
         <ModRM mode-operand-number="0" reg="0" rm-operand-number="0"/>
@@ -41252,6 +41281,7 @@
       <Operand type="ax" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <Opcode byte="35"/>
         <Immediate size="2" operand-number="1"/>
       </Encoding>
@@ -41271,6 +41301,7 @@
       <Operand type="r16" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="81"/>
         <ModRM mode="11" reg="6" rm-operand-number="0"/>
@@ -41448,6 +41479,7 @@
       <Operand type="m16" input="true" output="true"/>
       <Operand type="imm16"/>
       <Encoding>
+        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="ignored" BX-operand-number="0"/>
         <Opcode byte="81"/>
         <ModRM mode-operand-number="0" reg="6" rm-operand-number="0"/>
