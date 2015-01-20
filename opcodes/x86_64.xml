@@ -376,8 +376,8 @@
       <Operand type="r64" input="true" output="true"/>
       <Operand type="r64" input="true" output="false"/>
       <Encoding>
+        <Prefix byte="66" mandatory="true"/>
         <REX mandatory="true" W="1" R-operand-number="0" B-operand-number="1" X="ignored"/>
-        <Opcode byte="66"/>
         <Opcode byte="0F"/>
         <Opcode byte="38"/>
         <Opcode byte="F6"/>
@@ -389,8 +389,8 @@
       <Operand type="r64" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
+        <Prefix byte="66" mandatory="true"/>
         <REX mandatory="true" W="1" R-operand-number="0" BX-operand-number="1"/>
-        <Opcode byte="66"/>
         <Opcode byte="0F"/>
         <Opcode byte="38"/>
         <Opcode byte="F6"/>
@@ -928,8 +928,8 @@
       <Operand type="r64" input="true" output="true"/>
       <Operand type="r64" input="true" output="false"/>
       <Encoding>
+        <Prefix byte="F3" mandatory="true"/>
         <REX mandatory="true" W="1" R-operand-number="0" B-operand-number="1" X="ignored"/>
-        <Opcode byte="F3"/>
         <Opcode byte="0F"/>
         <Opcode byte="38"/>
         <Opcode byte="F6"/>
@@ -941,8 +941,8 @@
       <Operand type="r64" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
+        <Prefix byte="F3" mandatory="true"/>
         <REX mandatory="true" W="1" R-operand-number="0" BX-operand-number="1"/>
-        <Opcode byte="F3"/>
         <Opcode byte="0F"/>
         <Opcode byte="38"/>
         <Opcode byte="F6"/>
