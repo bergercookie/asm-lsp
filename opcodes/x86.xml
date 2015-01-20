@@ -1219,9 +1219,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="1" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blcfill">
@@ -1229,9 +1229,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="1" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blcfill">
@@ -1239,9 +1239,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="1" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blcfill">
@@ -1249,9 +1249,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="1" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -1261,9 +1261,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="02"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="6" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blci">
@@ -1271,9 +1271,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="02"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="6" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blci">
@@ -1281,9 +1281,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="02"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="6" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blci">
@@ -1291,9 +1291,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="02"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="6" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -1303,9 +1303,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="5" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blcic">
@@ -1313,9 +1313,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="5" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blcic">
@@ -1323,9 +1323,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="5" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blcic">
@@ -1333,9 +1333,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="5" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -1345,9 +1345,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="02"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="1" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blcmsk">
@@ -1355,9 +1355,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="02"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="1" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blcmsk">
@@ -1365,9 +1365,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="02"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="1" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blcmsk">
@@ -1375,9 +1375,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="02"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="1" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -1387,9 +1387,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="3" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blcs">
@@ -1397,9 +1397,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="3" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blcs">
@@ -1407,9 +1407,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="3" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blcs">
@@ -1417,9 +1417,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="3" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -1545,9 +1545,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="2" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blsfill">
@@ -1555,9 +1555,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="2" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blsfill">
@@ -1565,9 +1565,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="2" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blsfill">
@@ -1575,9 +1575,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="2" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -1609,9 +1609,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="6" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blsic">
@@ -1619,9 +1619,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="6" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blsic">
@@ -1629,9 +1629,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="6" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="blsic">
@@ -1639,9 +1639,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="6" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -17675,9 +17675,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="7" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="t1mskc">
@@ -17685,9 +17685,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="7" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="t1mskc">
@@ -17695,9 +17695,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="7" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="t1mskc">
@@ -17705,9 +17705,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="7" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -17898,9 +17898,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="4" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="tzmsk">
@@ -17908,9 +17908,9 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="4" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="tzmsk">
@@ -17918,9 +17918,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg="4" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="tzmsk">
@@ -17928,9 +17928,9 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="0"/>
         <Opcode byte="01"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode-operand-number="1" reg="4" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
