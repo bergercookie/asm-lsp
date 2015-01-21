@@ -13,7 +13,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="80"/>
         <ModRM mode="11" reg="2" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -23,12 +23,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="12"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="10"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -37,36 +37,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" BX-operand-number="1"/>
-        <Opcode byte="12"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="adcb" go-name="ADCB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="80"/>
-        <ModRM mode="11" reg="2" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="adcb" go-name="ADCB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
-        <Opcode byte="12"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
-        <Opcode byte="10"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="adcb" go-name="ADCB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="m8" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="12"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
@@ -245,15 +216,7 @@
       <Operand type="m8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" BX-operand-number="0"/>
-        <Opcode byte="10"/>
-        <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="adcb" go-name="ADCB" nacl-version="33">
-      <Operand type="m8" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
         <Opcode byte="10"/>
         <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -416,7 +379,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="80"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -426,12 +389,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="02"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="00"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -440,36 +403,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" BX-operand-number="1"/>
-        <Opcode byte="02"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="addb" go-name="ADDB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="80"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="addb" go-name="ADDB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
-        <Opcode byte="02"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
-        <Opcode byte="00"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="addb" go-name="ADDB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="m8" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="02"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
@@ -648,15 +582,7 @@
       <Operand type="m8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" BX-operand-number="0"/>
-        <Opcode byte="00"/>
-        <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="addb" go-name="ADDB" nacl-version="33">
-      <Operand type="m8" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
         <Opcode byte="00"/>
         <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -1145,7 +1071,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="80"/>
         <ModRM mode="11" reg="4" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -1155,12 +1081,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="22"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="20"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -1169,36 +1095,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" BX-operand-number="1"/>
-        <Opcode byte="22"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="andb" go-name="ANDB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="80"/>
-        <ModRM mode="11" reg="4" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="andb" go-name="ANDB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
-        <Opcode byte="22"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
-        <Opcode byte="20"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="andb" go-name="ANDB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="m8" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="22"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
@@ -1377,15 +1274,7 @@
       <Operand type="m8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" BX-operand-number="0"/>
-        <Opcode byte="20"/>
-        <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="andb" go-name="ANDB" nacl-version="33">
-      <Operand type="m8" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
         <Opcode byte="20"/>
         <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -5173,7 +5062,7 @@
       <Operand type="r8" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="80"/>
         <ModRM mode="11" reg="7" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -5183,12 +5072,12 @@
       <Operand type="r8" input="true" output="false"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="3A"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="38"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -5197,36 +5086,7 @@
       <Operand type="r8" input="true" output="false"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" BX-operand-number="1"/>
-        <Opcode byte="3A"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="cmpb" go-name="CMPB" nacl-version="33">
-      <Operand type="r8l" input="true" output="false"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="80"/>
-        <ModRM mode="11" reg="7" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="cmpb" go-name="CMPB" cancelling-inputs="true" nacl-version="33">
-      <Operand type="r8l" input="true" output="false"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
-        <Opcode byte="3A"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
-        <Opcode byte="38"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="cmpb" go-name="CMPB" nacl-version="33">
-      <Operand type="r8l" input="true" output="false"/>
-      <Operand type="m8" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="3A"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
@@ -5405,15 +5265,7 @@
       <Operand type="m8" input="true" output="false"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" BX-operand-number="0"/>
-        <Opcode byte="38"/>
-        <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="cmpb" go-name="CMPB" nacl-version="33">
-      <Operand type="m8" input="true" output="false"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
         <Opcode byte="38"/>
         <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -5632,16 +5484,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="B0"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="cmpxchgb" go-name="CMPXCHGB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="B0"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
@@ -5682,16 +5525,7 @@
       <Operand type="m8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" BX-operand-number="0"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="B0"/>
-        <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="cmpxchgb" go-name="CMPXCHGB" nacl-version="33">
-      <Operand type="m8" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
         <Opcode byte="0F"/>
         <Opcode byte="B0"/>
         <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
@@ -5838,7 +5672,7 @@
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
         <Prefix byte="F2" mandatory="true"/>
-        <REX mandatory="true" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="38"/>
         <Opcode byte="F0"/>
@@ -5875,7 +5709,7 @@
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
         <Prefix byte="F2" mandatory="true"/>
-        <REX mandatory="true" W="0" R-operand-number="0" BX-operand-number="1"/>
+        <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="0F"/>
         <Opcode byte="38"/>
         <Opcode byte="F0"/>
@@ -5904,28 +5738,6 @@
         <Opcode byte="0F"/>
         <Opcode byte="38"/>
         <Opcode byte="F1"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="crc32b" go-name="CRC32B" nacl-version="33">
-      <Operand type="r32l" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
-        <Prefix byte="F2" mandatory="true"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="38"/>
-        <Opcode byte="F0"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="crc32b" go-name="CRC32B" nacl-version="33">
-      <Operand type="r32l" input="true" output="true"/>
-      <Operand type="m8" input="true" output="false"/>
-      <Encoding>
-        <Prefix byte="F2" mandatory="true"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="38"/>
-        <Opcode byte="F0"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
@@ -6707,14 +6519,7 @@
     <InstructionForm gas-name="decb" go-name="DECB" nacl-version="33">
       <Operand type="r8" input="true" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="FE"/>
-        <ModRM mode="11" reg="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="decb" go-name="DECB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="FE"/>
         <ModRM mode="11" reg="1" rm-operand-number="0"/>
       </Encoding>
@@ -6783,15 +6588,7 @@
       <Operand type="r8" input="true" output="false"/>
       <ImplicitOperand id="ax" input="true" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="F6"/>
-        <ModRM mode="11" reg="6" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="divb" go-name="DIVB" nacl-version="33">
-      <Operand type="r8l" input="true" output="false"/>
-      <ImplicitOperand id="ax" input="true" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="F6"/>
         <ModRM mode="11" reg="6" rm-operand-number="0"/>
       </Encoding>
@@ -7222,15 +7019,7 @@
       <Operand type="r8" input="true" output="false"/>
       <ImplicitOperand id="ax" input="true" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="F6"/>
-        <ModRM mode="11" reg="7" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="idivb" go-name="IDIVB" nacl-version="33">
-      <Operand type="r8l" input="true" output="false"/>
-      <ImplicitOperand id="ax" input="true" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="F6"/>
         <ModRM mode="11" reg="7" rm-operand-number="0"/>
       </Encoding>
@@ -7313,16 +7102,7 @@
       <ImplicitOperand id="ax" input="false" output="true"/>
       <ImplicitOperand id="al" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="F6"/>
-        <ModRM mode="11" reg="5" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="imulb" go-name="IMULB" nacl-version="33">
-      <Operand type="r8l" input="true" output="false"/>
-      <ImplicitOperand id="ax" input="false" output="true"/>
-      <ImplicitOperand id="al" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="F6"/>
         <ModRM mode="11" reg="5" rm-operand-number="0"/>
       </Encoding>
@@ -7602,14 +7382,7 @@
     <InstructionForm gas-name="incb" go-name="INCB" nacl-version="33">
       <Operand type="r8" input="true" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="FE"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="incb" go-name="INCB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="FE"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
@@ -9517,13 +9290,13 @@
       <Operand type="r8" input="false" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="C6"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
       </Encoding>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="B0" addend-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
       </Encoding>
@@ -9532,12 +9305,12 @@
       <Operand type="r8" input="false" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="8A"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="88"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -9546,40 +9319,7 @@
       <Operand type="r8" input="false" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" BX-operand-number="1"/>
-        <Opcode byte="8A"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="movb" go-name="MOVB" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="C6"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-      <Encoding>
-        <Opcode byte="B0" addend-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="movb" go-name="MOVB" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
-        <Opcode byte="8A"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
-        <Opcode byte="88"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="movb" go-name="MOVB" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Operand type="m8" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="8A"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
@@ -9738,15 +9478,7 @@
       <Operand type="m8" input="false" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" BX-operand-number="0"/>
-        <Opcode byte="88"/>
-        <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="movb" go-name="MOVB" nacl-version="33">
-      <Operand type="m8" input="false" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
         <Opcode byte="88"/>
         <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -10861,7 +10593,7 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <REX mandatory="true" W="1" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="BE"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
@@ -10881,7 +10613,7 @@
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" BX-operand-number="1"/>
+        <REX mandatory="true" W="1" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="0F"/>
         <Opcode byte="BE"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
@@ -11146,16 +10878,7 @@
       <ImplicitOperand id="ax" input="false" output="true"/>
       <ImplicitOperand id="al" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="F6"/>
-        <ModRM mode="11" reg="4" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="mulb" go-name="MULB" nacl-version="33">
-      <Operand type="r8l" input="true" output="false"/>
-      <ImplicitOperand id="ax" input="false" output="true"/>
-      <ImplicitOperand id="al" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="F6"/>
         <ModRM mode="11" reg="4" rm-operand-number="0"/>
       </Encoding>
@@ -11389,14 +11112,7 @@
     <InstructionForm gas-name="negb" go-name="NEGB" nacl-version="33">
       <Operand type="r8" input="true" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="F6"/>
-        <ModRM mode="11" reg="3" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="negb" go-name="NEGB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="F6"/>
         <ModRM mode="11" reg="3" rm-operand-number="0"/>
       </Encoding>
@@ -11471,14 +11187,7 @@
     <InstructionForm gas-name="notb" go-name="NOTB" nacl-version="33">
       <Operand type="r8" input="true" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="F6"/>
-        <ModRM mode="11" reg="2" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="notb" go-name="NOTB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="F6"/>
         <ModRM mode="11" reg="2" rm-operand-number="0"/>
       </Encoding>
@@ -11555,7 +11264,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="80"/>
         <ModRM mode="11" reg="1" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -11565,12 +11274,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="0A"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="08"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -11579,36 +11288,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" BX-operand-number="1"/>
-        <Opcode byte="0A"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="orb" go-name="ORB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="80"/>
-        <ModRM mode="11" reg="1" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="orb" go-name="ORB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
-        <Opcode byte="0A"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
-        <Opcode byte="08"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="orb" go-name="ORB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="m8" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="0A"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
@@ -11787,15 +11467,7 @@
       <Operand type="m8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" BX-operand-number="0"/>
-        <Opcode byte="08"/>
-        <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="orb" go-name="ORB" nacl-version="33">
-      <Operand type="m8" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
         <Opcode byte="08"/>
         <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -18130,7 +17802,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="1"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D0"/>
         <ModRM mode="11" reg="2" rm-operand-number="0"/>
       </Encoding>
@@ -18139,7 +17811,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="C0"/>
         <ModRM mode="11" reg="2" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -18149,32 +17821,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="cl" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="D2"/>
-        <ModRM mode="11" reg="2" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="rclb" go-name="RCLB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="1"/>
-      <Encoding>
-        <Opcode byte="D0"/>
-        <ModRM mode="11" reg="2" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="rclb" go-name="RCLB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="C0"/>
-        <ModRM mode="11" reg="2" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="rclb" go-name="RCLB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="cl" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D2"/>
         <ModRM mode="11" reg="2" rm-operand-number="0"/>
       </Encoding>
@@ -18437,7 +18084,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="1"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D0"/>
         <ModRM mode="11" reg="3" rm-operand-number="0"/>
       </Encoding>
@@ -18446,7 +18093,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="C0"/>
         <ModRM mode="11" reg="3" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -18456,32 +18103,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="cl" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="D2"/>
-        <ModRM mode="11" reg="3" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="rcrb" go-name="RCRB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="1"/>
-      <Encoding>
-        <Opcode byte="D0"/>
-        <ModRM mode="11" reg="3" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="rcrb" go-name="RCRB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="C0"/>
-        <ModRM mode="11" reg="3" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="rcrb" go-name="RCRB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="cl" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D2"/>
         <ModRM mode="11" reg="3" rm-operand-number="0"/>
       </Encoding>
@@ -18802,7 +18424,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="1"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D0"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
@@ -18811,7 +18433,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="C0"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -18821,32 +18443,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="cl" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="D2"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="rolb" go-name="ROLB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="1"/>
-      <Encoding>
-        <Opcode byte="D0"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="rolb" go-name="ROLB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="C0"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="rolb" go-name="ROLB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="cl" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D2"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
       </Encoding>
@@ -19059,7 +18656,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="1"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D0"/>
         <ModRM mode="11" reg="1" rm-operand-number="0"/>
       </Encoding>
@@ -19068,7 +18665,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="C0"/>
         <ModRM mode="11" reg="1" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -19078,32 +18675,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="cl" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="D2"/>
-        <ModRM mode="11" reg="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="rorb" go-name="RORB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="1"/>
-      <Encoding>
-        <Opcode byte="D0"/>
-        <ModRM mode="11" reg="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="rorb" go-name="RORB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="C0"/>
-        <ModRM mode="11" reg="1" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="rorb" go-name="RORB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="cl" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D2"/>
         <ModRM mode="11" reg="1" rm-operand-number="0"/>
       </Encoding>
@@ -19544,7 +19116,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="1"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D0"/>
         <ModRM mode="11" reg="4" rm-operand-number="0"/>
       </Encoding>
@@ -19553,7 +19125,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="C0"/>
         <ModRM mode="11" reg="4" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -19563,32 +19135,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="cl" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="D2"/>
-        <ModRM mode="11" reg="4" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="salb" go-name="SALB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="1"/>
-      <Encoding>
-        <Opcode byte="D0"/>
-        <ModRM mode="11" reg="4" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="salb" go-name="SALB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="C0"/>
-        <ModRM mode="11" reg="4" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="salb" go-name="SALB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="cl" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D2"/>
         <ModRM mode="11" reg="4" rm-operand-number="0"/>
       </Encoding>
@@ -19801,7 +19348,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="1"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D0"/>
         <ModRM mode="11" reg="7" rm-operand-number="0"/>
       </Encoding>
@@ -19810,7 +19357,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="C0"/>
         <ModRM mode="11" reg="7" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -19820,32 +19367,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="cl" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="D2"/>
-        <ModRM mode="11" reg="7" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="sarb" go-name="SARB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="1"/>
-      <Encoding>
-        <Opcode byte="D0"/>
-        <ModRM mode="11" reg="7" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="sarb" go-name="SARB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="C0"/>
-        <ModRM mode="11" reg="7" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="sarb" go-name="SARB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="cl" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D2"/>
         <ModRM mode="11" reg="7" rm-operand-number="0"/>
       </Encoding>
@@ -20112,7 +19634,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="80"/>
         <ModRM mode="11" reg="3" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -20122,12 +19644,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="1A"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="18"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -20136,36 +19658,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" BX-operand-number="1"/>
-        <Opcode byte="1A"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="sbbb" go-name="SBBB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="80"/>
-        <ModRM mode="11" reg="3" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="sbbb" go-name="SBBB" cancelling-inputs="true" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
-        <Opcode byte="1A"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
-        <Opcode byte="18"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="sbbb" go-name="SBBB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="m8" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="1A"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
@@ -20344,15 +19837,7 @@
       <Operand type="m8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" BX-operand-number="0"/>
-        <Opcode byte="18"/>
-        <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="sbbb" go-name="SBBB" nacl-version="33">
-      <Operand type="m8" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
         <Opcode byte="18"/>
         <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -20452,15 +19937,7 @@
     <InstructionForm gas-name="seta" go-name="SETHI" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="97"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="seta" go-name="SETHI" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="97"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20480,15 +19957,7 @@
     <InstructionForm gas-name="setae" go-name="SETCC" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="93"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setae" go-name="SETCC" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="93"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20508,15 +19977,7 @@
     <InstructionForm gas-name="setb" go-name="SETCS" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="92"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setb" go-name="SETCS" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="92"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20536,15 +19997,7 @@
     <InstructionForm gas-name="setbe" go-name="SETLS" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="96"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setbe" go-name="SETLS" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="96"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20564,15 +20017,7 @@
     <InstructionForm gas-name="setc" go-name="SETCS" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="92"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setc" go-name="SETCS" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="92"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20592,15 +20037,7 @@
     <InstructionForm gas-name="sete" go-name="SETEQ" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="94"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="sete" go-name="SETEQ" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="94"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20620,15 +20057,7 @@
     <InstructionForm gas-name="setg" go-name="SETGT" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="9F"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setg" go-name="SETGT" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="9F"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20648,15 +20077,7 @@
     <InstructionForm gas-name="setge" go-name="SETGE" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="9D"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setge" go-name="SETGE" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="9D"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20676,15 +20097,7 @@
     <InstructionForm gas-name="setl" go-name="SETLT" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="9C"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setl" go-name="SETLT" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="9C"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20704,15 +20117,7 @@
     <InstructionForm gas-name="setle" go-name="SETLE" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="9E"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setle" go-name="SETLE" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="9E"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20732,15 +20137,7 @@
     <InstructionForm gas-name="setna" go-name="SETLS" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="96"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setna" go-name="SETLS" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="96"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20760,15 +20157,7 @@
     <InstructionForm gas-name="setnae" go-name="SETCS" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="92"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setnae" go-name="SETCS" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="92"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20788,15 +20177,7 @@
     <InstructionForm gas-name="setnb" go-name="SETCC" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="93"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setnb" go-name="SETCC" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="93"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20816,15 +20197,7 @@
     <InstructionForm gas-name="setnbe" go-name="SETHI" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="97"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setnbe" go-name="SETHI" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="97"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20844,15 +20217,7 @@
     <InstructionForm gas-name="setnc" go-name="SETCC" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="93"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setnc" go-name="SETCC" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="93"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20872,15 +20237,7 @@
     <InstructionForm gas-name="setne" go-name="SETNE" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="95"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setne" go-name="SETNE" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="95"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20900,15 +20257,7 @@
     <InstructionForm gas-name="setng" go-name="SETLE" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="9E"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setng" go-name="SETLE" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="9E"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20928,15 +20277,7 @@
     <InstructionForm gas-name="setnge" go-name="SETLT" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="9C"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setnge" go-name="SETLT" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="9C"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20956,15 +20297,7 @@
     <InstructionForm gas-name="setnl" go-name="SETGE" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="9D"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setnl" go-name="SETGE" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="9D"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -20984,15 +20317,7 @@
     <InstructionForm gas-name="setnle" go-name="SETGT" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="9F"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setnle" go-name="SETGT" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="9F"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -21012,15 +20337,7 @@
     <InstructionForm gas-name="setno" go-name="SETOC" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="91"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setno" go-name="SETOC" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="91"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -21040,15 +20357,7 @@
     <InstructionForm gas-name="setnp" go-name="SETPC" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="9B"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setnp" go-name="SETPC" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="9B"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -21068,15 +20377,7 @@
     <InstructionForm gas-name="setns" go-name="SETPL" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="99"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setns" go-name="SETPL" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="99"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -21096,15 +20397,7 @@
     <InstructionForm gas-name="setnz" go-name="SETNE" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="95"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setnz" go-name="SETNE" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="95"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -21124,15 +20417,7 @@
     <InstructionForm gas-name="seto" go-name="SETOS" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="90"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="seto" go-name="SETOS" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="90"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -21152,15 +20437,7 @@
     <InstructionForm gas-name="setp" go-name="SETPS" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="9A"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setp" go-name="SETPS" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="9A"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -21180,15 +20457,7 @@
     <InstructionForm gas-name="setpe" go-name="SETPS" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="9A"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setpe" go-name="SETPS" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="9A"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -21208,15 +20477,7 @@
     <InstructionForm gas-name="setpo" go-name="SETPC" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="9B"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setpo" go-name="SETPC" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="9B"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -21236,15 +20497,7 @@
     <InstructionForm gas-name="sets" go-name="SETMI" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="98"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="sets" go-name="SETMI" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="98"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -21264,15 +20517,7 @@
     <InstructionForm gas-name="setz" go-name="SETEQ" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="94"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="setz" go-name="SETEQ" nacl-version="33">
-      <Operand type="r8l" input="false" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="94"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
@@ -21491,7 +20736,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="1"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D0"/>
         <ModRM mode="11" reg="4" rm-operand-number="0"/>
       </Encoding>
@@ -21500,7 +20745,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="C0"/>
         <ModRM mode="11" reg="4" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -21510,32 +20755,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="cl" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="D2"/>
-        <ModRM mode="11" reg="4" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="shlb" go-name="SHLB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="1"/>
-      <Encoding>
-        <Opcode byte="D0"/>
-        <ModRM mode="11" reg="4" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="shlb" go-name="SHLB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="C0"/>
-        <ModRM mode="11" reg="4" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="shlb" go-name="SHLB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="cl" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D2"/>
         <ModRM mode="11" reg="4" rm-operand-number="0"/>
       </Encoding>
@@ -21938,7 +21158,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="1"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D0"/>
         <ModRM mode="11" reg="5" rm-operand-number="0"/>
       </Encoding>
@@ -21947,7 +21167,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="C0"/>
         <ModRM mode="11" reg="5" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -21957,32 +21177,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="cl" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
-        <Opcode byte="D2"/>
-        <ModRM mode="11" reg="5" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="shrb" go-name="SHRB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="1"/>
-      <Encoding>
-        <Opcode byte="D0"/>
-        <ModRM mode="11" reg="5" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="shrb" go-name="SHRB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="C0"/>
-        <ModRM mode="11" reg="5" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="shrb" go-name="SHRB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="cl" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="D2"/>
         <ModRM mode="11" reg="5" rm-operand-number="0"/>
       </Encoding>
@@ -22579,7 +21774,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="80"/>
         <ModRM mode="11" reg="5" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -22589,12 +21784,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="2A"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="28"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -22603,36 +21798,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" BX-operand-number="1"/>
-        <Opcode byte="2A"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="subb" go-name="SUBB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="80"/>
-        <ModRM mode="11" reg="5" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="subb" go-name="SUBB" cancelling-inputs="true" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
-        <Opcode byte="2A"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
-        <Opcode byte="28"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="subb" go-name="SUBB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="m8" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="2A"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
@@ -22811,15 +21977,7 @@
       <Operand type="m8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" BX-operand-number="0"/>
-        <Opcode byte="28"/>
-        <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="subb" go-name="SUBB" nacl-version="33">
-      <Operand type="m8" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
         <Opcode byte="28"/>
         <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -23072,7 +22230,7 @@
       <Operand type="r8" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="F6"/>
         <ModRM mode="11" reg="0" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -23082,24 +22240,7 @@
       <Operand type="r8" input="true" output="false"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
-        <Opcode byte="84"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="testb" go-name="TESTB" nacl-version="33">
-      <Operand type="r8l" input="true" output="false"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="F6"/>
-        <ModRM mode="11" reg="0" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="testb" go-name="TESTB" nacl-version="33">
-      <Operand type="r8l" input="true" output="false"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="84"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -23203,15 +22344,7 @@
       <Operand type="m8" input="true" output="false"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" BX-operand-number="0"/>
-        <Opcode byte="84"/>
-        <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="testb" go-name="TESTB" nacl-version="33">
-      <Operand type="m8" input="true" output="false"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
         <Opcode byte="84"/>
         <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -40880,16 +40013,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="C0"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="xaddb" go-name="XADDB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="0F"/>
         <Opcode byte="C0"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
@@ -40930,16 +40054,7 @@
       <Operand type="m8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" BX-operand-number="0"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="C0"/>
-        <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="xaddb" go-name="XADDB" nacl-version="33">
-      <Operand type="m8" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
         <Opcode byte="0F"/>
         <Opcode byte="C0"/>
         <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
@@ -40982,12 +40097,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="86"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="86"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -40996,27 +40111,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="m8" input="true" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" BX-operand-number="1"/>
-        <Opcode byte="86"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="xchgb" go-name="XCHGB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="true"/>
-      <Encoding>
-        <Opcode byte="86"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
-        <Opcode byte="86"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="xchgb" go-name="XCHGB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="m8" input="true" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="86"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
@@ -41147,15 +40242,7 @@
       <Operand type="m8" input="true" output="true"/>
       <Operand type="r8" input="true" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" BX-operand-number="0"/>
-        <Opcode byte="86"/>
-        <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="xchgb" go-name="XCHGB" nacl-version="33">
-      <Operand type="m8" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="true"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
         <Opcode byte="86"/>
         <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -41231,7 +40318,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="imm8"/>
       <Encoding>
-        <REX mandatory="true" W="0" R="ignored" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R="ignored" B-operand-number="0" X="ignored"/>
         <Opcode byte="80"/>
         <ModRM mode="11" reg="6" rm-operand-number="0"/>
         <Immediate size="1" operand-number="1"/>
@@ -41241,12 +40328,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
         <Opcode byte="32"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
+        <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="30"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
@@ -41255,36 +40342,7 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="0" BX-operand-number="1"/>
-        <Opcode byte="32"/>
-        <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="xorb" go-name="XORB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <Opcode byte="80"/>
-        <ModRM mode="11" reg="6" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="xorb" go-name="XORB" cancelling-inputs="true" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
-        <Opcode byte="32"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
-        <Opcode byte="30"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="xorb" go-name="XORB" nacl-version="33">
-      <Operand type="r8l" input="true" output="true"/>
-      <Operand type="m8" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="0" BX-operand-number="1"/>
         <Opcode byte="32"/>
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
@@ -41463,15 +40521,7 @@
       <Operand type="m8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <REX mandatory="true" W="0" R-operand-number="1" BX-operand-number="0"/>
-        <Opcode byte="30"/>
-        <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="xorb" go-name="XORB" nacl-version="33">
-      <Operand type="m8" input="true" output="true"/>
-      <Operand type="r8l" input="true" output="false"/>
-      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="1" BX-operand-number="0"/>
         <Opcode byte="30"/>
         <ModRM mode-operand-number="0" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>

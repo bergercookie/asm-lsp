@@ -163,20 +163,11 @@ class Operand:
         "r8"
             An 8-bit general-purpose register (al, bl, cl, dl, sil, dil, bpl, spl, r8b-r15b).
 
-        "r8l"
-            A legacy 8-bit general-purpose register (al, ah, bl, bh, cl, ch, dl, dh).
-
         "r16"
             A 16-bit general-purpose register (ax, bx, cx, dx, si, di, bp, sp, r8w-r15w).
 
-        "r16l"
-            A legacy 16-bit general-purpose register (ax, bx, cx, dx, si, di, bp, sp).
-
         "r32"
             A 32-bit general-purpose register (eax, ebx, ecx, edx, esi, edi, ebp, esp, r8d-r15d).
-
-        "r32l"
-            A legacy 32-bit general-purpose register (eax, ebx, ecx, edx, esi, edi, ebx, esp).
 
         "r64"
             A 64-bit general-purpose register (rax, rbx, rcx, rdx, rsi, rdi, rbp, rsp, r8-r15).
