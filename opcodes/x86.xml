@@ -66,12 +66,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="12"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="10"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="12"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="adcb" go-name="ADCB">
@@ -116,13 +116,13 @@
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="13"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="11"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="11"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="13"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="adcw" go-name="ADCW">
@@ -164,12 +164,12 @@
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="13"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="11"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="13"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="adcl" go-name="ADCL">
@@ -301,12 +301,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="02"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="00"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="02"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="addb" go-name="ADDB">
@@ -351,13 +351,13 @@
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="03"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="01"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="01"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="03"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="addw" go-name="ADDW">
@@ -399,12 +399,12 @@
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="03"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="01"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="03"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="addl" go-name="ADDL">
@@ -838,12 +838,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="22"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="20"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="22"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="andb" go-name="ANDB">
@@ -888,13 +888,13 @@
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="23"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="21"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="21"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="23"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="andw" go-name="ANDW">
@@ -936,12 +936,12 @@
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="23"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="21"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="23"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="andl" go-name="ANDL">
@@ -3535,12 +3535,12 @@
       <Operand type="r8" input="true" output="false"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="3A"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="38"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="3A"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="cmpb" go-name="CMPB">
@@ -3585,13 +3585,13 @@
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="3B"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="39"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="39"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="3B"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="cmpw" go-name="CMPW">
@@ -3633,12 +3633,12 @@
       <Operand type="r32" input="true" output="false"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="3B"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="39"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="3B"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="cmpl" go-name="CMPL">
@@ -7083,12 +7083,12 @@
       <Operand type="r8" input="false" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="8A"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="88"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="8A"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movb" go-name="MOVB">
@@ -7119,13 +7119,13 @@
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="8B"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="89"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="89"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="8B"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movw" go-name="MOVW">
@@ -7162,12 +7162,12 @@
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="8B"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="89"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="8B"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movl" go-name="MOVL">
@@ -7248,14 +7248,14 @@
       <Encoding>
         <Prefix byte="66" mandatory="true"/>
         <Opcode byte="0F"/>
-        <Opcode byte="29"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="28"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <Prefix byte="66" mandatory="true"/>
         <Opcode byte="0F"/>
-        <Opcode byte="28"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="29"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movapd" go-name="MOVAPD" xmm-mode="SSE">
@@ -7288,13 +7288,13 @@
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
         <Opcode byte="0F"/>
-        <Opcode byte="29"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="28"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <Opcode byte="0F"/>
-        <Opcode byte="28"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="29"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movaps" go-name="MOVAPS" xmm-mode="SSE">
@@ -7493,14 +7493,14 @@
       <Encoding>
         <Prefix byte="66" mandatory="true"/>
         <Opcode byte="0F"/>
-        <Opcode byte="7F"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="6F"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <Prefix byte="66" mandatory="true"/>
         <Opcode byte="0F"/>
-        <Opcode byte="6F"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="7F"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movdqa" xmm-mode="SSE">
@@ -7534,14 +7534,14 @@
       <Encoding>
         <Prefix byte="F3" mandatory="true"/>
         <Opcode byte="0F"/>
-        <Opcode byte="7F"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="6F"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <Prefix byte="F3" mandatory="true"/>
         <Opcode byte="0F"/>
-        <Opcode byte="6F"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="7F"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movdqu" xmm-mode="SSE">
@@ -7817,13 +7817,13 @@
       <Operand type="mm" input="true" output="false"/>
       <Encoding>
         <Opcode byte="0F"/>
-        <Opcode byte="7F"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="6F"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <Opcode byte="0F"/>
-        <Opcode byte="6F"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="7F"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movq" go-name="MOVQ" mmx-mode="MMX">
@@ -7841,16 +7841,16 @@
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <Prefix byte="66" mandatory="true"/>
-        <Opcode byte="0F"/>
-        <Opcode byte="D6"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-      <Encoding>
         <Prefix byte="F3" mandatory="true"/>
         <Opcode byte="0F"/>
         <Opcode byte="7E"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+      <Encoding>
+        <Prefix byte="66" mandatory="true"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="D6"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movq" go-name="MOVQ" xmm-mode="SSE">
@@ -7907,14 +7907,14 @@
       <Encoding>
         <Prefix byte="F2" mandatory="true"/>
         <Opcode byte="0F"/>
-        <Opcode byte="11"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="10"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <Prefix byte="F2" mandatory="true"/>
         <Opcode byte="0F"/>
-        <Opcode byte="10"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="11"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movsd" go-name="MOVSD" xmm-mode="SSE">
@@ -7996,14 +7996,14 @@
       <Encoding>
         <Prefix byte="F3" mandatory="true"/>
         <Opcode byte="0F"/>
-        <Opcode byte="11"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="10"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <Prefix byte="F3" mandatory="true"/>
         <Opcode byte="0F"/>
-        <Opcode byte="10"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="11"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movss" go-name="MOVSS" xmm-mode="SSE">
@@ -8095,14 +8095,14 @@
       <Encoding>
         <Prefix byte="66" mandatory="true"/>
         <Opcode byte="0F"/>
-        <Opcode byte="11"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="10"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <Prefix byte="66" mandatory="true"/>
         <Opcode byte="0F"/>
-        <Opcode byte="10"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="11"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movupd" go-name="MOVUPD" xmm-mode="SSE">
@@ -8135,13 +8135,13 @@
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
         <Opcode byte="0F"/>
-        <Opcode byte="11"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="10"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <Opcode byte="0F"/>
-        <Opcode byte="10"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="11"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movups" go-name="MOVUPS" xmm-mode="SSE">
@@ -8552,12 +8552,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="0A"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="08"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="0A"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="orb" go-name="ORB">
@@ -8602,13 +8602,13 @@
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="0B"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="09"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="09"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="0B"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="orw" go-name="ORW">
@@ -8650,12 +8650,12 @@
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="0B"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="09"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="0B"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="orl" go-name="ORL">
@@ -14852,10 +14852,6 @@
     <InstructionForm gas-name="ret" go-name="RET">
       <Operand type="imm16"/>
       <Encoding>
-        <Opcode byte="CA"/>
-        <Immediate size="2" operand-number="0"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="C2"/>
         <Immediate size="2" operand-number="0"/>
       </Encoding>
@@ -15738,12 +15734,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="1A"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="18"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="1A"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="sbbb" go-name="SBBB">
@@ -15788,13 +15784,13 @@
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="1B"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="19"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="19"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="1B"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="sbbw" go-name="SBBW">
@@ -15836,12 +15832,12 @@
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="1B"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="19"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="1B"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="sbbl" go-name="SBBL">
@@ -17388,12 +17384,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="2A"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="28"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="2A"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="subb" go-name="SUBB">
@@ -17438,13 +17434,13 @@
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="2B"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="29"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="29"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="2B"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="subw" go-name="SUBW">
@@ -17486,12 +17482,12 @@
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="2B"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="29"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="2B"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="subl" go-name="SUBL">
@@ -24705,13 +24701,13 @@
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="29"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="28"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="28"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="29"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vmovapd" xmm-mode="AVX">
@@ -24730,13 +24726,13 @@
       <Operand type="ymm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="ignored" L="1" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="29"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="28"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <VEX type="VEX" W="ignored" L="1" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="28"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="29"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vmovapd" xmm-mode="AVX">
@@ -24777,13 +24773,13 @@
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="29"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="28"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="28"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="29"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vmovaps" xmm-mode="AVX">
@@ -24802,13 +24798,13 @@
       <Operand type="ymm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="ignored" L="1" m-mmmm="00001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="29"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="28"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <VEX type="VEX" W="ignored" L="1" m-mmmm="00001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="28"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="29"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vmovaps" xmm-mode="AVX">
@@ -24933,13 +24929,13 @@
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="7F"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="6F"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="6F"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="7F"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vmovdqa" xmm-mode="AVX">
@@ -24958,13 +24954,13 @@
       <Operand type="ymm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="ignored" L="1" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="7F"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="6F"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <VEX type="VEX" W="ignored" L="1" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="6F"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="7F"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vmovdqa" xmm-mode="AVX">
@@ -25005,13 +25001,13 @@
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="10" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="7F"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="6F"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="10" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="6F"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="7F"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vmovdqu" xmm-mode="AVX">
@@ -25030,13 +25026,13 @@
       <Operand type="ymm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="ignored" L="1" m-mmmm="00001" pp="10" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="7F"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="6F"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <VEX type="VEX" W="ignored" L="1" m-mmmm="00001" pp="10" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="6F"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="7F"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vmovdqu" xmm-mode="AVX">
@@ -25326,14 +25322,14 @@
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="D6"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-      </Encoding>
-      <Encoding>
         <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="10" R="1" B="ignored" X="1" vvvv="1111"/>
         <Opcode byte="7E"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
+        <Opcode byte="D6"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vmovq" xmm-mode="AVX">
@@ -25385,13 +25381,13 @@
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="ignored" L="ignored" m-mmmm="00001" pp="11" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="11"/>
-        <ModRM mode="11" reg-operand-number="2" rm-operand-number="0"/>
+        <Opcode byte="10"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
       <Encoding>
         <VEX type="VEX" W="ignored" L="ignored" m-mmmm="00001" pp="11" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="10"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        <Opcode byte="11"/>
+        <ModRM mode="11" reg-operand-number="2" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -25507,13 +25503,13 @@
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="ignored" L="ignored" m-mmmm="00001" pp="10" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="11"/>
-        <ModRM mode="11" reg-operand-number="2" rm-operand-number="0"/>
+        <Opcode byte="10"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
       <Encoding>
         <VEX type="VEX" W="ignored" L="ignored" m-mmmm="00001" pp="10" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="10"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
+        <Opcode byte="11"/>
+        <ModRM mode="11" reg-operand-number="2" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -25524,13 +25520,13 @@
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="11"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="10"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="10"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="11"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vmovupd" xmm-mode="AVX">
@@ -25549,13 +25545,13 @@
       <Operand type="ymm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="ignored" L="1" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="11"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="10"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <VEX type="VEX" W="ignored" L="1" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="10"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="11"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vmovupd" xmm-mode="AVX">
@@ -25596,13 +25592,13 @@
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="11"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="10"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <VEX type="VEX" W="ignored" L="0" m-mmmm="00001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="10"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="11"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vmovups" xmm-mode="AVX">
@@ -25621,13 +25617,13 @@
       <Operand type="ymm" input="true" output="false"/>
       <Encoding>
         <VEX type="VEX" W="ignored" L="1" m-mmmm="00001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="11"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="10"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
       <Encoding>
         <VEX type="VEX" W="ignored" L="1" m-mmmm="00001" pp="00" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="10"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="11"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vmovups" xmm-mode="AVX">
@@ -27231,16 +27227,16 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01000" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="A2"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="3"/>
-        <RegisterByte register-operand-number="2" payload="ignored"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01000" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
         <Opcode byte="A2"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
         <RegisterByte register-operand-number="3" payload="ignored"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01000" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="A2"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="3"/>
+        <RegisterByte register-operand-number="2" payload="ignored"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpcmov" xmm-mode="AVX">
@@ -27276,16 +27272,16 @@
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="ymm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="1" m-mmmm="01000" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="A2"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="3"/>
-        <RegisterByte register-operand-number="2" payload="ignored"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="1" m-mmmm="01000" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
         <Opcode byte="A2"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
         <RegisterByte register-operand-number="3" payload="ignored"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="1" m-mmmm="01000" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="A2"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="3"/>
+        <RegisterByte register-operand-number="2" payload="ignored"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpcmov" xmm-mode="AVX">
@@ -28116,16 +28112,16 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="imm4"/>
       <Encoding>
-        <VEX type="VEX" W="1" L="0" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="49"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="3"/>
-        <RegisterByte register-operand-number="2" payload-operand-number="4"/>
-      </Encoding>
-      <Encoding>
         <VEX type="VEX" W="0" L="0" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
         <Opcode byte="49"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
         <RegisterByte register-operand-number="3" payload-operand-number="4"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="VEX" W="1" L="0" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="49"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="3"/>
+        <RegisterByte register-operand-number="2" payload-operand-number="4"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpermil2pd" xmm-mode="AVX">
@@ -28164,16 +28160,16 @@
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="imm4"/>
       <Encoding>
-        <VEX type="VEX" W="1" L="1" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="49"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="3"/>
-        <RegisterByte register-operand-number="2" payload-operand-number="4"/>
-      </Encoding>
-      <Encoding>
         <VEX type="VEX" W="0" L="1" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
         <Opcode byte="49"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
         <RegisterByte register-operand-number="3" payload-operand-number="4"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="VEX" W="1" L="1" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="49"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="3"/>
+        <RegisterByte register-operand-number="2" payload-operand-number="4"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpermil2pd" xmm-mode="AVX">
@@ -28214,16 +28210,16 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="imm4"/>
       <Encoding>
-        <VEX type="VEX" W="1" L="0" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="48"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="3"/>
-        <RegisterByte register-operand-number="2" payload-operand-number="4"/>
-      </Encoding>
-      <Encoding>
         <VEX type="VEX" W="0" L="0" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
         <Opcode byte="48"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
         <RegisterByte register-operand-number="3" payload-operand-number="4"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="VEX" W="1" L="0" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="48"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="3"/>
+        <RegisterByte register-operand-number="2" payload-operand-number="4"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpermil2ps" xmm-mode="AVX">
@@ -28262,16 +28258,16 @@
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="imm4"/>
       <Encoding>
-        <VEX type="VEX" W="1" L="1" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="48"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="3"/>
-        <RegisterByte register-operand-number="2" payload-operand-number="4"/>
-      </Encoding>
-      <Encoding>
         <VEX type="VEX" W="0" L="1" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
         <Opcode byte="48"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
         <RegisterByte register-operand-number="3" payload-operand-number="4"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="VEX" W="1" L="1" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="48"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="3"/>
+        <RegisterByte register-operand-number="2" payload-operand-number="4"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpermil2ps" xmm-mode="AVX">
@@ -28626,15 +28622,15 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <VEX type="VEX" W="0" L="0" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
-        <Opcode byte="15"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
-        <Immediate size="1" operand-number="2"/>
-      </Encoding>
-      <Encoding>
         <VEX type="VEX" W="0" L="0" m-mmmm="00001" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
         <Opcode byte="C5"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Immediate size="1" operand-number="2"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="VEX" W="0" L="0" m-mmmm="00011" pp="01" R="1" B="ignored" X="1" vvvv="1111"/>
+        <Opcode byte="15"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
         <Immediate size="1" operand-number="2"/>
       </Encoding>
     </InstructionForm>
@@ -31433,16 +31429,16 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01000" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="A3"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="3"/>
-        <RegisterByte register-operand-number="2" payload="ignored"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01000" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
         <Opcode byte="A3"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
         <RegisterByte register-operand-number="3" payload="ignored"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01000" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="A3"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="3"/>
+        <RegisterByte register-operand-number="2" payload="ignored"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpperm" xmm-mode="AVX">
@@ -31491,14 +31487,14 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="90"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="2"/>
         <Opcode byte="90"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="90"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vprotb" xmm-mode="AVX">
@@ -31555,14 +31551,14 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="92"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="2"/>
         <Opcode byte="92"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="92"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vprotd" xmm-mode="AVX">
@@ -31619,14 +31615,14 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="93"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="2"/>
         <Opcode byte="93"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="93"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vprotq" xmm-mode="AVX">
@@ -31683,14 +31679,14 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="91"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="2"/>
         <Opcode byte="91"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="91"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vprotw" xmm-mode="AVX">
@@ -31781,14 +31777,14 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="98"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="2"/>
         <Opcode byte="98"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="98"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpshab" xmm-mode="AVX">
@@ -31821,14 +31817,14 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="9A"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="2"/>
         <Opcode byte="9A"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="9A"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpshad" xmm-mode="AVX">
@@ -31861,14 +31857,14 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="9B"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="2"/>
         <Opcode byte="9B"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="9B"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpshaq" xmm-mode="AVX">
@@ -31901,14 +31897,14 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="99"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="2"/>
         <Opcode byte="99"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="99"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpshaw" xmm-mode="AVX">
@@ -31941,14 +31937,14 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="94"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="2"/>
         <Opcode byte="94"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="94"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpshlb" xmm-mode="AVX">
@@ -31981,14 +31977,14 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="96"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="2"/>
         <Opcode byte="96"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="96"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpshld" xmm-mode="AVX">
@@ -32021,14 +32017,14 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="97"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="2"/>
         <Opcode byte="97"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="97"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpshlq" xmm-mode="AVX">
@@ -32061,14 +32057,14 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
-        <Opcode byte="95"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
-      </Encoding>
-      <Encoding>
         <VEX type="XOP" W="0" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="2"/>
         <Opcode byte="95"/>
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+      </Encoding>
+      <Encoding>
+        <VEX type="XOP" W="1" L="0" m-mmmm="01001" pp="00" R="1" B="ignored" X="1" vvvv-operand-number="1"/>
+        <Opcode byte="95"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vpshlw" xmm-mode="AVX">
@@ -35416,12 +35412,12 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="32"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="30"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="32"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="xorb" go-name="XORB">
@@ -35466,13 +35462,13 @@
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="33"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <Opcode byte="31"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="31"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <Opcode byte="33"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="xorw" go-name="XORW">
@@ -35514,12 +35510,12 @@
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
-        <Opcode byte="33"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <Opcode byte="31"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Opcode byte="33"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="xorl" go-name="XORL">
