@@ -5679,7 +5679,7 @@
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="crc32w" nacl-version="33">
+    <InstructionForm gas-name="crc32w">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
@@ -5716,7 +5716,7 @@
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="crc32w" nacl-version="33">
+    <InstructionForm gas-name="crc32w">
       <Operand type="r32" input="true" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
@@ -17690,7 +17690,7 @@
         <Immediate size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pushw" go-name="PUSHW" nacl-version="33">
+    <InstructionForm gas-name="pushw" go-name="PUSHW">
       <Operand type="imm16" extended-size="8"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
@@ -29028,7 +29028,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VLDMXCSR" summary="Load MXCSR Register">
-    <InstructionForm gas-name="vldmxcsr" xmm-mode="AVX">
+    <InstructionForm gas-name="vldmxcsr" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
@@ -30066,7 +30066,7 @@
         <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovq" xmm-mode="AVX">
+    <InstructionForm gas-name="vmovq" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -37238,7 +37238,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSLLD" summary="Shift Packed Doubleword Data Left Logical">
-    <InstructionForm gas-name="vpslld" xmm-mode="AVX">
+    <InstructionForm gas-name="vpslld" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -37308,7 +37308,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSLLDQ" summary="Shift Packed Double Quadword Left Logical">
-    <InstructionForm gas-name="vpslldq" xmm-mode="AVX">
+    <InstructionForm gas-name="vpslldq" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -37334,7 +37334,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSLLQ" summary="Shift Packed Quadword Data Left Logical">
-    <InstructionForm gas-name="vpsllq" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsllq" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -37496,7 +37496,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSLLW" summary="Shift Packed Word Data Left Logical">
-    <InstructionForm gas-name="vpsllw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsllw" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -37566,7 +37566,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSRAD" summary="Shift Packed Doubleword Data Right Arithmetic">
-    <InstructionForm gas-name="vpsrad" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsrad" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -37682,7 +37682,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSRAW" summary="Shift Packed Word Data Right Arithmetic">
-    <InstructionForm gas-name="vpsraw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsraw" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -37752,7 +37752,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSRLD" summary="Shift Packed Doubleword Data Right Logical">
-    <InstructionForm gas-name="vpsrld" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsrld" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -37786,7 +37786,7 @@
         <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpsrld" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsrld" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX2"/>
       <Operand type="ymm" input="false" output="true"/>
       <Operand type="ymm" input="true" output="false"/>
@@ -37822,7 +37822,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSRLDQ" summary="Shift Packed Double Quadword Right Logical">
-    <InstructionForm gas-name="vpsrldq" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsrldq" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -37848,7 +37848,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSRLQ" summary="Shift Packed Quadword Data Right Logical">
-    <InstructionForm gas-name="vpsrlq" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsrlq" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -37882,7 +37882,7 @@
         <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpsrlq" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsrlq" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX2"/>
       <Operand type="ymm" input="false" output="true"/>
       <Operand type="ymm" input="true" output="false"/>
@@ -38010,7 +38010,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VPSRLW" summary="Shift Packed Word Data Right Logical">
-    <InstructionForm gas-name="vpsrlw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsrlw" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -38044,7 +38044,7 @@
         <ModRM mode-operand-number="2" reg-operand-number="0" rm-operand-number="2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpsrlw" xmm-mode="AVX">
+    <InstructionForm gas-name="vpsrlw" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX2"/>
       <Operand type="ymm" input="false" output="true"/>
       <Operand type="ymm" input="true" output="false"/>
@@ -39432,7 +39432,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VSTMXCSR" summary="Store MXCSR Register State">
-    <InstructionForm gas-name="vstmxcsr" xmm-mode="AVX">
+    <InstructionForm gas-name="vstmxcsr" xmm-mode="AVX" nacl-version="41">
       <ISA id="AVX"/>
       <Operand type="m32" input="false" output="true"/>
       <Encoding>
