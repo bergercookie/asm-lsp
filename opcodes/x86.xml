@@ -35255,11 +35255,11 @@
       <Operand type="r8" input="true" output="true"/>
       <Encoding>
         <Opcode byte="86"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
       <Encoding>
         <Opcode byte="86"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="xchgb" go-name="XCHGB">
@@ -35292,12 +35292,12 @@
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
         <Opcode byte="87"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
         <Opcode byte="87"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="xchgw" go-name="XCHGW">
@@ -35328,11 +35328,11 @@
       <Operand type="r32" input="true" output="true"/>
       <Encoding>
         <Opcode byte="87"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
+        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
       <Encoding>
         <Opcode byte="87"/>
-        <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="xchgl" go-name="XCHGL">

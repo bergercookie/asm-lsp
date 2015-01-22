@@ -40093,14 +40093,14 @@
       <Operand type="r8" input="true" output="true"/>
       <Operand type="r8" input="true" output="true"/>
       <Encoding>
-        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
-        <Opcode byte="86"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="86"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <Opcode byte="86"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="xchgb" go-name="XCHGB" nacl-version="33">
@@ -40135,15 +40135,15 @@
       <Operand type="r16" input="true" output="true"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
-        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
-        <Opcode byte="87"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
-        <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="87"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <Prefix byte="66" mandatory="false"/>
+        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <Opcode byte="87"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="xchgw" go-name="XCHGW" nacl-version="33">
@@ -40176,14 +40176,14 @@
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="true"/>
       <Encoding>
-        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
-        <Opcode byte="87"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <REX mandatory="false" W="0" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="87"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <REX mandatory="false" W="0" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <Opcode byte="87"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="xchgl" go-name="XCHGL" nacl-version="33">
@@ -40215,14 +40215,14 @@
       <Operand type="r64" input="true" output="true"/>
       <Operand type="r64" input="true" output="true"/>
       <Encoding>
-        <REX mandatory="true" W="1" R-operand-number="0" B-operand-number="1" X="ignored"/>
-        <Opcode byte="87"/>
-        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
-      </Encoding>
-      <Encoding>
         <REX mandatory="true" W="1" R-operand-number="1" B-operand-number="0" X="ignored"/>
         <Opcode byte="87"/>
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
+      </Encoding>
+      <Encoding>
+        <REX mandatory="true" W="1" R-operand-number="0" B-operand-number="1" X="ignored"/>
+        <Opcode byte="87"/>
+        <ModRM mode="11" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="xchgq" go-name="XCHGQ" nacl-version="33">
