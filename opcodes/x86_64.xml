@@ -17690,14 +17690,6 @@
         <Immediate size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pushw" go-name="PUSHW">
-      <Operand type="imm16" extended-size="8"/>
-      <Encoding>
-        <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="68"/>
-        <Immediate size="2" operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
     <InstructionForm gas-name="pushq" go-name="PUSHQ" nacl-version="33">
       <Operand type="imm32" extended-size="8"/>
       <Encoding>

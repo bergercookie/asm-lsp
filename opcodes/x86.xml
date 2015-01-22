@@ -14318,14 +14318,6 @@
         <Immediate size="1" operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pushw" go-name="PUSHW">
-      <Operand type="imm16" extended-size="4"/>
-      <Encoding>
-        <Prefix byte="66" mandatory="false"/>
-        <Opcode byte="68"/>
-        <Immediate size="2" operand-number="0"/>
-      </Encoding>
-    </InstructionForm>
     <InstructionForm gas-name="pushq">
       <Operand type="imm32"/>
       <Encoding>
