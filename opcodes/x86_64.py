@@ -718,6 +718,7 @@ def _bool(xml_boolean):
         "The boolean string must be \"true\" or \"false\""
     return {"true": True, "false": False}[xml_boolean]
 
+
 def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), "x86_64.xml")):
     """Reads instruction set data from an XML file and returns a list of :class:`Instruction` objects
 

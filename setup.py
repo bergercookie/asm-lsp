@@ -3,13 +3,11 @@
 from opcodes import __version__, __author__, __email__
 from distutils.core import setup
 
-import os
-
-root_path = os.path.dirname(__file__)
 
 def read_text_file(path):
-    with open(os.path.join(root_path, path)) as file:
-        return file.read()
+    import os
+    with open(os.path.join(os.path.dirname(__file__), path)) as f:
+        return f.read()
 
 
 setup(
@@ -21,6 +19,7 @@ setup(
     author_email=__email__,
     url="https://github.com/Maratyszcza/Opcodes",
     packages=["opcodes"],
+    package_data={"opcodes": ["x86.xml", "x86_64.xml"]},
     keywords=["assembly", "assembler", "asm"],
     requires=[],
     classifiers=[
