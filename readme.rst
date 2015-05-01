@@ -41,7 +41,7 @@ The project provides descriptions for most user-mode x86 and x86-64 instructions
 For each instruction the following information is provided:
 
 - Summary description
-- Instruction names in Intel assembly (`Peach-Py <https://bitbucket.org/MDukhan/peachpy>`_, `NASM <http://nasm.us>`_, `YASM <http://yasm.tortall.net>`_ and MASM assemblers), AT&T assembly (GNU assembler) and Plan 9 assembly (`Go <https://golang.org>`_ assembler)
+- Instruction names in Intel assembly (`PeachPy <https://github.com/Maratyszcza/PeachPy>`_, `NASM <http://nasm.us>`_, `YASM <http://yasm.tortall.net>`_ and MASM assemblers), AT&T assembly (GNU assembler) and Plan 9 assembly (`Go <https://golang.org>`_ assembler)
 - Operand types and characteristics (whether the operand is input or output)
 - Implicit input and output registers
 - ISA where this instruction was introduced
