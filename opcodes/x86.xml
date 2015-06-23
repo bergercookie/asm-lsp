@@ -7486,7 +7486,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="MOVDQA" summary="Move Aligned Double Quadword">
-    <InstructionForm gas-name="movdqa" xmm-mode="SSE">
+    <InstructionForm gas-name="movdqa" go-name="MOVO" xmm-mode="SSE">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -7503,7 +7503,7 @@
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movdqa" xmm-mode="SSE">
+    <InstructionForm gas-name="movdqa" go-name="MOVO" xmm-mode="SSE">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -7514,7 +7514,7 @@
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movdqa" xmm-mode="SSE">
+    <InstructionForm gas-name="movdqa" go-name="MOVO" xmm-mode="SSE">
       <ISA id="SSE2"/>
       <Operand type="m128" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -7527,7 +7527,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="MOVDQU" summary="Move Unaligned Double Quadword">
-    <InstructionForm gas-name="movdqu" xmm-mode="SSE">
+    <InstructionForm gas-name="movdqu" go-name="MOVOU" xmm-mode="SSE">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -7544,7 +7544,7 @@
         <ModRM mode="11" reg-operand-number="1" rm-operand-number="0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movdqu" xmm-mode="SSE">
+    <InstructionForm gas-name="movdqu" go-name="MOVOU" xmm-mode="SSE">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -7555,7 +7555,7 @@
         <ModRM mode-operand-number="1" reg-operand-number="0" rm-operand-number="1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movdqu" xmm-mode="SSE">
+    <InstructionForm gas-name="movdqu" go-name="MOVOU" xmm-mode="SSE">
       <ISA id="SSE2"/>
       <Operand type="m128" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -7709,7 +7709,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="MOVNTDQ" summary="Store Double Quadword Using Non-Temporal Hint">
-    <InstructionForm gas-name="movntdq" xmm-mode="SSE">
+    <InstructionForm gas-name="movntdq" go-name="MOVNTO" xmm-mode="SSE">
       <ISA id="SSE2"/>
       <Operand type="m128" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
