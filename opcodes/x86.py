@@ -236,17 +236,17 @@ class Operand:
     @property
     def is_register(self):
         """Indicates whether this operand specifies a register"""
-        return self.type in {"al", "cl", "ax", "eax", "xmm0", "r8", "r16", "r32", "mm", "xmm", "ymm", "zmm", "k"}
+        return self.type in ["al", "cl", "ax", "eax", "xmm0", "r8", "r16", "r32", "mm", "xmm", "ymm", "zmm", "k"]
 
     @property
     def is_memory(self):
         """Indicates whether this operand specifies a memory location"""
-        return self.type in {"m", "m8", "m16", "m32", "m64", "m80", "m128", "m256", "m512", "vm32x", "vm32y", "vm64x", "vm64y"}
+        return self.type in ["m", "m8", "m16", "m32", "m64", "m80", "m128", "m256", "m512", "vm32x", "vm32y", "vm64x", "vm64y"]
 
     @property
     def is_immediate(self):
         """Indicates whether this operand is an immediate constant"""
-        return self.type in {"imm4", "imm8", "imm16", "imm32"}
+        return self.type in ["imm4", "imm8", "imm16", "imm32"]
 
 
 class ISAExtension:
@@ -476,9 +476,9 @@ class VEX:
         :param int l: the value (0 or 1) to be assigned to VEX.L bit if it is ignored.
         :param int b: the value (0 or 1) to be assigned to VEX.B bit if it is ignored.
         """
-        assert w in {0, 1}, "VEX.W can be only 0 or 1"
-        assert l in {0, 1}, "VEX.L can be only 0 or 1"
-        assert b in {0, 1}, "VEX.B can be only 0 or 1"
+        assert w in [0, 1], "VEX.W can be only 0 or 1"
+        assert l in [0, 1], "VEX.L can be only 0 or 1"
+        assert b in [0, 1], "VEX.B can be only 0 or 1"
         if self.W is None:
             self.W = w
         if self.L is None:
@@ -545,8 +545,8 @@ class ModRM:
         :param int mode: the value (0b00, 0b01, 0b10, or 0b11) to be assigned to Mod R/M mode field if it is ignored.
         :param int rm: the value (an integer, 0 <= rm <= 7) to be assigned to Mod R/M rm field if it is ignored.
         """
-        assert mode in {0b00, 0b01, 0b10, 0b11}, "Mod R/M mode must be 0b00, 0b01, 0b10 or 0b11"
-        assert rm in {0, 1, 2, 3, 4, 5, 6, 7}, "Mod R/M rm must be an integer in 0-7 range"
+        assert mode in [0b00, 0b01, 0b10, 0b11], "Mod R/M mode must be 0b00, 0b01, 0b10 or 0b11"
+        assert rm in [0, 1, 2, 3, 4, 5, 6, 7], "Mod R/M rm must be an integer in 0-7 range"
         if self.mode is None:
             self.mode = mode
         if self.rm is None:
@@ -605,7 +605,7 @@ class DataOffset:
 def _bool(xml_boolean):
     """Converts strings "true" and "false" from XML files to Python bool"""
 
-    assert xml_boolean in {"true", "false"}, \
+    assert xml_boolean in ["true", "false"], \
         "The boolean string must be \"true\" or \"false\""
     return {"true": True, "false": False}[xml_boolean]
 
@@ -654,7 +654,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                     if xml_component.tag == "Prefix":
                         is_mandatory = _bool(xml_component.attrib["mandatory"])
                         byte = int(xml_component.attrib["byte"], 16)
-                        assert byte in {0x66, 0xF2, 0xF3}
+                        assert byte in [0x66, 0xF2, 0xF3]
                         prefix = Prefix(byte, is_mandatory)
                         encoding.components.append(prefix)
                     elif xml_component.tag == "VEX":
@@ -727,7 +727,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         assert "size" in xml_component.attrib
                         immediate = Immediate()
                         immediate.size = int(xml_component.attrib["size"])
-                        assert immediate.size in {1, 2, 4, 8}
+                        assert immediate.size in [1, 2, 4, 8]
                         assert "operand-number" in xml_component.attrib
                         immediate.value = instruction_form.operands[int(xml_component.attrib["operand-number"])]
                         encoding.components.append(immediate)
@@ -746,7 +746,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         assert "size" in xml_component.attrib
                         code_offset = CodeOffset()
                         code_offset.size = int(xml_component.attrib["size"])
-                        assert code_offset.size in {1, 4}
+                        assert code_offset.size in [1, 4]
                         assert "operand-number" in xml_component.attrib
                         code_offset.value = instruction_form.operands[int(xml_component.attrib["operand-number"])]
                         encoding.components.append(code_offset)
@@ -754,7 +754,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         assert "size" in xml_component.attrib
                         data_offset = DataOffset()
                         data_offset.size = int(xml_component.attrib["size"])
-                        assert data_offset.size in {4, 8}
+                        assert data_offset.size in [4, 8]
                         assert "operand-number" in xml_component.attrib
                         data_offset.value = instruction_form.operands[int(xml_component.attrib["operand-number"])]
                         encoding.components.append(data_offset)
