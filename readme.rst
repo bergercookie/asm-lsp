@@ -1,4 +1,4 @@
-.. image:: https://img.shields.io/badge/license-BSD-brightgreen.png
+.. image:: https://img.shields.io/github/license/mashape/apistatus.svg
    :alt: License
    :target: https://github.com/Maratyszcza/Opcodes/blob/master/license.rst
 
@@ -28,7 +28,7 @@ This project is a spin-off from `PeachPy <https://github.com/Maratyszcza/PeachPy
 Current status
 --------------
 
-The project provides descriptions for most user-mode x86 and x86-64 instructions up to AVX2 and SHA (including 3dnow!+, XOP, FMA3, FMA4, TBM and BMI2). The following instructions are currently **NOT** supported:
+The project provides descriptions for most user-mode x86 and x86-64 instructions up to AVX-512 and SHA (including 3dnow!+, XOP, FMA3, FMA4, TBM and BMI2). The following instructions are currently **NOT** supported:
 
 - All priveledged instructions and user-mode system instructions (e.g. XSAVE, SLDT)
 - Legacy string/streaming instructions (MOVS/SCAS/CMPS/STOS/LODS)
@@ -36,7 +36,6 @@ The project provides descriptions for most user-mode x86 and x86-64 instructions
 - x87 FPU instructions
 - VIA Padlock instructions
 - Intel HTM instructions
-- Intel AVX-512 instructions
 
 For each instruction the following information is provided:
 
