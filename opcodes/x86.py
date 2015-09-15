@@ -152,16 +152,37 @@ class Operand:
             A 64-bit MMX SIMD register (mm0-mm7).
 
         "xmm"
-            A 128-bit XMM SIMD register (xmm0-xmm7).
+            A 128-bit XMM SIMD register (xmm0-xmm31).
+
+        "xmm{k}"
+            A 128-bit XMM SIMD register (xmm0-xmm31), optionally merge-masked by an AVX-512 mask register (k1-k7).
+
+        "xmm{k}{z}"
+            A 128-bit XMM SIMD register (xmm0-xmm31), optionally masked by an AVX-512 mask register (k1-k7).
 
         "ymm"
-            A 256-bit YMM SIMD register (ymm0-ymm7).
+            A 256-bit YMM SIMD register (ymm0-ymm31).
+
+        "ymm{k}"
+            A 256-bit YMM SIMD register (ymm0-ymm31), optionally merge-masked by an AVX-512 mask register (k1-k7).
+
+        "ymm{k}{z}"
+            A 256-bit YMM SIMD register (ymm0-ymm31), optionally masked by an AVX-512 mask register (k1-k7).
 
         "zmm"
-            A 512-bit ZMM SIMD register (zmm0-zmm7).
+            A 512-bit ZMM SIMD register (zmm0-zmm31).
+
+        "zmm{k}"
+            A 512-bit ZMM SIMD register (zmm0-zmm31), optionally merge-masked by an AVX-512 mask register (k1-k7).
+
+        "zmm{k}{z}"
+            A 512-bit ZMM SIMD register (zmm0-zmm31), optionally masked by an AVX-512 mask register (k1-k7).
 
         "k"
-            An AVX-512 mask register (k1-k7).
+            An AVX-512 mask register (k0-k7).
+
+        "k{k}"
+            An AVX-512 mask register (k0-k7), optionally merge-masked by an AVX-512 mask register (k1-k7).
 
         "m"
             A memory operand of any size.
@@ -172,11 +193,26 @@ class Operand:
         "m16"
             A 16-bit memory operand.
 
+        "m16{k}{z}"
+            A 16-bit memory operand, optionally masked by an AVX-512 mask register (k1-k7).
+
         "m32"
             A 32-bit memory operand.
 
+        "m32{k}"
+            A 32-bit memory operand, optionally merge-masked by an AVX-512 mask register (k1-k7).
+
+        "m32{k}{z}"
+            A 32-bit memory operand, optionally masked by an AVX-512 mask register (k1-k7).
+
         "m64"
             A 64-bit memory operand.
+
+        "m64{k}"
+            A 64-bit memory operand, optionally merge-masked by an AVX-512 mask register (k1-k7).
+
+        "m64{k}{z}"
+            A 64-bit memory operand, optionally masked by an AVX-512 mask register (k1-k7).
 
         "m80"
             An 80-bit memory operand.
@@ -184,23 +220,89 @@ class Operand:
         "m128"
             A 128-bit memory operand.
 
+        "m128{k}{z}"
+            A 128-bit memory operand, optionally masked by an AVX-512 mask register (k1-k7).
+
         "m256"
             A 256-bit memory operand.
+
+        "m256{k}{z}"
+            A 256-bit memory operand, optionally masked by an AVX-512 mask register (k1-k7).
 
         "m512"
             A 512-bit memory operand.
 
+        "m512{k}{z}"
+            A 512-bit memory operand, optionally masked by an AVX-512 mask register (k1-k7).
+
+        "m64/m32bcst"
+            A 64-bit memory operand or a 32-bit memory operand broadcasted to 64 bits {1to2}.
+
+        "m128/m32bcst"
+            A 128-bit memory operand or a 32-bit memory operand broadcasted to 128 bits {1to4}.
+
+        "m256/m32bcst"
+            A 256-bit memory operand or a 32-bit memory operand broadcasted to 256 bits {1to8}.
+
+        "m512/m32bcst"
+            A 512-bit memory operand or a 32-bit memory operand broadcasted to 512 bits {1to16}.
+
+        "m128/m64bcst"
+            A 128-bit memory operand or a 64-bit memory operand broadcasted to 128 bits {1to2}.
+
+        "m256/m64bcst"
+            A 256-bit memory operand or a 64-bit memory operand broadcasted to 256 bits {1to4}.
+
+        "m512/m64bcst"
+            A 512-bit memory operand or a 64-bit memory operand broadcasted to 512 bits {1to8}.
+
         "vm32x"
             A vector of memory addresses using VSIB with 32-bit indices in XMM register.
+
+        "vm32x{k}"
+            A vector of memory addresses using VSIB with 32-bit indices in XMM register merge-masked by an AVX-512 mask
+            register (k1-k7).
 
         "vm32y"
             A vector of memory addresses using VSIB with 32-bit indices in YMM register.
 
+        "vm32y{k}"
+            A vector of memory addresses using VSIB with 32-bit indices in YMM register merge-masked by an AVX-512 mask
+            register (k1-k7).
+
+        "vm32z"
+            A vector of memory addresses using VSIB with 32-bit indices in ZMM register.
+
+        "vm32z{k}"
+            A vector of memory addresses using VSIB with 32-bit indices in ZMM register merge-masked by an AVX-512 mask
+            register (k1-k7).
+
         "vm64x"
             A vector of memory addresses using VSIB with 64-bit indices in XMM register.
 
+        "vm64x{k}"
+            A vector of memory addresses using VSIB with 64-bit indices in XMM register merge-masked by an AVX-512 mask
+            register (k1-k7).
+
         "vm64y"
             A vector of memory addresses using VSIB with 64-bit indices in YMM register.
+
+        "vm64y{k}"
+            A vector of memory addresses using VSIB with 64-bit indices in YMM register merge-masked by an AVX-512 mask
+            register (k1-k7).
+
+        "vm64z"
+            A vector of memory addresses using VSIB with 64-bit indices in ZMM register.
+
+        "vm64z{k}"
+            A vector of memory addresses using VSIB with 64-bit indices in ZMM register merge-masked by an AVX-512 mask
+            register (k1-k7).
+
+        "{sae}"
+            Suppress-all-exceptions modifier. Can be omitted.
+
+        "{er}"
+            Embedded rounding control. Can be omitted.
 
     :ivar is_input: indicates if the instruction reads the variable specified by this operand.
     :ivar is_output: indicates if the instruction writes the variable specified by this operand.
@@ -282,8 +384,14 @@ class ISAExtension:
         "AVX512F": 72,
         "AVX512BW": 73,
         "AVX512DQ": 74,
-        "RDRAND": 80,
-        "RDSEED": 81,
+        "AVX512VL": 75,
+        'AVX512PF': 76,
+        'AVX512ER': 77,
+        'AVX512CD': 78,
+        'AVX512VBMI': 79,
+        'AVX512IFMA': 80,
+        "RDRAND": 85,
+        "RDSEED": 86,
         "PCLMULQDQ": 90,
         "AES": 91,
         "SHA": 92,
@@ -316,9 +424,15 @@ class ISAExtension:
         - "SSE4A"     := Streaming SIMD Extension 4a.
         - "AVX"       := Advanced Vector eXtension.
         - "AVX2"      := Advanced Vector eXtension 2.
-        - "AVX512F"   := AVX-512 Foundation instructions.
-        - "AVX512BW"  := AVX-512 Byte and Word instructions.
-        - "AVX512DQ"  := AVX-512 Doubleword and Quadword instructions.
+        - "AVX512F"    := AVX-512 Foundation instructions.
+        - "AVX512BW"   := AVX-512 Byte and Word instructions.
+        - "AVX512DQ"   := AVX-512 Doubleword and Quadword instructions.
+        - "AVX512VL"   := AVX-512 Vector Length extension (EVEX-encoded XMM/YMM operations).
+        - "AVX512PF"   := AVX-512 Prefetch instructions.
+        - "AVX512ER"   := AVX-512 Exponential and Reciprocal instructions.
+        - "AVX512CD"   := AVX-512 Conflict Detection instructions.
+        - "AVX512VBMI" := AVX-512 Vector Bit Manipulation instructions.
+        - "AVX512IFMA" := AVX-512 Integer 52-bit Multiply-Accumulate instructions.
         - "XOP"       := eXtended OPerations extension.
         - "F16C"      := Half-Precision (F16) Conversion instructions.
         - "FMA3"      := Fused Multiply-Add instructions (3-operand).
@@ -377,9 +491,9 @@ class Prefix:
     :ivar byte: numerical representation of the prefix byte.
     """
 
-    def __init__(self, byte, is_mandatory):
-        self.byte = byte
-        self.is_mandatory = is_mandatory
+    def __init__(self):
+        self.byte = None
+        self.is_mandatory = None
 
 
 class VEX:
@@ -443,17 +557,15 @@ class VEX:
 
         None indicates that the bit is ignored.
 
-    :ivar R: the VEX.R bit. Always equals 1.
+    :ivar R: the VEX.R bit. Always equals 0 in 32-bit x86 architecture.
 
-    :ivar B: the VEX.B bit. Possible values are 0, 1, and None.
+    :ivar B: the VEX.B bit. Always equals 0 in 32-bit x86 architecture.
 
-        In the instruction definition this bit always equals None, indicating that the bit is ignored.
+    :ivar X: the VEX.X bit. Always equals 0 in 32-bit x86 architecture.
 
-    :ivar X: the VEX.X bit. Always equals 1.
+    :ivar vvvv: the VEX vvvv field. Possible values are 0b0000 or a reference to one of the instruction operands.
 
-    :ivar vvvv: the VEX vvvv field. Possible values are 0b1111 or a reference to one of the instruction operands.
-
-        The value 0b1111 indicates that this field is not used.
+        The value 0b0000 indicates that this field is not used. \
         If vvvv is a reference to an instruction operand, the operand is of register type and VEX.vvvv field specifies \
         its number.
     """
@@ -469,22 +581,137 @@ class VEX:
         self.B = None
         self.vvvv = None
 
-    def set_ignored(self, w=0, l=0, b=1):
+    def set_ignored(self, w=0, l=0):
         """Sets values for ignored bits
 
         :param int w: the value (0 or 1) to be assigned to VEX.W bit if it is ignored.
         :param int l: the value (0 or 1) to be assigned to VEX.L bit if it is ignored.
-        :param int b: the value (0 or 1) to be assigned to VEX.B bit if it is ignored.
         """
         assert w in [0, 1], "VEX.W can be only 0 or 1"
         assert l in [0, 1], "VEX.L can be only 0 or 1"
-        assert b in [0, 1], "VEX.B can be only 0 or 1"
         if self.W is None:
             self.W = w
         if self.L is None:
             self.L = l
-        if self.B is None:
-            self.B = b
+
+
+class EVEX:
+    """EVEX prefix.
+
+    Encoding may have only one EVEX prefix and if present, it immediately precedes the opcode, and no other prefix is \
+    allowed.
+
+    :ivar mm: the EVEX mm (compressed legacy escape) field. Identical to two low bits of VEX.m-mmmm field. Possible
+    values are:
+
+        0b01
+            Implies 0x0F leading opcode byte.
+
+        0b10
+            Implies 0x0F 0x38 leading opcode bytes.
+
+        0b11
+            Implies 0x0F 0x3A leading opcode bytes.
+
+    :ivar pp: the EVEX pp (compressed legacy prefix) field. Possible values are:
+
+        0b00
+            No implied prefix.
+
+        0b01
+            Implied 0x66 prefix.
+
+        0b10
+            Implied 0xF3 prefix.
+
+        0b11
+            Implied 0xF2 prefix.
+
+    :ivar W: the EVEX.W bit. Possible values are 0, 1, and None.
+
+        None indicates that the bit is ignored.
+
+    :ivar LL: the EVEX.L'L bits. Specify either vector length for the operation, or explicit rounding control (in which
+    case operation is 512 bits wide). Possible values:
+
+        None
+            Indicates that the EVEX.L'L field is ignored.
+
+        0b00
+            128-bits wide operation.
+
+        0b01
+            256-bits wide operation.
+
+        0b10
+            512-bits wide operation.
+
+        Reference to the last instruction operand
+            EVEX.L'L are interpreted as rounding control and set to the value specified by the operand. If the rounding
+            control operand is omitted, EVEX.L'L is set to 0b10 (embedded rounding control is only supported for 512-bit
+            wide operations).
+
+    :ivar RR: the EVEX.R'R bits. Always equals 0b00 in 32-bit x86 architecture.
+
+    :ivar B: the EVEX.B bit. Always equals 0 in 32-bit x86 architecture.
+
+    :ivar X: the EVEX.X bit. Always equals 0 in 32-bit x86 architecture.
+
+    :ivar vvvv: the EVEX vvvv field. Possible values are 0b0000 or a reference to one of the instruction operands.
+
+        The value 0b0000 indicates that this field is not used. \
+        If vvvv is a reference to an instruction operand, the operand is of register type and EVEX.vvvv field specifies\
+        its number.
+
+    :ivar V: the EVEX V field. Always equals 0 in 32-bit x86 architecture.
+
+    :ivar b: the EVEX b (broadcast/rounding control/suppress all exceptions context) bit. Possible values are 0 or 1.
+
+    :ivar aaa: the EVEX aaa (embedded opmask register specifier) field. Possible values are 0 or a reference to one of
+    the instruction operands.
+
+        The value 0 indicates that this field is not used. \
+        If aaa is a reference to an instruction operand, the operand supports register mask, and EVEX.aaa encodes the \
+        mask register.
+
+    :ivar z: the EVEX z bit. Possible values are None, 0 or a reference to one of the instruction operands.
+
+        None indicates that the bit is ignored. \
+        The value 0 indicates that the bit is not used. \
+        If aaa is a reference to an instruction operand, the operand supports zero-masking with register mask, and
+        EVEX.z indicates whether zero-masking is used.
+    """
+
+    def __init__(self):
+        self.mm = None
+        self.pp = None
+        self.W = None
+        self.LL = None
+        self.RR = None
+        self.B = None
+        self.X = None
+        self.vvvv = None
+        self.V = None
+        self.b = None
+        self.aaa = None
+        self.z = None
+
+    def set_ignored(self, w=0, ll=0, z=0):
+        """Sets values for ignored bits
+
+        :param int w: the value (0 or 1) to be assigned to EVEX.W bit if it is ignored.
+        :param int ll: the value (0b00, 0b01, 0b10, or 0b11) to be assigned to EVEX.L'L field if it is ignored.
+        :param int z: the value (0 or 1) to be assigned to EVEX.z bit if it is ignored.
+        """
+        assert w in [0, 1], "EVEX.W can be only 0 or 1"
+        assert ll in [0b00, 0b01, 0b10, 0b11], "EVEX.L'L must be a 2-bit integer value"
+        assert z in [0, 1], "EVEX.z can be only 0 or 1"
+        if self.W is None:
+            self.W = w
+        if self.LL is None:
+            self.LL = ll
+        if self.z is None:
+            self.z = z
 
 
 class Opcode:
@@ -610,6 +837,30 @@ def _bool(xml_boolean):
     return {"true": True, "false": False}[xml_boolean]
 
 
+def _parse_boolean(xml_boolean):
+    """Converts strings "true" and "false" from XML files to Python bool"""
+
+    if xml_boolean is not None:
+        assert xml_boolean in ["true", "false"], \
+            "The boolean string must be \"true\" or \"false\""
+        return {"true": True, "false": False}[xml_boolean]
+
+
+def _parse_value(value, operands, base=None):
+    """Parses string, which can be a number, a reference to an operand, or None
+
+    :param value: the string to parse.
+    :param operands: the list of operands. If value starts with "#", it is interpreted as a reference to an operand.
+    :param base: the base of the integer representation of value.
+    """
+    if value is not None:
+        if value.startswith("#"):
+            return operands[int(value[1:])]
+        else:
+            assert base is not None
+            return int(value, base)
+
+
 def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), "x86.xml")):
     """Reads instruction set data from an XML file and returns a list of :class:`Instruction` objects
 
@@ -652,51 +903,40 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                 encoding = Encoding()
                 for xml_component in xml_encoding:
                     if xml_component.tag == "Prefix":
-                        is_mandatory = _bool(xml_component.attrib["mandatory"])
-                        byte = int(xml_component.attrib["byte"], 16)
-                        assert byte in [0x66, 0xF2, 0xF3]
-                        prefix = Prefix(byte, is_mandatory)
+                        prefix = Prefix()
+                        prefix.byte = _parse_value(xml_component.attrib.get("byte"), [], 16)
+                        assert prefix.byte in [0x66, 0xF2, 0xF3]
+                        prefix.is_mandatory = _parse_boolean(xml_component.attrib.get("mandatory"))
                         encoding.components.append(prefix)
                     elif xml_component.tag == "VEX":
                         vex = VEX()
 
-                        assert "W" in xml_component.attrib
-                        vex.W = xml_component.attrib["W"]
-                        if vex.W == "ignored":
-                            vex.W = None
-                        else:
-                            vex.W = int(vex.W)
-
-                        assert "L" in xml_component.attrib
-                        vex.L = xml_component.attrib["L"]
-                        if vex.L == "ignored":
-                            vex.L = None
-                        else:
-                            vex.L = int(vex.L)
-
                         vex.type = xml_component.attrib["type"]
-                        vex.mmmmm = int(xml_component.attrib["m-mmmm"], 2)
                         vex.pp = int(xml_component.attrib["pp"], 2)
-
-                        assert xml_component.attrib["R"] == "1"
-                        vex.R = 1
-
-                        assert xml_component.attrib["X"] == "1"
-                        vex.X = 1
-
-                        assert xml_component.attrib["B"] == "ignored"
-                        vex.B = None
-
-                        vex.vvvv = None
-                        if "vvvv" in xml_component.attrib:
-                            assert "vvvv-operand-number" not in xml_component.attrib
-                            assert xml_component.attrib["vvvv"] == "1111"
-                            vex.vvvv = int(xml_component.attrib["vvvv"], 2)
-                        else:
-                            assert "vvvv-operand-number" in xml_component.attrib
-                            vex.vvvv = instruction_form.operands[int(xml_component.attrib["vvvv-operand-number"])]
+                        vex.mmmmm = int(xml_component.attrib["m-mmmm"], 2)
+                        vex.W = _parse_value(xml_component.attrib.get("W"), [], 2)
+                        vex.L = _parse_value(xml_component.attrib.get("L"), [], 2)
+                        vex.R = _parse_value(xml_component.attrib.get("R"), instruction_form.operands, 2)
+                        vex.B = _parse_value(xml_component.attrib.get("B"), instruction_form.operands, 2)
+                        vex.X = _parse_value(xml_component.attrib.get("X"), instruction_form.operands, 2)
+                        vex.vvvv = _parse_value(xml_component.attrib.get("vvvv"), instruction_form.operands, 2)
 
                         encoding.components.append(vex)
+                    elif xml_component.tag == "EVEX":
+                        evex = EVEX()
+                        evex.pp = int(xml_component.attrib["pp"], 2)
+                        evex.mm = int(xml_component.attrib["mm"], 2)
+                        evex.W = _parse_value(xml_component.attrib.get("W"), [], 2)
+                        evex.LL = _parse_value(xml_component.attrib.get("LL"), instruction_form.operands, 2)
+                        evex.vvvv = _parse_value(xml_component.attrib["vvvv"], instruction_form.operands, 2)
+                        evex.V = _parse_value(xml_component.attrib["V"], instruction_form.operands, 2)
+                        evex.aaa = _parse_value(xml_component.attrib.get("aaa", "000"), instruction_form.operands, 2)
+                        evex.z = _parse_value(xml_component.attrib.get("z", "0"), instruction_form.operands, 2)
+                        evex.X = _parse_value(xml_component.attrib.get("X"), instruction_form.operands, 2)
+                        evex.B = _parse_value(xml_component.attrib["B"], instruction_form.operands, 2)
+                        evex.RR = _parse_value(xml_component.attrib.get("RR"), instruction_form.operands, 2)
+                        evex.b = _parse_value(xml_component.attrib["b"], instruction_form.operands, 2)
+                        encoding.components.append(evex)
                     elif xml_component.tag == "Opcode":
                         opcode = Opcode(int(xml_component.attrib["byte"], 16))
                         if "addend-operand-number" in xml_component.attrib:
@@ -704,59 +944,35 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         encoding.components.append(opcode)
                     elif xml_component.tag == "ModRM":
                         modrm = ModRM()
-                        if "mode" in xml_component.attrib:
-                            if xml_component.attrib["mode"] == "ignored":
-                                modrm.mode = None
-                            else:
-                                modrm.mode = int(xml_component.attrib["mode"], 2)
-                                assert modrm.mode == 0b11
-                        else:
-                            assert "mode-operand-number" in xml_component.attrib
-                            assert xml_component.attrib["mode-operand-number"] == xml_component.attrib["rm-operand-number"]
-                            modrm.mode = instruction_form.operands[int(xml_component.attrib["mode-operand-number"])]
-                        if "reg" in xml_component.attrib:
-                            assert "reg-operand-number" not in xml_component.attrib
-                            modrm.reg = int(xml_component.attrib["reg"])
-                            assert 0 <= modrm.reg <= 7
-                        else:
-                            assert "reg-operand-number" in xml_component.attrib
-                            modrm.reg = instruction_form.operands[int(xml_component.attrib["reg-operand-number"])]
-                        modrm.rm = instruction_form.operands[int(xml_component.attrib["rm-operand-number"])]
+                        modrm.mode = _parse_value(xml_component.attrib.get("mode"), instruction_form.operands, 2)
+                        modrm.reg = _parse_value(xml_component.attrib.get("reg"), instruction_form.operands, 10)
+                        modrm.rm = _parse_value(xml_component.attrib.get("rm"), instruction_form.operands)
                         encoding.components.append(modrm)
                     elif xml_component.tag == "Immediate":
                         assert "size" in xml_component.attrib
                         immediate = Immediate()
                         immediate.size = int(xml_component.attrib["size"])
                         assert immediate.size in [1, 2, 4, 8]
-                        assert "operand-number" in xml_component.attrib
-                        immediate.value = instruction_form.operands[int(xml_component.attrib["operand-number"])]
+                        immediate.value = _parse_value(xml_component.attrib.get("value"), instruction_form.operands)
                         encoding.components.append(immediate)
                     elif xml_component.tag == "RegisterByte":
                         register_byte = RegisterByte()
-                        register_byte.register = instruction_form.operands[int(xml_component.attrib["register-operand-number"])]
-                        assert "payload" in xml_component.attrib or "payload-operand-number" in xml_component.attrib
-                        if "payload" in xml_component.attrib:
-                            assert "payload-operand-number" not in xml_component.attrib
-                            assert xml_component.attrib["payload"] == "ignored"
-                            register_byte.payload = None
-                        else:
-                            register_byte.payload = instruction_form.operands[int(xml_component.attrib["payload-operand-number"])]
+                        register_byte.register = _parse_value(xml_component.attrib.get("register"), instruction_form.operands)
+                        register_byte.payload = _parse_value(xml_component.attrib.get("paylod"), instruction_form.operands)
                         encoding.components.append(register_byte)
                     elif xml_component.tag == "CodeOffset":
                         assert "size" in xml_component.attrib
                         code_offset = CodeOffset()
                         code_offset.size = int(xml_component.attrib["size"])
                         assert code_offset.size in [1, 4]
-                        assert "operand-number" in xml_component.attrib
-                        code_offset.value = instruction_form.operands[int(xml_component.attrib["operand-number"])]
+                        code_offset.value = _parse_value(xml_component.attrib.get("value"), instruction_form.operands)
                         encoding.components.append(code_offset)
                     elif xml_component.tag == "DataOffset":
                         assert "size" in xml_component.attrib
                         data_offset = DataOffset()
                         data_offset.size = int(xml_component.attrib["size"])
                         assert data_offset.size in [4, 8]
-                        assert "operand-number" in xml_component.attrib
-                        data_offset.value = instruction_form.operands[int(xml_component.attrib["operand-number"])]
+                        data_offset.value = _parse_value(xml_component.attrib.get("value"), instruction_form.operands)
                         encoding.components.append(data_offset)
                     else:
                         print("Unknown encoding tag: " + xml_component.tag)

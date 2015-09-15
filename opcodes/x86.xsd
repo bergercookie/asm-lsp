@@ -24,24 +24,57 @@
 			<xs:enumeration value="mm" />
 			<xs:enumeration value="xmm0" />
 			<xs:enumeration value="xmm" />
+			<xs:enumeration value="xmm{k}" />
+			<xs:enumeration value="xmm{k}{z}" />
 			<xs:enumeration value="ymm" />
+			<xs:enumeration value="ymm{k}" />
+			<xs:enumeration value="ymm{k}{z}" />
 			<xs:enumeration value="zmm" />
+			<xs:enumeration value="zmm{k}" />
+			<xs:enumeration value="zmm{k}{z}" />
 			<xs:enumeration value="k" />
+			<xs:enumeration value="k{k}" />
 			<xs:enumeration value="moffs32" />
 			<xs:enumeration value="moffs64" />
 			<xs:enumeration value="m" />
 			<xs:enumeration value="m8" />
 			<xs:enumeration value="m16" />
+			<xs:enumeration value="m16{k}{z}" />
 			<xs:enumeration value="m32" />
+			<xs:enumeration value="m32{k}" />
+			<xs:enumeration value="m32{k}{z}" />
 			<xs:enumeration value="m64" />
+			<xs:enumeration value="m64{k}" />
+			<xs:enumeration value="m64{k}{z}" />
 			<xs:enumeration value="m128" />
+			<xs:enumeration value="m128{k}{z}" />
 			<xs:enumeration value="m256" />
+			<xs:enumeration value="m256{k}{z}" />
+			<xs:enumeration value="m512" />
+			<xs:enumeration value="m512{k}{z}" />
+			<xs:enumeration value="m64/m32bcst" />
+			<xs:enumeration value="m128/m32bcst" />
+			<xs:enumeration value="m256/m32bcst" />
+			<xs:enumeration value="m512/m32bcst" />
+			<xs:enumeration value="m128/m64bcst" />
+			<xs:enumeration value="m256/m64bcst" />
+			<xs:enumeration value="m512/m64bcst" />
 			<xs:enumeration value="vm32x" />
+			<xs:enumeration value="vm32x{k}" />
 			<xs:enumeration value="vm64x" />
+			<xs:enumeration value="vm64x{k}" />
 			<xs:enumeration value="vm32y" />
+			<xs:enumeration value="vm32y{k}" />
 			<xs:enumeration value="vm64y" />
+			<xs:enumeration value="vm64y{k}" />
+			<xs:enumeration value="vm32z" />
+			<xs:enumeration value="vm32z{k}" />
+			<xs:enumeration value="vm64z" />
+			<xs:enumeration value="vm64z{k}" />
 			<xs:enumeration value="rel8" />
 			<xs:enumeration value="rel32" />
+			<xs:enumeration value="{er}" />
+			<xs:enumeration value="{sae}" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="ExtendedSize">
@@ -76,49 +109,32 @@
 			<xs:enumeration value="AVX" />
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="OpcodeByte">
-		<xs:restriction base="xs:token">
-			<xs:pattern value="[0-9A-F]{2}" />
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:simpleType name="PrefixByte">
+	<xs:simpleType name="Prefix.byte">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="66" />
 			<xs:enumeration value="F2" />
 			<xs:enumeration value="F3" />
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="Bit">
+	<xs:simpleType name="VEX.type">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="VEX" />
+			<xs:enumeration value="XOP" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="VEX.W">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="0" />
 			<xs:enumeration value="1" />
-			<xs:enumeration value="ignored" />
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="OperandNumber">
-		<xs:restriction base="xs:int">
-			<xs:minInclusive value="0"/>
-			<xs:maxInclusive value="3"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:simpleType name="RegValue">
-		<xs:restriction base="xs:int">
-			<xs:minInclusive value="0"/>
-			<xs:maxInclusive value="7"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:simpleType name="Mode">
+	<xs:simpleType name="VEX.L">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="11" />
-			<xs:enumeration value="ignored" />
+			<xs:enumeration value="0" />
+			<xs:enumeration value="1" />
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="VVVV">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="1111" />
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:simpleType name="M-MMMM">
+	<xs:simpleType name="VEX.m-mmmm">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="00001" />
 			<xs:enumeration value="00010" />
@@ -128,7 +144,7 @@
 			<xs:enumeration value="01010" />
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="PP">
+	<xs:simpleType name="VEX.pp">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="00" />
 			<xs:enumeration value="01" />
@@ -136,15 +152,177 @@
 			<xs:enumeration value="11" />
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="VEXPrefixType">
+	<xs:simpleType name="VEX.R">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="VEX" />
-			<xs:enumeration value="XOP" />
+			<xs:enumeration value="0" />
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="Ignored">
+	<xs:simpleType name="VEX.X">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="ignored" />
+			<xs:enumeration value="0" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="VEX.B">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="VEX.vvvv">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0000" />
+			<xs:enumeration value="#0" />
+			<xs:enumeration value="#1" />
+			<xs:enumeration value="#2" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EVEX.mm">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="01" />
+			<xs:enumeration value="10" />
+			<xs:enumeration value="11" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EVEX.pp">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="00" />
+			<xs:enumeration value="01" />
+			<xs:enumeration value="10" />
+			<xs:enumeration value="11" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EVEX.W">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0" />
+			<xs:enumeration value="1" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EVEX.LL">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="00" />
+			<xs:enumeration value="01" />
+			<xs:enumeration value="10" />
+			<xs:enumeration value="#2" />
+			<xs:enumeration value="#3" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EVEX.vvvv">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0000" />
+			<xs:enumeration value="#0" />
+			<xs:enumeration value="#1" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EVEX.V">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0" />
+			<xs:enumeration value="#0" />
+			<xs:enumeration value="#1" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EVEX.RR">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="00" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EVEX.B">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EVEX.X">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EVEX.b">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0" />
+			<xs:enumeration value="1" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EVEX.aaa">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="000" />
+			<xs:enumeration value="#0" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EVEX.z">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="#0" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Opcode.byte">
+		<xs:restriction base="xs:token">
+			<xs:pattern value="[0-9A-F]{2}" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Opcode.addend">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="#0" />
+			<xs:enumeration value="#1" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ModRM.mode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="11" />
+			<xs:enumeration value="#0" />
+			<xs:enumeration value="#1" />
+			<xs:enumeration value="#2" />
+			<xs:enumeration value="#3" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ModRM.reg">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0" />
+			<xs:enumeration value="1" />
+			<xs:enumeration value="2" />
+			<xs:enumeration value="3" />
+			<xs:enumeration value="4" />
+			<xs:enumeration value="5" />
+			<xs:enumeration value="6" />
+			<xs:enumeration value="7" />
+			<xs:enumeration value="#0" />
+			<xs:enumeration value="#1" />
+			<xs:enumeration value="#2" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ModRM.rm">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="#0" />
+			<xs:enumeration value="#1" />
+			<xs:enumeration value="#2" />
+			<xs:enumeration value="#3" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Immediate.value">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="#0" />
+			<xs:enumeration value="#1" />
+			<xs:enumeration value="#2" />
+			<xs:enumeration value="#3" />
+			<xs:enumeration value="#4" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RegisterByte.register">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="#2" />
+			<xs:enumeration value="#3" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RegisterByte.payload">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="#4" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CodeOffset.value">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="#0" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DataOffset.value">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="#0" />
+			<xs:enumeration value="#1" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="ISAExtension">
@@ -188,6 +366,12 @@
 			<xs:enumeration value="AVX512F" />
 			<xs:enumeration value="AVX512BW" />
 			<xs:enumeration value="AVX512DQ" />
+			<xs:enumeration value="AVX512VL" />
+			<xs:enumeration value="AVX512PF" />
+			<xs:enumeration value="AVX512ER" />
+			<xs:enumeration value="AVX512CD" />
+			<xs:enumeration value="AVX512VBMI" />
+			<xs:enumeration value="AVX512IFMA" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:element name="InstructionSet">
@@ -224,83 +408,80 @@
 												<xs:sequence>
 													<xs:element name="Prefix" minOccurs="0" maxOccurs="2">
 														<xs:complexType>
-															<xs:attribute name="byte" type="PrefixByte" use="required" />
 															<xs:attribute name="mandatory" type="xs:boolean" use="required" />
+															<xs:attribute name="byte" type="Prefix.byte" use="required" />
 														</xs:complexType>
 													</xs:element>
 													<xs:element name="VEX" minOccurs="0">
 														<xs:complexType>
-															<xs:attribute name="type" type="VEXPrefixType" use="required" />
-															<xs:attribute name="W" type="Bit" use="required" />
-															<xs:attribute name="L" type="Bit" use="required" />
-															<xs:attribute name="m-mmmm" type="M-MMMM" use="required" />
-															<xs:attribute name="pp" type="PP" use="required" />
-															<xs:attribute name="R" type="Bit" />
-															<xs:attribute name="R-operand-number" type="OperandNumber" />
-															<xs:attribute name="X" type="Bit" />
-															<xs:attribute name="B" type="Bit" />
-															<xs:attribute name="B-operand-number" type="OperandNumber" />
-															<xs:attribute name="BX-operand-number" type="OperandNumber" />
-															<xs:attribute name="vvvv" type="VVVV" />
-															<xs:attribute name="vvvv-operand-number" type="OperandNumber" />
+															<xs:attribute name="type" type="VEX.type" use="required" />
+															<xs:attribute name="W" type="VEX.W" />
+															<xs:attribute name="L" type="VEX.L" />
+															<xs:attribute name="m-mmmm" type="VEX.m-mmmm" use="required" />
+															<xs:attribute name="pp" type="VEX.pp" use="required" />
+															<xs:attribute name="R" type="VEX.R" />
+															<xs:attribute name="X" type="VEX.X" />
+															<xs:attribute name="B" type="VEX.B" />
+															<xs:attribute name="vvvv" type="VEX.vvvv" />
 														</xs:complexType>
 													</xs:element>
-													<xs:element name="REX" minOccurs="0">
+													<xs:element name="EVEX" minOccurs="0">
 														<xs:complexType>
-															<xs:attribute name="mandatory" type="xs:boolean" use="required" />
-															<xs:attribute name="W" type="Bit" use="required" />
-															<xs:attribute name="X" type="Bit" />
-															<xs:attribute name="B" type="Bit" />
-															<xs:attribute name="B-operand-number" type="OperandNumber" />
-															<xs:attribute name="BX-operand-number" type="OperandNumber" />
-															<xs:attribute name="R" type="Bit" />
-															<xs:attribute name="R-operand-number" type="OperandNumber" />
+															<xs:attribute name="mm" type="EVEX.mm" use="required" />
+															<xs:attribute name="pp" type="EVEX.pp" use="required" />
+															<xs:attribute name="W" type="EVEX.W" />
+															<xs:attribute name="LL" type="EVEX.LL" />
+															<xs:attribute name="vvvv" type="EVEX.vvvv" />
+															<xs:attribute name="V" type="EVEX.V" />
+															<xs:attribute name="RR" type="EVEX.RR" />
+															<xs:attribute name="B" type="EVEX.B" />
+															<xs:attribute name="X" type="EVEX.X" />
+															<xs:attribute name="b" type="EVEX.b" />
+															<xs:attribute name="aaa" type="EVEX.aaa" />
+															<xs:attribute name="z" type="EVEX.z" />
 														</xs:complexType>
 													</xs:element>
 													<xs:element name="Opcode" maxOccurs="4">
 														<xs:complexType>
-															<xs:attribute name="byte" type="OpcodeByte" use="required" />
-															<xs:attribute name="addend-operand-number" type="OperandNumber" />
+															<xs:attribute name="byte" type="Opcode.byte" use="required" />
+															<xs:attribute name="addend" type="Opcode.addend" />
 														</xs:complexType>
 													</xs:element>
 													<xs:element name="ModRM" minOccurs="0">
 														<xs:complexType>
-															<xs:attribute name="mode" type="Mode" />
-															<xs:attribute name="mode-operand-number" type="OperandNumber" />
-															<xs:attribute name="reg-operand-number" type="OperandNumber" />
-															<xs:attribute name="reg" type="RegValue" />
-															<xs:attribute name="rm-operand-number" type="OperandNumber" />
+															<xs:attribute name="mode" type="ModRM.mode" />
+															<xs:attribute name="reg" type="ModRM.reg" />
+															<xs:attribute name="rm" type="ModRM.rm" />
 														</xs:complexType>
 													</xs:element>
 													<xs:element name="Opcode" minOccurs="0" maxOccurs="1">
 														<xs:complexType>
-															<xs:attribute name="byte" type="OpcodeByte" use="required" />
-															<xs:attribute name="addend-operand-number" type="OperandNumber" />
+															<xs:attribute name="byte" type="Opcode.byte" use="required" />
+															<xs:attribute name="addend" type="Opcode.addend" />
 														</xs:complexType>
 													</xs:element>
 													<xs:element name="Immediate" minOccurs="0" maxOccurs="2">
 														<xs:complexType>
 															<xs:attribute name="size" type="xs:int" use="required" />
-															<xs:attribute name="operand-number" type="OperandNumber" use="required" />
+															<xs:attribute name="value" type="Immediate.value" use="required" />
 														</xs:complexType>
 													</xs:element>
 													<xs:element name="RegisterByte" minOccurs="0" maxOccurs="1">
 														<xs:complexType>
-															<xs:attribute name="register-operand-number" type="xs:int" use="required" />
-															<xs:attribute name="payload" type="Ignored" />
-															<xs:attribute name="payload-operand-number" type="xs:int" />
+															<xs:attribute name="register" type="RegisterByte.register" use="required" />
+															<xs:attribute name="payload" type="RegisterByte.payload" />
 														</xs:complexType>
 													</xs:element>
 													<xs:element name="CodeOffset" minOccurs="0">
 														<xs:complexType>
 															<xs:attribute name="size" type="xs:int" use="required" />
-															<xs:attribute name="operand-number" type="OperandNumber" use="required" />
+															<xs:attribute name="value" type="CodeOffset.value" use="required" />
 														</xs:complexType>
 													</xs:element>
 													<xs:element name="DataOffset" minOccurs="0">
 														<xs:complexType>
 															<xs:attribute name="size" type="xs:int" use="required" />
-															<xs:attribute name="operand-number" type="OperandNumber" use="required" />
+															<xs:attribute name="value" type="DataOffset.value" use="required" />
 														</xs:complexType>
 													</xs:element>
 												</xs:sequence>
