@@ -689,7 +689,7 @@ class VEX:
         self.B = None
         self.vvvv = None
 
-    def set_ignored(self, w=0, l=0, r=1, x=1, b=1):
+    def set_ignored(self, w=0, l=0, r=0, x=0, b=0):
         """Sets values for ignored bits
 
         :param int w: the value (0 or 1) to be assigned to VEX.W bit if it is ignored.
