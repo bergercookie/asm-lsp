@@ -939,8 +939,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         encoding.components.append(evex)
                     elif xml_component.tag == "Opcode":
                         opcode = Opcode(int(xml_component.attrib["byte"], 16))
-                        if "addend-operand-number" in xml_component.attrib:
-                            opcode.addend = instruction_form.operands[int(xml_component.attrib["addend-operand-number"])]
+                        opcode.addend = _parse_value(xml_component.get("addend"), instruction_form.operands)
                         encoding.components.append(opcode)
                     elif xml_component.tag == "ModRM":
                         modrm = ModRM()
@@ -958,7 +957,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                     elif xml_component.tag == "RegisterByte":
                         register_byte = RegisterByte()
                         register_byte.register = _parse_value(xml_component.attrib.get("register"), instruction_form.operands)
-                        register_byte.payload = _parse_value(xml_component.attrib.get("paylod"), instruction_form.operands)
+                        register_byte.payload = _parse_value(xml_component.attrib.get("payload"), instruction_form.operands)
                         encoding.components.append(register_byte)
                     elif xml_component.tag == "CodeOffset":
                         assert "size" in xml_component.attrib
