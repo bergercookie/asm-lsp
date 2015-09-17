@@ -1,4 +1,4 @@
-.. image:: https://img.shields.io/github/license/mashape/apistatus.svg
+.. image:: https://img.shields.io/github/license/Maratyszcza/Opcodes.svg
    :alt: License
    :target: https://github.com/Maratyszcza/Opcodes/blob/master/license.rst
 
