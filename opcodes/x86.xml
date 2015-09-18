@@ -55241,9 +55241,9 @@
       <Operand type="m128/m32bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55254,9 +55254,9 @@
       <Operand type="m256/m32bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55266,9 +55266,9 @@
       <Operand type="m512/m32bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55279,9 +55279,9 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55316,9 +55316,9 @@
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55352,9 +55352,9 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55469,9 +55469,9 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
+        <EVEX mm="01" pp="01" LL="00" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
         <Opcode byte="73"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="7" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55482,9 +55482,9 @@
       <Operand type="m128" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
+        <EVEX mm="01" pp="01" LL="00" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
         <Opcode byte="73"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="7" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55507,9 +55507,9 @@
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
+        <EVEX mm="01" pp="01" LL="01" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
         <Opcode byte="73"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="7" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55520,9 +55520,9 @@
       <Operand type="m256" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
+        <EVEX mm="01" pp="01" LL="01" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
         <Opcode byte="73"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="7" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55532,9 +55532,9 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
+        <EVEX mm="01" pp="01" LL="10" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
         <Opcode byte="73"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="7" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55544,9 +55544,9 @@
       <Operand type="m512" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
+        <EVEX mm="01" pp="01" LL="10" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
         <Opcode byte="73"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="7" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55559,9 +55559,9 @@
       <Operand type="m128/m64bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="73"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55572,9 +55572,9 @@
       <Operand type="m256/m64bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="73"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55584,9 +55584,9 @@
       <Operand type="m512/m64bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="73"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55597,9 +55597,9 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="73"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55634,9 +55634,9 @@
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="73"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -55670,9 +55670,9 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="73"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56079,9 +56079,9 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56116,9 +56116,9 @@
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56152,9 +56152,9 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56187,9 +56187,9 @@
       <Operand type="m128" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56200,9 +56200,9 @@
       <Operand type="m256" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56212,9 +56212,9 @@
       <Operand type="m512" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56295,9 +56295,9 @@
       <Operand type="m128/m32bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56308,9 +56308,9 @@
       <Operand type="m256/m32bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56320,9 +56320,9 @@
       <Operand type="m512/m32bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56333,9 +56333,9 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56370,9 +56370,9 @@
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56406,9 +56406,9 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56511,9 +56511,9 @@
       <Operand type="m128/m64bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56524,9 +56524,9 @@
       <Operand type="m256/m64bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56536,9 +56536,9 @@
       <Operand type="m512/m64bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56549,9 +56549,9 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56586,9 +56586,9 @@
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56622,9 +56622,9 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56919,9 +56919,9 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56956,9 +56956,9 @@
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -56992,9 +56992,9 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57027,9 +57027,9 @@
       <Operand type="m128" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57040,9 +57040,9 @@
       <Operand type="m256" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57052,9 +57052,9 @@
       <Operand type="m512" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57135,9 +57135,9 @@
       <Operand type="m128/m32bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57148,9 +57148,9 @@
       <Operand type="m256/m32bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57160,9 +57160,9 @@
       <Operand type="m512/m32bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57173,9 +57173,9 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57210,9 +57210,9 @@
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57246,9 +57246,9 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" W="0" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="72"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57363,9 +57363,9 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
+        <EVEX mm="01" pp="01" LL="00" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
         <Opcode byte="73"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="3" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57376,9 +57376,9 @@
       <Operand type="m128" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
+        <EVEX mm="01" pp="01" LL="00" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
         <Opcode byte="73"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="3" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57401,9 +57401,9 @@
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
+        <EVEX mm="01" pp="01" LL="01" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
         <Opcode byte="73"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="3" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57414,9 +57414,9 @@
       <Operand type="m256" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
+        <EVEX mm="01" pp="01" LL="01" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
         <Opcode byte="73"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="3" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57426,9 +57426,9 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
+        <EVEX mm="01" pp="01" LL="10" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
         <Opcode byte="73"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="3" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57438,9 +57438,9 @@
       <Operand type="m512" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
+        <EVEX mm="01" pp="01" LL="10" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="000"/>
         <Opcode byte="73"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="3" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57453,9 +57453,9 @@
       <Operand type="m128/m64bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="73"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57466,9 +57466,9 @@
       <Operand type="m256/m64bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="73"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57478,9 +57478,9 @@
       <Operand type="m512/m64bcst" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0"/>
         <Opcode byte="73"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57491,9 +57491,9 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="73"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57528,9 +57528,9 @@
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="73"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57564,9 +57564,9 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" W="1" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="73"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -57973,9 +57973,9 @@
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -58010,9 +58010,9 @@
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -58046,9 +58046,9 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
+        <ModRM mode="11" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -58081,9 +58081,9 @@
       <Operand type="m128" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="00" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -58094,9 +58094,9 @@
       <Operand type="m256" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="01" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="01" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -58106,9 +58106,9 @@
       <Operand type="m512" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="10" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <EVEX mm="01" pp="01" LL="10" vvvv="#0" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
         <Opcode byte="71"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
+        <ModRM mode="#1" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
