@@ -19829,7 +19829,7 @@
       <Operand type="zmm{k}{z}" input="false" output="true"/>
       <Operand type="m256" input="true" output="false"/>
       <Encoding>
-        <EVEX mm="10" pp="01" LL="10" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0" disp8xN="64"/>
+        <EVEX mm="10" pp="01" LL="10" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0" disp8xN="32"/>
         <Opcode byte="5B"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
