@@ -24434,7 +24434,7 @@
       <Operand type="zmm{k}{z}" input="false" output="true"/>
       <Operand type="m256" input="true" output="false"/>
       <Encoding>
-        <EVEX mm="10" pp="01" LL="10" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" b="0" aaa="#0" z="#0" disp8xN="32"/>
+        <EVEX mm="10" pp="01" LL="10" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" b="0" aaa="#0" z="#0" disp8xN="32"/>
         <Opcode byte="5B"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
