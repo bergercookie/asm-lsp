@@ -40924,14 +40924,14 @@
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" b="0" aaa="000"/>
-        <Opcode byte="D6"/>
-        <ModRM mode="11" reg="#1" rm="#0"/>
-      </Encoding>
-      <Encoding>
         <EVEX mm="01" pp="10" LL="00" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" b="0" aaa="000"/>
         <Opcode byte="7E"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
+      </Encoding>
+      <Encoding>
+        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" b="0" aaa="000"/>
+        <Opcode byte="D6"/>
+        <ModRM mode="11" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vmovq" xmm-mode="AVX" nacl-version="41">
@@ -40954,13 +40954,13 @@
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
       <Encoding>
-        <EVEX mm="01" pp="10" LL="00" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" b="0" aaa="000" disp8xN="8"/>
-        <Opcode byte="7E"/>
+        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" b="0" aaa="000" disp8xN="8"/>
+        <Opcode byte="6E"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
       <Encoding>
-        <EVEX mm="01" pp="01" LL="00" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" b="0" aaa="000" disp8xN="8"/>
-        <Opcode byte="6E"/>
+        <EVEX mm="01" pp="10" LL="00" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" b="0" aaa="000" disp8xN="8"/>
+        <Opcode byte="7E"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
@@ -40985,12 +40985,12 @@
       <Operand type="xmm" input="true" output="false"/>
       <Encoding>
         <EVEX mm="01" pp="01" LL="00" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" b="0" aaa="000" disp8xN="8"/>
-        <Opcode byte="D6"/>
+        <Opcode byte="7E"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
       <Encoding>
         <EVEX mm="01" pp="01" LL="00" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" b="0" aaa="000" disp8xN="8"/>
-        <Opcode byte="7E"/>
+        <Opcode byte="D6"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
