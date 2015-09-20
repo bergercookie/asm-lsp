@@ -25028,7 +25028,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcomisd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcomisd" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="m64" input="true" output="false"/>
@@ -25071,7 +25071,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcomiss" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcomiss" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="m32" input="true" output="false"/>
@@ -26655,7 +26655,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcvtsd2si" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcvtsd2si" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -26685,7 +26685,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcvtsd2si" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcvtsd2si" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -26821,7 +26821,7 @@
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcvtsi2sd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcvtsi2sd" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -26854,7 +26854,7 @@
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcvtsi2sd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcvtsi2sd" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -26876,7 +26876,7 @@
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcvtsi2sd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcvtsi2sd" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -26934,7 +26934,7 @@
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcvtsi2ss" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcvtsi2ss" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -26956,7 +26956,7 @@
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcvtsi2ss" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcvtsi2ss" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -27060,7 +27060,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcvtss2si" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcvtss2si" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
@@ -27090,7 +27090,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcvtss2si" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcvtss2si" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
@@ -27804,7 +27804,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcvttsd2si" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcvttsd2si" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -27834,7 +27834,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcvttsd2si" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcvttsd2si" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -27932,7 +27932,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcvttss2si" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcvttss2si" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
@@ -27962,7 +27962,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vcvttss2si" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vcvttss2si" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
@@ -29472,7 +29472,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vextractps" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vextractps" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="m32" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -38169,7 +38169,7 @@
         <Immediate size="1" value="#3"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vinsertps" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vinsertps" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -38195,7 +38195,7 @@
         <Immediate size="1" value="#3"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vinsertps" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vinsertps" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -39380,7 +39380,7 @@
         <ModRM mode="11" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovd" xmm-mode="AVX" nacl-version="44" nacl-zero-extends-outputs="true">
+    <InstructionForm gas-name="vmovd" xmm-mode="AVX" nacl-zero-extends-outputs="true">
       <ISA id="AVX512F"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -39400,7 +39400,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovd" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
@@ -39420,7 +39420,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovd" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
@@ -39440,7 +39440,7 @@
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovd" xmm-mode="AVX" nacl-version="44">
+    <InstructionForm gas-name="vmovd" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="m32" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -40391,7 +40391,7 @@
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovhlps" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovhlps" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -40414,7 +40414,7 @@
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovhpd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovhpd" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="m64" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -40435,7 +40435,7 @@
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovhpd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovhpd" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -40458,7 +40458,7 @@
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovhps" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovhps" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="m64" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -40479,7 +40479,7 @@
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovhps" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovhps" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -40503,7 +40503,7 @@
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovlhps" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovlhps" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -40526,7 +40526,7 @@
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovlpd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovlpd" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="m64" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -40547,7 +40547,7 @@
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovlpd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovlpd" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -40570,7 +40570,7 @@
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovlps" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovlps" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="m64" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -40591,7 +40591,7 @@
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovlps" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovlps" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -40658,7 +40658,7 @@
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovntdq" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovntdq" xmm-mode="AVX">
       <ISA id="AVX512VL"/>
       <ISA id="AVX512F"/>
       <Operand type="m128" input="false" output="true"/>
@@ -40679,7 +40679,7 @@
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovntdq" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovntdq" xmm-mode="AVX">
       <ISA id="AVX512VL"/>
       <ISA id="AVX512F"/>
       <Operand type="m256" input="false" output="true"/>
@@ -40712,7 +40712,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovntdqa" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovntdqa" xmm-mode="AVX">
       <ISA id="AVX512VL"/>
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
@@ -40733,7 +40733,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovntdqa" xmm-mode="AVX" nacl-version="42">
+    <InstructionForm gas-name="vmovntdqa" xmm-mode="AVX">
       <ISA id="AVX512VL"/>
       <ISA id="AVX512F"/>
       <Operand type="ymm" input="false" output="true"/>
@@ -40766,7 +40766,7 @@
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovntpd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovntpd" xmm-mode="AVX">
       <ISA id="AVX512VL"/>
       <ISA id="AVX512F"/>
       <Operand type="m128" input="false" output="true"/>
@@ -40787,7 +40787,7 @@
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovntpd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovntpd" xmm-mode="AVX">
       <ISA id="AVX512VL"/>
       <ISA id="AVX512F"/>
       <Operand type="m256" input="false" output="true"/>
@@ -40820,7 +40820,7 @@
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovntps" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovntps" xmm-mode="AVX">
       <ISA id="AVX512VL"/>
       <ISA id="AVX512F"/>
       <Operand type="m128" input="false" output="true"/>
@@ -40841,7 +40841,7 @@
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovntps" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovntps" xmm-mode="AVX">
       <ISA id="AVX512VL"/>
       <ISA id="AVX512F"/>
       <Operand type="m256" input="false" output="true"/>
@@ -40874,7 +40874,7 @@
         <ModRM mode="11" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovq" xmm-mode="AVX" nacl-version="44">
+    <InstructionForm gas-name="vmovq" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="r64" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -40894,7 +40894,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovq" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovq" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="r64" input="true" output="false"/>
@@ -40919,7 +40919,7 @@
         <ModRM mode="11" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovq" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovq" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -40949,7 +40949,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovq" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vmovq" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -40979,7 +40979,7 @@
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vmovq" xmm-mode="AVX" nacl-version="42">
+    <InstructionForm gas-name="vmovq" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="m64" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -50528,7 +50528,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpextrb" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpextrb" xmm-mode="AVX">
       <ISA id="AVX512BW"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -50552,7 +50552,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpextrb" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpextrb" xmm-mode="AVX">
       <ISA id="AVX512BW"/>
       <Operand type="m8" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -50578,7 +50578,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpextrd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpextrd" xmm-mode="AVX">
       <ISA id="AVX512DQ"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -50602,7 +50602,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpextrd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpextrd" xmm-mode="AVX">
       <ISA id="AVX512DQ"/>
       <Operand type="m32" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -50628,7 +50628,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpextrq" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpextrq" xmm-mode="AVX">
       <ISA id="AVX512DQ"/>
       <Operand type="r64" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -50652,7 +50652,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpextrq" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpextrq" xmm-mode="AVX">
       <ISA id="AVX512DQ"/>
       <Operand type="m64" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -50684,7 +50684,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpextrw" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpextrw" xmm-mode="AVX">
       <ISA id="AVX512BW"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -50714,7 +50714,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpextrw" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpextrw" xmm-mode="AVX">
       <ISA id="AVX512BW"/>
       <Operand type="m16" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -51593,7 +51593,7 @@
         <Immediate size="1" value="#3"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpinsrb" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpinsrb" xmm-mode="AVX">
       <ISA id="AVX512BW"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -51619,7 +51619,7 @@
         <Immediate size="1" value="#3"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpinsrb" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpinsrb" xmm-mode="AVX">
       <ISA id="AVX512BW"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -51647,7 +51647,7 @@
         <Immediate size="1" value="#3"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpinsrd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpinsrd" xmm-mode="AVX">
       <ISA id="AVX512DQ"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -51673,7 +51673,7 @@
         <Immediate size="1" value="#3"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpinsrd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpinsrd" xmm-mode="AVX">
       <ISA id="AVX512DQ"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -51701,7 +51701,7 @@
         <Immediate size="1" value="#3"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpinsrq" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpinsrq" xmm-mode="AVX">
       <ISA id="AVX512DQ"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -51727,7 +51727,7 @@
         <Immediate size="1" value="#3"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpinsrq" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpinsrq" xmm-mode="AVX">
       <ISA id="AVX512DQ"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -51755,7 +51755,7 @@
         <Immediate size="1" value="#3"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpinsrw" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpinsrw" xmm-mode="AVX">
       <ISA id="AVX512BW"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -51781,7 +51781,7 @@
         <Immediate size="1" value="#3"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpinsrw" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpinsrw" xmm-mode="AVX">
       <ISA id="AVX512BW"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -59226,7 +59226,7 @@
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpsadbw" xmm-mode="AVX" cancelling-inputs="true" nacl-version="41">
+    <InstructionForm gas-name="vpsadbw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA id="AVX512VL"/>
       <ISA id="AVX512BW"/>
       <Operand type="xmm" input="false" output="true"/>
@@ -59249,7 +59249,7 @@
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpsadbw" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpsadbw" xmm-mode="AVX">
       <ISA id="AVX512VL"/>
       <ISA id="AVX512BW"/>
       <Operand type="xmm" input="false" output="true"/>
@@ -59272,7 +59272,7 @@
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpsadbw" xmm-mode="AVX" cancelling-inputs="true" nacl-version="42">
+    <InstructionForm gas-name="vpsadbw" xmm-mode="AVX" cancelling-inputs="true">
       <ISA id="AVX512VL"/>
       <ISA id="AVX512BW"/>
       <Operand type="ymm" input="false" output="true"/>
@@ -59295,7 +59295,7 @@
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpsadbw" xmm-mode="AVX" nacl-version="42">
+    <InstructionForm gas-name="vpsadbw" xmm-mode="AVX">
       <ISA id="AVX512VL"/>
       <ISA id="AVX512BW"/>
       <Operand type="ymm" input="false" output="true"/>
@@ -60647,7 +60647,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpslldq" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpslldq" xmm-mode="AVX">
       <ISA id="AVX512VL"/>
       <ISA id="AVX512BW"/>
       <Operand type="xmm" input="false" output="true"/>
@@ -62541,7 +62541,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpsrldq" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vpsrldq" xmm-mode="AVX">
       <ISA id="AVX512VL"/>
       <ISA id="AVX512BW"/>
       <Operand type="xmm" input="false" output="true"/>
@@ -69366,7 +69366,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vucomisd" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vucomisd" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="m64" input="true" output="false"/>
@@ -69409,7 +69409,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vucomiss" xmm-mode="AVX" nacl-version="41">
+    <InstructionForm gas-name="vucomiss" xmm-mode="AVX">
       <ISA id="AVX512F"/>
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="m32" input="true" output="false"/>
