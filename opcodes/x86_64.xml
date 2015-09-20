@@ -25230,7 +25230,7 @@
       <ISA id="AVX512VL"/>
       <ISA id="AVX512F"/>
       <Operand type="xmm{k}{z}" input="false" output="true"/>
-      <Operand type="m128/m32bcst" input="true" output="false"/>
+      <Operand type="m64/m32bcst" input="true" output="false"/>
       <Encoding>
         <EVEX mm="01" pp="10" LL="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" b="#1" aaa="#0" z="#0" disp8xN="8"/>
         <Opcode byte="E6"/>
