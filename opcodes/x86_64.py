@@ -815,6 +815,11 @@ class EVEX:
         The value 0 indicates that the bit is not used. \
         If aaa is a reference to an instruction operand, the operand supports zero-masking with register mask, and
         EVEX.z indicates whether zero-masking is used.
+
+    :ivar disp8xN: the N value used for encoding compressed 8-bit displacement. Possible values are powers of 2 in \
+    [1, 64] range or None.
+
+        None indicates that this instruction form does not use displacement (the form has no memory operands).
     """
 
     def __init__(self):
@@ -830,6 +835,7 @@ class EVEX:
         self.b = None
         self.aaa = None
         self.z = None
+        self.disp8xN = None
 
     def set_ignored(self, w=0, ll=0, rr=0, x=0, z=0):
         """Sets values for ignored bits
@@ -1081,6 +1087,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         evex.B = _parse_value(xml_component.attrib["B"], instruction_form.operands)
                         evex.RR = _parse_value(xml_component.attrib.get("RR"), instruction_form.operands)
                         evex.b = _parse_value(xml_component.attrib["b"], instruction_form.operands, 2)
+                        evex.disp8xN = _parse_value(xml_component.attrib.get("disp8xN"), [], 10)
                         encoding.components.append(evex)
                     elif xml_component.tag == "Opcode":
                         opcode = Opcode(int(xml_component.attrib["byte"], 16))

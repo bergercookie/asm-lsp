@@ -253,6 +253,17 @@
 			<xs:enumeration value="#0" />
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="EVEX.disp8xN">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="1" />
+			<xs:enumeration value="2" />
+			<xs:enumeration value="4" />
+			<xs:enumeration value="8" />
+			<xs:enumeration value="16" />
+			<xs:enumeration value="32" />
+			<xs:enumeration value="64" />
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="Opcode.byte">
 		<xs:restriction base="xs:token">
 			<xs:pattern value="[0-9A-F]{2}" />
@@ -441,6 +452,7 @@
 															<xs:attribute name="b" type="EVEX.b" />
 															<xs:attribute name="aaa" type="EVEX.aaa" />
 															<xs:attribute name="z" type="EVEX.z" />
+															<xs:attribute name="disp8xN" type="EVEX.disp8xN" />
 														</xs:complexType>
 													</xs:element>
 													<xs:element name="Opcode" maxOccurs="4">
