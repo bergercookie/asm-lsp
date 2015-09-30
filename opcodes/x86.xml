@@ -5169,7 +5169,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imulw" go-name="IMULW">
+    <InstructionForm gas-name="imulw">
       <Operand type="r16" input="false" output="true"/>
       <Operand type="r16" input="true" output="false" extended-size="2"/>
       <Operand type="imm8"/>
@@ -5180,7 +5180,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imulw" go-name="IMULW">
+    <InstructionForm gas-name="imulw">
       <Operand type="r16" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Operand type="imm16"/>
@@ -5191,7 +5191,7 @@
         <Immediate size="2" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imulw" go-name="IMULW">
+    <InstructionForm gas-name="imulw">
       <Operand type="r16" input="false" output="true"/>
       <Operand type="m16" input="true" output="false" extended-size="2"/>
       <Operand type="imm8"/>
@@ -5202,7 +5202,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imulw" go-name="IMULW">
+    <InstructionForm gas-name="imulw">
       <Operand type="r16" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Operand type="imm16"/>
@@ -5213,7 +5213,7 @@
         <Immediate size="2" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imull" go-name="IMULL">
+    <InstructionForm gas-name="imull">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false" extended-size="4"/>
       <Operand type="imm8"/>
@@ -5223,7 +5223,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imull" go-name="IMULL">
+    <InstructionForm gas-name="imull">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Operand type="imm32"/>
@@ -5233,7 +5233,7 @@
         <Immediate size="4" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imull" go-name="IMULL">
+    <InstructionForm gas-name="imull">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false" extended-size="4"/>
       <Operand type="imm8"/>
@@ -5243,7 +5243,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imull" go-name="IMULL">
+    <InstructionForm gas-name="imull">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Operand type="imm32"/>

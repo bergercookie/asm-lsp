@@ -7241,7 +7241,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imulw" go-name="IMULW" nacl-version="33">
+    <InstructionForm gas-name="imulw" nacl-version="33">
       <Operand type="r16" input="false" output="true"/>
       <Operand type="r16" input="true" output="false" extended-size="2"/>
       <Operand type="imm8"/>
@@ -7253,7 +7253,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imulw" go-name="IMULW" nacl-version="33">
+    <InstructionForm gas-name="imulw" nacl-version="33">
       <Operand type="r16" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Operand type="imm16"/>
@@ -7265,7 +7265,7 @@
         <Immediate size="2" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imulw" go-name="IMULW" nacl-version="33">
+    <InstructionForm gas-name="imulw" nacl-version="33">
       <Operand type="r16" input="false" output="true"/>
       <Operand type="m16" input="true" output="false" extended-size="2"/>
       <Operand type="imm8"/>
@@ -7277,7 +7277,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imulw" go-name="IMULW" nacl-version="33">
+    <InstructionForm gas-name="imulw" nacl-version="33">
       <Operand type="r16" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Operand type="imm16"/>
@@ -7289,7 +7289,7 @@
         <Immediate size="2" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imull" go-name="IMULL" nacl-version="33" nacl-zero-extends-outputs="true">
+    <InstructionForm gas-name="imull" nacl-version="33" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false" extended-size="4"/>
       <Operand type="imm8"/>
@@ -7300,7 +7300,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imull" go-name="IMULL" nacl-version="33" nacl-zero-extends-outputs="true">
+    <InstructionForm gas-name="imull" nacl-version="33" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Operand type="imm32"/>
@@ -7311,7 +7311,7 @@
         <Immediate size="4" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imull" go-name="IMULL" nacl-version="33" nacl-zero-extends-outputs="true">
+    <InstructionForm gas-name="imull" nacl-version="33" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false" extended-size="4"/>
       <Operand type="imm8"/>
@@ -7322,7 +7322,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imull" go-name="IMULL" nacl-version="33" nacl-zero-extends-outputs="true">
+    <InstructionForm gas-name="imull" nacl-version="33" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Operand type="imm32"/>
@@ -7333,7 +7333,7 @@
         <Immediate size="4" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imulq" go-name="IMULQ" nacl-version="33">
+    <InstructionForm gas-name="imulq" go-name="IMUL3Q" nacl-version="33">
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r64" input="true" output="false" extended-size="8"/>
       <Operand type="imm8"/>
@@ -7344,7 +7344,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imulq" go-name="IMULQ" nacl-version="33">
+    <InstructionForm gas-name="imulq" go-name="IMUL3Q" nacl-version="33">
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r64" input="true" output="false" extended-size="8"/>
       <Operand type="imm32"/>
@@ -7355,7 +7355,7 @@
         <Immediate size="4" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imulq" go-name="IMULQ" nacl-version="33">
+    <InstructionForm gas-name="imulq" go-name="IMUL3Q" nacl-version="33">
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false" extended-size="8"/>
       <Operand type="imm8"/>
@@ -7366,7 +7366,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="imulq" go-name="IMULQ" nacl-version="33">
+    <InstructionForm gas-name="imulq" go-name="IMUL3Q" nacl-version="33">
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false" extended-size="8"/>
       <Operand type="imm32"/>
