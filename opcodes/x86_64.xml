@@ -11770,7 +11770,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PACKSSDW" summary="Pack Doublewords into Words with Signed Saturation">
-    <InstructionForm gas-name="packssdw" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="packssdw" go-name="PACKSSLW" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -11781,7 +11781,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="packssdw" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="packssdw" go-name="PACKSSLW" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -11792,7 +11792,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="packssdw" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="packssdw" go-name="PACKSSLW" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -11804,7 +11804,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="packssdw" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="packssdw" go-name="PACKSSLW" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -11990,7 +11990,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PADDD" summary="Add Packed Doubleword Integers">
-    <InstructionForm gas-name="paddd" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="paddd" go-name="PADDL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -12001,7 +12001,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="paddd" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="paddd" go-name="PADDL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -12012,7 +12012,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="paddd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="paddd" go-name="PADDL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -12024,7 +12024,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="paddd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="paddd" go-name="PADDL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -12754,7 +12754,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPEQD" summary="Compare Packed Doubleword Data for Equality">
-    <InstructionForm gas-name="pcmpeqd" mmx-mode="MMX" cancelling-inputs="true" nacl-version="33">
+    <InstructionForm gas-name="pcmpeqd" go-name="PCMPEQL" mmx-mode="MMX" cancelling-inputs="true" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -12765,7 +12765,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpeqd" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="pcmpeqd" go-name="PCMPEQL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -12776,7 +12776,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpeqd" xmm-mode="SSE" cancelling-inputs="true" nacl-version="33">
+    <InstructionForm gas-name="pcmpeqd" go-name="PCMPEQL" xmm-mode="SSE" cancelling-inputs="true" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -12788,7 +12788,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpeqd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="pcmpeqd" go-name="PCMPEQL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -13002,7 +13002,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PCMPGTD" summary="Compare Packed Signed Doubleword Integers for Greater Than">
-    <InstructionForm gas-name="pcmpgtd" mmx-mode="MMX" cancelling-inputs="true" nacl-version="33">
+    <InstructionForm gas-name="pcmpgtd" go-name="PCMPGTL" mmx-mode="MMX" cancelling-inputs="true" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -13013,7 +13013,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpgtd" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="pcmpgtd" go-name="PCMPGTL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -13024,7 +13024,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpgtd" xmm-mode="SSE" cancelling-inputs="true" nacl-version="33">
+    <InstructionForm gas-name="pcmpgtd" go-name="PCMPGTL" xmm-mode="SSE" cancelling-inputs="true" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -13036,7 +13036,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pcmpgtd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="pcmpgtd" go-name="PCMPGTL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -14525,7 +14525,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PMADDWD" summary="Multiply and Add Packed Signed Word Integers">
-    <InstructionForm gas-name="pmaddwd" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="pmaddwd" go-name="PMADDWL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -14536,7 +14536,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pmaddwd" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="pmaddwd" go-name="PMADDWL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -14547,7 +14547,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pmaddwd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="pmaddwd" go-name="PMADDWL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -14559,7 +14559,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pmaddwd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="pmaddwd" go-name="PMADDWL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -15628,7 +15628,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PMULUDQ" summary="Multiply Packed Unsigned Doubleword Integers">
-    <InstructionForm gas-name="pmuludq" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="pmuludq" go-name="PMULULQ" mmx-mode="MMX" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -15639,7 +15639,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pmuludq" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="pmuludq" go-name="PMULULQ" mmx-mode="MMX" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -15650,7 +15650,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pmuludq" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="pmuludq" go-name="PMULULQ" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -15662,7 +15662,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pmuludq" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="pmuludq" go-name="PMULULQ" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -16017,7 +16017,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSHUFD" summary="Shuffle Packed Doublewords">
-    <InstructionForm gas-name="pshufd" go-name="PSHUFD" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="pshufd" go-name="PSHUFL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -16031,7 +16031,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pshufd" go-name="PSHUFD" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="pshufd" go-name="PSHUFL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -16291,7 +16291,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSLLD" summary="Shift Packed Doubleword Data Left Logical">
-    <InstructionForm gas-name="pslld" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="pslld" go-name="PSLLL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="imm8"/>
@@ -16303,7 +16303,7 @@
         <Immediate size="1" value="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pslld" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="pslld" go-name="PSLLL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -16314,7 +16314,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pslld" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="pslld" go-name="PSLLL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -16325,7 +16325,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pslld" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="pslld" go-name="PSLLL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="imm8"/>
@@ -16338,7 +16338,7 @@
         <Immediate size="1" value="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pslld" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="pslld" go-name="PSLLL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -16350,7 +16350,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pslld" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="pslld" go-name="PSLLL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -16364,7 +16364,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSLLDQ" summary="Shift Packed Double Quadword Left Logical">
-    <InstructionForm gas-name="pslldq" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="pslldq" go-name="PSLLO" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="imm8"/>
@@ -16525,7 +16525,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSRAD" summary="Shift Packed Doubleword Data Right Arithmetic">
-    <InstructionForm gas-name="psrad" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="psrad" go-name="PSRAL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="imm8"/>
@@ -16537,7 +16537,7 @@
         <Immediate size="1" value="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psrad" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="psrad" go-name="PSRAL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -16548,7 +16548,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psrad" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="psrad" go-name="PSRAL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -16559,7 +16559,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psrad" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="psrad" go-name="PSRAL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="imm8"/>
@@ -16572,7 +16572,7 @@
         <Immediate size="1" value="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psrad" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="psrad" go-name="PSRAL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -16584,7 +16584,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psrad" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="psrad" go-name="PSRAL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -16671,7 +16671,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSRLD" summary="Shift Packed Doubleword Data Right Logical">
-    <InstructionForm gas-name="psrld" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="psrld" go-name="PSRLL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="imm8"/>
@@ -16683,7 +16683,7 @@
         <Immediate size="1" value="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psrld" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="psrld" go-name="PSRLL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -16694,7 +16694,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psrld" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="psrld" go-name="PSRLL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -16705,7 +16705,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psrld" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="psrld" go-name="PSRLL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="imm8"/>
@@ -16718,7 +16718,7 @@
         <Immediate size="1" value="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psrld" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="psrld" go-name="PSRLL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -16730,7 +16730,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psrld" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="psrld" go-name="PSRLL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -16744,7 +16744,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSRLDQ" summary="Shift Packed Double Quadword Right Logical">
-    <InstructionForm gas-name="psrldq" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="psrldq" go-name="PSRLO" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="imm8"/>
@@ -16953,7 +16953,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBD" summary="Subtract Packed Doubleword Integers">
-    <InstructionForm gas-name="psubd" mmx-mode="MMX" cancelling-inputs="true" nacl-version="33">
+    <InstructionForm gas-name="psubd" go-name="PSUBL" mmx-mode="MMX" cancelling-inputs="true" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -16964,7 +16964,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psubd" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="psubd" go-name="PSUBL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -16975,7 +16975,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psubd" xmm-mode="SSE" cancelling-inputs="true" nacl-version="33">
+    <InstructionForm gas-name="psubd" go-name="PSUBL" xmm-mode="SSE" cancelling-inputs="true" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -16987,7 +16987,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psubd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="psubd" go-name="PSUBL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -17391,7 +17391,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PUNPCKHDQ" summary="Unpack and Interleave High-Order Doublewords into Quadwords">
-    <InstructionForm gas-name="punpckhdq" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="punpckhdq" go-name="PUNPCKHLQ" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -17402,7 +17402,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="punpckhdq" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="punpckhdq" go-name="PUNPCKHLQ" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -17413,7 +17413,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="punpckhdq" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="punpckhdq" go-name="PUNPCKHLQ" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -17425,7 +17425,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="punpckhdq" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="punpckhdq" go-name="PUNPCKHLQ" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -17465,7 +17465,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PUNPCKHWD" summary="Unpack and Interleave High-Order Words into Doublewords">
-    <InstructionForm gas-name="punpckhwd" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="punpckhwd" go-name="PUNPCKHWL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -17476,7 +17476,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="punpckhwd" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="punpckhwd" go-name="PUNPCKHWL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -17487,7 +17487,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="punpckhwd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="punpckhwd" go-name="PUNPCKHWL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -17499,7 +17499,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="punpckhwd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="punpckhwd" go-name="PUNPCKHWL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -17561,7 +17561,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PUNPCKLDQ" summary="Unpack and Interleave Low-Order Doublewords into Quadwords">
-    <InstructionForm gas-name="punpckldq" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="punpckldq" go-name="PUNPCKLLQ" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -17572,7 +17572,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="punpckldq" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="punpckldq" go-name="PUNPCKLLQ" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m32" input="true" output="false"/>
@@ -17583,7 +17583,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="punpckldq" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="punpckldq" go-name="PUNPCKLLQ" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -17595,7 +17595,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="punpckldq" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="punpckldq" go-name="PUNPCKLLQ" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -17635,7 +17635,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PUNPCKLWD" summary="Unpack and Interleave Low-Order Words into Doublewords">
-    <InstructionForm gas-name="punpcklwd" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="punpcklwd" go-name="PUNPCKLWL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -17646,7 +17646,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="punpcklwd" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="punpcklwd" go-name="PUNPCKLWL" mmx-mode="MMX" nacl-version="33">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m32" input="true" output="false"/>
@@ -17657,7 +17657,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="punpcklwd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="punpcklwd" go-name="PUNPCKLWL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -17669,7 +17669,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="punpcklwd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="punpcklwd" go-name="PUNPCKLWL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>

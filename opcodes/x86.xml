@@ -12779,7 +12779,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSHUFD" summary="Shuffle Packed Doublewords">
-    <InstructionForm gas-name="pshufd" xmm-mode="SSE">
+    <InstructionForm gas-name="pshufd" go-name="PSHUFL" xmm-mode="SSE">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -12792,7 +12792,7 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="pshufd" xmm-mode="SSE">
+    <InstructionForm gas-name="pshufd" go-name="PSHUFL" xmm-mode="SSE">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -13641,7 +13641,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="PSUBD" summary="Subtract Packed Doubleword Integers">
-    <InstructionForm gas-name="psubd" mmx-mode="MMX" cancelling-inputs="true">
+    <InstructionForm gas-name="psubd" go-name="PSUBL" mmx-mode="MMX" cancelling-inputs="true">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -13651,7 +13651,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psubd" mmx-mode="MMX">
+    <InstructionForm gas-name="psubd" go-name="PSUBL" mmx-mode="MMX">
       <ISA id="MMX"/>
       <Operand type="mm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -13661,7 +13661,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psubd" xmm-mode="SSE" cancelling-inputs="true">
+    <InstructionForm gas-name="psubd" go-name="PSUBL" xmm-mode="SSE" cancelling-inputs="true">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -13672,7 +13672,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="psubd" xmm-mode="SSE">
+    <InstructionForm gas-name="psubd" go-name="PSUBL" xmm-mode="SSE">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m128" input="true" output="false"/>
