@@ -5867,7 +5867,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTPD2PI" summary="Convert Packed Double-Precision FP Values to Packed Dword Integers">
-    <InstructionForm gas-name="cvtpd2pi" mmx-mode="MMX" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtpd2pi" go-name="CVTPD2PL" mmx-mode="MMX" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="mm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -5879,7 +5879,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtpd2pi" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="cvtpd2pi" go-name="CVTPD2PL" mmx-mode="MMX" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="mm" input="false" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -5919,7 +5919,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTPI2PD" summary="Convert Packed Dword Integers to Packed Double-Precision FP Values">
-    <InstructionForm gas-name="cvtpi2pd" mmx-mode="MMX" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtpi2pd" go-name="CVTPL2PD" mmx-mode="MMX" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -5931,7 +5931,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtpi2pd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtpi2pd" go-name="CVTPL2PD" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -5945,7 +5945,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTPI2PS" summary="Convert Packed Dword Integers to Packed Single-Precision FP Values">
-    <InstructionForm gas-name="cvtpi2ps" mmx-mode="MMX" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtpi2ps" go-name="CVTPL2PS" mmx-mode="MMX" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="mm" input="true" output="false"/>
@@ -5956,7 +5956,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtpi2ps" mmx-mode="MMX" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtpi2ps" go-name="CVTPL2PS" mmx-mode="MMX" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -6019,7 +6019,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTPS2PI" summary="Convert Packed Single-Precision FP Values to Packed Dword Integers">
-    <InstructionForm gas-name="cvtps2pi" mmx-mode="MMX" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtps2pi" go-name="CVTPS2PL" mmx-mode="MMX" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="mm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -6030,7 +6030,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtps2pi" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="cvtps2pi" go-name="CVTPS2PL" mmx-mode="MMX" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="mm" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -6043,7 +6043,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTSD2SI" summary="Convert Scalar Double-Precision FP Value to Integer">
-    <InstructionForm gas-name="cvtsd2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtsd2si" go-name="CVTSD2SL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -6055,7 +6055,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtsd2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtsd2si" go-name="CVTSD2SL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -6067,7 +6067,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtsd2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtsd2si" go-name="CVTSD2SQ" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="r64" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -6079,7 +6079,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtsd2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtsd2si" go-name="CVTSD2SQ" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -6119,7 +6119,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTSI2SD" summary="Convert Dword Integer to Scalar Double-Precision FP Value">
-    <InstructionForm gas-name="cvtsi2sd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtsi2sd" go-name="CVTSL2SD" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
@@ -6131,7 +6131,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtsi2sd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtsi2sd" go-name="CVTSQ2SD" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="r64" input="true" output="false"/>
@@ -6143,7 +6143,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtsi2sd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtsi2sd" go-name="CVTSL2SD" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m32" input="true" output="false"/>
@@ -6155,7 +6155,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtsi2sd" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtsi2sd" go-name="CVTSQ2SD" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -6169,7 +6169,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTSI2SS" summary="Convert Dword Integer to Scalar Single-Precision FP Value">
-    <InstructionForm gas-name="cvtsi2ss" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtsi2ss" go-name="CVTSL2SS" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
@@ -6181,7 +6181,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtsi2ss" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtsi2ss" go-name="CVTSQ2SS" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="r64" input="true" output="false"/>
@@ -6193,7 +6193,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtsi2ss" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtsi2ss" go-name="CVTSL2SS" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m32" input="true" output="false"/>
@@ -6205,7 +6205,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtsi2ss" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtsi2ss" go-name="CVTSQ2SS" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="xmm" input="true" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -6245,7 +6245,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTSS2SI" summary="Convert Scalar Single-Precision FP Value to Dword Integer">
-    <InstructionForm gas-name="cvtss2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtss2si" go-name="CVTSS2SL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -6257,7 +6257,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtss2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtss2si" go-name="CVTSS2SL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
@@ -6269,7 +6269,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtss2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtss2si" go-name="CVTSS2SQ" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="r64" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -6281,7 +6281,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvtss2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvtss2si" go-name="CVTSS2SQ" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
@@ -6321,7 +6321,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTTPD2PI" summary="Convert with Truncation Packed Double-Precision FP Values to Packed Dword Integers">
-    <InstructionForm gas-name="cvttpd2pi" mmx-mode="MMX" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvttpd2pi" go-name="CVTTPD2PL" mmx-mode="MMX" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="mm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -6333,7 +6333,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvttpd2pi" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="cvttpd2pi" go-name="CVTTPD2PL" mmx-mode="MMX" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="mm" input="false" output="true"/>
       <Operand type="m128" input="true" output="false"/>
@@ -6373,7 +6373,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTTPS2PI" summary="Convert with Truncation Packed Single-Precision FP Values to Packed Dword Integers">
-    <InstructionForm gas-name="cvttps2pi" mmx-mode="MMX" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvttps2pi" go-name="CVTTPS2PL" mmx-mode="MMX" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="mm" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -6384,7 +6384,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvttps2pi" mmx-mode="MMX" nacl-version="33">
+    <InstructionForm gas-name="cvttps2pi" go-name="CVTTPS2PL" mmx-mode="MMX" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="mm" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -6397,7 +6397,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTTSD2SI" summary="Convert with Truncation Scalar Double-Precision FP Value to Signed Integer">
-    <InstructionForm gas-name="cvttsd2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvttsd2si" go-name="CVTTSD2SL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -6409,7 +6409,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvttsd2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvttsd2si" go-name="CVTTSD2SL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -6421,7 +6421,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvttsd2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvttsd2si" go-name="CVTTSD2SQ" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="r64" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -6433,7 +6433,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvttsd2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvttsd2si" go-name="CVTTSD2SQ" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE2"/>
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m64" input="true" output="false"/>
@@ -6447,7 +6447,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="CVTTSS2SI" summary="Convert with Truncation Scalar Single-Precision FP Value to Dword Integer">
-    <InstructionForm gas-name="cvttss2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvttss2si" go-name="CVTTSS2SL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -6459,7 +6459,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvttss2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvttss2si" go-name="CVTTSS2SL" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
@@ -6471,7 +6471,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvttss2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvttss2si" go-name="CVTTSS2SQ" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="r64" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
@@ -6483,7 +6483,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="cvttss2si" xmm-mode="SSE" nacl-version="33">
+    <InstructionForm gas-name="cvttss2si" go-name="CVTTSS2SQ" xmm-mode="SSE" nacl-version="33">
       <ISA id="SSE"/>
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
