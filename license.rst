@@ -1,5 +1,6 @@
-Opcodes Database license
-========================
+=======================================
+Opcodes Database license (2-clause BSD)
+=======================================
 
 Copyright (c) 2014-2015, Georgia Institute of Technology
 All rights reserved.
