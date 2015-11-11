@@ -49,3 +49,39 @@ For each instruction the following information is provided:
 - Whether the instruction has no dependency on input values when input operands refer to the same register (e.g. `XOR eax, eax` has no dependency on `eax`)
 - Whether the instruction is supported by Native Client validator and when the support was introduced
 - Whether the instruction that writes to a 32-bit register is recognized by x86-64 Native Client validator as zero-extending
+
+Installation
+------------
+
+.. code-block:: bash
+
+  pip install --upgrade Opcodes
+
+Users
+-----
+
+- `PeachPy <https://github.com/Maratyszcza/PeachPy>`_ -- x86-64 assembler embedded in Python that targets High-Performance Computing use-cases.
+
+- `Template-Assembly <https://github.com/mattbierner/Template-Assembly>`_ -- Embedding x86 assembly code in C++ with metaprogramming using a domain specific language.
+
+Peer-Reviewed Publications
+--------------------------
+
+- Marat Dukhan "PeachPy meets Opcodes: Direct Machine Code Generation from Python", to be presented on Python for High-Performance Computing (PyHPC) 2015 on November 15, 2015.
+
+Acknowledgements
+----------------
+
+.. image:: https://github.com/Maratyszcza/PeachPy/blob/master/logo/hpcgarage.png
+  :alt: HPC Garage logo
+  :target: http://hpcgarage.org/
+
+.. image:: https://github.com/Maratyszcza/PeachPy/blob/master/logo/college-of-computing.gif
+  :alt: Georgia Tech College of Computing logo
+  :target: http://www.cse.gatech.edu/
+
+This work is a research project at the HPC Garage lab in the Georgia Institute of Technology, College of Computing, School of Computational Science and Engineering.
+
+The work was supported in part by grants to Prof. Richard Vuduc’s research lab, `The HPC Garage <www.hpcgarage.org>`_, from the National Science Foundation (NSF) under NSF CAREER award number 0953100; and a grant from the Defense Advanced Research Projects Agency (DARPA) Computer Science Study Group program
+
+Any opinions, conclusions or recommendations expressed in this software and documentation are those of the authors and not necessarily reflect those of NSF or DARPA.
