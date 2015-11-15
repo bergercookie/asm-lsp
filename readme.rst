@@ -67,7 +67,7 @@ Users
 Peer-Reviewed Publications
 --------------------------
 
-- Marat Dukhan "PeachPy meets Opcodes: Direct Machine Code Generation from Python", to be presented on Python for High-Performance Computing (PyHPC) 2015 on November 15, 2015.
+- Marat Dukhan "PeachPy meets Opcodes: Direct Machine Code Generation from Python", Python for High-Performance Computing (PyHPC) 2015 (`slides <http://www.peachpy.io/slides/pyhpc2015>`_, `paper on ACM Digital Library <https://dl.acm.org/citation.cfm?id=2835860>`_).
 
 Acknowledgements
 ----------------
