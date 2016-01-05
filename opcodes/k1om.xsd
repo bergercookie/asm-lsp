@@ -4,7 +4,6 @@
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="1" />
 			<xs:enumeration value="3" />
-			<xs:enumeration value="imm4" />
 			<xs:enumeration value="imm8" />
 			<xs:enumeration value="imm16" />
 			<xs:enumeration value="imm32" />
@@ -55,6 +54,13 @@
 			<xs:enumeration value="Uf64(m512)" />
 			<xs:enumeration value="Ui32(m512)" />
 			<xs:enumeration value="Ui64(m512)" />
+			<xs:enumeration value="Uf32(vm32z)" />
+			<xs:enumeration value="Uf64(vm32z)" />
+			<xs:enumeration value="Ui32(vm32z)" />
+			<xs:enumeration value="Ui64(vm32z)" />
+			<xs:enumeration value="vm32z{k}" />
+			<xs:enumeration value="Uf32(vm32z){k}" />
+			<xs:enumeration value="Uf64(vm32z){k}" />
 			<xs:enumeration value="rel8" />
 			<xs:enumeration value="rel32" />
 		</xs:restriction>
@@ -224,6 +230,7 @@
 	<xs:simpleType name="MVEX.SSS">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="000" />
+			<xs:enumeration value="#0" />
 			<xs:enumeration value="#1" />
 			<xs:enumeration value="#2" />
 		</xs:restriction>

@@ -8599,24 +8599,24 @@
     <InstructionForm gas-name="valignd">
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="zmm" input="true" output="false"/>
-      <Operand type="m512" input="true" output="false"/>
-      <Operand type="imm8"/>
-      <Encoding>
-        <MVEX mmmm="0011" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="000"/>
-        <Opcode byte="03"/>
-        <ModRM mode="#2" reg="#0" rm="#2"/>
-        <Immediate size="1" value="#3"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="valignd">
-      <Operand type="zmm{k}" input="false" output="true"/>
-      <Operand type="zmm" input="true" output="false"/>
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
         <MVEX mmmm="0011" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="000"/>
         <Opcode byte="03"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
+        <Immediate size="1" value="#3"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="valignd">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="m512" input="true" output="false"/>
+      <Operand type="imm8"/>
+      <Encoding>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="000"/>
+        <Opcode byte="03"/>
+        <ModRM mode="#2" reg="#0" rm="#2"/>
         <Immediate size="1" value="#3"/>
       </Encoding>
     </InstructionForm>
@@ -9010,20 +9010,20 @@
   <Instruction name="VEXP223PS" summary="Approximation to the Exponential 2^x of Packed Single-Precision Floating-Point Values with Less Than 2^-23 Relative Error">
     <InstructionForm gas-name="vexp223ps">
       <Operand type="zmm{k}" input="false" output="true"/>
-      <Operand type="m512" input="true" output="false"/>
-      <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
-        <Opcode byte="C8"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="vexp223ps">
-      <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="zmm" input="true" output="false"/>
       <Encoding>
         <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
         <Opcode byte="C8"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vexp223ps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="m512" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
+        <Opcode byte="C8"/>
+        <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9621,6 +9621,68 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
+  <Instruction name="VGATHERDPD" summary="Gather Packed Double-Precision Floating-Point Values Using Signed Doubleword Indices">
+    <InstructionForm gas-name="vgatherdpd">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="Uf64(vm32z)" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#1" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <Opcode byte="92"/>
+        <ModRM mode="#1" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VGATHERDPS" summary="Gather Packed Single-Precision Floating-Point Values Using Signed Doubleword Indices">
+    <InstructionForm gas-name="vgatherdps">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="Uf32(vm32z)" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#1" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <Opcode byte="92"/>
+        <ModRM mode="#1" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VGATHERPF0DPS" summary="Sparse Prefetch Packed Single-Precision Floating-Point Data Values with Signed Doubleword Indices Using T0 Hint">
+    <InstructionForm gas-name="vgatherpf0dps">
+      <Operand type="Uf32(vm32z){k}" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <Opcode byte="C6"/>
+        <ModRM mode="#0" reg="1" rm="#0"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VGATHERPF0HINTDPD" summary="Sparse Prefetch Hint Packed Double-Precision Floating-Point Data Values with Signed Doubleword Indices">
+    <InstructionForm gas-name="vgatherpf0hintdpd">
+      <Operand type="Uf64(vm32z){k}" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <Opcode byte="C6"/>
+        <ModRM mode="#0" reg="0" rm="#0"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VGATHERPF0HINTDPS" summary="Sparse Prefetch Hint Packed Single-Precision Floating-Point Data Values with Signed Doubleword Indices">
+    <InstructionForm gas-name="vgatherpf0hintdps">
+      <Operand type="Uf32(vm32z){k}" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <Opcode byte="C6"/>
+        <ModRM mode="#0" reg="0" rm="#0"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VGATHERPF1DPS" summary="Sparse Prefetch Packed Single-Precision Floating-Point Data Values with Signed Doubleword Indices Using T1 Hint">
+    <InstructionForm gas-name="vgatherpf1dps">
+      <Operand type="Uf32(vm32z){k}" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <Opcode byte="C6"/>
+        <ModRM mode="#0" reg="2" rm="#0"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="VGETEXPPD" summary="Extract Exponents of Packed Double-Precision Floating-Point Values as Double-Precision Floating-Point Values">
     <InstructionForm gas-name="vgetexppd">
       <Operand type="zmm{k}" input="false" output="true"/>
@@ -9910,20 +9972,20 @@
   <Instruction name="VLOG2PS" summary="Approximation to the Base-2 Logarithm of Packed Single-Precision Floating-Point Values">
     <InstructionForm gas-name="vlog2ps">
       <Operand type="zmm{k}" input="false" output="true"/>
-      <Operand type="m512" input="true" output="false"/>
-      <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
-        <Opcode byte="C9"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="vlog2ps">
-      <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="zmm" input="true" output="false"/>
       <Encoding>
         <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
         <Opcode byte="C9"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vlog2ps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="m512" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
+        <Opcode byte="C9"/>
+        <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -10583,16 +10645,6 @@
     <InstructionForm gas-name="vpermd">
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="zmm" input="true" output="false"/>
-      <Operand type="m512" input="true" output="false"/>
-      <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="000"/>
-        <Opcode byte="36"/>
-        <ModRM mode="#2" reg="#0" rm="#2"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="vpermd">
-      <Operand type="zmm{k}" input="false" output="true"/>
-      <Operand type="zmm" input="true" output="false"/>
       <Operand type="zmm" input="true" output="false"/>
       <Encoding>
         <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="000"/>
@@ -10600,8 +10652,29 @@
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
+    <InstructionForm gas-name="vpermd">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="m512" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="000"/>
+        <Opcode byte="36"/>
+        <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
   </Instruction>
   <Instruction name="VPERMF32X4" summary="Permute Single-Precision Floating-Point Elements">
+    <InstructionForm gas-name="vpermf32x4">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="imm8"/>
+      <Encoding>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
+        <Opcode byte="07"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
+        <Immediate size="1" value="#2"/>
+      </Encoding>
+    </InstructionForm>
     <InstructionForm gas-name="vpermf32x4">
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="m512" input="true" output="false"/>
@@ -10613,15 +10686,26 @@
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="vpermf32x4">
-      <Operand type="zmm{k}" input="false" output="true"/>
-      <Operand type="zmm" input="true" output="false"/>
-      <Operand type="imm8"/>
+  </Instruction>
+  <Instruction name="VPGATHERDD" summary="Gather Packed Doubleword Values Using Signed Doubleword Indices">
+    <InstructionForm gas-name="vpgatherdd">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="Ui32(vm32z)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
-        <Opcode byte="07"/>
-        <ModRM mode="11" reg="#0" rm="#1"/>
-        <Immediate size="1" value="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#1" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <Opcode byte="90"/>
+        <ModRM mode="#1" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VPGATHERDQ" summary="Gather Packed Quadword Values Using Signed Doubleword Indices">
+    <InstructionForm gas-name="vpgatherdq">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="Ui64(vm32z)" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#1" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <Opcode byte="90"/>
+        <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -11031,18 +11115,29 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
-  <Instruction name="VPSHUFD" summary="Shuffle Packed Doublewords">
-    <InstructionForm gas-name="vpshufd">
-      <Operand type="zmm{k}" input="false" output="true"/>
-      <Operand type="m512" input="true" output="false"/>
-      <Operand type="imm8"/>
+  <Instruction name="VPSCATTERDD" summary="Scatter Packed Doubleword Values with Signed Doubleword Indices">
+    <InstructionForm gas-name="vpscatterdd">
+      <Operand type="vm32z{k}" input="false" output="true"/>
+      <Operand type="Di32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
-        <Opcode byte="70"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
-        <Immediate size="1" value="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <Opcode byte="A0"/>
+        <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
     </InstructionForm>
+  </Instruction>
+  <Instruction name="VPSCATTERDQ" summary="Scatter Packed Quadword Values with Signed Doubleword Indices">
+    <InstructionForm gas-name="vpscatterdq">
+      <Operand type="vm32z{k}" input="false" output="true"/>
+      <Operand type="Di64(zmm)" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <Opcode byte="A0"/>
+        <ModRM mode="#0" reg="#1" rm="#0"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VPSHUFD" summary="Shuffle Packed Doublewords">
     <InstructionForm gas-name="vpshufd">
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="zmm" input="true" output="false"/>
@@ -11051,6 +11146,17 @@
         <MVEX mmmm="0001" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
         <Opcode byte="70"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
+        <Immediate size="1" value="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vpshufd">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="m512" input="true" output="false"/>
+      <Operand type="imm8"/>
+      <Encoding>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
+        <Opcode byte="70"/>
+        <ModRM mode="#1" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -11350,20 +11456,20 @@
   <Instruction name="VRCP23PS" summary="Approximation to the Reciprocal of Packed Single-Precision Floating-Point Values with Less Than 2^-23 Relative Error">
     <InstructionForm gas-name="vrcp23ps">
       <Operand type="zmm{k}" input="false" output="true"/>
-      <Operand type="m512" input="true" output="false"/>
-      <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
-        <Opcode byte="CA"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="vrcp23ps">
-      <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="zmm" input="true" output="false"/>
       <Encoding>
         <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
         <Opcode byte="CA"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vrcp23ps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="m512" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
+        <Opcode byte="CA"/>
+        <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -11418,20 +11524,20 @@
   <Instruction name="VRSQRT23PS" summary="Approximation to the Reciprocal Square Root of Packed Single-Precision Floating-Point Values with Less Than 2^-23 Relative Error">
     <InstructionForm gas-name="vrsqrt23ps">
       <Operand type="zmm{k}" input="false" output="true"/>
-      <Operand type="m512" input="true" output="false"/>
-      <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
-        <Opcode byte="CB"/>
-        <ModRM mode="#1" reg="#0" rm="#1"/>
-      </Encoding>
-    </InstructionForm>
-    <InstructionForm gas-name="vrsqrt23ps">
-      <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="zmm" input="true" output="false"/>
       <Encoding>
         <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
         <Opcode byte="CB"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vrsqrt23ps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="m512" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
+        <Opcode byte="CB"/>
+        <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -11454,6 +11560,68 @@
         <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
         <Opcode byte="84"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VSCATTERDPD" summary="Scatter Packed Double-Precision Floating-Point Values with Signed Doubleword Indices">
+    <InstructionForm gas-name="vscatterdpd">
+      <Operand type="vm32z{k}" input="false" output="true"/>
+      <Operand type="Df64(zmm)" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <Opcode byte="A2"/>
+        <ModRM mode="#0" reg="#1" rm="#0"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VSCATTERDPS" summary="Scatter Packed Single-Precision Floating-Point Values with Signed Doubleword Indices">
+    <InstructionForm gas-name="vscatterdps">
+      <Operand type="vm32z{k}" input="false" output="true"/>
+      <Operand type="Df32(zmm)" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <Opcode byte="A2"/>
+        <ModRM mode="#0" reg="#1" rm="#0"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VSCATTERPF0DPS" summary="Sparse Prefetch Packed Single-Precision Floating-Point Data Values with Signed Doubleword Indices Using T0 Hint with Intent to Write">
+    <InstructionForm gas-name="vscatterpf0dps">
+      <Operand type="Uf32(vm32z){k}" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <Opcode byte="C6"/>
+        <ModRM mode="#0" reg="5" rm="#0"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VSCATTERPF0HINTDPD" summary="Sparse Prefetch Packed Double-Precision Floating-Point Data Values with Signed Doubleword Indices Using T0 Hint with Intent to Write">
+    <InstructionForm gas-name="vscatterpf0hintdpd">
+      <Operand type="Uf64(vm32z){k}" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <Opcode byte="C6"/>
+        <ModRM mode="#0" reg="4" rm="#0"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VSCATTERPF0HINTDPS" summary="Sparse Prefetch Packed Single-Precision Floating-Point Data Values with Signed Doubleword Indices Using T0 Hint with Intent to Write">
+    <InstructionForm gas-name="vscatterpf0hintdps">
+      <Operand type="Uf32(vm32z){k}" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <Opcode byte="C6"/>
+        <ModRM mode="#0" reg="4" rm="#0"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VSCATTERPF1DPS" summary="Sparse Prefetch Packed Single-Precision Floating-Point Data Values with Signed Doubleword Indices Using T1 Hint with Intent to Write">
+    <InstructionForm gas-name="vscatterpf1dps">
+      <Operand type="Uf32(vm32z){k}" input="true" output="false"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <Opcode byte="C6"/>
+        <ModRM mode="#0" reg="6" rm="#0"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
