@@ -19,6 +19,6 @@ opcodes.k1om module
 -------------------
 
 .. automodule:: opcodes.k1om
-    :member:
+    :members:
     :undoc-members:
 
