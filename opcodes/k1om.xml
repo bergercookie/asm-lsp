@@ -8803,7 +8803,7 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
-  <Instruction name="VCVTFXPNTDQ2PS">
+  <Instruction name="VCVTFXPNTDQ2PS" summary="Convert Fixed Point Signed Doubleword Integer Vector to Single-Precision Floating-Point Vector">
     <InstructionForm gas-name="vcvtfxpntdq2ps">
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Si32(zmm)" input="true" output="false"/>
@@ -8827,7 +8827,7 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
-  <Instruction name="VCVTFXPNTPD2DQ">
+  <Instruction name="VCVTFXPNTPD2DQ" summary="Convert Double-Precision Floating-Point Vector to Fixed Point Signed Doubleword Integer Vector">
     <InstructionForm gas-name="vcvtfxpntpd2dq">
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
@@ -8851,7 +8851,7 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
-  <Instruction name="VCVTFXPNTPD2UDQ">
+  <Instruction name="VCVTFXPNTPD2UDQ" summary="Convert Double-Precision Floating-Point Vector to Fixed Point Unsigned Doubleword Integer Vector">
     <InstructionForm gas-name="vcvtfxpntpd2udq">
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
@@ -8875,7 +8875,7 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
-  <Instruction name="VCVTFXPNTPS2DQ">
+  <Instruction name="VCVTFXPNTPS2DQ" summary="Convert Single-Precision Vector to Fixed Point Signed Doubleword Integer Vector">
     <InstructionForm gas-name="vcvtfxpntps2dq">
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
@@ -8899,7 +8899,7 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
-  <Instruction name="VCVTFXPNTPS2UDQ">
+  <Instruction name="VCVTFXPNTPS2UDQ" summary="Convert Single-Precision Vector to Fixed Point Unsigned Doubleword Integer Vector">
     <InstructionForm gas-name="vcvtfxpntps2udq">
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
@@ -8923,7 +8923,7 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
-  <Instruction name="VCVTFXPNTUDQ2PS">
+  <Instruction name="VCVTFXPNTUDQ2PS" summary="Convert Fixed Point Unsigned Doubleword Integer Vector to Single-Precision Floating-Point Vector">
     <InstructionForm gas-name="vcvtfxpntudq2ps">
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Si32(zmm)" input="true" output="false"/>
@@ -9027,7 +9027,7 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
-  <Instruction name="VFIXUPNANPD">
+  <Instruction name="VFIXUPNANPD" summary="Fix Up Special Double-Precision Floating-Point Numbers With NaN Passthrough">
     <InstructionForm gas-name="vfixupnanpd">
       <Operand type="zmm{k}" input="true" output="true"/>
       <Operand type="zmm" input="true" output="false"/>
@@ -9049,7 +9049,7 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
-  <Instruction name="VFIXUPNANPS">
+  <Instruction name="VFIXUPNANPS" summary="Fix Up Special Single-Precision Floating-Point Numbers With NaN Passthrough">
     <InstructionForm gas-name="vfixupnanps">
       <Operand type="zmm{k}" input="true" output="true"/>
       <Operand type="zmm" input="true" output="false"/>
