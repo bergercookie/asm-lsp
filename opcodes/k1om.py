@@ -8,7 +8,7 @@ class Instruction:
 
     An instruction may have multiple forms, that mainly differ by operand types.
 
-    :ivar name: instruction name in Intel-style assembly (Peach-Py, NASM and YASM assemblers).
+    :ivar name: instruction name in Intel-style assembly (PeachPy, NASM and YASM assemblers).
     :ivar summary: a summary description of the instruction name.
     :ivar forms: a list of :class:`InstructionForm` objects representing the instruction forms.
     """
