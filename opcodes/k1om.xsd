@@ -172,7 +172,6 @@
 	</xs:simpleType>
 	<xs:simpleType name="MVEX.mmmm">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="0000" />
 			<xs:enumeration value="0001" />
 			<xs:enumeration value="0010" />
 			<xs:enumeration value="0011" />
@@ -360,13 +359,13 @@
 															<xs:attribute name="mmmm" type="MVEX.mmmm" use="required" />
 															<xs:attribute name="pp" type="MVEX.pp" use="required" />
 															<xs:attribute name="W" type="MVEX.W" />
-															<xs:attribute name="vvvv" type="MVEX.vvvv" />
-															<xs:attribute name="V" type="MVEX.V" />
+															<xs:attribute name="vvvv" type="MVEX.vvvv" use="required" />
+															<xs:attribute name="V" type="MVEX.V" use="required" />
 															<xs:attribute name="RR" type="MVEX.RR" />
 															<xs:attribute name="B" type="MVEX.B" />
 															<xs:attribute name="X" type="MVEX.X" />
-															<xs:attribute name="SSS" type="MVEX.SSS" />
-															<xs:attribute name="aaa" type="MVEX.aaa" />
+															<xs:attribute name="SSS" type="MVEX.SSS" use="required" />
+															<xs:attribute name="aaa" type="MVEX.aaa" use="required" />
 														</xs:complexType>
 													</xs:element>
 													<xs:element name="Opcode" maxOccurs="2">
