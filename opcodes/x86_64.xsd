@@ -305,6 +305,7 @@
 	</xs:simpleType>
 	<xs:simpleType name="EVEX.z">
 		<xs:restriction base="xs:string">
+			<xs:enumeration value="0" />
 			<xs:enumeration value="#0" />
 		</xs:restriction>
 	</xs:simpleType>
@@ -513,9 +514,9 @@
 															<xs:attribute name="RR" type="EVEX.RR" />
 															<xs:attribute name="B" type="EVEX.B" />
 															<xs:attribute name="X" type="EVEX.X" />
-															<xs:attribute name="b" type="EVEX.b" />
-															<xs:attribute name="aaa" type="EVEX.aaa" />
-															<xs:attribute name="z" type="EVEX.z" />
+															<xs:attribute name="b" type="EVEX.b" use="required" />
+															<xs:attribute name="aaa" type="EVEX.aaa" use="required" />
+															<xs:attribute name="z" type="EVEX.z" use="required" />
 															<xs:attribute name="disp8xN" type="EVEX.disp8xN" />
 														</xs:complexType>
 													</xs:element>
