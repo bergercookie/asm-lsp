@@ -15,3 +15,10 @@ opcodes.x86_64 module
     :members:
     :undoc-members:
 
+opcodes.k1om module
+-------------------
+
+.. automodule:: opcodes.k1om
+    :member:
+    :undoc-members:
+
