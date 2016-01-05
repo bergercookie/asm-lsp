@@ -3965,6 +3965,7 @@
   </Instruction>
   <Instruction name="CRC32" summary="Accumulate CRC32 Value">
     <InstructionForm gas-name="crc32b">
+      <ISA id="SSE4.2"/>
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
@@ -3976,6 +3977,7 @@
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="crc32w">
+      <ISA id="SSE4.2"/>
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
@@ -3988,6 +3990,7 @@
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="crc32l">
+      <ISA id="SSE4.2"/>
       <Operand type="r32" input="true" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
@@ -3999,6 +4002,7 @@
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="crc32b">
+      <ISA id="SSE4.2"/>
       <Operand type="r32" input="true" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
@@ -4010,6 +4014,7 @@
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="crc32w">
+      <ISA id="SSE4.2"/>
       <Operand type="r32" input="true" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
@@ -4022,6 +4027,7 @@
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="crc32l">
+      <ISA id="SSE4.2"/>
       <Operand type="r32" input="true" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
@@ -7320,6 +7326,7 @@
   </Instruction>
   <Instruction name="MOVBE" summary="Move Data After Swapping Bytes">
     <InstructionForm gas-name="movbew">
+      <ISA id="MOVBE"/>
       <Operand type="r16" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
@@ -7331,6 +7338,7 @@
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movbel">
+      <ISA id="MOVBE"/>
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
@@ -7341,6 +7349,7 @@
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movbew">
+      <ISA id="MOVBE"/>
       <Operand type="m16" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
@@ -7352,6 +7361,7 @@
       </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="movbel">
+      <ISA id="MOVBE"/>
       <Operand type="m32" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>

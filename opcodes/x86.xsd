@@ -368,6 +368,7 @@
 			<xs:enumeration value="SHA" />
 			<xs:enumeration value="RDRAND" />
 			<xs:enumeration value="RDSEED" />
+			<xs:enumeration value="MOVBE" />
 			<xs:enumeration value="POPCNT" />
 			<xs:enumeration value="LZCNT" />
 			<xs:enumeration value="BMI" />

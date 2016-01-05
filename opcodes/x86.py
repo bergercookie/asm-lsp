@@ -357,6 +357,7 @@ class ISAExtension:
         "RDTSC": 5,
         "RDTSCP": 6,
         "CMOV": 20,
+        "MOVBE": 99,
         "POPCNT": 100,
         "LZCNT": 101,
         "TBM": 102,
@@ -405,6 +406,7 @@ class ISAExtension:
         - "RDTSCP"    := The `RDTSCP` instruction.
         - "CPUID"     := The `CPUID` instruction.
         - "FEMMS"     := The `FEMMS` instruction.
+        - "MOVBE"     := The `MOVBE` instruction.
         - "POPCNT"    := The `POPCNT` instruction.
         - "LZCNT"     := The `LZCNT` instruction.
         - "PCLMULQDQ" := The `PCLMULQDQ` instruction.
