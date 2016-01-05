@@ -1073,7 +1073,6 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         encoding.components.append(rex)
                     elif xml_component.tag == "VEX":
                         vex = VEX()
-
                         vex.type = xml_component.attrib["type"]
                         vex.pp = int(xml_component.attrib["pp"], 2)
                         vex.mmmmm = int(xml_component.attrib["m-mmmm"], 2)
@@ -1083,7 +1082,6 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         vex.B = _parse_value(xml_component.attrib.get("B"), instruction_form.operands, 2)
                         vex.X = _parse_value(xml_component.attrib.get("X"), instruction_form.operands)
                         vex.vvvv = _parse_value(xml_component.attrib.get("vvvv"), instruction_form.operands, 2)
-
                         encoding.components.append(vex)
                     elif xml_component.tag == "EVEX":
                         evex = EVEX()

@@ -215,8 +215,6 @@
 	<xs:simpleType name="EVEX.V">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="0" />
-			<xs:enumeration value="#0" />
-			<xs:enumeration value="#1" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="EVEX.RR">

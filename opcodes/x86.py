@@ -928,17 +928,15 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         encoding.components.append(prefix)
                     elif xml_component.tag == "VEX":
                         vex = VEX()
-
                         vex.type = xml_component.attrib["type"]
                         vex.pp = int(xml_component.attrib["pp"], 2)
                         vex.mmmmm = int(xml_component.attrib["m-mmmm"], 2)
                         vex.W = _parse_value(xml_component.attrib.get("W"), [], 2)
                         vex.L = _parse_value(xml_component.attrib.get("L"), [], 2)
-                        vex.R = _parse_value(xml_component.attrib.get("R"), instruction_form.operands, 2)
-                        vex.B = _parse_value(xml_component.attrib.get("B"), instruction_form.operands, 2)
-                        vex.X = _parse_value(xml_component.attrib.get("X"), instruction_form.operands, 2)
+                        vex.R = int(xml_component.attrib["R"], 2)
+                        vex.B = int(xml_component.attrib["B"], 2)
+                        vex.X = int(xml_component.attrib["X"], 2)
                         vex.vvvv = _parse_value(xml_component.attrib.get("vvvv"), instruction_form.operands, 2)
-
                         encoding.components.append(vex)
                     elif xml_component.tag == "EVEX":
                         evex = EVEX()
@@ -947,12 +945,12 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                         evex.W = _parse_value(xml_component.attrib.get("W"), [], 2)
                         evex.LL = _parse_value(xml_component.attrib.get("LL"), instruction_form.operands, 2)
                         evex.vvvv = _parse_value(xml_component.attrib["vvvv"], instruction_form.operands, 2)
-                        evex.V = _parse_value(xml_component.attrib["V"], instruction_form.operands, 2)
+                        evex.V = int(xml_component.attrib["V"], 2)
                         evex.aaa = _parse_value(xml_component.attrib["aaa"], instruction_form.operands, 2)
                         evex.z = _parse_value(xml_component.attrib["z"], instruction_form.operands, 2)
-                        evex.X = _parse_value(xml_component.attrib.get("X"), instruction_form.operands, 2)
-                        evex.B = _parse_value(xml_component.attrib["B"], instruction_form.operands, 2)
-                        evex.RR = _parse_value(xml_component.attrib.get("RR"), instruction_form.operands, 2)
+                        evex.X = int(xml_component.attrib["X"], 2)
+                        evex.B = int(xml_component.attrib["B"], 2)
+                        evex.RR = int(xml_component.attrib["RR"], 2)
                         evex.b = _parse_value(xml_component.attrib["b"], instruction_form.operands, 2)
                         evex.disp8xN = _parse_value(xml_component.attrib.get("disp8xN"), [], 10)
                         encoding.components.append(evex)
