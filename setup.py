@@ -19,7 +19,7 @@ setup(
     author_email=__email__,
     url="https://github.com/Maratyszcza/Opcodes",
     packages=["opcodes"],
-    package_data={"opcodes": ["x86.xml", "x86_64.xml"]},
+    package_data={"opcodes": ["x86.xml", "x86_64.xml", "k1om.xml"]},
     keywords=["assembly", "assembler", "asm", "opcodes", "x86", "x86-64", "isa", "cpu"],
     requires=[],
     classifiers=[
