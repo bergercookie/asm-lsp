@@ -601,7 +601,7 @@ class EVEX:
     Encoding may have only one EVEX prefix and if present, it immediately precedes the opcode, and no other prefix is \
     allowed.
 
-    :ivar mm: the EVEX mm (compressed legacy escape) field. Identical to two low bits of VEX.m-mmmm field. Possible
+    :ivar mm: the EVEX mm (compressed legacy escape) field. Identical to two low bits of VEX.m-mmmm field. Possible \
     values are:
 
         0b01
@@ -631,8 +631,8 @@ class EVEX:
 
         None indicates that the bit is ignored.
 
-    :ivar LL: the EVEX.L'L bits. Specify either vector length for the operation, or explicit rounding control (in which
-    case operation is 512 bits wide). Possible values:
+    :ivar LL: the EVEX.L'L bits. Specify either vector length for the operation, or explicit rounding control \
+    (in which case operation is 512 bits wide). Possible values:
 
         None
             Indicates that the EVEX.L'L field is ignored.
@@ -647,9 +647,9 @@ class EVEX:
             512-bits wide operation.
 
         Reference to the last instruction operand
-            EVEX.L'L are interpreted as rounding control and set to the value specified by the operand. If the rounding
-            control operand is omitted, EVEX.L'L is set to 0b10 (embedded rounding control is only supported for 512-bit
-            wide operations).
+            EVEX.L'L are interpreted as rounding control and set to the value specified by the operand. If the \
+            rounding control operand is omitted, EVEX.L'L is set to 0b10 (embedded rounding control is only supported \
+            for 512-bit wide operations).
 
     :ivar RR: the EVEX.R'R bits. Always equals 0b00 in 32-bit x86 architecture.
 
@@ -660,14 +660,24 @@ class EVEX:
     :ivar vvvv: the EVEX vvvv field. Possible values are 0b0000 or a reference to one of the instruction operands.
 
         The value 0b0000 indicates that this field is not used. \
-        If vvvv is a reference to an instruction operand, the operand is of register type and EVEX.vvvv field specifies\
-        its number.
+        If vvvv is a reference to an instruction operand, the operand is of register type and EVEX.vvvv field \
+        encodes the register number.
 
     :ivar V: the EVEX V field. Always equals 0 in 32-bit x86 architecture.
 
-    :ivar b: the EVEX b (broadcast/rounding control/suppress all exceptions context) bit. Possible values are 0 or 1.
+    :ivar b: the EVEX b (broadcast/rounding control/suppress all exceptions context) bit. Possible values are 0 or a \
+    reference to one of the instruction operands.
 
-    :ivar aaa: the EVEX aaa (embedded opmask register specifier) field. Possible values are 0 or a reference to one of
+        The value 0 indicates that this field is not used. \
+        If b is a reference to an instruction operand, the operand can be a memory operand with optional broadcasting, \
+        an optional rounding specification, or an optional Suppress-all-exceptions specification. \
+        If b is a reference to a memory operand, EVEX.b encodes whether broadcasting is used to the operand. \
+        If b is a reference to a optional rounding control specification, EVEX.b encodes whether explicit rounding \
+        control is used. \
+        If b is a reference to a suppress-all-exceptions specification, EVEX.b encodes whether suppress-all-exceptions \
+        is enabled.
+
+    :ivar aaa: the EVEX aaa (embedded opmask register specifier) field. Possible values are 0 or a reference to one of \
     the instruction operands.
 
         The value 0 indicates that this field is not used. \
@@ -678,7 +688,7 @@ class EVEX:
 
         None indicates that the bit is ignored. \
         The value 0 indicates that the bit is not used. \
-        If aaa is a reference to an instruction operand, the operand supports zero-masking with register mask, and
+        If z is a reference to an instruction operand, the operand supports zero-masking with register mask, and \
         EVEX.z indicates whether zero-masking is used.
 
     :ivar disp8xN: the N value used for encoding compressed 8-bit displacement. Possible values are powers of 2 in \

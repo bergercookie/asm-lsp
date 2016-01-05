@@ -721,7 +721,7 @@ class EVEX:
     Encoding may have only one EVEX prefix and if present, it immediately precedes the opcode, and no other prefix is \
     allowed.
 
-    :ivar mm: the EVEX mm (compressed legacy escape) field. Identical to two low bits of VEX.m-mmmm field. Possible
+    :ivar mm: the EVEX mm (compressed legacy escape) field. Identical to two low bits of VEX.m-mmmm field. Possible \
     values are:
 
         0b01
@@ -751,8 +751,8 @@ class EVEX:
 
         None indicates that the bit is ignored.
 
-    :ivar LL: the EVEX.L'L bits. Specify either vector length for the operation, or explicit rounding control (in which
-    case operation is 512 bits wide). Possible values:
+    :ivar LL: the EVEX.L'L bits. Specify either vector length for the operation, or explicit rounding control \
+    (in which case operation is 512 bits wide). Possible values:
 
         None
             Indicates that the EVEX.L'L field is ignored.
@@ -771,12 +771,12 @@ class EVEX:
             control operand is omitted, EVEX.L'L is set to 0b10 (embedded rounding control is only supported for 512-bit
             wide operations).
 
-    :ivar RR: the EVEX.R'R bits. Possible values are None, 0, or a reference to an register-type instruction operand.
+    :ivar RR: the EVEX.R'R bits. Possible values are None, or a reference to an register-type instruction operand.
 
         None indicates that the field is ignored.
         The R' bit specifies bit 4 of the register number and the R bit specifies bit 3 of the register number.
 
-    :ivar B: the EVEX.B bit. Possible values are 0, 1, None, or a reference to one of the instruction operands.
+    :ivar B: the EVEX.B bit. Possible values are None, or a reference to one of the instruction operands.
 
         None indicates that this bit is ignored. \
         If R is a reference to an instruction operand, the operand can be of register or memory type. If the operand is\
@@ -784,7 +784,7 @@ class EVEX:
         ignored. If the operand is of memory type, the EVEX.R bit specifies the high bit (bit 3) of the base register \
         number, and the X instance variable refers to the same operand.
 
-    :ivar X: the EVEX.X bit. Possible values are 0, 1, None, or a reference to one of the instruction operands.
+    :ivar X: the EVEX.X bit. Possible values are None, or a reference to one of the instruction operands.
 
         The value None indicates that this bit is ignored. \
         If X is a reference to an instruction operand, the operand is of memory type and the EVEX.X bit specifies the \
@@ -793,16 +793,26 @@ class EVEX:
     :ivar vvvv: the EVEX vvvv field. Possible values are 0b0000 or a reference to one of the instruction operands.
 
         The value 0b0000 indicates that this field is not used. \
-        If vvvv is a reference to an instruction operand, the operand is of register type and EVEX.vvvv field specifies\
-        its number.
+        If vvvv is a reference to an instruction operand, the operand is of register type and EVEX.vvvv field \
+        specifies the register number.
 
     :ivar V: the EVEX V field. Possible values are 0, or a reference to one of the instruction operands.
 
         The value 0 indicates that this field is not used (EVEX.vvvv is not used or encodes a general-purpose register).
 
-    :ivar b: the EVEX b (broadcast/rounding control/suppress all exceptions context) bit. Possible values are 0 or 1.
+    :ivar b: the EVEX b (broadcast/rounding control/suppress all exceptions context) bit. Possible values are 0 or a \
+    reference to one of the instruction operands.
 
-    :ivar aaa: the EVEX aaa (embedded opmask register specifier) field. Possible values are 0 or a reference to one of
+        The value 0 indicates that this field is not used. \
+        If b is a reference to an instruction operand, the operand can be a memory operand with optional broadcasting, \
+        an optional rounding specification, or an optional Suppress-all-exceptions specification. \
+        If b is a reference to a memory operand, EVEX.b encodes whether broadcasting is used to the operand. \
+        If b is a reference to a optional rounding control specification, EVEX.b encodes whether explicit rounding \
+        control is used. \
+        If b is a reference to a suppress-all-exceptions specification, EVEX.b encodes whether suppress-all-exceptions \
+        is enabled.
+
+    :ivar aaa: the EVEX aaa (embedded opmask register specifier) field. Possible values are 0 or a reference to one of \
     the instruction operands.
 
         The value 0 indicates that this field is not used. \
@@ -813,7 +823,7 @@ class EVEX:
 
         None indicates that the bit is ignored. \
         The value 0 indicates that the bit is not used. \
-        If aaa is a reference to an instruction operand, the operand supports zero-masking with register mask, and
+        If z is a reference to an instruction operand, the operand supports zero-masking with register mask, and \
         EVEX.z indicates whether zero-masking is used.
 
     :ivar disp8xN: the N value used for encoding compressed 8-bit displacement. Possible values are powers of 2 in \
