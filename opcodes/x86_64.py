@@ -955,6 +955,17 @@ class Immediate:
 
 
 class RegisterByte:
+    """Byte that encodes a register in the low 4 bits and optionally encodes an immediate value in the high 4 bits.
+
+    :ivar register: a reference to an instruction operand of register type. The register number is encoded in the low \
+    4 bits of the byte (register number is in 0..15 for all instructions which use this encoding component).
+
+    :ivar payload: value of the high 4 bits of the byte. Can be None or a reference to an instruction operand of imm4 \
+    type.
+
+        None indicates that this high 4 bits are not used. \
+        The only instructions that use the payload are VPERMIL2PD and VPERMIL2PS from XOP instruction set.
+    """
     def __init__(self):
         self.register = None
         self.payload = None
