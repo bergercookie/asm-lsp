@@ -161,12 +161,18 @@ class Operand:
         "vm32z"
             A vector of memory addresses using VSIB with 32-bit indices in ZMM register.
 
+        "{sae}"
+            Suppress-all-exceptions modifier. This operand is optional and can be omitted.
+
+        "{er}"
+            Embedded rounding control. This operand is optional and can be omitted.
+
     :ivar is_input: indicates if the instruction reads the variable specified by this operand.
     :ivar is_output: indicates if the instruction writes the variable specified by this operand.
     :ivar extended_size: for immediate operands the size of the value in bytes after size-extension.
 
-        The extended size affects which operand values can be encoded. E.g. a signed imm8 operand 
-        would normally values in the [-128, 127] range. But if it is extended to 4 bytes, it can also
+        The extended size affects which operand values can be encoded. E.g. a signed imm8 operand \
+        would normally values in the [-128, 127] range. But if it is extended to 4 bytes, it can also \
         encode values in [2**32 - 128, 2**32 - 1] range.
     """
     def __init__(self, type):
@@ -436,7 +442,7 @@ class MVEX:
 
     :ivar RR: the MVEX.R'R bits. Possible values are None, or a reference to an register-type instruction operand.
 
-        None indicates that the field is ignored.
+        None indicates that the field is ignored. \
         The R' bit specifies bit 4 of the register number and the R bit specifies bit 3 of the register number.
 
     :ivar B: the MVEX.B bit. Possible values are None, or a reference to one of the instruction operands.
@@ -521,7 +527,7 @@ class Opcode:
     :ivar byte: operation code as a byte integer (0 <= `byte` <= 255)
     :ivar addend: None or a reference to an instruction operand.
 
-        If addend is a reference to an instruction operand, the operand is of register type and the three lowest bits
+        If addend is a reference to an instruction operand, the operand is of register type and the three lowest bits \
         of its number must be ORed with `byte` to produce the final opcode value.
     """
     def __init__(self, byte):

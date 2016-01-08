@@ -323,10 +323,10 @@ class Operand:
             register (k1-k7).
 
         "{sae}"
-            Suppress-all-exceptions modifier. Can be omitted.
+            Suppress-all-exceptions modifier. This operand is optional and can be omitted.
 
         "{er}"
-            Embedded rounding control. Can be omitted.
+            Embedded rounding control. This operand is optional and can be omitted.
 
     :ivar is_input: indicates if the instruction reads the variable specified by this operand.
     :ivar is_output: indicates if the instruction writes the variable specified by this operand.
