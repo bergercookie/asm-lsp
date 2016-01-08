@@ -8491,7 +8491,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="50"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -8501,9 +8501,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="50"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vaddnpd">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="50"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -8513,7 +8524,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="50"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -8523,9 +8534,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="50"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vaddnps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="50"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -8535,7 +8557,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="58"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -8545,9 +8567,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="58"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vaddpd">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="58"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -8557,7 +8590,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="58"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -8567,9 +8600,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="58"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vaddps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="58"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -8579,7 +8623,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="CC"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -8589,9 +8633,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="CC"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vaddsetsps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="CC"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -8614,7 +8669,7 @@
       <Operand type="m512" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="000"/>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="000" E="#2"/>
         <Opcode byte="03"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
         <Immediate size="1" value="#3"/>
@@ -8627,7 +8682,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="65"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -8637,7 +8692,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="65"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -8649,7 +8704,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="65"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -8659,7 +8714,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="65"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -8670,7 +8725,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Uf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="1A"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -8681,7 +8736,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Uf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="1B"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -8692,7 +8747,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Ui32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="5A"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -8703,7 +8758,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Ui64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="5B"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -8714,7 +8769,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Uf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="19"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -8725,7 +8780,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Uf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="18"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -8738,7 +8793,7 @@
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="C2"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
         <Immediate size="1" value="#3"/>
@@ -8750,9 +8805,22 @@
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="C2"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+        <Immediate size="1" value="#3"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vcmppd">
+      <Operand type="k{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="imm8"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#4" E="1"/>
+        <Opcode byte="C2"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
         <Immediate size="1" value="#3"/>
       </Encoding>
     </InstructionForm>
@@ -8764,7 +8832,7 @@
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="C2"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
         <Immediate size="1" value="#3"/>
@@ -8776,9 +8844,22 @@
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="C2"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+        <Immediate size="1" value="#3"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vcmpps">
+      <Operand type="k{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="imm8"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#4" E="1"/>
+        <Opcode byte="C2"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
         <Immediate size="1" value="#3"/>
       </Encoding>
     </InstructionForm>
@@ -8797,7 +8878,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="10" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="10" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="E6"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -8820,7 +8901,7 @@
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="CB"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -8833,7 +8914,7 @@
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="11" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="11" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="0"/>
         <Opcode byte="E6"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -8844,9 +8925,21 @@
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="11" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="11" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="E6"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
+        <Immediate size="1" value="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vcvtfxpntpd2dq">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="imm8"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0011" pp="11" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="E6"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -8857,7 +8950,7 @@
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="11" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="11" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="0"/>
         <Opcode byte="CA"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -8868,9 +8961,21 @@
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="11" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="11" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="CA"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
+        <Immediate size="1" value="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vcvtfxpntpd2udq">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="imm8"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0011" pp="11" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="CA"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -8881,7 +8986,7 @@
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="0"/>
         <Opcode byte="CB"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -8892,9 +8997,21 @@
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="CB"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
+        <Immediate size="1" value="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vcvtfxpntps2dq">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="imm8"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="CB"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -8905,7 +9022,7 @@
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="0"/>
         <Opcode byte="CA"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -8916,9 +9033,21 @@
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="CA"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
+        <Immediate size="1" value="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vcvtfxpntps2udq">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="imm8"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="CA"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -8940,7 +9069,7 @@
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="CA"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -8952,7 +9081,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="0"/>
         <Opcode byte="5A"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
@@ -8961,9 +9090,19 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="5A"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vcvtpd2ps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#2" E="1"/>
+        <Opcode byte="5A"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -8972,7 +9111,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="0"/>
         <Opcode byte="5A"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
@@ -8981,9 +9120,19 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="5A"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vcvtps2pd">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#2" E="1"/>
+        <Opcode byte="5A"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9001,7 +9150,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="10" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="10" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="7A"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -9021,7 +9170,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="m512" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000" E="#1"/>
         <Opcode byte="C8"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -9043,7 +9192,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="55"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -9065,7 +9214,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="55"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -9077,7 +9226,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="98"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9087,9 +9236,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="98"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfmadd132pd">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="98"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9099,7 +9259,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="98"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9109,9 +9269,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="98"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfmadd132ps">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="98"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9121,7 +9292,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="A8"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9131,9 +9302,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="A8"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfmadd213pd">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="A8"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9143,7 +9325,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="A8"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9153,9 +9335,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="A8"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfmadd213ps">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="A8"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9165,7 +9358,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="B8"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9175,9 +9368,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="B8"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfmadd231pd">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="B8"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9187,7 +9391,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="B8"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9197,9 +9401,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="B8"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfmadd231ps">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="B8"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9209,7 +9424,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="A4"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9219,9 +9434,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="A4"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfmadd233ps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="A4"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9231,7 +9457,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="9A"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9241,9 +9467,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="9A"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfmsub132pd">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="9A"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9253,7 +9490,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="9A"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9263,9 +9500,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="9A"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfmsub132ps">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="9A"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9275,7 +9523,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="AA"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9285,9 +9533,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="AA"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfmsub213pd">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="AA"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9297,7 +9556,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="AA"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9307,9 +9566,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="AA"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfmsub213ps">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="AA"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9319,7 +9589,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="BA"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9329,9 +9599,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="BA"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfmsub231pd">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="BA"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9341,7 +9622,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="BA"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9351,9 +9632,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="BA"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfmsub231ps">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="BA"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9363,7 +9655,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="9C"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9373,9 +9665,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="9C"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfnmadd132pd">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="9C"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9385,7 +9688,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="9C"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9395,9 +9698,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="9C"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfnmadd132ps">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="9C"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9407,7 +9721,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="AC"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9417,9 +9731,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="AC"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfnmadd213pd">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="AC"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9429,7 +9754,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="AC"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9439,9 +9764,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="AC"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfnmadd213ps">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="AC"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9451,7 +9787,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="BC"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9461,9 +9797,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="BC"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfnmadd231pd">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="BC"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9473,7 +9820,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="BC"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9483,9 +9830,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="BC"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfnmadd231ps">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="BC"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9495,7 +9853,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="9E"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9505,9 +9863,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="9E"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfnmsub132pd">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="9E"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9517,7 +9886,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="9E"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9527,9 +9896,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="9E"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfnmsub132ps">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="9E"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9539,7 +9919,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="AE"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9549,9 +9929,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="AE"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfnmsub213pd">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="AE"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9561,7 +9952,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="AE"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9571,9 +9962,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="AE"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfnmsub213ps">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="AE"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9583,7 +9985,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="BE"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9593,9 +9995,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="BE"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfnmsub231pd">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="BE"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9605,7 +10018,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="BE"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9615,9 +10028,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="BE"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vfnmsub231ps">
+      <Operand type="zmm{k}" input="true" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="BE"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9626,7 +10050,7 @@
       <Operand type="zmm{k}" input="true" output="true"/>
       <Operand type="Uf64(vm32z)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#1" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#1" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="92"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -9637,7 +10061,7 @@
       <Operand type="zmm{k}" input="true" output="true"/>
       <Operand type="Uf32(vm32z)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#1" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#1" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="92"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -9647,7 +10071,7 @@
     <InstructionForm gas-name="vgatherpf0dps">
       <Operand type="Uf32(vm32z){k}" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0" E="#0"/>
         <Opcode byte="C6"/>
         <ModRM mode="#0" reg="1" rm="#0"/>
       </Encoding>
@@ -9657,7 +10081,7 @@
     <InstructionForm gas-name="vgatherpf0hintdpd">
       <Operand type="Uf64(vm32z){k}" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0" E="#0"/>
         <Opcode byte="C6"/>
         <ModRM mode="#0" reg="0" rm="#0"/>
       </Encoding>
@@ -9667,7 +10091,7 @@
     <InstructionForm gas-name="vgatherpf0hintdps">
       <Operand type="Uf32(vm32z){k}" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0" E="#0"/>
         <Opcode byte="C6"/>
         <ModRM mode="#0" reg="0" rm="#0"/>
       </Encoding>
@@ -9677,7 +10101,7 @@
     <InstructionForm gas-name="vgatherpf1dps">
       <Operand type="Uf32(vm32z){k}" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0" E="#0"/>
         <Opcode byte="C6"/>
         <ModRM mode="#0" reg="2" rm="#0"/>
       </Encoding>
@@ -9688,7 +10112,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="0"/>
         <Opcode byte="42"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
@@ -9697,9 +10121,19 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="42"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vgetexppd">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#2" E="1"/>
+        <Opcode byte="42"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9708,7 +10142,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="0"/>
         <Opcode byte="42"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
@@ -9717,9 +10151,19 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="42"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vgetexpps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#2" E="1"/>
+        <Opcode byte="42"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9729,7 +10173,7 @@
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="0"/>
         <Opcode byte="26"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -9740,9 +10184,21 @@
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="26"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
+        <Immediate size="1" value="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vgetmantpd">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="imm8"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0011" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="26"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -9753,7 +10209,7 @@
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="0"/>
         <Opcode byte="26"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -9764,9 +10220,21 @@
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="26"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
+        <Immediate size="1" value="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vgetmantps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="imm8"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="26"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -9777,7 +10245,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="51"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9787,9 +10255,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="51"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vgmaxabsps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="51"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9799,7 +10278,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="53"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9809,9 +10288,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="53"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vgmaxpd">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="53"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9821,7 +10311,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="53"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9831,9 +10321,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="53"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vgmaxps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="53"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9843,7 +10344,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="52"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9853,9 +10354,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="52"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vgminpd">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="52"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9865,7 +10377,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="52"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -9875,9 +10387,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="52"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vgminps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="52"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -9886,7 +10409,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Ui32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="D4"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -9897,7 +10420,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Uf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="00" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="00" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="D5"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -9908,7 +10431,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Uf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="D5"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -9919,7 +10442,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Ui64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="00" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="00" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="D4"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -9930,7 +10453,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Ui32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="D0"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -9941,7 +10464,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Uf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="00" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="00" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="D1"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -9952,7 +10475,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Uf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="D1"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -9963,7 +10486,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Ui64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="00" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="00" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="D0"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -9983,7 +10506,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="m512" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000" E="#1"/>
         <Opcode byte="C9"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -9994,7 +10517,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Uf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="28"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -10003,7 +10526,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="0"/>
         <Opcode byte="28"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
@@ -10012,7 +10535,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Df64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="29"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10023,7 +10546,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Uf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="28"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -10032,7 +10555,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="0"/>
         <Opcode byte="28"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
@@ -10041,7 +10564,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Df32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="00" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="29"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10052,7 +10575,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Ui32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="6F"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -10070,7 +10593,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Di32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="7F"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10081,7 +10604,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Ui64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="6F"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -10099,7 +10622,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Di64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="7F"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10110,7 +10633,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Df64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="10" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="10" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="29"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10121,7 +10644,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Df32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="11" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="11" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="29"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10132,7 +10655,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Df64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="10" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="10" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="29"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10143,7 +10666,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Df32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="11" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="11" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="29"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10155,7 +10678,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="59"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -10165,9 +10688,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="59"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vmulpd">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="59"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -10177,7 +10711,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="59"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -10187,9 +10721,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="59"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vmulps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="59"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -10198,7 +10743,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Di32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="D4"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10209,7 +10754,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Df64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="D5"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10220,7 +10765,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Df32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="D5"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10231,7 +10776,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Di64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="D4"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10242,7 +10787,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Di32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="D0"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10253,7 +10798,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Df64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="D1"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10264,7 +10809,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Df32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="D1"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10275,7 +10820,7 @@
       <Operand type="m512{k}" input="false" output="true"/>
       <Operand type="Di64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="D0"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -10297,7 +10842,7 @@
       <Operand type="k" input="true" output="true"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="5C"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10319,7 +10864,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="FE"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10341,7 +10886,7 @@
       <Operand type="k" input="false" output="true"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="5D"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10363,7 +10908,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="CD"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10385,7 +10930,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="DB"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10407,7 +10952,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="DF"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10429,7 +10974,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="DF"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10451,7 +10996,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="DB"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10473,7 +11018,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="64"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10495,7 +11040,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="64"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10506,7 +11051,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Ui32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="58"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -10517,7 +11062,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="Ui64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="59"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -10542,7 +11087,7 @@
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="1F"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
         <Immediate size="1" value="#3"/>
@@ -10565,7 +11110,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="76"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10587,7 +11132,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="66"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10609,7 +11154,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="74"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10634,7 +11179,7 @@
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="1E"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
         <Immediate size="1" value="#3"/>
@@ -10657,7 +11202,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="m512" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="000"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="000" E="#2"/>
         <Opcode byte="36"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10680,7 +11225,7 @@
       <Operand type="m512" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000" E="#1"/>
         <Opcode byte="07"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -10692,7 +11237,7 @@
       <Operand type="zmm{k}" input="true" output="true"/>
       <Operand type="Ui32(vm32z)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#1" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#1" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="90"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -10703,7 +11248,7 @@
       <Operand type="zmm{k}" input="true" output="true"/>
       <Operand type="Ui64(vm32z)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#1" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#1" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="90"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -10725,7 +11270,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="B5"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10747,7 +11292,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="B4"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10769,7 +11314,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="3D"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10791,7 +11336,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="3F"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10813,7 +11358,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="39"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10835,7 +11380,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="3B"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10857,7 +11402,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="87"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10879,7 +11424,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="86"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10901,7 +11446,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="40"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10923,7 +11468,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="EB"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -10945,7 +11490,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="EB"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -11087,7 +11632,7 @@
       <Operand type="k" input="true" output="true"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="5E"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -11109,7 +11654,7 @@
       <Operand type="k" input="true" output="true"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="6E"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -11120,7 +11665,7 @@
       <Operand type="vm32z{k}" input="false" output="true"/>
       <Operand type="Di32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="A0"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -11131,7 +11676,7 @@
       <Operand type="vm32z{k}" input="false" output="true"/>
       <Operand type="Di64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="A0"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -11154,7 +11699,7 @@
       <Operand type="m512" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000" E="#1"/>
         <Opcode byte="70"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -11178,7 +11723,7 @@
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="#0" V="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="#0" V="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="72"/>
         <ModRM mode="#1" reg="6" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -11201,7 +11746,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="47"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -11224,7 +11769,7 @@
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="#0" V="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="#0" V="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="72"/>
         <ModRM mode="#1" reg="4" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -11247,7 +11792,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="46"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -11270,7 +11815,7 @@
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="#0" V="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="#0" V="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="72"/>
         <ModRM mode="#1" reg="2" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -11293,7 +11838,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="45"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -11315,7 +11860,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="FA"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -11337,7 +11882,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="6C"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -11359,7 +11904,7 @@
       <Operand type="k" input="false" output="true"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="6F"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -11381,7 +11926,7 @@
       <Operand type="k" input="false" output="true"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="5F"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -11403,7 +11948,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="27"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -11425,7 +11970,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="EF"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -11447,7 +11992,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="EF"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -11467,7 +12012,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="m512" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000" E="#1"/>
         <Opcode byte="CA"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -11479,7 +12024,7 @@
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="0"/>
         <Opcode byte="52"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -11490,9 +12035,21 @@
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="52"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
+        <Immediate size="1" value="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vrndfxpntpd">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="imm8"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0011" pp="01" W="1" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="52"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -11503,7 +12060,7 @@
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="0"/>
         <Opcode byte="52"/>
         <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
@@ -11514,9 +12071,21 @@
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Operand type="imm8"/>
       <Encoding>
-        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#1" E="#1"/>
         <Opcode byte="52"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
+        <Immediate size="1" value="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vrndfxpntps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="imm8"/>
+      <Operand type="{sae}"/>
+      <Encoding>
+        <MVEX mmmm="0011" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="52"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
         <Immediate size="1" value="#2"/>
       </Encoding>
     </InstructionForm>
@@ -11535,7 +12104,7 @@
       <Operand type="zmm{k}" input="false" output="true"/>
       <Operand type="m512" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="0" RR="#0" B="#1" X="#1" aaa="#0" SSS="000" E="#1"/>
         <Opcode byte="CB"/>
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
@@ -11557,7 +12126,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Si32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="84"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
@@ -11568,7 +12137,7 @@
       <Operand type="vm32z{k}" input="false" output="true"/>
       <Operand type="Df64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="A2"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -11579,7 +12148,7 @@
       <Operand type="vm32z{k}" input="false" output="true"/>
       <Operand type="Df32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" RR="#1" B="#0" X="#0" aaa="#0" SSS="#1" E="#0"/>
         <Opcode byte="A2"/>
         <ModRM mode="#0" reg="#1" rm="#0"/>
       </Encoding>
@@ -11589,7 +12158,7 @@
     <InstructionForm gas-name="vscatterpf0dps">
       <Operand type="Uf32(vm32z){k}" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0" E="#0"/>
         <Opcode byte="C6"/>
         <ModRM mode="#0" reg="5" rm="#0"/>
       </Encoding>
@@ -11599,7 +12168,7 @@
     <InstructionForm gas-name="vscatterpf0hintdpd">
       <Operand type="Uf64(vm32z){k}" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0" E="#0"/>
         <Opcode byte="C6"/>
         <ModRM mode="#0" reg="4" rm="#0"/>
       </Encoding>
@@ -11609,7 +12178,7 @@
     <InstructionForm gas-name="vscatterpf0hintdps">
       <Operand type="Uf32(vm32z){k}" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0" E="#0"/>
         <Opcode byte="C6"/>
         <ModRM mode="#0" reg="4" rm="#0"/>
       </Encoding>
@@ -11619,7 +12188,7 @@
     <InstructionForm gas-name="vscatterpf1dps">
       <Operand type="Uf32(vm32z){k}" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="0000" V="#0" B="#0" X="#0" aaa="#0" SSS="#0" E="#0"/>
         <Opcode byte="C6"/>
         <ModRM mode="#0" reg="6" rm="#0"/>
       </Encoding>
@@ -11631,7 +12200,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="5C"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -11641,9 +12210,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="5C"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vsubpd">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0001" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="5C"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -11653,7 +12233,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="5C"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -11663,9 +12243,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="5C"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vsubps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0001" pp="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="5C"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -11675,7 +12266,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="6D"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -11685,9 +12276,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf64(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="6D"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vsubrpd">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="1" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="6D"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
@@ -11697,7 +12299,7 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(zmm)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="0"/>
         <Opcode byte="6D"/>
         <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
@@ -11707,9 +12309,20 @@
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="Sf32(m512)" input="true" output="false"/>
       <Encoding>
-        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2"/>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#2" E="#2"/>
         <Opcode byte="6D"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vsubrps">
+      <Operand type="zmm{k}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="{er}"/>
+      <Encoding>
+        <MVEX mmmm="0010" pp="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" aaa="#0" SSS="#3" E="1"/>
+        <Opcode byte="6D"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
