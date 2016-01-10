@@ -125,6 +125,18 @@ class Operand:
         "zmm{k}"
             A 512-bit ZMM SIMD register (zmm0-zmm31), optionally masked by a mask register (k1-k7).
 
+        "S(zmm)"
+            A 512-bit ZMM SIMD register (zmm0-zmm31), optionally with an elements swizzle ({cdab}, {badc}, \
+            {dacb}, {aaaa}, {bbbb}, {cccc}, {dddd}).
+
+        "Cf32(zmm)"
+            A 512-bit ZMM SIMD register (zmm0-zmm31), optionally with a single-precision store down-conversion \
+            ({float16}, {uint8}, {sint8}, {uint16}, {sint16}).
+
+        "Ci32(zmm)"
+            A 512-bit ZMM SIMD register (zmm0-zmm31), optionally with a 32-bit integer store down-conversion \
+            ({uint8}, {sint8}, {uint16}, {sint16}).
+
         "k"
             A mask register (k0-k7).
 
@@ -158,14 +170,54 @@ class Operand:
         "m512{k}"
             A 512-bit memory operand, optionally masked by a mask register (k1-k7).
 
+        "BCf32(m512)"
+            A 512-bit memory operand, optionally with a single-precision memory broadcast/conversion ({1to16}, \
+            {4to16}, {float16}, {uint8}, {uint16}, {sint16})
+
+        "BCi32(m512)"
+            A 512-bit memory operand, optionally with a 32-bit integer memory broadcast/conversion ({1to16}, {4to16}, \
+            {uint8}, {sint8}, {uint16}, {sint16})
+
+        "B64(m512)"
+            A 512-bit memory operand, optionally with a 64-bit elements broadcast ({1to8}, {4to8})
+
+        "Cf32(m512)"
+            A 512-bit memory operand, optionally with a single-precision memory up-conversion ({float16}, \
+            {uint8}, {sint8}, {uint16}, {sint16})
+
+        "Ci32(m512)"
+            A 512-bit memory operand, optionally with a 32-bit integer memory up-conversion ({uint8}, {sint8}, \
+            {uint16}, {sint16})
+
         "vm32z"
             A vector of memory addresses using VSIB with 32-bit indices in ZMM register.
+
+        "vm32z{k}"
+            A vector of memory addresses using VSIB with 32-bit indices in ZMM register masked by a mask register \
+            (k1-k7).
+
+        "Cf32(vm32z)"
+            A vector of memory addresses using VSIB with 32-bit indices in ZMM register, optionally with a \
+            single-precision memory up-conversion ({float16}, {uint8}, {sint8}, {uint16}, {sint16}).
+
+        "Ci32(vm32z)"
+            A vector of memory addresses using VSIB with 32-bit indices in ZMM register, optionally with a 32-bit \
+            integer memory up-conversion ({uint8}, {sint8}, {uint16}, {sint16}).
+
+        "Cf32(vm32z){k}"
+            A vector of memory addresses using VSIB with 32-bit indices in ZMM register masked by a mask register, \
+            optionally with a single-precision memory up-conversion ({float16}, {uint8}, {sint8}, {uint16}, {sint16}).
 
         "{sae}"
             Suppress-all-exceptions modifier. This operand is optional and can be omitted.
 
         "{er}"
             Embedded rounding control. This operand is optional and can be omitted.
+
+    :ivar allow_conversion: for a memory operand with BCf32/BCi32 primitive indicates if memory conversion primitive \
+    can be used for the operand. For all other types of operands this variable is meaningless, and its value is None.
+    :ivar allow_1to16: for a memory operand with BCf32/BCi32 primitive indicates if {1to16} primitive can be used for \
+    the operand. For all other types of operands this variable is meaningless, and its value is None.
 
     :ivar is_input: indicates if the instruction reads the variable specified by this operand.
     :ivar is_output: indicates if the instruction writes the variable specified by this operand.
@@ -177,9 +229,15 @@ class Operand:
     """
     def __init__(self, type):
         self.type = type
+        self.allow_1to16 = None
+        self.allow_conversion = None
         self.is_input = False
         self.is_output = False
         self.extended_size = None
+
+        if self.type.startswith("S") and self.is_memory:
+            self.allow_1to16 = True
+            self.allow_conversion = True
 
     def __str__(self):
         """Return string representation of the operand type and its read/write attributes"""
@@ -201,15 +259,17 @@ class Operand:
     @property
     def is_register(self):
         """Indicates whether this operand specifies a register"""
-        return self.type.replace("{k}{z}", "").replace("{k}", "") \
-            in ["al", "cl", "ax", "eax", "rax", "xmm0", "r8", "r16", "r32", "r64", "r8l", "r16l", "r32l", "mm", "xmm", "ymm", "zmm", "k"]
+        return self.type \
+            in ["al", "cl", "ax", "eax", "rax", "r8", "r16", "r32", "r64", "r8l", "r16l", "r32l",
+                "zmm", "zmm{k}", "S(zmm)", "Cf32(zmm)", "Ci32(zmm)", "k", "k{k}"]
 
     @property
     def is_memory(self):
         """Indicates whether this operand specifies a memory location"""
-        return self.type.replace("{k}", "") \
-            in ["m", "m8", "m16", "m32", "m64", "m80", "m128", "m512",
-                "vm32z"]
+        return self.type \
+            in ["m", "m8", "m16", "m32", "m64", "m80", "m128",
+                "m512", "m512{k}", "BCf32(m512)", "BCi32(m512)", "B64(m512)", "Cf32(m512)", "Ci32(m512)",
+                "vm32z", "vm32z{k}", "Cf32(vm32z)", "Ci32(vm32z)", "Cf32(vm32z){k}"]
 
     @property
     def is_immediate(self):
@@ -469,12 +529,18 @@ class MVEX:
 
         The value 0 indicates that this field is not used (MVEX.vvvv is not used or encodes a general-purpose register).
 
-    :ivar SSS: the MVEX SSS (swizzle/broadcast/up-convert/down-convert) field. Possible values are 0 or a \
-    reference to one of the instruction operands.
+    :ivar SSS: the MVEX SSS (swizzle/broadcast/up-convert/down-convert) field. Possible values are 0, or a reference \
+    to one of the instruction operands.
 
         The value 0 indicates that this field is not used. \
-        If SSS is a reference to an instruction operand, the operand type includes an swizzle, broadcast, \
-        up-conversion, or down-conversion option, and MVEX.SSS encodes the swizzle/broadcast/conversion modifier.
+        If SSS is a reference to an instruction operand, the operand type either includes a swizzle, broadcast, or \
+        conversion primitive, or the operand type is {er} (static rounding control), or the operand type is {sae}. \
+        If SSS is a reference to a memory/register operand, it encodes the primitive applied to the operand. \
+        If SSS is a reference to a static rounding control operand, it the high bit of MVEX.SSS encodes \
+        suppress-all-exceptions mode (1 = enabled, 0 = disabled) and the two low bits encode rounding mode (round \
+        to nearest even = 0b00, round down = 0b01, round up = 0b10, round toward zero = 0b11) \
+        If SSS is a reference to a suppress-all-exceptions operand, the high bit of MVEX.SSS encodes the \
+        suppress-all-exceptions mode (1 = enabled, 0 = disabled) and the two low bits are ignored.
 
     :ivar aaa: the MVEX aaa (embedded opmask register specifier) field. Possible values are 0 or a reference to one of \
     the instruction operands.
@@ -482,6 +548,15 @@ class MVEX:
         The value 0 indicates that this field is not used. \
         If aaa is a reference to an instruction operand, the operand supports register mask, and MVEX.aaa encodes the \
         mask register.
+
+    :ivar E: the MVEX E (eviction hint/MVEX.SSS override) bit. Possible values are 0, 1, or a reference to an \
+    instruction operand.
+
+        The value 0 indicates that MVEX.SSS field specifies swizzle primitive for a register operand. \
+        The value 1 indicates that MVEX.SSS field specifies static rounding mode and/or suppress-all-exceptions mode \
+        for the instruction. \
+        If E is a reference to an instruction operand, the operand is of memory type, and MVEX.E encodes whether \
+        eviction hint applies to the operand (1 = eviction hint set, 0 = eviction hint not set).
     """
 
     def __init__(self):
@@ -680,6 +755,12 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                 _parse_boolean(xml_instruction_form.attrib.get("cancelling-inputs", "false"))
             for xml_operand in xml_instruction_form.findall("Operand"):
                 operand = Operand(xml_operand.attrib["type"])
+                allow_conversion = _parse_boolean(xml_operand.attrib.get("allow-conversion"))
+                if allow_conversion is not None:
+                    operand.allow_conversion = allow_conversion
+                allow_1to16 = _parse_boolean(xml_operand.attrib.get("allow-1to16"))
+                if allow_1to16 is not None:
+                    operand.allow_1to16 = allow_1to16
                 operand.is_input = _parse_boolean(xml_operand.attrib.get("input", "false"))
                 operand.is_output = _parse_boolean(xml_operand.attrib.get("output", "false"))
                 operand.extended_size = _parse_value(xml_operand.attrib.get("extended-size"), [], 10)

@@ -22,18 +22,9 @@
 			<xs:enumeration value="r64" />
 			<xs:enumeration value="zmm" />
 			<xs:enumeration value="zmm{k}" />
-			<xs:enumeration value="Sf32(zmm)" />
-			<xs:enumeration value="Sf64(zmm)" />
-			<xs:enumeration value="Si32(zmm)" />
-			<xs:enumeration value="Si64(zmm)" />
-			<xs:enumeration value="Df32(zmm)" />
-			<xs:enumeration value="Df64(zmm)" />
-			<xs:enumeration value="Di32(zmm)" />
-			<xs:enumeration value="Di64(zmm)" />
-			<xs:enumeration value="Uf32(zmm)" />
-			<xs:enumeration value="Uf64(zmm)" />
-			<xs:enumeration value="Ui32(zmm)" />
-			<xs:enumeration value="Ui64(zmm)" />
+			<xs:enumeration value="S(zmm)" />
+			<xs:enumeration value="Cf32(zmm)" />
+			<xs:enumeration value="Ci32(zmm)" />
 			<xs:enumeration value="k" />
 			<xs:enumeration value="k{k}" />
 			<xs:enumeration value="moffs32" />
@@ -46,23 +37,20 @@
 			<xs:enumeration value="m128" />
 			<xs:enumeration value="m512" />
 			<xs:enumeration value="m512{k}" />
-			<xs:enumeration value="Sf32(m512)" />
-			<xs:enumeration value="Sf64(m512)" />
-			<xs:enumeration value="Si32(m512)" />
-			<xs:enumeration value="Si64(m512)" />
-			<xs:enumeration value="Uf32(m512)" />
-			<xs:enumeration value="Uf64(m512)" />
-			<xs:enumeration value="Ui32(m512)" />
-			<xs:enumeration value="Ui64(m512)" />
-			<xs:enumeration value="Uf32(vm32z)" />
-			<xs:enumeration value="Uf64(vm32z)" />
-			<xs:enumeration value="Ui32(vm32z)" />
-			<xs:enumeration value="Ui64(vm32z)" />
+			<xs:enumeration value="BCf32(m512)" />
+			<xs:enumeration value="BCi32(m512)" />
+			<xs:enumeration value="B64(m512)" />
+			<xs:enumeration value="Cf32(m512)" />
+			<xs:enumeration value="Ci32(m512)" />
+			<xs:enumeration value="vm32z" />
 			<xs:enumeration value="vm32z{k}" />
-			<xs:enumeration value="Uf32(vm32z){k}" />
-			<xs:enumeration value="Uf64(vm32z){k}" />
+			<xs:enumeration value="Cf32(vm32z)" />
+			<xs:enumeration value="Ci32(vm32z)" />
+			<xs:enumeration value="Cf32(vm32z){k}" />
 			<xs:enumeration value="rel8" />
 			<xs:enumeration value="rel32" />
+			<xs:enumeration value="{er}" />
+			<xs:enumeration value="{sae}" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="ExtendedSize">
@@ -232,12 +220,23 @@
 			<xs:enumeration value="#0" />
 			<xs:enumeration value="#1" />
 			<xs:enumeration value="#2" />
+			<xs:enumeration value="#3" />
+			<xs:enumeration value="#4" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="MVEX.aaa">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="000" />
 			<xs:enumeration value="#0" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MVEX.E">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0" />
+			<xs:enumeration value="1" />
+			<xs:enumeration value="#0" />
+			<xs:enumeration value="#1" />
+			<xs:enumeration value="#2" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="Opcode.byte">
@@ -312,6 +311,8 @@
 										<xs:element name="Operand" minOccurs="0" maxOccurs="unbounded">
 											<xs:complexType>
 												<xs:attribute name="type" type="OperandType" use="required" />
+												<xs:attribute name="allow-1to16" type="xs:boolean" default="true" />
+												<xs:attribute name="allow-conversion" type="xs:boolean" default="true" />
 												<xs:attribute name="input" type="xs:boolean" />
 												<xs:attribute name="output" type="xs:boolean" />
 												<xs:attribute name="extended-size" type="ExtendedSize" />
@@ -366,6 +367,7 @@
 															<xs:attribute name="X" type="MVEX.X" />
 															<xs:attribute name="SSS" type="MVEX.SSS" use="required" />
 															<xs:attribute name="aaa" type="MVEX.aaa" use="required" />
+															<xs:attribute name="E" type="MVEX.E" />
 														</xs:complexType>
 													</xs:element>
 													<xs:element name="Opcode" maxOccurs="2">
