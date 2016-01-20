@@ -557,6 +557,40 @@ class MVEX:
         for the instruction. \
         If E is a reference to an instruction operand, the operand is of memory type, and MVEX.E encodes whether \
         eviction hint applies to the operand (1 = eviction hint set, 0 = eviction hint not set).
+
+    :ivar disp8xN: the N value used for encoding compressed 8-bit displacement of memory operands when no broadcast or \
+    conversion is specified. Possible values are powers of 2 in [4, 64] range or None.
+
+        None indicates that this instruction form does not use displacement (the form has no memory operands).
+
+        When broadcast or conversion is specified, N is decreased by the following factors:
+
+            {1to16}
+                N is decreased by 16
+
+            {4to16}
+                N is decreased by 4
+
+            {1to8}
+                N is decreased by 8
+
+            {4to8}
+                N is decreased by 2
+
+            {float16}
+                N is decreased by 2
+
+            {uint16}
+                N is decreased by 2
+
+            {sint16}
+                N is decreased by 2
+
+            {uint8}
+                N is decreased by 4
+
+            {sint8}
+                N is decreased by 4
     """
 
     def __init__(self):
