@@ -924,7 +924,7 @@ def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(_
                     instruction_form.implicit_inputs.add(xml_implicit_operand.attrib["id"])
                 if _bool(xml_implicit_operand.attrib["output"]):
                     instruction_form.implicit_outputs.add(xml_implicit_operand.attrib["id"])
-            for xml_isa_extension in xml_instruction_form.findall("Extension"):
+            for xml_isa_extension in xml_instruction_form.findall("ISA"):
                 assert "id" in xml_isa_extension.attrib
                 isa_extension = ISAExtension(xml_isa_extension.attrib["id"])
                 instruction_form.isa_extensions.append(isa_extension)
