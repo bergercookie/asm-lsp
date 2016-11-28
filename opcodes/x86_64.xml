@@ -10543,7 +10543,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="MOVSX" summary="Move with Sign-Extension">
-    <InstructionForm gas-name="movsbw" nacl-version="33">
+    <InstructionForm gas-name="movsbw" go-name="MOVBWSX" nacl-version="33">
       <Operand type="r16" input="false" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
@@ -10554,7 +10554,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movsbw" nacl-version="33">
+    <InstructionForm gas-name="movsbw" go-name="MOVBWSX" nacl-version="33">
       <Operand type="r16" input="false" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
@@ -10565,7 +10565,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movsbl" nacl-version="33" nacl-zero-extends-outputs="true">
+    <InstructionForm gas-name="movsbl" go-name="MOVBLSX" nacl-version="33" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
@@ -10575,7 +10575,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movswl" nacl-version="33" nacl-zero-extends-outputs="true">
+    <InstructionForm gas-name="movswl" go-name="MOVWLSX" nacl-version="33" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
@@ -10585,7 +10585,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movsbl" nacl-version="33" nacl-zero-extends-outputs="true">
+    <InstructionForm gas-name="movsbl" go-name="MOVBLSX" nacl-version="33" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
@@ -10595,7 +10595,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movswl" nacl-version="33" nacl-zero-extends-outputs="true">
+    <InstructionForm gas-name="movswl" go-name="MOVWLSX" nacl-version="33" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
@@ -10605,7 +10605,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movsbq" nacl-version="33">
+    <InstructionForm gas-name="movsbq" go-name="MOVBQSX" nacl-version="33">
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
@@ -10615,7 +10615,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movswq" nacl-version="33">
+    <InstructionForm gas-name="movswq" go-name="MOVWQSX" nacl-version="33">
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
@@ -10625,7 +10625,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movsbq" nacl-version="33">
+    <InstructionForm gas-name="movsbq" go-name="MOVBQSX" nacl-version="33">
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
@@ -10635,7 +10635,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movswq" nacl-version="33">
+    <InstructionForm gas-name="movswq" go-name="MOVWQSX" nacl-version="33">
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
@@ -10647,7 +10647,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="MOVSXD" summary="Move Doubleword to Quadword with Sign-Extension">
-    <InstructionForm gas-name="movslq" nacl-version="33">
+    <InstructionForm gas-name="movslq" go-name="MOVLQSX" nacl-version="33">
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r32" input="true" output="false"/>
       <Encoding>
@@ -10656,7 +10656,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movslq" nacl-version="33">
+    <InstructionForm gas-name="movslq" go-name="MOVLQSX" nacl-version="33">
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m32" input="true" output="false"/>
       <Encoding>
@@ -10753,7 +10753,7 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="MOVZX" summary="Move with Zero-Extend">
-    <InstructionForm gas-name="movzbw" nacl-version="33">
+    <InstructionForm gas-name="movzbw" go-name="MOVBWZX" nacl-version="33">
       <Operand type="r16" input="false" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
@@ -10764,7 +10764,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movzbw" nacl-version="33">
+    <InstructionForm gas-name="movzbw" go-name="MOVBWZX" nacl-version="33">
       <Operand type="r16" input="false" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
@@ -10775,7 +10775,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movzbl" nacl-version="33" nacl-zero-extends-outputs="true">
+    <InstructionForm gas-name="movzbl" go-name="MOVBLZX" nacl-version="33" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
@@ -10785,7 +10785,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movzwl" nacl-version="33" nacl-zero-extends-outputs="true">
+    <InstructionForm gas-name="movzwl" go-name="MOVWLZX" nacl-version="33" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
@@ -10795,7 +10795,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movzbl" nacl-version="33" nacl-zero-extends-outputs="true">
+    <InstructionForm gas-name="movzbl" go-name="MOVBLZX" nacl-version="33" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
@@ -10805,7 +10805,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movzwl" nacl-version="33" nacl-zero-extends-outputs="true">
+    <InstructionForm gas-name="movzwl" go-name="MOVWLZX" nacl-version="33" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
@@ -10815,7 +10815,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movzbq" nacl-version="33">
+    <InstructionForm gas-name="movzbq" go-name="MOVBQZX" nacl-version="33">
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r8" input="true" output="false"/>
       <Encoding>
@@ -10825,7 +10825,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movzwq" nacl-version="33">
+    <InstructionForm gas-name="movzwq" go-name="MOVWQZX" nacl-version="33">
       <Operand type="r64" input="false" output="true"/>
       <Operand type="r16" input="true" output="false"/>
       <Encoding>
@@ -10835,7 +10835,7 @@
         <ModRM mode="11" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movzbq" nacl-version="33">
+    <InstructionForm gas-name="movzbq" go-name="MOVBQZX" nacl-version="33">
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
@@ -10845,7 +10845,7 @@
         <ModRM mode="#1" reg="#0" rm="#1"/>
       </Encoding>
     </InstructionForm>
-    <InstructionForm gas-name="movzwq" nacl-version="33">
+    <InstructionForm gas-name="movzwq" go-name="MOVWQZX" nacl-version="33">
       <Operand type="r64" input="false" output="true"/>
       <Operand type="m16" input="true" output="false"/>
       <Encoding>
