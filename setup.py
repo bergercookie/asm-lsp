@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from opcodes import __version__, __author__, __email__
-from distutils.core import setup
+from setuptools import setup
 
 
 def read_text_file(path):
@@ -21,6 +21,7 @@ setup(
     packages=["opcodes"],
     package_data={"opcodes": ["x86.xml", "x86_64.xml", "k1om.xml"]},
     keywords=["assembly", "assembler", "asm", "opcodes", "x86", "x86-64", "isa", "cpu"],
+    install_requires=["setuptools"],
     requires=[],
     classifiers=[
         "Development Status :: 4 - Beta",

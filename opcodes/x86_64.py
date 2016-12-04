@@ -1,4 +1,5 @@
 from __future__ import print_function
+import pkg_resources
 import xml.etree.ElementTree as ET
 import os
 
@@ -1025,12 +1026,17 @@ def _parse_value(value, operands, base=None):
             return int(value, base)
 
 
-def read_instruction_set(filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), "x86_64.xml")):
+def read_instruction_set(filename=None):
     """Reads instruction set data from an XML file and returns a list of :class:`Instruction` objects
 
     :param filename: path to an XML file with instruction set data
     """
-    xml_tree = ET.parse(filename)
+    if filename is None:
+        data = pkg_resources.resource_stream("opcodes", "x86_64.xml")
+        xml_tree = ET.parse(data)
+    else:
+        xml_tree = ET.parse(filename)
+
     xml_instruction_set = xml_tree.getroot()
     assert xml_instruction_set.tag == "InstructionSet"
     assert xml_instruction_set.attrib["name"] == "x86-64"
