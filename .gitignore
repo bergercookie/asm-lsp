@@ -9,6 +9,7 @@ doc/
 
 # Generated distributions
 dist/
+opcodes.egg-info
 MANIFEST
 
 # Raw inputs
