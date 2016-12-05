@@ -1,7 +1,6 @@
 from __future__ import print_function
 import pkg_resources
 import xml.etree.ElementTree as ET
-import os
 
 
 class Instruction:
