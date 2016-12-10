@@ -22179,6 +22179,16 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
+  <Instruction name="SYSCALL" summary="Fast System Call">
+    <InstructionForm gas-name="syscall" go-name="SYSCALL">
+      <ImplicitOperand id="r11" input="false" output="true"/>
+      <ImplicitOperand id="rcx" input="false" output="true"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="05"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="T1MSKC" summary="Inverse Mask From Trailing Ones">
     <InstructionForm gas-name="t1mskc">
       <ISA id="TBM"/>

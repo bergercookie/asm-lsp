@@ -8245,6 +8245,16 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
+  <Instruction name="SYSCALL" summary="Fast System Call">
+    <InstructionForm gas-name="syscall">
+      <ImplicitOperand id="r11" input="false" output="true"/>
+      <ImplicitOperand id="rcx" input="false" output="true"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="05"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="TEST" summary="Logical Compare">
     <InstructionForm gas-name="testb">
       <Operand type="al" input="true" output="false"/>

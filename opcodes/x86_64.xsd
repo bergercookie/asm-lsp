@@ -99,6 +99,7 @@
 			<xs:enumeration value="rdx" />
 			<xs:enumeration value="rsi" />
 			<xs:enumeration value="rdi" />
+			<xs:enumeration value="r11" />
 			<xs:enumeration value="xmm0" />
 		</xs:restriction>
 	</xs:simpleType>
