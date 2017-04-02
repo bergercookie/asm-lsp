@@ -433,6 +433,7 @@
 			<xs:enumeration value="ADX" />
 			<xs:enumeration value="CLFLUSH" />
 			<xs:enumeration value="CLFLUSHOPT" />
+			<xs:enumeration value="CLWB" />
 			<xs:enumeration value="CLZERO" />
 			<xs:enumeration value="PREFETCH" />
 			<xs:enumeration value="PREFETCHW" />

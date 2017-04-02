@@ -414,6 +414,7 @@ class ISAExtension:
         - "RDSEED"      := The `RDSEED` instruction.
         - "CLFLUSH"     := The `CLFLUSH` instruction.
         - "CLFLUSHOPT"  := The `CLFLUSHOPT` instruction.
+        - "CLWB"        := The `CLWB` instruction.
         - "CLZERO"      := The `CLZERO` instruction.
         - "PREFETCH"    := The `PREFETCH` instruction (3dnow! Prefetch).
         - "PREFETCHW"   := The `PREFETCHW` instruction (3dnow! Prefetch/Intel PRFCHW).
