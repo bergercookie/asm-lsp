@@ -378,6 +378,7 @@
 			<xs:enumeration value="PREFETCHW" />
 			<xs:enumeration value="PREFETCHWT1" />
 			<xs:enumeration value="MONITOR" />
+			<xs:enumeration value="MONITORX" />
 			<xs:enumeration value="AVX512F" />
 			<xs:enumeration value="AVX512BW" />
 			<xs:enumeration value="AVX512DQ" />

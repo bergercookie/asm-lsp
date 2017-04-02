@@ -445,6 +445,7 @@ class ISAExtension:
         - "PREFETCHW"   := The `PREFETCHW` instruction (3dnow! Prefetch/Intel PRFCHW).
         - "PREFETCHWT1" := The `PREFETCHWT1` instruction.
         - "MONITOR"     := The `MONITOR` and `MWAIT` instructions.
+        - "MONITORX"    := The `MONITORX` and `MWAITX` instructions.
         - "CMOV"        := Conditional MOVe instructions.
         - "MMX"         := MultiMedia eXtension.
         - "MMX+"        := AMD MMX+ extension / Integer SSE (Intel).

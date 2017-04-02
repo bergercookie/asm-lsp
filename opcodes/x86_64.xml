@@ -9308,6 +9308,19 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
+  <Instruction name="MONITORX" summary="Monitor a Linear Address Range with Timeout">
+    <InstructionForm gas-name="monitorx">
+      <ISA id="MONITORX"/>
+      <ImplicitOperand id="rax" input="true" output="false"/>
+      <ImplicitOperand id="ecx" input="true" output="false"/>
+      <ImplicitOperand id="edx" input="true" output="false"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="01"/>
+        <Opcode byte="FA"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="MOV" summary="Move">
     <InstructionForm gas-name="movb" go-name="MOVB" nacl-version="33">
       <Operand type="r8" input="false" output="true"/>
@@ -11146,6 +11159,19 @@
         <Opcode byte="0F"/>
         <Opcode byte="01"/>
         <Opcode byte="C9"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="MWAITX" summary="Monitor Wait with Timeout">
+    <InstructionForm gas-name="mwaitx">
+      <ISA id="MONITORX"/>
+      <ImplicitOperand id="eax" input="true" output="false"/>
+      <ImplicitOperand id="ebx" input="true" output="false"/>
+      <ImplicitOperand id="ecx" input="true" output="false"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="01"/>
+        <Opcode byte="FB"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
