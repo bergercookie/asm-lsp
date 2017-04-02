@@ -7071,6 +7071,19 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
+  <Instruction name="MONITOR" summary="Monitor a Linear Address Range">
+    <InstructionForm gas-name="monitor">
+      <ISA id="MONITOR"/>
+      <ImplicitOperand id="eax" input="true" output="false"/>
+      <ImplicitOperand id="ecx" input="true" output="false"/>
+      <ImplicitOperand id="edx" input="true" output="false"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="01"/>
+        <Opcode byte="C8"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="MOV" summary="Move">
     <InstructionForm gas-name="movb" go-name="MOVB">
       <Operand type="r8" input="false" output="true"/>
@@ -8438,6 +8451,18 @@
         <VEX type="VEX" W="0" L="0" m-mmmm="00010" pp="11" R="0" X="0" B="0" vvvv="#1"/>
         <Opcode byte="F6"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="MWAIT" summary="Monitor Wait">
+    <InstructionForm gas-name="mwait">
+      <ISA id="MONITOR"/>
+      <ImplicitOperand id="eax" input="true" output="false"/>
+      <ImplicitOperand id="ecx" input="true" output="false"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="01"/>
+        <Opcode byte="C9"/>
       </Encoding>
     </InstructionForm>
   </Instruction>
