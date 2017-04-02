@@ -2942,6 +2942,17 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
+  <Instruction name="CLZERO" summary="Zero-out 64-bit Cache Line">
+    <InstructionForm gas-name="clzero">
+      <ISA id="CLZERO"/>
+      <ImplicitOperand id="rax" input="true" output="false"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="01"/>
+        <Opcode byte="FC"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="CMC" summary="Complement Carry Flag">
     <InstructionForm gas-name="cmc" go-name="CMC" nacl-version="33">
       <Encoding>
