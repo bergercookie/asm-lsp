@@ -374,6 +374,8 @@
 			<xs:enumeration value="BMI2" />
 			<xs:enumeration value="TBM" />
 			<xs:enumeration value="ADX" />
+			<xs:enumeration value="CLFLUSH" />
+			<xs:enumeration value="CLFLUSHOPT" />
 			<xs:enumeration value="CLZERO" />
 			<xs:enumeration value="PREFETCH" />
 			<xs:enumeration value="PREFETCHW" />

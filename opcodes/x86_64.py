@@ -441,6 +441,8 @@ class ISAExtension:
         - "PCLMULQDQ"   := The `PCLMULQDQ` instruction.
         - "RDRAND"      := The `RDRAND` instruction.
         - "RDSEED"      := The `RDSEED` instruction.
+        - "CLFLUSH"     := The `CLFLUSH` instruction.
+        - "CLFLUSHOPT"  := The `CLFLUSHOPT` instruction.
         - "CLZERO"      := The `CLZERO` instruction.
         - "PREFETCH"    := The `PREFETCH` instruction (3dnow! Prefetch).
         - "PREFETCHW"   := The `PREFETCHW` instruction (3dnow! Prefetch/Intel PRFCHW).

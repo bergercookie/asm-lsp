@@ -2942,6 +2942,31 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
+  <Instruction name="CLFLUSH" summary="Flush Cache Line">
+    <InstructionForm gas-name="clflush">
+      <ISA id="CLFLUSH"/>
+      <Operand type="m8" input="true" output="false"/>
+      <Encoding>
+        <REX mandatory="false" W="0" B="#0" X="#0"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="AE"/>
+        <ModRM mode="#0" reg="7" rm="#0"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="CLFLUSHOPT" summary="Flush Cache Line Optimized">
+    <InstructionForm gas-name="clflushopt">
+      <ISA id="CLFLUSHOPT"/>
+      <Operand type="m8" input="true" output="false"/>
+      <Encoding>
+        <Prefix byte="66" mandatory="true"/>
+        <REX mandatory="false" W="0" B="#0" X="#0"/>
+        <Opcode byte="0F"/>
+        <Opcode byte="AE"/>
+        <ModRM mode="#0" reg="7" rm="#0"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="CLZERO" summary="Zero-out 64-bit Cache Line">
     <InstructionForm gas-name="clzero">
       <ISA id="CLZERO"/>
