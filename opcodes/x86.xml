@@ -12630,6 +12630,17 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
+  <Instruction name="PREFETCH" summary="Prefetch Data into Caches">
+    <InstructionForm gas-name="prefetch">
+      <ISA id="PREFETCH"/>
+      <Operand type="m8" input="true" output="false"/>
+      <Encoding>
+        <Opcode byte="0F"/>
+        <Opcode byte="0D"/>
+        <ModRM mode="#0" reg="0" rm="#0"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="PREFETCHNTA" summary="Prefetch Data Into Caches using NTA Hint">
     <InstructionForm gas-name="prefetchnta" go-name="PREFETCHNTA">
       <ISA id="MMX+"/>
@@ -12676,7 +12687,7 @@
   </Instruction>
   <Instruction name="PREFETCHW" summary="Prefetch Data into Caches in Anticipation of a Write">
     <InstructionForm gas-name="prefetchw">
-      <ISA id="PRFCHW"/>
+      <ISA id="PREFETCHW"/>
       <Operand type="m8" input="true" output="false"/>
       <Encoding>
         <Opcode byte="0F"/>

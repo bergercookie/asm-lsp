@@ -431,7 +431,8 @@
 			<xs:enumeration value="BMI2" />
 			<xs:enumeration value="TBM" />
 			<xs:enumeration value="ADX" />
-			<xs:enumeration value="PRFCHW" />
+			<xs:enumeration value="PREFETCH" />
+			<xs:enumeration value="PREFETCHW" />
 			<xs:enumeration value="PREFETCHWT1" />
 			<xs:enumeration value="AVX512F" />
 			<xs:enumeration value="AVX512BW" />
