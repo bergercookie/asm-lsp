@@ -53054,6 +53054,50 @@
       </Encoding>
     </InstructionForm>
   </Instruction>
+  <Instruction name="VPOPCNTD" summary="Packed Population Count for Doubleword Integers">
+    <InstructionForm gas-name="vpopcntd" xmm-mode="AVX">
+      <ISA id="AVX512VPOPCNTDQ"/>
+      <Operand type="zmm{k}{z}" input="false" output="true"/>
+      <Operand type="m512/m32bcst" input="true" output="false"/>
+      <Encoding>
+        <EVEX mm="10" pp="01" LL="10" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0" disp8xN="64"/>
+        <Opcode byte="55"/>
+        <ModRM mode="#1" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vpopcntd" xmm-mode="AVX">
+      <ISA id="AVX512VPOPCNTDQ"/>
+      <Operand type="zmm{k}{z}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Encoding>
+        <EVEX mm="10" pp="01" LL="10" W="0" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <Opcode byte="55"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
+  <Instruction name="VPOPCNTQ" summary="Packed Population Count for Quadword Integers">
+    <InstructionForm gas-name="vpopcntq" xmm-mode="AVX">
+      <ISA id="AVX512VPOPCNTDQ"/>
+      <Operand type="zmm{k}{z}" input="false" output="true"/>
+      <Operand type="m512/m64bcst" input="true" output="false"/>
+      <Encoding>
+        <EVEX mm="10" pp="01" LL="10" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="#1" aaa="#0" z="#0" disp8xN="64"/>
+        <Opcode byte="55"/>
+        <ModRM mode="#1" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vpopcntq" xmm-mode="AVX">
+      <ISA id="AVX512VPOPCNTDQ"/>
+      <Operand type="zmm{k}{z}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Encoding>
+        <EVEX mm="10" pp="01" LL="10" W="1" vvvv="0000" V="0" RR="00" B="0" X="0" b="0" aaa="#0" z="#0"/>
+        <Opcode byte="55"/>
+        <ModRM mode="11" reg="#0" rm="#1"/>
+      </Encoding>
+    </InstructionForm>
+  </Instruction>
   <Instruction name="VPOR" summary="Packed Bitwise Logical OR">
     <InstructionForm gas-name="vpor" xmm-mode="AVX">
       <ISA id="AVX"/>
