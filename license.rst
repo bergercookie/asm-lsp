@@ -2,6 +2,7 @@
 Opcodes Database license (2-clause BSD)
 =======================================
 
+Copyright (c) 2017 Facebook Inc.
 Copyright (c) 2014-2017, Georgia Institute of Technology
 All rights reserved.
 
