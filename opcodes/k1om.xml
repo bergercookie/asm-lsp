@@ -12377,7 +12377,7 @@
   <Instruction name="XADD" summary="Exchange and Add">
     <InstructionForm gas-name="xaddb">
       <Operand type="r8" input="true" output="true"/>
-      <Operand type="r8" input="true" output="false"/>
+      <Operand type="r8" input="true" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="#1" B="#0"/>
         <Opcode byte="0F"/>
@@ -12387,7 +12387,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddw">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="r16" input="true" output="false"/>
+      <Operand type="r16" input="true" output="true"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="#1" B="#0"/>
@@ -12398,7 +12398,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddl">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="r32" input="true" output="false"/>
+      <Operand type="r32" input="true" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="#1" B="#0"/>
         <Opcode byte="0F"/>
@@ -12408,7 +12408,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddq">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="r64" input="true" output="false"/>
+      <Operand type="r64" input="true" output="true"/>
       <Encoding>
         <REX mandatory="true" W="1" R="#1" B="#0"/>
         <Opcode byte="0F"/>
@@ -12418,7 +12418,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddb">
       <Operand type="m8" input="true" output="true"/>
-      <Operand type="r8" input="true" output="false"/>
+      <Operand type="r8" input="true" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="#1" B="#0" X="#0"/>
         <Opcode byte="0F"/>
@@ -12428,7 +12428,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddw">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="r16" input="true" output="false"/>
+      <Operand type="r16" input="true" output="true"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="#1" B="#0" X="#0"/>
@@ -12439,7 +12439,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddl">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="r32" input="true" output="false"/>
+      <Operand type="r32" input="true" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="#1" B="#0" X="#0"/>
         <Opcode byte="0F"/>
@@ -12449,7 +12449,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddq">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="r64" input="true" output="false"/>
+      <Operand type="r64" input="true" output="true"/>
       <Encoding>
         <REX mandatory="true" W="1" R="#1" B="#0" X="#0"/>
         <Opcode byte="0F"/>

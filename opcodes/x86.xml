@@ -65125,7 +65125,7 @@
   <Instruction name="XADD" summary="Exchange and Add">
     <InstructionForm gas-name="xaddb" go-name="XADDB">
       <Operand type="r8" input="true" output="true"/>
-      <Operand type="r8" input="true" output="false"/>
+      <Operand type="r8" input="true" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
         <Opcode byte="C0"/>
@@ -65134,7 +65134,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddw" go-name="XADDW">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="r16" input="true" output="false"/>
+      <Operand type="r16" input="true" output="true"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
         <Opcode byte="0F"/>
@@ -65144,7 +65144,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddl" go-name="XADDL">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="r32" input="true" output="false"/>
+      <Operand type="r32" input="true" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
         <Opcode byte="C1"/>
@@ -65153,7 +65153,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddb" go-name="XADDB">
       <Operand type="m8" input="true" output="true"/>
-      <Operand type="r8" input="true" output="false"/>
+      <Operand type="r8" input="true" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
         <Opcode byte="C0"/>
@@ -65162,7 +65162,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddw" go-name="XADDW">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="r16" input="true" output="false"/>
+      <Operand type="r16" input="true" output="true"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
         <Opcode byte="0F"/>
@@ -65172,7 +65172,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddl" go-name="XADDL">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="r32" input="true" output="false"/>
+      <Operand type="r32" input="true" output="true"/>
       <Encoding>
         <Opcode byte="0F"/>
         <Opcode byte="C1"/>

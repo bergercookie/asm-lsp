@@ -70330,7 +70330,7 @@
   <Instruction name="XADD" summary="Exchange and Add">
     <InstructionForm gas-name="xaddb" go-name="XADDB" nacl-version="33">
       <Operand type="r8" input="true" output="true"/>
-      <Operand type="r8" input="true" output="false"/>
+      <Operand type="r8" input="true" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="#1" B="#0"/>
         <Opcode byte="0F"/>
@@ -70340,7 +70340,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddw" go-name="XADDW" nacl-version="33">
       <Operand type="r16" input="true" output="true"/>
-      <Operand type="r16" input="true" output="false"/>
+      <Operand type="r16" input="true" output="true"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="#1" B="#0"/>
@@ -70351,7 +70351,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddl" go-name="XADDL" nacl-version="33" nacl-zero-extends-outputs="true">
       <Operand type="r32" input="true" output="true"/>
-      <Operand type="r32" input="true" output="false"/>
+      <Operand type="r32" input="true" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="#1" B="#0"/>
         <Opcode byte="0F"/>
@@ -70361,7 +70361,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddq" go-name="XADDQ" nacl-version="33">
       <Operand type="r64" input="true" output="true"/>
-      <Operand type="r64" input="true" output="false"/>
+      <Operand type="r64" input="true" output="true"/>
       <Encoding>
         <REX mandatory="true" W="1" R="#1" B="#0"/>
         <Opcode byte="0F"/>
@@ -70371,7 +70371,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddb" go-name="XADDB" nacl-version="33">
       <Operand type="m8" input="true" output="true"/>
-      <Operand type="r8" input="true" output="false"/>
+      <Operand type="r8" input="true" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="#1" B="#0" X="#0"/>
         <Opcode byte="0F"/>
@@ -70381,7 +70381,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddw" go-name="XADDW" nacl-version="33">
       <Operand type="m16" input="true" output="true"/>
-      <Operand type="r16" input="true" output="false"/>
+      <Operand type="r16" input="true" output="true"/>
       <Encoding>
         <Prefix byte="66" mandatory="false"/>
         <REX mandatory="false" W="0" R="#1" B="#0" X="#0"/>
@@ -70392,7 +70392,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddl" go-name="XADDL" nacl-version="33">
       <Operand type="m32" input="true" output="true"/>
-      <Operand type="r32" input="true" output="false"/>
+      <Operand type="r32" input="true" output="true"/>
       <Encoding>
         <REX mandatory="false" W="0" R="#1" B="#0" X="#0"/>
         <Opcode byte="0F"/>
@@ -70402,7 +70402,7 @@
     </InstructionForm>
     <InstructionForm gas-name="xaddq" go-name="XADDQ" nacl-version="33">
       <Operand type="m64" input="true" output="true"/>
-      <Operand type="r64" input="true" output="false"/>
+      <Operand type="r64" input="true" output="true"/>
       <Encoding>
         <REX mandatory="true" W="1" R="#1" B="#0" X="#0"/>
         <Opcode byte="0F"/>
