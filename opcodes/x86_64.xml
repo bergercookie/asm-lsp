@@ -23672,6 +23672,76 @@
     </InstructionForm>
   </Instruction>
   <Instruction name="VANDNPS" summary="Bitwise Logical AND NOT of Packed Single-Precision Floating-Point Values">
+    <InstructionForm gas-name="vandnps" xmm-mode="AVX">
+      <ISA id="AVX512VL"/>
+      <ISA id="AVX512DQ"/>
+      <Operand type="xmm{k}{z}" input="false" output="true"/>
+      <Operand type="xmm" input="true" output="false"/>
+      <Operand type="m128/m32bcst" input="true" output="false"/>
+      <Encoding>
+        <EVEX mm="01" pp="00" LL="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="#2" aaa="#0" z="#0" disp8xN="16"/>
+        <Opcode byte="55"/>
+        <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vandnps" xmm-mode="AVX" cancelling-inputs="true">
+      <ISA id="AVX512VL"/>
+      <ISA id="AVX512DQ"/>
+      <Operand type="xmm{k}{z}" input="false" output="true"/>
+      <Operand type="xmm" input="true" output="false"/>
+      <Operand type="xmm" input="true" output="false"/>
+      <Encoding>
+        <EVEX mm="01" pp="00" LL="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="0" aaa="#0" z="#0"/>
+        <Opcode byte="55"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vandnps" xmm-mode="AVX">
+      <ISA id="AVX512VL"/>
+      <ISA id="AVX512DQ"/>
+      <Operand type="ymm{k}{z}" input="false" output="true"/>
+      <Operand type="ymm" input="true" output="false"/>
+      <Operand type="m256/m32bcst" input="true" output="false"/>
+      <Encoding>
+        <EVEX mm="01" pp="00" LL="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="#2" aaa="#0" z="#0" disp8xN="32"/>
+        <Opcode byte="55"/>
+        <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vandnps" xmm-mode="AVX" cancelling-inputs="true">
+      <ISA id="AVX512VL"/>
+      <ISA id="AVX512DQ"/>
+      <Operand type="ymm{k}{z}" input="false" output="true"/>
+      <Operand type="ymm" input="true" output="false"/>
+      <Operand type="ymm" input="true" output="false"/>
+      <Encoding>
+        <EVEX mm="01" pp="00" LL="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="0" aaa="#0" z="#0"/>
+        <Opcode byte="55"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vandnps" xmm-mode="AVX">
+      <ISA id="AVX512DQ"/>
+      <Operand type="zmm{k}{z}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="m512/m32bcst" input="true" output="false"/>
+      <Encoding>
+        <EVEX mm="01" pp="00" LL="10" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="#2" aaa="#0" z="#0" disp8xN="64"/>
+        <Opcode byte="55"/>
+        <ModRM mode="#2" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
+    <InstructionForm gas-name="vandnps" xmm-mode="AVX" cancelling-inputs="true">
+      <ISA id="AVX512DQ"/>
+      <Operand type="zmm{k}{z}" input="false" output="true"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Operand type="zmm" input="true" output="false"/>
+      <Encoding>
+        <EVEX mm="01" pp="00" LL="10" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="0" aaa="#0" z="#0"/>
+        <Opcode byte="55"/>
+        <ModRM mode="11" reg="#0" rm="#2"/>
+      </Encoding>
+    </InstructionForm>
     <InstructionForm gas-name="vandnps" xmm-mode="AVX" cancelling-inputs="true" nacl-version="41">
       <ISA id="AVX"/>
       <Operand type="xmm" input="false" output="true"/>
@@ -23845,11 +23915,6 @@
         <Opcode byte="54"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
-      <Encoding>
-        <EVEX mm="01" pp="00" LL="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="#2" aaa="#0" z="#0" disp8xN="16"/>
-        <Opcode byte="54"/>
-        <ModRM mode="#2" reg="#0" rm="#2"/>
-      </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vandps" xmm-mode="AVX">
       <ISA id="AVX512VL"/>
@@ -23857,11 +23922,6 @@
       <Operand type="xmm{k}{z}" input="false" output="true"/>
       <Operand type="xmm" input="true" output="false"/>
       <Operand type="xmm" input="true" output="false"/>
-      <Encoding>
-        <EVEX mm="01" pp="00" LL="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="0" aaa="#0" z="#0"/>
-        <Opcode byte="54"/>
-        <ModRM mode="11" reg="#0" rm="#2"/>
-      </Encoding>
       <Encoding>
         <EVEX mm="01" pp="00" LL="00" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="0" aaa="#0" z="#0"/>
         <Opcode byte="54"/>
@@ -23879,11 +23939,6 @@
         <Opcode byte="54"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
-      <Encoding>
-        <EVEX mm="01" pp="00" LL="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="#2" aaa="#0" z="#0" disp8xN="32"/>
-        <Opcode byte="54"/>
-        <ModRM mode="#2" reg="#0" rm="#2"/>
-      </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vandps" xmm-mode="AVX">
       <ISA id="AVX512VL"/>
@@ -23891,11 +23946,6 @@
       <Operand type="ymm{k}{z}" input="false" output="true"/>
       <Operand type="ymm" input="true" output="false"/>
       <Operand type="ymm" input="true" output="false"/>
-      <Encoding>
-        <EVEX mm="01" pp="00" LL="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="0" aaa="#0" z="#0"/>
-        <Opcode byte="54"/>
-        <ModRM mode="11" reg="#0" rm="#2"/>
-      </Encoding>
       <Encoding>
         <EVEX mm="01" pp="00" LL="01" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="0" aaa="#0" z="#0"/>
         <Opcode byte="54"/>
@@ -23912,22 +23962,12 @@
         <Opcode byte="54"/>
         <ModRM mode="#2" reg="#0" rm="#2"/>
       </Encoding>
-      <Encoding>
-        <EVEX mm="01" pp="00" LL="10" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="#2" aaa="#0" z="#0" disp8xN="64"/>
-        <Opcode byte="54"/>
-        <ModRM mode="#2" reg="#0" rm="#2"/>
-      </Encoding>
     </InstructionForm>
     <InstructionForm gas-name="vandps" xmm-mode="AVX">
       <ISA id="AVX512DQ"/>
       <Operand type="zmm{k}{z}" input="false" output="true"/>
       <Operand type="zmm" input="true" output="false"/>
       <Operand type="zmm" input="true" output="false"/>
-      <Encoding>
-        <EVEX mm="01" pp="00" LL="10" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="0" aaa="#0" z="#0"/>
-        <Opcode byte="54"/>
-        <ModRM mode="11" reg="#0" rm="#2"/>
-      </Encoding>
       <Encoding>
         <EVEX mm="01" pp="00" LL="10" W="0" vvvv="#1" V="#1" RR="#0" B="#2" X="#2" b="0" aaa="#0" z="#0"/>
         <Opcode byte="54"/>
