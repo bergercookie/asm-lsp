@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 
 
 class Instruction:
-    """Instruction is defines by its mnemonic name (in Intel-style assembly).
+    """Instruction is defined by its mnemonic name (in Intel-style assembly).
 
     An instruction may have multiple forms, that mainly differ by operand types.
 
