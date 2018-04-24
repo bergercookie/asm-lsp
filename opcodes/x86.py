@@ -308,9 +308,9 @@ class Operand:
     :ivar is_output: indicates if the instruction writes the variable specified by this operand.
     :ivar extended_size: for immediate operands the size of the value in bytes after size-extension.
 
-        The extended size affects which operand values can be encoded. E.g. a signed imm8 operand 
-        would normally values in the [-128, 127] range. But if it is extended to 4 bytes, it can also
-        encode values in [2**32 - 128, 2**32 - 1] range.
+        The extended size affects which operand values can be encoded. E.g. a signed imm8 operand would normally \
+        encode values in the [-128, 127] range. But if it is extended to 4 bytes, it can also encode values in \
+        [2**32 - 128, 2**32 - 1] range.
     """
     def __init__(self, type):
         self.type = type
