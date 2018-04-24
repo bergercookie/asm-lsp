@@ -87,7 +87,7 @@ class InstructionForm:
     def __str__(self):
         """Returns string representation of the instruction form and its operands in Intel-style assembly"""
         if self.operands:
-            return self.name + " " + ", ".join([operand.type for operand in self.operands])
+            return self.name + " " + ", ".join(operand.type for operand in self.operands)
         else:
             return self.name
 
