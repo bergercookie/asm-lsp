@@ -1,0 +1,32 @@
+[package]
+name = "look-asm"
+version = "0.1.0"
+authors = ["Nikos Koukis <nickkouk@gmail.com>"]
+edition = "2018"
+
+description = "Lookup assembly opcodes without leaving your terminal"
+
+documentation = "https://github.com/bergercookie/look-asm"
+homepage = "https://github.com/bergercookie/look-asm"
+repository = "https://github.com/bergercookie/look-asm"
+
+readme = "README.md"
+
+keywords = ["assembly", "productivity", "x86", "arm", "tooling"]
+publish = true
+exclude = [ ]
+license = "BSD-2-Clause"
+
+[badges]
+
+cirrus-ci = { repository = "look-asm", branch = "master" }
+
+
+[dependencies]
+anyhow = "1.0.31"
+quick-xml = "0.18.1"
+url = "2.1.1"
+log = {version = "0.4.8"}
+env_logger = "0.7.1"
+
+# [dev-dependencies]

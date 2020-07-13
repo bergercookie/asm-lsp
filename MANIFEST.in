@@ -1,9 +1,0 @@
-include license.rst
-include readme.rst
-include opcodes/x86_64.xml
-include opcodes/x86_64.xsd
-include opcodes/x86.xml
-include opcodes/x86.xsd
-include opcodes/k1om.xml
-include opcodes/k1om.xsd
-
