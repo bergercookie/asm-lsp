@@ -1,5 +1,4 @@
-use std::collections::HashMap;
-use strum;
+use std::collections::{HashMap,HashSet};
 use strum_macros::EnumString;
 
 // Instruction ------------------------------------------------------------------------------------
@@ -66,6 +65,12 @@ pub enum MMXMode {
     MMX,
 }
 
+#[derive(Debug, Hash, PartialEq, Eq, Clone, EnumString)]
+pub enum Arch {
+    X86,
+    X86_64,
+}
+
 // Instruction Set Architecture -------------------------------------------------------------------
 #[derive(Debug, Clone, EnumString)]
 pub enum ISA {
@@ -81,6 +86,8 @@ pub enum ISA {
     _3DNow,
     #[strum(serialize="3dnow!+")]
     _3DNowPlus,
+    #[strum(serialize="3dnow! Geode")]
+    _3DNowGeode,
     SSE,
     SSE2,
     SSE3,
@@ -167,17 +174,17 @@ pub enum OperandType {
     xmm,
     #[strum(serialize="xmm{k}")]
     xmm_k,
-    #[strum(serialize="xmm{k_z}")]
+    #[strum(serialize="xmm{k}{z}")]
     xmm_k_z,
     ymm,
     #[strum(serialize="ymm{k}")]
     ymm_k,
-    #[strum(serialize="ymm{k_z}")]
+    #[strum(serialize="ymm{k}{z}")]
     ymm_k_z,
     zmm,
     #[strum(serialize="zmm{k}")]
     zmm_k,
-    #[strum(serialize="zmm{k_z}")]
+    #[strum(serialize="zmm{k}{z}")]
     zmm_k_z,
     k,
     #[strum(serialize="k{k}")]
@@ -187,26 +194,26 @@ pub enum OperandType {
     m,
     m8,
     m16,
-    #[strum(serialize="m16{k_z}")]
+    #[strum(serialize="m16{k}{z}")]
     m16_k_z,
     m32,
     #[strum(serialize="m32{k}")]
     m32_k,
-    #[strum(serialize="m32{k_z}")]
+    #[strum(serialize="m32{k}{z}")]
     m32_k_z,
     m64,
     #[strum(serialize="m64{k}")]
     m64_k,
-    #[strum(serialize="m64{k_z}")]
+    #[strum(serialize="m64{k}{z}")]
     m64_k_z,
     m128,
-    #[strum(serialize="m128{k_z}")]
+    #[strum(serialize="m128{k}{z}")]
     m128_k_z,
     m256,
-    #[strum(serialize="m256{k_z}")]
+    #[strum(serialize="m256{k}{z}")]
     m256_k_z,
     m512,
-    #[strum(serialize="m512{k_z}")]
+    #[strum(serialize="m512{k}{z}")]
     m512_k_z,
     #[strum(serialize="m64/m32bcst")]
     m64_m32bcst,
