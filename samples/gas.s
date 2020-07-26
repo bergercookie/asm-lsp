@@ -23,6 +23,7 @@ main:
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register 6
 	subq	$32, %rsp
+	MOVLPS
 	movl	%edi, -20(%rbp)
 	movq	%rsi, -32(%rbp)
 	movb	$1, -1(%rbp)

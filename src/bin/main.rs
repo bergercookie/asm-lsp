@@ -1,4 +1,4 @@
-use look_asm::*;
+use asm_lsp::*;
 
 use log::{error, info};
 use lsp_types::request::HoverRequest;

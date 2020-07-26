@@ -1,14 +1,14 @@
 [package]
-name = "look-asm"
+name = "asm-lsp"
 version = "0.1.0"
 authors = ["Nikos Koukis <nickkouk@gmail.com>"]
 edition = "2018"
 
-description = "Lookup assembly opcodes without leaving your terminal"
+description = "Assembly Language Server"
 
-documentation = "https://github.com/bergercookie/look-asm"
-homepage = "https://github.com/bergercookie/look-asm"
-repository = "https://github.com/bergercookie/look-asm"
+documentation = "https://github.com/bergercookie/asm-lsp"
+homepage = "https://github.com/bergercookie/asm-lsp"
+repository = "https://github.com/bergercookie/asm-lsp"
 
 readme = "README.md"
 
@@ -19,7 +19,7 @@ license = "BSD-2-Clause"
 
 [badges]
 
-cirrus-ci = { repository = "look-asm", branch = "master" }
+cirrus-ci = { repository = "asm-lsp", branch = "master" }
 
 
 [dependencies]

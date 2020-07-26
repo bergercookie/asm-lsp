@@ -1,14 +1,25 @@
-# look-asm
+# Language Server for GAS/GO Assembly
 
 ## Goal
 
-Lookup an assembly instruction code from your terminal.
+Provide hovering and (TODO) autocompletion for assembly files written in the
+GAS/NASM or GO assembly flavors. It supports assembly files for the x86 or
+x86_64 instruction sets.
 
-% TODO - Add example usage
+This tool can serve as reference when reading the assembly output of a program.
+This way you can query what each command exactly does and deliberate about
+whether the compiler is producing the desired output or whether you have to
+tweak your code for optimisation.
 
-This tool can serve as a reference point when reading the assembly output of a
-program. This way you can deliberate about whether the compiler is producing the
-desired output or whether you have to tweak your code for optimisation.
+## Demo
+
+### Hovering / Documentation support
+
+![](https://github.com/bergercookie/asm-lsp/blob/master/demo/hover.gif)
+
+### Autocomplete
+
+TODO
 
 ## Acknowledgements
 
