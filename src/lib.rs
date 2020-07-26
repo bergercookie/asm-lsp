@@ -1,5 +1,7 @@
+pub mod lsp;
 pub mod types;
 pub mod x86_parser;
 
+pub use lsp::*;
 pub use types::*;
-pub use x86_parser::generate_instruction_set;
+pub use x86_parser::{populate_name_to_instruction_map, populate_instructions};

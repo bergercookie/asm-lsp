@@ -7,20 +7,21 @@ use quick_xml::events::Event;
 use quick_xml::Reader;
 use regex::Regex;
 use reqwest;
+use std::collections::HashMap;
 use std::str;
 use std::str::FromStr;
 
-/// Parse the provided XML contents and return a populated InstructionSet based on that.
+/// Parse the provided XML contents and return a vector of all the instrucitons based on that.
 /// If parsing fails, the appropriate error will be returned instead.
 ///
 /// Current function assumes that the XML file is already read and that it's been given a reference
 /// to its contents (`&str`).
-pub fn generate_instruction_set(xml_contents: &str) -> anyhow::Result<InstructionSet> {
+pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instruction>> {
     // initialisation -----------------------------------------------------------------------------
     let mut buf = Vec::new();
 
     // initialise the instruction set
-    let mut instruction_set = InstructionSet::new();
+    let mut instructions_map = HashMap::<String, Instruction>::new();
 
     // iterate through the XML --------------------------------------------------------------------
     let mut reader = Reader::from_str(xml_contents);
@@ -199,7 +200,7 @@ pub fn generate_instruction_set(xml_contents: &str) -> anyhow::Result<Instructio
                 match e.name() {
                     b"Instruction" => {
                         // finish instruction
-                        instruction_set
+                        instructions_map
                             .insert(curr_instruction.name.clone(), curr_instruction.clone());
                     }
                     b"InstructionForm" => {
@@ -238,10 +239,25 @@ pub fn generate_instruction_set(xml_contents: &str) -> anyhow::Result<Instructio
         let instruction_name = caps.get(2).map_or("", |m| m.as_str());
 
         // add URL to the corresponding instruction
-        match instruction_set.get_mut(instruction_name) {
+        match instructions_map.get_mut(instruction_name) {
             None => (), // key not found
-            Some(url_field) => url_field.url = Some(x86_online_docs.clone() + url_suffix),
+            Some(instruction) => instruction.url = Some(x86_online_docs.clone() + url_suffix),
         }
     }
-    Ok(instruction_set)
+
+    Ok(instructions_map
+        .into_iter()
+        .map(|(_, v)| v)
+        .collect::<Vec<_>>())
+}
+
+pub fn populate_name_to_instruction_map<'instruction>(
+    instructions: &'instruction Vec<Instruction>,
+    names_to_instructions: &mut NameToInstructionMap<'instruction>,
+) {
+    for instruction in instructions {
+        for name in &instruction.get_associated_names() {
+            names_to_instructions.insert(name, instruction);
+        }
+    }
 }
