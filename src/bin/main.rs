@@ -12,7 +12,7 @@ pub fn main() -> anyhow::Result<()> {
     // initialisation -----------------------------------------------------------------------------
     // Set up logging. Because `stdio_transport` gets a lock on stdout and stdin, we must have our
     // logging only write out to stderr.
-    flexi_logger::Logger::with_str("info").start()?;
+    flexi_logger::Logger::try_with_str("info")?.start()?;
 
     // create a map of &Instruction_name -> &Instruction - Use that in user queries
     // The Instruction(s) themselves are stored in a vector and we only keep references to the
@@ -138,10 +138,16 @@ fn main_loop(
     Ok(())
 }
 
-fn cast<R>(req: Request) -> Result<(RequestId, R::Params), Request>
+fn cast<R>(req: Request) -> anyhow::Result<(RequestId, R::Params)>
 where
     R: lsp_types::request::Request,
     R::Params: serde::de::DeserializeOwned,
 {
-    req.extract(R::METHOD)
+    match req.extract(R::METHOD) {
+        Ok(value) => Ok(value),
+        // Fixme please
+        Err(e) => {
+            Err(anyhow::anyhow!("Error: {e}"))
+        }
+    }
 }
