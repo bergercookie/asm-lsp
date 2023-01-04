@@ -36,6 +36,7 @@ flexi_logger = "0.24.2" # write to stderr instead of stdout
 log = {version = "0.4.17"}
 lsp-server = "0.6.0"
 lsp-types = "0.93.2"
+# need fixed
 quick-xml = "0.18.1"
 regex = "1.7.0"
 reqwest = {version = "0.11.13", features = ["blocking"]}
