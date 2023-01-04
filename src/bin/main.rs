@@ -146,8 +146,6 @@ where
     match req.extract(R::METHOD) {
         Ok(value) => Ok(value),
         // Fixme please
-        Err(e) => {
-            Err(anyhow::anyhow!("Error: {e}"))
-        }
+        Err(e) => Err(anyhow::anyhow!("Error: {e}")),
     }
 }
