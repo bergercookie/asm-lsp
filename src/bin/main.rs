@@ -19,23 +19,23 @@ pub fn main() -> anyhow::Result<()> {
     // former map
     info!("Populating instruction set -> x86...");
     let xml_conts_x86 = include_str!("../../opcodes/x86.xml");
-    let x86_instructions =
-        populate_instructions(&xml_conts_x86)?
-            .into_iter()
-            .map(|mut instruction| {
-                instruction.arch = Some(Arch::X86);
-                instruction
-            }).collect();
+    let x86_instructions = populate_instructions(xml_conts_x86)?
+        .into_iter()
+        .map(|mut instruction| {
+            instruction.arch = Some(Arch::X86);
+            instruction
+        })
+        .collect();
 
     info!("Populating instruction set -> x86_64...");
     let xml_conts_x86_64 = include_str!("../../opcodes/x86_64.xml");
-    let x86_64_instructions =
-        populate_instructions(&xml_conts_x86_64)?
-            .into_iter()
-            .map(|mut instruction| {
-                instruction.arch = Some(Arch::X86_64);
-                instruction
-            }).collect();
+    let x86_64_instructions = populate_instructions(xml_conts_x86_64)?
+        .into_iter()
+        .map(|mut instruction| {
+            instruction.arch = Some(Arch::X86_64);
+            instruction
+        })
+        .collect();
 
     // TODO - Currently in case a name exists both in x86 and x86_64 the latter overrides the
     // former. Modify this to allow to return both

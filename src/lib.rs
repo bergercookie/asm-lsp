@@ -4,4 +4,4 @@ pub mod x86_parser;
 
 pub use lsp::*;
 pub use types::*;
-pub use x86_parser::{populate_name_to_instruction_map, populate_instructions};
+pub use x86_parser::{populate_instructions, populate_name_to_instruction_map};
