@@ -1,6 +1,6 @@
 [package]
 name = "asm-lsp"
-version = "0.2.0"
+version = "0.3.1"
 authors = ["Nikos Koukis <nickkouk@gmail.com>"]
 edition = "2018"
 
