@@ -12,30 +12,30 @@ pub fn main() -> anyhow::Result<()> {
     // initialisation -----------------------------------------------------------------------------
     // Set up logging. Because `stdio_transport` gets a lock on stdout and stdin, we must have our
     // logging only write out to stderr.
-    flexi_logger::Logger::with_str("info").start()?;
+    flexi_logger::Logger::try_with_str("info")?.start()?;
 
     // create a map of &Instruction_name -> &Instruction - Use that in user queries
     // The Instruction(s) themselves are stored in a vector and we only keep references to the
     // former map
     info!("Populating instruction set -> x86...");
     let xml_conts_x86 = include_str!("../../opcodes/x86.xml");
-    let x86_instructions =
-        populate_instructions(&xml_conts_x86)?
-            .into_iter()
-            .map(|mut instruction| {
-                instruction.arch = Some(Arch::X86);
-                instruction
-            }).collect();
+    let x86_instructions = populate_instructions(xml_conts_x86)?
+        .into_iter()
+        .map(|mut instruction| {
+            instruction.arch = Some(Arch::X86);
+            instruction
+        })
+        .collect();
 
     info!("Populating instruction set -> x86_64...");
     let xml_conts_x86_64 = include_str!("../../opcodes/x86_64.xml");
-    let x86_64_instructions =
-        populate_instructions(&xml_conts_x86_64)?
-            .into_iter()
-            .map(|mut instruction| {
-                instruction.arch = Some(Arch::X86_64);
-                instruction
-            }).collect();
+    let x86_64_instructions = populate_instructions(xml_conts_x86_64)?
+        .into_iter()
+        .map(|mut instruction| {
+            instruction.arch = Some(Arch::X86_64);
+            instruction
+        })
+        .collect();
 
     // TODO - Currently in case a name exists both in x86 and x86_64 the latter overrides the
     // former. Modify this to allow to return both
@@ -138,10 +138,14 @@ fn main_loop(
     Ok(())
 }
 
-fn cast<R>(req: Request) -> Result<(RequestId, R::Params), Request>
+fn cast<R>(req: Request) -> anyhow::Result<(RequestId, R::Params)>
 where
     R: lsp_types::request::Request,
     R::Params: serde::de::DeserializeOwned,
 {
-    req.extract(R::METHOD)
+    match req.extract(R::METHOD) {
+        Ok(value) => Ok(value),
+        // Fixme please
+        Err(e) => Err(anyhow::anyhow!("Error: {e}")),
+    }
 }

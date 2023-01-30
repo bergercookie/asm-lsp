@@ -86,12 +86,12 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                                 "mmx-mode" => unsafe {
                                     let value_ = value.as_ref();
                                     curr_instruction_form.mmx_mode =
-                                        Some(MMXMode::from_str(str::from_utf8_unchecked(&value_))?);
+                                        Some(MMXMode::from_str(str::from_utf8_unchecked(value_))?);
                                 },
                                 "xmm-mode" => unsafe {
                                     let value_ = value.as_ref();
                                     curr_instruction_form.xmm_mode =
-                                        Some(XMMMode::from_str(str::from_utf8_unchecked(&value_))?);
+                                        Some(XMMMode::from_str(str::from_utf8_unchecked(value_))?);
                                 },
                                 "cancelling-inputs" => match str::from_utf8(&value).unwrap() {
                                     "true" => curr_instruction_form.cancelling_inputs = Some(true),
@@ -140,17 +140,18 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                     b"ISA" => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            match str::from_utf8(key).unwrap() {
-                                "id" => unsafe {
+                            if str::from_utf8(key).unwrap() == "id" {
+                                unsafe {
                                     curr_instruction_form.isa = Some(
-                                        ISA::from_str(str::from_utf8_unchecked(&value.as_ref()))
-                                            .expect(&format!(
-                                                "Unexpected ISA variant - {}",
-                                                str::from_utf8_unchecked(&value)
-                                            )),
+                                        ISA::from_str(str::from_utf8_unchecked(value.as_ref()))
+                                            .unwrap_or_else(|_| {
+                                                panic!(
+                                                    "Unexpected ISA variant - {}",
+                                                    str::from_utf8_unchecked(&value)
+                                                )
+                                            }),
                                     )
-                                },
-                                _ => (),
+                                }
                             }
                         }
                     }
@@ -234,7 +235,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
     let re = Regex::new(r#"<a href="\./(.*?\.html)">(.*?)</a>.*</td>"#)?;
     for line in body_it {
         // take it step by step.. match a small portion of the line first...
-        let caps = re.captures(&line).unwrap();
+        let caps = re.captures(line).unwrap();
         let url_suffix = caps.get(1).map_or("", |m| m.as_str());
         let instruction_name = caps.get(2).map_or("", |m| m.as_str());
 
@@ -245,10 +246,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
         }
     }
 
-    Ok(instructions_map
-        .into_iter()
-        .map(|(_, v)| v)
-        .collect::<Vec<_>>())
+    Ok(instructions_map.into_values().collect())
 }
 
 pub fn populate_name_to_instruction_map<'instruction>(

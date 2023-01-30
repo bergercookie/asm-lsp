@@ -44,8 +44,8 @@ impl std::fmt::Display for Instruction {
         // instruction forms
         let instruction_form_strs: Vec<String> =
             self.forms.iter().map(|f| format!("{}", f)).collect();
-        for i in 0..instruction_form_strs.len() {
-            v.push(&instruction_form_strs[i]);
+        for item in instruction_form_strs.iter() {
+            v.push(item.as_str());
         }
 
         // url
@@ -76,10 +76,8 @@ impl<'own> Instruction {
         names.push(&self.name);
 
         for f in &self.forms {
-            for opt in &[&f.gas_name, &f.go_name] {
-                if let Some(name) = opt {
-                    names.push(&name);
-                }
+            for name in [&f.gas_name, &f.go_name].iter().copied().flatten() {
+                names.push(name);
             }
         }
 
@@ -147,7 +145,7 @@ impl std::fmt::Display for InstructionForm {
                     s += &format!(" extended-size = {}", extended_size)
                 }
 
-                return s;
+                s
             })
             .collect::<Vec<String>>()
             .join("\n");
