@@ -31,18 +31,17 @@ cirrus-ci = { repository = "asm-lsp", branch = "master" }
 
 
 [dependencies]
-anyhow = "1.0.68"
-flexi_logger = "0.24.2" # write to stderr instead of stdout
+anyhow = "1.0.70"
+flexi_logger = "0.25.3" # write to stderr instead of stdout
 log = {version = "0.4.17"}
-lsp-server = "0.6.0"
-lsp-types = "0.93.2"
-# need fixed
-quick-xml = "0.18.1"
-regex = "1.7.0"
-reqwest = {version = "0.11.13", features = ["blocking"]}
+lsp-server = "0.7.0"
+lsp-types = "0.94.0"
+quick-xml = "0.28.1"
+regex = "1.7.2"
+reqwest = {version = "0.11.15", features = ["blocking"]}
 strum = "0.24.1"
 strum_macros = "0.24.3"
-serde_json = "1.0.91"
-serde = "1.0.152"
+serde_json = "1.0.94"
+serde = "1.0.158"
 
 # [dev-dependencies]

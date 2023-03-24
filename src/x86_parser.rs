@@ -4,6 +4,7 @@ use anyhow::anyhow;
 use log::debug;
 use quick_xml::events::attributes::Attribute;
 use quick_xml::events::Event;
+use quick_xml::name::QName;
 use quick_xml::Reader;
 use regex::Regex;
 use reqwest;
@@ -17,9 +18,6 @@ use std::str::FromStr;
 /// Current function assumes that the XML file is already read and that it's been given a reference
 /// to its contents (`&str`).
 pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instruction>> {
-    // initialisation -----------------------------------------------------------------------------
-    let mut buf = Vec::new();
-
     // initialise the instruction set
     let mut instructions_map = HashMap::<String, Instruction>::new();
 
@@ -33,18 +31,18 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
 
     debug!("Parsing XML contents...");
     loop {
-        match reader.read_event(&mut buf) {
+        match reader.read_event() {
             // start event ------------------------------------------------------------------------
             Ok(Event::Start(ref e)) => {
                 match e.name() {
-                    b"Instruction" => {
+                    QName(b"Instruction") => {
                         // start of a new instruction
                         curr_instruction = Instruction::default();
 
                         // iterate over the attributes
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            match str::from_utf8(key).unwrap() {
+                            match str::from_utf8(key.into_inner()).unwrap() {
                                 "name" => unsafe {
                                     curr_instruction.name =
                                         String::from(str::from_utf8_unchecked(&value));
@@ -57,7 +55,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                             }
                         }
                     }
-                    b"InstructionForm" => {
+                    QName(b"InstructionForm") => {
                         // Read the attributes
                         //
                         // <xs:attribute name="gas-name" type="xs:string" use="required" />
@@ -74,7 +72,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                         // iterate over the attributes
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            match str::from_utf8(key).unwrap() {
+                            match str::from_utf8(key.into_inner()).unwrap() {
                                 "gas-name" => unsafe {
                                     curr_instruction_form.gas_name =
                                         Some(String::from(str::from_utf8_unchecked(&value)));
@@ -131,16 +129,16 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                             }
                         }
                     }
-                    b"Encoding" => {} // TODO
-                    _ => (),          // unknown event
+                    QName(b"Encoding") => {} // TODO
+                    _ => (),                 // unknown event
                 }
             }
             Ok(Event::Empty(ref e)) => {
                 match e.name() {
-                    b"ISA" => {
+                    QName(b"ISA") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if str::from_utf8(key).unwrap() == "id" {
+                            if str::from_utf8(key.into_inner()).unwrap() == "id" {
                                 unsafe {
                                     curr_instruction_form.isa = Some(
                                         ISA::from_str(str::from_utf8_unchecked(value.as_ref()))
@@ -155,7 +153,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                             }
                         }
                     }
-                    b"Operand" => {
+                    QName(b"Operand") => {
                         let mut type_ = OperandType::k; // dummy initialisation
                         let mut extended_size = None;
                         let mut input = None;
@@ -163,7 +161,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
 
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            match str::from_utf8(key).unwrap() {
+                            match str::from_utf8(key.into_inner()).unwrap() {
                                 "type" => {
                                     type_ = OperandType::from_str(str::from_utf8(&value)?)?;
                                 }
@@ -199,12 +197,12 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
             // end event --------------------------------------------------------------------------
             Ok(Event::End(ref e)) => {
                 match e.name() {
-                    b"Instruction" => {
+                    QName(b"Instruction") => {
                         // finish instruction
                         instructions_map
                             .insert(curr_instruction.name.clone(), curr_instruction.clone());
                     }
-                    b"InstructionForm" => {
+                    QName(b"InstructionForm") => {
                         curr_instruction.push_form(curr_instruction_form.clone());
                     }
                     _ => (), // unknown event
