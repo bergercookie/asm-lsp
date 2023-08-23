@@ -230,7 +230,8 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
     // <a href="./VSCATTERPF1DPS:VSCATTERPF1QPS:VSCATTERPF1DPD:VSCATTERPF1QPD.html">VSCATTERPF1QPS</a></td>
     //
     // let re = Regex::new(r"<a href=\"./(.*)">(.*)</a></td>")?;
-    let re = Regex::new(r#"<a href="\./(.*?\.html)">(.*?)</a>.*</td>"#)?;
+    // let re = Regex::new(r#"<a href="\./(.*?\.html)">(.*?)</a>.*</td>"#)?;
+    let re = Regex::new(r#"<a href='\/(.*?)'>(.*?)<\/a>.*<\/td>"#)?;
     for line in body_it {
         // take it step by step.. match a small portion of the line first...
         let caps = re.captures(line).unwrap();
