@@ -157,7 +157,8 @@ impl std::fmt::Display for InstructionForm {
 }
 
 // helper structs, types and functions ------------------------------------------------------------
-pub type NameToInstructionMap<'instruction> = HashMap<&'instruction str, &'instruction Instruction>;
+pub type NameToInstructionMap<'instruction> =
+    HashMap<(Arch, &'instruction str), &'instruction Instruction>;
 
 #[derive(Debug, Clone, EnumString, AsRefStr)]
 pub enum XMMMode {
@@ -171,7 +172,7 @@ pub enum MMXMode {
     MMX,
 }
 
-#[derive(Debug, Hash, PartialEq, Eq, Clone, EnumString, AsRefStr)]
+#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr)]
 pub enum Arch {
     X86,
     X86_64,

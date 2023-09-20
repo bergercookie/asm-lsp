@@ -249,12 +249,13 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
 }
 
 pub fn populate_name_to_instruction_map<'instruction>(
+    arch: Arch,
     instructions: &'instruction Vec<Instruction>,
     names_to_instructions: &mut NameToInstructionMap<'instruction>,
 ) {
     for instruction in instructions {
         for name in &instruction.get_associated_names() {
-            names_to_instructions.insert(name, instruction);
+            names_to_instructions.insert((arch, name), instruction);
         }
     }
 }

@@ -37,11 +37,13 @@ pub fn main() -> anyhow::Result<()> {
         })
         .collect();
 
-    // TODO - Currently in case a name exists both in x86 and x86_64 the latter overrides the
-    // former. Modify this to allow to return both
     let mut names_to_instructions = NameToInstructionMap::new();
-    populate_name_to_instruction_map(&x86_instructions, &mut names_to_instructions);
-    populate_name_to_instruction_map(&x86_64_instructions, &mut names_to_instructions);
+    populate_name_to_instruction_map(Arch::X86, &x86_instructions, &mut names_to_instructions);
+    populate_name_to_instruction_map(
+        Arch::X86_64,
+        &x86_64_instructions,
+        &mut names_to_instructions,
+    );
 
     // LSP server initialisation ------------------------------------------------------------------
     info!("Starting lsp server...");
@@ -92,21 +94,47 @@ fn main_loop(
 
                         // get documentation ------------------------------------------------------
                         // format response
-                        let hover_res: Hover;
                         match word {
                             Ok(word) => {
-                                match names_to_instructions.get(&*word) {
-                                    Some(instruction) => {
-                                        // word is a known instruction
-                                        hover_res = Hover {
-                                            contents: HoverContents::Markup(MarkupContent {
-                                                kind: MarkupKind::Markdown,
-                                                value: format!("{}", instruction),
-                                            }),
-                                            range: None,
-                                        };
-                                        let result = Some(hover_res);
-                                        let result = serde_json::to_value(&result).unwrap();
+                                let (x86_instruction, x86_64_instruction) = (
+                                    names_to_instructions.get(&(Arch::X86, &*word)),
+                                    names_to_instructions.get(&(Arch::X86_64, &*word)),
+                                );
+                                let hover_res: Option<Hover> =
+                                    match (x86_instruction.is_some(), x86_64_instruction.is_some())
+                                    {
+                                        (true, _) | (_, true) => {
+                                            let mut value = String::new();
+                                            if let Some(x86_instruction) = x86_instruction {
+                                                value += &format!("{}", x86_instruction);
+                                            }
+                                            if let Some(x86_64_instruction) = x86_64_instruction {
+                                                value += &format!(
+                                                    "{}{}",
+                                                    if x86_instruction.is_some() {
+                                                        "\n\n"
+                                                    } else {
+                                                        ""
+                                                    },
+                                                    x86_64_instruction
+                                                );
+                                            }
+                                            Some(Hover {
+                                                contents: HoverContents::Markup(MarkupContent {
+                                                    kind: MarkupKind::Markdown,
+                                                    value,
+                                                }),
+                                                range: None,
+                                            })
+                                        }
+                                        _ => {
+                                            // don't know of this word
+                                            None
+                                        }
+                                    };
+                                match hover_res {
+                                    Some(_) => {
+                                        let result = serde_json::to_value(&hover_res).unwrap();
                                         let result = Response {
                                             id: id.clone(),
                                             result: Some(result),
@@ -114,7 +142,7 @@ fn main_loop(
                                         };
                                         connection.sender.send(Message::Response(result))?;
                                     }
-                                    _ => {
+                                    None => {
                                         // don't know of this word
                                         connection.sender.send(Message::Response(res.clone()))?;
                                     }
