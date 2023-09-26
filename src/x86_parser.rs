@@ -216,6 +216,9 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
 
     // provide a URL example page -----------------------------------------------------------------
     // parse this x86 page, grab the contents of the table + the URLs they are referring to
+    // TODO Fetching fliecloutier.com may take time and sometimes it's unresponsive. Cache this
+    //      once and re-use.
+    // TODO Add a CLI argument to refresh this cache.
     let x86_online_docs = String::from("https://www.felixcloutier.com/x86/");
     debug!(
         "Fetching further documentation from the web -> {}...",
