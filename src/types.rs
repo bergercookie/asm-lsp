@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use strum_macros::{AsRefStr, EnumString};
+use serde::{Serialize, Deserialize};
 
 // Instruction ------------------------------------------------------------------------------------
 #[derive(Debug, Clone)]
@@ -176,6 +177,53 @@ pub enum MMXMode {
 pub enum Arch {
     X86,
     X86_64,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Assemblers {
+    pub gas: bool,
+    pub go: bool,
+}
+
+impl Default for Assemblers {
+    fn default() -> Self {
+        Assemblers {
+            gas: true,
+            go: true
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InstructionSets {
+    pub x86: bool,
+    pub x86_64: bool,
+}
+
+impl Default for InstructionSets {
+    fn default() -> Self {
+        InstructionSets {
+            x86: true,
+            x86_64: true,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TargetConfig {
+    pub version: String,
+    pub assemblers: Assemblers,
+    pub instruction_sets: InstructionSets,
+}
+
+impl Default for TargetConfig {
+    fn default() -> Self {
+        TargetConfig {
+            version: String::from("0.1"),
+            assemblers: Assemblers::default(),
+            instruction_sets: InstructionSets::default(),
+        }
+    }
 }
 
 // Instruction Set Architecture -------------------------------------------------------------------

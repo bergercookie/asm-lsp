@@ -4,6 +4,8 @@ use log::{error, info};
 use lsp_types::request::HoverRequest;
 use lsp_types::*;
 
+use crate::lsp::{filter_targets, get_target_config};
+
 use lsp_server::{Connection, Message, Request, RequestId, Response};
 use serde_json::json;
 
@@ -73,6 +75,7 @@ fn main_loop(
     names_to_instructions: &NameToInstructionMap,
 ) -> anyhow::Result<()> {
     let _params: InitializeParams = serde_json::from_value(params).unwrap();
+    let target_config = get_target_config(&_params);
     info!("Starting LSP loop...");
     for msg in &connection.receiver {
         match msg {
@@ -97,8 +100,16 @@ fn main_loop(
                         match word {
                             Ok(word) => {
                                 let (x86_instruction, x86_64_instruction) = (
-                                    names_to_instructions.get(&(Arch::X86, &*word)),
-                                    names_to_instructions.get(&(Arch::X86_64, &*word)),
+                                    if target_config.instruction_sets.x86 {
+                                        names_to_instructions.get(&(Arch::X86, &*word))
+                                    } else {
+                                        None
+                                    },
+                                    if target_config.instruction_sets.x86_64 {
+                                        names_to_instructions.get(&(Arch::X86_64, &*word))
+                                    } else {
+                                        None
+                                    },
                                 );
                                 let hover_res: Option<Hover> =
                                     match (x86_instruction.is_some(), x86_64_instruction.is_some())
@@ -106,7 +117,10 @@ fn main_loop(
                                         (true, _) | (_, true) => {
                                             let mut value = String::new();
                                             if let Some(x86_instruction) = x86_instruction {
-                                                value += &format!("{}", x86_instruction);
+                                                value += &format!(
+                                                    "{}", 
+                                                    filter_targets(x86_instruction, &target_config)
+                                                );
                                             }
                                             if let Some(x86_64_instruction) = x86_64_instruction {
                                                 value += &format!(
@@ -116,7 +130,7 @@ fn main_loop(
                                                     } else {
                                                         ""
                                                     },
-                                                    x86_64_instruction
+                                                    filter_targets(x86_64_instruction, &target_config)
                                                 );
                                             }
                                             Some(Hover {
