@@ -48,7 +48,7 @@ pub fn main() -> anyhow::Result<()> {
     );
 
     // LSP server initialisation ------------------------------------------------------------------
-    info!("Starting lsp server...");
+    info!("Starting LSP server...");
 
     // Create the transport
     let (connection, io_threads) = Connection::stdio();
@@ -65,7 +65,7 @@ pub fn main() -> anyhow::Result<()> {
     io_threads.join()?;
 
     // Shut down gracefully.
-    info!("Shutting down lsp server");
+    info!("Shutting down LSP server");
     Ok(())
 }
 
