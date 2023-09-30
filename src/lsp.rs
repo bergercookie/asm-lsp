@@ -1,9 +1,11 @@
 use crate::types::Column;
-use crate::{TargetConfig, Instruction};
-use lsp_types::{TextDocumentPositionParams, InitializeParams, Url};
+use crate::{Instruction, TargetConfig};
+use log::{error, info};
+use lsp_types::{InitializeParams, TextDocumentPositionParams, Url};
 use std::fs::File;
 use std::io::BufRead;
-use log::info;
+use std::path::PathBuf;
+
 /// Find the start and end indices of a word inside the given line
 /// Borrowed from RLS
 pub fn find_word_at_pos(line: &str, col: Column) -> (Column, Column) {
@@ -52,8 +54,17 @@ pub fn get_word_from_file_params(
 }
 
 pub fn get_target_config(params: &InitializeParams) -> TargetConfig {
+    // 1. if we have workspace folders, then iterate through them and assign the first valid one to
+    //    the root path
+    // 2. If we don't have worksace folders or none of them is a valid path, check the root_uri
+    //    variable
+    // 3. If we do have a root_path, check whether we can find a .asm-lsp file at its root.
+    // 4. If everything fails return TargetConfig::default()
+
+    let mut root_path: Option<PathBuf> = None;
+
     // first check workspace folders
-    let root_path = if let Some(folders) = &params.workspace_folders {
+    if let Some(folders) = &params.workspace_folders {
         // if there's multiple, just visit in order until we find a valid folder
         let mut path = None;
         for folder in folders.iter() {
@@ -64,43 +75,38 @@ pub fn get_target_config(params: &InitializeParams) -> TargetConfig {
                 }
             }
         }
-        path
-    } else {
-        None
+
+        root_path = path;
     };
-    
+
     // if workspace folders weren't set or came up empty, we check the root_uri
-    let root_path = if root_path.is_none() {
+    if root_path.is_none() {
         if let Some(root_uri) = &params.root_uri {
             if let Ok(path) = root_uri.to_file_path() {
-                Some(path)
-            } else {
-                None
+                root_path = Some(path)
             }
-        } else {
-            None
         }
-    } else {
-        root_path
     };
 
     // if we have a properly configured root path, check for the config file
     if let Some(mut path) = root_path {
         path.push(".asm-lsp");
-        if let Ok(config) = std::fs::read_to_string(path) {
+        if let Ok(config) = std::fs::read_to_string(path.clone()) {
+            let path_s = path.display();
             match toml::from_str::<TargetConfig>(&config) {
-                Ok(config) => return config,
+                Ok(config) => {
+                    info!("Parsing asm-lsp config from file -> {path_s}\n");
+                    return config;
+                }
                 Err(e) => {
-                    info!(
-                        "Failed to parse config file: {e}\n"
-                    );
+                    error!("Failed to parse config file {path_s} - Error: {e}\n");
                 } // if there's an error we fall through to the default
             }
         }
     }
 
     // default is to turn everything on
-    return TargetConfig::default();
+    TargetConfig::default()
 }
 
 pub fn filter_targets(instr: &&Instruction, config: &TargetConfig) -> Instruction {
@@ -113,19 +119,19 @@ pub fn filter_targets(instr: &&Instruction, config: &TargetConfig) -> Instructio
             (form.go_name.is_some() && config.assemblers.go)
                 || (form.gas_name.is_some() && config.assemblers.gas)
         })
-    .map(|form| {
-        let mut filtered = form.clone();
-        // handle cases where gas and go both have names on the same form
-        if !(config.assemblers.gas) {
-            filtered.gas_name = None;
-        }
-        if !(config.assemblers.go) {
-            filtered.go_name = None;
-        }
-        filtered
-    })
-    .collect();
+        .map(|form| {
+            let mut filtered = form.clone();
+            // handle cases where gas and go both have names on the same form
+            if !config.assemblers.gas {
+                filtered.gas_name = None;
+            }
+            if !config.assemblers.go {
+                filtered.go_name = None;
+            }
+            filtered
+        })
+        .collect();
 
     instr.forms = forms;
-    return instr;
+    instr
 }

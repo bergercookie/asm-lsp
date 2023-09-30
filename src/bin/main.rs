@@ -48,7 +48,7 @@ pub fn main() -> anyhow::Result<()> {
     );
 
     // LSP server initialisation ------------------------------------------------------------------
-    info!("Starting lsp server...");
+    info!("Starting LSP server...");
 
     // Create the transport
     let (connection, io_threads) = Connection::stdio();
@@ -59,13 +59,13 @@ pub fn main() -> anyhow::Result<()> {
         hover_provider,
         ..ServerCapabilities::default()
     };
-    let server_capabilities = serde_json::to_value(&capabilities).unwrap();
+    let server_capabilities = serde_json::to_value(capabilities).unwrap();
     let initialization_params = connection.initialize(server_capabilities)?;
     main_loop(&connection, initialization_params, &names_to_instructions)?;
     io_threads.join()?;
 
     // Shut down gracefully.
-    info!("Shutting down lsp server");
+    info!("Shutting down LSP server");
     Ok(())
 }
 
