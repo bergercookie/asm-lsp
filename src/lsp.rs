@@ -90,7 +90,7 @@ pub fn get_target_config(params: &InitializeParams) -> TargetConfig {
 
     // if we have a properly configured root path, check for the config file
     if let Some(mut path) = root_path {
-        path.push(".asm-lsp");
+        path.push(".asm-lsp.toml");
         if let Ok(config) = std::fs::read_to_string(path.clone()) {
             let path_s = path.display();
             match toml::from_str::<TargetConfig>(&config) {
