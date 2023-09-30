@@ -8,10 +8,15 @@ on:
       - "**/Cargo.toml"
       - "**/Cargo.lock"
 jobs:
-  security_audit:
+  audit:
+    name: Security Audit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        name: Checkout
+
       - uses: taiki-e/install-action@cargo-deny
+        name: Install cargo-deny
+
       - name: Scan for vulnerabilities
         run: cargo deny check advisories

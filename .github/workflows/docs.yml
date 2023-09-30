@@ -11,15 +11,16 @@ env:
 
 jobs:
   rustdoc:
+    name: Build Documentation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         name: Checkout
 
       - uses: actions-rs/toolchain@v1
         name: Install rust toolchain
         with:
-          toolchain: nightly
+          toolchain: stable
           override: true
 
       - uses: Swatinem/rust-cache@v2

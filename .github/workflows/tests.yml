@@ -11,7 +11,7 @@ on:
   pull_request:
     branches: ["master"]
     paths:
-      - ".github/workflows/unit-tests.yml"
+      - ".github/workflows/tests.yml"
       - "src/**"
       - "Cargo.*"
       - build.rs
@@ -24,7 +24,8 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  unit-tests:
+  tests:
+    name: Run Unit Tests
     runs-on: ${{ matrix.os }}
 
     continue-on-error: ${{ matrix.rust == 'nightly' }}
@@ -40,13 +41,6 @@ jobs:
 
       - run: rustup toolchain install ${{ matrix.rust }} --profile minimal
       - uses: Swatinem/rust-cache@v2
-
-      - name: Install cargo-hack
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 5
-          max_attempts: 5
-          command: cargo install cargo-hack
 
       - name: Run rustfmt checks
         run: cargo fmt --check
