@@ -1,6 +1,6 @@
 use crate::types::Column;
 use crate::{Instruction, TargetConfig};
-use log::{info, error};
+use log::{error, info};
 use lsp_types::{InitializeParams, TextDocumentPositionParams, Url};
 use std::fs::File;
 use std::io::BufRead;
@@ -106,7 +106,7 @@ pub fn get_target_config(params: &InitializeParams) -> TargetConfig {
     }
 
     // default is to turn everything on
-    return TargetConfig::default();
+    TargetConfig::default()
 }
 
 pub fn filter_targets(instr: &&Instruction, config: &TargetConfig) -> Instruction {
@@ -133,5 +133,5 @@ pub fn filter_targets(instr: &&Instruction, config: &TargetConfig) -> Instructio
         .collect();
 
     instr.forms = forms;
-    return instr;
+    instr
 }
