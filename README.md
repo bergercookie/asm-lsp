@@ -40,6 +40,21 @@ Add a section like the following in your `settings.json` file:
 }
 ```
 
+Add a `.asm-lsp.toml` file like the following to your project's root directory 
+to selectively target specific assemblers and/or instruction sets:
+
+```toml
+version = "0.1"
+
+[assemblers]
+gas = true
+go = false
+
+[instruction_sets]
+x86 = false
+x86_64 = true
+```
+
 ## Demo
 
 ### Hovering / Documentation support
