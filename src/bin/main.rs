@@ -16,37 +16,6 @@ pub fn main() -> anyhow::Result<()> {
     // logging only write out to stderr.
     flexi_logger::Logger::try_with_str("info")?.start()?;
 
-    // create a map of &Instruction_name -> &Instruction - Use that in user queries
-    // The Instruction(s) themselves are stored in a vector and we only keep references to the
-    // former map
-    info!("Populating instruction set -> x86...");
-    let xml_conts_x86 = include_str!("../../opcodes/x86.xml");
-    let x86_instructions = populate_instructions(xml_conts_x86)?
-        .into_iter()
-        .map(|mut instruction| {
-            instruction.arch = Some(Arch::X86);
-            instruction
-        })
-        .collect();
-
-    info!("Populating instruction set -> x86_64...");
-    let xml_conts_x86_64 = include_str!("../../opcodes/x86_64.xml");
-    let x86_64_instructions = populate_instructions(xml_conts_x86_64)?
-        .into_iter()
-        .map(|mut instruction| {
-            instruction.arch = Some(Arch::X86_64);
-            instruction
-        })
-        .collect();
-
-    let mut names_to_instructions = NameToInstructionMap::new();
-    populate_name_to_instruction_map(Arch::X86, &x86_instructions, &mut names_to_instructions);
-    populate_name_to_instruction_map(
-        Arch::X86_64,
-        &x86_64_instructions,
-        &mut names_to_instructions,
-    );
-
     // LSP server initialisation ------------------------------------------------------------------
     info!("Starting LSP server...");
 
@@ -61,6 +30,59 @@ pub fn main() -> anyhow::Result<()> {
     };
     let server_capabilities = serde_json::to_value(capabilities).unwrap();
     let initialization_params = connection.initialize(server_capabilities)?;
+
+    let params: InitializeParams = serde_json::from_value(initialization_params.clone()).unwrap();
+    let target_config = get_target_config(&params);
+
+    // create a map of &Instruction_name -> &Instruction - Use that in user queries
+    // The Instruction(s) themselves are stored in a vector and we only keep references to the
+    // former map
+    let x86_instructions = if target_config.instruction_sets.x86 {
+        info!("Populating instruction set -> x86...");
+        let xml_conts_x86 = include_str!("../../opcodes/x86.xml");
+        populate_instructions(xml_conts_x86)?
+            .into_iter()
+            .map(|mut instruction| {
+                instruction.arch = Some(Arch::X86);
+                instruction
+            })
+            .map(|instruction| {
+                // filter out assemblers by user config
+                filter_targets(&instruction, &target_config)
+            })
+            .filter(|instruction| !instruction.forms.is_empty())
+            .collect()
+    } else {
+        Vec::new()
+    };
+
+    let x86_64_instructions = if target_config.instruction_sets.x86_64 {
+        info!("Populating instruction set -> x86_64...");
+        let xml_conts_x86_64 = include_str!("../../opcodes/x86_64.xml");
+        populate_instructions(xml_conts_x86_64)?
+            .into_iter()
+            .map(|mut instruction| {
+                instruction.arch = Some(Arch::X86_64);
+                instruction
+            })
+            .map(|instruction| {
+                // filter out assemblers by user config
+                filter_targets(&instruction, &target_config)
+            })
+            .filter(|instruction| !instruction.forms.is_empty())
+            .collect()
+    } else {
+        Vec::new()
+    };
+
+    let mut names_to_instructions = NameToInstructionMap::new();
+    populate_name_to_instruction_map(Arch::X86, &x86_instructions, &mut names_to_instructions);
+    populate_name_to_instruction_map(
+        Arch::X86_64,
+        &x86_64_instructions,
+        &mut names_to_instructions,
+    );
+
     main_loop(&connection, initialization_params, &names_to_instructions)?;
     io_threads.join()?;
 
@@ -75,7 +97,6 @@ fn main_loop(
     names_to_instructions: &NameToInstructionMap,
 ) -> anyhow::Result<()> {
     let _params: InitializeParams = serde_json::from_value(params).unwrap();
-    let target_config = get_target_config(&_params);
     info!("Starting LSP loop...");
     for msg in &connection.receiver {
         match msg {
@@ -100,16 +121,8 @@ fn main_loop(
                         match word {
                             Ok(word) => {
                                 let (x86_instruction, x86_64_instruction) = (
-                                    if target_config.instruction_sets.x86 {
-                                        names_to_instructions.get(&(Arch::X86, &*word))
-                                    } else {
-                                        None
-                                    },
-                                    if target_config.instruction_sets.x86_64 {
-                                        names_to_instructions.get(&(Arch::X86_64, &*word))
-                                    } else {
-                                        None
-                                    },
+                                    names_to_instructions.get(&(Arch::X86, &*word)),
+                                    names_to_instructions.get(&(Arch::X86_64, &*word)),
                                 );
                                 let hover_res: Option<Hover> =
                                     match (x86_instruction.is_some(), x86_64_instruction.is_some())
@@ -117,10 +130,7 @@ fn main_loop(
                                         (true, _) | (_, true) => {
                                             let mut value = String::new();
                                             if let Some(x86_instruction) = x86_instruction {
-                                                value += &format!(
-                                                    "{}", 
-                                                    filter_targets(x86_instruction, &target_config)
-                                                );
+                                                value += &format!("{}", x86_instruction);
                                             }
                                             if let Some(x86_64_instruction) = x86_64_instruction {
                                                 value += &format!(
@@ -130,7 +140,7 @@ fn main_loop(
                                                     } else {
                                                         ""
                                                     },
-                                                    filter_targets(x86_64_instruction, &target_config)
+                                                    x86_64_instruction
                                                 );
                                             }
                                             Some(Hover {

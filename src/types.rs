@@ -1,6 +1,6 @@
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use strum_macros::{AsRefStr, EnumString};
-use serde::{Serialize, Deserialize};
 
 // Instruction ------------------------------------------------------------------------------------
 #[derive(Debug, Clone)]
@@ -189,7 +189,7 @@ impl Default for Assemblers {
     fn default() -> Self {
         Assemblers {
             gas: true,
-            go: true
+            go: true,
         }
     }
 }

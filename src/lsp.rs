@@ -109,15 +109,15 @@ pub fn get_target_config(params: &InitializeParams) -> TargetConfig {
     TargetConfig::default()
 }
 
-pub fn filter_targets(instr: &&Instruction, config: &TargetConfig) -> Instruction {
-    let mut instr = (*instr).clone();
+pub fn filter_targets(instr: &Instruction, config: &TargetConfig) -> Instruction {
+    let mut instr = instr.clone();
 
     let forms = instr
         .forms
         .iter()
         .filter(|form| {
-            (form.go_name.is_some() && config.assemblers.go)
-                || (form.gas_name.is_some() && config.assemblers.gas)
+            (form.gas_name.is_some() && config.assemblers.gas)
+                || (form.go_name.is_some() && config.assemblers.go)
         })
         .map(|form| {
             let mut filtered = form.clone();
