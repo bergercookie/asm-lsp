@@ -1,0 +1,33 @@
+name: Check Documentation
+on:
+  workflow_dispatch:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  rustdoc:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout
+
+      - uses: actions-rs/toolchain@v1
+        name: Install rust toolchain
+        with:
+          toolchain: stable
+          override: true
+
+      - uses: Swatinem/rust-cache@v2
+        name: Smart caching for Cargo
+
+      - uses: actions-rs/cargo@v1
+        name: Check Documentation with Rustdoc
+        with:
+          command: doc
+          args: --verbose --no-deps

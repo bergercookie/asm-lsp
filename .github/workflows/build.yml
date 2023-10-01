@@ -1,0 +1,39 @@
+name: Build Cargo Workspace
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: Build Cargo Workspace
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - uses: Swatinem/rust-cache@v2
+        name: Cache dependencies
+
+      # FIXME: those may be installed by default on Ubuntu, but I know they do not come installed on Nix
+      # needs to be tested on a machine running ubuntu and removed if this section is redundant
+      - name: Install build deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install openssl pkg-config
+
+      - uses: actions-rs/cargo@v1
+        name: Build crate
+        with:
+          command: build
+          args: --verbose --all-features
