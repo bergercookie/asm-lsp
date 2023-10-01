@@ -40,7 +40,9 @@ Add a section like the following in your `settings.json` file:
 }
 ```
 
-Add a `.asm-lsp.toml` file like the following to your project's root directory 
+### [OPTIONAL] Configure via `.asm-lsp.toml`
+
+Add a `.asm-lsp.toml` file like the following to your project's root directory
 to selectively target specific assemblers and/or instruction sets:
 
 ```toml
