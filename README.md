@@ -1,5 +1,8 @@
 # Language Server for GAS/GO Assembly
 
+[![crates.io](https://img.shields.io/crates/v/asm-lsp.svg)](https://crates.io/crates/asm-lsp)
+[![Tests](https://github.com/bergercookie/asm-lsp/actions/workflows/lint_and_test.yml/badge.svg)](https://github.com/bergercookie/asm-lsp/actions/workflows/lint_and_test.yml)
+
 ## Goal
 
 Provide hovering and (TODO) autocompletion for assembly files written in the
