@@ -1,21 +1,21 @@
 [package]
 name = "asm-lsp"
-version = "0.3.3"
+version = "0.4.0"
 authors = ["Nikos Koukis <nickkouk@gmail.com>"]
 edition = "2018"
 
-description = "Assembly Language Server"
+description = "Language Server for x86/x86_64 Assembly Code"
 
-documentation = "https://github.com/bergercookie/asm-lsp"
+documentation = "https://docs.rs/asm-lsp/latest/asm_lsp/"
 homepage = "https://github.com/bergercookie/asm-lsp"
 repository = "https://github.com/bergercookie/asm-lsp"
 
 readme = "README.md"
 
-keywords = ["assembly", "productivity", "x86", "arm", "tooling"]
+keywords = ["assembly", "language-server", "lsp", "tooling", "x86"]
+categories = ["command-line-utilities", "development-tools"]
 publish = true
-exclude = ["samples/*",
-           "demo/*", ]
+exclude = ["samples/*", "demo/*"]
 license = "BSD-2-Clause"
 
 [lib]
@@ -25,20 +25,16 @@ path = "src/lib.rs"
 name = "asm-lsp"
 path = "src/bin/main.rs"
 
-[badges]
-
-cirrus-ci = { repository = "asm-lsp", branch = "master" }
-
-
 [dependencies]
 anyhow = "1.0.70"
-flexi_logger = "0.25.3" # write to stderr instead of stdout
-log = {version = "0.4.17"}
+# write to stderr instead of stdout
+flexi_logger = "0.25.3"
+log = { version = "0.4.17" }
 lsp-server = "0.7.0"
 lsp-types = "0.94.0"
 quick-xml = "0.28.1"
 regex = "1.7.2"
-reqwest = {version = "0.11.15", features = ["blocking"]}
+reqwest = { version = "0.11.15", features = ["blocking"] }
 strum = "0.24.1"
 strum_macros = "0.24.3"
 serde_json = "1.0.94"

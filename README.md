@@ -23,10 +23,6 @@ cargo install asm-lsp
 cargo install --git https://github.com/bergercookie/asm-lsp
 ```
 
-### Using .deb (Debian/Ubuntu)
-
-Debian packages are also provided in the [here](https://drive.google.com/drive/folders/189R1Uw2BPMEPS4ofWIfTYkAnK2I2Z3Zc?usp=sharing)
-
 ## Set up as a language server
 
 Add a section like the following in your `settings.json` file:
