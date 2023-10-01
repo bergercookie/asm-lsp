@@ -7,6 +7,12 @@ on:
     paths:
       - "**/Cargo.toml"
       - "**/Cargo.lock"
+  pull_request:
+    branches: ["master"]
+    paths:
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+
 jobs:
   audit:
     name: Security Audit

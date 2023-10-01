@@ -25,13 +25,6 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         name: Cache dependencies
 
-      # FIXME: those may be installed by default on Ubuntu, but I know they do not come installed on Nix
-      # needs to be tested on a machine running ubuntu and removed if this section is redundant
-      - name: Install build deps
-        run: |
-          sudo apt-get update
-          sudo apt-get install openssl pkg-config
-
       - uses: actions-rs/cargo@v1
         name: Build crate
         with:
