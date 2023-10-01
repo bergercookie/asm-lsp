@@ -4,6 +4,8 @@ use log::{error, info};
 use lsp_types::request::HoverRequest;
 use lsp_types::*;
 
+use crate::lsp::{filter_targets, get_target_config};
+
 use lsp_server::{Connection, Message, Request, RequestId, Response};
 use serde_json::json;
 
@@ -14,39 +16,8 @@ pub fn main() -> anyhow::Result<()> {
     // logging only write out to stderr.
     flexi_logger::Logger::try_with_str("info")?.start()?;
 
-    // create a map of &Instruction_name -> &Instruction - Use that in user queries
-    // The Instruction(s) themselves are stored in a vector and we only keep references to the
-    // former map
-    info!("Populating instruction set -> x86...");
-    let xml_conts_x86 = include_str!("../../opcodes/x86.xml");
-    let x86_instructions = populate_instructions(xml_conts_x86)?
-        .into_iter()
-        .map(|mut instruction| {
-            instruction.arch = Some(Arch::X86);
-            instruction
-        })
-        .collect();
-
-    info!("Populating instruction set -> x86_64...");
-    let xml_conts_x86_64 = include_str!("../../opcodes/x86_64.xml");
-    let x86_64_instructions = populate_instructions(xml_conts_x86_64)?
-        .into_iter()
-        .map(|mut instruction| {
-            instruction.arch = Some(Arch::X86_64);
-            instruction
-        })
-        .collect();
-
-    let mut names_to_instructions = NameToInstructionMap::new();
-    populate_name_to_instruction_map(Arch::X86, &x86_instructions, &mut names_to_instructions);
-    populate_name_to_instruction_map(
-        Arch::X86_64,
-        &x86_64_instructions,
-        &mut names_to_instructions,
-    );
-
     // LSP server initialisation ------------------------------------------------------------------
-    info!("Starting lsp server...");
+    info!("Starting LSP server...");
 
     // Create the transport
     let (connection, io_threads) = Connection::stdio();
@@ -57,13 +28,66 @@ pub fn main() -> anyhow::Result<()> {
         hover_provider,
         ..ServerCapabilities::default()
     };
-    let server_capabilities = serde_json::to_value(&capabilities).unwrap();
+    let server_capabilities = serde_json::to_value(capabilities).unwrap();
     let initialization_params = connection.initialize(server_capabilities)?;
+
+    let params: InitializeParams = serde_json::from_value(initialization_params.clone()).unwrap();
+    let target_config = get_target_config(&params);
+
+    // create a map of &Instruction_name -> &Instruction - Use that in user queries
+    // The Instruction(s) themselves are stored in a vector and we only keep references to the
+    // former map
+    let x86_instructions = if target_config.instruction_sets.x86 {
+        info!("Populating instruction set -> x86...");
+        let xml_conts_x86 = include_str!("../../opcodes/x86.xml");
+        populate_instructions(xml_conts_x86)?
+            .into_iter()
+            .map(|mut instruction| {
+                instruction.arch = Some(Arch::X86);
+                instruction
+            })
+            .map(|instruction| {
+                // filter out assemblers by user config
+                filter_targets(&instruction, &target_config)
+            })
+            .filter(|instruction| !instruction.forms.is_empty())
+            .collect()
+    } else {
+        Vec::new()
+    };
+
+    let x86_64_instructions = if target_config.instruction_sets.x86_64 {
+        info!("Populating instruction set -> x86_64...");
+        let xml_conts_x86_64 = include_str!("../../opcodes/x86_64.xml");
+        populate_instructions(xml_conts_x86_64)?
+            .into_iter()
+            .map(|mut instruction| {
+                instruction.arch = Some(Arch::X86_64);
+                instruction
+            })
+            .map(|instruction| {
+                // filter out assemblers by user config
+                filter_targets(&instruction, &target_config)
+            })
+            .filter(|instruction| !instruction.forms.is_empty())
+            .collect()
+    } else {
+        Vec::new()
+    };
+
+    let mut names_to_instructions = NameToInstructionMap::new();
+    populate_name_to_instruction_map(Arch::X86, &x86_instructions, &mut names_to_instructions);
+    populate_name_to_instruction_map(
+        Arch::X86_64,
+        &x86_64_instructions,
+        &mut names_to_instructions,
+    );
+
     main_loop(&connection, initialization_params, &names_to_instructions)?;
     io_threads.join()?;
 
     // Shut down gracefully.
-    info!("Shutting down lsp server");
+    info!("Shutting down LSP server");
     Ok(())
 }
 
