@@ -1,7 +1,7 @@
 use crate::types::*;
 
 use anyhow::anyhow;
-use log::debug;
+use log::{debug, error, info};
 use quick_xml::events::attributes::Attribute;
 use quick_xml::events::Event;
 use quick_xml::name::QName;
@@ -9,6 +9,10 @@ use quick_xml::Reader;
 use regex::Regex;
 use reqwest;
 use std::collections::HashMap;
+use std::env::args;
+use std::fs;
+use std::io::Write;
+use std::path::PathBuf;
 use std::str;
 use std::str::FromStr;
 
@@ -215,16 +219,71 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
     }
 
     // provide a URL example page -----------------------------------------------------------------
-    // parse this x86 page, grab the contents of the table + the URLs they are referring to
-    // TODO Fetching fliecloutier.com may take time and sometimes it's unresponsive. Cache this
-    //      once and re-use.
-    // TODO Add a CLI argument to refresh this cache.
+    // 1. If the cache refresh option is enabled or the cache doesn't exist, attempt to fetch the
+    //    data, write it to the cache, and then use it
+    //      - parse this x86 page, grab the contents of the table + the URLs they are referring to
+    // 2. Otherwise, attempt to read the data from the cache
+    //
+    // Do we want to change behavior on error and just not include the web info?
+    //  e.g change body over to an option and only mutate the map if it's Some(_)
+    let cache_refresh = args() // replace with an actual way to check CLI args
+        .into_iter()
+        .fold(false, |accum, arg| accum || arg.contains("refresh"));
     let x86_online_docs = String::from("https://www.felixcloutier.com/x86/");
-    debug!(
-        "Fetching further documentation from the web -> {}...",
-        x86_online_docs
-    );
-    let body = reqwest::blocking::get(&x86_online_docs)?.text()?;
+    let mut x86_cache_path = match get_cache_dir() {
+        Ok(cache_path) => cache_path,
+        Err(e) => {
+            error!("Failed to resolve the cache file path - Error: {e}\n");
+            return Err(e);
+        }
+    };
+
+    // At this point we have a valid directory, now append the file name
+    x86_cache_path.push("x86_docs.cache");
+    let cache_exists = match x86_cache_path.try_exists() {
+        Ok(true) => true,
+        _ => false,
+    };
+
+    let body = if cache_refresh || !cache_exists {
+        debug!(
+            "Fetching further documentation from the web -> {}...",
+            x86_online_docs
+        );
+        // grab the info from the web
+        let contents = reqwest::blocking::get(&x86_online_docs.clone())?.text()?;
+        // attempt to populate the cache
+        match fs::File::create(x86_cache_path.clone()) {
+            Ok(mut cache_file) => {
+                info!("Created the cache file...");
+                match cache_file.write_all(contents.as_bytes()) {
+                    Ok(()) => {
+                        info!("Populated the cache\n");
+                    }
+                    Err(e) => {
+                        error!(
+                            "Failed to write to the cache file {} - Error: {e}\n",
+                            x86_cache_path.display()
+                        );
+                    }
+                }
+            }
+            Err(e) => {
+                error!(
+                    "Failed to create the cache file {} - Error: {e}\n",
+                    x86_cache_path.display()
+                );
+            }
+        }
+        contents
+    } else {
+        // read the cache from the fs
+        debug!(
+            "Fetching further documentation from the cache -> {}...",
+            x86_cache_path.display()
+        );
+        fs::read_to_string(x86_cache_path)?
+    };
 
     // skip first line
     let body_it = body.split("<td>").skip(1).step_by(2);
@@ -261,4 +320,18 @@ pub fn populate_name_to_instruction_map<'instruction>(
             names_to_instructions.insert((arch, name), instruction);
         }
     }
+}
+
+fn get_cache_dir() -> anyhow::Result<PathBuf> {
+    // grab the home directory and build off of that
+    let home_path = std::env::var("HOME")?;
+    let mut x86_cache_path = PathBuf::from(home_path);
+
+    x86_cache_path.push(".cache");
+    x86_cache_path.push("asm-lsp");
+
+    // create the ~/.cache/asm-lsp directory if it's not already there
+    fs::create_dir_all(x86_cache_path.clone())?;
+
+    Ok(x86_cache_path)
 }
