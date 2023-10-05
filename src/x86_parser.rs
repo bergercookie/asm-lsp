@@ -1,7 +1,7 @@
 use crate::types::*;
 
 use anyhow::anyhow;
-use log::debug;
+use log::{debug, error, info, warn};
 use quick_xml::events::attributes::Attribute;
 use quick_xml::events::Event;
 use quick_xml::name::QName;
@@ -9,6 +9,10 @@ use quick_xml::Reader;
 use regex::Regex;
 use reqwest;
 use std::collections::HashMap;
+use std::env::args;
+use std::fs;
+use std::io::Write;
+use std::path::PathBuf;
 use std::str;
 use std::str::FromStr;
 
@@ -214,21 +218,11 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
         }
     }
 
-    // provide a URL example page -----------------------------------------------------------------
-    // parse this x86 page, grab the contents of the table + the URLs they are referring to
-    // TODO Fetching fliecloutier.com may take time and sometimes it's unresponsive. Cache this
-    //      once and re-use.
-    // TODO Add a CLI argument to refresh this cache.
     let x86_online_docs = String::from("https://www.felixcloutier.com/x86/");
-    debug!(
-        "Fetching further documentation from the web -> {}...",
-        x86_online_docs
-    );
-    let body = reqwest::blocking::get(&x86_online_docs)?.text()?;
-
-    // skip first line
+    let body = get_docs_body(&x86_online_docs).unwrap_or_default();
     let body_it = body.split("<td>").skip(1).step_by(2);
 
+    // Parse this x86 page, grab the contents of the table + the URLs they are referring to
     // Regex to match:
     // <a href="./VSCATTERPF1DPS:VSCATTERPF1QPS:VSCATTERPF1DPD:VSCATTERPF1QPD.html">VSCATTERPF1QPS</a></td>
     //
@@ -260,6 +254,152 @@ pub fn populate_name_to_instruction_map<'instruction>(
     for instruction in instructions {
         for name in &instruction.get_associated_names() {
             names_to_instructions.insert((arch, name), instruction);
+        }
+    }
+}
+
+fn get_docs_body(x86_online_docs: &str) -> Option<String> {
+    // provide a URL example page -----------------------------------------------------------------
+    // 1. If the cache refresh option is enabled or the cache doesn't exist, attempt to fetch the
+    //    data, write it to the cache, and then use it
+    // 2. Otherwise, attempt to read the data from the cache
+    // 3. If invalid data is read in, attempt to remove the cache file
+    let cache_refresh = args().any(|arg| arg.contains("--cache-refresh"));
+    let mut x86_cache_path = match get_cache_dir() {
+        Ok(cache_path) => Some(cache_path),
+        Err(e) => {
+            warn!("Failed to resolve the cache file path - Error: {e}.");
+            None
+        }
+    };
+
+    // Attempt to append the cache file name to path and see if it is valid/ exists
+    let cache_exists: bool;
+    if let Some(mut path) = x86_cache_path {
+        path.push("x86_docs.html");
+        cache_exists = matches!(path.try_exists(), Ok(true));
+        x86_cache_path = Some(path);
+    } else {
+        cache_exists = false;
+    }
+
+    let body = if cache_refresh || !cache_exists {
+        match get_x86_docs_web(x86_online_docs) {
+            Ok(docs) => {
+                if let Some(ref path) = x86_cache_path {
+                    set_x86_docs_cache(&docs, path);
+                }
+                docs
+            }
+            Err(e) => {
+                error!(
+                    "Failed to fetch documentation from {} - Error: {e}.",
+                    x86_online_docs
+                );
+                return None;
+            }
+        }
+    } else if let Some(ref path) = x86_cache_path {
+        match get_x86_docs_cache(path) {
+            Ok(docs) => docs,
+            Err(e) => {
+                error!(
+                    "Failed to fetch documentation from the cache: {} - Error: {e}.",
+                    path.display()
+                );
+                return None;
+            }
+        }
+    } else {
+        error!("Failed to fetch documentation from the cache - Invalid path.");
+        return None;
+    };
+
+    // try to create the iterator to check if the data is valid
+    // if the body produces an empty iterator, we attempt to clear the cache
+    if body.split("<td>").skip(1).step_by(2).next().is_none() {
+        error!("Invalid docs contents.");
+        if let Some(ref path) = x86_cache_path {
+            error!("Attempting to remove the cache file {}...", path.display());
+            match std::fs::remove_file(path) {
+                Ok(()) => {
+                    error!("Cache file removed.");
+                }
+                Err(e) => {
+                    error!("Failed to remove the cache file - Error: {e}.",);
+                }
+            }
+        } else {
+            error!("Unable to clear the cache, invalid path.");
+        }
+        return None;
+    }
+
+    Some(body)
+}
+
+fn get_cache_dir() -> anyhow::Result<PathBuf> {
+    // first check if the appropriate environment variable is set
+    if let Ok(path) = std::env::var("ASM_LSP_CACHE_DIR") {
+        let path = PathBuf::from(path);
+        // ensure the path is valid
+        if path.is_dir() {
+            return Ok(path);
+        }
+    }
+
+    // If the environment variable isn't set or gives an invalid path, grab the home directory and build off of that
+    let mut x86_cache_path = home::home_dir().ok_or(anyhow!("Home directory not found"))?;
+
+    x86_cache_path.push(".cache");
+    x86_cache_path.push("asm-lsp");
+
+    // create the ~/.cache/asm-lsp directory if it's not already there
+    fs::create_dir_all(&x86_cache_path)?;
+
+    Ok(x86_cache_path)
+}
+
+fn get_x86_docs_web(x86_online_docs: &str) -> anyhow::Result<String> {
+    info!(
+        "Fetching further documentation from the web -> {}...",
+        x86_online_docs
+    );
+    // grab the info from the web
+    let contents = reqwest::blocking::get(x86_online_docs)?.text()?;
+    Ok(contents)
+}
+
+fn get_x86_docs_cache(x86_cache_path: &PathBuf) -> Result<String, std::io::Error> {
+    info!(
+        "Fetching html page containing further documentation, from the cache -> {}...",
+        x86_cache_path.display()
+    );
+    fs::read_to_string(x86_cache_path)
+}
+
+fn set_x86_docs_cache(contents: &str, x86_cache_path: &PathBuf) {
+    info!("Writing to the cache file {}...", x86_cache_path.display());
+    match fs::File::create(x86_cache_path) {
+        Ok(mut cache_file) => {
+            info!("Created the cache file {} .", x86_cache_path.display());
+            match cache_file.write_all(contents.as_bytes()) {
+                Ok(()) => {
+                    info!("Populated the cache.");
+                }
+                Err(e) => {
+                    error!(
+                        "Failed to write to the cache file {} - Error: {e}.",
+                        x86_cache_path.display()
+                    );
+                }
+            }
+        }
+        Err(e) => {
+            error!(
+                "Failed to create the cache file {} - Error: {e}.",
+                x86_cache_path.display()
+            );
         }
     }
 }
