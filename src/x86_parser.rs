@@ -227,8 +227,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
     // Do we want to change behavior on error and just not include the web info?
     //  e.g change body over to an option and only mutate the map if it's Some(_)
     let cache_refresh = args() // replace with an actual way to check CLI args
-        .into_iter()
-        .fold(false, |accum, arg| accum || arg.contains("refresh"));
+        .any(|arg| arg.contains("refresh"));
     let x86_online_docs = String::from("https://www.felixcloutier.com/x86/");
     let mut x86_cache_path = match get_cache_dir() {
         Ok(cache_path) => cache_path,
@@ -240,10 +239,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
 
     // At this point we have a valid directory, now append the file name
     x86_cache_path.push("x86_docs.cache");
-    let cache_exists = match x86_cache_path.try_exists() {
-        Ok(true) => true,
-        _ => false,
-    };
+    let cache_exists = matches!(x86_cache_path.try_exists(), Ok(true));
 
     let body = if cache_refresh || !cache_exists {
         debug!(
