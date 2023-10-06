@@ -223,9 +223,6 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
     //    data, write it to the cache, and then use it
     //      - parse this x86 page, grab the contents of the table + the URLs they are referring to
     // 2. Otherwise, attempt to read the data from the cache
-    //
-    // Do we want to change behavior on error and just not include the web info?
-    //  e.g change body over to an option and only mutate the map if it's Some(_)
     let cache_refresh = args() // replace with an actual way to check CLI args
         .any(|arg| arg.contains("refresh"));
     let x86_online_docs = String::from("https://www.felixcloutier.com/x86/");
@@ -249,6 +246,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
         // grab the info from the web
         let contents = reqwest::blocking::get(&x86_online_docs.clone())?.text()?;
         // attempt to populate the cache
+        // In the event of a failure to populate, allow the program to continue
         match fs::File::create(x86_cache_path.clone()) {
             Ok(mut cache_file) => {
                 info!("Created the cache file...");
@@ -273,7 +271,6 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
         }
         contents
     } else {
-        // read the cache from the fs
         debug!(
             "Fetching further documentation from the cache -> {}...",
             x86_cache_path.display()
@@ -320,8 +317,7 @@ pub fn populate_name_to_instruction_map<'instruction>(
 
 fn get_cache_dir() -> anyhow::Result<PathBuf> {
     // grab the home directory and build off of that
-    let home_path = std::env::var("HOME")?;
-    let mut x86_cache_path = PathBuf::from(home_path);
+    let mut x86_cache_path = home::home_dir().ok_or(anyhow!("Home directory not found"))?;
 
     x86_cache_path.push(".cache");
     x86_cache_path.push("asm-lsp");
