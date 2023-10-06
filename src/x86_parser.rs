@@ -239,7 +239,11 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
     let cache_exists = matches!(x86_cache_path.try_exists(), Ok(true));
 
     let body = if cache_refresh || !cache_exists {
-        get_x86_docs_web(&x86_online_docs, x86_cache_path)?        
+        let contents = get_x86_docs_web(&x86_online_docs)?;
+        // Attempt to populate the cache
+        // In the event of a failure to populate, allow the program to continue
+        set_x86_docs_cache(&contents, x86_cache_path);
+        contents
     } else {
         get_x86_docs_cache(x86_cache_path)?
     };
@@ -294,15 +298,25 @@ fn get_cache_dir() -> anyhow::Result<PathBuf> {
     Ok(x86_cache_path)
 }
 
-fn get_x86_docs_web(x86_online_docs: &str, x86_cache_path: PathBuf) -> anyhow::Result<String> {
+fn get_x86_docs_web(x86_online_docs: &str) -> anyhow::Result<String> {
     debug!(
         "Fetching further documentation from the web -> {}...",
         x86_online_docs
     );
     // grab the info from the web
     let contents = reqwest::blocking::get(x86_online_docs.clone())?.text()?;
-    // attempt to populate the cache
-    // In the event of a failure to populate, allow the program to continue
+    Ok(contents)
+}
+
+fn get_x86_docs_cache(x86_cache_path: PathBuf) -> Result<String, std::io::Error> {
+    debug!(
+        "Fetching further documentation from the cache -> {}...",
+        x86_cache_path.display()
+    );
+    fs::read_to_string(x86_cache_path)
+}
+
+fn set_x86_docs_cache(contents: &str, x86_cache_path: PathBuf) {
     match fs::File::create(x86_cache_path.clone()) {
         Ok(mut cache_file) => {
             info!("Created the cache file...");
@@ -325,13 +339,4 @@ fn get_x86_docs_web(x86_online_docs: &str, x86_cache_path: PathBuf) -> anyhow::R
             );
         }
     }
-    Ok(contents)
-}
-
-fn get_x86_docs_cache(x86_cache_path: PathBuf) -> Result<String, std::io::Error> {
-    debug!(
-        "Fetching further documentation from the cache -> {}...",
-        x86_cache_path.display()
-    );
-    fs::read_to_string(x86_cache_path)
 }
