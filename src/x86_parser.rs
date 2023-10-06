@@ -239,43 +239,9 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
     let cache_exists = matches!(x86_cache_path.try_exists(), Ok(true));
 
     let body = if cache_refresh || !cache_exists {
-        debug!(
-            "Fetching further documentation from the web -> {}...",
-            x86_online_docs
-        );
-        // grab the info from the web
-        let contents = reqwest::blocking::get(&x86_online_docs.clone())?.text()?;
-        // attempt to populate the cache
-        // In the event of a failure to populate, allow the program to continue
-        match fs::File::create(x86_cache_path.clone()) {
-            Ok(mut cache_file) => {
-                info!("Created the cache file...");
-                match cache_file.write_all(contents.as_bytes()) {
-                    Ok(()) => {
-                        info!("Populated the cache\n");
-                    }
-                    Err(e) => {
-                        error!(
-                            "Failed to write to the cache file {} - Error: {e}\n",
-                            x86_cache_path.display()
-                        );
-                    }
-                }
-            }
-            Err(e) => {
-                error!(
-                    "Failed to create the cache file {} - Error: {e}\n",
-                    x86_cache_path.display()
-                );
-            }
-        }
-        contents
+        get_x86_docs_web(&x86_online_docs, x86_cache_path)?        
     } else {
-        debug!(
-            "Fetching further documentation from the cache -> {}...",
-            x86_cache_path.display()
-        );
-        fs::read_to_string(x86_cache_path)?
+        get_x86_docs_cache(x86_cache_path)?
     };
 
     // skip first line
@@ -326,4 +292,46 @@ fn get_cache_dir() -> anyhow::Result<PathBuf> {
     fs::create_dir_all(x86_cache_path.clone())?;
 
     Ok(x86_cache_path)
+}
+
+fn get_x86_docs_web(x86_online_docs: &str, x86_cache_path: PathBuf) -> anyhow::Result<String> {
+    debug!(
+        "Fetching further documentation from the web -> {}...",
+        x86_online_docs
+    );
+    // grab the info from the web
+    let contents = reqwest::blocking::get(x86_online_docs.clone())?.text()?;
+    // attempt to populate the cache
+    // In the event of a failure to populate, allow the program to continue
+    match fs::File::create(x86_cache_path.clone()) {
+        Ok(mut cache_file) => {
+            info!("Created the cache file...");
+            match cache_file.write_all(contents.as_bytes()) {
+                Ok(()) => {
+                    info!("Populated the cache\n");
+                }
+                Err(e) => {
+                    error!(
+                        "Failed to write to the cache file {} - Error: {e}\n",
+                        x86_cache_path.display()
+                    );
+                }
+            }
+        }
+        Err(e) => {
+            error!(
+                "Failed to create the cache file {} - Error: {e}\n",
+                x86_cache_path.display()
+            );
+        }
+    }
+    Ok(contents)
+}
+
+fn get_x86_docs_cache(x86_cache_path: PathBuf) -> Result<String, std::io::Error> {
+    debug!(
+        "Fetching further documentation from the cache -> {}...",
+        x86_cache_path.display()
+    );
+    fs::read_to_string(x86_cache_path)
 }
