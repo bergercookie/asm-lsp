@@ -8,16 +8,20 @@ on:
       - "*"
 
 jobs:
+  call-workflow-audit:
+    uses: ./.github/workflows/audit.yml
+  call-workflow-build:
+    uses: ./.github/workflows/build.yml
+  call-workflow-build-docs:
+    uses: ./.github/workflows/build_docs.yml
+  call-workflow-lint-and-test:
+    uses: ./.github/workflows/lint_and_test.yml
   publish:
     name: Publish Crate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         name: Checkout
-
-      - uses: actions/setup-python@v3
-      - uses: pre-commit/action@v3.0.0
-        name: Run pre-commit hooks
 
       - uses: actions-rs/toolchain@v1
         with:
