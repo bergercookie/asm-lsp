@@ -1,5 +1,6 @@
 name: Build Documentation
 on:
+  workflow_call:
   workflow_dispatch:
   push:
     branches:
