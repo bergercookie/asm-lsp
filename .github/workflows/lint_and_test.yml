@@ -3,7 +3,8 @@ name: Lint Code / Run Tests
 on:
   workflow_dispatch:
   push:
-    branches: ["master"]
+    branches:
+      - "*"
     paths:
       - "src/**"
       - "Cargo.*"
@@ -38,12 +39,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - run: rustup toolchain install ${{ matrix.rust }} --profile minimal
       - uses: Swatinem/rust-cache@v2
 
-      - name: Run rustfmt checks
-        run: cargo fmt --check
-
-      - name: Run clippy lints
-        run: cargo clippy -- -D warnings
+      - uses: actions/setup-python@v3
+      - uses: pre-commit/action@v3.0.0
+        name: Run pre-commit hooks

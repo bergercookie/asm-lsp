@@ -1,0 +1,3 @@
+{
+  "ignorePatterns": ["https://crates.io/crates/asm-lsp"]
+}

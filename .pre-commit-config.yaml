@@ -1,0 +1,42 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: "v4.4.0"
+    hooks:
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+  - repo: https://github.com/tcort/markdown-link-check
+    rev: "v3.10.3"
+    hooks:
+      # https://github.com/tcort/markdown-link-check#config-file-format
+      - id: markdown-link-check
+        args: ["--progress", "--config", ".markdown-link-check.json"]
+  - repo: https://github.com/markdownlint/markdownlint
+    rev: "v0.12.0"
+    hooks:
+      - id: markdownlint
+        exclude: ^.github/
+        entry: mdl -r ~MD033,~MD013,~MD034,~MD029,~MD007
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: "0.27.0"
+    hooks:
+      - id: check-github-workflows
+        args: ["--verbose", "--builtin-schema", "vendor.github-workflows"]
+        files: ^\.github/workflows/
+        types: [yaml]
+  - repo: meta
+    hooks:
+      - id: check-hooks-apply
+      - id: check-useless-excludes
+
+  - repo: https://github.com/doublify/pre-commit-rust
+    rev: v1.0
+    hooks:
+      - id: fmt
+      - id: cargo-check
+        args: ["--locked"]
+      - id: clippy
