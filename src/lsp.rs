@@ -128,7 +128,7 @@ pub fn get_target_config(params: &InitializeParams) -> TargetConfig {
     TargetConfig::default()
 }
 
-pub fn filter_targets(instr: &Instruction, config: &TargetConfig) -> Instruction {
+pub fn instr_filter_targets(instr: &Instruction, config: &TargetConfig) -> Instruction {
     let mut instr = instr.clone();
 
     let forms = instr

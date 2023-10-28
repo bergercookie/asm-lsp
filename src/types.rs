@@ -1,6 +1,93 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use strum_macros::{AsRefStr, EnumString};
+use strum_macros::{AsRefStr, Display, EnumString};
+
+// Register ---------------------------------------------------------------------------------------
+#[derive(Debug, Clone)]
+pub struct Register {
+    pub name: String,
+    pub description: String,
+    pub reg_type: Option<RegisterType>,
+    pub location: Option<RegisterLocation>,
+    pub bit_info: Vec<RegisterBitInfo>,
+    pub url: Option<String>,
+    pub arch: Option<Arch>,
+}
+
+impl Default for Register {
+    fn default() -> Self {
+        let name = String::new();
+        let description = String::new();
+        let reg_type = None;
+        let location = None;
+        let bit_info = vec![];
+        let url = None;
+        let arch = None;
+
+        Self {
+            name,
+            description,
+            reg_type,
+            location,
+            bit_info,
+            url,
+            arch,
+        }
+    }
+}
+
+impl std::fmt::Display for Register {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // basic fields
+        let header: String;
+        if let Some(arch) = &self.arch {
+            header = format!("{} [{}]", &self.name, arch.as_ref());
+        } else {
+            header = self.name.clone();
+        }
+
+        let mut v: Vec<String> = vec![header.clone(), self.description.clone(), String::from("\n")];
+
+        // Register Type
+        let reg_type_str = if let Some(reg_type_) = self.reg_type {
+            reg_type_.to_string()
+        } else {
+            String::new()
+        };
+        if !reg_type_str.is_empty() {
+            v.push(reg_type_str);
+        }
+
+        // Register Location
+        let reg_loc_str = if let Some(location_) = self.location {
+            location_.to_string()
+        } else {
+            String::new()
+        };
+        if !reg_loc_str.is_empty() {
+            v.push(reg_loc_str);
+        }
+
+        // Bit Meanings
+        for (i, bit) in self.bit_info.iter().enumerate() {
+            v.push(format!("{:2}: {} - {}", i, bit.label, bit.description));
+        }
+
+        // url
+        let more_info: String;
+        match &self.url {
+            None => {}
+            Some(url_) => {
+                more_info = format!("\nMore info: {}", url_);
+                v.push(more_info.clone());
+            }
+        }
+
+        let s = v.join("\n");
+        write!(f, "{}", s)?;
+        Ok(())
+    }
+}
 
 // Instruction ------------------------------------------------------------------------------------
 #[derive(Debug, Clone)]
@@ -161,6 +248,9 @@ impl std::fmt::Display for InstructionForm {
 pub type NameToInstructionMap<'instruction> =
     HashMap<(Arch, &'instruction str), &'instruction Instruction>;
 
+pub type NameToRegisterMap<'register> = 
+    HashMap<(Arch, &'register str), &'register Register>;
+
 #[derive(Debug, Clone, EnumString, AsRefStr)]
 pub enum XMMMode {
     SSE,
@@ -177,6 +267,48 @@ pub enum MMXMode {
 pub enum Arch {
     X86,
     X86_64,
+}
+
+#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Display)]
+pub enum RegisterType {
+    #[strum(serialize = "General Purpose Register")]
+    GeneralPurpose,
+    #[strum(serialize = "Pointer Register")]
+    Pointer,
+    #[strum(serialize = "Segment Register")]
+    Segment,
+    #[strum(serialize = "RFLAGS Register")]
+    RFLAGS,
+    #[strum(serialize = "Control Register")]
+    Control,
+    #[strum(serialize = "Machine State Register")]
+    MSR,
+    #[strum(serialize = "Debug Register")]
+    Debug,
+    #[strum(serialize = "Test Register")]
+    Test,
+    #[strum(serialize = "Protected Mode Register")]
+    ProtectedMode,
+}
+
+#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Display)]
+pub enum RegisterLocation {
+    #[strum(serialize = "64-bit")]
+    Bits64,
+    #[strum(serialize = "32-bit")]
+    Bits32,
+    #[strum(serialize = "16-bit")]
+    Bits16,
+    #[strum(serialize = "8 high bits of lower 16 bits")]
+    Upper8Lower16,
+    #[strum(serialize = "8-bit")]
+    Lower8Lower16,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RegisterBitInfo {
+    label: String,
+    description: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

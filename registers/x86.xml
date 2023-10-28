@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='utf-8'?>
+<InstructionSet name="x86">
+    <Register name="rax" description="Accumulator" type="GeneralPurpose" location="64-bit">
+    </Register>
+    <Register name="eax" description="Accumulator" type="GeneralPurpose" location="32-bit">
+    </Register>
+    <Register name="ax" description="Accumulator" type="GeneralPurpose" location="16-bit">
+    </Register>
+    <Register name="ah" description="Accumulator" type="GeneralPurpose" location="8-high-bits">
+    </Register>
+    <Register name="al" description="Accumulator" type="GeneralPurpose" location="8-low-bits">
+    </Register>
+    <Register name="rbx" description="Base" type="GeneralPurpose" location="64-bit">
+    </Register>
+    <Register name="ebx" description="Base" type="GeneralPurpose" location="32-bit">
+    </Register>
+    <Register name="bx" description="Base" type="GeneralPurpose" location="16-bit">
+    </Register>
+    <Register name="bh" description="Base" type="GeneralPurpose" location="8-high-bits">
+    </Register>
+    <Register name="bl" description="Base" type="GeneralPurpose" location="8-low-bits">
+    </Register>
+    <Register name="rcx" description="Counter" type="GeneralPurpose" location="64-bit">
+    </Register>
+    <Register name="ecx" description="Counter" type="GeneralPurpose" location="32-bit">
+    </Register>
+    <Register name="cx" description="Counter" type="GeneralPurpose" location="16-bit">
+    </Register>
+    <Register name="ch" description="Counter" type="GeneralPurpose" location="8-high-bits">
+    </Register>
+    <Register name="cl" description="Counter" type="GeneralPurpose" location="8-low-bits">
+    </Register>
+    <Register name="rdx" description="Data" type="GeneralPurpose" location="64-bit">
+    </Register>
+    <Register name="edx" description="Data" type="GeneralPurpose" location="32-bit">
+    </Register>
+    <Register name="dx" description="Data" type="GeneralPurpose" location="16-bit">
+    </Register>
+    <Register name="dh" description="Data" type="GeneralPurpose" location="8-high-bits">
+    </Register>
+    <Register name="dl" description="Data" type="GeneralPurpose" location="8-low-bits">
+    </Register>
+    <Register name="rsi" description="Source" type="GeneralPurpose" location="64-bit">
+    </Register>
+    <Register name="esi" description="Source" type="GeneralPurpose" location="32-bit">
+    </Register>
+    <Register name="si" description="Source" type="GeneralPurpose" location="16-bit">
+    </Register>
+    <Register name="sil" description="Source" type="GeneralPurpose" location="8-low-bits">
+    </Register>
+    <Register name="rdi" description="Destination" type="GeneralPurpose" location="64-bit">
+    </Register>
+    <Register name="edi" description="Destination" type="GeneralPurpose" location="32-bit">
+    </Register>
+    <Register name="di" description="Destination" type="GeneralPurpose" location="16-bit">
+    </Register>
+    <Register name="dil" description="Destination" type="GeneralPurpose" location="8-low-bits">
+    </Register>
+    <Register name="rsp" description="Stack Pointer" type="GeneralPurpose" location="64-bit">
+    </Register>
+    <Register name="esp" description="Stack Pointer" type="GeneralPurpose" location="32-bit">
+    </Register>
+    <Register name="sp" description="Stack Pointer" type="GeneralPurpose" location="16-bit">
+    </Register>
+    <Register name="spl" description="Stack Pointer" type="GeneralPurpose" location="8-low-bits">
+    </Register>
+    <Register name="rbp" description="Stack Base Pointer" type="GeneralPurpose" location="64-bit">
+    </Register>
+    <Register name="ebp" description="Stack Base Pointer" type="GeneralPurpose" location="32-bit">
+    </Register>
+    <Register name="bp" description="Stack Base Pointer" type="GeneralPurpose" location="16-bit">
+    </Register>
+    <Register name="bpl" description="Stack Base Pointer" type="GeneralPurpose" location="8-low-bits">
+    </Register>
+</InstructionSet>

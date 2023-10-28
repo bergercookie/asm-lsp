@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<InstructionSet name="x86_64">
+    <Register name="rax" description="Accumulator" type="GeneralPurpose" location="64-bit">
+    </Register>
+</InstructionSet>
