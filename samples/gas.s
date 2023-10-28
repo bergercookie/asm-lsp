@@ -33,7 +33,7 @@ main:
 	movq	%rax, %rdx
 	movzbl	-1(%rbp), %eax
 	andl	$15, %eax
-	movl	%eax, %esi
+	movl	%RAX, %esi
 	movq	%rdx, %rdi
 	call	_ZNSolsEi@PLT
 	movq	%rax, %rdx

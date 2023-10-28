@@ -21,6 +21,31 @@ use std::str::FromStr;
 ///
 /// Current function assumes that the XML file is already read and that it's been given a reference
 /// to its contents (`&str`).
+pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
+    // initialise the instruction set
+    let mut registers_map = HashMap::<String, Register>::new();
+
+    // iterate through the XML --------------------------------------------------------------------
+    let mut reader = Reader::from_str(xml_contents);
+    reader.trim_text(true);
+
+    // ref to the instruction that's currently under construction
+    let mut curr_instruction = Instruction::default();
+    let mut curr_instruction_form = InstructionForm::default();
+
+    debug!("Parsing XML contents...");
+    loop {
+        break;
+    }
+
+    Ok(registers_map.into_values().collect())
+}
+
+/// Parse the provided XML contents and return a vector of all the instrucitons based on that.
+/// If parsing fails, the appropriate error will be returned instead.
+///
+/// Current function assumes that the XML file is already read and that it's been given a reference
+/// to its contents (`&str`).
 pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instruction>> {
     // initialise the instruction set
     let mut instructions_map = HashMap::<String, Instruction>::new();
@@ -284,6 +309,16 @@ mod tests {
         }
 
         mock.assert();
+    }
+}
+
+pub fn populate_name_to_register_map<'register>(
+    arch: Arch,
+    registers: &'register Vec<Register>,
+    names_to_registers: &mut NameToRegisterMap<'register>,
+) {
+    for register in registers {
+        names_to_registers.insert((arch, &register.name), register);
     }
 }
 
