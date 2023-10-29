@@ -120,10 +120,9 @@ fn main_loop(
                         // format response
                         match word {
                             Ok(word) => {
-                                let (x86_instruction, x86_64_instruction) = (
-                                    names_to_instructions.get(&(Arch::X86, &*word)),
-                                    names_to_instructions.get(&(Arch::X86_64, &*word)),
-                                );
+                                let (x86_instruction, x86_64_instruction) =
+                                    search_for_instr(&word, names_to_instructions);
+
                                 let hover_res: Option<Hover> =
                                     match (x86_instruction.is_some(), x86_64_instruction.is_some())
                                     {
