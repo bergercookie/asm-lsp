@@ -218,7 +218,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
         }
     }
 
-    let x86_online_docs = String::from("https://www.felixcloutier.com/x86/");
+    let x86_online_docs = get_x86_docs_url();
     let body = get_docs_body(&x86_online_docs).unwrap_or_default();
     let body_it = body.split("<td>").skip(1).step_by(2);
 
@@ -244,6 +244,46 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
     }
 
     Ok(instructions_map.into_values().collect())
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::x86_parser::{get_cache_dir, populate_instructions};
+    #[test]
+    fn test_populate_instructions() {
+        let mut server = mockito::Server::new_with_port(8080);
+
+        let mock = server
+            .mock("GET", "/x86/")
+            .with_status(200)
+            .with_header("content-type", "text/html")
+            .with_body("")
+            .expect(2) // 1 request for x86, 1 for x86_64
+            .create();
+
+        // Need to clear the cache file (if there is one)
+        // to ensure a request is made for each test call
+        let mut x86_cache_path = get_cache_dir().unwrap();
+        x86_cache_path.push("x86_docs.html");
+        if x86_cache_path.is_file() {
+            std::fs::remove_file(&x86_cache_path).unwrap();
+        }
+        let xml_conts_x86 = include_str!("../opcodes/x86.xml");
+        assert!(populate_instructions(xml_conts_x86).is_ok());
+
+        if x86_cache_path.is_file() {
+            std::fs::remove_file(&x86_cache_path).unwrap();
+        }
+        let xml_conts_x86_64 = include_str!("../opcodes/x86_64.xml");
+        assert!(populate_instructions(xml_conts_x86_64).is_ok());
+
+        // Clean things up so we don't have an empty cache file
+        if x86_cache_path.is_file() {
+            std::fs::remove_file(&x86_cache_path).unwrap();
+        }
+
+        mock.assert();
+    }
 }
 
 pub fn populate_name_to_instruction_map<'instruction>(
@@ -358,6 +398,16 @@ fn get_cache_dir() -> anyhow::Result<PathBuf> {
     fs::create_dir_all(&x86_cache_path)?;
 
     Ok(x86_cache_path)
+}
+
+#[cfg(not(test))]
+fn get_x86_docs_url() -> String {
+    String::from("https://www.felixcloutier.com/x86/")
+}
+
+#[cfg(test)]
+fn get_x86_docs_url() -> String {
+    String::from("http://127.0.0.1:8080/x86/")
 }
 
 fn get_x86_docs_web(x86_online_docs: &str) -> anyhow::Result<String> {
