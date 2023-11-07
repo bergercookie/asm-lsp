@@ -41,5 +41,6 @@ serde_json = "1.0.94"
 serde = "1.0.158"
 toml = "0.8.1"
 home = "0.5.5"
+mockito = "1.2.0"
 
 # [dev-dependencies]
