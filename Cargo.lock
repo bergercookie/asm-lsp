@@ -58,6 +58,7 @@ dependencies = [
  "lsp-server",
  "lsp-types",
  "mockito",
+ "once_cell",
  "quick-xml",
  "regex",
  "reqwest",
@@ -66,6 +67,8 @@ dependencies = [
  "strum",
  "strum_macros",
  "toml",
+ "tree-sitter",
+ "tree-sitter-asm",
 ]
 
 [[package]]
@@ -1412,6 +1415,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c06d3da6113f116aaee68e4d601191614c9053067f9ab7f6edbcb161237daa54"
 dependencies = [
  "once_cell",
+]
+
+[[package]]
+name = "tree-sitter"
+version = "0.20.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e747b1f9b7b931ed39a548c1fae149101497de3c1fc8d9e18c62c1a66c683d3d"
+dependencies = [
+ "cc",
+ "regex",
+]
+
+[[package]]
+name = "tree-sitter-asm"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fbdc74797a3118e3f8b440d58b341a7c1d4538e26ddfa1b4254129a0f1280b94"
+dependencies = [
+ "cc",
+ "tree-sitter",
 ]
 
 [[package]]

@@ -5,7 +5,7 @@
 
 ## Goal
 
-Provide hovering and (TODO) autocompletion for assembly files written in the
+Provide hovering and autocompletion for assembly files written in the
 GAS/NASM or GO assembly flavors. It supports assembly files for the x86 or
 x86_64 instruction sets.
 
@@ -64,7 +64,7 @@ x86_64 = true
 
 ### Autocomplete
 
-TODO
+![](https://github.com/bergercookie/asm-lsp/blob/master/demo/autocomplete.gif)
 
 ## Acknowledgements
 
