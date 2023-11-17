@@ -1,7 +1,8 @@
 use crate::types::Column;
-use crate::{Arch, Instruction, NameToInstructionMap, TargetConfig};
+use crate::{Arch, Hoverable, Instruction, TargetConfig};
 use log::{error, info};
-use lsp_types::{InitializeParams, TextDocumentPositionParams, Url};
+use lsp_types::*;
+use std::collections::HashMap;
 use std::fs::File;
 use std::io::BufRead;
 use std::path::PathBuf;
@@ -53,23 +54,50 @@ pub fn get_word_from_file_params(
     }
 }
 
-// Note: Have to call .cloned() on the results of .get()
-// here because of compiler issue regarding entangled lifetimes: https://github.com/rust-lang/rust/issues/80389
-pub fn search_for_instr<'a: 'b, 'b>(
-    word: &str,
-    map: &'a NameToInstructionMap<'a>,
-) -> (Option<&'b Instruction>, Option<&'b Instruction>) {
-    let raised_word = word.to_uppercase();
-    let x86_instruction = map
-        .get(&(Arch::X86, word))
-        .or_else(|| map.get(&(Arch::X86, &raised_word)))
-        .cloned();
-    let x86_64_instruction = map
-        .get(&(Arch::X86_64, word))
-        .or_else(|| map.get(&(Arch::X86_64, &raised_word)))
-        .cloned();
+pub fn get_hover_resp<T: Hoverable>(word: &str, map: &HashMap<(Arch, &str), T>) -> Option<Hover> {
+    let (x86_res, x86_64_res) = search_for_hoverable(word, map);
 
-    (x86_instruction, x86_64_instruction)
+    match (x86_res.is_some(), x86_64_res.is_some()) {
+        (true, _) | (_, true) => {
+            let mut value = String::new();
+            if let Some(x86_res) = x86_res {
+                value += &format!("{}", x86_res);
+            }
+            if let Some(x86_64_res) = x86_64_res {
+                value += &format!(
+                    "{}{}",
+                    if x86_res.is_some() { "\n\n" } else { "" },
+                    x86_64_res
+                );
+            }
+            Some(Hover {
+                contents: HoverContents::Markup(MarkupContent {
+                    kind: MarkupKind::Markdown,
+                    value,
+                }),
+                range: None,
+            })
+        }
+        _ => {
+            // don't know of this word
+            None
+        }
+    }
+}
+
+// Note: Some issues here regarding entangled lifetimes
+// -- https://github.com/rust-lang/rust/issues/80389
+// If issue is resolved, can add a separate lifetime "'b" to "word"
+// parameter such that 'a: 'b
+// For now, using 'a for both isn't strictly necessary, but fits our use case
+fn search_for_hoverable<'a, T: Hoverable>(
+    word: &'a str,
+    map: &'a HashMap<(Arch, &str), T>,
+) -> (Option<&'a T>, Option<&'a T>) {
+    let x86_res = map.get(&(Arch::X86, word));
+    let x86_64_res = map.get(&(Arch::X86_64, word));
+
+    (x86_res, x86_64_res)
 }
 
 pub fn get_target_config(params: &InitializeParams) -> TargetConfig {

@@ -16,32 +16,7 @@ use std::path::PathBuf;
 use std::str;
 use std::str::FromStr;
 
-/// Parse the provided XML contents and return a vector of all the instrucitons based on that.
-/// If parsing fails, the appropriate error will be returned instead.
-///
-/// Current function assumes that the XML file is already read and that it's been given a reference
-/// to its contents (`&str`).
-pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
-    // initialise the instruction set
-    let mut registers_map = HashMap::<String, Register>::new();
-
-    // iterate through the XML --------------------------------------------------------------------
-    let mut reader = Reader::from_str(xml_contents);
-    reader.trim_text(true);
-
-    // ref to the instruction that's currently under construction
-    let mut curr_instruction = Instruction::default();
-    let mut curr_instruction_form = InstructionForm::default();
-
-    debug!("Parsing XML contents...");
-    loop {
-        break;
-    }
-
-    Ok(registers_map.into_values().collect())
-}
-
-/// Parse the provided XML contents and return a vector of all the instrucitons based on that.
+/// Parse the provided XML contents and return a vector of all the instructions based on that.
 /// If parsing fails, the appropriate error will be returned instead.
 ///
 /// Current function assumes that the XML file is already read and that it's been given a reference
@@ -73,8 +48,9 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                             let Attribute { key, value } = attr.unwrap();
                             match str::from_utf8(key.into_inner()).unwrap() {
                                 "name" => unsafe {
-                                    curr_instruction.name =
-                                        String::from(str::from_utf8_unchecked(&value));
+                                    let name = String::from(str::from_utf8_unchecked(&value));
+                                    curr_instruction.alt_names.push(name.to_uppercase());
+                                    curr_instruction.name = name;
                                 },
                                 "summary" => unsafe {
                                     curr_instruction.summary =
@@ -289,7 +265,7 @@ mod tests {
         // Need to clear the cache file (if there is one)
         // to ensure a request is made for each test call
         let mut x86_cache_path = get_cache_dir().unwrap();
-        x86_cache_path.push("x86_docs.html");
+        x86_cache_path.push("x86_instr_docs.html");
         if x86_cache_path.is_file() {
             std::fs::remove_file(&x86_cache_path).unwrap();
         }
@@ -311,16 +287,6 @@ mod tests {
     }
 }
 
-pub fn populate_name_to_register_map<'register>(
-    arch: Arch,
-    registers: &'register Vec<Register>,
-    names_to_registers: &mut NameToRegisterMap<'register>,
-) {
-    for register in registers {
-        names_to_registers.insert((arch, &register.name), register);
-    }
-}
-
 pub fn populate_name_to_instruction_map<'instruction>(
     arch: Arch,
     instructions: &'instruction Vec<Instruction>,
@@ -329,6 +295,143 @@ pub fn populate_name_to_instruction_map<'instruction>(
     for instruction in instructions {
         for name in &instruction.get_associated_names() {
             names_to_instructions.insert((arch, name), instruction);
+        }
+    }
+}
+
+/// Parse the provided XML contents and return a vector of all the registers based on that.
+/// If parsing fails, the appropriate error will be returned instead.
+///
+/// Current function assumes that the XML file is already read and that it's been given a reference
+/// to its contents (`&str`).
+pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
+    let mut registers_map = HashMap::<String, Register>::new();
+
+    // iterate through the XML --------------------------------------------------------------------
+    let mut reader = Reader::from_str(xml_contents);
+    reader.trim_text(true);
+
+    // ref to the register that's currently under construction
+    let mut curr_register = Register::default();
+    let mut curr_bit_flag = RegisterBitInfo::default();
+
+    debug!("Parsing XML contents...");
+    loop {
+        match reader.read_event() {
+            // start event ------------------------------------------------------------------------
+            Ok(Event::Start(ref e)) => {
+                match e.name() {
+                    QName(b"Register") => {
+                        // start of a new register
+                        curr_register = Register::default();
+
+                        // iterate over the attributes
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            match str::from_utf8(key.into_inner()).unwrap() {
+                                "name" => unsafe {
+                                    let name_ = String::from(str::from_utf8_unchecked(&value));
+                                    curr_register.alt_names.push(name_.to_uppercase());
+                                    curr_register.name = name_;
+                                },
+                                "altname" => unsafe {
+                                    curr_register
+                                        .alt_names
+                                        .push(String::from(str::from_utf8_unchecked(&value)));
+                                },
+                                "description" => unsafe {
+                                    curr_register.description =
+                                        Some(String::from(str::from_utf8_unchecked(&value)));
+                                },
+                                "type" => unsafe {
+                                    curr_register.reg_type = match RegisterType::from_str(
+                                        str::from_utf8_unchecked(&value),
+                                    ) {
+                                        Ok(reg) => Some(reg),
+                                        _ => None,
+                                    }
+                                },
+                                "width" => unsafe {
+                                    curr_register.width = match RegisterWidth::from_str(
+                                        str::from_utf8_unchecked(&value),
+                                    ) {
+                                        Ok(width) => Some(width),
+                                        _ => None,
+                                    }
+                                },
+                                _ => {}
+                            }
+                        }
+                    }
+                    QName(b"Flags") => {} // it's just a wrapper...
+                    // Actual flag bit info
+                    QName(b"Flag") => {
+                        curr_bit_flag = RegisterBitInfo::default();
+
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            match str::from_utf8(key.into_inner()).unwrap() {
+                                "bit" => unsafe {
+                                    curr_bit_flag.bit =
+                                        str::from_utf8_unchecked(&value).parse::<u32>().unwrap();
+                                },
+                                "label" => unsafe {
+                                    curr_bit_flag.label =
+                                        String::from(str::from_utf8_unchecked(&value));
+                                },
+                                "description" => unsafe {
+                                    curr_bit_flag.description =
+                                        String::from(str::from_utf8_unchecked(&value));
+                                },
+                                "pae" => unsafe {
+                                    curr_bit_flag.pae =
+                                        String::from(str::from_utf8_unchecked(&value));
+                                },
+                                "longmode" => unsafe {
+                                    curr_bit_flag.long_mode =
+                                        String::from(str::from_utf8_unchecked(&value));
+                                },
+                                _ => {}
+                            }
+                        }
+                    }
+                    _ => (), // unknown event
+                }
+            }
+            // end event --------------------------------------------------------------------------
+            Ok(Event::End(ref e)) => {
+                match e.name() {
+                    QName(b"Register") => {
+                        // finish instruction
+                        registers_map.insert(curr_register.name.clone(), curr_register.clone());
+                    }
+                    QName(b"Flag") => {
+                        curr_register.push_flag(curr_bit_flag.clone());
+                    }
+                    _ => (), // unknown event
+                }
+            }
+            Ok(Event::Eof) => break,
+            Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
+            _ => (), // rest of events that we don't consider
+        }
+    }
+
+    // TODO: Add to URL fields here?
+    // https://wiki.osdev.org/CPU_Registers_x86 and https://wiki.osdev.org/CPU_Registers_x86-64
+    // are less straightforward compared to the instruction set site
+
+    Ok(registers_map.into_values().collect())
+}
+
+pub fn populate_name_to_register_map<'register>(
+    arch: Arch,
+    registers: &'register Vec<Register>,
+    names_to_registers: &mut NameToRegisterMap<'register>,
+) {
+    for register in registers {
+        for name in &register.get_associated_names() {
+            names_to_registers.insert((arch, name), register);
         }
     }
 }
@@ -351,7 +454,7 @@ fn get_docs_body(x86_online_docs: &str) -> Option<String> {
     // Attempt to append the cache file name to path and see if it is valid/ exists
     let cache_exists: bool;
     if let Some(mut path) = x86_cache_path {
-        path.push("x86_docs.html");
+        path.push("x86_instr_docs.html");
         cache_exists = matches!(path.try_exists(), Ok(true));
         x86_cache_path = Some(path);
     } else {
