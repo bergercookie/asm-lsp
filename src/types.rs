@@ -1,20 +1,24 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use strum_macros::{AsRefStr, EnumString};
+use std::{collections::HashMap, fmt::Display};
+use strum_macros::{AsRefStr, Display, EnumString};
 
 // Instruction ------------------------------------------------------------------------------------
 #[derive(Debug, Clone)]
 pub struct Instruction {
     pub name: String,
+    pub alt_names: Vec<String>,
     pub summary: String,
     pub forms: Vec<InstructionForm>,
     pub url: Option<String>,
     pub arch: Option<Arch>,
 }
 
+impl Hoverable for &Instruction {}
+
 impl Default for Instruction {
     fn default() -> Self {
         let name = String::new();
+        let alt_names = vec![];
         let summary = String::new();
         let forms = vec![];
         let url = None;
@@ -22,6 +26,7 @@ impl Default for Instruction {
 
         Self {
             name,
+            alt_names,
             summary,
             forms,
             url,
@@ -40,7 +45,7 @@ impl std::fmt::Display for Instruction {
             header = self.name.clone();
         }
 
-        let mut v: Vec<&'_ str> = vec![&header, &self.summary, "\n", "## Forms", "\n"];
+        let mut v: Vec<&str> = vec![&header, &self.summary, "\n", "## Forms", "\n"];
 
         // instruction forms
         let instruction_form_strs: Vec<String> =
@@ -75,6 +80,10 @@ impl<'own> Instruction {
     pub fn get_associated_names(&'own self) -> Vec<&'own str> {
         let mut names = Vec::<&'own str>::new();
         names.push(&self.name);
+
+        for name in &self.alt_names {
+            names.push(name);
+        }
 
         for f in &self.forms {
             for name in [&f.gas_name, &f.go_name].iter().copied().flatten() {
@@ -157,9 +166,127 @@ impl std::fmt::Display for InstructionForm {
     }
 }
 
+// Register ---------------------------------------------------------------------------------------
+#[derive(Debug, Clone)]
+pub struct Register {
+    pub name: String,
+    pub alt_names: Vec<String>,
+    pub description: Option<String>,
+    pub reg_type: Option<RegisterType>,
+    pub width: Option<RegisterWidth>,
+    pub flag_info: Vec<RegisterBitInfo>,
+    pub arch: Option<Arch>,
+    pub url: Option<String>,
+}
+
+impl Hoverable for &Register {}
+
+impl Default for Register {
+    fn default() -> Self {
+        let name = String::new();
+        let alt_names = vec![];
+        let description = None;
+        let reg_type = None;
+        let width = None;
+        let flag_info = vec![];
+        let arch = None;
+        let url = None;
+
+        Self {
+            name,
+            alt_names,
+            description,
+            reg_type,
+            width,
+            flag_info,
+            arch,
+            url,
+        }
+    }
+}
+
+impl std::fmt::Display for Register {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // basic fields
+        let header: String;
+        if let Some(arch) = &self.arch {
+            header = format!("{} [{}]", &self.name.to_uppercase(), arch.as_ref());
+        } else {
+            header = self.name.to_uppercase();
+        }
+
+        let mut v: Vec<String> = if let Some(description_) = &self.description {
+            vec![header, description_.clone(), String::from("\n")]
+        } else {
+            vec![header, String::from("\n")]
+        };
+
+        // Register Type
+        if let Some(reg_type_) = &self.reg_type {
+            let reg_type = format!("Type: {}", reg_type_);
+            v.push(reg_type);
+        }
+
+        // Register Width
+        if let Some(reg_width_) = self.width {
+            let reg_width = format!("Width: {}", reg_width_);
+            v.push(reg_width);
+        }
+
+        // Bit-mask flag meanings if applicable
+        if !self.flag_info.is_empty() {
+            let flag_heading = String::from("\n## Flags:");
+            v.push(flag_heading);
+
+            let flags: Vec<String> = self
+                .flag_info
+                .iter()
+                .map(|flag| format!("{}", flag))
+                .collect();
+            for flag in flags.iter() {
+                v.push(flag.clone());
+            }
+        }
+
+        // TODO: URL support
+        if let Some(url_) = &self.url {
+            let more_info = format!("\nMore info: {}", url_);
+            v.push(more_info);
+        }
+
+        let s = v.join("\n");
+        write!(f, "{}", s)?;
+        Ok(())
+    }
+}
+
+impl<'own> Register {
+    /// Add a new bit flag entry at the current instruction
+    pub fn push_flag(&mut self, flag: RegisterBitInfo) {
+        self.flag_info.push(flag);
+    }
+
+    /// get the names of all the associated registers
+    pub fn get_associated_names(&'own self) -> Vec<&'own str> {
+        let mut names = Vec::<&'own str>::new();
+        names.push(&self.name);
+
+        for name in &self.alt_names {
+            names.push(name);
+        }
+
+        names
+    }
+}
+
 // helper structs, types and functions ------------------------------------------------------------
 pub type NameToInstructionMap<'instruction> =
     HashMap<(Arch, &'instruction str), &'instruction Instruction>;
+
+pub type NameToRegisterMap<'register> = HashMap<(Arch, &'register str), &'register Register>;
+
+// Define a trait for types we display on Hover Requests so we can avoid some duplicate code
+pub trait Hoverable: Display + Clone + Copy {}
 
 #[derive(Debug, Clone, EnumString, AsRefStr)]
 pub enum XMMMode {
@@ -177,6 +304,82 @@ pub enum MMXMode {
 pub enum Arch {
     X86,
     X86_64,
+}
+
+#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Display)]
+pub enum RegisterType {
+    #[strum(serialize = "General Purpose Register")]
+    GeneralPurpose,
+    #[strum(serialize = "Pointer Register")]
+    Pointer,
+    #[strum(serialize = "Segment Register")]
+    Segment,
+    #[strum(serialize = "Flag Register")]
+    Flag,
+    #[strum(serialize = "Control Register")]
+    Control,
+    #[strum(serialize = "Extended Control Register")]
+    ExtendedControl,
+    #[strum(serialize = "Machine State Register")]
+    MSR,
+    #[strum(serialize = "Debug Register")]
+    Debug,
+    #[strum(serialize = "Test Register")]
+    Test,
+    #[strum(serialize = "Protected Mode Register")]
+    ProtectedMode,
+}
+
+#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Display)]
+pub enum RegisterWidth {
+    #[strum(serialize = "512 bits")]
+    Bits512,
+    #[strum(serialize = "256 bits")]
+    Bits256,
+    #[strum(serialize = "128 bits")]
+    Bits128,
+    #[strum(serialize = "32(64) bits")]
+    Bits32Or64,
+    #[strum(serialize = "64 bits")]
+    Bits64,
+    #[strum(serialize = "48 bits")]
+    Bits48,
+    #[strum(serialize = "32 bits")]
+    Bits32,
+    #[strum(serialize = "16 bits")]
+    Bits16,
+    #[strum(serialize = "8 high bits of lower 16 bits")]
+    Upper8Lower16,
+    #[strum(serialize = "8 lower bits")]
+    Lower8Lower16,
+}
+
+#[derive(Debug, Clone, Serialize, Default, Deserialize)]
+pub struct RegisterBitInfo {
+    pub bit: u32,
+    pub label: String,
+    pub description: String,
+    pub pae: String,
+    pub long_mode: String,
+}
+
+impl std::fmt::Display for RegisterBitInfo {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut s = if self.label.is_empty() {
+            format!("{:2}: {}", self.bit, self.description)
+        } else {
+            format!("{:2}: {} - {}", self.bit, self.label, self.description)
+        };
+        if !self.pae.is_empty() {
+            s += &format!(", PAE: {}", self.pae);
+        }
+        if !self.long_mode.is_empty() {
+            s += &format!(", Long Mode: {}", self.long_mode);
+        }
+
+        write!(f, "{}", s)?;
+        Ok(())
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

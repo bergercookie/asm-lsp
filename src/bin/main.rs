@@ -4,7 +4,7 @@ use log::{error, info};
 use lsp_types::request::HoverRequest;
 use lsp_types::*;
 
-use crate::lsp::{filter_targets, get_target_config};
+use crate::lsp::{get_target_config, instr_filter_targets};
 
 use lsp_server::{Connection, Message, Request, RequestId, Response};
 use serde_json::json;
@@ -48,7 +48,7 @@ pub fn main() -> anyhow::Result<()> {
             })
             .map(|instruction| {
                 // filter out assemblers by user config
-                filter_targets(&instruction, &target_config)
+                instr_filter_targets(&instruction, &target_config)
             })
             .filter(|instruction| !instruction.forms.is_empty())
             .collect()
@@ -67,7 +67,7 @@ pub fn main() -> anyhow::Result<()> {
             })
             .map(|instruction| {
                 // filter out assemblers by user config
-                filter_targets(&instruction, &target_config)
+                instr_filter_targets(&instruction, &target_config)
             })
             .filter(|instruction| !instruction.forms.is_empty())
             .collect()
@@ -83,7 +83,47 @@ pub fn main() -> anyhow::Result<()> {
         &mut names_to_instructions,
     );
 
-    main_loop(&connection, initialization_params, &names_to_instructions)?;
+    // create a map of &Register_name -> &Register - Use that in user queries
+    // The Register(s) themselves are stored in a vector and we only keep references to the
+    // former map
+    let x86_registers = if target_config.instruction_sets.x86 {
+        info!("Populating register set -> x86...");
+        let xml_conts_regs_x86 = include_str!("../../registers/x86.xml");
+        populate_registers(xml_conts_regs_x86)?
+            .into_iter()
+            .map(|mut reg| {
+                reg.arch = Some(Arch::X86);
+                reg
+            })
+            .collect()
+    } else {
+        Vec::new()
+    };
+
+    let x86_64_registers = if target_config.instruction_sets.x86_64 {
+        info!("Populating register set -> x86_64...");
+        let xml_conts_regs_x86_64 = include_str!("../../registers/x86_64.xml");
+        populate_registers(xml_conts_regs_x86_64)?
+            .into_iter()
+            .map(|mut reg| {
+                reg.arch = Some(Arch::X86_64);
+                reg
+            })
+            .collect()
+    } else {
+        Vec::new()
+    };
+
+    let mut names_to_registers = NameToRegisterMap::new();
+    populate_name_to_register_map(Arch::X86, &x86_registers, &mut names_to_registers);
+    populate_name_to_register_map(Arch::X86_64, &x86_64_registers, &mut names_to_registers);
+
+    main_loop(
+        &connection,
+        initialization_params,
+        &names_to_instructions,
+        &names_to_registers,
+    )?;
     io_threads.join()?;
 
     // Shut down gracefully.
@@ -95,6 +135,7 @@ fn main_loop(
     connection: &Connection,
     params: serde_json::Value,
     names_to_instructions: &NameToInstructionMap,
+    names_to_registers: &NameToRegisterMap,
 ) -> anyhow::Result<()> {
     let _params: InitializeParams = serde_json::from_value(params).unwrap();
     info!("Starting LSP loop...");
@@ -120,41 +161,13 @@ fn main_loop(
                         // format response
                         match word {
                             Ok(word) => {
-                                let (x86_instruction, x86_64_instruction) =
-                                    search_for_instr(&word, names_to_instructions);
-
-                                let hover_res: Option<Hover> =
-                                    match (x86_instruction.is_some(), x86_64_instruction.is_some())
-                                    {
-                                        (true, _) | (_, true) => {
-                                            let mut value = String::new();
-                                            if let Some(x86_instruction) = x86_instruction {
-                                                value += &format!("{}", x86_instruction);
-                                            }
-                                            if let Some(x86_64_instruction) = x86_64_instruction {
-                                                value += &format!(
-                                                    "{}{}",
-                                                    if x86_instruction.is_some() {
-                                                        "\n\n"
-                                                    } else {
-                                                        ""
-                                                    },
-                                                    x86_64_instruction
-                                                );
-                                            }
-                                            Some(Hover {
-                                                contents: HoverContents::Markup(MarkupContent {
-                                                    kind: MarkupKind::Markdown,
-                                                    value,
-                                                }),
-                                                range: None,
-                                            })
-                                        }
-                                        _ => {
-                                            // don't know of this word
-                                            None
-                                        }
-                                    };
+                                let hover_res = get_hover_resp(&word, names_to_instructions);
+                                // If no instructions matched, check the registers
+                                let hover_res = if hover_res.is_none() {
+                                    get_hover_resp(&word, names_to_registers)
+                                } else {
+                                    hover_res
+                                };
                                 match hover_res {
                                     Some(_) => {
                                         let result = serde_json::to_value(&hover_res).unwrap();
