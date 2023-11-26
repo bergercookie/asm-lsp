@@ -1,8 +1,9 @@
 use crate::types::Column;
-use crate::{Arch, Hoverable, Instruction, TargetConfig};
-use log::{error, info};
+use crate::{Arch, Completable, Hoverable, Instruction, TargetConfig};
+use log::{error, info, log, log_enabled};
 use lsp_types::*;
-use std::collections::HashMap;
+use once_cell::sync::Lazy;
+use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::BufRead;
 use std::path::PathBuf;
@@ -54,6 +55,43 @@ pub fn get_word_from_file_params(
     }
 }
 
+/// Function allowing us to connect tree sitter's logging with the log crate
+pub fn tree_sitter_logger(log_type: tree_sitter::LogType, message: &str) {
+    // map tree-sitter log types to log levels, for now set everything to Trace
+    let log_level = match log_type {
+        tree_sitter::LogType::Parse | tree_sitter::LogType::Lex => log::Level::Trace,
+    };
+
+    // tree-sitter logs are incredibly verbose, only forward them to the logger
+    // if we *really* need to see what's going on
+    if log_enabled!(log_level) {
+        log!(log_level, "{}", message);
+    }
+}
+
+/// Given a NameTo_SomeItem_ map, returns a `Vec<CompletionItem>` for the items
+/// contained within the map
+pub fn get_completes<T: Completable>(
+    map: &HashMap<(Arch, &str), T>,
+    kind: Option<CompletionItemKind>,
+) -> Vec<CompletionItem> {
+    map.iter()
+        .map(|((_arch, name), item_info)| {
+            let value = format!("{}", item_info);
+
+            CompletionItem {
+                label: String::from(*name),
+                kind,
+                documentation: Some(Documentation::MarkupContent(MarkupContent {
+                    kind: MarkupKind::Markdown,
+                    value,
+                })),
+                ..Default::default()
+            }
+        })
+        .collect()
+}
+
 pub fn get_hover_resp<T: Hoverable>(word: &str, map: &HashMap<(Arch, &str), T>) -> Option<Hover> {
     let (x86_res, x86_64_res) = search_for_hoverable(word, map);
 
@@ -83,6 +121,302 @@ pub fn get_hover_resp<T: Hoverable>(word: &str, map: &HashMap<(Arch, &str), T>) 
             None
         }
     }
+}
+
+/// Filter out duplicate completion suggestions
+fn filtered_comp_list(comps: &[CompletionItem]) -> Vec<CompletionItem> {
+    let mut seen = HashSet::new();
+
+    comps
+        .iter()
+        .filter(|comp_item| {
+            if seen.contains(&comp_item.label) {
+                false
+            } else {
+                seen.insert(&comp_item.label);
+                true
+            }
+        })
+        .cloned()
+        .collect()
+}
+
+pub fn get_comp_resp(
+    curr_doc: &str,
+    parser: &mut tree_sitter::Parser,
+    params: &CompletionParams,
+    instr_comps: &[CompletionItem],
+    reg_comps: &[CompletionItem],
+) -> Option<CompletionList> {
+    let cursor_line = params.text_document_position.position.line as usize;
+    let cursor_char = params.text_document_position.position.character as usize;
+    let mut comp_items = None;
+
+    // prepend register names with "%" in GAS
+    if let Some(ctx) = params.context.as_ref() {
+        if ctx.trigger_kind == CompletionTriggerKind::TRIGGER_CHARACTER {
+            return Some(CompletionList {
+                is_incomplete: true,
+                items: reg_comps.to_owned(),
+            });
+        }
+    }
+
+    // TODO: filter register completions by width allowed by corresponding instruction
+    // TODO: Would like to do incremental parsing but don't see a straightforward
+    // way to map the LSP's edit info the the format/ info tree-sitter is expecting...
+    let curr_tree = parser.parse(curr_doc, None);
+    if let Some(tree) = curr_tree {
+        let mut cursor = tree_sitter::QueryCursor::new();
+        cursor.set_point_range(std::ops::Range {
+            start: tree_sitter::Point {
+                row: cursor_line,
+                column: 0,
+            },
+            end: tree_sitter::Point {
+                row: cursor_line,
+                column: usize::MAX,
+            },
+        });
+        let curr_doc = curr_doc.as_bytes();
+
+        // Instruction and two register arguments
+        static QUERY_INSTR_REG_REG: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(
+                tree_sitter_asm::language(),
+                "(instruction kind: (word) @instr_name (ident (reg) @r1) (ident (reg) @r2))",
+            )
+            .unwrap()
+        });
+
+        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = cursor
+            .matches(&QUERY_INSTR_REG_REG, tree.root_node(), curr_doc)
+            .collect();
+        if let Some(match_) = matches.first() {
+            let caps = match_.captures;
+            if caps.len() == 3 {
+                let instr_start = caps[0].node.range().start_point;
+                let instr_end = caps[0].node.range().end_point;
+                let reg_1_start = caps[1].node.range().start_point;
+                let reg_1_end = caps[1].node.range().end_point;
+                let reg_2_start = caps[2].node.range().start_point;
+                let reg_2_end = caps[2].node.range().end_point;
+                if instr_start.row == cursor_line
+                    && instr_end.row == cursor_line
+                    && instr_start.column <= cursor_char
+                    && instr_end.column >= cursor_char
+                {
+                    comp_items = Some(filtered_comp_list(instr_comps));
+                } else if (reg_1_start.row == cursor_line
+                    && reg_1_end.row == cursor_line
+                    && reg_1_start.column <= cursor_char
+                    && reg_1_end.column >= cursor_char)
+                    || (reg_2_start.row == cursor_line
+                        && reg_2_end.row == cursor_line
+                        && reg_2_start.column <= cursor_char
+                        && reg_2_end.column >= cursor_char)
+                {
+                    comp_items = Some(filtered_comp_list(reg_comps));
+                }
+                if let Some(items) = comp_items {
+                    return Some(CompletionList {
+                        is_incomplete: true,
+                        items,
+                    });
+                }
+            }
+        }
+
+        // Instruction and one register argument, one non-register argument
+        static QUERY_INSTR_REG_ARG: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(
+                tree_sitter_asm::language(),
+                "(instruction kind: (word) @instr_name (ident (reg) @r1) (ident))",
+            )
+            .unwrap()
+        });
+
+        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = cursor
+            .matches(&QUERY_INSTR_REG_ARG, tree.root_node(), curr_doc)
+            .collect();
+        if let Some(match_) = matches.first() {
+            let caps = match_.captures;
+            if caps.len() == 2 {
+                let instr_start = caps[0].node.range().start_point;
+                let instr_end = caps[0].node.range().end_point;
+                let reg_1_start = caps[1].node.range().start_point;
+                let reg_1_end = caps[1].node.range().end_point;
+                if instr_start.row == cursor_line
+                    && instr_end.row == cursor_line
+                    && instr_start.column <= cursor_char
+                    && instr_end.column >= cursor_char
+                {
+                    comp_items = Some(filtered_comp_list(instr_comps));
+                } else if reg_1_start.row == cursor_line
+                    && reg_1_end.row == cursor_line
+                    && reg_1_start.column <= cursor_char
+                    && reg_1_end.column >= cursor_char
+                {
+                    comp_items = Some(filtered_comp_list(reg_comps));
+                }
+                if let Some(items) = comp_items {
+                    return Some(CompletionList {
+                        is_incomplete: true,
+                        items,
+                    });
+                }
+            }
+        }
+
+        // Instruction and one non-register argument, one register argument
+        static QUERY_INSTR_ARG_REG: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(
+                tree_sitter_asm::language(),
+                "(instruction kind: (word) @instr_name (ident) (ident (reg) @r1))",
+            )
+            .unwrap()
+        });
+        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = cursor
+            .matches(&QUERY_INSTR_ARG_REG, tree.root_node(), curr_doc)
+            .collect();
+        if let Some(match_) = matches.first() {
+            let caps = match_.captures;
+            if caps.len() == 2 {
+                let instr_start = caps[0].node.range().start_point;
+                let instr_end = caps[0].node.range().end_point;
+                let reg_1_start = caps[1].node.range().start_point;
+                let reg_1_end = caps[1].node.range().end_point;
+                if instr_start.row == cursor_line
+                    && instr_end.row == cursor_line
+                    && instr_start.column <= cursor_char
+                    && instr_end.column >= cursor_char
+                {
+                    comp_items = Some(filtered_comp_list(instr_comps));
+                } else if reg_1_start.row == cursor_line
+                    && reg_1_end.row == cursor_line
+                    && reg_1_start.column <= cursor_char
+                    && reg_1_end.column >= cursor_char
+                {
+                    comp_items = Some(filtered_comp_list(reg_comps));
+                }
+                if let Some(items) = comp_items {
+                    return Some(CompletionList {
+                        is_incomplete: true,
+                        items,
+                    });
+                }
+            }
+        }
+
+        // Instruction and one register argument
+        static QUERY_INSTR_REG: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(
+                tree_sitter_asm::language(),
+                "(instruction kind: (word) @instr_name (ident (reg) @r1))",
+            )
+            .unwrap()
+        });
+        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = cursor
+            .matches(&QUERY_INSTR_REG, tree.root_node(), curr_doc)
+            .collect();
+        if let Some(match_) = matches.first() {
+            let caps = match_.captures;
+            if caps.len() == 2 {
+                let instr_start = caps[0].node.range().start_point;
+                let instr_end = caps[0].node.range().end_point;
+                let reg_start = caps[1].node.range().start_point;
+                let reg_end = caps[1].node.range().end_point;
+                if instr_start.row == cursor_line
+                    && instr_end.row == cursor_line
+                    && instr_start.column <= cursor_char
+                    && instr_end.column >= cursor_char
+                {
+                    comp_items = Some(filtered_comp_list(instr_comps));
+                } else if reg_start.row == cursor_line
+                    && reg_end.row == cursor_line
+                    && reg_start.column <= cursor_char
+                    && reg_end.column >= cursor_char
+                {
+                    comp_items = Some(filtered_comp_list(reg_comps));
+                }
+
+                if let Some(items) = comp_items {
+                    return Some(CompletionList {
+                        is_incomplete: true,
+                        items,
+                    });
+                }
+            }
+        }
+
+        // Instruction and one non-register argument
+        static QUERY_INSTR_ARG: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(
+                tree_sitter_asm::language(),
+                "(instruction kind: (word) @instr_name (ident))",
+            )
+            .unwrap()
+        });
+        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = cursor
+            .matches(&QUERY_INSTR_ARG, tree.root_node(), curr_doc)
+            .collect();
+        if let Some(match_) = matches.first() {
+            let caps = match_.captures;
+            if caps.len() == 1 {
+                let instr_start = caps[0].node.range().start_point;
+                let instr_end = caps[0].node.range().end_point;
+                if instr_start.row == cursor_line
+                    && instr_end.row == cursor_line
+                    && instr_start.column <= cursor_char
+                    && instr_end.column >= cursor_char
+                {
+                    comp_items = Some(filtered_comp_list(instr_comps));
+                }
+
+                if let Some(items) = comp_items {
+                    return Some(CompletionList {
+                        is_incomplete: true,
+                        items,
+                    });
+                }
+            }
+        }
+
+        // Just an instruction
+        static QUERY_INSTR: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(
+                tree_sitter_asm::language(),
+                "(instruction kind: (word) @instr_name)",
+            )
+            .unwrap()
+        });
+        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = cursor
+            .matches(&QUERY_INSTR, tree.root_node(), curr_doc)
+            .collect();
+        if let Some(match_) = matches.first() {
+            let caps = match_.captures;
+            if caps.len() == 1 {
+                let instr_start = caps[0].node.range().start_point;
+                let instr_end = caps[0].node.range().end_point;
+                if instr_start.row == cursor_line
+                    && instr_end.row == cursor_line
+                    && instr_start.column <= cursor_char
+                    && instr_end.column >= cursor_char
+                {
+                    comp_items = Some(filtered_comp_list(instr_comps));
+                }
+
+                if let Some(items) = comp_items {
+                    return Some(CompletionList {
+                        is_incomplete: true,
+                        items,
+                    });
+                }
+            }
+        }
+    }
+
+    None
 }
 
 // Note: Some issues here regarding entangled lifetimes

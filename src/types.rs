@@ -14,6 +14,7 @@ pub struct Instruction {
 }
 
 impl Hoverable for &Instruction {}
+impl Completable for &Instruction {}
 
 impl Default for Instruction {
     fn default() -> Self {
@@ -180,6 +181,7 @@ pub struct Register {
 }
 
 impl Hoverable for &Register {}
+impl Completable for &Register {}
 
 impl Default for Register {
     fn default() -> Self {
@@ -287,6 +289,8 @@ pub type NameToRegisterMap<'register> = HashMap<(Arch, &'register str), &'regist
 
 // Define a trait for types we display on Hover Requests so we can avoid some duplicate code
 pub trait Hoverable: Display + Clone + Copy {}
+// Define a trait for types we display on Completion Requests so we can avoid some duplicate code
+pub trait Completable: Display {}
 
 #[derive(Debug, Clone, EnumString, AsRefStr)]
 pub enum XMMMode {
