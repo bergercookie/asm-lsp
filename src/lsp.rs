@@ -386,6 +386,97 @@ pub fn get_comp_resp(
     None
 }
 
+fn lsp_pos_of_point(pos: tree_sitter::Point) -> lsp_types::Position {
+    Position {
+        line: pos.row as u32,
+        character: pos.column as u32,
+    }
+}
+
+/// Get a tree of symbols describing the document's structure.
+pub fn get_document_symbols(
+    curr_doc: &str,
+    parser: &mut tree_sitter::Parser,
+    _params: &DocumentSymbolParams,
+) -> Option<Vec<DocumentSymbol>> {
+    let tree = parser.parse(curr_doc, None)?;
+
+    static LABEL_KIND_ID: Lazy<u16> =
+        Lazy::new(|| tree_sitter_asm::language().id_for_node_kind("label", true));
+    static IDENT_KIND_ID: Lazy<u16> =
+        Lazy::new(|| tree_sitter_asm::language().id_for_node_kind("ident", true));
+
+    /// Explore `node`, push immediate children into `res`.
+    fn explore_node(curr_doc: &str, node: tree_sitter::Node, res: &mut Vec<DocumentSymbol>) {
+        if node.kind_id() == *LABEL_KIND_ID {
+            let mut children = vec![];
+            let mut cursor = node.walk();
+
+            // description for this node
+            let mut descr = String::new();
+
+            if cursor.goto_first_child() {
+                loop {
+                    let sub_node = cursor.node();
+                    if sub_node.kind_id() == *IDENT_KIND_ID {
+                        if let Ok(text) = sub_node.utf8_text(curr_doc.as_bytes()) {
+                            descr = text.to_string();
+                        }
+                    }
+
+                    explore_node(curr_doc, sub_node, &mut children);
+                    if !cursor.goto_next_sibling() {
+                        break;
+                    }
+                }
+            }
+
+            let range = lsp_types::Range::new(
+                lsp_pos_of_point(node.start_position()),
+                lsp_pos_of_point(node.end_position()),
+            );
+
+            #[allow(deprecated)]
+            let doc = DocumentSymbol {
+                name: descr,
+                detail: None,
+                kind: SymbolKind::FUNCTION,
+                tags: None,
+                deprecated: Some(false),
+                range,
+                selection_range: range,
+                children: if children.is_empty() {
+                    None
+                } else {
+                    Some(children)
+                },
+            };
+            res.push(doc)
+        } else {
+            let mut cursor = node.walk();
+
+            if cursor.goto_first_child() {
+                loop {
+                    explore_node(curr_doc, cursor.node(), res);
+                    if !cursor.goto_next_sibling() {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    let mut res: Vec<DocumentSymbol> = vec![];
+    let mut cursor = tree.walk();
+    loop {
+        explore_node(curr_doc, cursor.node(), &mut res);
+        if !cursor.goto_next_sibling() {
+            break;
+        }
+    }
+    Some(res)
+}
+
 // Note: Some issues here regarding entangled lifetimes
 // -- https://github.com/rust-lang/rust/issues/80389
 // If issue is resolved, can add a separate lifetime "'b" to "word"
