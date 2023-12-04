@@ -45,5 +45,6 @@ mockito = "1.2.0"
 tree-sitter = "0.20.10"
 tree-sitter-asm = "0.1.0"
 once_cell = "1.18.0"
+lsp-textdocument = "0.3.2"
 
 # [dev-dependencies]
