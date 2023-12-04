@@ -166,7 +166,7 @@ pub fn get_comp_resp(
         if ctx.trigger_kind == CompletionTriggerKind::TRIGGER_CHARACTER {
             return Some(CompletionList {
                 is_incomplete: true,
-                items: reg_comps.to_owned(),
+                items: filtered_comp_list(reg_comps),
             });
         }
     }
