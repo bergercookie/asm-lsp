@@ -141,6 +141,15 @@ fn filtered_comp_list(comps: &[CompletionItem]) -> Vec<CompletionItem> {
         .collect()
 }
 
+macro_rules! cursor_matches {
+    ($cursor_line:expr,$cursor_char:expr,$query_start:expr,$query_end:expr) => {{
+        $query_start.row == $cursor_line
+            && $query_end.row == $cursor_line
+            && $query_start.column <= $cursor_char
+            && $query_end.column >= $cursor_char
+    }};
+}
+
 pub fn get_comp_resp(
     curr_doc: &str,
     parser: &mut tree_sitter::Parser,
@@ -201,20 +210,10 @@ pub fn get_comp_resp(
                 let reg_1_end = caps[1].node.range().end_point;
                 let reg_2_start = caps[2].node.range().start_point;
                 let reg_2_end = caps[2].node.range().end_point;
-                if instr_start.row == cursor_line
-                    && instr_end.row == cursor_line
-                    && instr_start.column <= cursor_char
-                    && instr_end.column >= cursor_char
-                {
+                if cursor_matches!(cursor_line, cursor_char, instr_start, instr_end) {
                     comp_items = Some(filtered_comp_list(instr_comps));
-                } else if (reg_1_start.row == cursor_line
-                    && reg_1_end.row == cursor_line
-                    && reg_1_start.column <= cursor_char
-                    && reg_1_end.column >= cursor_char)
-                    || (reg_2_start.row == cursor_line
-                        && reg_2_end.row == cursor_line
-                        && reg_2_start.column <= cursor_char
-                        && reg_2_end.column >= cursor_char)
+                } else if cursor_matches!(cursor_line, cursor_char, reg_1_start, reg_1_end)
+                    || cursor_matches!(cursor_line, cursor_char, reg_2_start, reg_2_end)
                 {
                     comp_items = Some(filtered_comp_list(reg_comps));
                 }
@@ -244,19 +243,11 @@ pub fn get_comp_resp(
             if caps.len() == 2 {
                 let instr_start = caps[0].node.range().start_point;
                 let instr_end = caps[0].node.range().end_point;
-                let reg_1_start = caps[1].node.range().start_point;
-                let reg_1_end = caps[1].node.range().end_point;
-                if instr_start.row == cursor_line
-                    && instr_end.row == cursor_line
-                    && instr_start.column <= cursor_char
-                    && instr_end.column >= cursor_char
-                {
+                let reg_start = caps[1].node.range().start_point;
+                let reg_end = caps[1].node.range().end_point;
+                if cursor_matches!(cursor_line, cursor_char, instr_start, instr_end) {
                     comp_items = Some(filtered_comp_list(instr_comps));
-                } else if reg_1_start.row == cursor_line
-                    && reg_1_end.row == cursor_line
-                    && reg_1_start.column <= cursor_char
-                    && reg_1_end.column >= cursor_char
-                {
+                } else if cursor_matches!(cursor_line, cursor_char, reg_start, reg_end) {
                     comp_items = Some(filtered_comp_list(reg_comps));
                 }
                 if let Some(items) = comp_items {
@@ -284,19 +275,11 @@ pub fn get_comp_resp(
             if caps.len() == 2 {
                 let instr_start = caps[0].node.range().start_point;
                 let instr_end = caps[0].node.range().end_point;
-                let reg_1_start = caps[1].node.range().start_point;
-                let reg_1_end = caps[1].node.range().end_point;
-                if instr_start.row == cursor_line
-                    && instr_end.row == cursor_line
-                    && instr_start.column <= cursor_char
-                    && instr_end.column >= cursor_char
-                {
+                let reg_start = caps[1].node.range().start_point;
+                let reg_end = caps[1].node.range().end_point;
+                if cursor_matches!(cursor_line, cursor_char, instr_start, instr_end) {
                     comp_items = Some(filtered_comp_list(instr_comps));
-                } else if reg_1_start.row == cursor_line
-                    && reg_1_end.row == cursor_line
-                    && reg_1_start.column <= cursor_char
-                    && reg_1_end.column >= cursor_char
-                {
+                } else if cursor_matches!(cursor_line, cursor_char, reg_start, reg_end) {
                     comp_items = Some(filtered_comp_list(reg_comps));
                 }
                 if let Some(items) = comp_items {
@@ -326,17 +309,9 @@ pub fn get_comp_resp(
                 let instr_end = caps[0].node.range().end_point;
                 let reg_start = caps[1].node.range().start_point;
                 let reg_end = caps[1].node.range().end_point;
-                if instr_start.row == cursor_line
-                    && instr_end.row == cursor_line
-                    && instr_start.column <= cursor_char
-                    && instr_end.column >= cursor_char
-                {
+                if cursor_matches!(cursor_line, cursor_char, instr_start, instr_end) {
                     comp_items = Some(filtered_comp_list(instr_comps));
-                } else if reg_start.row == cursor_line
-                    && reg_end.row == cursor_line
-                    && reg_start.column <= cursor_char
-                    && reg_end.column >= cursor_char
-                {
+                } else if cursor_matches!(cursor_line, cursor_char, reg_start, reg_end) {
                     comp_items = Some(filtered_comp_list(reg_comps));
                 }
 
@@ -365,11 +340,7 @@ pub fn get_comp_resp(
             if caps.len() == 1 {
                 let instr_start = caps[0].node.range().start_point;
                 let instr_end = caps[0].node.range().end_point;
-                if instr_start.row == cursor_line
-                    && instr_end.row == cursor_line
-                    && instr_start.column <= cursor_char
-                    && instr_end.column >= cursor_char
-                {
+                if cursor_matches!(cursor_line, cursor_char, instr_start, instr_end) {
                     comp_items = Some(filtered_comp_list(instr_comps));
                 }
 
@@ -398,11 +369,7 @@ pub fn get_comp_resp(
             if caps.len() == 1 {
                 let instr_start = caps[0].node.range().start_point;
                 let instr_end = caps[0].node.range().end_point;
-                if instr_start.row == cursor_line
-                    && instr_end.row == cursor_line
-                    && instr_start.column <= cursor_char
-                    && instr_end.column >= cursor_char
-                {
+                if cursor_matches!(cursor_line, cursor_char, instr_start, instr_end) {
                     comp_items = Some(filtered_comp_list(instr_comps));
                 }
 
