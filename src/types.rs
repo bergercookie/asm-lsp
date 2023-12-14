@@ -436,10 +436,16 @@ impl Default for TargetConfig {
 // Instruction Set Architecture -------------------------------------------------------------------
 #[derive(Debug, Clone, EnumString, AsRefStr)]
 pub enum ISA {
+    #[strum(serialize = "RAO-INT")]
+    RAOINT,
+    GFNI,
+    VAES,
+    VPCLMULQDQ,
     RDTSC,
     RDTSCP,
     CPUID,
     CMOV,
+    CMPCCXADD,
     MMX,
     #[strum(serialize = "MMX+")]
     MMXPlus,
@@ -450,6 +456,8 @@ pub enum ISA {
     _3DNowPlus,
     #[strum(serialize = "3dnow! Geode")]
     _3DNowGeode,
+    SM3,
+    SM4,
     SSE,
     SSE2,
     SSE3,
@@ -459,6 +467,16 @@ pub enum ISA {
     #[strum(serialize = "SSE4.2")]
     SSE4_2, //
     SSE4A,
+    #[strum(serialize = "AMX-TILE")]
+    AMXTILE,
+    #[strum(serialize = "AMX-COMPLEX")]
+    AMXCOMPLEX,
+    #[strum(serialize = "AMX-INT8")]
+    AMXINT8,
+    #[strum(serialize = "AMX-BF16")]
+    AMXBF16,
+    #[strum(serialize = "AMX-FP16")]
+    AMXFP16,
     AVX,
     AVX2,
     XOP,
@@ -468,6 +486,7 @@ pub enum ISA {
     PCLMULQDQ,
     AES,
     SHA,
+    SHA512,
     RDRAND,
     RDSEED,
     MOVBE,
@@ -482,6 +501,7 @@ pub enum ISA {
     CLWB,
     CLZERO,
     PREFETCH,
+    PREFETCHI,
     PREFETCHW,
     PREFETCHWT1,
     MONITOR,
@@ -493,9 +513,32 @@ pub enum ISA {
     AVX512PF,
     AVX512ER,
     AVX512CD,
-    AVX512VBMI,
+    #[strum(serialize = "AVX512-IFMA")]
     AVX512IFMA,
+    #[strum(serialize = "AVX512-VPOPCNTDQ")]
     AVX512VPOPCNTDQ,
+    #[strum(serialize = "AVX512-BF16")]
+    AVX512BF16,
+    #[strum(serialize = "AVX512-FP16")]
+    AVX512FP16,
+    #[strum(serialize = "AVX512-BITALG")]
+    AVX512BITALG,
+    #[strum(serialize = "AVX512-VBMI")]
+    AVX512VBMI,
+    #[strum(serialize = "AVX512-VBMI2")]
+    AVX512VBMI2,
+    #[strum(serialize = "AVX512-VNNI")]
+    AVX512VNNI,
+    #[strum(serialize = "AVX-VNNI")]
+    AVXVNNI,
+    #[strum(serialize = "AVX-VNNI-INT8")]
+    AVXVNNIINT8,
+    #[strum(serialize = "AVX-VNNI-INT16")]
+    AVXVNNIINT16,
+    #[strum(serialize = "AVX-NE-CONVERT")]
+    AVXNECONVERT,
+    #[strum(serialize = "AVX-IFMA")]
+    AVXIFMA,
 }
 
 // Operand ----------------------------------------------------------------------------------------
@@ -556,6 +599,8 @@ pub enum OperandType {
     m,
     m8,
     m16,
+    #[strum(serialize = "m16{k}")]
+    m16_k,
     #[strum(serialize = "m16{k}{z}")]
     m16_k_z,
     m32,
@@ -563,18 +608,28 @@ pub enum OperandType {
     m32_k,
     #[strum(serialize = "m32{k}{z}")]
     m32_k_z,
+    #[strum(serialize = "m32/m16bcst")]
+    m32_m16bcst,
     m64,
     #[strum(serialize = "m64{k}")]
     m64_k,
     #[strum(serialize = "m64{k}{z}")]
     m64_k_z,
+    #[strum(serialize = "m64/m16bcst")]
+    m64_m16bcst,
     m128,
+    #[strum(serialize = "m128{k}")]
+    m128_k,
     #[strum(serialize = "m128{k}{z}")]
     m128_k_z,
     m256,
+    #[strum(serialize = "m256{k}")]
+    m256_k,
     #[strum(serialize = "m256{k}{z}")]
     m256_k_z,
     m512,
+    #[strum(serialize = "m512{k}")]
+    m512_k,
     #[strum(serialize = "m512{k}{z}")]
     m512_k_z,
     #[strum(serialize = "m64/m32bcst")]
@@ -585,10 +640,16 @@ pub enum OperandType {
     m256_m32bcst,
     #[strum(serialize = "m512/m32bcst")]
     m512_m32bcst,
+    #[strum(serialize = "m128/m16bcst")]
+    m128_m16bcst,
     #[strum(serialize = "m128/m64bcst")]
     m128_m64bcst,
+    #[strum(serialize = "m256/m16bcst")]
+    m256_m16bcst,
     #[strum(serialize = "m256/m64bcst")]
     m256_m64bcst,
+    #[strum(serialize = "m512/m16bcst")]
+    m512_m16bcst,
     #[strum(serialize = "m512/m64bcst")]
     m512_m64bcst,
     vm32x,
@@ -615,6 +676,8 @@ pub enum OperandType {
     er,
     #[strum(serialize = "{sae}")]
     sae,
+    sibmem,
+    tmm,
 }
 
 // lsp types --------------------------------------------------------------------------------------

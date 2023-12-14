@@ -104,7 +104,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                                     _ => {
                                         return Err(anyhow!(
                                             "Unknown value for XML attribute {}",
-                                            "nacl-zero-extends-outputs"
+                                            "cancelling_inputs"
                                         ))
                                     }
                                 },
@@ -168,7 +168,15 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                             let Attribute { key, value } = attr.unwrap();
                             match str::from_utf8(key.into_inner()).unwrap() {
                                 "type" => {
-                                    type_ = OperandType::from_str(str::from_utf8(&value)?)?;
+                                    type_ = match OperandType::from_str(str::from_utf8(&value)?) {
+                                        Ok(op_type) => op_type,
+                                        Err(_) => {
+                                            return Err(anyhow!(
+                                                "Unknown value for operand type -- Variant: {}",
+                                                str::from_utf8(&value)?
+                                            ));
+                                        }
+                                    }
                                 }
                                 "input" => match str::from_utf8(&value).unwrap() {
                                     "true" => input = Some(true),
