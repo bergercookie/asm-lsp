@@ -49,5 +49,6 @@ lsp-textdocument = "0.3.2"
 dirs = "5.0.1"
 symbolic = { version = "12.8.0", features = ["demangle"] }
 symbolic-demangle = "12.8.0"
+url-escape = "0.1.1"
 
 # [dev-dependencies]
