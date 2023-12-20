@@ -519,11 +519,12 @@ pub fn get_sig_help_resp(
     curr_doc: &str,
     parser: &mut tree_sitter::Parser,
     params: &SignatureHelpParams,
+    curr_tree: &mut Option<Tree>,
     instr_info: &NameToInstructionMap,
 ) -> Option<SignatureHelp> {
     let cursor_line = params.text_document_position_params.position.line as usize;
 
-    let curr_tree = parser.parse(curr_doc, None);
+    *curr_tree = parser.parse(curr_doc, curr_tree.as_ref());
     if let Some(tree) = curr_tree {
         let mut cursor = tree_sitter::QueryCursor::new();
         cursor.set_point_range(std::ops::Range {

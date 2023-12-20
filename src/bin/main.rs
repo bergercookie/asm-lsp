@@ -331,6 +331,7 @@ fn main_loop(
                             doc.get_content(None),
                             &mut parser,
                             &params,
+                            &mut tree,
                             names_to_instructions,
                         );
 
