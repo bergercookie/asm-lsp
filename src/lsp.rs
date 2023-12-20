@@ -1,12 +1,14 @@
 use crate::types::Column;
 use crate::{Arch, Completable, Hoverable, Instruction, TargetConfig};
 use log::{error, info, log, log_enabled};
+use lsp_textdocument::FullTextDocument;
 use lsp_types::*;
 use once_cell::sync::Lazy;
 use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::BufRead;
 use std::path::PathBuf;
+use tree_sitter::{InputEdit, Parser, Tree};
 
 /// Find the start and end indices of a word inside the given line
 /// Borrowed from RLS
@@ -67,6 +69,38 @@ pub fn tree_sitter_logger(log_type: tree_sitter::LogType, message: &str) {
     if log_enabled!(log_level) {
         log!(log_level, "{}", message);
     }
+}
+
+/// Convert an `lsp_types::TextDocumentContentChangeEvent` to a `tree_sitter::InputEdit`
+pub fn text_doc_change_to_ts_edit(
+    change: &TextDocumentContentChangeEvent,
+    doc: &FullTextDocument,
+) -> Result<InputEdit, &'static str> {
+    let range = change.range.ok_or("Invalid edit range")?;
+    let start = range.start;
+    let end = range.end;
+
+    let start_byte = doc.offset_at(start) as usize;
+    let new_end_byte = start_byte + change.text.len();
+    let new_end_pos = doc.position_at(new_end_byte as u32);
+
+    Ok(tree_sitter::InputEdit {
+        start_byte,
+        old_end_byte: doc.offset_at(end) as usize,
+        new_end_byte,
+        start_position: tree_sitter::Point {
+            row: start.line as usize,
+            column: start.character as usize,
+        },
+        old_end_position: tree_sitter::Point {
+            row: end.line as usize,
+            column: end.character as usize,
+        },
+        new_end_position: tree_sitter::Point {
+            row: new_end_pos.line as usize,
+            column: new_end_pos.character as usize,
+        },
+    })
 }
 
 /// Given a NameTo_SomeItem_ map, returns a `Vec<CompletionItem>` for the items
@@ -152,7 +186,8 @@ macro_rules! cursor_matches {
 
 pub fn get_comp_resp(
     curr_doc: &str,
-    parser: &mut tree_sitter::Parser,
+    parser: &mut Parser,
+    curr_tree: &mut Option<Tree>,
     params: &CompletionParams,
     instr_comps: &[CompletionItem],
     reg_comps: &[CompletionItem],
@@ -172,9 +207,7 @@ pub fn get_comp_resp(
     }
 
     // TODO: filter register completions by width allowed by corresponding instruction
-    // TODO: Would like to do incremental parsing but don't see a straightforward
-    // way to map the LSP's edit info the the format/ info tree-sitter is expecting...
-    let curr_tree = parser.parse(curr_doc, None);
+    *curr_tree = parser.parse(curr_doc, curr_tree.as_ref());
     if let Some(tree) = curr_tree {
         let mut cursor = tree_sitter::QueryCursor::new();
         cursor.set_point_range(std::ops::Range {
@@ -397,9 +430,11 @@ fn lsp_pos_of_point(pos: tree_sitter::Point) -> lsp_types::Position {
 pub fn get_document_symbols(
     curr_doc: &str,
     parser: &mut tree_sitter::Parser,
+    curr_tree: &mut Option<Tree>,
     _params: &DocumentSymbolParams,
 ) -> Option<Vec<DocumentSymbol>> {
-    let tree = parser.parse(curr_doc, None)?;
+    //let tree = parser.parse(curr_doc, None)?;
+    *curr_tree = parser.parse(curr_doc, curr_tree.as_ref());
 
     static LABEL_KIND_ID: Lazy<u16> =
         Lazy::new(|| tree_sitter_asm::language().id_for_node_kind("label", true));
@@ -466,15 +501,19 @@ pub fn get_document_symbols(
         }
     }
 
-    let mut res: Vec<DocumentSymbol> = vec![];
-    let mut cursor = tree.walk();
-    loop {
-        explore_node(curr_doc, cursor.node(), &mut res);
-        if !cursor.goto_next_sibling() {
-            break;
+    if let Some(tree) = curr_tree {
+        let mut res: Vec<DocumentSymbol> = vec![];
+        let mut cursor = tree.walk();
+        loop {
+            explore_node(curr_doc, cursor.node(), &mut res);
+            if !cursor.goto_next_sibling() {
+                break;
+            }
         }
+        Some(res)
+    } else {
+        None
     }
-    Some(res)
 }
 
 // Note: Some issues here regarding entangled lifetimes

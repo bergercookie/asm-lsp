@@ -6,6 +6,7 @@ use lsp_types::request::{Completion, DocumentSymbolRequest, HoverRequest};
 use lsp_types::*;
 
 use crate::lsp::{get_document_symbols, get_target_config, instr_filter_targets};
+use lsp_textdocument::FullTextDocument;
 
 use lsp_server::{Connection, Message, Notification, Request, RequestId, Response};
 use serde_json::json;
@@ -23,6 +24,9 @@ pub fn main() -> anyhow::Result<()> {
     // Create the transport
     let (connection, io_threads) = Connection::stdio();
 
+    // specify UTF-16 encoding for compatibility with lsp-textdocument
+    let position_encoding = Some(PositionEncodingKind::UTF16);
+
     // Run the server and wait for the two threads to end (typically by trigger LSP Exit event).
     let hover_provider = Some(HoverProviderCapability::Simple(true));
 
@@ -34,9 +38,12 @@ pub fn main() -> anyhow::Result<()> {
         ..Default::default()
     });
 
-    let text_document_sync = Some(TextDocumentSyncCapability::Kind(TextDocumentSyncKind::FULL));
+    let text_document_sync = Some(TextDocumentSyncCapability::Kind(
+        TextDocumentSyncKind::INCREMENTAL,
+    ));
 
     let capabilities = ServerCapabilities {
+        position_encoding,
         hover_provider,
         completion_provider,
         text_document_sync,
@@ -153,16 +160,18 @@ pub fn main() -> anyhow::Result<()> {
     populate_name_to_register_map(Arch::X86, &x86_registers, &mut names_to_registers);
     populate_name_to_register_map(Arch::X86_64, &x86_64_registers, &mut names_to_registers);
 
-    let instr_comps = get_completes(&names_to_instructions, Some(CompletionItemKind::OPERATOR));
-    let reg_comps = get_completes(&names_to_registers, Some(CompletionItemKind::VARIABLE));
+    let instr_completion_items =
+        get_completes(&names_to_instructions, Some(CompletionItemKind::OPERATOR));
+    let reg_completion_items =
+        get_completes(&names_to_registers, Some(CompletionItemKind::VARIABLE));
 
     main_loop(
         &connection,
         initialization_params,
         &names_to_instructions,
         &names_to_registers,
-        &instr_comps,
-        &reg_comps,
+        &instr_completion_items,
+        &reg_completion_items,
     )?;
     io_threads.join()?;
 
@@ -176,16 +185,13 @@ fn main_loop(
     params: serde_json::Value,
     names_to_instructions: &NameToInstructionMap,
     names_to_registers: &NameToRegisterMap,
-    instruction_completes: &[CompletionItem],
-    register_completes: &[CompletionItem],
+    instruction_completion_items: &[CompletionItem],
+    register_completion_items: &[CompletionItem],
 ) -> anyhow::Result<()> {
     let _params: InitializeParams = serde_json::from_value(params).unwrap();
-
-    let mut doc_open_params;
-    let mut doc_change_params;
-    let curr_doc = String::new();
-    let mut curr_doc = &curr_doc;
+    let mut curr_doc: Option<FullTextDocument> = None;
     let mut parser = tree_sitter::Parser::new();
+    let mut tree: Option<tree_sitter::Tree> = None;
     parser.set_logger(Some(Box::new(tree_sitter_logger)));
     parser.set_language(tree_sitter_asm::language())?;
 
@@ -240,56 +246,73 @@ fn main_loop(
                     }
                 } else if let Ok((id, params)) = cast_req::<Completion>(req.clone()) {
                     // CompletionRequest ---------------------------------------------------------------
+                    let res = Response {
+                        id: id.clone(),
+                        result: Some(json!("")),
+                        error: None,
+                    };
                     // get suggestions ------------------------------------------------------
-                    let comp_res = get_comp_resp(
-                        curr_doc,
-                        &mut parser,
-                        &params,
-                        instruction_completes,
-                        register_completes,
-                    );
-                    match comp_res {
-                        Some(_) => {
-                            let result = serde_json::to_value(&comp_res).unwrap();
-                            let result = Response {
-                                id: id.clone(),
-                                result: Some(result),
-                                error: None,
-                            };
-                            connection.sender.send(Message::Response(result))?;
+                    if let Some(ref doc) = curr_doc {
+                        let comp_res = get_comp_resp(
+                            doc.get_content(None),
+                            &mut parser,
+                            &mut tree,
+                            &params,
+                            instruction_completion_items,
+                            register_completion_items,
+                        );
+                        match comp_res {
+                            Some(_) => {
+                                let result = serde_json::to_value(&comp_res).unwrap();
+                                let result = Response {
+                                    id: id.clone(),
+                                    result: Some(result),
+                                    error: None,
+                                };
+                                connection.sender.send(Message::Response(result))?;
+                            }
+                            None => {
+                                // don't know what to suggest
+                                connection.sender.send(Message::Response(res.clone()))?;
+                            }
                         }
-                        None => {
-                            // don't know what to suggest
-                            let res = Response {
-                                id: id.clone(),
-                                result: Some(json!("")),
-                                error: None,
-                            };
-                            connection.sender.send(Message::Response(res.clone()))?;
-                        }
+                    } else {
+                        // don't know what to suggest
+                        connection.sender.send(Message::Response(res.clone()))?;
                     }
                 } else if let Ok((id, params)) = cast_req::<DocumentSymbolRequest>(req.clone()) {
-                    let symbols = get_document_symbols(curr_doc, &mut parser, &params);
-                    match symbols {
-                        Some(symbols) => {
-                            let resp = DocumentSymbolResponse::Nested(symbols);
-                            let result = serde_json::to_value(&resp).unwrap();
-                            let result = Response {
-                                id: id.clone(),
-                                result: Some(result),
-                                error: None,
-                            };
-                            connection.sender.send(Message::Response(result))?;
+                    // DocumentSymbolRequest ---------------------------------------------------------------
+                    let res = Response {
+                        id: id.clone(),
+                        result: Some(json!("")),
+                        error: None,
+                    };
+                    // get document symbolss ------------------------------------------------------
+                    if let Some(ref doc) = curr_doc {
+                        let symbols = get_document_symbols(
+                            doc.get_content(None),
+                            &mut parser,
+                            &mut tree,
+                            &params,
+                        );
+                        match symbols {
+                            Some(symbols) => {
+                                let resp = DocumentSymbolResponse::Nested(symbols);
+                                let result = serde_json::to_value(&resp).unwrap();
+                                let result = Response {
+                                    id: id.clone(),
+                                    result: Some(result),
+                                    error: None,
+                                };
+                                connection.sender.send(Message::Response(result))?;
+                            }
+                            None => {
+                                // don't know what to reply
+                                connection.sender.send(Message::Response(res.clone()))?;
+                            }
                         }
-                        None => {
-                            // don't know what to reply
-                            let res = Response {
-                                id: id.clone(),
-                                result: Some(json!("")),
-                                error: None,
-                            };
-                            connection.sender.send(Message::Response(res.clone()))?;
-                        }
+                    } else {
+                        connection.sender.send(Message::Response(res.clone()))?;
                     }
                 } else {
                     error!("Invalid request fromat -> {:#?}", req);
@@ -297,12 +320,30 @@ fn main_loop(
             }
             Message::Notification(notif) => {
                 if let Ok(params) = cast_notif::<DidOpenTextDocument>(notif.clone()) {
-                    // move the notification's params into this variable so we can avoid cloning the document contents
-                    doc_open_params = params;
-                    curr_doc = &doc_open_params.text_document.text;
+                    curr_doc = Some(FullTextDocument::new(
+                        params.text_document.language_id.clone(),
+                        params.text_document.version,
+                        params.text_document.text.clone(),
+                    ));
+                    tree = parser.parse(params.text_document.text, None);
                 } else if let Ok(params) = cast_notif::<DidChangeTextDocument>(notif.clone()) {
-                    doc_change_params = params;
-                    curr_doc = &doc_change_params.content_changes.last().unwrap().text;
+                    if let Some(ref mut doc) = curr_doc {
+                        // Sync our in-memory copy of the current buffer
+                        doc.update(&params.content_changes, params.text_document.version);
+                        // Update the TS tree
+                        if let Some(ref mut curr_tree) = tree {
+                            for change in params.content_changes.iter() {
+                                match text_doc_change_to_ts_edit(change, doc) {
+                                    Ok(edit) => {
+                                        curr_tree.edit(&edit);
+                                    }
+                                    Err(e) => {
+                                        error!("Bad edit info, failed to edit tree - Error: {e}");
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             Message::Response(_resp) => {}
