@@ -8,8 +8,6 @@ use lsp_types::*;
 use crate::lsp::{get_document_symbols, get_target_config, instr_filter_targets};
 use lsp_textdocument::FullTextDocument;
 
-use lsp_textdocument::FullTextDocument;
-
 use lsp_server::{Connection, Message, Notification, Request, RequestId, Response};
 use serde_json::json;
 
@@ -283,27 +281,38 @@ fn main_loop(
                         connection.sender.send(Message::Response(res.clone()))?;
                     }
                 } else if let Ok((id, params)) = cast_req::<DocumentSymbolRequest>(req.clone()) {
-                    let symbols = get_document_symbols(curr_doc, &mut parser, &params);
-                    match symbols {
-                        Some(symbols) => {
-                            let resp = DocumentSymbolResponse::Nested(symbols);
-                            let result = serde_json::to_value(&resp).unwrap();
-                            let result = Response {
-                                id: id.clone(),
-                                result: Some(result),
-                                error: None,
-                            };
-                            connection.sender.send(Message::Response(result))?;
+                    // DocumentSymbolRequest ---------------------------------------------------------------
+                    let res = Response {
+                        id: id.clone(),
+                        result: Some(json!("")),
+                        error: None,
+                    };
+                    // get document symbolss ------------------------------------------------------
+                    if let Some(ref doc) = curr_doc {
+                        let symbols = get_document_symbols(
+                            doc.get_content(None),
+                            &mut parser,
+                            &mut tree,
+                            &params,
+                        );
+                        match symbols {
+                            Some(symbols) => {
+                                let resp = DocumentSymbolResponse::Nested(symbols);
+                                let result = serde_json::to_value(&resp).unwrap();
+                                let result = Response {
+                                    id: id.clone(),
+                                    result: Some(result),
+                                    error: None,
+                                };
+                                connection.sender.send(Message::Response(result))?;
+                            }
+                            None => {
+                                // don't know what to reply
+                                connection.sender.send(Message::Response(res.clone()))?;
+                            }
                         }
-                        None => {
-                            // don't know what to reply
-                            let res = Response {
-                                id: id.clone(),
-                                result: Some(json!("")),
-                                error: None,
-                            };
-                            connection.sender.send(Message::Response(res.clone()))?;
-                        }
+                    } else {
+                        connection.sender.send(Message::Response(res.clone()))?;
                     }
                 } else {
                     error!("Invalid request fromat -> {:#?}", req);

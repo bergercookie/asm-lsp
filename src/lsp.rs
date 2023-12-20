@@ -430,9 +430,11 @@ fn lsp_pos_of_point(pos: tree_sitter::Point) -> lsp_types::Position {
 pub fn get_document_symbols(
     curr_doc: &str,
     parser: &mut tree_sitter::Parser,
+    curr_tree: &mut Option<Tree>,
     _params: &DocumentSymbolParams,
 ) -> Option<Vec<DocumentSymbol>> {
-    let tree = parser.parse(curr_doc, None)?;
+    //let tree = parser.parse(curr_doc, None)?;
+    *curr_tree = parser.parse(curr_doc, curr_tree.as_ref());
 
     static LABEL_KIND_ID: Lazy<u16> =
         Lazy::new(|| tree_sitter_asm::language().id_for_node_kind("label", true));
@@ -499,15 +501,19 @@ pub fn get_document_symbols(
         }
     }
 
-    let mut res: Vec<DocumentSymbol> = vec![];
-    let mut cursor = tree.walk();
-    loop {
-        explore_node(curr_doc, cursor.node(), &mut res);
-        if !cursor.goto_next_sibling() {
-            break;
+    if let Some(tree) = curr_tree {
+        let mut res: Vec<DocumentSymbol> = vec![];
+        let mut cursor = tree.walk();
+        loop {
+            explore_node(curr_doc, cursor.node(), &mut res);
+            if !cursor.goto_next_sibling() {
+                break;
+            }
         }
+        Some(res)
+    } else {
+        None
     }
-    Some(res)
 }
 
 // Note: Some issues here regarding entangled lifetimes
