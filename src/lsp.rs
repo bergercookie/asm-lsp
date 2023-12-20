@@ -1,5 +1,5 @@
 use crate::types::Column;
-use crate::{Arch, Completable, Hoverable, Instruction, TargetConfig};
+use crate::{Arch, Completable, Hoverable, Instruction, NameToInstructionMap, TargetConfig};
 use log::{error, info, log, log_enabled};
 use lsp_textdocument::FullTextDocument;
 use lsp_types::*;
@@ -500,7 +500,6 @@ pub fn get_document_symbols(
             }
         }
     }
-
     if let Some(tree) = curr_tree {
         let mut res: Vec<DocumentSymbol> = vec![];
         let mut cursor = tree.walk();
@@ -514,6 +513,115 @@ pub fn get_document_symbols(
     } else {
         None
     }
+}
+
+pub fn get_sig_help_resp(
+    curr_doc: &str,
+    parser: &mut tree_sitter::Parser,
+    params: &SignatureHelpParams,
+    curr_tree: &mut Option<Tree>,
+    instr_info: &NameToInstructionMap,
+) -> Option<SignatureHelp> {
+    let cursor_line = params.text_document_position_params.position.line as usize;
+
+    *curr_tree = parser.parse(curr_doc, curr_tree.as_ref());
+    if let Some(tree) = curr_tree {
+        let mut cursor = tree_sitter::QueryCursor::new();
+        cursor.set_point_range(std::ops::Range {
+            start: tree_sitter::Point {
+                row: cursor_line,
+                column: 0,
+            },
+            end: tree_sitter::Point {
+                row: cursor_line,
+                column: usize::MAX,
+            },
+        });
+        let curr_doc = curr_doc.as_bytes();
+
+        // Instruction with any (or zero) argument(s)
+        static QUERY_INSTR_ANY_ARGS: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(
+                tree_sitter_asm::language(),
+                "(instruction kind: (word) @instr_name)",
+            )
+            .unwrap()
+        });
+
+        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = cursor
+            .matches(&QUERY_INSTR_ANY_ARGS, tree.root_node(), curr_doc)
+            .collect();
+        if let Some(match_) = matches.first() {
+            let caps = match_.captures;
+            if caps.len() == 1 {
+                if let Ok(instr_name) = caps[0].node.utf8_text(curr_doc) {
+                    let mut value = String::new();
+                    let mut has_x86 = false;
+                    let mut has_x86_64 = false;
+                    let (x86_info, x86_64_info) = search_for_hoverable(instr_name, instr_info);
+                    if let Some(sig) = x86_info {
+                        for form in sig.forms.iter() {
+                            if let Some(ref gas_name) = form.gas_name {
+                                if instr_name.eq_ignore_ascii_case(gas_name) {
+                                    if !has_x86 {
+                                        value += "**x86**\n";
+                                        has_x86 = true;
+                                    }
+                                    value += &format!("{}\n", form);
+                                }
+                            } else if let Some(ref go_name) = form.go_name {
+                                if instr_name.eq_ignore_ascii_case(go_name) {
+                                    if !has_x86 {
+                                        value += "**x86**\n";
+                                        has_x86 = true;
+                                    }
+                                    value += &format!("{}\n", form);
+                                }
+                            }
+                        }
+                    }
+                    if let Some(sig) = x86_64_info {
+                        for form in sig.forms.iter() {
+                            if let Some(ref gas_name) = form.gas_name {
+                                if instr_name.eq_ignore_ascii_case(gas_name) {
+                                    if !has_x86_64 {
+                                        value += "**x86_64**\n";
+                                        has_x86_64 = true;
+                                    }
+                                    value += &format!("{}\n", form);
+                                }
+                            } else if let Some(ref go_name) = form.go_name {
+                                if instr_name.eq_ignore_ascii_case(go_name) {
+                                    if !has_x86_64 {
+                                        value += "**x86_64**\n";
+                                        has_x86_64 = true;
+                                    }
+                                    value += &format!("{}\n", form);
+                                }
+                            }
+                        }
+                    }
+                    if !value.is_empty() {
+                        return Some(SignatureHelp {
+                            signatures: vec![SignatureInformation {
+                                label: instr_name.to_string(),
+                                documentation: Some(Documentation::MarkupContent(MarkupContent {
+                                    kind: MarkupKind::Markdown,
+                                    value,
+                                })),
+                                parameters: None,
+                                active_parameter: None,
+                            }],
+                            active_signature: None,
+                            active_parameter: None,
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    None
 }
 
 // Note: Some issues here regarding entangled lifetimes

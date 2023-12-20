@@ -5,9 +5,9 @@
 
 ## Goal
 
-Provide hovering and autocompletion for assembly files written in the
-GAS/NASM or GO assembly flavors. It supports assembly files for the x86 or
-x86_64 instruction sets.
+Provide hovering, autocompletion, and signature help for assembly files written
+in the GAS/NASM or GO assembly flavors. It supports assembly files for the x86
+or x86_64 instruction sets.
 
 This tool can serve as reference when reading the assembly output of a program.
 This way you can query what each command exactly does and deliberate about
@@ -65,6 +65,17 @@ x86_64 = true
 ### Autocomplete
 
 ![](https://github.com/bergercookie/asm-lsp/blob/master/demo/autocomplete.gif)
+
+### Signature Help
+
+![](https://github.com/bergercookie/asm-lsp/blob/master/demo/signaturehelp.gif)
+
+- Triggering signature help is dependent on your editor and LSP client.
+  - Using Neovim's built in LSP client, this can be done via the command
+    ``:lua vim.lsp.buf.signature_help()``.
+  - Using coc, [this issue comment](https://github.com/neoclide/coc.nvim/issues/2656#issuecomment-845903417)
+    suggests the remap ``inoremap <silent> ,s <C-r>=CocActionAsync('showSignatureHelp')<CR>``
+    to trigger signature help in insert mode.
 
 ## Acknowledgements
 

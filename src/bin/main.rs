@@ -2,7 +2,7 @@ use asm_lsp::*;
 
 use log::{error, info};
 use lsp_types::notification::{DidChangeTextDocument, DidOpenTextDocument};
-use lsp_types::request::{Completion, DocumentSymbolRequest, HoverRequest};
+use lsp_types::request::{Completion, DocumentSymbolRequest, HoverRequest, SignatureHelpRequest};
 use lsp_types::*;
 
 use crate::lsp::{get_document_symbols, get_target_config, instr_filter_targets};
@@ -42,10 +42,19 @@ pub fn main() -> anyhow::Result<()> {
         TextDocumentSyncKind::INCREMENTAL,
     ));
 
+    let signature_help_provider = Some(SignatureHelpOptions {
+        trigger_characters: None,
+        retrigger_characters: None,
+        work_done_progress_options: WorkDoneProgressOptions {
+            work_done_progress: Some(false),
+        },
+    });
+
     let capabilities = ServerCapabilities {
         position_encoding,
         hover_provider,
         completion_provider,
+        signature_help_provider,
         text_document_sync,
         document_symbol_provider: Some(OneOf::Left(true)),
         ..ServerCapabilities::default()
@@ -312,6 +321,36 @@ fn main_loop(
                             }
                         }
                     } else {
+                        connection.sender.send(Message::Response(res.clone()))?;
+                    }
+                } else if let Ok((id, params)) = cast_req::<SignatureHelpRequest>(req.clone()) {
+                    // SignatureHelp ---------------------------------------------------------------
+                    // get signatures ------------------------------------------------------
+                    if let Some(ref doc) = curr_doc {
+                        let sig_res = get_sig_help_resp(
+                            doc.get_content(None),
+                            &mut parser,
+                            &params,
+                            &mut tree,
+                            names_to_instructions,
+                        );
+
+                        if let Some(sig) = sig_res {
+                            let result = serde_json::to_value(&sig).unwrap();
+
+                            let result = Response {
+                                id: id.clone(),
+                                result: Some(result),
+                                error: None,
+                            };
+                            connection.sender.send(Message::Response(result.clone()))?;
+                        }
+                    } else {
+                        let res = Response {
+                            id: id.clone(),
+                            result: Some(json!("")),
+                            error: None,
+                        };
                         connection.sender.send(Message::Response(res.clone()))?;
                     }
                 } else {
