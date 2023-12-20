@@ -1,11 +1,12 @@
 use crate::types::Column;
 use crate::{Arch, Completable, Hoverable, Instruction, NameToInstructionMap, TargetConfig};
+use dirs::config_dir;
 use log::{error, info, log, log_enabled};
 use lsp_textdocument::FullTextDocument;
 use lsp_types::*;
 use once_cell::sync::Lazy;
 use std::collections::{HashMap, HashSet};
-use std::fs::File;
+use std::fs::{create_dir_all, File};
 use std::io::BufRead;
 use std::path::PathBuf;
 use tree_sitter::{InputEdit, Parser, Tree};
@@ -639,14 +640,56 @@ fn search_for_hoverable<'a, T: Hoverable>(
     (x86_res, x86_64_res)
 }
 
+/// Searches for global config in ~/.config/asm-lsp, then the project's directory
+/// Project specific configs will override global configs
 pub fn get_target_config(params: &InitializeParams) -> TargetConfig {
+    match (get_global_config(), get_project_config(params)) {
+        (_, Some(proj_cfg)) => proj_cfg,
+        (Some(global_cfg), None) => global_cfg,
+        (None, None) => TargetConfig::default(), // default is to turn everything on
+    }
+}
+
+/// Checks ~/.config/asm-lsp for a config file, creating directories along the way as necessary
+fn get_global_config() -> Option<TargetConfig> {
+    if let Some(mut cfg_path) = config_dir() {
+        cfg_path.push("asm-lsp");
+        let cfg_path_s = cfg_path.display();
+        info!("Creating directories along {} as necessary...", cfg_path_s);
+        match create_dir_all(&cfg_path) {
+            Ok(()) => {
+                cfg_path.push(".asm-lsp.toml");
+                if let Ok(config) = std::fs::read_to_string(&cfg_path) {
+                    let cfg_path_s = cfg_path.display();
+                    match toml::from_str::<TargetConfig>(&config) {
+                        Ok(config) => {
+                            info!("Parsing global asm-lsp config from file -> {cfg_path_s}\n");
+                            return Some(config);
+                        }
+                        Err(e) => {
+                            error!(
+                                "Failed to parse global config file {cfg_path_s} - Error: {e}\n"
+                            );
+                        }
+                    }
+                }
+            }
+            Err(e) => {
+                error!("Failed to create global config directory {cfg_path_s} - Error: {e}");
+            }
+        }
+    }
+
+    None
+}
+
+/// checks for a config specific to the current buffer
+fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
     // 1. if we have workspace folders, then iterate through them and assign the first valid one to
     //    the root path
     // 2. If we don't have worksace folders or none of them is a valid path, check the root_uri
     //    variable
     // 3. If we do have a root_path, check whether we can find a .asm-lsp file at its root.
-    // 4. If everything fails return TargetConfig::default()
-
     let mut root_path: Option<PathBuf> = None;
 
     // first check workspace folders
@@ -677,22 +720,21 @@ pub fn get_target_config(params: &InitializeParams) -> TargetConfig {
     // if we have a properly configured root path, check for the config file
     if let Some(mut path) = root_path {
         path.push(".asm-lsp.toml");
-        if let Ok(config) = std::fs::read_to_string(path.clone()) {
+        if let Ok(config) = std::fs::read_to_string(&path) {
             let path_s = path.display();
             match toml::from_str::<TargetConfig>(&config) {
                 Ok(config) => {
-                    info!("Parsing asm-lsp config from file -> {path_s}\n");
-                    return config;
+                    info!("Parsing asm-lsp project config from file -> {path_s}\n");
+                    return Some(config);
                 }
                 Err(e) => {
-                    error!("Failed to parse config file {path_s} - Error: {e}\n");
-                } // if there's an error we fall through to the default
+                    error!("Failed to parse project config file {path_s} - Error: {e}\n");
+                } // if there's an error we fall through to check for a global config
             }
         }
     }
 
-    // default is to turn everything on
-    TargetConfig::default()
+    None
 }
 
 pub fn instr_filter_targets(instr: &Instruction, config: &TargetConfig) -> Instruction {
