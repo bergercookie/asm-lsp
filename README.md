@@ -5,9 +5,9 @@
 
 ## Goal
 
-Provide hovering, autocompletion, and signature help for assembly files written
-in the GAS/NASM or GO assembly flavors. It supports assembly files for the x86
-or x86_64 instruction sets.
+Provide hovering, autocompletion, signature help, and go to definition for assembly files
+written in the GAS/NASM or GO assembly flavors. It supports assembly files for
+the x86 or x86_64 instruction sets.
 
 This tool can serve as reference when reading the assembly output of a program.
 This way you can query what each command exactly does and deliberate about
@@ -66,6 +66,10 @@ x86_64 = true
 ### Autocomplete
 
 ![](https://github.com/bergercookie/asm-lsp/blob/master/demo/autocomplete.gif)
+
+### Goto Definition
+
+![](https://github.com/bergercookie/asm-lsp/blob/master/demo/gotodef.gif)
 
 ### Signature Help
 
