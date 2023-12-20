@@ -2,10 +2,10 @@ use asm_lsp::*;
 
 use log::{error, info};
 use lsp_types::notification::{DidChangeTextDocument, DidOpenTextDocument};
-use lsp_types::request::{Completion, HoverRequest};
+use lsp_types::request::{Completion, DocumentSymbolRequest, HoverRequest};
 use lsp_types::*;
 
-use crate::lsp::{get_target_config, instr_filter_targets};
+use crate::lsp::{get_document_symbols, get_target_config, instr_filter_targets};
 
 use lsp_server::{Connection, Message, Notification, Request, RequestId, Response};
 use serde_json::json;
@@ -40,6 +40,7 @@ pub fn main() -> anyhow::Result<()> {
         hover_provider,
         completion_provider,
         text_document_sync,
+        document_symbol_provider: Some(OneOf::Left(true)),
         ..ServerCapabilities::default()
     };
     let server_capabilities = serde_json::to_value(capabilities).unwrap();
@@ -259,6 +260,29 @@ fn main_loop(
                         }
                         None => {
                             // don't know what to suggest
+                            let res = Response {
+                                id: id.clone(),
+                                result: Some(json!("")),
+                                error: None,
+                            };
+                            connection.sender.send(Message::Response(res.clone()))?;
+                        }
+                    }
+                } else if let Ok((id, params)) = cast_req::<DocumentSymbolRequest>(req.clone()) {
+                    let symbols = get_document_symbols(curr_doc, &mut parser, &params);
+                    match symbols {
+                        Some(symbols) => {
+                            let resp = DocumentSymbolResponse::Nested(symbols);
+                            let result = serde_json::to_value(&resp).unwrap();
+                            let result = Response {
+                                id: id.clone(),
+                                result: Some(result),
+                                error: None,
+                            };
+                            connection.sender.send(Message::Response(result))?;
+                        }
+                        None => {
+                            // don't know what to reply
                             let res = Response {
                                 id: id.clone(),
                                 result: Some(json!("")),
