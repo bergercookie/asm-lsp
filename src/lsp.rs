@@ -9,6 +9,8 @@ use std::collections::{HashMap, HashSet};
 use std::fs::{create_dir_all, File};
 use std::io::BufRead;
 use std::path::PathBuf;
+use symbolic::common::{Language, Name, NameMangling};
+use symbolic_demangle::{Demangle, DemangleOptions};
 use tree_sitter::{InputEdit, Parser, Tree};
 
 /// Find the start and end indices of a word inside the given line
@@ -127,7 +129,31 @@ pub fn get_completes<T: Completable>(
         .collect()
 }
 
-pub fn get_hover_resp<T: Hoverable>(word: &str, map: &HashMap<(Arch, &str), T>) -> Option<Hover> {
+pub fn get_hover_resp<T: Hoverable, S: Hoverable>(
+    word: &str,
+    instruction_map: &HashMap<(Arch, &str), T>,
+    register_map: &HashMap<(Arch, &str), S>,
+) -> Option<Hover> {
+    let instr_lookup = lookup_hover_resp(word, instruction_map);
+    if instr_lookup.is_some() {
+        return instr_lookup;
+    }
+
+    let reg_lookup = lookup_hover_resp(word, register_map);
+    if reg_lookup.is_some() {
+        return reg_lookup;
+    }
+
+    let demang = get_demangle_resp(word);
+
+    if demang.is_some() {
+        return demang;
+    }
+
+    None
+}
+
+fn lookup_hover_resp<T: Hoverable>(word: &str, map: &HashMap<(Arch, &str), T>) -> Option<Hover> {
     let (x86_res, x86_64_res) = search_for_hoverable(word, map);
 
     match (x86_res.is_some(), x86_64_res.is_some()) {
@@ -156,6 +182,23 @@ pub fn get_hover_resp<T: Hoverable>(word: &str, map: &HashMap<(Arch, &str), T>) 
             None
         }
     }
+}
+
+fn get_demangle_resp(word: &str) -> Option<Hover> {
+    let name = Name::new(word, NameMangling::Mangled, Language::Unknown);
+    let demangled = name.demangle(DemangleOptions::complete());
+    if let Some(demang) = demangled {
+        let value = demang.to_string();
+        return Some(Hover {
+            contents: HoverContents::Markup(MarkupContent {
+                kind: MarkupKind::Markdown,
+                value,
+            }),
+            range: None,
+        });
+    }
+
+    None
 }
 
 /// Filter out duplicate completion suggestions

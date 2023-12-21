@@ -205,13 +205,8 @@ fn main_loop(
                     // format response
                     match word {
                         Ok(word) => {
-                            let hover_res = get_hover_resp(&word, names_to_instructions);
-                            // If no instructions matched, check the registers
-                            let hover_res = if hover_res.is_none() {
-                                get_hover_resp(&word, names_to_registers)
-                            } else {
-                                hover_res
-                            };
+                            let hover_res =
+                                get_hover_resp(&word, names_to_instructions, names_to_registers);
                             match hover_res {
                                 Some(_) => {
                                     let result = serde_json::to_value(&hover_res).unwrap();
