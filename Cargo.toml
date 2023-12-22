@@ -47,5 +47,7 @@ tree-sitter-asm = "0.1.0"
 once_cell = "1.18.0"
 lsp-textdocument = "0.3.2"
 dirs = "5.0.1"
+symbolic = { version = "12.8.0", features = ["demangle"] }
+symbolic-demangle = "12.8.0"
 
 # [dev-dependencies]
