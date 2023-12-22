@@ -5,6 +5,7 @@ use log::{error, info, log, log_enabled};
 use lsp_textdocument::FullTextDocument;
 use lsp_types::*;
 use once_cell::sync::Lazy;
+use regex::Regex;
 use std::collections::{HashMap, HashSet};
 use std::fs::{create_dir_all, File};
 use std::io::BufRead;
@@ -812,6 +813,219 @@ fn search_for_hoverable<'a, T: Hoverable>(
     let x86_64_res = map.get(&(Arch::X86_64, word));
 
     (x86_res, x86_64_res)
+}
+
+/// Returns a series of non-overlapping edits from bottom to top
+/// Labels are non-indented, non-labels are indented once, and
+/// trailing newlines/ whitespace is trimmed according to params
+pub fn get_doc_fmt_resp(
+    doc: &FullTextDocument,
+    params: &DocumentFormattingParams,
+) -> Vec<TextEdit> {
+    let mut edits: Vec<TextEdit> = Vec::new();
+
+    if doc.line_count() == 0 {
+        return edits;
+    }
+
+    let single_indent = if params.options.insert_spaces {
+        " ".repeat(params.options.tab_size as usize)
+    } else {
+        String::from("\t")
+    };
+    const EMPTY_STR: &str = "";
+    const NEW_LINE: &str = "\n";
+
+    let insert_final_newline = params.options.insert_final_newline.unwrap_or(false);
+    let trim_final_newlines = params.options.trim_final_newlines.unwrap_or(true);
+    let trim_trailing_whitespace = params.options.trim_trailing_whitespace.unwrap_or(true);
+
+    // Find the lowest line (highest line number) that isn't a trailing newline
+    let mut lowest_nonempty_line = doc.line_count() - 1;
+    for line_num in (0..doc.line_count()).rev() {
+        lowest_nonempty_line = line_num;
+        if !doc
+            .get_content(Some(Range {
+                start: Position {
+                    line: line_num,
+                    character: 0,
+                },
+                end: Position {
+                    line: line_num,
+                    character: u32::MAX,
+                },
+            }))
+            .trim()
+            .is_empty()
+        {
+            break;
+        }
+    }
+
+    // handle trimming of/ adding trailing newlines per params
+    match (trim_final_newlines, insert_final_newline) {
+        // replace all trailing newlines with a single one
+        (true, true) => edits.push(TextEdit {
+            range: Range {
+                start: Position {
+                    line: lowest_nonempty_line,
+                    character: u32::MAX,
+                },
+                end: Position {
+                    line: doc.line_count() - 1,
+                    character: u32::MAX,
+                },
+            },
+            new_text: NEW_LINE.to_string(),
+        }),
+        // take out all trailing newlines, no additional lines added
+        (true, false) => edits.push(TextEdit {
+            range: Range {
+                start: Position {
+                    line: lowest_nonempty_line,
+                    character: u32::MAX,
+                },
+                end: Position {
+                    line: doc.line_count() - 1,
+                    character: u32::MAX,
+                },
+            },
+            new_text: EMPTY_STR.to_string(),
+        }),
+        // Add another trailing newline on top of 0 or more existing trailing newlines
+        (false, true) => {
+            if lowest_nonempty_line < doc.line_count() - 1 {
+                edits.push(TextEdit {
+                    range: Range {
+                        start: Position {
+                            line: doc.line_count() - 1,
+                            character: u32::MAX,
+                        },
+                        end: Position {
+                            line: doc.line_count() - 1,
+                            character: u32::MAX,
+                        },
+                    },
+                    new_text: NEW_LINE.to_string(),
+                })
+            }
+        }
+        (false, false) => {} // do nothing
+    }
+
+    // Match leading white space if there is any, the label text, ':' literally,
+    // white space before a comment, an optional comment, and trailing whitespace
+    static LABEL_REGEX: Lazy<Regex> = Lazy::new(|| {
+        Regex::new(r"(?P<lead_ws>^\s*)(?P<label>[a-zA-Z0-9_\.]+):(\s*\S.*\S)*(?P<trail_ws>\s*$)")
+            .unwrap()
+    });
+    // Match leading white space, whatever the contents are (code and comments),
+    // and trailing whitespace
+    static OTHER_REGEX: Lazy<Regex> = Lazy::new(|| {
+        Regex::new(r"(?P<lead_ws>^\s*)(?P<content>\S.*\S|\S)(?P<trail_ws>\s*$)").unwrap()
+    });
+
+    for line_num in (0..=lowest_nonempty_line).rev() {
+        let line_contents = doc.get_content(Some(Range {
+            start: Position {
+                line: line_num,
+                character: 0,
+            },
+            end: Position {
+                line: line_num,
+                character: u32::MAX,
+            },
+        }));
+
+        // Case 1: It's a label-> clear any leading whitespace, trim trailing whitespace if
+        // specified by params
+        if let Some(caps) = LABEL_REGEX.captures(line_contents) {
+            if let (Some(lead_ws_match), Some(_label_match), Some(trail_ws_match)) = (
+                caps.name("lead_ws"),
+                caps.name("label"),
+                caps.name("trail_ws"),
+            ) {
+                {
+                    if !lead_ws_match.as_str().is_empty() {
+                        edits.push(TextEdit::new(
+                            Range {
+                                start: Position {
+                                    line: line_num,
+                                    character: 0,
+                                },
+                                end: Position {
+                                    line: line_num,
+                                    character: lead_ws_match.end() as u32,
+                                },
+                            },
+                            EMPTY_STR.to_string(),
+                        ));
+                    }
+                    if trim_trailing_whitespace
+                        && !(trail_ws_match.is_empty() || trail_ws_match.as_str().eq("\n"))
+                    {
+                        edits.push(TextEdit::new(
+                            Range {
+                                start: Position {
+                                    line: line_num,
+                                    character: trail_ws_match.start() as u32,
+                                },
+                                end: Position {
+                                    line: line_num,
+                                    character: trail_ws_match.end() as u32,
+                                },
+                            },
+                            EMPTY_STR.to_string(),
+                        ));
+                    }
+                }
+            }
+
+        // Case 2: It's not a label, make sure leading whitespace is a single indent,
+        // trim trailing whitespace if specified by params
+        } else if let Some(caps) = OTHER_REGEX.captures(line_contents) {
+            if let (Some(lead_ws_match), Some(_content_match), Some(trail_ws_match)) = (
+                caps.name("lead_ws"),
+                caps.name("content"),
+                caps.name("trail_ws"),
+            ) {
+                if !lead_ws_match.as_str().eq(&single_indent) {
+                    edits.push(TextEdit::new(
+                        Range {
+                            start: Position {
+                                line: line_num,
+                                character: 0,
+                            },
+                            end: Position {
+                                line: line_num,
+                                character: lead_ws_match.end() as u32,
+                            },
+                        },
+                        single_indent.to_string(),
+                    ));
+                }
+                if trim_trailing_whitespace
+                    && !(trail_ws_match.is_empty() || trail_ws_match.as_str().eq("\n"))
+                {
+                    edits.push(TextEdit::new(
+                        Range {
+                            start: Position {
+                                line: line_num,
+                                character: trail_ws_match.start() as u32,
+                            },
+                            end: Position {
+                                line: line_num,
+                                character: trail_ws_match.end() as u32,
+                            },
+                        },
+                        EMPTY_STR.to_string(),
+                    ));
+                }
+            }
+        }
+    }
+
+    edits
 }
 
 /// Searches for global config in ~/.config/asm-lsp, then the project's directory
