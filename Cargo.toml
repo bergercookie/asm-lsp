@@ -46,5 +46,6 @@ tree-sitter = "0.20.10"
 tree-sitter-asm = "0.1.0"
 once_cell = "1.18.0"
 lsp-textdocument = "0.3.2"
+dirs = "5.0.1"
 
 # [dev-dependencies]
