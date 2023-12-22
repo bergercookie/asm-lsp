@@ -57,7 +57,7 @@ x86 = false
 x86_64 = true
 ```
 
-## Demo
+## Demos / Features Documentation
 
 ### Hovering / Documentation support
 
@@ -77,9 +77,9 @@ x86_64 = true
 
 - Triggering signature help is dependent on your editor and LSP client.
   - Using Neovim's built in LSP client, this can be done via the command
-    ``:lua vim.lsp.buf.signature_help()``.
+    `:lua vim.lsp.buf.signature_help()`.
   - Using coc, [this issue comment](https://github.com/neoclide/coc.nvim/issues/2656#issuecomment-845903417)
-    suggests the remap ``inoremap <silent> ,s <C-r>=CocActionAsync('showSignatureHelp')<CR>``
+    suggests the remap `inoremap <silent> ,s <C-r>=CocActionAsync('showSignatureHelp')<CR>`
     to trigger signature help in insert mode.
 
 ## Acknowledgements
