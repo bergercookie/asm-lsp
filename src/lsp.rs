@@ -60,6 +60,27 @@ pub fn get_word_from_file_params(
     }
 }
 
+/// Returns a string slice to the word in doc specified by the position params
+pub fn get_word_from_pos_params<'a>(
+    doc: &'a FullTextDocument,
+    pos_params: &TextDocumentPositionParams,
+) -> &'a str {
+    let line_contents = doc.get_content(Some(Range {
+        start: Position {
+            line: pos_params.position.line,
+            character: 0,
+        },
+        end: Position {
+            line: pos_params.position.line,
+            character: u32::MAX,
+        },
+    }));
+
+    let (word_start, word_end) =
+        find_word_at_pos(line_contents, pos_params.position.character as usize);
+    &line_contents[word_start..word_end]
+}
+
 /// Function allowing us to connect tree sitter's logging with the log crate
 pub fn tree_sitter_logger(log_type: tree_sitter::LogType, message: &str) {
     // map tree-sitter log types to log levels, for now set everything to Trace
@@ -660,6 +681,57 @@ pub fn get_sig_help_resp(
                             active_parameter: None,
                         });
                     }
+                }
+            }
+        }
+    }
+
+    None
+}
+
+pub fn get_goto_def_resp(
+    curr_doc: &FullTextDocument,
+    parser: &mut Parser,
+    curr_tree: &mut Option<Tree>,
+    params: &GotoDefinitionParams,
+) -> Option<GotoDefinitionResponse> {
+    let doc = curr_doc.get_content(None);
+    *curr_tree = parser.parse(doc, curr_tree.as_ref());
+
+    if let Some(tree) = curr_tree {
+        static QUERY_LABEL: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(tree_sitter_asm::language(), "(label) @label").unwrap()
+        });
+
+        let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
+        let mut cursor = tree_sitter::QueryCursor::new();
+        let matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc.as_bytes());
+
+        let word = get_word_from_pos_params(curr_doc, &params.text_document_position_params);
+
+        for match_ in matches.into_iter() {
+            for cap in match_.captures.iter() {
+                let text = cap
+                    .node
+                    .utf8_text(doc.as_bytes())
+                    .unwrap_or("")
+                    .trim()
+                    .trim_matches(is_not_ident_char);
+
+                if word.eq(text) {
+                    let start = cap.node.start_position();
+                    let end = cap.node.end_position();
+                    return Some(GotoDefinitionResponse::Scalar(Location {
+                        uri: params
+                            .text_document_position_params
+                            .text_document
+                            .uri
+                            .clone(),
+                        range: Range {
+                            start: lsp_pos_of_point(start),
+                            end: lsp_pos_of_point(end),
+                        },
+                    }));
                 }
             }
         }

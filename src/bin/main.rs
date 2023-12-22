@@ -2,7 +2,9 @@ use asm_lsp::*;
 
 use log::{error, info};
 use lsp_types::notification::{DidChangeTextDocument, DidOpenTextDocument};
-use lsp_types::request::{Completion, DocumentSymbolRequest, HoverRequest, SignatureHelpRequest};
+use lsp_types::request::{
+    Completion, DocumentSymbolRequest, GotoDefinition, HoverRequest, SignatureHelpRequest,
+};
 use lsp_types::*;
 
 use crate::lsp::{get_document_symbols, get_target_config, instr_filter_targets};
@@ -38,6 +40,8 @@ pub fn main() -> anyhow::Result<()> {
         ..Default::default()
     });
 
+    let definition_provider = Some(OneOf::Left(true));
+
     let text_document_sync = Some(TextDocumentSyncCapability::Kind(
         TextDocumentSyncKind::INCREMENTAL,
     ));
@@ -55,6 +59,7 @@ pub fn main() -> anyhow::Result<()> {
         hover_provider,
         completion_provider,
         signature_help_provider,
+        definition_provider,
         text_document_sync,
         document_symbol_provider: Some(OneOf::Left(true)),
         ..ServerCapabilities::default()
@@ -263,6 +268,30 @@ fn main_loop(
                     } else {
                         // don't know what to suggest
                         connection.sender.send(Message::Response(res.clone()))?;
+                    }
+                } else if let Ok((id, params)) = cast_req::<GotoDefinition>(req.clone()) {
+                    let res = Response {
+                        id: id.clone(),
+                        result: None,
+                        error: None,
+                    };
+                    if let Some(ref doc) = curr_doc {
+                        let def_res = get_goto_def_resp(doc, &mut parser, &mut tree, &params);
+                        match def_res {
+                            Some(_) => {
+                                let result = serde_json::to_value(&def_res).unwrap();
+                                let result = Response {
+                                    id: id.clone(),
+                                    result: Some(result),
+                                    error: None,
+                                };
+                                connection.sender.send(Message::Response(result))?;
+                            }
+                            None => {
+                                // don't know what to suggest
+                                connection.sender.send(Message::Response(res.clone()))?;
+                            }
+                        }
                     }
                 } else if let Ok((id, params)) = cast_req::<DocumentSymbolRequest>(req.clone()) {
                     // DocumentSymbolRequest ---------------------------------------------------------------
