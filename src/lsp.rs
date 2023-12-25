@@ -81,6 +81,99 @@ pub fn get_word_from_pos_params<'a>(
     &line_contents[word_start..word_end]
 }
 
+/// Returns a string slice to the filename in doc specified by the position params
+/// if it is one
+pub fn get_filename_from_pos_params<'a>(
+    doc: &'a FullTextDocument,
+    pos_params: &TextDocumentPositionParams,
+) -> &'a str {
+    let is_ident_char = |c: char| c.is_alphanumeric() || c == '_';
+
+    let line_contents = doc.get_content(Some(Range {
+        start: Position {
+            line: pos_params.position.line,
+            character: 0,
+        },
+        end: Position {
+            line: pos_params.position.line,
+            character: u32::MAX,
+        },
+    }));
+
+    let (word_start, word_end) =
+        find_word_at_pos(line_contents, pos_params.position.character as usize);
+    // try walking forward from the filename to the extension
+    if let Some('.') = line_contents.chars().nth(word_end) {
+        if let Some(idx) = line_contents
+            .chars()
+            .enumerate()
+            .skip(word_end + 1)
+            .take_while(|(_i, c)| is_ident_char(*c))
+            .map(|(i, _c)| i)
+            .last()
+        {
+            return &line_contents[word_start..=idx];
+        }
+    }
+    // try walking backward from the extension to the filename
+    let search_start = if word_start > 0 {
+        word_start - 1
+    } else {
+        word_start
+    };
+    if let Some('.') = line_contents.chars().nth(search_start) {
+        if let Some(idx) = line_contents
+            .chars()
+            .rev()
+            .enumerate()
+            .skip_while(|(i, _c)| (line_contents.len() - 1 - *i) >= word_start)
+            .skip(1)
+            .take_while(|(_i, c)| is_ident_char(*c))
+            .map(|(i, _c)| line_contents.len() - 1 - i)
+            .last()
+        {
+            return &line_contents[idx..word_end];
+        }
+    }
+
+    // could be a file without an extension....
+    &line_contents[word_start..word_end]
+}
+
+/// return a vector of include directories
+pub fn get_include_dirs() -> Vec<PathBuf> {
+    let mut include_dirs = HashSet::new();
+    let cmds = &["cpp", "cpp", "clang", "clang"];
+    let cmd_args = &[
+        ["-v", "-E", "-x", "c", "/dev/null", "-o", "/dev/null"],
+        ["-v", "-E", "-x", "c++", "/dev/null", "-o", "/dev/null"],
+    ];
+
+    for (cmd, args) in cmds.iter().zip(cmd_args.iter().cycle()) {
+        if let Ok(cmd_output) = std::process::Command::new(cmd)
+            .args(args)
+            .stderr(std::process::Stdio::piped())
+            .output()
+        {
+            if cmd_output.status.success() {
+                let output_str: String = String::from_utf8(cmd_output.stderr).unwrap_or_default();
+
+                output_str
+                    .lines()
+                    .skip_while(|line| !line.contains("#include <...> search starts here:"))
+                    .skip(1)
+                    .take_while(|line| !line.contains("End of search list."))
+                    .filter_map(|line| PathBuf::from(line.trim()).canonicalize().ok())
+                    .for_each(|path| {
+                        include_dirs.insert(path);
+                    });
+            }
+        }
+    }
+
+    include_dirs.iter().cloned().collect::<Vec<PathBuf>>()
+}
+
 /// Function allowing us to connect tree sitter's logging with the log crate
 pub fn tree_sitter_logger(log_type: tree_sitter::LogType, message: &str) {
     // map tree-sitter log types to log levels, for now set everything to Trace
@@ -152,8 +245,10 @@ pub fn get_completes<T: Completable>(
 
 pub fn get_hover_resp<T: Hoverable, S: Hoverable>(
     word: &str,
+    file_word: Option<&str>,
     instruction_map: &HashMap<(Arch, &str), T>,
     register_map: &HashMap<(Arch, &str), S>,
+    include_dirs: &[PathBuf],
 ) -> Option<Hover> {
     let instr_lookup = lookup_hover_resp(word, instruction_map);
     if instr_lookup.is_some() {
@@ -169,6 +264,13 @@ pub fn get_hover_resp<T: Hoverable, S: Hoverable>(
 
     if demang.is_some() {
         return demang;
+    }
+
+    if let Some(filename) = file_word {
+        let include_path = get_include_resp(filename, include_dirs);
+        if include_path.is_some() {
+            return include_path;
+        }
     }
 
     None
@@ -220,6 +322,49 @@ fn get_demangle_resp(word: &str) -> Option<Hover> {
     }
 
     None
+}
+
+fn get_include_resp(filename: &str, include_dirs: &[PathBuf]) -> Option<Hover> {
+    let mut paths = String::new();
+    for dir in include_dirs.iter() {
+        match std::fs::read_dir(dir) {
+            Ok(dir_reader) => {
+                for file in dir_reader {
+                    match file {
+                        Ok(f) => {
+                            if f.file_name() == filename {
+                                paths += &format!("file://{}\n", f.path().display());
+                            }
+                        }
+                        Err(e) => {
+                            error!(
+                                "Failed to read item in {} - Error {e}",
+                                dir.as_path().display()
+                            );
+                        }
+                    };
+                }
+            }
+            Err(e) => {
+                error!(
+                    "Failed to create directory reader for {} - Error {e}",
+                    dir.as_path().display()
+                );
+            }
+        }
+    }
+
+    if paths.is_empty() {
+        None
+    } else {
+        Some(Hover {
+            contents: HoverContents::Markup(MarkupContent {
+                kind: MarkupKind::Markdown,
+                value: paths,
+            }),
+            range: None,
+        })
+    }
 }
 
 /// Filter out duplicate completion suggestions
