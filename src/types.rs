@@ -317,6 +317,87 @@ impl Display for Z80Timing {
     }
 }
 
+// Directive ------------------------------------------------------------------------------------
+#[derive(Debug, Clone)]
+pub struct Directive {
+    pub name: String,
+    pub alt_names: Vec<String>,
+    pub signatures: Vec<String>,
+    pub description: String,
+    pub deprecated: bool,
+    pub url: Option<String>,
+    pub assembler: Option<Assembler>,
+}
+
+impl Hoverable for &Directive {}
+impl Completable for &Directive {}
+
+impl Default for Directive {
+    fn default() -> Self {
+        let name = String::new();
+        let alt_names = vec![];
+        let signatures = vec![];
+        let description = String::new();
+        let deprecated = false;
+        let url = None;
+        let assembler = None;
+
+        Self {
+            name,
+            alt_names,
+            signatures,
+            description,
+            deprecated,
+            url,
+            assembler,
+        }
+    }
+}
+
+impl std::fmt::Display for Directive {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // basic fields
+        let header: String;
+        if let Some(assembler) = &self.assembler {
+            header = format!(
+                ".{} [{}]{}",
+                &self.name,
+                assembler.as_ref(),
+                if self.deprecated {
+                    "\n**DEPRECATED**"
+                } else {
+                    ""
+                }
+            );
+        } else {
+            header = self.name.clone();
+        }
+
+        let mut v: Vec<&str> = vec![&header, &self.description, "\n"];
+
+        // signature(s)
+        let mut sigs = String::new();
+        for sig in self.signatures.iter() {
+            sigs += &format!("- {}\n", sig);
+        }
+        v.push(&sigs);
+
+        // url
+        let more_info: String;
+        match &self.url {
+            None => {}
+            Some(url_) => {
+                more_info = format!("\nMore info: {}", url_);
+                v.push(&more_info);
+            }
+        }
+
+        let s = v.join("\n");
+        write!(f, "{}", s)?;
+        Ok(())
+    }
+}
+
 #[derive(Default, Debug, Clone)]
 pub enum Z80Register8Bit {
     #[default]
@@ -349,6 +430,20 @@ pub enum Z80Register16Bit {
     #[default]
     HL,
     HLShadow,
+}
+
+impl<'own> Directive {
+    /// get the names of all the associated directives
+    pub fn get_associated_names(&'own self) -> Vec<&'own str> {
+        let mut names = Vec::<&'own str>::new();
+        names.push(&self.name);
+
+        for name in &self.alt_names {
+            names.push(name);
+        }
+
+        names
+    }
 }
 
 // Register ---------------------------------------------------------------------------------------
@@ -471,10 +566,15 @@ pub type NameToInstructionMap<'instruction> =
 
 pub type NameToRegisterMap<'register> = HashMap<(Arch, &'register str), &'register Register>;
 
+pub type NameToDirectiveMap<'directive> =
+    HashMap<(Assembler, &'directive str), &'directive Directive>;
+
 // Define a trait for types we display on Hover Requests so we can avoid some duplicate code
 pub trait Hoverable: Display + Clone + Copy {}
 // Define a trait for types we display on Completion Requests so we can avoid some duplicate code
 pub trait Completable: Display {}
+// Define a trait for the enums we use to distinguish between different Architectures and Assemblers
+pub trait ArchOrAssembler {}
 
 #[derive(Debug, Clone, EnumString, AsRefStr)]
 pub enum XMMMode {
@@ -498,6 +598,16 @@ pub enum Arch {
     #[strum(serialize = "z80")]
     Z80,
 }
+
+impl ArchOrAssembler for Arch {}
+
+#[derive(Debug, Display, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr)]
+pub enum Assembler {
+    Gas,
+    Go,
+}
+
+impl ArchOrAssembler for Assembler {}
 
 #[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Display)]
 pub enum RegisterType {

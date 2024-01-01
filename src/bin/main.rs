@@ -39,7 +39,7 @@ pub fn main() -> anyhow::Result<()> {
         completion_item: Some(CompletionOptionsCompletionItem {
             label_details_support: Some(true),
         }),
-        trigger_characters: Some(vec![String::from("%")]),
+        trigger_characters: Some(vec![String::from("%"), String::from(".")]),
         ..Default::default()
     });
 
@@ -171,10 +171,23 @@ pub fn main() -> anyhow::Result<()> {
     populate_name_to_register_map(Arch::X86_64, &x86_64_registers, &mut names_to_registers);
     populate_name_to_register_map(Arch::Z80, &z80_registers, &mut names_to_registers);
 
+    let gas_directives = if target_config.assemblers.gas {
+        info!("Populating directive set -> Gas...");
+        let xml_conts_gas = include_str!("../../directives/gas_directives.xml");
+        populate_directives(xml_conts_gas)?.into_iter().collect()
+    } else {
+        Vec::new()
+    };
+
+    let mut names_to_directives = NameToDirectiveMap::new();
+    populate_name_to_directive_map(Assembler::Gas, &gas_directives, &mut names_to_directives);
+
     let instr_completion_items =
         get_completes(&names_to_instructions, Some(CompletionItemKind::OPERATOR));
     let reg_completion_items =
         get_completes(&names_to_registers, Some(CompletionItemKind::VARIABLE));
+    let directive_completion_items =
+        get_completes(&names_to_directives, Some(CompletionItemKind::OPERATOR));
 
     let include_dirs = get_include_dirs();
 
@@ -182,8 +195,10 @@ pub fn main() -> anyhow::Result<()> {
         &connection,
         initialization_params,
         &names_to_instructions,
+        &names_to_directives,
         &names_to_registers,
         &instr_completion_items,
+        &directive_completion_items,
         &reg_completion_items,
         &include_dirs,
     )?;
@@ -194,12 +209,15 @@ pub fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
+#[allow(clippy::too_many_arguments)]
 fn main_loop(
     connection: &Connection,
     params: serde_json::Value,
     names_to_instructions: &NameToInstructionMap,
+    names_to_directives: &NameToDirectiveMap,
     names_to_registers: &NameToRegisterMap,
     instruction_completion_items: &[CompletionItem],
+    directive_completion_items: &[CompletionItem],
     register_completion_items: &[CompletionItem],
     include_dirs: &[PathBuf],
 ) -> anyhow::Result<()> {
@@ -250,6 +268,7 @@ fn main_loop(
                         file_word,
                         names_to_instructions,
                         names_to_registers,
+                        names_to_directives,
                         include_dirs,
                     );
                     match hover_res {
@@ -282,6 +301,7 @@ fn main_loop(
                             &mut tree,
                             &params,
                             instruction_completion_items,
+                            directive_completion_items,
                             register_completion_items,
                         );
                         match comp_res {

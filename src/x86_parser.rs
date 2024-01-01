@@ -2,6 +2,7 @@ use crate::types::*;
 
 use anyhow::anyhow;
 use log::{debug, error, info, warn};
+use quick_xml::escape::unescape;
 use quick_xml::events::attributes::Attribute;
 use quick_xml::events::Event;
 use quick_xml::name::QName;
@@ -582,6 +583,114 @@ pub fn populate_name_to_register_map<'register>(
     for register in registers {
         for name in &register.get_associated_names() {
             names_to_registers.insert((arch, name), register);
+        }
+    }
+}
+
+pub fn populate_directives(xml_contents: &str) -> anyhow::Result<Vec<Directive>> {
+    let mut directives_map = HashMap::<String, Directive>::new();
+
+    // iterate through the XML --------------------------------------------------------------------
+    let mut reader = Reader::from_str(xml_contents);
+    reader.trim_text(true);
+
+    // ref to the assembler directive that's currently under construction
+    let mut curr_directive = Directive::default();
+    let mut assembler: Option<Assembler> = None;
+
+    debug!("Parsing XML contents...");
+    loop {
+        match reader.read_event() {
+            // start event ------------------------------------------------------------------------
+            Ok(Event::Start(ref e)) => {
+                match e.name() {
+                    QName(b"Assembler") => {
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            if let Ok("name") = str::from_utf8(key.into_inner()) {
+                                assembler = Assembler::from_str(unsafe {
+                                    str::from_utf8_unchecked(&value)
+                                })
+                                .ok();
+                            }
+                        }
+                    }
+                    QName(b"Directive") => {
+                        // start of a new directive
+                        curr_directive = Directive::default();
+                        curr_directive.assembler = assembler;
+
+                        // iterate over the attributes
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            match str::from_utf8(key.into_inner()).unwrap() {
+                                "name" => {
+                                    let name =
+                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                    curr_directive.alt_names.push(name.to_uppercase());
+                                    curr_directive.name = name;
+                                }
+                                "md_description" => {
+                                    let description =
+                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                    curr_directive.description =
+                                        unescape(&description).unwrap().to_string();
+                                }
+                                "deprecated" => {
+                                    curr_directive.deprecated = FromStr::from_str(unsafe {
+                                        str::from_utf8_unchecked(&value)
+                                    })
+                                    .unwrap();
+                                }
+                                "url_fragment" => {
+                                    curr_directive.url = Some(format!(
+                                        "https://sourceware.org/binutils/docs-2.41/as/{}.html",
+                                        unsafe { str::from_utf8_unchecked(&value) }
+                                    ));
+                                }
+                                _ => {}
+                            }
+                        }
+                    }
+                    QName(b"Signatures") => {} // it's just a wrapper...
+                    QName(b"Signature") => {
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            if let Ok("sig") = str::from_utf8(key.into_inner()) {
+                                let sig = String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                curr_directive
+                                    .signatures
+                                    .push(unescape(&sig).unwrap().to_string());
+                            }
+                        }
+                    }
+                    _ => {} // unknown event
+                }
+            }
+            // end event --------------------------------------------------------------------------
+            Ok(Event::End(ref e)) => {
+                if let QName(b"Directive") = e.name() {
+                    // finish directive
+                    directives_map.insert(curr_directive.name.clone(), curr_directive.clone());
+                }
+            }
+            Ok(Event::Eof) => break,
+            Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
+            _ => (), // rest of events that we don't consider
+        }
+    }
+
+    Ok(directives_map.into_values().collect())
+}
+
+pub fn populate_name_to_directive_map<'directive>(
+    assem: Assembler,
+    directives: &'directive Vec<Directive>,
+    names_to_directives: &mut NameToDirectiveMap<'directive>,
+) {
+    for register in directives {
+        for name in &register.get_associated_names() {
+            names_to_directives.insert((assem, name), register);
         }
     }
 }
