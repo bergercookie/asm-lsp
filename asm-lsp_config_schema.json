@@ -1,0 +1,44 @@
+{
+    "$id": "asm-lsp_config_schema.json",
+    "$schema": "http://json-schema.org/schema",
+    "title": "asm-lsp Configuration Schema",
+    "description": "Configuration for asm-lsp.",
+    "type": "object",
+    "properties": {
+        "version": {
+            "description": "Config version number.",
+            "type": "string"
+        },
+        "assemblers": {
+            "description": "Options to manage assembler-dependent features.",
+            "type": "object",
+            "properties": {
+                "gas": {
+                    "description": "Flag to turn features related to the GNU Assembler on/off.",
+                    "type": "boolean"
+                },
+                "go": {
+                    "description": "Flag to turn features related to the Go Assembler on/off.",
+                    "type": "boolean"
+                }
+            },
+            "required": [ "gas", "go" ]
+        },
+        "instruction_sets": {
+            "description": "Options to manage instruction set-dependent features.",
+            "type": "object",
+            "properties": {
+                "x86": {
+                    "description": "Flag to turn features related to the x86 instruction set on/off.",
+                    "type": "boolean"
+                },
+                "x86_64": {
+                    "description": "Flag to turn features related to the x86_64 instruction set on/off.",
+                    "type": "boolean"
+                }
+            },
+            "required": [ "x86", "x86_64" ]
+        }
+    },
+    "required": [ "version", "assemblers", "instruction_sets" ]
+}
