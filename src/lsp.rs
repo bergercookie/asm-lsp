@@ -259,7 +259,6 @@ pub fn get_comp_resp(
 ) -> Option<CompletionList> {
     let cursor_line = params.text_document_position.position.line as usize;
     let cursor_char = params.text_document_position.position.character as usize;
-    let mut comp_items = None;
 
     // prepend register names with "%" in GAS
     if let Some(ctx) = params.context.as_ref() {
@@ -287,191 +286,54 @@ pub fn get_comp_resp(
         });
         let curr_doc = curr_doc.as_bytes();
 
-        // Instruction and two register arguments
-        static QUERY_INSTR_REG_REG: Lazy<tree_sitter::Query> = Lazy::new(|| {
+        static QUERY_INSTR_ANY: Lazy<tree_sitter::Query> = Lazy::new(|| {
             tree_sitter::Query::new(
                 tree_sitter_asm::language(),
-                "(instruction kind: (word) @instr_name (ident (reg) @r1) (ident (reg) @r2))",
+                "[
+                    (instruction kind: (word) @instr_name)
+                    (
+                        instruction kind: (word) @instr_name
+                            [
+                                (
+                                    [
+                                     (ident (reg) @r1)
+                                     (ptr (int) (reg) @r1)
+                                     (ptr (reg) @r1)
+                                     (ptr (int))
+                                     (ptr)
+                                    ]
+                                    [
+                                     (ident (reg) @r2)
+                                     (ptr (int) (reg) @r2)
+                                     (ptr (reg) @r2)
+                                     (ptr (int))
+                                     (ptr)
+                                    ]
+                                )
+                                (
+                                    [
+                                     (ident (reg) @r1)
+                                     (ptr (int) (reg) @r1)
+                                     (ptr (reg) @r1)
+                                    ]
+                                )
+                            ]
+                    )
+                ]",
             )
             .unwrap()
         });
 
-        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = cursor
-            .matches(&QUERY_INSTR_REG_REG, tree.root_node(), curr_doc)
-            .collect();
-        if let Some(match_) = matches.first() {
+        let matches_iter = cursor.matches(&QUERY_INSTR_ANY, tree.root_node(), curr_doc);
+        for match_ in matches_iter {
             let caps = match_.captures;
-            if caps.len() == 3 {
-                let instr_start = caps[0].node.range().start_point;
-                let instr_end = caps[0].node.range().end_point;
-                let reg_1_start = caps[1].node.range().start_point;
-                let reg_1_end = caps[1].node.range().end_point;
-                let reg_2_start = caps[2].node.range().start_point;
-                let reg_2_end = caps[2].node.range().end_point;
-                if cursor_matches!(cursor_line, cursor_char, instr_start, instr_end) {
-                    comp_items = Some(filtered_comp_list(instr_comps));
-                } else if cursor_matches!(cursor_line, cursor_char, reg_1_start, reg_1_end)
-                    || cursor_matches!(cursor_line, cursor_char, reg_2_start, reg_2_end)
-                {
-                    comp_items = Some(filtered_comp_list(reg_comps));
-                }
-                if let Some(items) = comp_items {
-                    return Some(CompletionList {
-                        is_incomplete: true,
-                        items,
-                    });
-                }
-            }
-        }
-
-        // Instruction and one register argument, one non-register argument
-        static QUERY_INSTR_REG_ARG: Lazy<tree_sitter::Query> = Lazy::new(|| {
-            tree_sitter::Query::new(
-                tree_sitter_asm::language(),
-                "(instruction kind: (word) @instr_name (ident (reg) @r1) (ident))",
-            )
-            .unwrap()
-        });
-
-        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = cursor
-            .matches(&QUERY_INSTR_REG_ARG, tree.root_node(), curr_doc)
-            .collect();
-        if let Some(match_) = matches.first() {
-            let caps = match_.captures;
-            if caps.len() == 2 {
-                let instr_start = caps[0].node.range().start_point;
-                let instr_end = caps[0].node.range().end_point;
-                let reg_start = caps[1].node.range().start_point;
-                let reg_end = caps[1].node.range().end_point;
-                if cursor_matches!(cursor_line, cursor_char, instr_start, instr_end) {
-                    comp_items = Some(filtered_comp_list(instr_comps));
-                } else if cursor_matches!(cursor_line, cursor_char, reg_start, reg_end) {
-                    comp_items = Some(filtered_comp_list(reg_comps));
-                }
-                if let Some(items) = comp_items {
-                    return Some(CompletionList {
-                        is_incomplete: true,
-                        items,
-                    });
-                }
-            }
-        }
-
-        // Instruction and one non-register argument, one register argument
-        static QUERY_INSTR_ARG_REG: Lazy<tree_sitter::Query> = Lazy::new(|| {
-            tree_sitter::Query::new(
-                tree_sitter_asm::language(),
-                "(instruction kind: (word) @instr_name (ident) (ident (reg) @r1))",
-            )
-            .unwrap()
-        });
-        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = cursor
-            .matches(&QUERY_INSTR_ARG_REG, tree.root_node(), curr_doc)
-            .collect();
-        if let Some(match_) = matches.first() {
-            let caps = match_.captures;
-            if caps.len() == 2 {
-                let instr_start = caps[0].node.range().start_point;
-                let instr_end = caps[0].node.range().end_point;
-                let reg_start = caps[1].node.range().start_point;
-                let reg_end = caps[1].node.range().end_point;
-                if cursor_matches!(cursor_line, cursor_char, instr_start, instr_end) {
-                    comp_items = Some(filtered_comp_list(instr_comps));
-                } else if cursor_matches!(cursor_line, cursor_char, reg_start, reg_end) {
-                    comp_items = Some(filtered_comp_list(reg_comps));
-                }
-                if let Some(items) = comp_items {
-                    return Some(CompletionList {
-                        is_incomplete: true,
-                        items,
-                    });
-                }
-            }
-        }
-
-        // Instruction and one register argument
-        static QUERY_INSTR_REG: Lazy<tree_sitter::Query> = Lazy::new(|| {
-            tree_sitter::Query::new(
-                tree_sitter_asm::language(),
-                "(instruction kind: (word) @instr_name (ident (reg) @r1))",
-            )
-            .unwrap()
-        });
-        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = cursor
-            .matches(&QUERY_INSTR_REG, tree.root_node(), curr_doc)
-            .collect();
-        if let Some(match_) = matches.first() {
-            let caps = match_.captures;
-            if caps.len() == 2 {
-                let instr_start = caps[0].node.range().start_point;
-                let instr_end = caps[0].node.range().end_point;
-                let reg_start = caps[1].node.range().start_point;
-                let reg_end = caps[1].node.range().end_point;
-                if cursor_matches!(cursor_line, cursor_char, instr_start, instr_end) {
-                    comp_items = Some(filtered_comp_list(instr_comps));
-                } else if cursor_matches!(cursor_line, cursor_char, reg_start, reg_end) {
-                    comp_items = Some(filtered_comp_list(reg_comps));
-                }
-
-                if let Some(items) = comp_items {
-                    return Some(CompletionList {
-                        is_incomplete: true,
-                        items,
-                    });
-                }
-            }
-        }
-
-        // Instruction and one non-register argument
-        static QUERY_INSTR_ARG: Lazy<tree_sitter::Query> = Lazy::new(|| {
-            tree_sitter::Query::new(
-                tree_sitter_asm::language(),
-                "(instruction kind: (word) @instr_name (ident))",
-            )
-            .unwrap()
-        });
-        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = cursor
-            .matches(&QUERY_INSTR_ARG, tree.root_node(), curr_doc)
-            .collect();
-        if let Some(match_) = matches.first() {
-            let caps = match_.captures;
-            if caps.len() == 1 {
-                let instr_start = caps[0].node.range().start_point;
-                let instr_end = caps[0].node.range().end_point;
-                if cursor_matches!(cursor_line, cursor_char, instr_start, instr_end) {
-                    comp_items = Some(filtered_comp_list(instr_comps));
-                }
-
-                if let Some(items) = comp_items {
-                    return Some(CompletionList {
-                        is_incomplete: true,
-                        items,
-                    });
-                }
-            }
-        }
-
-        // Just an instruction
-        static QUERY_INSTR: Lazy<tree_sitter::Query> = Lazy::new(|| {
-            tree_sitter::Query::new(
-                tree_sitter_asm::language(),
-                "(instruction kind: (word) @instr_name)",
-            )
-            .unwrap()
-        });
-        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = cursor
-            .matches(&QUERY_INSTR, tree.root_node(), curr_doc)
-            .collect();
-        if let Some(match_) = matches.first() {
-            let caps = match_.captures;
-            if caps.len() == 1 {
-                let instr_start = caps[0].node.range().start_point;
-                let instr_end = caps[0].node.range().end_point;
-                if cursor_matches!(cursor_line, cursor_char, instr_start, instr_end) {
-                    comp_items = Some(filtered_comp_list(instr_comps));
-                }
-
-                if let Some(items) = comp_items {
+            for (cap_num, cap) in caps.iter().enumerate() {
+                let arg_start = cap.node.range().start_point;
+                let arg_end = cap.node.range().end_point;
+                if cursor_matches!(cursor_line, cursor_char, arg_start, arg_end) {
+                    // an instruction is always capture #0, any capture number after must be a register
+                    let items =
+                        filtered_comp_list(if cap_num == 0 { instr_comps } else { reg_comps });
                     return Some(CompletionList {
                         is_incomplete: true,
                         items,
