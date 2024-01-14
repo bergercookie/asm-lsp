@@ -358,7 +358,7 @@ fn main_loop(
                         connection.sender.send(Message::Response(res.clone()))?;
                     }
                 } else {
-                    error!("Invalid request fromat -> {:#?}", req);
+                    error!("Invalid request format -> {:#?}", req);
                 }
             }
             Message::Notification(notif) => {
