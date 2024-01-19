@@ -3,7 +3,8 @@ use asm_lsp::*;
 use log::{error, info};
 use lsp_types::notification::{DidChangeTextDocument, DidOpenTextDocument};
 use lsp_types::request::{
-    Completion, DocumentSymbolRequest, GotoDefinition, HoverRequest, SignatureHelpRequest,
+    Completion, DocumentSymbolRequest, GotoDefinition, HoverRequest, References,
+    SignatureHelpRequest,
 };
 use lsp_types::*;
 
@@ -54,6 +55,8 @@ pub fn main() -> anyhow::Result<()> {
         },
     });
 
+    let references_provider = Some(OneOf::Left(true));
+
     let capabilities = ServerCapabilities {
         position_encoding,
         hover_provider,
@@ -62,6 +65,7 @@ pub fn main() -> anyhow::Result<()> {
         definition_provider,
         text_document_sync,
         document_symbol_provider: Some(OneOf::Left(true)),
+        references_provider,
         ..ServerCapabilities::default()
     };
     let server_capabilities = serde_json::to_value(capabilities).unwrap();
@@ -356,6 +360,27 @@ fn main_loop(
                             error: None,
                         };
                         connection.sender.send(Message::Response(res.clone()))?;
+                    }
+                } else if let Ok((id, params)) = cast_req::<References>(req.clone()) {
+                    if let Some(ref doc) = curr_doc {
+                        let ref_resp = get_ref_resp(doc, &mut parser, &mut tree, &params);
+                        if !ref_resp.is_empty() {
+                            let result = serde_json::to_value(&ref_resp).unwrap();
+
+                            let result = Response {
+                                id: id.clone(),
+                                result: Some(result),
+                                error: None,
+                            };
+                            connection.sender.send(Message::Response(result.clone()))?;
+                        } else {
+                            let res = Response {
+                                id: id.clone(),
+                                result: None,
+                                error: None,
+                            };
+                            connection.sender.send(Message::Response(res.clone()))?;
+                        }
                     }
                 } else {
                     error!("Invalid request format -> {:#?}", req);

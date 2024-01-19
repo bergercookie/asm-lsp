@@ -602,6 +602,90 @@ pub fn get_goto_def_resp(
     None
 }
 
+pub fn get_ref_resp(
+    curr_doc: &FullTextDocument,
+    parser: &mut Parser,
+    curr_tree: &mut Option<Tree>,
+    params: &ReferenceParams,
+) -> Vec<Location> {
+    let mut refs: Vec<Location> = Vec::new();
+    let doc = curr_doc.get_content(None);
+    *curr_tree = parser.parse(doc, curr_tree.as_ref());
+
+    if let Some(tree) = curr_tree {
+        static QUERY_LABEL: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(
+                tree_sitter_asm::language(),
+                "(label (ident (reg (word)))) @label",
+            )
+            .unwrap()
+        });
+
+        static QUERY_WORD: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(tree_sitter_asm::language(), "(ident) @ident").unwrap()
+        });
+
+        let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
+        let word = get_word_from_pos_params(curr_doc, &params.text_document_position);
+        let uri = &params.text_document_position.text_document.uri;
+
+        let mut cursor = tree_sitter::QueryCursor::new();
+        if params.context.include_declaration {
+            let label_matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc.as_bytes());
+            for match_ in label_matches.into_iter() {
+                for cap in match_.captures.iter() {
+                    let text = cap
+                        .node
+                        .utf8_text(doc.as_bytes())
+                        .unwrap_or("")
+                        .trim()
+                        .trim_matches(is_not_ident_char);
+
+                    if word.eq(text) {
+                        let start = lsp_pos_of_point(cap.node.start_position());
+                        let end = lsp_pos_of_point(cap.node.end_position());
+                        // None of the LSP types implement the Hash trait, can't use a HashSet
+                        // to avoid duplicates
+                        if !refs.iter().any(|loc| loc.range.start == start) {
+                            refs.push(Location {
+                                uri: uri.clone(),
+                                range: Range { start, end },
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        let word_matches = cursor.matches(&QUERY_WORD, tree.root_node(), doc.as_bytes());
+        for match_ in word_matches.into_iter() {
+            for cap in match_.captures.iter() {
+                let text = cap
+                    .node
+                    .utf8_text(doc.as_bytes())
+                    .unwrap_or("")
+                    .trim()
+                    .trim_matches(is_not_ident_char);
+
+                if word.eq(text) {
+                    let start = lsp_pos_of_point(cap.node.start_position());
+                    let end = lsp_pos_of_point(cap.node.end_position());
+                    // None of the LSP types implement the Hash trait, can't use a HashSet
+                    // to avoid duplicates
+                    if !refs.iter().any(|loc| loc.range.start == start) {
+                        refs.push(Location {
+                            uri: uri.clone(),
+                            range: Range { start, end },
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    refs
+}
+
 // Note: Some issues here regarding entangled lifetimes
 // -- https://github.com/rust-lang/rust/issues/80389
 // If issue is resolved, can add a separate lifetime "'b" to "word"
