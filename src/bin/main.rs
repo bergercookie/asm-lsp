@@ -214,15 +214,12 @@ fn main_loop(
                     };
 
                     // get the word under the cursor
-                    let word = get_word_from_file_params(&params.text_document_position_params);
+                    let word = get_word_from_file_params(&params.text_document_position_params, "");
                     // treat the word under the cursor as a filename and grab it as well
                     let file_word = if let Some(ref doc) = curr_doc {
-                        Some(get_filename_from_pos_params(
-                            doc,
-                            &params.text_document_position_params,
-                        ))
+                        get_word_from_pos_params(doc, &params.text_document_position_params, ".")
                     } else {
-                        None
+                        ""
                     };
 
                     // get documentation ------------------------------------------------------
