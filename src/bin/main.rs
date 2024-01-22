@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use asm_lsp::*;
 
 use log::{error, info};
@@ -163,6 +165,8 @@ pub fn main() -> anyhow::Result<()> {
     let reg_completion_items =
         get_completes(&names_to_registers, Some(CompletionItemKind::VARIABLE));
 
+    let include_dirs = get_include_dirs();
+
     main_loop(
         &connection,
         initialization_params,
@@ -170,6 +174,7 @@ pub fn main() -> anyhow::Result<()> {
         &names_to_registers,
         &instr_completion_items,
         &reg_completion_items,
+        &include_dirs,
     )?;
     io_threads.join()?;
 
@@ -185,6 +190,7 @@ fn main_loop(
     names_to_registers: &NameToRegisterMap,
     instruction_completion_items: &[CompletionItem],
     register_completion_items: &[CompletionItem],
+    include_dirs: &[PathBuf],
 ) -> anyhow::Result<()> {
     let _params: InitializeParams = serde_json::from_value(params).unwrap();
     let mut curr_doc: Option<FullTextDocument> = None;
@@ -208,14 +214,25 @@ fn main_loop(
                     };
 
                     // get the word under the cursor
-                    let word = get_word_from_file_params(&params.text_document_position_params);
+                    let word = get_word_from_file_params(&params.text_document_position_params, "");
+                    // treat the word under the cursor as a filename and grab it as well
+                    let file_word = if let Some(ref doc) = curr_doc {
+                        get_word_from_pos_params(doc, &params.text_document_position_params, ".")
+                    } else {
+                        ""
+                    };
 
                     // get documentation ------------------------------------------------------
                     // format response
                     match word {
                         Ok(word) => {
-                            let hover_res =
-                                get_hover_resp(&word, names_to_instructions, names_to_registers);
+                            let hover_res = get_hover_resp(
+                                &word,
+                                file_word,
+                                names_to_instructions,
+                                names_to_registers,
+                                include_dirs,
+                            );
                             match hover_res {
                                 Some(_) => {
                                     let result = serde_json::to_value(&hover_res).unwrap();

@@ -15,9 +15,13 @@ use tree_sitter::{InputEdit, Parser, Tree};
 
 /// Find the start and end indices of a word inside the given line
 /// Borrowed from RLS
-pub fn find_word_at_pos(line: &str, col: Column) -> (Column, Column) {
+/// `additional_chars` parameter allows specifying additional legal "word"
+/// characters besides the default alphanumeric and '_'
+pub fn find_word_at_pos(line: &str, col: Column, additional_chars: &str) -> (Column, Column) {
     let line_ = format!("{} ", line);
-    let is_ident_char = |c: char| c.is_alphanumeric() || c == '_';
+    let is_ident_char = |c: char| {
+        c.is_alphanumeric() || c == '_' || additional_chars.chars().any(|word_char| word_char == c)
+    };
 
     let start = line_
         .chars()
@@ -41,6 +45,7 @@ pub fn find_word_at_pos(line: &str, col: Column) -> (Column, Column) {
 
 pub fn get_word_from_file_params(
     pos_params: &TextDocumentPositionParams,
+    extra_chars: &str,
 ) -> anyhow::Result<String> {
     let uri = &pos_params.text_document.uri;
     let line = pos_params.position.line as usize;
@@ -53,7 +58,7 @@ pub fn get_word_from_file_params(
             let buf_reader = std::io::BufReader::new(file);
 
             let line_conts = buf_reader.lines().nth(line).unwrap().unwrap();
-            let (start, end) = find_word_at_pos(&line_conts, col);
+            let (start, end) = find_word_at_pos(&line_conts, col, extra_chars);
             Ok(String::from(&line_conts[start..end]))
         }
         Err(_) => Err(anyhow::anyhow!("filepath get error")),
@@ -61,9 +66,15 @@ pub fn get_word_from_file_params(
 }
 
 /// Returns a string slice to the word in doc specified by the position params
+///
+/// The `extra_chars` param allows specifying extra chars to be considered as
+/// valid word chars, in addition to the default alphanumeric and '_' chars
+// extra_chars is used when grabbing filenames from a document, as '.' isn't
+// normally considered a valid "word" char
 pub fn get_word_from_pos_params<'a>(
     doc: &'a FullTextDocument,
     pos_params: &TextDocumentPositionParams,
+    extra_chars: &str,
 ) -> &'a str {
     let line_contents = doc.get_content(Some(Range {
         start: Position {
@@ -76,9 +87,61 @@ pub fn get_word_from_pos_params<'a>(
         },
     }));
 
-    let (word_start, word_end) =
-        find_word_at_pos(line_contents, pos_params.position.character as usize);
+    let (word_start, word_end) = find_word_at_pos(
+        line_contents,
+        pos_params.position.character as usize,
+        extra_chars,
+    );
     &line_contents[word_start..word_end]
+}
+
+/// return a vector of #include directories
+pub fn get_include_dirs() -> Vec<PathBuf> {
+    let mut include_dirs = HashSet::new();
+    // repeat "cpp" and "clang" so that each command can be run with
+    // both set of args specified in `cmd_args`
+    let cmds = &["cpp", "cpp", "clang", "clang"];
+    let cmd_args = &[
+        ["-v", "-E", "-x", "c", "/dev/null", "-o", "/dev/null"],
+        ["-v", "-E", "-x", "c++", "/dev/null", "-o", "/dev/null"],
+    ];
+
+    for (cmd, args) in cmds.iter().zip(cmd_args.iter().cycle()) {
+        if let Ok(cmd_output) = std::process::Command::new(cmd)
+            .args(args)
+            .stderr(std::process::Stdio::piped())
+            .output()
+        {
+            if cmd_output.status.success() {
+                let output_str: String = String::from_utf8(cmd_output.stderr).unwrap_or_default();
+
+                output_str
+                    .lines()
+                    .skip_while(|line| !line.contains("#include \"...\" search starts here:"))
+                    .skip(1)
+                    .take_while(|line| {
+                        !(line.contains("End of search list.")
+                            || line.contains("#include <...> search starts here:"))
+                    })
+                    .filter_map(|line| PathBuf::from(line.trim()).canonicalize().ok())
+                    .for_each(|path| {
+                        include_dirs.insert(path);
+                    });
+
+                output_str
+                    .lines()
+                    .skip_while(|line| !line.contains("#include <...> search starts here:"))
+                    .skip(1)
+                    .take_while(|line| !line.contains("End of search list."))
+                    .filter_map(|line| PathBuf::from(line.trim()).canonicalize().ok())
+                    .for_each(|path| {
+                        include_dirs.insert(path);
+                    });
+            }
+        }
+    }
+
+    include_dirs.iter().cloned().collect::<Vec<PathBuf>>()
 }
 
 /// Function allowing us to connect tree sitter's logging with the log crate
@@ -152,8 +215,10 @@ pub fn get_completes<T: Completable>(
 
 pub fn get_hover_resp<T: Hoverable, S: Hoverable>(
     word: &str,
+    file_word: &str,
     instruction_map: &HashMap<(Arch, &str), T>,
     register_map: &HashMap<(Arch, &str), S>,
+    include_dirs: &[PathBuf],
 ) -> Option<Hover> {
     let instr_lookup = lookup_hover_resp(word, instruction_map);
     if instr_lookup.is_some() {
@@ -169,6 +234,11 @@ pub fn get_hover_resp<T: Hoverable, S: Hoverable>(
 
     if demang.is_some() {
         return demang;
+    }
+
+    let include_path = get_include_resp(file_word, include_dirs);
+    if include_path.is_some() {
+        return include_path;
     }
 
     None
@@ -220,6 +290,49 @@ fn get_demangle_resp(word: &str) -> Option<Hover> {
     }
 
     None
+}
+
+fn get_include_resp(filename: &str, include_dirs: &[PathBuf]) -> Option<Hover> {
+    let mut paths = String::new();
+    for dir in include_dirs.iter() {
+        match std::fs::read_dir(dir) {
+            Ok(dir_reader) => {
+                for file in dir_reader {
+                    match file {
+                        Ok(f) => {
+                            if f.file_name() == filename {
+                                paths += &format!("file://{}\n", f.path().display());
+                            }
+                        }
+                        Err(e) => {
+                            error!(
+                                "Failed to read item in {} - Error {e}",
+                                dir.as_path().display()
+                            );
+                        }
+                    };
+                }
+            }
+            Err(e) => {
+                error!(
+                    "Failed to create directory reader for {} - Error {e}",
+                    dir.as_path().display()
+                );
+            }
+        }
+    }
+
+    if paths.is_empty() {
+        None
+    } else {
+        Some(Hover {
+            contents: HoverContents::Markup(MarkupContent {
+                kind: MarkupKind::Markdown,
+                value: paths,
+            }),
+            range: None,
+        })
+    }
 }
 
 /// Filter out duplicate completion suggestions
@@ -569,7 +682,7 @@ pub fn get_goto_def_resp(
         let mut cursor = tree_sitter::QueryCursor::new();
         let matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc.as_bytes());
 
-        let word = get_word_from_pos_params(curr_doc, &params.text_document_position_params);
+        let word = get_word_from_pos_params(curr_doc, &params.text_document_position_params, "");
 
         for match_ in matches.into_iter() {
             for cap in match_.captures.iter() {
@@ -626,7 +739,7 @@ pub fn get_ref_resp(
         });
 
         let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
-        let word = get_word_from_pos_params(curr_doc, &params.text_document_position);
+        let word = get_word_from_pos_params(curr_doc, &params.text_document_position, "");
         let uri = &params.text_document_position.text_document.uri;
 
         let mut cursor = tree_sitter::QueryCursor::new();
