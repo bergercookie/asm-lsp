@@ -50,6 +50,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                                 "name" => unsafe {
                                     let name = String::from(str::from_utf8_unchecked(&value));
                                     curr_instruction.alt_names.push(name.to_uppercase());
+                                    curr_instruction.alt_names.push(name.to_lowercase());
                                     curr_instruction.name = name;
                                 },
                                 "summary" => unsafe {
@@ -340,6 +341,7 @@ pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
                                 "name" => unsafe {
                                     let name_ = String::from(str::from_utf8_unchecked(&value));
                                     curr_register.alt_names.push(name_.to_uppercase());
+                                    curr_register.alt_names.push(name_.to_lowercase());
                                     curr_register.name = name_;
                                 },
                                 "altname" => unsafe {
