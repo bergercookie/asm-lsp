@@ -213,45 +213,47 @@ fn main_loop(
                         error: None,
                     };
 
-                    // get the word under the cursor
-                    let word = get_word_from_file_params(&params.text_document_position_params, "");
-                    // treat the word under the cursor as a filename and grab it as well
-                    let file_word = if let Some(ref doc) = curr_doc {
-                        get_word_from_pos_params(doc, &params.text_document_position_params, ".")
+                    let (word, file_word) = if let Some(ref doc) = curr_doc {
+                        (
+                            // get the word under the cursor
+                            get_word_from_pos_params(
+                                doc,
+                                &params.text_document_position_params,
+                                ".",
+                            ),
+                            // treat the word under the cursor as a filename and grab it as well
+                            get_word_from_pos_params(
+                                doc,
+                                &params.text_document_position_params,
+                                "",
+                            ),
+                        )
                     } else {
-                        ""
+                        ("", "")
                     };
 
                     // get documentation ------------------------------------------------------
                     // format response
-                    match word {
-                        Ok(word) => {
-                            let hover_res = get_hover_resp(
-                                &word,
-                                file_word,
-                                names_to_instructions,
-                                names_to_registers,
-                                include_dirs,
-                            );
-                            match hover_res {
-                                Some(_) => {
-                                    let result = serde_json::to_value(&hover_res).unwrap();
-                                    let result = Response {
-                                        id: id.clone(),
-                                        result: Some(result),
-                                        error: None,
-                                    };
-                                    connection.sender.send(Message::Response(result))?;
-                                }
-                                None => {
-                                    // don't know of this word
-                                    connection.sender.send(Message::Response(res.clone()))?;
-                                }
-                            }
+                    let hover_res = get_hover_resp(
+                        word,
+                        file_word,
+                        names_to_instructions,
+                        names_to_registers,
+                        include_dirs,
+                    );
+                    match hover_res {
+                        Some(_) => {
+                            let result = serde_json::to_value(&hover_res).unwrap();
+                            let result = Response {
+                                id: id.clone(),
+                                result: Some(result),
+                                error: None,
+                            };
+                            connection.sender.send(Message::Response(result))?;
                         }
-                        Err(_) => {
-                            // given word is not valid
-                            connection.sender.send(Message::Response(res))?;
+                        None => {
+                            // don't know of this word
+                            connection.sender.send(Message::Response(res.clone()))?;
                         }
                     }
                 } else if let Ok((id, params)) = cast_req::<Completion>(req.clone()) {
