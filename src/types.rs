@@ -304,9 +304,11 @@ pub enum MMXMode {
     MMX,
 }
 
-#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr)]
+#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, Display, EnumString, AsRefStr)]
 pub enum Arch {
+    #[strum(serialize = "x86")]
     X86,
+    #[strum(serialize = "x86-64")]
     X86_64,
 }
 
