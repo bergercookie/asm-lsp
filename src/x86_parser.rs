@@ -32,6 +32,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
     // ref to the instruction that's currently under construction
     let mut curr_instruction = Instruction::default();
     let mut curr_instruction_form = InstructionForm::default();
+    let mut arch: Option<Arch> = None;
 
     debug!("Parsing XML contents...");
     loop {
@@ -39,9 +40,19 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
             // start event ------------------------------------------------------------------------
             Ok(Event::Start(ref e)) => {
                 match e.name() {
+                    QName(b"InstructionSet") => {
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            if let Ok("name") = str::from_utf8(key.into_inner()) {
+                                arch = Arch::from_str(unsafe { str::from_utf8_unchecked(&value) })
+                                    .ok();
+                            }
+                        }
+                    }
                     QName(b"Instruction") => {
                         // start of a new instruction
                         curr_instruction = Instruction::default();
+                        curr_instruction.arch = arch;
 
                         // iterate over the attributes
                         for attr in e.attributes() {
@@ -323,6 +334,7 @@ pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
     // ref to the register that's currently under construction
     let mut curr_register = Register::default();
     let mut curr_bit_flag = RegisterBitInfo::default();
+    let mut arch: Option<Arch> = None;
 
     debug!("Parsing XML contents...");
     loop {
@@ -330,9 +342,19 @@ pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
             // start event ------------------------------------------------------------------------
             Ok(Event::Start(ref e)) => {
                 match e.name() {
+                    QName(b"InstructionSet") => {
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            if let Ok("name") = str::from_utf8(key.into_inner()) {
+                                arch = Arch::from_str(unsafe { str::from_utf8_unchecked(&value) })
+                                    .ok();
+                            }
+                        }
+                    }
                     QName(b"Register") => {
                         // start of a new register
                         curr_register = Register::default();
+                        curr_register.arch = arch;
 
                         // iterate over the attributes
                         for attr in e.attributes() {
@@ -412,7 +434,7 @@ pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
             Ok(Event::End(ref e)) => {
                 match e.name() {
                     QName(b"Register") => {
-                        // finish instruction
+                        // finish register
                         registers_map.insert(curr_register.name.clone(), curr_register.clone());
                     }
                     QName(b"Flag") => {
