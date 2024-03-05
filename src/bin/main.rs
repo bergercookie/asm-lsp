@@ -39,7 +39,7 @@ pub fn main() -> anyhow::Result<()> {
         completion_item: Some(CompletionOptionsCompletionItem {
             label_details_support: Some(true),
         }),
-        trigger_characters: Some(vec![String::from("%")]),
+        trigger_characters: Some(vec![String::from("%"), String::from(".")]),
         ..Default::default()
     });
 
@@ -84,10 +84,6 @@ pub fn main() -> anyhow::Result<()> {
         let xml_conts_x86 = include_str!("../../opcodes/x86.xml");
         populate_instructions(xml_conts_x86)?
             .into_iter()
-            .map(|mut instruction| {
-                instruction.arch = Some(Arch::X86);
-                instruction
-            })
             .map(|instruction| {
                 // filter out assemblers by user config
                 instr_filter_targets(&instruction, &target_config)
@@ -103,10 +99,6 @@ pub fn main() -> anyhow::Result<()> {
         let xml_conts_x86_64 = include_str!("../../opcodes/x86_64.xml");
         populate_instructions(xml_conts_x86_64)?
             .into_iter()
-            .map(|mut instruction| {
-                instruction.arch = Some(Arch::X86_64);
-                instruction
-            })
             .map(|instruction| {
                 // filter out assemblers by user config
                 instr_filter_targets(&instruction, &target_config)
@@ -133,10 +125,6 @@ pub fn main() -> anyhow::Result<()> {
         let xml_conts_regs_x86 = include_str!("../../registers/x86.xml");
         populate_registers(xml_conts_regs_x86)?
             .into_iter()
-            .map(|mut reg| {
-                reg.arch = Some(Arch::X86);
-                reg
-            })
             .collect()
     } else {
         Vec::new()
@@ -147,10 +135,6 @@ pub fn main() -> anyhow::Result<()> {
         let xml_conts_regs_x86_64 = include_str!("../../registers/x86_64.xml");
         populate_registers(xml_conts_regs_x86_64)?
             .into_iter()
-            .map(|mut reg| {
-                reg.arch = Some(Arch::X86_64);
-                reg
-            })
             .collect()
     } else {
         Vec::new()
@@ -160,10 +144,23 @@ pub fn main() -> anyhow::Result<()> {
     populate_name_to_register_map(Arch::X86, &x86_registers, &mut names_to_registers);
     populate_name_to_register_map(Arch::X86_64, &x86_64_registers, &mut names_to_registers);
 
+    let gas_directives = if target_config.assemblers.gas {
+        info!("Populating directive set -> Gas...");
+        let xml_conts_gas = include_str!("../../directives/gas_directives.xml");
+        populate_directives(xml_conts_gas)?.into_iter().collect()
+    } else {
+        Vec::new()
+    };
+
+    let mut names_to_directives = NameToDirectiveMap::new();
+    populate_name_to_directive_map(Assembler::Gas, &gas_directives, &mut names_to_directives);
+
     let instr_completion_items =
         get_completes(&names_to_instructions, Some(CompletionItemKind::OPERATOR));
     let reg_completion_items =
         get_completes(&names_to_registers, Some(CompletionItemKind::VARIABLE));
+    let directive_completion_items =
+        get_completes(&names_to_directives, Some(CompletionItemKind::OPERATOR));
 
     let include_dirs = get_include_dirs();
 
@@ -171,8 +168,10 @@ pub fn main() -> anyhow::Result<()> {
         &connection,
         initialization_params,
         &names_to_instructions,
+        &names_to_directives,
         &names_to_registers,
         &instr_completion_items,
+        &directive_completion_items,
         &reg_completion_items,
         &include_dirs,
     )?;
@@ -183,12 +182,15 @@ pub fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
+#[allow(clippy::too_many_arguments)]
 fn main_loop(
     connection: &Connection,
     params: serde_json::Value,
     names_to_instructions: &NameToInstructionMap,
+    names_to_directives: &NameToDirectiveMap,
     names_to_registers: &NameToRegisterMap,
     instruction_completion_items: &[CompletionItem],
+    directive_completion_items: &[CompletionItem],
     register_completion_items: &[CompletionItem],
     include_dirs: &[PathBuf],
 ) -> anyhow::Result<()> {
@@ -219,13 +221,13 @@ fn main_loop(
                             get_word_from_pos_params(
                                 doc,
                                 &params.text_document_position_params,
-                                ".",
+                                "",
                             ),
                             // treat the word under the cursor as a filename and grab it as well
                             get_word_from_pos_params(
                                 doc,
                                 &params.text_document_position_params,
-                                "",
+                                ".",
                             ),
                         )
                     } else {
@@ -239,6 +241,7 @@ fn main_loop(
                         file_word,
                         names_to_instructions,
                         names_to_registers,
+                        names_to_directives,
                         include_dirs,
                     );
                     match hover_res {
@@ -271,6 +274,7 @@ fn main_loop(
                             &mut tree,
                             &params,
                             instruction_completion_items,
+                            directive_completion_items,
                             register_completion_items,
                         );
                         match comp_res {
