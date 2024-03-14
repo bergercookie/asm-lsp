@@ -55,6 +55,7 @@ go = false
 [instruction_sets]
 x86 = false
 x86_64 = true
+z80 = false
 ```
 
 ## Demos / Features Documentation

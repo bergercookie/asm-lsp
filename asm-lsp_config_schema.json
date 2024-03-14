@@ -35,6 +35,10 @@
                 "x86_64": {
                     "description": "Flag to turn features related to the x86_64 instruction set on/off.",
                     "type": "boolean"
+                },
+                "z80": {
+                    "description": "Flag to turn features related to the z80 instruction set on/off.",
+                    "type": "boolean"
                 }
             },
             "required": [ "x86", "x86_64" ]
