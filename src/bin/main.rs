@@ -323,7 +323,7 @@ fn main_loop(
                         result: Some(json!("")),
                         error: None,
                     };
-                    // get document symbolss ------------------------------------------------------
+                    // get document symbols ------------------------------------------------------
                     if let Some(ref doc) = curr_doc {
                         let symbols = get_document_symbols(
                             doc.get_content(None),
