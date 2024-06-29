@@ -15,6 +15,7 @@ use std::io::Write;
 use std::path::PathBuf;
 use std::str;
 use std::str::FromStr;
+use url_escape::encode_www_form_urlencoded;
 
 /// Parse the provided XML contents and return a vector of all the instructions based on that.
 /// If parsing fails, the appropriate error will be returned instead.
@@ -83,7 +84,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                         // <xs:attribute name="nacl-version" type="NaClVersion" />
                         // <xs:attribute name="nacl-zero-extends-outputs" type="xs:boolean" />
 
-                        // new instruction
+                        // new instruction form
                         curr_instruction_form = InstructionForm::default();
 
                         // iterate over the attributes
@@ -142,12 +143,38 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                                         }
                                     }
                                 }
+                                "z80name" => unsafe {
+                                    curr_instruction_form.z80_name =
+                                        Some(String::from(str::from_utf8_unchecked(&value)));
+                                },
+                                "form" => {
+                                    let value_ = unsafe { str::from_utf8_unchecked(&value) };
+                                    curr_instruction_form.urls.push(format!(
+                                        "https://www.zilog.com/docs/z80/z80cpu_um.pdf#{}",
+                                        encode_www_form_urlencoded(value_)
+                                    ));
+                                    curr_instruction_form.z80_form = Some(value_.to_string());
+                                }
                                 _ => {}
                             }
                         }
                     }
-                    QName(b"Encoding") => {} // TODO
-                    _ => (),                 // unknown event
+                    // TODO
+                    QName(b"Encoding") => {
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            if str::from_utf8(key.into_inner()).unwrap() == "byte" {
+                                let disp_code =
+                                    unsafe { str::from_utf8_unchecked(&value) }.to_string() + " ";
+                                if let Some(ref mut opcodes) = curr_instruction_form.z80_opcode {
+                                    opcodes.push_str(&disp_code);
+                                } else {
+                                    curr_instruction_form.z80_opcode = Some(disp_code);
+                                }
+                            }
+                        }
+                    }
+                    _ => (), // unknown event
                 }
             }
             Ok(Event::Empty(ref e)) => {
@@ -216,6 +243,95 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                             output,
                         })
                     }
+                    // TODO: Copy pasta grab value code for each block here...
+                    QName(b"TimingZ80") => {
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            if str::from_utf8(key.into_inner()).unwrap() == "value" {
+                                let z80 = match Z80TimingInfo::from_str(unsafe {
+                                    str::from_utf8_unchecked(&value)
+                                }) {
+                                    Ok(timing) => timing,
+                                    Err(e) => return Err(anyhow!(e)),
+                                };
+                                if let Some(ref mut timing_entry) = curr_instruction_form.z80_timing
+                                {
+                                    timing_entry.z80 = z80;
+                                } else {
+                                    curr_instruction_form.z80_timing = Some(Z80Timing {
+                                        z80,
+                                        ..Default::default()
+                                    })
+                                }
+                            }
+                        }
+                    }
+                    QName(b"TimingZ80M1") => {
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            if str::from_utf8(key.into_inner()).unwrap() == "value" {
+                                let z80_plus_m1 = match Z80TimingInfo::from_str(unsafe {
+                                    str::from_utf8_unchecked(&value)
+                                }) {
+                                    Ok(timing) => timing,
+                                    Err(e) => return Err(anyhow!(e)),
+                                };
+                                if let Some(ref mut timing_entry) = curr_instruction_form.z80_timing
+                                {
+                                    timing_entry.z80_plus_m1 = z80_plus_m1;
+                                } else {
+                                    curr_instruction_form.z80_timing = Some(Z80Timing {
+                                        z80_plus_m1,
+                                        ..Default::default()
+                                    })
+                                }
+                            }
+                        }
+                    }
+                    QName(b"TimingR800") => {
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            if str::from_utf8(key.into_inner()).unwrap() == "value" {
+                                let r800 = match Z80TimingInfo::from_str(unsafe {
+                                    str::from_utf8_unchecked(&value)
+                                }) {
+                                    Ok(timing) => timing,
+                                    Err(e) => return Err(anyhow!(e)),
+                                };
+                                if let Some(ref mut timing_entry) = curr_instruction_form.z80_timing
+                                {
+                                    timing_entry.r800 = r800;
+                                } else {
+                                    curr_instruction_form.z80_timing = Some(Z80Timing {
+                                        r800,
+                                        ..Default::default()
+                                    })
+                                }
+                            }
+                        }
+                    }
+                    QName(b"TimingR800Wait") => {
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            if str::from_utf8(key.into_inner()).unwrap() == "value" {
+                                let r800_plus_wait = match Z80TimingInfo::from_str(unsafe {
+                                    str::from_utf8_unchecked(&value)
+                                }) {
+                                    Ok(timing) => timing,
+                                    Err(e) => return Err(anyhow!(e)),
+                                };
+                                if let Some(ref mut timing_entry) = curr_instruction_form.z80_timing
+                                {
+                                    timing_entry.r800_plus_wait = r800_plus_wait;
+                                } else {
+                                    curr_instruction_form.z80_timing = Some(Z80Timing {
+                                        r800_plus_wait,
+                                        ..Default::default()
+                                    })
+                                }
+                            }
+                        }
+                    }
                     _ => (), // unknown event
                 }
             }
@@ -239,28 +355,30 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
         }
     }
 
-    let x86_online_docs = get_x86_docs_url();
-    let body = get_docs_body(&x86_online_docs).unwrap_or_default();
-    let body_it = body.split("<td>").skip(1).step_by(2);
+    if let Some(Arch::X86 | Arch::X86_64) = arch {
+        let x86_online_docs = get_x86_docs_url();
+        let body = get_docs_body(&x86_online_docs).unwrap_or_default();
+        let body_it = body.split("<td>").skip(1).step_by(2);
 
-    // Parse this x86 page, grab the contents of the table + the URLs they are referring to
-    // Regex to match:
-    // <a href="./VSCATTERPF1DPS:VSCATTERPF1QPS:VSCATTERPF1DPD:VSCATTERPF1QPD.html">VSCATTERPF1QPS</a></td>
-    //
-    // let re = Regex::new(r"<a href=\"./(.*)">(.*)</a></td>")?;
-    // let re = Regex::new(r#"<a href="\./(.*?\.html)">(.*?)</a>.*</td>"#)?;
-    // let re = Regex::new(r"<a href='\/(.*?)'>(.*?)<\/a>.*<\/td>")?;
-    let re = Regex::new(r"<a href='\/x86\/(.*?)'>(.*?)<\/a>.*<\/td>")?;
-    for line in body_it {
-        // take it step by step.. match a small portion of the line first...
-        let caps = re.captures(line).unwrap();
-        let url_suffix = caps.get(1).map_or("", |m| m.as_str());
-        let instruction_name = caps.get(2).map_or("", |m| m.as_str());
+        // Parse this x86 page, grab the contents of the table + the URLs they are referring to
+        // Regex to match:
+        // <a href="./VSCATTERPF1DPS:VSCATTERPF1QPS:VSCATTERPF1DPD:VSCATTERPF1QPD.html">VSCATTERPF1QPS</a></td>
+        //
+        // let re = Regex::new(r"<a href=\"./(.*)">(.*)</a></td>")?;
+        // let re = Regex::new(r#"<a href="\./(.*?\.html)">(.*?)</a>.*</td>"#)?;
+        // let re = Regex::new(r"<a href='\/(.*?)'>(.*?)<\/a>.*<\/td>")?;
+        let re = Regex::new(r"<a href='\/x86\/(.*?)'>(.*?)<\/a>.*<\/td>")?;
+        for line in body_it {
+            // take it step by step.. match a small portion of the line first...
+            let caps = re.captures(line).unwrap();
+            let url_suffix = caps.get(1).map_or("", |m| m.as_str());
+            let instruction_name = caps.get(2).map_or("", |m| m.as_str());
 
-        // add URL to the corresponding instruction
-        match instructions_map.get_mut(instruction_name) {
-            None => (), // key not found
-            Some(instruction) => instruction.url = Some(x86_online_docs.clone() + url_suffix),
+            // add URL to the corresponding instruction
+            match instructions_map.get_mut(instruction_name) {
+                None => (), // key not found
+                Some(instruction) => instruction.url = Some(x86_online_docs.clone() + url_suffix),
+            }
         }
     }
 

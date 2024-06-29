@@ -245,10 +245,10 @@ pub fn get_hover_resp<T: Hoverable, S: Hoverable>(
 }
 
 fn lookup_hover_resp<T: Hoverable>(word: &str, map: &HashMap<(Arch, &str), T>) -> Option<Hover> {
-    let (x86_res, x86_64_res) = search_for_hoverable(word, map);
-
-    match (x86_res.is_some(), x86_64_res.is_some()) {
-        (true, _) | (_, true) => {
+    // switch over to vec?
+    let (x86_res, x86_64_res, z80_res) = search_for_hoverable(word, map);
+    match (x86_res.is_some(), x86_64_res.is_some(), z80_res.is_some()) {
+        (true, _, _) | (_, true, _) | (_, _, true) => {
             let mut value = String::new();
             if let Some(x86_res) = x86_res {
                 value += &format!("{}", x86_res);
@@ -256,9 +256,12 @@ fn lookup_hover_resp<T: Hoverable>(word: &str, map: &HashMap<(Arch, &str), T>) -
             if let Some(x86_64_res) = x86_64_res {
                 value += &format!(
                     "{}{}",
-                    if x86_res.is_some() { "\n\n" } else { "" },
+                    if !value.is_empty() { "\n\n" } else { "" },
                     x86_64_res
                 );
+            }
+            if let Some(z80_res) = z80_res {
+                value += &format!("{}{}", if !value.is_empty() { "\n\n" } else { "" }, z80_res);
             }
             Some(Hover {
                 contents: HoverContents::Markup(MarkupContent {
@@ -597,7 +600,9 @@ pub fn get_sig_help_resp(
                     let mut value = String::new();
                     let mut has_x86 = false;
                     let mut has_x86_64 = false;
-                    let (x86_info, x86_64_info) = search_for_hoverable(instr_name, instr_info);
+                    let mut has_z80 = false;
+                    let (x86_info, x86_64_info, z80_info) =
+                        search_for_hoverable(instr_name, instr_info);
                     if let Some(sig) = x86_info {
                         for form in sig.forms.iter() {
                             if let Some(ref gas_name) = form.gas_name {
@@ -634,6 +639,19 @@ pub fn get_sig_help_resp(
                                     if !has_x86_64 {
                                         value += "**x86_64**\n";
                                         has_x86_64 = true;
+                                    }
+                                    value += &format!("{}\n", form);
+                                }
+                            }
+                        }
+                    }
+                    if let Some(sig) = z80_info {
+                        for form in sig.forms.iter() {
+                            if let Some(ref z80_name) = form.z80_name {
+                                if instr_name.eq_ignore_ascii_case(z80_name) {
+                                    if !has_z80 {
+                                        value += "**z80**\n";
+                                        has_z80 = true;
                                     }
                                     value += &format!("{}\n", form);
                                 }
@@ -806,11 +824,12 @@ pub fn get_ref_resp(
 fn search_for_hoverable<'a, T: Hoverable>(
     word: &'a str,
     map: &'a HashMap<(Arch, &str), T>,
-) -> (Option<&'a T>, Option<&'a T>) {
+) -> (Option<&'a T>, Option<&'a T>, Option<&'a T>) {
     let x86_res = map.get(&(Arch::X86, word));
     let x86_64_res = map.get(&(Arch::X86_64, word));
+    let z80_res = map.get(&(Arch::Z80, word));
 
-    (x86_res, x86_64_res)
+    (x86_res, x86_64_res, z80_res)
 }
 
 /// Searches for global config in ~/.config/asm-lsp, then the project's directory
@@ -919,6 +938,7 @@ pub fn instr_filter_targets(instr: &Instruction, config: &TargetConfig) -> Instr
         .filter(|form| {
             (form.gas_name.is_some() && config.assemblers.gas)
                 || (form.go_name.is_some() && config.assemblers.go)
+                || (form.z80_name.is_some() && config.instruction_sets.z80)
         })
         .map(|form| {
             let mut filtered = form.clone();
@@ -928,6 +948,9 @@ pub fn instr_filter_targets(instr: &Instruction, config: &TargetConfig) -> Instr
             }
             if !config.assemblers.go {
                 filtered.go_name = None;
+            }
+            if !config.assemblers.z80 {
+                filtered.z80_name = None;
             }
             filtered
         })

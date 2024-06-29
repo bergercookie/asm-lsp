@@ -109,6 +109,21 @@ pub fn main() -> anyhow::Result<()> {
         Vec::new()
     };
 
+    let z80_instructions = if target_config.instruction_sets.z80 {
+        info!("Populating instruction set -> z80...");
+        let xml_conts_z80 = include_str!("../../opcodes/z80.xml");
+        populate_instructions(xml_conts_z80)?
+            .into_iter()
+            .map(|instruction| {
+                // filter out assemblers by user config
+                instr_filter_targets(&instruction, &target_config)
+            })
+            .filter(|instruction| !instruction.forms.is_empty())
+            .collect()
+    } else {
+        Vec::new()
+    };
+
     let mut names_to_instructions = NameToInstructionMap::new();
     populate_name_to_instruction_map(Arch::X86, &x86_instructions, &mut names_to_instructions);
     populate_name_to_instruction_map(
@@ -116,6 +131,7 @@ pub fn main() -> anyhow::Result<()> {
         &x86_64_instructions,
         &mut names_to_instructions,
     );
+    populate_name_to_instruction_map(Arch::Z80, &z80_instructions, &mut names_to_instructions);
 
     // create a map of &Register_name -> &Register - Use that in user queries
     // The Register(s) themselves are stored in a vector and we only keep references to the
@@ -140,9 +156,20 @@ pub fn main() -> anyhow::Result<()> {
         Vec::new()
     };
 
+    let z80_registers = if target_config.instruction_sets.z80 {
+        info!("Populating register set -> z80...");
+        let xml_conts_regs_z80 = include_str!("../../registers/z80.xml");
+        populate_registers(xml_conts_regs_z80)?
+            .into_iter()
+            .collect()
+    } else {
+        Vec::new()
+    };
+
     let mut names_to_registers = NameToRegisterMap::new();
     populate_name_to_register_map(Arch::X86, &x86_registers, &mut names_to_registers);
     populate_name_to_register_map(Arch::X86_64, &x86_64_registers, &mut names_to_registers);
+    populate_name_to_register_map(Arch::Z80, &z80_registers, &mut names_to_registers);
 
     let instr_completion_items =
         get_completes(&names_to_instructions, Some(CompletionItemKind::OPERATOR));
@@ -203,13 +230,13 @@ fn main_loop(
                             get_word_from_pos_params(
                                 doc,
                                 &params.text_document_position_params,
-                                ".",
+                                "",
                             ),
                             // treat the word under the cursor as a filename and grab it as well
                             get_word_from_pos_params(
                                 doc,
                                 &params.text_document_position_params,
-                                "",
+                                ".",
                             ),
                         )
                     } else {

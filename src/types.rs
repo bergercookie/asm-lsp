@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, fmt::Display};
+use std::{collections::HashMap, fmt::Display, str::FromStr};
 use strum_macros::{AsRefStr, Display, EnumString};
 
 // Instruction ------------------------------------------------------------------------------------
@@ -87,7 +87,11 @@ impl<'own> Instruction {
         }
 
         for f in &self.forms {
-            for name in [&f.gas_name, &f.go_name].iter().copied().flatten() {
+            for name in [&f.gas_name, &f.go_name, &f.z80_name]
+                .iter()
+                .copied()
+                .flatten()
+            {
                 names.push(name);
             }
         }
@@ -99,6 +103,7 @@ impl<'own> Instruction {
 // InstructionForm --------------------------------------------------------------------------------
 #[derive(Default, Debug, Clone)]
 pub struct InstructionForm {
+    // --- Gas/Go-Specific Information ---
     pub gas_name: Option<String>,
     pub go_name: Option<String>,
     pub mmx_mode: Option<MMXMode>,
@@ -108,6 +113,13 @@ pub struct InstructionForm {
     pub nacl_zero_extends_outputs: Option<bool>,
     pub isa: Option<ISA>,
     pub operands: Vec<Operand>,
+    // --- Z80-Specific Information ---
+    pub z80_name: Option<String>,
+    pub z80_form: Option<String>,
+    pub z80_opcode: Option<String>,
+    pub z80_timing: Option<Z80Timing>,
+    // --- Assembler/Architecture Agnostic Info ---
+    pub urls: Vec<String>,
 }
 
 impl std::fmt::Display for InstructionForm {
@@ -119,12 +131,22 @@ impl std::fmt::Display for InstructionForm {
         if let Some(val) = &self.go_name {
             s += &format!("*GO*: {} | ", val);
         }
+        if let Some(val) = &self.z80_form {
+            s += &format!("*Z80*: {} | ", val);
+        }
 
         if let Some(val) = &self.mmx_mode {
             s += &(format!("*MMX*: {} | ", val.as_ref()));
         }
         if let Some(val) = &self.xmm_mode {
             s += &(format!("*XMM*: {} | ", val.as_ref()));
+        }
+        if let Some(val) = &self.z80_opcode {
+            if val.contains(',') {
+                s += &format!("*Opcodes*: {} | ", val);
+            } else {
+                s += &format!("*Opcode*: {} | ", val);
+            }
         }
 
         // cancelling inputs
@@ -141,30 +163,192 @@ impl std::fmt::Display for InstructionForm {
         }
 
         // Operands
-        let operands_str: String = self
-            .operands
-            .iter()
-            .map(|op| {
-                let mut s = format!("  + {:<8}", format!("[{}]", op.type_.as_ref()));
-                if let Some(input) = op.input {
-                    s += &format!(" input = {:<5} ", input)
-                }
-                if let Some(output) = op.output {
-                    s += &format!(" output = {:<5}", output)
-                }
-                if let Some(extended_size) = op.extended_size {
-                    s += &format!(" extended-size = {}", extended_size)
-                }
+        let operands_str: String = if !self.operands.is_empty() {
+            self.operands
+                .iter()
+                .map(|op| {
+                    let mut s = format!("  + {:<8}", format!("[{}]", op.type_.as_ref()));
+                    if let Some(input) = op.input {
+                        s += &format!(" input = {:<5} ", input)
+                    }
+                    if let Some(output) = op.output {
+                        s += &format!(" output = {:<5}", output)
+                    }
+                    if let Some(extended_size) = op.extended_size {
+                        s += &format!(" extended-size = {}", extended_size)
+                    }
 
-                s
-            })
-            .collect::<Vec<String>>()
-            .join("\n");
-        s = s + &operands_str + "\n";
+                    s
+                })
+                .collect::<Vec<String>>()
+                .join("\n")
+        } else {
+            String::new()
+        };
+
+        s += &operands_str;
+
+        if let Some(ref timing) = self.z80_timing {
+            s += &format!("\n  + {}", timing);
+        }
+
+        for url in self.urls.iter() {
+            s += &format!("\n  + More info: {}\n", url);
+        }
 
         write!(f, "{}", s)?;
         Ok(())
     }
+}
+
+#[derive(Debug, Default, Clone, Copy)]
+pub enum Z80TimingValue {
+    #[default]
+    Unknown,
+    Val(u8),
+}
+
+impl Display for Z80TimingValue {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Unknown => {
+                write!(f, "?")?;
+            }
+            Self::Val(val) => {
+                write!(f, "{}", val)?;
+            }
+        }
+
+        Ok(())
+    }
+}
+
+impl FromStr for Z80TimingValue {
+    type Err = std::num::ParseIntError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        if s.eq("?") {
+            Ok(Z80TimingValue::Unknown)
+        } else {
+            match s.parse::<u8>() {
+                Ok(val) => Ok(Z80TimingValue::Val(val)),
+                Err(e) => Err(e),
+            }
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+pub enum Z80TimingInfo {
+    OneNum(Z80TimingValue), // better names here?
+    TwoNum((Z80TimingValue, Z80TimingValue)),
+    ThreeNum((Z80TimingValue, Z80TimingValue, Z80TimingValue)),
+}
+
+impl Default for Z80TimingInfo {
+    fn default() -> Self {
+        Self::OneNum(Z80TimingValue::Unknown)
+    }
+}
+
+impl Display for Z80TimingInfo {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Z80TimingInfo::OneNum(num) => {
+                write!(f, "{}", num)?;
+            }
+            Z80TimingInfo::TwoNum((num1, num2)) => {
+                write!(f, "{}/{}", num1, num2)?;
+            }
+            Z80TimingInfo::ThreeNum((num1, num2, num3)) => {
+                write!(f, "{}/{}/{}", num1, num2, num3)?;
+            }
+        }
+        Ok(())
+    }
+}
+
+impl FromStr for Z80TimingInfo {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        if let Some('/') = s.chars().next() {
+            return Err(String::from("Cannot have an empty num value"));
+        } else if let Some('/') = s.chars().next_back() {
+            return Err(String::from("Cannot have an empty num value"));
+        }
+        let pieces: Vec<Result<Z80TimingValue, std::num::ParseIntError>> =
+            s.split('/').map(|x| x.parse::<Z80TimingValue>()).collect();
+
+        match pieces.len() {
+            1 => match pieces[0] {
+                Ok(num) => Ok(Z80TimingInfo::OneNum(num)),
+                Err(_) => Err(String::from("Failed to parse one timing value")),
+            },
+            2 => match (&pieces[0], &pieces[1]) {
+                (Ok(num1), Ok(num2)) => Ok(Z80TimingInfo::TwoNum((*num1, *num2))),
+                _ => Err(String::from("Failed to parse one or more timing values")),
+            },
+            3 => match (&pieces[0], &pieces[1], &pieces[2]) {
+                (Ok(num1), Ok(num2), Ok(num3)) => {
+                    Ok(Z80TimingInfo::ThreeNum((*num1, *num2, *num3)))
+                }
+                _ => Err(String::from("Failed to parse one or more timing values")),
+            },
+            n => Err(format!("Expected 1-3 timing values, got {n}")),
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct Z80Timing {
+    pub z80: Z80TimingInfo,
+    pub z80_plus_m1: Z80TimingInfo,
+    pub r800: Z80TimingInfo,
+    pub r800_plus_wait: Z80TimingInfo,
+}
+
+impl Display for Z80Timing {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Z80: {}, Z80 + M1: {}, R800: {}, R800 + Wait: {}",
+            self.z80, self.z80_plus_m1, self.r800, self.z80_plus_m1
+        )?;
+        Ok(())
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub enum Z80Register8Bit {
+    #[default]
+    A,
+    AShadow,
+    F,
+    FShadow,
+    B,
+    BShadow,
+    C,
+    CShadow,
+    D,
+    DShadow,
+    E,
+    EShadow,
+    H,
+    HShadow,
+    L,
+    LShadow,
+}
+
+#[derive(Default, Debug, Clone)]
+pub enum Z80Register16Bit {
+    AF,
+    AFShadow,
+    BC,
+    BCShadow,
+    DE,
+    DEShadow,
+    #[default]
+    HL,
+    HLShadow,
 }
 
 // Register ---------------------------------------------------------------------------------------
@@ -304,18 +488,23 @@ pub enum MMXMode {
     MMX,
 }
 
-#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, Display, EnumString, AsRefStr)]
+#[derive(Debug, Default, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr)]
 pub enum Arch {
+    #[default]
     #[strum(serialize = "x86")]
     X86,
     #[strum(serialize = "x86-64")]
     X86_64,
+    #[strum(serialize = "z80")]
+    Z80,
 }
 
 #[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Display)]
 pub enum RegisterType {
     #[strum(serialize = "General Purpose Register")]
     GeneralPurpose,
+    #[strum(serialize = "Special Purpose Register")]
+    SpecialPurpose,
     #[strum(serialize = "Pointer Register")]
     Pointer,
     #[strum(serialize = "Segment Register")]
@@ -354,6 +543,8 @@ pub enum RegisterWidth {
     Bits32,
     #[strum(serialize = "16 bits")]
     Bits16,
+    #[strum(serialize = "8 bits")]
+    Bits8,
     #[strum(serialize = "8 high bits of lower 16 bits")]
     Upper8Lower16,
     #[strum(serialize = "8 lower bits")]
@@ -392,6 +583,7 @@ impl std::fmt::Display for RegisterBitInfo {
 pub struct Assemblers {
     pub gas: bool,
     pub go: bool,
+    pub z80: bool,
 }
 
 impl Default for Assemblers {
@@ -399,14 +591,17 @@ impl Default for Assemblers {
         Assemblers {
             gas: true,
             go: true,
+            z80: false,
         }
     }
 }
 
+#[allow(non_snake_case)]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct InstructionSets {
     pub x86: bool,
     pub x86_64: bool,
+    pub z80: bool,
 }
 
 impl Default for InstructionSets {
@@ -414,6 +609,7 @@ impl Default for InstructionSets {
         InstructionSets {
             x86: true,
             x86_64: true,
+            z80: false,
         }
     }
 }
