@@ -57,6 +57,12 @@ x86 = false
 x86_64 = true
 ```
 
+## Root directory must contain `.git`
+
+The lsp searches for a `.git` directory to locate the root of your project.
+Please be sure to run `git init` if your project is not already configured as a
+repository.
+
 ## Demos / Features Documentation
 
 ### Hovering / Documentation support

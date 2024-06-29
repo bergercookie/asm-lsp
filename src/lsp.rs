@@ -473,7 +473,6 @@ pub fn get_document_symbols(
     curr_tree: &mut Option<Tree>,
     _params: &DocumentSymbolParams,
 ) -> Option<Vec<DocumentSymbol>> {
-    //let tree = parser.parse(curr_doc, None)?;
     *curr_tree = parser.parse(curr_doc, curr_tree.as_ref());
 
     static LABEL_KIND_ID: Lazy<u16> =
