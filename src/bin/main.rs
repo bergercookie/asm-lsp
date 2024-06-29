@@ -84,10 +84,6 @@ pub fn main() -> anyhow::Result<()> {
         let xml_conts_x86 = include_str!("../../opcodes/x86.xml");
         populate_instructions(xml_conts_x86)?
             .into_iter()
-            .map(|mut instruction| {
-                instruction.arch = Some(Arch::X86);
-                instruction
-            })
             .map(|instruction| {
                 // filter out assemblers by user config
                 instr_filter_targets(&instruction, &target_config)
@@ -103,10 +99,6 @@ pub fn main() -> anyhow::Result<()> {
         let xml_conts_x86_64 = include_str!("../../opcodes/x86_64.xml");
         populate_instructions(xml_conts_x86_64)?
             .into_iter()
-            .map(|mut instruction| {
-                instruction.arch = Some(Arch::X86_64);
-                instruction
-            })
             .map(|instruction| {
                 // filter out assemblers by user config
                 instr_filter_targets(&instruction, &target_config)
@@ -133,10 +125,6 @@ pub fn main() -> anyhow::Result<()> {
         let xml_conts_regs_x86 = include_str!("../../registers/x86.xml");
         populate_registers(xml_conts_regs_x86)?
             .into_iter()
-            .map(|mut reg| {
-                reg.arch = Some(Arch::X86);
-                reg
-            })
             .collect()
     } else {
         Vec::new()
@@ -147,10 +135,6 @@ pub fn main() -> anyhow::Result<()> {
         let xml_conts_regs_x86_64 = include_str!("../../registers/x86_64.xml");
         populate_registers(xml_conts_regs_x86_64)?
             .into_iter()
-            .map(|mut reg| {
-                reg.arch = Some(Arch::X86_64);
-                reg
-            })
             .collect()
     } else {
         Vec::new()

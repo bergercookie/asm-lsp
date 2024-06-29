@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<InstructionSet name="x86_64">
+<InstructionSet name="x86-64">
     <Register name="rax" description="Accumulator" type="General Purpose Register" width="64 bits">
     </Register>
     <Register name="eax" description="Accumulator" type="General Purpose Register" width="32 bits">
