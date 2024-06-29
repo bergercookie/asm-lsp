@@ -1,5 +1,8 @@
 use crate::types::Column;
-use crate::{Arch, Completable, Hoverable, Instruction, NameToInstructionMap, TargetConfig};
+use crate::{
+    Arch, ArchOrAssembler, Assembler, Completable, Hoverable, Instruction, NameToInstructionMap,
+    TargetConfig,
+};
 use dirs::config_dir;
 use log::{error, info, log, log_enabled};
 use lsp_textdocument::FullTextDocument;
@@ -192,12 +195,12 @@ pub fn text_doc_change_to_ts_edit(
 
 /// Given a NameTo_SomeItem_ map, returns a `Vec<CompletionItem>` for the items
 /// contained within the map
-pub fn get_completes<T: Completable>(
-    map: &HashMap<(Arch, &str), T>,
+pub fn get_completes<T: Completable, U: ArchOrAssembler>(
+    map: &HashMap<(U, &str), T>,
     kind: Option<CompletionItemKind>,
 ) -> Vec<CompletionItem> {
     map.iter()
-        .map(|((_arch, name), item_info)| {
+        .map(|((_arch_or_asm, name), item_info)| {
             let value = format!("{}", item_info);
 
             CompletionItem {
@@ -213,25 +216,30 @@ pub fn get_completes<T: Completable>(
         .collect()
 }
 
-pub fn get_hover_resp<T: Hoverable, S: Hoverable>(
+pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
     word: &str,
     file_word: &str,
     instruction_map: &HashMap<(Arch, &str), T>,
-    register_map: &HashMap<(Arch, &str), S>,
+    register_map: &HashMap<(Arch, &str), U>,
+    directive_map: &HashMap<(Assembler, &str), V>,
     include_dirs: &[PathBuf],
 ) -> Option<Hover> {
-    let instr_lookup = lookup_hover_resp(word, instruction_map);
+    let instr_lookup = lookup_hover_resp_by_arch(word, instruction_map);
     if instr_lookup.is_some() {
         return instr_lookup;
     }
 
-    let reg_lookup = lookup_hover_resp(word, register_map);
+    let directive_lookup = lookup_hover_resp_by_assembler(word, directive_map);
+    if directive_lookup.is_some() {
+        return directive_lookup;
+    }
+
+    let reg_lookup = lookup_hover_resp_by_arch(word, register_map);
     if reg_lookup.is_some() {
         return reg_lookup;
     }
 
     let demang = get_demangle_resp(word);
-
     if demang.is_some() {
         return demang;
     }
@@ -244,9 +252,12 @@ pub fn get_hover_resp<T: Hoverable, S: Hoverable>(
     None
 }
 
-fn lookup_hover_resp<T: Hoverable>(word: &str, map: &HashMap<(Arch, &str), T>) -> Option<Hover> {
+fn lookup_hover_resp_by_arch<T: Hoverable>(
+    word: &str,
+    map: &HashMap<(Arch, &str), T>,
+) -> Option<Hover> {
     // switch over to vec?
-    let (x86_res, x86_64_res, z80_res) = search_for_hoverable(word, map);
+    let (x86_res, x86_64_res, z80_res) = search_for_hoverable_by_arch(word, map);
     match (x86_res.is_some(), x86_64_res.is_some(), z80_res.is_some()) {
         (true, _, _) | (_, true, _) | (_, _, true) => {
             let mut value = String::new();
@@ -262,6 +273,36 @@ fn lookup_hover_resp<T: Hoverable>(word: &str, map: &HashMap<(Arch, &str), T>) -
             }
             if let Some(z80_res) = z80_res {
                 value += &format!("{}{}", if !value.is_empty() { "\n\n" } else { "" }, z80_res);
+            }
+            Some(Hover {
+                contents: HoverContents::Markup(MarkupContent {
+                    kind: MarkupKind::Markdown,
+                    value,
+                }),
+                range: None,
+            })
+        }
+        _ => {
+            // don't know of this word
+            None
+        }
+    }
+}
+
+fn lookup_hover_resp_by_assembler<T: Hoverable>(
+    word: &str,
+    map: &HashMap<(Assembler, &str), T>,
+) -> Option<Hover> {
+    let (gas_res, go_res) = search_for_hoverable_by_assembler(word, map);
+
+    match (gas_res.is_some(), go_res.is_some()) {
+        (true, _) | (_, true) => {
+            let mut value = String::new();
+            if let Some(gas_res) = gas_res {
+                value += &format!("{}", gas_res);
+            }
+            if let Some(go_res) = go_res {
+                value += &format!("{}{}", if gas_res.is_some() { "\n\n" } else { "" }, go_res);
             }
             Some(Hover {
                 contents: HoverContents::Markup(MarkupContent {
@@ -371,18 +412,31 @@ pub fn get_comp_resp(
     curr_tree: &mut Option<Tree>,
     params: &CompletionParams,
     instr_comps: &[CompletionItem],
+    dir_comps: &[CompletionItem],
     reg_comps: &[CompletionItem],
 ) -> Option<CompletionList> {
     let cursor_line = params.text_document_position.position.line as usize;
     let cursor_char = params.text_document_position.position.character as usize;
 
-    // prepend register names with "%" in GAS
     if let Some(ctx) = params.context.as_ref() {
         if ctx.trigger_kind == CompletionTriggerKind::TRIGGER_CHARACTER {
-            return Some(CompletionList {
-                is_incomplete: true,
-                items: filtered_comp_list(reg_comps),
-            });
+            match ctx.trigger_character.as_ref().map(|s| s.as_ref()) {
+                // prepend GAS registers with "%"
+                Some("%") => {
+                    return Some(CompletionList {
+                        is_incomplete: true,
+                        items: filtered_comp_list(reg_comps),
+                    });
+                }
+                // prepend GAS directives with "."
+                Some(".") => {
+                    return Some(CompletionList {
+                        is_incomplete: true,
+                        items: filtered_comp_list(dir_comps),
+                    });
+                }
+                _ => {}
+            }
         }
     }
 
@@ -401,6 +455,30 @@ pub fn get_comp_resp(
             },
         });
         let curr_doc = curr_doc.as_bytes();
+
+        static QUERY_DIRECTIVE: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(
+                tree_sitter_asm::language(),
+                "(meta kind: (meta_ident) @directive)",
+            )
+            .unwrap()
+        });
+        let matches_iter = cursor.matches(&QUERY_DIRECTIVE, tree.root_node(), curr_doc);
+
+        for match_ in matches_iter {
+            let caps = match_.captures;
+            for cap in caps.iter() {
+                let arg_start = cap.node.range().start_point;
+                let arg_end = cap.node.range().end_point;
+                if cursor_matches!(cursor_line, cursor_char, arg_start, arg_end) {
+                    let items = filtered_comp_list(dir_comps);
+                    return Some(CompletionList {
+                        is_incomplete: true,
+                        items,
+                    });
+                }
+            }
+        }
 
         static QUERY_INSTR_ANY: Lazy<tree_sitter::Query> = Lazy::new(|| {
             tree_sitter::Query::new(
@@ -602,7 +680,7 @@ pub fn get_sig_help_resp(
                     let mut has_x86_64 = false;
                     let mut has_z80 = false;
                     let (x86_info, x86_64_info, z80_info) =
-                        search_for_hoverable(instr_name, instr_info);
+                        search_for_hoverable_by_arch(instr_name, instr_info);
                     if let Some(sig) = x86_info {
                         for form in sig.forms.iter() {
                             if let Some(ref gas_name) = form.gas_name {
@@ -821,7 +899,7 @@ pub fn get_ref_resp(
 // If issue is resolved, can add a separate lifetime "'b" to "word"
 // parameter such that 'a: 'b
 // For now, using 'a for both isn't strictly necessary, but fits our use case
-fn search_for_hoverable<'a, T: Hoverable>(
+fn search_for_hoverable_by_arch<'a, T: Hoverable>(
     word: &'a str,
     map: &'a HashMap<(Arch, &str), T>,
 ) -> (Option<&'a T>, Option<&'a T>, Option<&'a T>) {
@@ -830,6 +908,16 @@ fn search_for_hoverable<'a, T: Hoverable>(
     let z80_res = map.get(&(Arch::Z80, word));
 
     (x86_res, x86_64_res, z80_res)
+}
+
+fn search_for_hoverable_by_assembler<'a, T: Hoverable>(
+    word: &'a str,
+    map: &'a HashMap<(Assembler, &str), T>,
+) -> (Option<&'a T>, Option<&'a T>) {
+    let gas_res = map.get(&(Assembler::Gas, word));
+    let go_res = map.get(&(Assembler::Go, word));
+
+    (gas_res, go_res)
 }
 
 /// Searches for global config in ~/.config/asm-lsp, then the project's directory
