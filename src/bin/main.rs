@@ -114,11 +114,6 @@ pub fn main() -> anyhow::Result<()> {
         let xml_conts_z80 = include_str!("../../opcodes/z80.xml");
         populate_instructions(xml_conts_z80)?
             .into_iter()
-            // TODO: Replace this with assignment in XML parser
-            .map(|mut instruction| {
-                instruction.arch = Some(Arch::Z80);
-                instruction
-            })
             .map(|instruction| {
                 // filter out assemblers by user config
                 instr_filter_targets(&instruction, &target_config)
@@ -166,10 +161,6 @@ pub fn main() -> anyhow::Result<()> {
         let xml_conts_regs_z80 = include_str!("../../registers/z80.xml");
         populate_registers(xml_conts_regs_z80)?
             .into_iter()
-            .map(|mut reg| {
-                reg.arch = Some(Arch::Z80);
-                reg
-            })
             .collect()
     } else {
         Vec::new()

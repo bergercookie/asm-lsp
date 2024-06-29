@@ -51,10 +51,12 @@ version = "0.1"
 [assemblers]
 gas = true
 go = false
+z80 = false
 
 [instruction_sets]
 x86 = false
 x86_64 = true
+z80 = false
 ```
 
 ## Root directory must contain `.git`

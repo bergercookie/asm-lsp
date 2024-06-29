@@ -355,36 +355,31 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
         }
     }
 
-    match arch {
-        Some(Arch::X86 | Arch::X86_64) => {
-            let x86_online_docs = get_x86_docs_url();
-            let body = get_docs_body(&x86_online_docs).unwrap_or_default();
-            let body_it = body.split("<td>").skip(1).step_by(2);
+    if let Some(Arch::X86 | Arch::X86_64) = arch {
+        let x86_online_docs = get_x86_docs_url();
+        let body = get_docs_body(&x86_online_docs).unwrap_or_default();
+        let body_it = body.split("<td>").skip(1).step_by(2);
 
-            // Parse this x86 page, grab the contents of the table + the URLs they are referring to
-            // Regex to match:
-            // <a href="./VSCATTERPF1DPS:VSCATTERPF1QPS:VSCATTERPF1DPD:VSCATTERPF1QPD.html">VSCATTERPF1QPS</a></td>
-            //
-            // let re = Regex::new(r"<a href=\"./(.*)">(.*)</a></td>")?;
-            // let re = Regex::new(r#"<a href="\./(.*?\.html)">(.*?)</a>.*</td>"#)?;
-            // let re = Regex::new(r"<a href='\/(.*?)'>(.*?)<\/a>.*<\/td>")?;
-            let re = Regex::new(r"<a href='\/x86\/(.*?)'>(.*?)<\/a>.*<\/td>")?;
-            for line in body_it {
-                // take it step by step.. match a small portion of the line first...
-                let caps = re.captures(line).unwrap();
-                let url_suffix = caps.get(1).map_or("", |m| m.as_str());
-                let instruction_name = caps.get(2).map_or("", |m| m.as_str());
+        // Parse this x86 page, grab the contents of the table + the URLs they are referring to
+        // Regex to match:
+        // <a href="./VSCATTERPF1DPS:VSCATTERPF1QPS:VSCATTERPF1DPD:VSCATTERPF1QPD.html">VSCATTERPF1QPS</a></td>
+        //
+        // let re = Regex::new(r"<a href=\"./(.*)">(.*)</a></td>")?;
+        // let re = Regex::new(r#"<a href="\./(.*?\.html)">(.*?)</a>.*</td>"#)?;
+        // let re = Regex::new(r"<a href='\/(.*?)'>(.*?)<\/a>.*<\/td>")?;
+        let re = Regex::new(r"<a href='\/x86\/(.*?)'>(.*?)<\/a>.*<\/td>")?;
+        for line in body_it {
+            // take it step by step.. match a small portion of the line first...
+            let caps = re.captures(line).unwrap();
+            let url_suffix = caps.get(1).map_or("", |m| m.as_str());
+            let instruction_name = caps.get(2).map_or("", |m| m.as_str());
 
-                // add URL to the corresponding instruction
-                match instructions_map.get_mut(instruction_name) {
-                    None => (), // key not found
-                    Some(instruction) => {
-                        instruction.url = Some(x86_online_docs.clone() + url_suffix)
-                    }
-                }
+            // add URL to the corresponding instruction
+            match instructions_map.get_mut(instruction_name) {
+                None => (), // key not found
+                Some(instruction) => instruction.url = Some(x86_online_docs.clone() + url_suffix),
             }
         }
-        _ => {}
     }
 
     Ok(instructions_map.into_values().collect())
