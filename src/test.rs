@@ -5,17 +5,18 @@ mod tests {
     use anyhow::Result;
     use lsp_textdocument::FullTextDocument;
     use lsp_types::{
-        HoverContents, MarkupContent, MarkupKind, Position, TextDocumentIdentifier,
-        TextDocumentPositionParams, Url,
+        CompletionContext, CompletionItem, CompletionItemKind, CompletionParams,
+        CompletionTriggerKind, HoverContents, MarkupContent, MarkupKind, PartialResultParams,
+        Position, TextDocumentIdentifier, TextDocumentPositionParams, Url, WorkDoneProgressParams,
     };
-    // use tree_sitter::Parser;
+    use tree_sitter::Parser;
 
     use crate::{
-        get_hover_resp, get_word_from_pos_params, instr_filter_targets, populate_directives,
-        populate_name_to_directive_map, populate_name_to_instruction_map,
-        populate_name_to_register_map, populate_registers, x86_parser::get_cache_dir, Arch,
-        Assembler, Assemblers, Instruction, InstructionSets, NameToDirectiveMap,
-        NameToInstructionMap, NameToRegisterMap, TargetConfig,
+        get_comp_resp, get_completes, get_hover_resp, get_word_from_pos_params,
+        instr_filter_targets, populate_directives, populate_name_to_directive_map,
+        populate_name_to_instruction_map, populate_name_to_register_map, populate_registers,
+        x86_parser::get_cache_dir, Arch, Assembler, Assemblers, Instruction, InstructionSets,
+        NameToDirectiveMap, NameToInstructionMap, NameToRegisterMap, TargetConfig,
     };
 
     // TODO: Add include_dirs
@@ -24,9 +25,9 @@ mod tests {
         names_to_instructions: NameToInstructionMap,
         names_to_registers: NameToRegisterMap,
         names_to_directives: NameToDirectiveMap,
-        // instr_completion_items: Vec<CompletionItem>,
-        // reg_completion_items: Vec<CompletionItem>,
-        // directive_completion_items: Vec<CompletionItem>,
+        instr_completion_items: Vec<CompletionItem>,
+        reg_completion_items: Vec<CompletionItem>,
+        directive_completion_items: Vec<CompletionItem>,
     }
 
     impl GlobalVars {
@@ -35,9 +36,9 @@ mod tests {
                 names_to_instructions: NameToInstructionMap::new(),
                 names_to_registers: NameToRegisterMap::new(),
                 names_to_directives: NameToDirectiveMap::new(),
-                // instr_completion_items: Vec::new(),
-                // reg_completion_items: Vec::new(),
-                // directive_completion_items: Vec::new(),
+                instr_completion_items: Vec::new(),
+                reg_completion_items: Vec::new(),
+                directive_completion_items: Vec::new(),
             }
         }
     }
@@ -155,6 +156,18 @@ mod tests {
             &gas_directives,
             &mut store.names_to_directives,
         );
+        store.instr_completion_items = get_completes(
+            &store.names_to_instructions,
+            Some(CompletionItemKind::OPERATOR),
+        );
+        store.reg_completion_items = get_completes(
+            &store.names_to_registers,
+            Some(CompletionItemKind::VARIABLE),
+        );
+        store.directive_completion_items = get_completes(
+            &store.names_to_directives,
+            Some(CompletionItemKind::OPERATOR),
+        );
 
         return Ok(store);
     }
@@ -230,6 +243,165 @@ mod tests {
         } else {
             panic!("Invalid hover response contents: {:?}", resp.contents);
         }
+    }
+
+    fn test_autocomplete(
+        source: &str,
+        expected_kind: CompletionItemKind,
+        trigger_kind: CompletionTriggerKind,
+        trigger_character: Option<String>,
+    ) {
+        prepare_globals();
+
+        let globals = GLOBALS
+            .get()
+            .expect("global store not initialized")
+            .lock()
+            .expect("Another test already failed");
+
+        let source_code = source.replace("<cursor>", "");
+
+        let mut parser = Parser::new();
+        parser.set_language(tree_sitter_asm::language()).unwrap();
+        let mut tree = parser.parse(&source_code, None);
+
+        let mut position: Option<Position> = None;
+        for (line_num, line) in source.lines().enumerate() {
+            if let Some((idx, _)) = line.match_indices("<cursor>").next() {
+                position = Some(Position {
+                    line: line_num as u32,
+                    character: idx as u32,
+                });
+                break;
+            }
+        }
+
+        let pos_params = TextDocumentPositionParams {
+            text_document: TextDocumentIdentifier {
+                uri: Url::parse("file://").unwrap(),
+            },
+            position: position.expect("No <cursor> marker found"),
+        };
+
+        let comp_ctx = CompletionContext {
+            trigger_kind,
+            trigger_character,
+        };
+
+        let params = CompletionParams {
+            text_document_position: pos_params,
+            work_done_progress_params: WorkDoneProgressParams {
+                work_done_token: None,
+            },
+            partial_result_params: PartialResultParams {
+                partial_result_token: None,
+            },
+            context: Some(comp_ctx),
+        };
+
+        let resp = get_comp_resp(
+            &source_code,
+            &mut parser,
+            &mut tree,
+            &params,
+            &globals.instr_completion_items,
+            &globals.directive_completion_items,
+            &globals.reg_completion_items,
+        )
+        .unwrap();
+
+        // - We currently have a very course-grained approach to completions,
+        // - We just send all of the appropriate items (e.g. all instrucitons, all
+        // registers, or all directives) and let the editor's lsp client sort out
+        // which to display/ in what order
+        // - Given this, we won't check for equality for all of the expected items,
+        // but instead just that
+        //      1) There are some items
+        //      2) Said items are of the right type
+        assert!(!resp.items.is_empty());
+        for comp in &resp.items {
+            assert!(comp.kind == Some(expected_kind));
+        }
+    }
+
+    fn test_register_autocomplete(
+        source: &str,
+        trigger_kind: CompletionTriggerKind,
+        trigger_character: Option<String>,
+    ) {
+        prepare_globals();
+        let expected_kind = CompletionItemKind::VARIABLE;
+        test_autocomplete(source, expected_kind, trigger_kind, trigger_character);
+    }
+
+    fn test_instruction_autocomplete(
+        source: &str,
+        trigger_kind: CompletionTriggerKind,
+        trigger_character: Option<String>,
+    ) {
+        prepare_globals();
+        let expected_kind = CompletionItemKind::OPERATOR;
+        test_autocomplete(source, expected_kind, trigger_kind, trigger_character);
+    }
+
+    fn test_directive_autocomplete(
+        source: &str,
+        trigger_kind: CompletionTriggerKind,
+        trigger_character: Option<String>,
+    ) {
+        prepare_globals();
+        let expected_kind = CompletionItemKind::OPERATOR;
+        test_autocomplete(source, expected_kind, trigger_kind, trigger_character);
+    }
+
+    #[test]
+    fn handle_autocomplete_x86_x86_64_it_provides_instr_comps_one_character_start() {
+        test_instruction_autocomplete("s<cursor>", CompletionTriggerKind::INVOKED, None);
+    }
+
+    #[test]
+    fn handle_autocomplete_x86_x86_64_it_provides_reg_comps_after_percent_symbol() {
+        test_register_autocomplete(
+            "pushq %<cursor>",
+            CompletionTriggerKind::TRIGGER_CHARACTER,
+            Some("%".to_string()),
+        );
+    }
+    #[test]
+    fn handle_autocomplete_x86_x86_64_it_provides_reg_comps_in_existing_reg_arg_1() {
+        test_register_autocomplete("pushq %rb<cursor>", CompletionTriggerKind::INVOKED, None);
+    }
+    #[test]
+    fn handle_autocomplete_x86_x86_64_it_provides_reg_comps_in_existing_reg_arg_2() {
+        test_register_autocomplete(
+            "	movq	%rs<cursor>, %rbp",
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_x86_x86_64_it_provides_reg_comps_in_existing_reg_arg_3() {
+        test_register_autocomplete(
+            "	movq	%rsp, %rb<cursor>",
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_x86_x86_64_it_provides_reg_comps_in_existing_offset_arg() {
+        test_register_autocomplete(
+            "	movl	%edi, -20(%r<cursor>)",
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_x86_x86_64_it_provides_reg_comps_in_existing_relative_addressing_arg() {
+        test_register_autocomplete(
+            "	leaq	_ZSt4cout(%ri<cursor>), %rdi",
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
     }
 
     #[test]
@@ -453,6 +625,27 @@ Width: 64 bits",
     }
 
     #[test]
+    fn handle_autocomplete_gas_it_provides_directive_completes_1() {
+        test_directive_autocomplete("	.fi<cursor>", CompletionTriggerKind::INVOKED, None);
+    }
+    #[test]
+    fn handle_autocomplete_gas_it_provides_directive_completes_2() {
+        test_directive_autocomplete(
+            r#"	.fil<cursor>	"a.cpp""#,
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_gas_it_provides_directive_completes_3() {
+        test_directive_autocomplete(
+            ".<cursor>",
+            CompletionTriggerKind::TRIGGER_CHARACTER,
+            Some(".".to_string()),
+        );
+    }
+
+    #[test]
     fn handle_hover_gas_it_provides_directive_info_1() {
         test_hover(r#"	.f<cursor>ile	"a.cpp"#, ".file [Gas]
 This version of the `.file` directive tells `as` that we are about to start a new logical file. When emitting DWARF2 line number information, `.file` assigns filenames to the `.debug_line` file name table.
@@ -499,6 +692,40 @@ More info: https://sourceware.org/binutils/docs-2.41/as/Global.html",
         test_hover("	movq	_ZSt4endlIcSt<cursor>11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@GOTPCREL(%rip), %rax",
         "std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)",
             );
+    }
+
+    #[test]
+    fn handle_autocomplete_z80_it_provides_instr_comps_one_character_start() {
+        test_instruction_autocomplete("L<cursor>", CompletionTriggerKind::INVOKED, None);
+    }
+
+    #[test]
+    fn handle_autocomplete_z80_it_provides_reg_comps_after_one_character() {
+        test_register_autocomplete(
+            "pushq %<cursor>",
+            CompletionTriggerKind::TRIGGER_CHARACTER,
+            Some("%".to_string()),
+        );
+    }
+    #[test]
+    fn handle_autocomplete_z80_it_provides_reg_comps_in_existing_reg_arg_1() {
+        test_register_autocomplete("LD A<cursor>", CompletionTriggerKind::INVOKED, None);
+    }
+    #[test]
+    fn handle_autocomplete_z80_it_provides_reg_comps_in_existing_reg_arg_2() {
+        test_register_autocomplete(
+            "        LD H<cursor>, DATA     ;STARTING ADDRESS OF DATA STRING",
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_z80_it_provides_reg_comps_in_existing_reg_arg_3() {
+        test_register_autocomplete(
+            "        CP (H<cursor>)         ;COMPARE MEMORY CONTENTS WITH",
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
     }
 
     #[test]

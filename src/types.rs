@@ -77,7 +77,7 @@ impl<'own> Instruction {
         self.forms.push(form);
     }
 
-    /// Get the primary name
+    /// Get the primary names
     pub fn get_primary_names(&'own self) -> Vec<&'own str> {
         let mut names = Vec::<&'own str>::new();
         names.push(&self.name);
@@ -88,7 +88,7 @@ impl<'own> Instruction {
         names
     }
 
-    /// get the names of all the associated commands (includes Go and Gas forms)
+    /// Get the names of all the associated commands (includes Go and Gas forms)
     pub fn get_associated_names(&'own self) -> Vec<&'own str> {
         let mut names = Vec::<&'own str>::new();
 
