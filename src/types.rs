@@ -13,8 +13,8 @@ pub struct Instruction {
     pub arch: Option<Arch>,
 }
 
-impl Hoverable for &Instruction {}
-impl Completable for &Instruction {}
+impl Hoverable for Instruction {}
+impl Completable for Instruction {}
 
 impl Default for Instruction {
     fn default() -> Self {
@@ -77,14 +77,20 @@ impl<'own> Instruction {
         self.forms.push(form);
     }
 
-    /// get the names of all the associated commands (includes Go and Gas forms)
-    pub fn get_associated_names(&'own self) -> Vec<&'own str> {
+    /// Get the primary name
+    pub fn get_primary_names(&'own self) -> Vec<&'own str> {
         let mut names = Vec::<&'own str>::new();
         names.push(&self.name);
 
         for name in &self.alt_names {
             names.push(name);
         }
+        names
+    }
+
+    /// get the names of all the associated commands (includes Go and Gas forms)
+    pub fn get_associated_names(&'own self) -> Vec<&'own str> {
+        let mut names = Vec::<&'own str>::new();
 
         for f in &self.forms {
             for name in [&f.gas_name, &f.go_name, &f.z80_name]
@@ -178,7 +184,7 @@ impl std::fmt::Display for InstructionForm {
                         s += &format!(" extended-size = {}", extended_size)
                     }
 
-                    s
+                    s.trim_end().to_owned()
                 })
                 .collect::<Vec<String>>()
                 .join("\n")
@@ -329,8 +335,8 @@ pub struct Directive {
     pub assembler: Option<Assembler>,
 }
 
-impl Hoverable for &Directive {}
-impl Completable for &Directive {}
+impl Hoverable for Directive {}
+impl Completable for Directive {}
 
 impl Default for Directive {
     fn default() -> Self {
@@ -459,8 +465,8 @@ pub struct Register {
     pub url: Option<String>,
 }
 
-impl Hoverable for &Register {}
-impl Completable for &Register {}
+impl Hoverable for Register {}
+impl Completable for Register {}
 
 impl Default for Register {
     fn default() -> Self {
@@ -561,16 +567,14 @@ impl<'own> Register {
 }
 
 // helper structs, types and functions ------------------------------------------------------------
-pub type NameToInstructionMap<'instruction> =
-    HashMap<(Arch, &'instruction str), &'instruction Instruction>;
+pub type NameToInstructionMap = HashMap<(Arch, String), Instruction>;
 
-pub type NameToRegisterMap<'register> = HashMap<(Arch, &'register str), &'register Register>;
+pub type NameToRegisterMap = HashMap<(Arch, String), Register>;
 
-pub type NameToDirectiveMap<'directive> =
-    HashMap<(Assembler, &'directive str), &'directive Directive>;
+pub type NameToDirectiveMap = HashMap<(Assembler, String), Directive>;
 
 // Define a trait for types we display on Hover Requests so we can avoid some duplicate code
-pub trait Hoverable: Display + Clone + Copy {}
+pub trait Hoverable: Display + Clone {}
 // Define a trait for types we display on Completion Requests so we can avoid some duplicate code
 pub trait Completable: Display {}
 // Define a trait for the enums we use to distinguish between different Architectures and Assemblers
