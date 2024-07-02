@@ -32,7 +32,6 @@ flexi_logger = "0.25.3"
 log = { version = "0.4.17" }
 lsp-server = "0.7.0"
 lsp-types = "0.94.0"
-quick-xml = "0.28.1"
 regex = "1.7.2"
 reqwest = { version = "0.11.15", features = ["blocking"] }
 strum = "0.24.1"
@@ -50,5 +49,6 @@ dirs = "5.0.1"
 symbolic = { version = "12.8.0", features = ["demangle"] }
 symbolic-demangle = "12.8.0"
 url-escape = "0.1.1"
+quick-xml = "0.35.0"
 
 # [dev-dependencies]

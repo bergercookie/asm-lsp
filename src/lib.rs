@@ -1,4 +1,5 @@
 pub mod lsp;
+mod test;
 pub mod types;
 pub mod x86_parser;
 

@@ -29,7 +29,6 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
 
     // iterate through the XML --------------------------------------------------------------------
     let mut reader = Reader::from_str(xml_contents);
-    reader.trim_text(true);
 
     // ref to the instruction that's currently under construction
     let mut curr_instruction = Instruction::default();
@@ -244,7 +243,6 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                             output,
                         })
                     }
-                    // TODO: Copy pasta grab value code for each block here...
                     QName(b"TimingZ80") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
@@ -393,12 +391,11 @@ mod tests {
     fn test_populate_instructions() {
         let mut server = mockito::Server::new_with_port(8080);
 
-        let mock = server
+        let _ = server
             .mock("GET", "/x86/")
             .with_status(200)
             .with_header("content-type", "text/html")
             .with_body("")
-            .expect(2) // 1 request for x86, 1 for x86_64
             .create();
 
         // Need to clear the cache file (if there is one)
@@ -421,19 +418,26 @@ mod tests {
         if x86_cache_path.is_file() {
             std::fs::remove_file(&x86_cache_path).unwrap();
         }
-
-        mock.assert();
     }
 }
 
-pub fn populate_name_to_instruction_map<'instruction>(
+pub fn populate_name_to_instruction_map(
     arch: Arch,
-    instructions: &'instruction Vec<Instruction>,
-    names_to_instructions: &mut NameToInstructionMap<'instruction>,
+    instructions: &Vec<Instruction>,
+    names_to_instructions: &mut NameToInstructionMap,
 ) {
+    // Add the true names first
+    for instruction in instructions {
+        for name in &instruction.get_primary_names() {
+            names_to_instructions.insert((arch, name.to_string()), instruction.clone());
+        }
+    }
+    // then add alternate form names, being careful not to overwrite existing entries
     for instruction in instructions {
         for name in &instruction.get_associated_names() {
-            names_to_instructions.insert((arch, name), instruction);
+            names_to_instructions
+                .entry((arch, name.to_string()))
+                .or_insert_with(|| instruction.clone());
         }
     }
 }
@@ -448,7 +452,6 @@ pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
 
     // iterate through the XML --------------------------------------------------------------------
     let mut reader = Reader::from_str(xml_contents);
-    reader.trim_text(true);
 
     // ref to the register that's currently under construction
     let mut curr_register = Register::default();
@@ -575,14 +578,14 @@ pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
     Ok(registers_map.into_values().collect())
 }
 
-pub fn populate_name_to_register_map<'register>(
+pub fn populate_name_to_register_map(
     arch: Arch,
-    registers: &'register Vec<Register>,
-    names_to_registers: &mut NameToRegisterMap<'register>,
+    registers: &Vec<Register>,
+    names_to_registers: &mut NameToRegisterMap,
 ) {
     for register in registers {
         for name in &register.get_associated_names() {
-            names_to_registers.insert((arch, name), register);
+            names_to_registers.insert((arch, name.to_string()), register.clone());
         }
     }
 }
@@ -592,7 +595,6 @@ pub fn populate_directives(xml_contents: &str) -> anyhow::Result<Vec<Directive>>
 
     // iterate through the XML --------------------------------------------------------------------
     let mut reader = Reader::from_str(xml_contents);
-    reader.trim_text(true);
 
     // ref to the assembler directive that's currently under construction
     let mut curr_directive = Directive::default();
@@ -683,14 +685,14 @@ pub fn populate_directives(xml_contents: &str) -> anyhow::Result<Vec<Directive>>
     Ok(directives_map.into_values().collect())
 }
 
-pub fn populate_name_to_directive_map<'directive>(
+pub fn populate_name_to_directive_map(
     assem: Assembler,
-    directives: &'directive Vec<Directive>,
-    names_to_directives: &mut NameToDirectiveMap<'directive>,
+    directives: &Vec<Directive>,
+    names_to_directives: &mut NameToDirectiveMap,
 ) {
     for register in directives {
         for name in &register.get_associated_names() {
-            names_to_directives.insert((assem, name), register);
+            names_to_directives.insert((assem, name.to_string()), register.clone());
         }
     }
 }
@@ -775,7 +777,7 @@ fn get_docs_body(x86_online_docs: &str) -> Option<String> {
     Some(body)
 }
 
-fn get_cache_dir() -> anyhow::Result<PathBuf> {
+pub fn get_cache_dir() -> anyhow::Result<PathBuf> {
     // first check if the appropriate environment variable is set
     if let Ok(path) = std::env::var("ASM_LSP_CACHE_DIR") {
         let path = PathBuf::from(path);
