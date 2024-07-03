@@ -196,7 +196,7 @@ pub fn text_doc_change_to_ts_edit(
 /// Given a NameTo_SomeItem_ map, returns a `Vec<CompletionItem>` for the items
 /// contained within the map
 pub fn get_completes<T: Completable, U: ArchOrAssembler>(
-    map: &HashMap<(U, String), T>,
+    map: &HashMap<(U, &str), T>,
     kind: Option<CompletionItemKind>,
 ) -> Vec<CompletionItem> {
     map.iter()
@@ -204,7 +204,7 @@ pub fn get_completes<T: Completable, U: ArchOrAssembler>(
             let value = format!("{}", item_info);
 
             CompletionItem {
-                label: name.clone(),
+                label: (*name).to_string(),
                 kind,
                 documentation: Some(Documentation::MarkupContent(MarkupContent {
                     kind: MarkupKind::Markdown,
@@ -219,9 +219,9 @@ pub fn get_completes<T: Completable, U: ArchOrAssembler>(
 pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
     word: &str,
     file_word: &str,
-    instruction_map: &HashMap<(Arch, String), T>,
-    register_map: &HashMap<(Arch, String), U>,
-    directive_map: &HashMap<(Assembler, String), V>,
+    instruction_map: &HashMap<(Arch, &str), T>,
+    register_map: &HashMap<(Arch, &str), U>,
+    directive_map: &HashMap<(Assembler, &str), V>,
     include_dirs: &[PathBuf],
 ) -> Option<Hover> {
     let instr_lookup = lookup_hover_resp_by_arch(word, instruction_map);
@@ -254,7 +254,7 @@ pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
 
 fn lookup_hover_resp_by_arch<T: Hoverable>(
     word: &str,
-    map: &HashMap<(Arch, String), T>,
+    map: &HashMap<(Arch, &str), T>,
 ) -> Option<Hover> {
     // switch over to vec?
     let (x86_res, x86_64_res, z80_res) = search_for_hoverable_by_arch(word, map);
@@ -291,7 +291,7 @@ fn lookup_hover_resp_by_arch<T: Hoverable>(
 
 fn lookup_hover_resp_by_assembler<T: Hoverable>(
     word: &str,
-    map: &HashMap<(Assembler, String), T>,
+    map: &HashMap<(Assembler, &str), T>,
 ) -> Option<Hover> {
     let (gas_res, go_res) = search_for_hoverable_by_assembler(word, map);
 
@@ -901,21 +901,21 @@ pub fn get_ref_resp(
 // For now, using 'a for both isn't strictly necessary, but fits our use case
 fn search_for_hoverable_by_arch<'a, T: Hoverable>(
     word: &'a str,
-    map: &'a HashMap<(Arch, String), T>,
+    map: &'a HashMap<(Arch, &str), T>,
 ) -> (Option<&'a T>, Option<&'a T>, Option<&'a T>) {
-    let x86_res = map.get(&(Arch::X86, word.to_string()));
-    let x86_64_res = map.get(&(Arch::X86_64, word.to_string()));
-    let z80_res = map.get(&(Arch::Z80, word.to_string()));
+    let x86_res = map.get(&(Arch::X86, word));
+    let x86_64_res = map.get(&(Arch::X86_64, word));
+    let z80_res = map.get(&(Arch::Z80, word));
 
     (x86_res, x86_64_res, z80_res)
 }
 
 fn search_for_hoverable_by_assembler<'a, T: Hoverable>(
     word: &'a str,
-    map: &'a HashMap<(Assembler, String), T>,
+    map: &'a HashMap<(Assembler, &str), T>,
 ) -> (Option<&'a T>, Option<&'a T>) {
-    let gas_res = map.get(&(Assembler::Gas, word.to_string()));
-    let go_res = map.get(&(Assembler::Go, word.to_string()));
+    let gas_res = map.get(&(Assembler::Gas, word));
+    let go_res = map.get(&(Assembler::Go, word));
 
     (gas_res, go_res)
 }
