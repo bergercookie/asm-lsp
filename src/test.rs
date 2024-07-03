@@ -1,7 +1,5 @@
 #[cfg(test)]
 mod tests {
-    use std::sync::{Mutex, Once, OnceLock};
-
     use anyhow::Result;
     use lsp_textdocument::FullTextDocument;
     use lsp_types::{
@@ -15,22 +13,47 @@ mod tests {
         get_comp_resp, get_completes, get_hover_resp, get_word_from_pos_params,
         instr_filter_targets, populate_directives, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers,
-        x86_parser::get_cache_dir, Arch, Assembler, Assemblers, Instruction, InstructionSets,
-        NameToDirectiveMap, NameToInstructionMap, NameToRegisterMap, TargetConfig,
+        x86_parser::get_cache_dir, Arch, Assembler, Assemblers, Directive, Instruction,
+        InstructionSets, NameToDirectiveMap, NameToInstructionMap, NameToRegisterMap, Register,
+        TargetConfig,
     };
 
-    // TODO: Add include_dirs
     #[derive(Debug)]
-    struct GlobalVars {
-        names_to_instructions: NameToInstructionMap,
-        names_to_registers: NameToRegisterMap,
-        names_to_directives: NameToDirectiveMap,
+    struct GlobalInfo {
+        x86_instructions: Vec<Instruction>,
+        x86_64_instructions: Vec<Instruction>,
+        x86_registers: Vec<Register>,
+        x86_64_registers: Vec<Register>,
+        z80_instructions: Vec<Instruction>,
+        z80_registers: Vec<Register>,
+        gas_directives: Vec<Directive>,
+    }
+
+    #[derive(Debug)]
+    struct GlobalVars<'a> {
+        names_to_instructions: NameToInstructionMap<'a>,
+        names_to_registers: NameToRegisterMap<'a>,
+        names_to_directives: NameToDirectiveMap<'a>,
         instr_completion_items: Vec<CompletionItem>,
         reg_completion_items: Vec<CompletionItem>,
         directive_completion_items: Vec<CompletionItem>,
     }
 
-    impl GlobalVars {
+    impl GlobalInfo {
+        fn new() -> Self {
+            Self {
+                x86_instructions: Vec::new(),
+                x86_64_instructions: Vec::new(),
+                x86_registers: Vec::new(),
+                x86_64_registers: Vec::new(),
+                z80_instructions: Vec::new(),
+                z80_registers: Vec::new(),
+                gas_directives: Vec::new(),
+            }
+        }
+    }
+
+    impl GlobalVars<'_> {
         fn new() -> Self {
             Self {
                 names_to_instructions: NameToInstructionMap::new(),
@@ -45,12 +68,10 @@ mod tests {
 
     // TODO: Look into a way to cleanly handle multiple GLOBALS, each representing the server
     // setup from a different configuration
-    static SETUP: Once = Once::new();
-    static GLOBALS: OnceLock<Mutex<GlobalVars>> = OnceLock::new();
+    fn init_global_info(config: Option<TargetConfig>) -> Result<GlobalInfo> {
+        let mut info = GlobalInfo::new();
 
-    fn init_test_store() -> Result<GlobalVars> {
-        let mut store = GlobalVars::new();
-        let target_config = TargetConfig {
+        let target_config = config.unwrap_or(TargetConfig {
             version: "0.1".to_string(),
             assemblers: Assemblers {
                 gas: true,
@@ -62,15 +83,9 @@ mod tests {
                 x86_64: true,
                 z80: true,
             },
-        };
+        });
 
-        let mut x86_cache_path = get_cache_dir().unwrap();
-        x86_cache_path.push("x86_instr_docs.html");
-        if x86_cache_path.is_file() {
-            std::fs::remove_file(&x86_cache_path).unwrap();
-        }
-
-        let x86_instructions: Vec<Instruction> = {
+        info.x86_instructions = {
             let xml_conts_x86 = include_str!("../opcodes/x86.xml");
             crate::populate_instructions(xml_conts_x86)?
                 .into_iter()
@@ -79,13 +94,7 @@ mod tests {
                 .collect()
         };
 
-        populate_name_to_instruction_map(
-            Arch::X86,
-            &x86_instructions,
-            &mut store.names_to_instructions,
-        );
-
-        let x86_64_instructions: Vec<Instruction> = {
+        info.x86_64_instructions = {
             let xml_conts_x86_64 = include_str!("../opcodes/x86_64.xml");
             crate::populate_instructions(xml_conts_x86_64)?
                 .into_iter()
@@ -94,13 +103,7 @@ mod tests {
                 .collect()
         };
 
-        populate_name_to_instruction_map(
-            Arch::X86_64,
-            &x86_64_instructions,
-            &mut store.names_to_instructions,
-        );
-
-        let z80_instructions: Vec<Instruction> = {
+        info.z80_instructions = {
             let xml_conts_z80 = include_str!("../opcodes/z80.xml");
             crate::populate_instructions(xml_conts_z80)?
                 .into_iter()
@@ -109,53 +112,86 @@ mod tests {
                 .collect()
         };
 
-        populate_name_to_instruction_map(
-            Arch::Z80,
-            &z80_instructions,
-            &mut store.names_to_instructions,
-        );
-
-        let x86_registers = {
+        info.x86_registers = {
             let xml_conts_regs_x86 = include_str!("../registers/x86.xml");
             populate_registers(xml_conts_regs_x86)?
                 .into_iter()
                 .collect()
         };
 
-        populate_name_to_register_map(Arch::X86, &x86_registers, &mut store.names_to_registers);
-
-        let x86_64_registers = {
+        info.x86_64_registers = {
             let xml_conts_regs_x86_64 = include_str!("../registers/x86_64.xml");
             populate_registers(xml_conts_regs_x86_64)?
                 .into_iter()
                 .collect()
         };
 
-        populate_name_to_register_map(
-            Arch::X86_64,
-            &x86_64_registers,
-            &mut store.names_to_registers,
-        );
-
-        let z80_registers = {
+        info.z80_registers = {
             let xml_conts_regs_z80 = include_str!("../registers/z80.xml");
             populate_registers(xml_conts_regs_z80)?
                 .into_iter()
                 .collect()
         };
 
-        populate_name_to_register_map(Arch::Z80, &z80_registers, &mut store.names_to_registers);
-
-        let gas_directives = {
+        info.gas_directives = {
             let xml_conts_gas = include_str!("../directives/gas_directives.xml");
             populate_directives(xml_conts_gas)?.into_iter().collect()
         };
 
+        return Ok(info);
+    }
+
+    fn init_test_store<'a>(info: &'a GlobalInfo) -> Result<GlobalVars<'a>> {
+        let mut store = GlobalVars::new();
+
+        let mut x86_cache_path = get_cache_dir().unwrap();
+        x86_cache_path.push("x86_instr_docs.html");
+        if x86_cache_path.is_file() {
+            std::fs::remove_file(&x86_cache_path).unwrap();
+        }
+
+        populate_name_to_instruction_map(
+            Arch::X86,
+            &info.x86_instructions,
+            &mut store.names_to_instructions,
+        );
+
+        populate_name_to_instruction_map(
+            Arch::X86_64,
+            &info.x86_64_instructions,
+            &mut store.names_to_instructions,
+        );
+
+        populate_name_to_instruction_map(
+            Arch::Z80,
+            &info.z80_instructions,
+            &mut store.names_to_instructions,
+        );
+
+        populate_name_to_register_map(
+            Arch::X86,
+            &info.x86_registers,
+            &mut store.names_to_registers,
+        );
+
+        populate_name_to_register_map(
+            Arch::X86_64,
+            &info.x86_64_registers,
+            &mut store.names_to_registers,
+        );
+
+        populate_name_to_register_map(
+            Arch::Z80,
+            &info.z80_registers,
+            &mut store.names_to_registers,
+        );
+
         populate_name_to_directive_map(
             Assembler::Gas,
-            &gas_directives,
+            &info.gas_directives,
             &mut store.names_to_directives,
         );
+
         store.instr_completion_items = get_completes(
             &store.names_to_instructions,
             Some(CompletionItemKind::OPERATOR),
@@ -172,20 +208,9 @@ mod tests {
         return Ok(store);
     }
 
-    fn prepare_globals() {
-        SETUP.call_once(|| {
-            GLOBALS.set(Mutex::new(init_test_store().unwrap())).unwrap();
-        });
-    }
-
     fn test_hover(source: &str, expected: &str) {
-        prepare_globals();
-
-        let globals = GLOBALS
-            .get()
-            .expect("global store not initialized")
-            .lock()
-            .expect("global store mutex poisoned");
+        let info = init_global_info(None).expect("Failed to load info");
+        let globals = init_test_store(&info).unwrap();
 
         let source_code = source.replace("<cursor>", "");
         let curr_doc = Some(FullTextDocument::new(
@@ -251,13 +276,8 @@ mod tests {
         trigger_kind: CompletionTriggerKind,
         trigger_character: Option<String>,
     ) {
-        prepare_globals();
-
-        let globals = GLOBALS
-            .get()
-            .expect("global store not initialized")
-            .lock()
-            .expect("Another test already failed");
+        let info = init_global_info(None).expect("Failed to load info");
+        let globals = init_test_store(&info).unwrap();
 
         let source_code = source.replace("<cursor>", "");
 
@@ -329,7 +349,6 @@ mod tests {
         trigger_kind: CompletionTriggerKind,
         trigger_character: Option<String>,
     ) {
-        prepare_globals();
         let expected_kind = CompletionItemKind::VARIABLE;
         test_autocomplete(source, expected_kind, trigger_kind, trigger_character);
     }
@@ -339,7 +358,6 @@ mod tests {
         trigger_kind: CompletionTriggerKind,
         trigger_character: Option<String>,
     ) {
-        prepare_globals();
         let expected_kind = CompletionItemKind::OPERATOR;
         test_autocomplete(source, expected_kind, trigger_kind, trigger_character);
     }
@@ -349,7 +367,6 @@ mod tests {
         trigger_kind: CompletionTriggerKind,
         trigger_character: Option<String>,
     ) {
-        prepare_globals();
         let expected_kind = CompletionItemKind::OPERATOR;
         test_autocomplete(source, expected_kind, trigger_kind, trigger_character);
     }

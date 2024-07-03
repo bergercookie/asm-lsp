@@ -421,23 +421,23 @@ mod tests {
     }
 }
 
-pub fn populate_name_to_instruction_map(
+pub fn populate_name_to_instruction_map<'instruction>(
     arch: Arch,
-    instructions: &Vec<Instruction>,
-    names_to_instructions: &mut NameToInstructionMap,
+    instructions: &'instruction Vec<Instruction>,
+    names_to_instructions: &mut NameToInstructionMap<'instruction>,
 ) {
     // Add the true names first
     for instruction in instructions {
         for name in &instruction.get_primary_names() {
-            names_to_instructions.insert((arch, name.to_string()), instruction.clone());
+            names_to_instructions.insert((arch, name), instruction);
         }
     }
     // then add alternate form names, being careful not to overwrite existing entries
     for instruction in instructions {
         for name in &instruction.get_associated_names() {
             names_to_instructions
-                .entry((arch, name.to_string()))
-                .or_insert_with(|| instruction.clone());
+                .entry((arch, name))
+                .or_insert_with(|| instruction);
         }
     }
 }
@@ -578,14 +578,14 @@ pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
     Ok(registers_map.into_values().collect())
 }
 
-pub fn populate_name_to_register_map(
+pub fn populate_name_to_register_map<'register>(
     arch: Arch,
-    registers: &Vec<Register>,
-    names_to_registers: &mut NameToRegisterMap,
+    registers: &'register Vec<Register>,
+    names_to_registers: &mut NameToRegisterMap<'register>,
 ) {
     for register in registers {
         for name in &register.get_associated_names() {
-            names_to_registers.insert((arch, name.to_string()), register.clone());
+            names_to_registers.insert((arch, name), register);
         }
     }
 }
@@ -685,14 +685,14 @@ pub fn populate_directives(xml_contents: &str) -> anyhow::Result<Vec<Directive>>
     Ok(directives_map.into_values().collect())
 }
 
-pub fn populate_name_to_directive_map(
+pub fn populate_name_to_directive_map<'directive>(
     assem: Assembler,
-    directives: &Vec<Directive>,
-    names_to_directives: &mut NameToDirectiveMap,
+    directives: &'directive Vec<Directive>,
+    names_to_directives: &mut NameToDirectiveMap<'directive>,
 ) {
     for register in directives {
         for name in &register.get_associated_names() {
-            names_to_directives.insert((assem, name.to_string()), register.clone());
+            names_to_directives.insert((assem, name), register);
         }
     }
 }
