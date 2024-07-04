@@ -66,8 +66,6 @@ mod tests {
         }
     }
 
-    // TODO: Look into a way to cleanly handle multiple GLOBALS, each representing the server
-    // setup from a different configuration
     fn init_global_info(config: Option<TargetConfig>) -> Result<GlobalInfo> {
         let mut info = GlobalInfo::new();
 
@@ -196,10 +194,12 @@ mod tests {
             &store.names_to_instructions,
             Some(CompletionItemKind::OPERATOR),
         );
+
         store.reg_completion_items = get_completes(
             &store.names_to_registers,
             Some(CompletionItemKind::VARIABLE),
         );
+
         store.directive_completion_items = get_completes(
             &store.names_to_directives,
             Some(CompletionItemKind::OPERATOR),
@@ -210,7 +210,7 @@ mod tests {
 
     fn test_hover(source: &str, expected: &str) {
         let info = init_global_info(None).expect("Failed to load info");
-        let globals = init_test_store(&info).unwrap();
+        let globals = init_test_store(&info).expect("Failed to initialize test store");
 
         let source_code = source.replace("<cursor>", "");
         let curr_doc = Some(FullTextDocument::new(
@@ -277,7 +277,7 @@ mod tests {
         trigger_character: Option<String>,
     ) {
         let info = init_global_info(None).expect("Failed to load info");
-        let globals = init_test_store(&info).unwrap();
+        let globals = init_test_store(&info).expect("Failed to initialize test store");
 
         let source_code = source.replace("<cursor>", "");
 
@@ -338,6 +338,8 @@ mod tests {
         // but instead just that
         //      1) There are some items
         //      2) Said items are of the right type
+        // NOTE: Both instructions and directives use the OPERATOR complection type,
+        // so another means of verification should be added here
         assert!(!resp.items.is_empty());
         for comp in &resp.items {
             assert!(comp.kind == Some(expected_kind));

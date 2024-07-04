@@ -1,27 +1,39 @@
+use std::collections::{HashMap, HashSet};
+use std::convert::TryFrom;
+use std::fs::{create_dir_all, File};
+use std::io::BufRead;
+use std::path::PathBuf;
+
+use anyhow::{anyhow, Result};
+use dirs::config_dir;
+use log::{error, info, log, log_enabled};
+use lsp_textdocument::FullTextDocument;
+use lsp_types::{
+    CompletionItem, CompletionItemKind, CompletionList, CompletionParams, CompletionTriggerKind,
+    DocumentSymbol, DocumentSymbolParams, Documentation, GotoDefinitionParams,
+    GotoDefinitionResponse, Hover, HoverContents, InitializeParams, Location, MarkupContent,
+    MarkupKind, Position, Range, ReferenceParams, SignatureHelp, SignatureHelpParams,
+    SignatureInformation, SymbolKind, TextDocumentContentChangeEvent, TextDocumentPositionParams,
+    Url,
+};
+use once_cell::sync::Lazy;
+use symbolic::common::{Language, Name, NameMangling};
+use symbolic_demangle::{Demangle, DemangleOptions};
+use tree_sitter::{InputEdit, Parser, Tree};
+
 use crate::types::Column;
 use crate::{
     Arch, ArchOrAssembler, Assembler, Completable, Hoverable, Instruction, NameToInstructionMap,
     TargetConfig,
 };
-use dirs::config_dir;
-use log::{error, info, log, log_enabled};
-use lsp_textdocument::FullTextDocument;
-use lsp_types::*;
-use once_cell::sync::Lazy;
-use std::collections::{HashMap, HashSet};
-use std::fs::{create_dir_all, File};
-use std::io::BufRead;
-use std::path::PathBuf;
-use symbolic::common::{Language, Name, NameMangling};
-use symbolic_demangle::{Demangle, DemangleOptions};
-use tree_sitter::{InputEdit, Parser, Tree};
 
 /// Find the start and end indices of a word inside the given line
 /// Borrowed from RLS
 /// `additional_chars` parameter allows specifying additional legal "word"
 /// characters besides the default alphanumeric and '_'
+#[must_use]
 pub fn find_word_at_pos(line: &str, col: Column, additional_chars: &str) -> (Column, Column) {
-    let line_ = format!("{} ", line);
+    let line_ = format!("{line} ");
     let is_ident_char = |c: char| {
         c.is_alphanumeric() || c == '_' || additional_chars.chars().any(|word_char| word_char == c)
     };
@@ -32,8 +44,7 @@ pub fn find_word_at_pos(line: &str, col: Column, additional_chars: &str) -> (Col
         .take(col)
         .filter(|&(_, c)| !is_ident_char(c))
         .last()
-        .map(|(i, _)| i + 1)
-        .unwrap_or(0);
+        .map_or(0, |(i, _)| i + 1);
 
     #[allow(clippy::filter_next)]
     let mut end = line_
@@ -43,13 +54,23 @@ pub fn find_word_at_pos(line: &str, col: Column, additional_chars: &str) -> (Col
         .filter(|&(_, c)| !is_ident_char(c));
 
     let end = end.next();
-    (start, end.map(|(i, _)| i).unwrap_or(col))
+    (start, end.map_or(col, |(i, _)| i))
 }
 
+/// Returns the word undernearth the cursor given the specified `TextDocumentPositionParams`
+///
+/// # Errors
+///
+/// Will return `Err` if the file cannot be opened
+///
+/// # Panics
+///
+/// Will panic if the position parameters specify a line past the end of the file's
+/// contents
 pub fn get_word_from_file_params(
     pos_params: &TextDocumentPositionParams,
     extra_chars: &str,
-) -> anyhow::Result<String> {
+) -> Result<String> {
     let uri = &pos_params.text_document.uri;
     let line = pos_params.position.line as usize;
     let col = pos_params.position.character as usize;
@@ -57,14 +78,17 @@ pub fn get_word_from_file_params(
     let filepath = uri.to_file_path();
     match filepath {
         Ok(file) => {
-            let file = File::open(file).unwrap_or_else(|_| panic!("Couldn't open file -> {}", uri));
+            let file = match File::open(file) {
+                Ok(opened) => opened,
+                Err(e) => return Err(anyhow!("Couldn't open file -> {uri} -- Error: {e}")),
+            };
             let buf_reader = std::io::BufReader::new(file);
 
             let line_conts = buf_reader.lines().nth(line).unwrap().unwrap();
             let (start, end) = find_word_at_pos(&line_conts, col, extra_chars);
             Ok(String::from(&line_conts[start..end]))
         }
-        Err(_) => Err(anyhow::anyhow!("filepath get error")),
+        Err(()) => Err(anyhow!("Filepath get error")),
     }
 }
 
@@ -74,6 +98,7 @@ pub fn get_word_from_file_params(
 /// valid word chars, in addition to the default alphanumeric and '_' chars
 // extra_chars is used when grabbing filenames from a document, as '.' isn't
 // normally considered a valid "word" char
+#[must_use]
 pub fn get_word_from_pos_params<'a>(
     doc: &'a FullTextDocument,
     pos_params: &TextDocumentPositionParams,
@@ -98,7 +123,8 @@ pub fn get_word_from_pos_params<'a>(
     &line_contents[word_start..word_end]
 }
 
-/// return a vector of #include directories
+/// Returns a vector of #include directories
+#[must_use]
 pub fn get_include_dirs() -> Vec<PathBuf> {
     let mut include_dirs = HashSet::new();
     // repeat "cpp" and "clang" so that each command can be run with
@@ -162,17 +188,22 @@ pub fn tree_sitter_logger(log_type: tree_sitter::LogType, message: &str) {
 }
 
 /// Convert an `lsp_types::TextDocumentContentChangeEvent` to a `tree_sitter::InputEdit`
+///
+/// # Errors
+///
+/// Returns `Err` if `change.range` is `None`, or if a `usize`->`u32` numeric conversion
+/// failed
 pub fn text_doc_change_to_ts_edit(
     change: &TextDocumentContentChangeEvent,
     doc: &FullTextDocument,
-) -> Result<InputEdit, &'static str> {
-    let range = change.range.ok_or("Invalid edit range")?;
+) -> Result<InputEdit> {
+    let range = change.range.ok_or(anyhow!("Invalid edit range"))?;
     let start = range.start;
     let end = range.end;
 
     let start_byte = doc.offset_at(start) as usize;
     let new_end_byte = start_byte + change.text.len();
-    let new_end_pos = doc.position_at(new_end_byte as u32);
+    let new_end_pos = doc.position_at(u32::try_from(new_end_byte)?);
 
     Ok(tree_sitter::InputEdit {
         start_byte,
@@ -193,15 +224,16 @@ pub fn text_doc_change_to_ts_edit(
     })
 }
 
-/// Given a NameTo_SomeItem_ map, returns a `Vec<CompletionItem>` for the items
+/// Given a `NameTo_SomeItem_` map, returns a `Vec<CompletionItem>` for the items
 /// contained within the map
+#[must_use]
 pub fn get_completes<T: Completable, U: ArchOrAssembler>(
     map: &HashMap<(U, &str), T>,
     kind: Option<CompletionItemKind>,
 ) -> Vec<CompletionItem> {
     map.iter()
         .map(|((_arch_or_asm, name), item_info)| {
-            let value = format!("{}", item_info);
+            let value = format!("{item_info}");
 
             CompletionItem {
                 label: (*name).to_string(),
@@ -216,6 +248,7 @@ pub fn get_completes<T: Completable, U: ArchOrAssembler>(
         .collect()
 }
 
+#[must_use]
 pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
     word: &str,
     file_word: &str,
@@ -257,22 +290,26 @@ fn lookup_hover_resp_by_arch<T: Hoverable>(
     map: &HashMap<(Arch, &str), T>,
 ) -> Option<Hover> {
     // switch over to vec?
-    let (x86_res, x86_64_res, z80_res) = search_for_hoverable_by_arch(word, map);
-    match (x86_res.is_some(), x86_64_res.is_some(), z80_res.is_some()) {
+    let (x86_resp, x86_64_resp, z80_resp) = search_for_hoverable_by_arch(word, map);
+    match (
+        x86_resp.is_some(),
+        x86_64_resp.is_some(),
+        z80_resp.is_some(),
+    ) {
         (true, _, _) | (_, true, _) | (_, _, true) => {
             let mut value = String::new();
-            if let Some(x86_res) = x86_res {
-                value += &format!("{}", x86_res);
+            if let Some(x86_resp) = x86_resp {
+                value += &format!("{x86_resp}");
             }
-            if let Some(x86_64_res) = x86_64_res {
+            if let Some(x86_64_resp) = x86_64_resp {
                 value += &format!(
                     "{}{}",
-                    if !value.is_empty() { "\n\n" } else { "" },
-                    x86_64_res
+                    if value.is_empty() { "" } else { "\n\n" },
+                    x86_64_resp
                 );
             }
-            if let Some(z80_res) = z80_res {
-                value += &format!("{}{}", if !value.is_empty() { "\n\n" } else { "" }, z80_res);
+            if let Some(z80_resp) = z80_resp {
+                value += &format!("{}{}", if value.is_empty() { "" } else { "\n\n" }, z80_resp);
             }
             Some(Hover {
                 contents: HoverContents::Markup(MarkupContent {
@@ -293,16 +330,20 @@ fn lookup_hover_resp_by_assembler<T: Hoverable>(
     word: &str,
     map: &HashMap<(Assembler, &str), T>,
 ) -> Option<Hover> {
-    let (gas_res, go_res) = search_for_hoverable_by_assembler(word, map);
+    let (gas_resp, go_resp) = search_for_hoverable_by_assembler(word, map);
 
-    match (gas_res.is_some(), go_res.is_some()) {
+    match (gas_resp.is_some(), go_resp.is_some()) {
         (true, _) | (_, true) => {
             let mut value = String::new();
-            if let Some(gas_res) = gas_res {
-                value += &format!("{}", gas_res);
+            if let Some(gas_resp) = gas_resp {
+                value += &format!("{gas_resp}");
             }
-            if let Some(go_res) = go_res {
-                value += &format!("{}{}", if gas_res.is_some() { "\n\n" } else { "" }, go_res);
+            if let Some(go_resp) = go_resp {
+                value += &format!(
+                    "{}{}",
+                    if gas_resp.is_some() { "\n\n" } else { "" },
+                    go_resp
+                );
             }
             Some(Hover {
                 contents: HoverContents::Markup(MarkupContent {
@@ -338,7 +379,7 @@ fn get_demangle_resp(word: &str) -> Option<Hover> {
 
 fn get_include_resp(filename: &str, include_dirs: &[PathBuf]) -> Option<Hover> {
     let mut paths = String::new();
-    for dir in include_dirs.iter() {
+    for dir in include_dirs {
         match std::fs::read_dir(dir) {
             Ok(dir_reader) => {
                 for file in dir_reader {
@@ -420,7 +461,11 @@ pub fn get_comp_resp(
 
     if let Some(ctx) = params.context.as_ref() {
         if ctx.trigger_kind == CompletionTriggerKind::TRIGGER_CHARACTER {
-            match ctx.trigger_character.as_ref().map(|s| s.as_ref()) {
+            match ctx
+                .trigger_character
+                .as_ref()
+                .map(std::convert::AsRef::as_ref)
+            {
                 // prepend GAS registers with "%"
                 Some("%") => {
                     return Some(CompletionList {
@@ -467,7 +512,7 @@ pub fn get_comp_resp(
 
         for match_ in matches_iter {
             let caps = match_.captures;
-            for cap in caps.iter() {
+            for cap in caps {
                 let arg_start = cap.node.range().start_point;
                 let arg_end = cap.node.range().end_point;
                 if cursor_matches!(cursor_line, cursor_char, arg_start, arg_end) {
@@ -606,7 +651,7 @@ pub fn get_document_symbols(
                     Some(children)
                 },
             };
-            res.push(doc)
+            res.push(doc);
         } else {
             let mut cursor = node.walk();
 
@@ -659,7 +704,7 @@ pub fn get_sig_help_resp(
         });
         let curr_doc = curr_doc.as_bytes();
 
-        // Instruction with any (or zero) argument(s)
+        // Instruction with any (including zero) argument(s)
         static QUERY_INSTR_ANY_ARGS: Lazy<tree_sitter::Query> = Lazy::new(|| {
             tree_sitter::Query::new(
                 tree_sitter_asm::language(),
@@ -682,14 +727,14 @@ pub fn get_sig_help_resp(
                     let (x86_info, x86_64_info, z80_info) =
                         search_for_hoverable_by_arch(instr_name, instr_info);
                     if let Some(sig) = x86_info {
-                        for form in sig.forms.iter() {
+                        for form in &sig.forms {
                             if let Some(ref gas_name) = form.gas_name {
                                 if instr_name.eq_ignore_ascii_case(gas_name) {
                                     if !has_x86 {
                                         value += "**x86**\n";
                                         has_x86 = true;
                                     }
-                                    value += &format!("{}\n", form);
+                                    value += &format!("{form}\n");
                                 }
                             } else if let Some(ref go_name) = form.go_name {
                                 if instr_name.eq_ignore_ascii_case(go_name) {
@@ -697,20 +742,20 @@ pub fn get_sig_help_resp(
                                         value += "**x86**\n";
                                         has_x86 = true;
                                     }
-                                    value += &format!("{}\n", form);
+                                    value += &format!("{form}\n");
                                 }
                             }
                         }
                     }
                     if let Some(sig) = x86_64_info {
-                        for form in sig.forms.iter() {
+                        for form in &sig.forms {
                             if let Some(ref gas_name) = form.gas_name {
                                 if instr_name.eq_ignore_ascii_case(gas_name) {
                                     if !has_x86_64 {
                                         value += "**x86_64**\n";
                                         has_x86_64 = true;
                                     }
-                                    value += &format!("{}\n", form);
+                                    value += &format!("{form}\n");
                                 }
                             } else if let Some(ref go_name) = form.go_name {
                                 if instr_name.eq_ignore_ascii_case(go_name) {
@@ -718,20 +763,20 @@ pub fn get_sig_help_resp(
                                         value += "**x86_64**\n";
                                         has_x86_64 = true;
                                     }
-                                    value += &format!("{}\n", form);
+                                    value += &format!("{form}\n");
                                 }
                             }
                         }
                     }
                     if let Some(sig) = z80_info {
-                        for form in sig.forms.iter() {
+                        for form in &sig.forms {
                             if let Some(ref z80_name) = form.z80_name {
                                 if instr_name.eq_ignore_ascii_case(z80_name) {
                                     if !has_z80 {
                                         value += "**z80**\n";
                                         has_z80 = true;
                                     }
-                                    value += &format!("{}\n", form);
+                                    value += &format!("{form}\n");
                                 }
                             }
                         }
@@ -779,8 +824,8 @@ pub fn get_goto_def_resp(
 
         let word = get_word_from_pos_params(curr_doc, &params.text_document_position_params, "");
 
-        for match_ in matches.into_iter() {
-            for cap in match_.captures.iter() {
+        for match_ in matches {
+            for cap in match_.captures {
                 let text = cap
                     .node
                     .utf8_text(doc.as_bytes())
@@ -840,8 +885,8 @@ pub fn get_ref_resp(
         let mut cursor = tree_sitter::QueryCursor::new();
         if params.context.include_declaration {
             let label_matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc.as_bytes());
-            for match_ in label_matches.into_iter() {
-                for cap in match_.captures.iter() {
+            for match_ in label_matches {
+                for cap in match_.captures {
                     let text = cap
                         .node
                         .utf8_text(doc.as_bytes())
@@ -852,8 +897,8 @@ pub fn get_ref_resp(
                     if word.eq(text) {
                         let start = lsp_pos_of_point(cap.node.start_position());
                         let end = lsp_pos_of_point(cap.node.end_position());
-                        // None of the LSP types implement the Hash trait, can't use a HashSet
-                        // to avoid duplicates
+                        // TODO: Use a Hashset here once lsptextdocument bumps its
+                        // dependency on lsp_types
                         if !refs.iter().any(|loc| loc.range.start == start) {
                             refs.push(Location {
                                 uri: uri.clone(),
@@ -866,8 +911,8 @@ pub fn get_ref_resp(
         }
 
         let word_matches = cursor.matches(&QUERY_WORD, tree.root_node(), doc.as_bytes());
-        for match_ in word_matches.into_iter() {
-            for cap in match_.captures.iter() {
+        for match_ in word_matches {
+            for cap in match_.captures {
                 let text = cap
                     .node
                     .utf8_text(doc.as_bytes())
@@ -878,8 +923,8 @@ pub fn get_ref_resp(
                 if word.eq(text) {
                     let start = lsp_pos_of_point(cap.node.start_position());
                     let end = lsp_pos_of_point(cap.node.end_position());
-                    // None of the LSP types implement the Hash trait, can't use a HashSet
-                    // to avoid duplicates
+                    // TODO: Use a Hashset here once lsptextdocument bumps its
+                    // dependency on lsp_types
                     if !refs.iter().any(|loc| loc.range.start == start) {
                         refs.push(Location {
                             uri: uri.clone(),
@@ -903,30 +948,31 @@ fn search_for_hoverable_by_arch<'a, T: Hoverable>(
     word: &'a str,
     map: &'a HashMap<(Arch, &str), T>,
 ) -> (Option<&'a T>, Option<&'a T>, Option<&'a T>) {
-    let x86_res = map.get(&(Arch::X86, word));
-    let x86_64_res = map.get(&(Arch::X86_64, word));
-    let z80_res = map.get(&(Arch::Z80, word));
+    let x86_resp = map.get(&(Arch::X86, word));
+    let x86_64_resp = map.get(&(Arch::X86_64, word));
+    let z80_resp = map.get(&(Arch::Z80, word));
 
-    (x86_res, x86_64_res, z80_res)
+    (x86_resp, x86_64_resp, z80_resp)
 }
 
 fn search_for_hoverable_by_assembler<'a, T: Hoverable>(
     word: &'a str,
     map: &'a HashMap<(Assembler, &str), T>,
 ) -> (Option<&'a T>, Option<&'a T>) {
-    let gas_res = map.get(&(Assembler::Gas, word));
-    let go_res = map.get(&(Assembler::Go, word));
+    let gas_resp = map.get(&(Assembler::Gas, word));
+    let go_resp = map.get(&(Assembler::Go, word));
 
-    (gas_res, go_res)
+    (gas_resp, go_resp)
 }
 
 /// Searches for global config in ~/.config/asm-lsp, then the project's directory
 /// Project specific configs will override global configs
+#[must_use]
 pub fn get_target_config(params: &InitializeParams) -> TargetConfig {
     match (get_global_config(), get_project_config(params)) {
         (_, Some(proj_cfg)) => proj_cfg,
         (Some(global_cfg), None) => global_cfg,
-        (None, None) => TargetConfig::default(), // default is to turn everything on
+        (None, None) => TargetConfig::default(), // default is to turn every non-z80 feature on
     }
 }
 
@@ -976,7 +1022,7 @@ fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
     if let Some(folders) = &params.workspace_folders {
         // if there's multiple, just visit in order until we find a valid folder
         let mut path = None;
-        for folder in folders.iter() {
+        for folder in folders {
             if let Ok(parsed) = Url::parse(folder.uri.as_str()) {
                 if let Ok(parsed_path) = parsed.to_file_path() {
                     path = Some(parsed_path);
@@ -992,7 +1038,7 @@ fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
     if root_path.is_none() {
         if let Some(root_uri) = &params.root_uri {
             if let Ok(path) = root_uri.to_file_path() {
-                root_path = Some(path)
+                root_path = Some(path);
             }
         }
     };
@@ -1009,7 +1055,7 @@ fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
                 }
                 Err(e) => {
                     error!("Failed to parse project config file {path_s} - Error: {e}\n");
-                } // if there's an error we fall through to check for a global config
+                } // if there's an error we fall through to check for a global config in the caller
             }
         }
     }
@@ -1017,6 +1063,7 @@ fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
     None
 }
 
+#[must_use]
 pub fn instr_filter_targets(instr: &Instruction, config: &TargetConfig) -> Instruction {
     let mut instr = instr.clone();
 

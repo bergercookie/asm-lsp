@@ -1,30 +1,42 @@
 use std::path::PathBuf;
 
-use asm_lsp::*;
+use asm_lsp::{
+    get_comp_resp, get_completes, get_document_symbols, get_goto_def_resp, get_hover_resp,
+    get_include_dirs, get_ref_resp, get_sig_help_resp, get_target_config, get_word_from_pos_params,
+    instr_filter_targets, populate_directives, populate_instructions,
+    populate_name_to_directive_map, populate_name_to_instruction_map,
+    populate_name_to_register_map, populate_registers, text_doc_change_to_ts_edit,
+    tree_sitter_logger, Arch, Assembler, NameToDirectiveMap, NameToInstructionMap,
+    NameToRegisterMap,
+};
 
-use log::{error, info};
 use lsp_types::notification::{DidChangeTextDocument, DidOpenTextDocument};
 use lsp_types::request::{
     Completion, DocumentSymbolRequest, GotoDefinition, HoverRequest, References,
     SignatureHelpRequest,
 };
-use lsp_types::*;
+use lsp_types::{
+    CompletionItem, CompletionItemKind, CompletionOptions, CompletionOptionsCompletionItem,
+    DocumentSymbolResponse, HoverProviderCapability, InitializeParams, OneOf, PositionEncodingKind,
+    ServerCapabilities, SignatureHelpOptions, TextDocumentSyncCapability, TextDocumentSyncKind,
+    WorkDoneProgressOptions,
+};
 
-use crate::lsp::{get_document_symbols, get_target_config, instr_filter_targets};
-use lsp_textdocument::FullTextDocument;
-
+use anyhow::Result;
+use log::{error, info};
 use lsp_server::{Connection, Message, Notification, Request, RequestId, Response};
+use lsp_textdocument::FullTextDocument;
 use serde_json::json;
 
 // main -------------------------------------------------------------------------------------------
-pub fn main() -> anyhow::Result<()> {
+pub fn main() -> Result<()> {
     // initialisation -----------------------------------------------------------------------------
     // Set up logging. Because `stdio_transport` gets a lock on stdout and stdin, we must have our
     // logging only write out to stderr.
     flexi_logger::Logger::try_with_str("info")?.start()?;
 
     // LSP server initialisation ------------------------------------------------------------------
-    info!("Starting LSP server...");
+    info!("Starting asm_lsp...");
 
     // Create the transport
     let (connection, io_threads) = Connection::stdio();
@@ -205,7 +217,7 @@ pub fn main() -> anyhow::Result<()> {
     io_threads.join()?;
 
     // Shut down gracefully.
-    info!("Shutting down LSP server");
+    info!("Shutting down asm_lsp");
     Ok(())
 }
 
@@ -220,7 +232,7 @@ fn main_loop(
     directive_completion_items: &[CompletionItem],
     register_completion_items: &[CompletionItem],
     include_dirs: &[PathBuf],
-) -> anyhow::Result<()> {
+) -> Result<()> {
     let _params: InitializeParams = serde_json::from_value(params).unwrap();
     let mut curr_doc: Option<FullTextDocument> = None;
     let mut parser = tree_sitter::Parser::new();
@@ -228,7 +240,13 @@ fn main_loop(
     parser.set_logger(Some(Box::new(tree_sitter_logger)));
     parser.set_language(tree_sitter_asm::language())?;
 
-    info!("Starting LSP loop...");
+    let mut empty_resp = Response {
+        id: RequestId::from(0),
+        result: Some(json!("")),
+        error: None,
+    };
+
+    info!("Starting asm_lsp loop...");
     for msg in &connection.receiver {
         match msg {
             Message::Request(req) => {
@@ -236,12 +254,6 @@ fn main_loop(
                     return Ok(());
                 } else if let Ok((id, params)) = cast_req::<HoverRequest>(req.clone()) {
                     // HoverRequest ---------------------------------------------------------------
-                    let res = Response {
-                        id: id.clone(),
-                        result: Some(json!("")),
-                        error: None,
-                    };
-
                     let (word, file_word) = if let Some(ref doc) = curr_doc {
                         (
                             // get the word under the cursor
@@ -258,12 +270,12 @@ fn main_loop(
                             ),
                         )
                     } else {
-                        ("", "")
+                        continue;
                     };
 
                     // get documentation ------------------------------------------------------
                     // format response
-                    let hover_res = get_hover_resp(
+                    let hover_resp = get_hover_resp(
                         word,
                         file_word,
                         names_to_instructions,
@@ -271,31 +283,25 @@ fn main_loop(
                         names_to_directives,
                         include_dirs,
                     );
-                    match hover_res {
-                        Some(_) => {
-                            let result = serde_json::to_value(&hover_res).unwrap();
-                            let result = Response {
-                                id: id.clone(),
-                                result: Some(result),
-                                error: None,
-                            };
-                            connection.sender.send(Message::Response(result))?;
-                        }
-                        None => {
-                            // don't know of this word
-                            connection.sender.send(Message::Response(res.clone()))?;
-                        }
+                    if hover_resp.is_some() {
+                        let result = serde_json::to_value(&hover_resp).unwrap();
+                        let result = Response {
+                            id: id.clone(),
+                            result: Some(result),
+                            error: None,
+                        };
+                        connection.sender.send(Message::Response(result))?;
+                    } else {
+                        empty_resp.id = id.clone();
+                        connection
+                            .sender
+                            .send(Message::Response(empty_resp.clone()))?;
                     }
                 } else if let Ok((id, params)) = cast_req::<Completion>(req.clone()) {
                     // CompletionRequest ---------------------------------------------------------------
-                    let res = Response {
-                        id: id.clone(),
-                        result: Some(json!("")),
-                        error: None,
-                    };
                     // get suggestions ------------------------------------------------------
                     if let Some(ref doc) = curr_doc {
-                        let comp_res = get_comp_resp(
+                        let comp_resp = get_comp_resp(
                             doc.get_content(None),
                             &mut parser,
                             &mut tree,
@@ -304,57 +310,41 @@ fn main_loop(
                             directive_completion_items,
                             register_completion_items,
                         );
-                        match comp_res {
-                            Some(_) => {
-                                let result = serde_json::to_value(&comp_res).unwrap();
-                                let result = Response {
-                                    id: id.clone(),
-                                    result: Some(result),
-                                    error: None,
-                                };
-                                connection.sender.send(Message::Response(result))?;
-                            }
-                            None => {
-                                // don't know what to suggest
-                                connection.sender.send(Message::Response(res.clone()))?;
-                            }
+                        if comp_resp.is_some() {
+                            let result = serde_json::to_value(&comp_resp).unwrap();
+                            let result = Response {
+                                id: id.clone(),
+                                result: Some(result),
+                                error: None,
+                            };
+                            connection.sender.send(Message::Response(result))?;
+                            continue;
                         }
-                    } else {
-                        // don't know what to suggest
-                        connection.sender.send(Message::Response(res.clone()))?;
                     }
+                    empty_resp.id = id.clone();
+                    connection
+                        .sender
+                        .send(Message::Response(empty_resp.clone()))?;
                 } else if let Ok((id, params)) = cast_req::<GotoDefinition>(req.clone()) {
-                    let res = Response {
-                        id: id.clone(),
-                        result: None,
-                        error: None,
-                    };
                     if let Some(ref doc) = curr_doc {
-                        let def_res = get_goto_def_resp(doc, &mut parser, &mut tree, &params);
-                        match def_res {
-                            Some(_) => {
-                                let result = serde_json::to_value(&def_res).unwrap();
-                                let result = Response {
-                                    id: id.clone(),
-                                    result: Some(result),
-                                    error: None,
-                                };
-                                connection.sender.send(Message::Response(result))?;
-                            }
-                            None => {
-                                // don't know what to suggest
-                                connection.sender.send(Message::Response(res.clone()))?;
-                            }
+                        let def_resp = get_goto_def_resp(doc, &mut parser, &mut tree, &params);
+                        if def_resp.is_some() {
+                            let result = serde_json::to_value(&def_resp).unwrap();
+                            let result = Response {
+                                id: id.clone(),
+                                result: Some(result),
+                                error: None,
+                            };
+                            connection.sender.send(Message::Response(result))?;
+                        } else {
+                            empty_resp.id = id.clone();
+                            connection
+                                .sender
+                                .send(Message::Response(empty_resp.clone()))?;
                         }
                     }
                 } else if let Ok((id, params)) = cast_req::<DocumentSymbolRequest>(req.clone()) {
                     // DocumentSymbolRequest ---------------------------------------------------------------
-                    let res = Response {
-                        id: id.clone(),
-                        result: Some(json!("")),
-                        error: None,
-                    };
-                    // get document symbols ------------------------------------------------------
                     if let Some(ref doc) = curr_doc {
                         let symbols = get_document_symbols(
                             doc.get_content(None),
@@ -362,30 +352,26 @@ fn main_loop(
                             &mut tree,
                             &params,
                         );
-                        match symbols {
-                            Some(symbols) => {
-                                let resp = DocumentSymbolResponse::Nested(symbols);
-                                let result = serde_json::to_value(&resp).unwrap();
-                                let result = Response {
-                                    id: id.clone(),
-                                    result: Some(result),
-                                    error: None,
-                                };
-                                connection.sender.send(Message::Response(result))?;
-                            }
-                            None => {
-                                // don't know what to reply
-                                connection.sender.send(Message::Response(res.clone()))?;
-                            }
+                        if let Some(symbols) = symbols {
+                            let resp = DocumentSymbolResponse::Nested(symbols);
+                            let result = serde_json::to_value(&resp).unwrap();
+                            let result = Response {
+                                id: id.clone(),
+                                result: Some(result),
+                                error: None,
+                            };
+                            connection.sender.send(Message::Response(result))?;
+                            continue;
                         }
-                    } else {
-                        connection.sender.send(Message::Response(res.clone()))?;
                     }
+                    empty_resp.id = id.clone();
+                    connection
+                        .sender
+                        .send(Message::Response(empty_resp.clone()))?;
                 } else if let Ok((id, params)) = cast_req::<SignatureHelpRequest>(req.clone()) {
                     // SignatureHelp ---------------------------------------------------------------
-                    // get signatures ------------------------------------------------------
                     if let Some(ref doc) = curr_doc {
-                        let sig_res = get_sig_help_resp(
+                        let sig_resp = get_sig_help_resp(
                             doc.get_content(None),
                             &mut parser,
                             &params,
@@ -393,7 +379,7 @@ fn main_loop(
                             names_to_instructions,
                         );
 
-                        if let Some(sig) = sig_res {
+                        if let Some(sig) = sig_resp {
                             let result = serde_json::to_value(&sig).unwrap();
 
                             let result = Response {
@@ -402,15 +388,13 @@ fn main_loop(
                                 error: None,
                             };
                             connection.sender.send(Message::Response(result.clone()))?;
+                            continue;
                         }
-                    } else {
-                        let res = Response {
-                            id: id.clone(),
-                            result: Some(json!("")),
-                            error: None,
-                        };
-                        connection.sender.send(Message::Response(res.clone()))?;
                     }
+                    empty_resp.id = id.clone();
+                    connection
+                        .sender
+                        .send(Message::Response(empty_resp.clone()))?;
                 } else if let Ok((id, params)) = cast_req::<References>(req.clone()) {
                     if let Some(ref doc) = curr_doc {
                         let ref_resp = get_ref_resp(doc, &mut parser, &mut tree, &params);
@@ -423,15 +407,13 @@ fn main_loop(
                                 error: None,
                             };
                             connection.sender.send(Message::Response(result.clone()))?;
-                        } else {
-                            let res = Response {
-                                id: id.clone(),
-                                result: None,
-                                error: None,
-                            };
-                            connection.sender.send(Message::Response(res.clone()))?;
+                            continue;
                         }
                     }
+                    empty_resp.id = id.clone();
+                    connection
+                        .sender
+                        .send(Message::Response(empty_resp.clone()))?;
                 } else {
                     error!("Invalid request format -> {:#?}", req);
                 }
@@ -450,7 +432,7 @@ fn main_loop(
                         doc.update(&params.content_changes, params.text_document.version);
                         // Update the TS tree
                         if let Some(ref mut curr_tree) = tree {
-                            for change in params.content_changes.iter() {
+                            for change in &params.content_changes {
                                 match text_doc_change_to_ts_edit(change, doc) {
                                     Ok(edit) => {
                                         curr_tree.edit(&edit);
@@ -470,7 +452,7 @@ fn main_loop(
     Ok(())
 }
 
-fn cast_req<R>(req: Request) -> anyhow::Result<(RequestId, R::Params)>
+fn cast_req<R>(req: Request) -> Result<(RequestId, R::Params)>
 where
     R: lsp_types::request::Request,
     R::Params: serde::de::DeserializeOwned,
@@ -482,7 +464,7 @@ where
     }
 }
 
-fn cast_notif<R>(notif: Notification) -> anyhow::Result<R::Params>
+fn cast_notif<R>(notif: Notification) -> Result<R::Params>
 where
     R: lsp_types::notification::Notification,
     R::Params: serde::de::DeserializeOwned,

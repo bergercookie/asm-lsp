@@ -1,5 +1,6 @@
-use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fmt::Display, str::FromStr};
+
+use serde::{Deserialize, Serialize};
 use strum_macros::{AsRefStr, Display, EnumString};
 
 // Instruction ------------------------------------------------------------------------------------
@@ -50,23 +51,23 @@ impl std::fmt::Display for Instruction {
 
         // instruction forms
         let instruction_form_strs: Vec<String> =
-            self.forms.iter().map(|f| format!("{}", f)).collect();
-        for item in instruction_form_strs.iter() {
+            self.forms.iter().map(|f| format!("{f}")).collect();
+        for item in &instruction_form_strs {
             v.push(item.as_str());
         }
 
         // url
         let more_info: String;
         match &self.url {
-            None => {}
-            Some(url_) => {
-                more_info = format!("\nMore info: {}", url_);
+            Some(url) => {
+                more_info = format!("\nMore info: {url}");
                 v.push(&more_info);
             }
+            None => {}
         }
 
         let s = v.join("\n");
-        write!(f, "{}", s)?;
+        write!(f, "{s}")?;
         Ok(())
     }
 }
@@ -78,6 +79,7 @@ impl<'own> Instruction {
     }
 
     /// Get the primary names
+    #[must_use]
     pub fn get_primary_names(&'own self) -> Vec<&'own str> {
         let mut names = Vec::<&'own str>::new();
         names.push(&self.name);
@@ -89,6 +91,7 @@ impl<'own> Instruction {
     }
 
     /// Get the names of all the associated commands (includes Go and Gas forms)
+    #[must_use]
     pub fn get_associated_names(&'own self) -> Vec<&'own str> {
         let mut names = Vec::<&'own str>::new();
 
@@ -132,13 +135,13 @@ impl std::fmt::Display for InstructionForm {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut s = String::new();
         if let Some(val) = &self.gas_name {
-            s += &format!("*GAS*: {} | ", val);
+            s += &format!("*GAS*: {val} | ");
         }
         if let Some(val) = &self.go_name {
-            s += &format!("*GO*: {} | ", val);
+            s += &format!("*GO*: {val} | ");
         }
         if let Some(val) = &self.z80_form {
-            s += &format!("*Z80*: {} | ", val);
+            s += &format!("*Z80*: {val} | ");
         }
 
         if let Some(val) = &self.mmx_mode {
@@ -149,9 +152,9 @@ impl std::fmt::Display for InstructionForm {
         }
         if let Some(val) = &self.z80_opcode {
             if val.contains(',') {
-                s += &format!("*Opcodes*: {} | ", val);
+                s += &format!("*Opcodes*: {val} | ");
             } else {
-                s += &format!("*Opcode*: {} | ", val);
+                s += &format!("*Opcode*: {val} | ");
             }
         }
 
@@ -175,13 +178,13 @@ impl std::fmt::Display for InstructionForm {
                 .map(|op| {
                     let mut s = format!("  + {:<8}", format!("[{}]", op.type_.as_ref()));
                     if let Some(input) = op.input {
-                        s += &format!(" input = {:<5} ", input)
+                        s += &format!(" input = {input:<5} ");
                     }
                     if let Some(output) = op.output {
-                        s += &format!(" output = {:<5}", output)
+                        s += &format!(" output = {output:<5}");
                     }
                     if let Some(extended_size) = op.extended_size {
-                        s += &format!(" extended-size = {}", extended_size)
+                        s += &format!(" extended-size = {extended_size}");
                     }
 
                     s.trim_end().to_owned()
@@ -195,14 +198,14 @@ impl std::fmt::Display for InstructionForm {
         s += &operands_str;
 
         if let Some(ref timing) = self.z80_timing {
-            s += &format!("\n  + {}", timing);
+            s += &format!("\n  + {timing}");
         }
 
-        for url in self.urls.iter() {
-            s += &format!("\n  + More info: {}\n", url);
+        for url in &self.urls {
+            s += &format!("\n  + More info: {url}\n");
         }
 
-        write!(f, "{}", s)?;
+        write!(f, "{s}")?;
         Ok(())
     }
 }
@@ -221,7 +224,7 @@ impl Display for Z80TimingValue {
                 write!(f, "?")?;
             }
             Self::Val(val) => {
-                write!(f, "{}", val)?;
+                write!(f, "{val}")?;
             }
         }
 
@@ -260,13 +263,13 @@ impl Display for Z80TimingInfo {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Z80TimingInfo::OneNum(num) => {
-                write!(f, "{}", num)?;
+                write!(f, "{num}")?;
             }
             Z80TimingInfo::TwoNum((num1, num2)) => {
-                write!(f, "{}/{}", num1, num2)?;
+                write!(f, "{num1}/{num2}")?;
             }
             Z80TimingInfo::ThreeNum((num1, num2, num3)) => {
-                write!(f, "{}/{}/{}", num1, num2, num3)?;
+                write!(f, "{num1}/{num2}/{num3}")?;
             }
         }
         Ok(())
@@ -282,7 +285,7 @@ impl FromStr for Z80TimingInfo {
             return Err(String::from("Cannot have an empty num value"));
         }
         let pieces: Vec<Result<Z80TimingValue, std::num::ParseIntError>> =
-            s.split('/').map(|x| x.parse::<Z80TimingValue>()).collect();
+            s.split('/').map(str::parse).collect();
 
         match pieces.len() {
             1 => match pieces[0] {
@@ -383,8 +386,8 @@ impl std::fmt::Display for Directive {
 
         // signature(s)
         let mut sigs = String::new();
-        for sig in self.signatures.iter() {
-            sigs += &format!("- {}\n", sig);
+        for sig in &self.signatures {
+            sigs += &format!("- {sig}\n");
         }
         v.push(&sigs);
 
@@ -393,13 +396,13 @@ impl std::fmt::Display for Directive {
         match &self.url {
             None => {}
             Some(url_) => {
-                more_info = format!("\nMore info: {}", url_);
+                more_info = format!("\nMore info: {url_}");
                 v.push(&more_info);
             }
         }
 
         let s = v.join("\n");
-        write!(f, "{}", s)?;
+        write!(f, "{s}")?;
         Ok(())
     }
 }
@@ -440,6 +443,7 @@ pub enum Z80Register16Bit {
 
 impl<'own> Directive {
     /// get the names of all the associated directives
+    #[must_use]
     pub fn get_associated_names(&'own self) -> Vec<&'own str> {
         let mut names = Vec::<&'own str>::new();
         names.push(&self.name);
@@ -510,13 +514,13 @@ impl std::fmt::Display for Register {
 
         // Register Type
         if let Some(reg_type_) = &self.reg_type {
-            let reg_type = format!("Type: {}", reg_type_);
+            let reg_type = format!("Type: {reg_type_}");
             v.push(reg_type);
         }
 
         // Register Width
         if let Some(reg_width_) = self.width {
-            let reg_width = format!("Width: {}", reg_width_);
+            let reg_width = format!("Width: {reg_width_}");
             v.push(reg_width);
         }
 
@@ -528,21 +532,21 @@ impl std::fmt::Display for Register {
             let flags: Vec<String> = self
                 .flag_info
                 .iter()
-                .map(|flag| format!("{}", flag))
+                .map(|flag| format!("{flag}"))
                 .collect();
-            for flag in flags.iter() {
+            for flag in &flags {
                 v.push(flag.clone());
             }
         }
 
         // TODO: URL support
         if let Some(url_) = &self.url {
-            let more_info = format!("\nMore info: {}", url_);
+            let more_info = format!("\nMore info: {url_}");
             v.push(more_info);
         }
 
         let s = v.join("\n");
-        write!(f, "{}", s)?;
+        write!(f, "{s}")?;
         Ok(())
     }
 }
@@ -554,6 +558,7 @@ impl<'own> Register {
     }
 
     /// get the names of all the associated registers
+    #[must_use]
     pub fn get_associated_names(&'own self) -> Vec<&'own str> {
         let mut names = Vec::<&'own str>::new();
         names.push(&self.name);
@@ -575,11 +580,8 @@ pub type NameToRegisterMap<'register> = HashMap<(Arch, &'register str), &'regist
 pub type NameToDirectiveMap<'directive> =
     HashMap<(Assembler, &'directive str), &'directive Directive>;
 
-// Define a trait for types we display on Hover Requests so we can avoid some duplicate code
 pub trait Hoverable: Display + Clone + Copy {}
-// Define a trait for types we display on Completion Requests so we can avoid some duplicate code
 pub trait Completable: Display {}
-// Define a trait for the enums we use to distinguish between different Architectures and Assemblers
 pub trait ArchOrAssembler {}
 
 #[derive(Debug, Clone, EnumString, AsRefStr)]
@@ -690,7 +692,7 @@ impl std::fmt::Display for RegisterBitInfo {
             s += &format!(", Long Mode: {}", self.long_mode);
         }
 
-        write!(f, "{}", s)?;
+        write!(f, "{s}")?;
         Ok(())
     }
 }

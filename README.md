@@ -7,7 +7,7 @@
 
 Provide hovering, autocompletion, signature help, go to definition, and view
 references for assembly files written in the GAS/NASM or GO assembly flavors. It
-supports assembly files for the x86 or x86_64 instruction sets.
+supports assembly files for the x86, x86_64, and z80 instruction sets.
 
 This tool can serve as reference when reading the assembly output of a program.
 This way you can query what each command exactly does and deliberate about
@@ -63,7 +63,7 @@ z80 = false
 
 The lsp searches for a `.git` directory to locate the root of your project.
 Please be sure to run `git init` if your project is not already configured as a
-repository.
+git repository.
 
 ## Demos / Features Documentation
 

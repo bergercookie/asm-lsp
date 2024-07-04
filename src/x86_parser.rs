@@ -1,6 +1,17 @@
-use crate::types::*;
+use std::collections::HashMap;
+use std::env::args;
+use std::fs;
+use std::io::Write;
+use std::path::PathBuf;
+use std::str::{self, FromStr};
 
-use anyhow::anyhow;
+use crate::types::{
+    Arch, Assembler, Directive, Instruction, InstructionForm, MMXMode, NameToDirectiveMap,
+    NameToInstructionMap, NameToRegisterMap, Operand, OperandType, Register, RegisterBitInfo,
+    RegisterType, RegisterWidth, XMMMode, Z80Timing, Z80TimingInfo, ISA,
+};
+
+use anyhow::{anyhow, Result};
 use log::{debug, error, info, warn};
 use quick_xml::escape::unescape;
 use quick_xml::events::attributes::Attribute;
@@ -9,13 +20,6 @@ use quick_xml::name::QName;
 use quick_xml::Reader;
 use regex::Regex;
 use reqwest;
-use std::collections::HashMap;
-use std::env::args;
-use std::fs;
-use std::io::Write;
-use std::path::PathBuf;
-use std::str;
-use std::str::FromStr;
 use url_escape::encode_www_form_urlencoded;
 
 /// Parse the provided XML contents and return a vector of all the instructions based on that.
@@ -23,7 +27,17 @@ use url_escape::encode_www_form_urlencoded;
 ///
 /// Current function assumes that the XML file is already read and that it's been given a reference
 /// to its contents (`&str`).
-pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instruction>> {
+///
+/// # Errors
+///
+/// This function is highly specialized to parse a handful of files and will panic or return
+/// `Err` for most mal-formed inputs
+///
+/// # Panics
+///
+/// This function is highly specialized to parse a handful of files and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
     // initialise the instruction set
     let mut instructions_map = HashMap::<String, Instruction>::new();
 
@@ -35,7 +49,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
     let mut curr_instruction_form = InstructionForm::default();
     let mut arch: Option<Arch> = None;
 
-    debug!("Parsing XML contents...");
+    debug!("Parsing instruction XML contents...");
     loop {
         match reader.read_event() {
             // start event ------------------------------------------------------------------------
@@ -47,6 +61,8 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                             if let Ok("name") = str::from_utf8(key.into_inner()) {
                                 arch = Arch::from_str(unsafe { str::from_utf8_unchecked(&value) })
                                     .ok();
+                            } else {
+                                warn!("Failed to parse architecture name");
                             }
                         }
                     }
@@ -59,16 +75,17 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
                             match str::from_utf8(key.into_inner()).unwrap() {
-                                "name" => unsafe {
-                                    let name = String::from(str::from_utf8_unchecked(&value));
+                                "name" => {
+                                    let name =
+                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
                                     curr_instruction.alt_names.push(name.to_uppercase());
                                     curr_instruction.alt_names.push(name.to_lowercase());
                                     curr_instruction.name = name;
-                                },
-                                "summary" => unsafe {
+                                }
+                                "summary" => {
                                     curr_instruction.summary =
-                                        String::from(str::from_utf8_unchecked(&value));
-                                },
+                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                }
                                 _ => {}
                             }
                         }
@@ -91,62 +108,67 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
                             match str::from_utf8(key.into_inner()).unwrap() {
-                                "gas-name" => unsafe {
-                                    curr_instruction_form.gas_name =
-                                        Some(String::from(str::from_utf8_unchecked(&value)));
-                                },
-                                "go-name" => unsafe {
-                                    curr_instruction_form.go_name =
-                                        Some(String::from(str::from_utf8_unchecked(&value)));
-                                },
-                                "mmx-mode" => unsafe {
+                                "gas-name" => {
+                                    curr_instruction_form.gas_name = Some(String::from(unsafe {
+                                        str::from_utf8_unchecked(&value)
+                                    }));
+                                }
+                                "go-name" => {
+                                    curr_instruction_form.go_name = Some(String::from(unsafe {
+                                        str::from_utf8_unchecked(&value)
+                                    }));
+                                }
+                                "mmx-mode" => {
                                     let value_ = value.as_ref();
                                     curr_instruction_form.mmx_mode =
-                                        Some(MMXMode::from_str(str::from_utf8_unchecked(value_))?);
-                                },
-                                "xmm-mode" => unsafe {
+                                        Some(MMXMode::from_str(unsafe {
+                                            str::from_utf8_unchecked(value_)
+                                        })?);
+                                }
+                                "xmm-mode" => {
                                     let value_ = value.as_ref();
                                     curr_instruction_form.xmm_mode =
-                                        Some(XMMMode::from_str(str::from_utf8_unchecked(value_))?);
-                                },
+                                        Some(XMMMode::from_str(unsafe {
+                                            str::from_utf8_unchecked(value_)
+                                        })?);
+                                }
                                 "cancelling-inputs" => match str::from_utf8(&value).unwrap() {
                                     "true" => curr_instruction_form.cancelling_inputs = Some(true),
                                     "false" => {
-                                        curr_instruction_form.cancelling_inputs = Some(false)
+                                        curr_instruction_form.cancelling_inputs = Some(false);
                                     }
-                                    _ => {
+                                    val => {
                                         return Err(anyhow!(
-                                            "Unknown value for XML attribute {}",
-                                            "cancelling_inputs"
-                                        ))
+                                            "Unknown value '{val}' for XML attribute cancelling inputs"
+                                        ));
                                     }
                                 },
                                 "nacl-version" => {
                                     curr_instruction_form.nacl_version =
-                                        value.as_ref().first().cloned();
+                                        value.as_ref().first().copied();
                                 }
                                 "nacl-zero-extends-outputs" => {
                                     match str::from_utf8(&value).unwrap() {
                                         "true" => {
                                             curr_instruction_form.nacl_zero_extends_outputs =
-                                                Some(true)
+                                                Some(true);
                                         }
                                         "false" => {
                                             curr_instruction_form.nacl_zero_extends_outputs =
-                                                Some(false)
+                                                Some(false);
                                         }
-                                        _ => {
+                                        val => {
                                             return Err(anyhow!(
-                                                "Unknown value for XML attribute {}",
-                                                "nacl-zero-extends-outputs"
-                                            ))
+                                                "Unknown value '{val}' for XML attribute nacl-zero-extends-outputs",
+                                            ));
                                         }
                                     }
                                 }
-                                "z80name" => unsafe {
-                                    curr_instruction_form.z80_name =
-                                        Some(String::from(str::from_utf8_unchecked(&value)));
-                                },
+                                "z80name" => {
+                                    curr_instruction_form.z80_name = Some(String::from(unsafe {
+                                        str::from_utf8_unchecked(&value)
+                                    }));
+                                }
                                 "form" => {
                                     let value_ = unsafe { str::from_utf8_unchecked(&value) };
                                     curr_instruction_form.urls.push(format!(
@@ -174,7 +196,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                             }
                         }
                     }
-                    _ => (), // unknown event
+                    _ => {} // unknown event
                 }
             }
             Ok(Event::Empty(ref e)) => {
@@ -183,16 +205,18 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
                             if str::from_utf8(key.into_inner()).unwrap() == "id" {
-                                unsafe {
-                                    curr_instruction_form.isa = Some(
-                                        ISA::from_str(str::from_utf8_unchecked(value.as_ref()))
+                                {
+                                    curr_instruction_form.isa =
+                                        Some(
+                                            ISA::from_str(unsafe {
+                                                str::from_utf8_unchecked(value.as_ref())
+                                            })
                                             .unwrap_or_else(|_| {
-                                                panic!(
-                                                    "Unexpected ISA variant - {}",
+                                                panic!("Unexpected ISA variant - {}", unsafe {
                                                     str::from_utf8_unchecked(&value)
-                                                )
+                                                })
                                             }),
-                                    )
+                                        );
                                 }
                             }
                         }
@@ -232,16 +256,16 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                                         str::from_utf8(value.as_ref()).unwrap().parse::<usize>()?,
                                     );
                                 }
-                                _ => (), // unknown event
+                                _ => {} // unknown event
                             }
                         }
 
                         curr_instruction_form.operands.push(Operand {
                             type_,
-                            extended_size,
                             input,
                             output,
-                        })
+                            extended_size,
+                        });
                     }
                     QName(b"TimingZ80") => {
                         for attr in e.attributes() {
@@ -260,7 +284,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                                     curr_instruction_form.z80_timing = Some(Z80Timing {
                                         z80,
                                         ..Default::default()
-                                    })
+                                    });
                                 }
                             }
                         }
@@ -282,7 +306,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                                     curr_instruction_form.z80_timing = Some(Z80Timing {
                                         z80_plus_m1,
                                         ..Default::default()
-                                    })
+                                    });
                                 }
                             }
                         }
@@ -304,7 +328,7 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                                     curr_instruction_form.z80_timing = Some(Z80Timing {
                                         r800,
                                         ..Default::default()
-                                    })
+                                    });
                                 }
                             }
                         }
@@ -326,12 +350,12 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                                     curr_instruction_form.z80_timing = Some(Z80Timing {
                                         r800_plus_wait,
                                         ..Default::default()
-                                    })
+                                    });
                                 }
                             }
                         }
                     }
-                    _ => (), // unknown event
+                    _ => {} // unknown event
                 }
             }
             // end event --------------------------------------------------------------------------
@@ -345,12 +369,12 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
                     QName(b"InstructionForm") => {
                         curr_instruction.push_form(curr_instruction_form.clone());
                     }
-                    _ => (), // unknown event
+                    _ => {} // unknown event
                 }
             }
             Ok(Event::Eof) => break,
             Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
-            _ => (), // rest of events that we don't consider
+            _ => {} // rest of events that we don't consider
         }
     }
 
@@ -374,9 +398,8 @@ pub fn populate_instructions(xml_contents: &str) -> anyhow::Result<Vec<Instructi
             let instruction_name = caps.get(2).map_or("", |m| m.as_str());
 
             // add URL to the corresponding instruction
-            match instructions_map.get_mut(instruction_name) {
-                None => (), // key not found
-                Some(instruction) => instruction.url = Some(x86_online_docs.clone() + url_suffix),
+            if let Some(instruction) = instructions_map.get_mut(instruction_name) {
+                instruction.url = Some(x86_online_docs.clone() + url_suffix);
             }
         }
     }
@@ -426,13 +449,13 @@ pub fn populate_name_to_instruction_map<'instruction>(
     instructions: &'instruction Vec<Instruction>,
     names_to_instructions: &mut NameToInstructionMap<'instruction>,
 ) {
-    // Add the true names first
+    // Add the "true" names first
     for instruction in instructions {
         for name in &instruction.get_primary_names() {
             names_to_instructions.insert((arch, name), instruction);
         }
     }
-    // then add alternate form names, being careful not to overwrite existing entries
+    // Add alternate form names next, ensuring we don't overwrite existing entries
     for instruction in instructions {
         for name in &instruction.get_associated_names() {
             names_to_instructions
@@ -447,7 +470,17 @@ pub fn populate_name_to_instruction_map<'instruction>(
 ///
 /// Current function assumes that the XML file is already read and that it's been given a reference
 /// to its contents (`&str`).
-pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
+///
+/// # Errors
+///
+/// This function is highly specialized to parse a handful of files and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+///
+/// # Panics
+///
+/// This function is highly specialized to parse a handful of files and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
     let mut registers_map = HashMap::<String, Register>::new();
 
     // iterate through the XML --------------------------------------------------------------------
@@ -458,7 +491,7 @@ pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
     let mut curr_bit_flag = RegisterBitInfo::default();
     let mut arch: Option<Arch> = None;
 
-    debug!("Parsing XML contents...");
+    debug!("Parsing register XML contents...");
     loop {
         match reader.read_event() {
             // start event ------------------------------------------------------------------------
@@ -482,37 +515,39 @@ pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
                             match str::from_utf8(key.into_inner()).unwrap() {
-                                "name" => unsafe {
-                                    let name_ = String::from(str::from_utf8_unchecked(&value));
+                                "name" => {
+                                    let name_ =
+                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
                                     curr_register.alt_names.push(name_.to_uppercase());
                                     curr_register.alt_names.push(name_.to_lowercase());
                                     curr_register.name = name_;
-                                },
-                                "altname" => unsafe {
-                                    curr_register
-                                        .alt_names
-                                        .push(String::from(str::from_utf8_unchecked(&value)));
-                                },
-                                "description" => unsafe {
-                                    curr_register.description =
-                                        Some(String::from(str::from_utf8_unchecked(&value)));
-                                },
-                                "type" => unsafe {
-                                    curr_register.reg_type = match RegisterType::from_str(
-                                        str::from_utf8_unchecked(&value),
-                                    ) {
+                                }
+                                "altname" => {
+                                    curr_register.alt_names.push(String::from(unsafe {
+                                        str::from_utf8_unchecked(&value)
+                                    }));
+                                }
+                                "description" => {
+                                    curr_register.description = Some(String::from(unsafe {
+                                        str::from_utf8_unchecked(&value)
+                                    }));
+                                }
+                                "type" => {
+                                    curr_register.reg_type = match RegisterType::from_str(unsafe {
+                                        str::from_utf8_unchecked(&value)
+                                    }) {
                                         Ok(reg) => Some(reg),
                                         _ => None,
                                     }
-                                },
-                                "width" => unsafe {
-                                    curr_register.width = match RegisterWidth::from_str(
-                                        str::from_utf8_unchecked(&value),
-                                    ) {
+                                }
+                                "width" => {
+                                    curr_register.width = match RegisterWidth::from_str(unsafe {
+                                        str::from_utf8_unchecked(&value)
+                                    }) {
                                         Ok(width) => Some(width),
                                         _ => None,
                                     }
-                                },
+                                }
                                 _ => {}
                             }
                         }
@@ -525,31 +560,32 @@ pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
                             match str::from_utf8(key.into_inner()).unwrap() {
-                                "bit" => unsafe {
-                                    curr_bit_flag.bit =
-                                        str::from_utf8_unchecked(&value).parse::<u32>().unwrap();
-                                },
-                                "label" => unsafe {
+                                "bit" => {
+                                    curr_bit_flag.bit = unsafe { str::from_utf8_unchecked(&value) }
+                                        .parse::<u32>()
+                                        .unwrap();
+                                }
+                                "label" => {
                                     curr_bit_flag.label =
-                                        String::from(str::from_utf8_unchecked(&value));
-                                },
-                                "description" => unsafe {
+                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                }
+                                "description" => {
                                     curr_bit_flag.description =
-                                        String::from(str::from_utf8_unchecked(&value));
-                                },
-                                "pae" => unsafe {
+                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                }
+                                "pae" => {
                                     curr_bit_flag.pae =
-                                        String::from(str::from_utf8_unchecked(&value));
-                                },
-                                "longmode" => unsafe {
+                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                }
+                                "longmode" => {
                                     curr_bit_flag.long_mode =
-                                        String::from(str::from_utf8_unchecked(&value));
-                                },
+                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                }
                                 _ => {}
                             }
                         }
                     }
-                    _ => (), // unknown event
+                    _ => {} // unknown event
                 }
             }
             // end event --------------------------------------------------------------------------
@@ -562,12 +598,12 @@ pub fn populate_registers(xml_contents: &str) -> anyhow::Result<Vec<Register>> {
                     QName(b"Flag") => {
                         curr_register.push_flag(curr_bit_flag.clone());
                     }
-                    _ => (), // unknown event
+                    _ => {} // unknown event
                 }
             }
             Ok(Event::Eof) => break,
             Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
-            _ => (), // rest of events that we don't consider
+            _ => {} // rest of events that we don't consider
         }
     }
 
@@ -590,7 +626,22 @@ pub fn populate_name_to_register_map<'register>(
     }
 }
 
-pub fn populate_directives(xml_contents: &str) -> anyhow::Result<Vec<Directive>> {
+/// Parse the provided XML contents and return a vector of all the directives based on that.
+/// If parsing fails, the appropriate error will be returned instead.
+///
+/// Current function assumes that the XML file is already read and that it's been given a reference
+/// to its contents (`&str`).
+///
+/// # Errors
+///
+/// This function is highly specialized to parse a handful of files and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+///
+/// # Panics
+///
+/// This function is highly specialized to parse a handful of files and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+pub fn populate_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     let mut directives_map = HashMap::<String, Directive>::new();
 
     // iterate through the XML --------------------------------------------------------------------
@@ -600,7 +651,7 @@ pub fn populate_directives(xml_contents: &str) -> anyhow::Result<Vec<Directive>>
     let mut curr_directive = Directive::default();
     let mut assembler: Option<Assembler> = None;
 
-    debug!("Parsing XML contents...");
+    debug!("Parsing directive XML contents...");
     loop {
         match reader.read_event() {
             // start event ------------------------------------------------------------------------
@@ -678,7 +729,7 @@ pub fn populate_directives(xml_contents: &str) -> anyhow::Result<Vec<Directive>>
             }
             Ok(Event::Eof) => break,
             Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
-            _ => (), // rest of events that we don't consider
+            _ => {} // rest of events that we don't consider
         }
     }
 
@@ -731,10 +782,7 @@ fn get_docs_body(x86_online_docs: &str) -> Option<String> {
                 docs
             }
             Err(e) => {
-                error!(
-                    "Failed to fetch documentation from {} - Error: {e}.",
-                    x86_online_docs
-                );
+                error!("Failed to fetch documentation from {x86_online_docs} - Error: {e}.");
                 return None;
             }
         }
@@ -777,7 +825,15 @@ fn get_docs_body(x86_online_docs: &str) -> Option<String> {
     Some(body)
 }
 
-pub fn get_cache_dir() -> anyhow::Result<PathBuf> {
+/// Searches for the asm-lsp cache directory. First checks for the  `ASM_LSP_CACHE_DIR`
+/// environment variable. If this variable is present and points to a valid directory,
+/// this path is returned. Otherwise, the function returns `~/.config/asm-lsp/`
+///
+/// # Errors
+///
+/// Returns `Err` if no directory can be found through `ASM_LSP_CACHE_DIR`, and
+/// then no home directory can be found on the system
+pub fn get_cache_dir() -> Result<PathBuf> {
     // first check if the appropriate environment variable is set
     if let Ok(path) = std::env::var("ASM_LSP_CACHE_DIR") {
         let path = PathBuf::from(path);
@@ -809,11 +865,8 @@ fn get_x86_docs_url() -> String {
     String::from("http://127.0.0.1:8080/x86/")
 }
 
-fn get_x86_docs_web(x86_online_docs: &str) -> anyhow::Result<String> {
-    info!(
-        "Fetching further documentation from the web -> {}...",
-        x86_online_docs
-    );
+fn get_x86_docs_web(x86_online_docs: &str) -> Result<String> {
+    info!("Fetching further documentation from the web -> {x86_online_docs}...");
     // grab the info from the web
     let contents = reqwest::blocking::get(x86_online_docs)?.text()?;
     Ok(contents)
