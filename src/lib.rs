@@ -1,3 +1,4 @@
+pub mod handle;
 pub mod lsp;
 mod test;
 pub mod types;
