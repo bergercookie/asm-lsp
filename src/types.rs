@@ -572,6 +572,13 @@ impl<'own> Register {
 }
 
 // helper structs, types and functions ------------------------------------------------------------
+#[derive(Debug, Clone, Default)]
+pub struct NameToInfoMaps<'a> {
+    pub instructions: NameToInstructionMap<'a>,
+    pub registers: NameToRegisterMap<'a>,
+    pub directives: NameToDirectiveMap<'a>,
+}
+
 pub type NameToInstructionMap<'instruction> =
     HashMap<(Arch, &'instruction str), &'instruction Instruction>;
 
