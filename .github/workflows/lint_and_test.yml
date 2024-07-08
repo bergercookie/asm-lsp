@@ -6,17 +6,8 @@ on:
   push:
     branches:
       - "*"
-    paths:
-      - "src/**"
-      - "Cargo.*"
-      - build.rs
   pull_request:
     branches: ["master"]
-    paths:
-      - ".github/workflows/tests.yml"
-      - "src/**"
-      - "Cargo.*"
-      - build.rs
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
