@@ -92,4 +92,4 @@ def make_xml(df: pd.DataFrame, descr_df: pd.DataFrame, dst_filename: str):
 if __name__ == "__main__":
     df = parse_csv("z80.csv")
     descr_df = parse_descr_csv("z80_instr_descr.csv")
-    make_xml(df, descr_df, "../opcodes/z80.xml")
+    make_xml(df, descr_df, "../docs_store/opcodes/raw/z80.xml")

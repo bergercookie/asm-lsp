@@ -7,6 +7,12 @@ repos:
       - id: check-toml
       - id: detect-private-key
       - id: end-of-file-fixer
+        exclude: |
+          (?x)^(
+             docs_store/opcodes/serialized/.*|
+             docs_store/registers/serialized/.*|
+             docs_store/directives/serialized/.*
+          )$
       - id: mixed-line-ending
       - id: trailing-whitespace
   - repo: https://github.com/tcort/markdown-link-check

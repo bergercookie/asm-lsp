@@ -407,43 +407,6 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
     Ok(instructions_map.into_values().collect())
 }
 
-#[cfg(test)]
-mod tests {
-    use crate::x86_parser::{get_cache_dir, populate_instructions};
-    #[test]
-    fn test_populate_instructions() {
-        let mut server = mockito::Server::new_with_port(8080);
-
-        let _ = server
-            .mock("GET", "/x86/")
-            .with_status(200)
-            .with_header("content-type", "text/html")
-            .with_body("")
-            .create();
-
-        // Need to clear the cache file (if there is one)
-        // to ensure a request is made for each test call
-        let mut x86_cache_path = get_cache_dir().unwrap();
-        x86_cache_path.push("x86_instr_docs.html");
-        if x86_cache_path.is_file() {
-            std::fs::remove_file(&x86_cache_path).unwrap();
-        }
-        let xml_conts_x86 = include_str!("../opcodes/x86.xml");
-        assert!(populate_instructions(xml_conts_x86).is_ok());
-
-        if x86_cache_path.is_file() {
-            std::fs::remove_file(&x86_cache_path).unwrap();
-        }
-        let xml_conts_x86_64 = include_str!("../opcodes/x86_64.xml");
-        assert!(populate_instructions(xml_conts_x86_64).is_ok());
-
-        // Clean things up so we don't have an empty cache file
-        if x86_cache_path.is_file() {
-            std::fs::remove_file(&x86_cache_path).unwrap();
-        }
-    }
-}
-
 pub fn populate_name_to_instruction_map<'instruction>(
     arch: Arch,
     instructions: &'instruction Vec<Instruction>,
@@ -461,6 +424,45 @@ pub fn populate_name_to_instruction_map<'instruction>(
             names_to_instructions
                 .entry((arch, name))
                 .or_insert_with(|| instruction);
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::x86_parser::{get_cache_dir, populate_instructions};
+    #[test]
+    fn test_populate_instructions() {
+        let mut server = mockito::Server::new_with_port(8080);
+
+        let _ = server
+            .mock("GET", "/x86/")
+            .with_status(200)
+            .with_header("content-type", "text/html")
+            .with_body(include_str!(
+                "../docs_store/instr_info_cache/x86_instr_docs.html"
+            ))
+            .create();
+
+        // Need to clear the cache file (if there is one)
+        // to ensure a request is made for each test call
+        let mut x86_cache_path = get_cache_dir().unwrap();
+        x86_cache_path.push("x86_instr_docs.html");
+        if x86_cache_path.is_file() {
+            std::fs::remove_file(&x86_cache_path).unwrap();
+        }
+        let xml_conts_x86 = include_str!("../docs_store/opcodes/raw/x86.xml");
+        assert!(populate_instructions(xml_conts_x86).is_ok());
+
+        if x86_cache_path.is_file() {
+            std::fs::remove_file(&x86_cache_path).unwrap();
+        }
+        let xml_conts_x86_64 = include_str!("../docs_store/opcodes/raw/x86_64.xml");
+        assert!(populate_instructions(xml_conts_x86_64).is_ok());
+
+        // Clean things up so we don't have an empty cache file
+        if x86_cache_path.is_file() {
+            std::fs::remove_file(&x86_cache_path).unwrap();
         }
     }
 }

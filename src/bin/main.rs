@@ -7,9 +7,9 @@ use asm_lsp::handle::{
     handle_signature_help_request,
 };
 use asm_lsp::{
-    get_completes, get_include_dirs, get_target_config, instr_filter_targets, populate_directives,
-    populate_instructions, populate_name_to_directive_map, populate_name_to_instruction_map,
-    populate_name_to_register_map, populate_registers, tree_sitter_logger, Arch, Assembler,
+    get_completes, get_include_dirs, get_target_config, instr_filter_targets,
+    populate_name_to_directive_map, populate_name_to_instruction_map,
+    populate_name_to_register_map, tree_sitter_logger, Arch, Assembler, Instruction,
     NameToInfoMaps,
 };
 
@@ -97,8 +97,8 @@ pub fn main() -> Result<()> {
     // former map
     let x86_instructions = if target_config.instruction_sets.x86 {
         let start = std::time::Instant::now();
-        let xml_conts_x86 = include_str!("../../opcodes/x86.xml");
-        let instrs = populate_instructions(xml_conts_x86)?
+        let x86_instrs = include_str!("../../docs_store/opcodes/serialized/x86");
+        let instrs = serde_json::de::from_str::<Vec<Instruction>>(x86_instrs)?
             .into_iter()
             .map(|instruction| {
                 // filter out assemblers by user config
@@ -117,8 +117,8 @@ pub fn main() -> Result<()> {
 
     let x86_64_instructions = if target_config.instruction_sets.x86_64 {
         let start = std::time::Instant::now();
-        let xml_conts_x86_64 = include_str!("../../opcodes/x86_64.xml");
-        let instrs = populate_instructions(xml_conts_x86_64)?
+        let x86_64_instrs = include_str!("../../docs_store/opcodes/serialized/x86_64");
+        let instrs = serde_json::de::from_str::<Vec<Instruction>>(x86_64_instrs)?
             .into_iter()
             .map(|instruction| {
                 // filter out assemblers by user config
@@ -127,7 +127,7 @@ pub fn main() -> Result<()> {
             .filter(|instruction| !instruction.forms.is_empty())
             .collect();
         info!(
-            "z86-64 Instruction set loaded in {}ms",
+            "x86-64 instruction set loaded in {}ms",
             start.elapsed().as_millis()
         );
         instrs
@@ -137,8 +137,8 @@ pub fn main() -> Result<()> {
 
     let z80_instructions = if target_config.instruction_sets.z80 {
         let start = std::time::Instant::now();
-        let xml_conts_z80 = include_str!("../../opcodes/z80.xml");
-        let instrs = populate_instructions(xml_conts_z80)?
+        let z80_instrs = include_str!("../../docs_store/opcodes/serialized/z80");
+        let instrs = serde_json::de::from_str::<Vec<Instruction>>(z80_instrs)?
             .into_iter()
             .map(|instruction| {
                 // filter out assemblers by user config
@@ -176,10 +176,8 @@ pub fn main() -> Result<()> {
     // former map
     let x86_registers = if target_config.instruction_sets.x86 {
         let start = std::time::Instant::now();
-        let xml_conts_regs_x86 = include_str!("../../registers/x86.xml");
-        let regs = populate_registers(xml_conts_regs_x86)?
-            .into_iter()
-            .collect();
+        let regs_x86 = include_str!("../../docs_store/registers/serialized/x86");
+        let regs = serde_json::de::from_str(regs_x86)?;
         info!(
             "x86 register set loaded in {}ms",
             start.elapsed().as_millis()
@@ -191,10 +189,8 @@ pub fn main() -> Result<()> {
 
     let x86_64_registers = if target_config.instruction_sets.x86_64 {
         let start = std::time::Instant::now();
-        let xml_conts_regs_x86_64 = include_str!("../../registers/x86_64.xml");
-        let regs = populate_registers(xml_conts_regs_x86_64)?
-            .into_iter()
-            .collect();
+        let regs_x86_64 = include_str!("../../docs_store/registers/serialized/x86_64");
+        let regs = serde_json::de::from_str(regs_x86_64)?;
         info!(
             "x86-64 register set loaded in {}ms",
             start.elapsed().as_millis()
@@ -206,10 +202,8 @@ pub fn main() -> Result<()> {
 
     let z80_registers = if target_config.instruction_sets.z80 {
         let start = std::time::Instant::now();
-        let xml_conts_regs_z80 = include_str!("../../registers/z80.xml");
-        let regs = populate_registers(xml_conts_regs_z80)?
-            .into_iter()
-            .collect();
+        let regs_z80 = include_str!("../../docs_store/registers/serialized/z80");
+        let regs = serde_json::de::from_str(regs_z80)?;
         info!(
             "z80 register set loaded in {}ms",
             start.elapsed().as_millis()
@@ -229,8 +223,8 @@ pub fn main() -> Result<()> {
 
     let gas_directives = if target_config.assemblers.gas {
         let start = std::time::Instant::now();
-        let xml_conts_gas = include_str!("../../directives/gas_directives.xml");
-        let dirs = populate_directives(xml_conts_gas)?.into_iter().collect();
+        let gas_dirs = include_str!("../../docs_store/directives/serialized/gas");
+        let dirs = serde_json::de::from_str(gas_dirs)?;
         info!(
             "Gas directive set loaded in {}ms",
             start.elapsed().as_millis()
