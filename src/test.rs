@@ -1,5 +1,8 @@
 #[cfg(test)]
 mod tests {
+    use core::panic;
+    use std::collections::HashMap;
+
     use anyhow::Result;
     use lsp_textdocument::FullTextDocument;
     use lsp_types::{
@@ -11,11 +14,11 @@ mod tests {
 
     use crate::{
         get_comp_resp, get_completes, get_hover_resp, get_word_from_pos_params,
-        instr_filter_targets, populate_directives, populate_name_to_directive_map,
-        populate_name_to_instruction_map, populate_name_to_register_map, populate_registers,
-        x86_parser::get_cache_dir, Arch, Assembler, Assemblers, Directive, Instruction,
-        InstructionSets, NameToDirectiveMap, NameToInstructionMap, NameToRegisterMap, Register,
-        TargetConfig,
+        instr_filter_targets, populate_directives, populate_instructions,
+        populate_name_to_directive_map, populate_name_to_instruction_map,
+        populate_name_to_register_map, populate_registers, x86_parser::get_cache_dir, Arch,
+        Assembler, Assemblers, Directive, Instruction, InstructionSets, NameToDirectiveMap,
+        NameToInstructionMap, NameToRegisterMap, Register, TargetConfig,
     };
 
     #[derive(Debug)]
@@ -84,56 +87,59 @@ mod tests {
         });
 
         info.x86_instructions = {
-            let xml_conts_x86 = include_str!("../opcodes/x86.xml");
-            crate::populate_instructions(xml_conts_x86)?
+            let x86_instrs = include_str!("../docs_store/opcodes/serialized/x86");
+            serde_json::de::from_str::<Vec<Instruction>>(x86_instrs)?
                 .into_iter()
-                .map(|instruction| instr_filter_targets(&instruction, &target_config))
+                .map(|instruction| {
+                    // filter out assemblers by user config
+                    instr_filter_targets(&instruction, &target_config)
+                })
                 .filter(|instruction| !instruction.forms.is_empty())
                 .collect()
         };
 
         info.x86_64_instructions = {
-            let xml_conts_x86_64 = include_str!("../opcodes/x86_64.xml");
-            crate::populate_instructions(xml_conts_x86_64)?
+            let x86_64_instrs = include_str!("../docs_store/opcodes/serialized/x86_64");
+            serde_json::de::from_str::<Vec<Instruction>>(x86_64_instrs)?
                 .into_iter()
-                .map(|instruction| instr_filter_targets(&instruction, &target_config))
+                .map(|instruction| {
+                    // filter out assemblers by user config
+                    instr_filter_targets(&instruction, &target_config)
+                })
                 .filter(|instruction| !instruction.forms.is_empty())
                 .collect()
         };
 
         info.z80_instructions = {
-            let xml_conts_z80 = include_str!("../opcodes/z80.xml");
-            crate::populate_instructions(xml_conts_z80)?
+            let z80_instrs = include_str!("../docs_store/opcodes/serialized/z80");
+            serde_json::de::from_str::<Vec<Instruction>>(z80_instrs)?
                 .into_iter()
-                .map(|instruction| instr_filter_targets(&instruction, &target_config))
+                .map(|instruction| {
+                    // filter out assemblers by user config
+                    instr_filter_targets(&instruction, &target_config)
+                })
                 .filter(|instruction| !instruction.forms.is_empty())
                 .collect()
         };
 
         info.x86_registers = {
-            let xml_conts_regs_x86 = include_str!("../registers/x86.xml");
-            populate_registers(xml_conts_regs_x86)?
-                .into_iter()
-                .collect()
+            let regs_x86 = include_str!("../docs_store/registers/serialized/x86");
+            serde_json::de::from_str(regs_x86)?
         };
 
         info.x86_64_registers = {
-            let xml_conts_regs_x86_64 = include_str!("../registers/x86_64.xml");
-            populate_registers(xml_conts_regs_x86_64)?
-                .into_iter()
-                .collect()
+            let regs_x86_64 = include_str!("../docs_store/registers/serialized/x86_64");
+            serde_json::de::from_str(regs_x86_64)?
         };
 
         info.z80_registers = {
-            let xml_conts_regs_z80 = include_str!("../registers/z80.xml");
-            populate_registers(xml_conts_regs_z80)?
-                .into_iter()
-                .collect()
+            let regs_z80 = include_str!("../docs_store/registers/serialized/z80");
+            serde_json::de::from_str(regs_z80)?
         };
 
         info.gas_directives = {
-            let xml_conts_gas = include_str!("../directives/gas_directives.xml");
-            populate_directives(xml_conts_gas)?.into_iter().collect()
+            let gas_dirs = include_str!("../docs_store/directives/serialized/gas");
+            serde_json::de::from_str(gas_dirs)?
         };
 
         return Ok(info);
@@ -441,6 +447,8 @@ Move Low Packed Single-Precision Floating-Point Values
   + [m64]    input = false  output = true
   + [xmm]    input = true   output = false
 
+More info: https://www.felixcloutier.com/x86/movlps
+
 MOVLPS [x86-64]
 Move Low Packed Single-Precision Floating-Point Values
 
@@ -453,7 +461,9 @@ Move Low Packed Single-Precision Floating-Point Values
 - *GAS*: movlps | *GO*: MOVLPS | *XMM*: SSE | *ISA*: SSE
 
   + [m64]    input = false  output = true
-  + [xmm]    input = true   output = false",
+  + [xmm]    input = true   output = false
+
+More info: https://www.felixcloutier.com/x86/movlps",
         );
     }
     #[test]
@@ -484,6 +494,8 @@ Push Value Onto the Stack
 
   + [m32]    input = true   output = false
 
+More info: https://www.felixcloutier.com/x86/push
+
 PUSH [x86-64]
 Push Value Onto the Stack
 
@@ -506,7 +518,9 @@ Push Value Onto the Stack
   + [m16]    input = true   output = false
 - *GAS*: pushq | *GO*: PUSHQ
 
-  + [m64]    input = true   output = false",
+  + [m64]    input = true   output = false
+
+More info: https://www.felixcloutier.com/x86/push",
         );
     }
     #[test]
@@ -542,6 +556,8 @@ Move Quadword
 
   + [m64]    input = false  output = true
   + [xmm]    input = true   output = false
+
+More info: https://www.felixcloutier.com/x86/movq
 
 MOVQ [x86-64]
 Move Quadword
@@ -587,7 +603,9 @@ Move Quadword
 - *GAS*: movq | *GO*: MOVQ | *XMM*: SSE | *ISA*: SSE2
 
   + [m64]    input = false  output = true
-  + [xmm]    input = true   output = false",
+  + [xmm]    input = true   output = false
+
+More info: https://www.felixcloutier.com/x86/movq",
         );
     }
 
@@ -1272,7 +1290,7 @@ LoaD. The basic data load/transfer instruction. Transfers data from the location
     fn handle_hover_z80_it_provides_reg_info_normal() {
         test_hover(
             "        LD H<cursor>L, DATA     ;STARTING ADDRESS OF DATA STRING",
-            "HL
+            "HL [z80]
 16-bit accumulator/address register or two 8-bit registers.
 
 Width: 16 bits",
@@ -1282,11 +1300,240 @@ Width: 16 bits",
     fn handle_hover_z80_it_provides_reg_info_prime() {
         test_hover(
             "        LD B<cursor>', 132      ;MAXIMUM STRING LENGTH",
-            "B
+            "B [z80]
 General purpose register.
 
 Type: General Purpose Register
 Width: 8 bits",
         );
+    }
+
+    #[test]
+    fn serialized_x86_registers_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let x86_regs_ser = include_str!("../docs_store/registers/serialized/x86");
+        let ser_vec = serde_json::de::from_str::<Vec<Register>>(x86_regs_ser).unwrap();
+
+        let x86_regs_raw = include_str!("../docs_store/registers/raw/x86.xml");
+        let mut raw_vec = populate_registers(x86_regs_raw).unwrap();
+
+        // HACK: Windows line endings...
+        for reg in raw_vec.iter_mut() {
+            if let Some(descr) = &reg.description {
+                reg.description = Some(descr.replace('\r', ""));
+            }
+        }
+
+        for reg in ser_vec {
+            *cmp_map.entry(reg.clone()).or_insert(0) += 1;
+        }
+        for reg in raw_vec {
+            let entry = cmp_map.get_mut(&reg).unwrap();
+            if *entry == 0 {
+                panic!(
+                    "Expected at least one more instruction entry for {:?}, but the count is 0",
+                    reg
+                );
+            }
+            *entry -= 1;
+        }
+        for (reg, count) in cmp_map.iter() {
+            if *count != 0 {
+                panic!("Expected count to be 0, found {count} for {:?}", reg);
+            }
+        }
+    }
+    #[test]
+    fn serialized_x86_64_registers_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let x86_64_regs_ser = include_str!("../docs_store/registers/serialized/x86_64");
+        let ser_vec = serde_json::de::from_str::<Vec<Register>>(x86_64_regs_ser).unwrap();
+
+        let x86_64_regs_raw = include_str!("../docs_store/registers/raw/x86_64.xml");
+        let mut raw_vec = populate_registers(x86_64_regs_raw).unwrap();
+
+        // HACK: Windows line endings...
+        for reg in raw_vec.iter_mut() {
+            if let Some(descr) = &reg.description {
+                reg.description = Some(descr.replace('\r', ""));
+            }
+        }
+
+        for reg in ser_vec {
+            *cmp_map.entry(reg.clone()).or_insert(0) += 1;
+        }
+        for reg in raw_vec {
+            let entry = cmp_map.get_mut(&reg).unwrap();
+            if *entry == 0 {
+                panic!(
+                    "Expected at least one more instruction entry for {:?}, but the count is 0",
+                    reg
+                );
+            }
+            *entry -= 1;
+        }
+        for (reg, count) in cmp_map.iter() {
+            if *count != 0 {
+                panic!("Expected count to be 0, found {count} for {:?}", reg);
+            }
+        }
+    }
+    #[test]
+    fn serialized_z80_registers_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let z80_regs_ser = include_str!("../docs_store/registers/serialized/z80");
+        let ser_vec = serde_json::de::from_str::<Vec<Register>>(z80_regs_ser).unwrap();
+
+        let z80_regs_raw = include_str!("../docs_store/registers/raw/z80.xml");
+        let raw_vec = populate_registers(z80_regs_raw).unwrap();
+
+        for reg in ser_vec {
+            *cmp_map.entry(reg.clone()).or_insert(0) += 1;
+        }
+        for reg in raw_vec {
+            let entry = cmp_map.get_mut(&reg).unwrap();
+            if *entry == 0 {
+                panic!(
+                    "Expected at least one more instruction entry for {:?}, but the count is 0",
+                    reg
+                );
+            }
+            *entry -= 1;
+        }
+        for (reg, count) in cmp_map.iter() {
+            if *count != 0 {
+                panic!("Expected count to be 0, found {count} for {:?}", reg);
+            }
+        }
+    }
+    #[test]
+    fn serialized_x86_instructions_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let x86_instrs_ser = include_str!("../docs_store/opcodes/serialized/x86");
+        let mut ser_vec = serde_json::de::from_str::<Vec<Instruction>>(x86_instrs_ser).unwrap();
+
+        let x86_instrs_raw = include_str!("../docs_store/opcodes/raw/x86.xml");
+        let mut raw_vec = populate_instructions(x86_instrs_raw).unwrap();
+
+        // HACK: To work around the difference in extra info urls between testing
+        // and production
+        for instr in ser_vec.iter_mut() {
+            instr.url = None;
+        }
+        for instr in raw_vec.iter_mut() {
+            instr.url = None;
+        }
+
+        for instr in ser_vec {
+            *cmp_map.entry(instr.clone()).or_insert(0) += 1;
+        }
+        for instr in raw_vec {
+            let entry = cmp_map.get_mut(&instr).unwrap();
+            if *entry == 0 {
+                panic!(
+                    "Expected at least one more instruction entry for {:?}, but the count is 0",
+                    instr
+                );
+            }
+            *entry -= 1;
+        }
+        for (instr, count) in cmp_map.iter() {
+            if *count != 0 {
+                panic!("Expected count to be 0, found {count} for {:?}", instr);
+            }
+        }
+    }
+    #[test]
+    fn serialized_x86_64_instructions_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let x86_64_instrs_ser = include_str!("../docs_store/opcodes/serialized/x86_64");
+        let mut ser_vec = serde_json::de::from_str::<Vec<Instruction>>(x86_64_instrs_ser).unwrap();
+
+        let x86_64_instrs_raw = include_str!("../docs_store/opcodes/raw/x86_64.xml");
+        let mut raw_vec = populate_instructions(x86_64_instrs_raw).unwrap();
+
+        // HACK: To work around the difference in extra info urls between testing
+        // and production
+        for instr in ser_vec.iter_mut() {
+            instr.url = None;
+        }
+        for instr in raw_vec.iter_mut() {
+            instr.url = None;
+        }
+
+        for instr in ser_vec {
+            *cmp_map.entry(instr.clone()).or_insert(0) += 1;
+        }
+        for instr in raw_vec {
+            let entry = cmp_map.get_mut(&instr).unwrap();
+            if *entry == 0 {
+                panic!(
+                    "Expected at least one more instruction entry for {:?}, but the count is 0",
+                    instr
+                );
+            }
+            *entry -= 1;
+        }
+        for (instr, count) in cmp_map.iter() {
+            if *count != 0 {
+                panic!("Expected count to be 0, found {count} for {:?}", instr);
+            }
+        }
+    }
+    #[test]
+    fn serialized_z80_instructions_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let z80_instrs_ser = include_str!("../docs_store/opcodes/serialized/z80");
+        let ser_vec = serde_json::de::from_str::<Vec<Instruction>>(z80_instrs_ser).unwrap();
+
+        let z80_instrs_raw = include_str!("../docs_store/opcodes/raw/z80.xml");
+        let raw_vec = populate_instructions(z80_instrs_raw).unwrap();
+
+        for instr in ser_vec {
+            *cmp_map.entry(instr.clone()).or_insert(0) += 1;
+        }
+        for instr in raw_vec {
+            let entry = cmp_map.get_mut(&instr).unwrap();
+            if *entry == 0 {
+                panic!(
+                    "Expected at least one more instruction entry for {:?}, but the count is 0",
+                    instr
+                );
+            }
+            *entry -= 1;
+        }
+        for (instr, count) in cmp_map.iter() {
+            if *count != 0 {
+                panic!("Expected count to be 0, found {count} for {:?}", instr);
+            }
+        }
+    }
+    #[test]
+    fn serialized_gas_directives_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let gas_dirs_ser = include_str!("../docs_store/directives/serialized/gas");
+        let ser_vec = serde_json::de::from_str::<Vec<Directive>>(gas_dirs_ser).unwrap();
+
+        let gas_dirs_raw = include_str!("../docs_store/directives/raw/gas.xml");
+        let raw_vec = populate_directives(gas_dirs_raw).unwrap();
+
+        for dir in ser_vec {
+            *cmp_map.entry(dir.clone()).or_insert(0) += 1;
+        }
+        for dir in raw_vec {
+            let entry = cmp_map.get_mut(&dir).unwrap();
+            if *entry == 0 {
+                panic!(
+                    "Expected at least one more instruction entry for {:?}, but the count is 0",
+                    dir
+                );
+            }
+            *entry -= 1;
+        }
+        for (dir, count) in cmp_map.iter() {
+            if *count != 0 {
+                panic!("Expected count to be 0, found {count} for {:?}", dir);
+            }
+        }
     }
 }

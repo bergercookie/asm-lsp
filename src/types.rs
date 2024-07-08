@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use strum_macros::{AsRefStr, Display, EnumString};
 
 // Instruction ------------------------------------------------------------------------------------
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
 pub struct Instruction {
     pub name: String,
     pub alt_names: Vec<String>,
@@ -110,7 +110,7 @@ impl<'own> Instruction {
 }
 
 // InstructionForm --------------------------------------------------------------------------------
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Eq, PartialEq, Hash, Debug, Clone, Serialize, Deserialize)]
 pub struct InstructionForm {
     // --- Gas/Go-Specific Information ---
     pub gas_name: Option<String>,
@@ -210,7 +210,7 @@ impl std::fmt::Display for InstructionForm {
     }
 }
 
-#[derive(Debug, Default, Clone, Copy)]
+#[derive(Debug, Default, PartialEq, Eq, Hash, Clone, Copy, Serialize, Deserialize)]
 pub enum Z80TimingValue {
     #[default]
     Unknown,
@@ -246,7 +246,7 @@ impl FromStr for Z80TimingValue {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Copy, Serialize, Deserialize)]
 pub enum Z80TimingInfo {
     OneNum(Z80TimingValue), // better names here?
     TwoNum((Z80TimingValue, Z80TimingValue)),
@@ -307,7 +307,7 @@ impl FromStr for Z80TimingInfo {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 pub struct Z80Timing {
     pub z80: Z80TimingInfo,
     pub z80_plus_m1: Z80TimingInfo,
@@ -327,7 +327,7 @@ impl Display for Z80Timing {
 }
 
 // Directive ------------------------------------------------------------------------------------
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Directive {
     pub name: String,
     pub alt_names: Vec<String>,
@@ -457,7 +457,7 @@ impl<'own> Directive {
 }
 
 // Register ---------------------------------------------------------------------------------------
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Register {
     pub name: String,
     pub alt_names: Vec<String>,
@@ -591,19 +591,21 @@ pub trait Hoverable: Display + Clone + Copy {}
 pub trait Completable: Display {}
 pub trait ArchOrAssembler {}
 
-#[derive(Debug, Clone, EnumString, AsRefStr)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, EnumString, AsRefStr, Serialize, Deserialize)]
 pub enum XMMMode {
     SSE,
     AVX,
 }
 
-#[derive(Debug, Clone, EnumString, AsRefStr)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, EnumString, AsRefStr, Serialize, Deserialize)]
 pub enum MMXMode {
     FPU,
     MMX,
 }
 
-#[derive(Debug, Default, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr)]
+#[derive(
+    Debug, Default, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Serialize, Deserialize,
+)]
 pub enum Arch {
     #[default]
     #[strum(serialize = "x86")]
@@ -616,7 +618,20 @@ pub enum Arch {
 
 impl ArchOrAssembler for Arch {}
 
-#[derive(Debug, Display, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr)]
+impl std::fmt::Display for Arch {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::X86 => write!(f, "x86")?,
+            Self::X86_64 => write!(f, "x86-64")?,
+            Self::Z80 => write!(f, "z80")?,
+        }
+        Ok(())
+    }
+}
+
+#[derive(
+    Debug, Display, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Serialize, Deserialize,
+)]
 pub enum Assembler {
     Gas,
     Go,
@@ -624,7 +639,9 @@ pub enum Assembler {
 
 impl ArchOrAssembler for Assembler {}
 
-#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Display)]
+#[derive(
+    Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Display, Serialize, Deserialize,
+)]
 pub enum RegisterType {
     #[strum(serialize = "General Purpose Register")]
     GeneralPurpose,
@@ -650,7 +667,9 @@ pub enum RegisterType {
     ProtectedMode,
 }
 
-#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Display)]
+#[derive(
+    Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Display, Serialize, Deserialize,
+)]
 pub enum RegisterWidth {
     #[strum(serialize = "512 bits")]
     Bits512,
@@ -676,7 +695,7 @@ pub enum RegisterWidth {
     Lower8Lower16,
 }
 
-#[derive(Debug, Clone, Serialize, Default, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Default, Deserialize)]
 pub struct RegisterBitInfo {
     pub bit: u32,
     pub label: String,
@@ -757,7 +776,7 @@ impl Default for TargetConfig {
 }
 
 // Instruction Set Architecture -------------------------------------------------------------------
-#[derive(Debug, Clone, EnumString, AsRefStr)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, EnumString, AsRefStr, Serialize, Deserialize)]
 pub enum ISA {
     #[strum(serialize = "RAO-INT")]
     RAOINT,
@@ -880,7 +899,7 @@ pub enum ISA {
 }
 
 // Operand ----------------------------------------------------------------------------------------
-#[derive(Debug, Clone)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 pub struct Operand {
     pub type_: OperandType,
     pub input: Option<bool>,
@@ -889,7 +908,7 @@ pub struct Operand {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Debug, Clone, EnumString, AsRefStr)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, EnumString, AsRefStr, Serialize, Deserialize)]
 pub enum OperandType {
     #[strum(serialize = "1")]
     _1,

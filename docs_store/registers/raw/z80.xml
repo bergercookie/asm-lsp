@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<InstructionSet name="Z80">
+<InstructionSet name="z80">
 <Register name="pc" description="The program counter holds the 16-bit address of the current instruction being fetched from memory. The PC is automatically incremented after its contents have been transferred to the address lines."
     type="Special Purpose Register" width="16 bits">
     </Register>
