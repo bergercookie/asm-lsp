@@ -87,8 +87,8 @@ mod tests {
         });
 
         info.x86_instructions = {
-            let x86_instrs = include_str!("../docs_store/opcodes/serialized/x86");
-            serde_json::de::from_str::<Vec<Instruction>>(x86_instrs)?
+            let x86_instrs = include_bytes!("../docs_store/opcodes/serialized/x86");
+            bincode::deserialize::<Vec<Instruction>>(x86_instrs)?
                 .into_iter()
                 .map(|instruction| {
                     // filter out assemblers by user config
@@ -99,8 +99,8 @@ mod tests {
         };
 
         info.x86_64_instructions = {
-            let x86_64_instrs = include_str!("../docs_store/opcodes/serialized/x86_64");
-            serde_json::de::from_str::<Vec<Instruction>>(x86_64_instrs)?
+            let x86_64_instrs = include_bytes!("../docs_store/opcodes/serialized/x86_64");
+            bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)?
                 .into_iter()
                 .map(|instruction| {
                     // filter out assemblers by user config
@@ -111,8 +111,8 @@ mod tests {
         };
 
         info.z80_instructions = {
-            let z80_instrs = include_str!("../docs_store/opcodes/serialized/z80");
-            serde_json::de::from_str::<Vec<Instruction>>(z80_instrs)?
+            let z80_instrs = include_bytes!("../docs_store/opcodes/serialized/z80");
+            bincode::deserialize::<Vec<Instruction>>(z80_instrs)?
                 .into_iter()
                 .map(|instruction| {
                     // filter out assemblers by user config
@@ -123,23 +123,23 @@ mod tests {
         };
 
         info.x86_registers = {
-            let regs_x86 = include_str!("../docs_store/registers/serialized/x86");
-            serde_json::de::from_str(regs_x86)?
+            let regs_x86 = include_bytes!("../docs_store/registers/serialized/x86");
+            bincode::deserialize(regs_x86)?
         };
 
         info.x86_64_registers = {
-            let regs_x86_64 = include_str!("../docs_store/registers/serialized/x86_64");
-            serde_json::de::from_str(regs_x86_64)?
+            let regs_x86_64 = include_bytes!("../docs_store/registers/serialized/x86_64");
+            bincode::deserialize(regs_x86_64)?
         };
 
         info.z80_registers = {
-            let regs_z80 = include_str!("../docs_store/registers/serialized/z80");
-            serde_json::de::from_str(regs_z80)?
+            let regs_z80 = include_bytes!("../docs_store/registers/serialized/z80");
+            bincode::deserialize(regs_z80)?
         };
 
         info.gas_directives = {
-            let gas_dirs = include_str!("../docs_store/directives/serialized/gas");
-            serde_json::de::from_str(gas_dirs)?
+            let gas_dirs = include_bytes!("../docs_store/directives/serialized/gas");
+            bincode::deserialize(gas_dirs)?
         };
 
         return Ok(info);
@@ -1311,8 +1311,8 @@ Width: 8 bits",
     #[test]
     fn serialized_x86_registers_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let x86_regs_ser = include_str!("../docs_store/registers/serialized/x86");
-        let ser_vec = serde_json::de::from_str::<Vec<Register>>(x86_regs_ser).unwrap();
+        let x86_regs_ser = include_bytes!("../docs_store/registers/serialized/x86");
+        let ser_vec = bincode::deserialize::<Vec<Register>>(x86_regs_ser).unwrap();
 
         let x86_regs_raw = include_str!("../docs_store/registers/raw/x86.xml");
         let mut raw_vec = populate_registers(x86_regs_raw).unwrap();
@@ -1346,8 +1346,8 @@ Width: 8 bits",
     #[test]
     fn serialized_x86_64_registers_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let x86_64_regs_ser = include_str!("../docs_store/registers/serialized/x86_64");
-        let ser_vec = serde_json::de::from_str::<Vec<Register>>(x86_64_regs_ser).unwrap();
+        let x86_64_regs_ser = include_bytes!("../docs_store/registers/serialized/x86_64");
+        let ser_vec = bincode::deserialize::<Vec<Register>>(x86_64_regs_ser).unwrap();
 
         let x86_64_regs_raw = include_str!("../docs_store/registers/raw/x86_64.xml");
         let mut raw_vec = populate_registers(x86_64_regs_raw).unwrap();
@@ -1381,8 +1381,8 @@ Width: 8 bits",
     #[test]
     fn serialized_z80_registers_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let z80_regs_ser = include_str!("../docs_store/registers/serialized/z80");
-        let ser_vec = serde_json::de::from_str::<Vec<Register>>(z80_regs_ser).unwrap();
+        let z80_regs_ser = include_bytes!("../docs_store/registers/serialized/z80");
+        let ser_vec = bincode::deserialize::<Vec<Register>>(z80_regs_ser).unwrap();
 
         let z80_regs_raw = include_str!("../docs_store/registers/raw/z80.xml");
         let raw_vec = populate_registers(z80_regs_raw).unwrap();
@@ -1409,8 +1409,8 @@ Width: 8 bits",
     #[test]
     fn serialized_x86_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let x86_instrs_ser = include_str!("../docs_store/opcodes/serialized/x86");
-        let mut ser_vec = serde_json::de::from_str::<Vec<Instruction>>(x86_instrs_ser).unwrap();
+        let x86_instrs_ser = include_bytes!("../docs_store/opcodes/serialized/x86");
+        let mut ser_vec = bincode::deserialize::<Vec<Instruction>>(x86_instrs_ser).unwrap();
 
         let x86_instrs_raw = include_str!("../docs_store/opcodes/raw/x86.xml");
         let mut raw_vec = populate_instructions(x86_instrs_raw).unwrap();
@@ -1446,8 +1446,8 @@ Width: 8 bits",
     #[test]
     fn serialized_x86_64_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let x86_64_instrs_ser = include_str!("../docs_store/opcodes/serialized/x86_64");
-        let mut ser_vec = serde_json::de::from_str::<Vec<Instruction>>(x86_64_instrs_ser).unwrap();
+        let x86_64_instrs_ser = include_bytes!("../docs_store/opcodes/serialized/x86_64");
+        let mut ser_vec = bincode::deserialize::<Vec<Instruction>>(x86_64_instrs_ser).unwrap();
 
         let x86_64_instrs_raw = include_str!("../docs_store/opcodes/raw/x86_64.xml");
         let mut raw_vec = populate_instructions(x86_64_instrs_raw).unwrap();
@@ -1483,8 +1483,8 @@ Width: 8 bits",
     #[test]
     fn serialized_z80_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let z80_instrs_ser = include_str!("../docs_store/opcodes/serialized/z80");
-        let ser_vec = serde_json::de::from_str::<Vec<Instruction>>(z80_instrs_ser).unwrap();
+        let z80_instrs_ser = include_bytes!("../docs_store/opcodes/serialized/z80");
+        let ser_vec = bincode::deserialize::<Vec<Instruction>>(z80_instrs_ser).unwrap();
 
         let z80_instrs_raw = include_str!("../docs_store/opcodes/raw/z80.xml");
         let raw_vec = populate_instructions(z80_instrs_raw).unwrap();
@@ -1511,8 +1511,8 @@ Width: 8 bits",
     #[test]
     fn serialized_gas_directives_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let gas_dirs_ser = include_str!("../docs_store/directives/serialized/gas");
-        let ser_vec = serde_json::de::from_str::<Vec<Directive>>(gas_dirs_ser).unwrap();
+        let gas_dirs_ser = include_bytes!("../docs_store/directives/serialized/gas");
+        let ser_vec = bincode::deserialize::<Vec<Directive>>(gas_dirs_ser).unwrap();
 
         let gas_dirs_raw = include_str!("../docs_store/directives/raw/gas.xml");
         let raw_vec = populate_directives(gas_dirs_raw).unwrap();

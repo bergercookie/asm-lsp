@@ -97,8 +97,8 @@ pub fn main() -> Result<()> {
     // former map
     let x86_instructions = if target_config.instruction_sets.x86 {
         let start = std::time::Instant::now();
-        let x86_instrs = include_str!("../../docs_store/opcodes/serialized/x86");
-        let instrs = serde_json::de::from_str::<Vec<Instruction>>(x86_instrs)?
+        let x86_instrs = include_bytes!("../../docs_store/opcodes/serialized/x86");
+        let instrs = bincode::deserialize::<Vec<Instruction>>(x86_instrs)?
             .into_iter()
             .map(|instruction| {
                 // filter out assemblers by user config
@@ -117,8 +117,8 @@ pub fn main() -> Result<()> {
 
     let x86_64_instructions = if target_config.instruction_sets.x86_64 {
         let start = std::time::Instant::now();
-        let x86_64_instrs = include_str!("../../docs_store/opcodes/serialized/x86_64");
-        let instrs = serde_json::de::from_str::<Vec<Instruction>>(x86_64_instrs)?
+        let x86_64_instrs = include_bytes!("../../docs_store/opcodes/serialized/x86_64");
+        let instrs = bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)?
             .into_iter()
             .map(|instruction| {
                 // filter out assemblers by user config
@@ -137,8 +137,8 @@ pub fn main() -> Result<()> {
 
     let z80_instructions = if target_config.instruction_sets.z80 {
         let start = std::time::Instant::now();
-        let z80_instrs = include_str!("../../docs_store/opcodes/serialized/z80");
-        let instrs = serde_json::de::from_str::<Vec<Instruction>>(z80_instrs)?
+        let z80_instrs = include_bytes!("../../docs_store/opcodes/serialized/z80");
+        let instrs = bincode::deserialize::<Vec<Instruction>>(z80_instrs)?
             .into_iter()
             .map(|instruction| {
                 // filter out assemblers by user config
@@ -176,8 +176,8 @@ pub fn main() -> Result<()> {
     // former map
     let x86_registers = if target_config.instruction_sets.x86 {
         let start = std::time::Instant::now();
-        let regs_x86 = include_str!("../../docs_store/registers/serialized/x86");
-        let regs = serde_json::de::from_str(regs_x86)?;
+        let regs_x86 = include_bytes!("../../docs_store/registers/serialized/x86");
+        let regs = bincode::deserialize(regs_x86)?;
         info!(
             "x86 register set loaded in {}ms",
             start.elapsed().as_millis()
@@ -189,8 +189,8 @@ pub fn main() -> Result<()> {
 
     let x86_64_registers = if target_config.instruction_sets.x86_64 {
         let start = std::time::Instant::now();
-        let regs_x86_64 = include_str!("../../docs_store/registers/serialized/x86_64");
-        let regs = serde_json::de::from_str(regs_x86_64)?;
+        let regs_x86_64 = include_bytes!("../../docs_store/registers/serialized/x86_64");
+        let regs = bincode::deserialize(regs_x86_64)?;
         info!(
             "x86-64 register set loaded in {}ms",
             start.elapsed().as_millis()
@@ -202,8 +202,8 @@ pub fn main() -> Result<()> {
 
     let z80_registers = if target_config.instruction_sets.z80 {
         let start = std::time::Instant::now();
-        let regs_z80 = include_str!("../../docs_store/registers/serialized/z80");
-        let regs = serde_json::de::from_str(regs_z80)?;
+        let regs_z80 = include_bytes!("../../docs_store/registers/serialized/z80");
+        let regs = bincode::deserialize(regs_z80)?;
         info!(
             "z80 register set loaded in {}ms",
             start.elapsed().as_millis()
@@ -223,8 +223,8 @@ pub fn main() -> Result<()> {
 
     let gas_directives = if target_config.assemblers.gas {
         let start = std::time::Instant::now();
-        let gas_dirs = include_str!("../../docs_store/directives/serialized/gas");
-        let dirs = serde_json::de::from_str(gas_dirs)?;
+        let gas_dirs = include_bytes!("../../docs_store/directives/serialized/gas");
+        let dirs = bincode::deserialize(gas_dirs)?;
         info!(
             "Gas directive set loaded in {}ms",
             start.elapsed().as_millis()
