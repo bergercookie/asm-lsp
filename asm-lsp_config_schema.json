@@ -20,9 +20,13 @@
                 "go": {
                     "description": "Flag to turn features related to the Go Assembler on/off.",
                     "type": "boolean"
+                },
+                "z80": {
+                    "description": "Flag to turn features related to the z80 Assembler on/off.",
+                    "type": "boolean"
                 }
             },
-            "required": [ "gas", "go" ]
+            "required": [ "gas", "go", "z80" ]
         },
         "instruction_sets": {
             "description": "Options to manage instruction set-dependent features.",
@@ -35,9 +39,13 @@
                 "x86_64": {
                     "description": "Flag to turn features related to the x86_64 instruction set on/off.",
                     "type": "boolean"
+                },
+                "z80": {
+                    "description": "Flag to turn features related to the z80 instruction set on/off.",
+                    "type": "boolean"
                 }
             },
-            "required": [ "x86", "x86_64" ]
+            "required": [ "x86", "x86_64", "z80" ]
         }
     },
     "required": [ "version", "assemblers", "instruction_sets" ]
