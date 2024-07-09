@@ -56,7 +56,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                     "Failed to determine architecture -- Zero instructions read in"
                 ));
             };
-            let serialized = serde_json::to_string(&instrs)?;
+            let serialized = bincode::serialize(&instrs)?;
             let output_path: PathBuf = if let Some(ref path) = opts.output_path {
                 path.to_owned()
             } else {
@@ -83,7 +83,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                     "Failed to determine architecture -- Zero registers read in"
                 ));
             };
-            let serialized = serde_json::to_string(&regs)?;
+            let serialized = bincode::serialize(&regs)?;
             let output_path: PathBuf = if let Some(ref path) = opts.output_path {
                 path.to_owned()
             } else {
@@ -110,7 +110,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                     "Failed to determine assembler -- Zero directives read in"
                 ));
             };
-            let serialized = serde_json::to_string(&directives)?;
+            let serialized = bincode::serialize(&directives)?;
             let output_path: PathBuf = if let Some(ref path) = opts.output_path {
                 path.to_owned()
             } else {
