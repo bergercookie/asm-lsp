@@ -47,13 +47,14 @@ home = "0.5.5"
 tree-sitter = "0.20.10"
 tree-sitter-asm = "0.1.0"
 once_cell = "1.18.0"
-lsp-textdocument = { git = "https://github.com/GiveMe-A-Name/lsp-textdocument.git", rev = "02ecef14aeda0c8330d39fc4ce5242b2de77c509" }
 dirs = "5.0.1"
 symbolic = { version = "12.8.0", features = ["demangle"] }
 symbolic-demangle = "12.8.0"
 url-escape = "0.1.1"
 quick-xml = "0.35.0"
 bincode = "1.3.3"
+lsp-textdocument = "0.4.0"
+compile_commands = "0.2.0"
 
 [dev-dependencies]
 mockito = "1.2.0"

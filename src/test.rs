@@ -7,8 +7,9 @@ mod tests {
     use lsp_textdocument::FullTextDocument;
     use lsp_types::{
         CompletionContext, CompletionItem, CompletionItemKind, CompletionParams,
-        CompletionTriggerKind, HoverContents, MarkupContent, MarkupKind, PartialResultParams,
-        Position, TextDocumentIdentifier, TextDocumentPositionParams, Uri, WorkDoneProgressParams,
+        CompletionTriggerKind, HoverContents, HoverParams, MarkupContent, MarkupKind,
+        PartialResultParams, Position, TextDocumentIdentifier, TextDocumentPositionParams, Uri,
+        WorkDoneProgressParams,
     };
     use tree_sitter::Parser;
 
@@ -243,6 +244,13 @@ mod tests {
             position: position.expect("No <cursor> marker found"),
         };
 
+        let hover_params = HoverParams {
+            text_document_position_params: pos_params.clone(),
+            work_done_progress_params: WorkDoneProgressParams {
+                work_done_token: None,
+            },
+        };
+
         let (word, file_word) = if let Some(ref doc) = curr_doc {
             (
                 // get the word under the cursor
@@ -255,12 +263,13 @@ mod tests {
         };
 
         let resp = get_hover_resp(
+            &hover_params,
             &word,
             &file_word,
             &globals.names_to_instructions,
             &globals.names_to_registers,
             &globals.names_to_directives,
-            &Vec::new(),
+            &HashMap::new(),
         )
         .unwrap();
 
