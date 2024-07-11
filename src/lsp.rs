@@ -3,6 +3,7 @@ use std::convert::TryFrom;
 use std::fs::{create_dir_all, File};
 use std::io::BufRead;
 use std::path::PathBuf;
+use std::str::FromStr;
 
 use anyhow::{anyhow, Result};
 use dirs::config_dir;
@@ -14,17 +15,16 @@ use lsp_types::{
     GotoDefinitionResponse, Hover, HoverContents, InitializeParams, Location, MarkupContent,
     MarkupKind, Position, Range, ReferenceParams, SignatureHelp, SignatureHelpParams,
     SignatureInformation, SymbolKind, TextDocumentContentChangeEvent, TextDocumentPositionParams,
-    Url,
 };
 use once_cell::sync::Lazy;
 use symbolic::common::{Language, Name, NameMangling};
 use symbolic_demangle::{Demangle, DemangleOptions};
-use tree_sitter::{InputEdit, Parser, Tree};
+use tree_sitter::InputEdit;
 
 use crate::types::Column;
 use crate::{
     Arch, ArchOrAssembler, Assembler, Completable, Hoverable, Instruction, NameToInstructionMap,
-    TargetConfig,
+    TargetConfig, TreeEntry,
 };
 
 /// Find the start and end indices of a word inside the given line
@@ -75,12 +75,12 @@ pub fn get_word_from_file_params(
     let line = pos_params.position.line as usize;
     let col = pos_params.position.character as usize;
 
-    let filepath = uri.to_file_path();
-    match filepath {
+    let filepath = PathBuf::from(uri.as_str());
+    match filepath.canonicalize() {
         Ok(file) => {
             let file = match File::open(file) {
                 Ok(opened) => opened,
-                Err(e) => return Err(anyhow!("Couldn't open file -> {uri} -- Error: {e}")),
+                Err(e) => return Err(anyhow!("Couldn't open file -> {:?} -- Error: {e}", uri)),
             };
             let buf_reader = std::io::BufReader::new(file);
 
@@ -88,7 +88,7 @@ pub fn get_word_from_file_params(
             let (start, end) = find_word_at_pos(&line_conts, col, extra_chars);
             Ok(String::from(&line_conts[start..end]))
         }
-        Err(()) => Err(anyhow!("Filepath get error")),
+        Err(e) => Err(anyhow!("Filepath get error -- Error: {e}")),
     }
 }
 
@@ -449,8 +449,7 @@ macro_rules! cursor_matches {
 
 pub fn get_comp_resp(
     curr_doc: &str,
-    parser: &mut Parser,
-    curr_tree: &mut Option<Tree>,
+    tree_entry: &mut TreeEntry,
     params: &CompletionParams,
     instr_comps: &[CompletionItem],
     dir_comps: &[CompletionItem],
@@ -486,8 +485,8 @@ pub fn get_comp_resp(
     }
 
     // TODO: filter register completions by width allowed by corresponding instruction
-    *curr_tree = parser.parse(curr_doc, curr_tree.as_ref());
-    if let Some(tree) = curr_tree {
+    tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
+    if let Some(ref tree) = tree_entry.tree {
         let mut cursor = tree_sitter::QueryCursor::new();
         cursor.set_point_range(std::ops::Range {
             start: tree_sitter::Point {
@@ -595,11 +594,10 @@ fn lsp_pos_of_point(pos: tree_sitter::Point) -> lsp_types::Position {
 /// Get a tree of symbols describing the document's structure.
 pub fn get_document_symbols(
     curr_doc: &str,
-    parser: &mut tree_sitter::Parser,
-    curr_tree: &mut Option<Tree>,
+    tree_entry: &mut TreeEntry,
     _params: &DocumentSymbolParams,
 ) -> Option<Vec<DocumentSymbol>> {
-    *curr_tree = parser.parse(curr_doc, curr_tree.as_ref());
+    tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
 
     static LABEL_KIND_ID: Lazy<u16> =
         Lazy::new(|| tree_sitter_asm::language().id_for_node_kind("label", true));
@@ -665,7 +663,7 @@ pub fn get_document_symbols(
             }
         }
     }
-    if let Some(tree) = curr_tree {
+    if let Some(ref tree) = tree_entry.tree {
         let mut res: Vec<DocumentSymbol> = vec![];
         let mut cursor = tree.walk();
         loop {
@@ -682,15 +680,14 @@ pub fn get_document_symbols(
 
 pub fn get_sig_help_resp(
     curr_doc: &str,
-    parser: &mut tree_sitter::Parser,
     params: &SignatureHelpParams,
-    curr_tree: &mut Option<Tree>,
+    tree_entry: &mut TreeEntry,
     instr_info: &NameToInstructionMap,
 ) -> Option<SignatureHelp> {
     let cursor_line = params.text_document_position_params.position.line as usize;
 
-    *curr_tree = parser.parse(curr_doc, curr_tree.as_ref());
-    if let Some(tree) = curr_tree {
+    tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
+    if let Some(ref tree) = tree_entry.tree {
         let mut cursor = tree_sitter::QueryCursor::new();
         cursor.set_point_range(std::ops::Range {
             start: tree_sitter::Point {
@@ -806,14 +803,13 @@ pub fn get_sig_help_resp(
 
 pub fn get_goto_def_resp(
     curr_doc: &FullTextDocument,
-    parser: &mut Parser,
-    curr_tree: &mut Option<Tree>,
+    tree_entry: &mut TreeEntry,
     params: &GotoDefinitionParams,
 ) -> Option<GotoDefinitionResponse> {
     let doc = curr_doc.get_content(None);
-    *curr_tree = parser.parse(doc, curr_tree.as_ref());
+    tree_entry.tree = tree_entry.parser.parse(doc, tree_entry.tree.as_ref());
 
-    if let Some(tree) = curr_tree {
+    if let Some(ref tree) = tree_entry.tree {
         static QUERY_LABEL: Lazy<tree_sitter::Query> = Lazy::new(|| {
             tree_sitter::Query::new(tree_sitter_asm::language(), "(label) @label").unwrap()
         });
@@ -856,16 +852,15 @@ pub fn get_goto_def_resp(
 }
 
 pub fn get_ref_resp(
-    curr_doc: &FullTextDocument,
-    parser: &mut Parser,
-    curr_tree: &mut Option<Tree>,
     params: &ReferenceParams,
+    curr_doc: &FullTextDocument,
+    tree_entry: &mut TreeEntry,
 ) -> Vec<Location> {
     let mut refs: Vec<Location> = Vec::new();
     let doc = curr_doc.get_content(None);
-    *curr_tree = parser.parse(doc, curr_tree.as_ref());
+    tree_entry.tree = tree_entry.parser.parse(doc, tree_entry.tree.as_ref());
 
-    if let Some(tree) = curr_tree {
+    if let Some(ref tree) = tree_entry.tree {
         static QUERY_LABEL: Lazy<tree_sitter::Query> = Lazy::new(|| {
             tree_sitter::Query::new(
                 tree_sitter_asm::language(),
@@ -1023,8 +1018,8 @@ fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
         // if there's multiple, just visit in order until we find a valid folder
         let mut path = None;
         for folder in folders {
-            if let Ok(parsed) = Url::parse(folder.uri.as_str()) {
-                if let Ok(parsed_path) = parsed.to_file_path() {
+            if let Ok(parsed) = PathBuf::from_str(folder.uri.path().as_str()) {
+                if let Ok(parsed_path) = parsed.canonicalize() {
                     path = Some(parsed_path);
                     break;
                 }
@@ -1036,9 +1031,12 @@ fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
 
     // if workspace folders weren't set or came up empty, we check the root_uri
     if root_path.is_none() {
+        #[allow(deprecated)]
         if let Some(root_uri) = &params.root_uri {
-            if let Ok(path) = root_uri.to_file_path() {
-                root_path = Some(path);
+            if let Ok(parsed) = PathBuf::from_str(root_uri.path().as_str()) {
+                if let Ok(parsed_path) = parsed.canonicalize() {
+                    root_path = Some(parsed_path);
+                }
             }
         }
     };

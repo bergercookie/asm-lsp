@@ -1,7 +1,13 @@
-use std::{collections::HashMap, fmt::Display, str::FromStr};
+use std::{
+    collections::{BTreeMap, HashMap},
+    fmt::Display,
+    str::FromStr,
+};
 
+use lsp_types::Uri;
 use serde::{Deserialize, Serialize};
 use strum_macros::{AsRefStr, Display, EnumString};
+use tree_sitter::{Parser, Tree};
 
 // Instruction ------------------------------------------------------------------------------------
 #[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
@@ -1042,3 +1048,12 @@ pub enum OperandType {
 
 /// Represents a text cursor between characters, pointing at the next character in the buffer.
 pub type Column = usize;
+
+/// Stores a tree-sitter tree and it associated parser for a given source file
+pub struct TreeEntry {
+    pub tree: Option<Tree>,
+    pub parser: Parser,
+}
+
+/// Associates URIs with their corresponding tree-sitter tree and parser
+pub type TreeStore = BTreeMap<Uri, TreeEntry>;
