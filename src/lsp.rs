@@ -3,6 +3,7 @@ use std::convert::TryFrom;
 use std::fs::{create_dir_all, File};
 use std::io::BufRead;
 use std::path::PathBuf;
+use std::str::FromStr;
 
 use anyhow::{anyhow, Result};
 use dirs::config_dir;
@@ -14,7 +15,6 @@ use lsp_types::{
     GotoDefinitionResponse, Hover, HoverContents, InitializeParams, Location, MarkupContent,
     MarkupKind, Position, Range, ReferenceParams, SignatureHelp, SignatureHelpParams,
     SignatureInformation, SymbolKind, TextDocumentContentChangeEvent, TextDocumentPositionParams,
-    Url,
 };
 use once_cell::sync::Lazy;
 use symbolic::common::{Language, Name, NameMangling};
@@ -75,12 +75,12 @@ pub fn get_word_from_file_params(
     let line = pos_params.position.line as usize;
     let col = pos_params.position.character as usize;
 
-    let filepath = uri.to_file_path();
-    match filepath {
+    let filepath = PathBuf::from(uri.as_str());
+    match filepath.canonicalize() {
         Ok(file) => {
             let file = match File::open(file) {
                 Ok(opened) => opened,
-                Err(e) => return Err(anyhow!("Couldn't open file -> {uri} -- Error: {e}")),
+                Err(e) => return Err(anyhow!("Couldn't open file -> {:?} -- Error: {e}", uri)),
             };
             let buf_reader = std::io::BufReader::new(file);
 
@@ -88,7 +88,7 @@ pub fn get_word_from_file_params(
             let (start, end) = find_word_at_pos(&line_conts, col, extra_chars);
             Ok(String::from(&line_conts[start..end]))
         }
-        Err(()) => Err(anyhow!("Filepath get error")),
+        Err(e) => Err(anyhow!("Filepath get error -- Error: {e}")),
     }
 }
 
@@ -1018,8 +1018,8 @@ fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
         // if there's multiple, just visit in order until we find a valid folder
         let mut path = None;
         for folder in folders {
-            if let Ok(parsed) = Url::parse(folder.uri.as_str()) {
-                if let Ok(parsed_path) = parsed.to_file_path() {
+            if let Ok(parsed) = PathBuf::from_str(folder.uri.path().as_str()) {
+                if let Ok(parsed_path) = parsed.canonicalize() {
                     path = Some(parsed_path);
                     break;
                 }
@@ -1031,9 +1031,12 @@ fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
 
     // if workspace folders weren't set or came up empty, we check the root_uri
     if root_path.is_none() {
+        #[allow(deprecated)]
         if let Some(root_uri) = &params.root_uri {
-            if let Ok(path) = root_uri.to_file_path() {
-                root_path = Some(path);
+            if let Ok(parsed) = PathBuf::from_str(root_uri.path().as_str()) {
+                if let Ok(parsed_path) = parsed.canonicalize() {
+                    root_path = Some(parsed_path);
+                }
             }
         }
     };

@@ -367,7 +367,7 @@ fn main_loop(
                     error!("Invalid request format -> {:#?}", req);
                 }
             }
-            Message::Notification(ref notif) => {
+            Message::Notification(notif) => {
                 if let Ok(params) = cast_notif::<DidOpenTextDocument>(notif.clone()) {
                     handle_did_open_text_document_notification(
                         &params,

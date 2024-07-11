@@ -1,14 +1,14 @@
 #[cfg(test)]
 mod tests {
     use core::panic;
-    use std::collections::HashMap;
+    use std::{collections::HashMap, str::FromStr};
 
     use anyhow::Result;
     use lsp_textdocument::FullTextDocument;
     use lsp_types::{
         CompletionContext, CompletionItem, CompletionItemKind, CompletionParams,
         CompletionTriggerKind, HoverContents, MarkupContent, MarkupKind, PartialResultParams,
-        Position, TextDocumentIdentifier, TextDocumentPositionParams, Url, WorkDoneProgressParams,
+        Position, TextDocumentIdentifier, TextDocumentPositionParams, Uri, WorkDoneProgressParams,
     };
     use tree_sitter::Parser;
 
@@ -18,7 +18,7 @@ mod tests {
         populate_name_to_directive_map, populate_name_to_instruction_map,
         populate_name_to_register_map, populate_registers, x86_parser::get_cache_dir, Arch,
         Assembler, Assemblers, Directive, Instruction, InstructionSets, NameToDirectiveMap,
-        NameToInstructionMap, NameToRegisterMap, Register, TargetConfig,
+        NameToInstructionMap, NameToRegisterMap, Register, TargetConfig, TreeEntry,
     };
 
     #[derive(Debug)]
@@ -238,7 +238,7 @@ mod tests {
 
         let pos_params = TextDocumentPositionParams {
             text_document: TextDocumentIdentifier {
-                uri: Url::parse("file://").unwrap(),
+                uri: Uri::from_str("file://").unwrap(),
             },
             position: position.expect("No <cursor> marker found"),
         };
@@ -289,7 +289,8 @@ mod tests {
 
         let mut parser = Parser::new();
         parser.set_language(tree_sitter_asm::language()).unwrap();
-        let mut tree = parser.parse(&source_code, None);
+        let tree = parser.parse(&source_code, None);
+        let mut tree_entry = TreeEntry { tree, parser };
 
         let mut position: Option<Position> = None;
         for (line_num, line) in source.lines().enumerate() {
@@ -304,7 +305,7 @@ mod tests {
 
         let pos_params = TextDocumentPositionParams {
             text_document: TextDocumentIdentifier {
-                uri: Url::parse("file://").unwrap(),
+                uri: Uri::from_str("file://").unwrap(),
             },
             position: position.expect("No <cursor> marker found"),
         };
@@ -327,8 +328,7 @@ mod tests {
 
         let resp = get_comp_resp(
             &source_code,
-            &mut parser,
-            &mut tree,
+            &mut tree_entry,
             &params,
             &globals.instr_completion_items,
             &globals.directive_completion_items,

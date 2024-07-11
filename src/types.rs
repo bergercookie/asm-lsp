@@ -4,7 +4,7 @@ use std::{
     str::FromStr,
 };
 
-use lsp_types::Url;
+use lsp_types::Uri;
 use serde::{Deserialize, Serialize};
 use strum_macros::{AsRefStr, Display, EnumString};
 use tree_sitter::{Parser, Tree};
@@ -1055,4 +1055,5 @@ pub struct TreeEntry {
     pub parser: Parser,
 }
 
-pub type TreeStore = BTreeMap<Url, TreeEntry>;
+/// Associates URIs with their corresponding tree-sitter tree and parser
+pub type TreeStore = BTreeMap<Uri, TreeEntry>;
