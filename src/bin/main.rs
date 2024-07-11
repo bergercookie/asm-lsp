@@ -10,7 +10,7 @@ use asm_lsp::{
     get_completes, get_include_dirs, get_target_config, instr_filter_targets,
     populate_name_to_directive_map, populate_name_to_instruction_map,
     populate_name_to_register_map, tree_sitter_logger, Arch, Assembler, Instruction,
-    NameToInfoMaps,
+    NameToInfoMaps, TreeStore,
 };
 
 use lsp_types::notification::{DidChangeTextDocument, DidCloseTextDocument, DidOpenTextDocument};
@@ -280,7 +280,7 @@ fn main_loop(
     let _params: InitializeParams = serde_json::from_value(params).unwrap();
     let mut text_store = TextDocuments::new();
     let mut parser = tree_sitter::Parser::new();
-    let mut tree: Option<tree_sitter::Tree> = None;
+    let mut tree_store = TreeStore::new();
     parser.set_logger(Some(Box::new(tree_sitter_logger)));
     parser.set_language(tree_sitter_asm::language())?;
 
@@ -311,8 +311,7 @@ fn main_loop(
                         id,
                         &params,
                         &text_store,
-                        &mut parser,
-                        &mut tree,
+                        &mut tree_store,
                         instruction_completion_items,
                         directive_completion_items,
                         register_completion_items,
@@ -322,14 +321,7 @@ fn main_loop(
                         start.elapsed().as_millis()
                     );
                 } else if let Ok((id, params)) = cast_req::<GotoDefinition>(req.clone()) {
-                    handle_goto_def_request(
-                        connection,
-                        id,
-                        &params,
-                        &text_store,
-                        &mut parser,
-                        &mut tree,
-                    )?;
+                    handle_goto_def_request(connection, id, &params, &text_store, &mut tree_store)?;
                     info!(
                         "Goto definition request serviced in {}ms",
                         start.elapsed().as_millis()
@@ -340,8 +332,7 @@ fn main_loop(
                         id,
                         &params,
                         &text_store,
-                        &mut parser,
-                        &mut tree,
+                        &mut tree_store,
                     )?;
                     info!(
                         "Document symbols request serviced in {}ms",
@@ -353,8 +344,7 @@ fn main_loop(
                         id,
                         &params,
                         &text_store,
-                        &mut parser,
-                        &mut tree,
+                        &mut tree_store,
                         &names_to_info.instructions,
                     )?;
                     info!(
@@ -367,8 +357,7 @@ fn main_loop(
                         id,
                         &params,
                         &text_store,
-                        &mut parser,
-                        &mut tree,
+                        &mut tree_store,
                     )?;
                     info!(
                         "References request serviced in {}ms",
@@ -383,8 +372,7 @@ fn main_loop(
                     handle_did_open_text_document_notification(
                         &params,
                         &mut text_store,
-                        &mut parser,
-                        &mut tree,
+                        &mut tree_store,
                     );
                     info!(
                         "Did open text document notification serviced in {}ms",
@@ -394,13 +382,13 @@ fn main_loop(
                     handle_did_change_text_document_notification(
                         &params,
                         &mut text_store,
-                        &mut tree,
+                        &mut tree_store,
                     )?;
                 } else if let Ok(params) = cast_notif::<DidCloseTextDocument>(notif.clone()) {
                     handle_did_close_text_document_notification(
                         &params,
                         &mut text_store,
-                        &mut tree,
+                        &mut tree_store,
                     );
                     info!(
                         "Did close text document notification serviced in {}ms",

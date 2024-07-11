@@ -12,12 +12,12 @@ use lsp_types::{
     HoverParams, ReferenceParams, SignatureHelpParams,
 };
 use serde_json::json;
-use tree_sitter::{Parser, Tree};
+use tree_sitter::Parser;
 
 use crate::{
     get_comp_resp, get_document_symbols, get_goto_def_resp, get_hover_resp, get_ref_resp,
     get_sig_help_resp, get_word_from_pos_params, text_doc_change_to_ts_edit, NameToInfoMaps,
-    NameToInstructionMap,
+    NameToInstructionMap, TreeEntry, TreeStore,
 };
 
 /// Handles hover requests
@@ -93,29 +93,30 @@ pub fn handle_completion_request(
     id: RequestId,
     params: &CompletionParams,
     text_store: &TextDocuments,
-    parser: &mut Parser,
-    tree: &mut Option<Tree>,
+    tree_store: &mut TreeStore,
     instruction_completion_items: &[CompletionItem],
     directive_completion_items: &[CompletionItem],
     register_completion_items: &[CompletionItem],
 ) -> Result<()> {
-    if let Some(doc) = text_store.get_document(&params.text_document_position.text_document.uri) {
-        if let Some(comp_resp) = get_comp_resp(
-            doc.get_content(None),
-            parser,
-            tree,
-            params,
-            instruction_completion_items,
-            directive_completion_items,
-            register_completion_items,
-        ) {
-            let result = serde_json::to_value(comp_resp).unwrap();
-            let result = Response {
-                id,
-                result: Some(result),
-                error: None,
-            };
-            return Ok(connection.sender.send(Message::Response(result))?);
+    let uri = &params.text_document_position.text_document.uri;
+    if let Some(doc) = text_store.get_document(uri) {
+        if let Some(ref mut tree_entry) = tree_store.get_mut(uri) {
+            if let Some(comp_resp) = get_comp_resp(
+                doc.get_content(None),
+                tree_entry,
+                params,
+                instruction_completion_items,
+                directive_completion_items,
+                register_completion_items,
+            ) {
+                let result = serde_json::to_value(comp_resp).unwrap();
+                let result = Response {
+                    id,
+                    result: Some(result),
+                    error: None,
+                };
+                return Ok(connection.sender.send(Message::Response(result))?);
+            }
         }
     }
 
@@ -142,21 +143,21 @@ pub fn handle_goto_def_request(
     id: RequestId,
     params: &GotoDefinitionParams,
     text_store: &TextDocuments,
-    parser: &mut Parser,
-    tree: &mut Option<Tree>,
+    tree_store: &mut TreeStore,
 ) -> Result<()> {
-    if let Some(doc) =
-        text_store.get_document(&params.text_document_position_params.text_document.uri)
-    {
-        if let Some(def_resp) = get_goto_def_resp(doc, parser, tree, params) {
-            let result = serde_json::to_value(def_resp).unwrap();
-            let result = Response {
-                id,
-                result: Some(result),
-                error: None,
-            };
+    let uri = &params.text_document_position_params.text_document.uri;
+    if let Some(doc) = text_store.get_document(uri) {
+        if let Some(tree_entry) = tree_store.get_mut(uri) {
+            if let Some(def_resp) = get_goto_def_resp(doc, tree_entry, params) {
+                let result = serde_json::to_value(def_resp).unwrap();
+                let result = Response {
+                    id,
+                    result: Some(result),
+                    error: None,
+                };
 
-            return Ok(connection.sender.send(Message::Response(result))?);
+                return Ok(connection.sender.send(Message::Response(result))?);
+            }
         }
     }
 
@@ -183,19 +184,21 @@ pub fn handle_document_symbols_request(
     id: RequestId,
     params: &DocumentSymbolParams,
     text_store: &TextDocuments,
-    parser: &mut Parser,
-    tree: &mut Option<Tree>,
+    tree_store: &mut TreeStore,
 ) -> Result<()> {
-    if let Some(doc) = text_store.get_document(&params.text_document.uri) {
-        if let Some(symbols) = get_document_symbols(doc.get_content(None), parser, tree, params) {
-            let resp = DocumentSymbolResponse::Nested(symbols);
-            let result = serde_json::to_value(resp).unwrap();
-            let result = Response {
-                id: id.clone(),
-                result: Some(result),
-                error: None,
-            };
-            return Ok(connection.sender.send(Message::Response(result))?);
+    let uri = &params.text_document.uri;
+    if let Some(doc) = text_store.get_document(uri) {
+        if let Some(tree_entry) = tree_store.get_mut(uri) {
+            if let Some(symbols) = get_document_symbols(doc.get_content(None), tree_entry, params) {
+                let resp = DocumentSymbolResponse::Nested(symbols);
+                let result = serde_json::to_value(resp).unwrap();
+                let result = Response {
+                    id: id.clone(),
+                    result: Some(result),
+                    error: None,
+                };
+                return Ok(connection.sender.send(Message::Response(result))?);
+            }
         }
     }
 
@@ -222,30 +225,29 @@ pub fn handle_signature_help_request(
     id: RequestId,
     params: &SignatureHelpParams,
     text_store: &TextDocuments,
-    parser: &mut Parser,
-    tree: &mut Option<Tree>,
+    tree_store: &mut TreeStore,
     names_to_instructions: &NameToInstructionMap,
 ) -> Result<()> {
-    if let Some(doc) =
-        text_store.get_document(&params.text_document_position_params.text_document.uri)
-    {
-        let sig_resp = get_sig_help_resp(
-            doc.get_content(None),
-            parser,
-            params,
-            tree,
-            names_to_instructions,
-        );
+    let uri = &params.text_document_position_params.text_document.uri;
+    if let Some(doc) = text_store.get_document(uri) {
+        if let Some(tree_entry) = tree_store.get_mut(uri) {
+            let sig_resp = get_sig_help_resp(
+                doc.get_content(None),
+                params,
+                tree_entry,
+                names_to_instructions,
+            );
 
-        if let Some(sig) = sig_resp {
-            let result = serde_json::to_value(sig).unwrap();
-            let result = Response {
-                id: id.clone(),
-                result: Some(result),
-                error: None,
-            };
+            if let Some(sig) = sig_resp {
+                let result = serde_json::to_value(sig).unwrap();
+                let result = Response {
+                    id: id.clone(),
+                    result: Some(result),
+                    error: None,
+                };
 
-            return Ok(connection.sender.send(Message::Response(result))?);
+                return Ok(connection.sender.send(Message::Response(result))?);
+            }
         }
     }
 
@@ -272,20 +274,22 @@ pub fn handle_references_request(
     id: RequestId,
     params: &ReferenceParams,
     text_store: &TextDocuments,
-    parser: &mut Parser,
-    tree: &mut Option<Tree>,
+    tree_store: &mut TreeStore,
 ) -> Result<()> {
-    if let Some(doc) = text_store.get_document(&params.text_document_position.text_document.uri) {
-        let ref_resp = get_ref_resp(doc, parser, tree, params);
-        if !ref_resp.is_empty() {
-            let result = serde_json::to_value(&ref_resp).unwrap();
+    let uri = &params.text_document_position.text_document.uri;
+    if let Some(doc) = text_store.get_document(uri) {
+        if let Some(tree_entry) = tree_store.get_mut(uri) {
+            let ref_resp = get_ref_resp(params, doc, tree_entry);
+            if !ref_resp.is_empty() {
+                let result = serde_json::to_value(&ref_resp).unwrap();
 
-            let result = Response {
-                id: id.clone(),
-                result: Some(result),
-                error: None,
-            };
-            return Ok(connection.sender.send(Message::Response(result.clone()))?);
+                let result = Response {
+                    id: id.clone(),
+                    result: Some(result),
+                    error: None,
+                };
+                return Ok(connection.sender.send(Message::Response(result.clone()))?);
+            }
         }
     }
 
@@ -306,16 +310,25 @@ pub fn handle_references_request(
 ///
 /// # Panics
 ///
-/// Panics if JSON encoding of a response fails
+/// Panics if JSON encoding of a response fails, or if the parser
+/// fails to set the language
 pub fn handle_did_open_text_document_notification(
     params: &DidOpenTextDocumentParams,
     text_store: &mut TextDocuments,
-    parser: &mut Parser,
-    tree: &mut Option<Tree>,
+    tree_store: &mut TreeStore,
 ) {
     let raw_params = serde_json::to_value(params).unwrap();
     text_store.listen(DidOpenTextDocument::METHOD, &raw_params);
-    *tree = parser.parse(&params.text_document.text, None);
+
+    let mut parser = Parser::new();
+    parser.set_language(tree_sitter_asm::language()).unwrap();
+    tree_store.insert(
+        params.text_document.uri.clone(),
+        TreeEntry {
+            tree: parser.parse(&params.text_document.text, None),
+            parser,
+        },
+    );
 }
 
 /// Handles did change text document notifications
@@ -332,20 +345,23 @@ pub fn handle_did_open_text_document_notification(
 pub fn handle_did_change_text_document_notification(
     params: &DidChangeTextDocumentParams,
     text_store: &mut TextDocuments,
-    tree: &mut Option<Tree>,
+    tree_store: &mut TreeStore,
 ) -> Result<()> {
     let raw_params = serde_json::to_value(params).unwrap();
     text_store.listen(DidChangeTextDocument::METHOD, &raw_params);
-    if let Some(ref mut doc) = text_store.get_document(&params.text_document.uri) {
-        // Update the TS tree
-        if let Some(ref mut curr_tree) = tree {
-            for change in &params.content_changes {
-                match text_doc_change_to_ts_edit(change, doc) {
-                    Ok(edit) => {
-                        curr_tree.edit(&edit);
-                    }
-                    Err(e) => {
-                        return Err(anyhow!("Bad edit info, failed to edit tree - Error: {e}"));
+
+    let uri = &params.text_document.uri;
+    if let Some(ref mut doc) = text_store.get_document(uri) {
+        if let Some(tree_entry) = tree_store.get_mut(uri) {
+            if let Some(ref mut curr_tree) = tree_entry.tree {
+                for change in &params.content_changes {
+                    match text_doc_change_to_ts_edit(change, doc) {
+                        Ok(edit) => {
+                            curr_tree.edit(&edit);
+                        }
+                        Err(e) => {
+                            return Err(anyhow!("Bad edit info, failed to edit tree - Error: {e}"));
+                        }
                     }
                 }
             }
@@ -359,12 +375,13 @@ pub fn handle_did_change_text_document_notification(
 ///
 /// # Panics
 ///
-/// Panics if JSON encoding of a response fails
+/// Panics if JSON encoding of `params` fails
 pub fn handle_did_close_text_document_notification(
     params: &DidCloseTextDocumentParams,
     text_store: &mut TextDocuments,
-    _tree: &mut Option<Tree>,
+    tree_store: &mut TreeStore,
 ) {
     let raw_params = serde_json::to_value(params).unwrap();
     text_store.listen(DidCloseTextDocument::METHOD, &raw_params);
+    tree_store.remove(&params.text_document.uri);
 }
