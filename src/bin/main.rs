@@ -2,9 +2,9 @@ use std::path::PathBuf;
 
 use asm_lsp::handle::{
     handle_completion_request, handle_did_change_text_document_notification,
-    handle_did_open_text_document_notification, handle_document_symbols_request,
-    handle_goto_def_request, handle_hover_request, handle_references_request,
-    handle_signature_help_request,
+    handle_did_close_text_document_notification, handle_did_open_text_document_notification,
+    handle_document_symbols_request, handle_goto_def_request, handle_hover_request,
+    handle_references_request, handle_signature_help_request,
 };
 use asm_lsp::{
     get_completes, get_include_dirs, get_target_config, instr_filter_targets,
@@ -13,7 +13,7 @@ use asm_lsp::{
     NameToInfoMaps,
 };
 
-use lsp_types::notification::{DidChangeTextDocument, DidOpenTextDocument};
+use lsp_types::notification::{DidChangeTextDocument, DidCloseTextDocument, DidOpenTextDocument};
 use lsp_types::request::{
     Completion, DocumentSymbolRequest, GotoDefinition, HoverRequest, References,
     SignatureHelpRequest,
@@ -28,7 +28,7 @@ use lsp_types::{
 use anyhow::Result;
 use log::{error, info};
 use lsp_server::{Connection, Message, Notification, Request, RequestId};
-use lsp_textdocument::FullTextDocument;
+use lsp_textdocument::TextDocuments;
 
 // main -------------------------------------------------------------------------------------------
 pub fn main() -> Result<()> {
@@ -278,7 +278,7 @@ fn main_loop(
     include_dirs: &[PathBuf],
 ) -> Result<()> {
     let _params: InitializeParams = serde_json::from_value(params).unwrap();
-    let mut curr_doc: Option<FullTextDocument> = None;
+    let mut text_store = TextDocuments::new();
     let mut parser = tree_sitter::Parser::new();
     let mut tree: Option<tree_sitter::Tree> = None;
     parser.set_logger(Some(Box::new(tree_sitter_logger)));
@@ -297,7 +297,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
-                        &curr_doc,
+                        &text_store,
                         names_to_info,
                         include_dirs,
                     )?;
@@ -310,7 +310,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
-                        &curr_doc,
+                        &text_store,
                         &mut parser,
                         &mut tree,
                         instruction_completion_items,
@@ -326,7 +326,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
-                        &curr_doc,
+                        &text_store,
                         &mut parser,
                         &mut tree,
                     )?;
@@ -339,7 +339,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
-                        &curr_doc,
+                        &text_store,
                         &mut parser,
                         &mut tree,
                     )?;
@@ -352,7 +352,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
-                        &curr_doc,
+                        &text_store,
                         &mut parser,
                         &mut tree,
                         &names_to_info.instructions,
@@ -366,7 +366,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
-                        &curr_doc,
+                        &text_store,
                         &mut parser,
                         &mut tree,
                     )?;
@@ -378,11 +378,11 @@ fn main_loop(
                     error!("Invalid request format -> {:#?}", req);
                 }
             }
-            Message::Notification(notif) => {
+            Message::Notification(ref notif) => {
                 if let Ok(params) = cast_notif::<DidOpenTextDocument>(notif.clone()) {
                     handle_did_open_text_document_notification(
-                        params,
-                        &mut curr_doc,
+                        &params,
+                        &mut text_store,
                         &mut parser,
                         &mut tree,
                     );
@@ -393,9 +393,19 @@ fn main_loop(
                 } else if let Ok(params) = cast_notif::<DidChangeTextDocument>(notif.clone()) {
                     handle_did_change_text_document_notification(
                         &params,
-                        &mut curr_doc,
+                        &mut text_store,
                         &mut tree,
                     )?;
+                } else if let Ok(params) = cast_notif::<DidCloseTextDocument>(notif.clone()) {
+                    handle_did_close_text_document_notification(
+                        &params,
+                        &mut text_store,
+                        &mut tree,
+                    );
+                    info!(
+                        "Did close text document notification serviced in {}ms",
+                        start.elapsed().as_millis()
+                    );
                 }
             }
             Message::Response(_resp) => {}

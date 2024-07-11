@@ -2,11 +2,14 @@ use std::path::PathBuf;
 
 use anyhow::{anyhow, Result};
 use lsp_server::{Connection, Message, RequestId, Response};
-use lsp_textdocument::FullTextDocument;
+use lsp_textdocument::TextDocuments;
 use lsp_types::{
-    CompletionItem, CompletionParams, DidChangeTextDocumentParams, DidOpenTextDocumentParams,
-    DocumentSymbolParams, DocumentSymbolResponse, GotoDefinitionParams, HoverParams,
-    ReferenceParams, SignatureHelpParams,
+    notification::{
+        DidChangeTextDocument, DidCloseTextDocument, DidOpenTextDocument, Notification,
+    },
+    CompletionItem, CompletionParams, DidChangeTextDocumentParams, DidCloseTextDocumentParams,
+    DidOpenTextDocumentParams, DocumentSymbolParams, DocumentSymbolResponse, GotoDefinitionParams,
+    HoverParams, ReferenceParams, SignatureHelpParams,
 };
 use serde_json::json;
 use tree_sitter::{Parser, Tree};
@@ -30,7 +33,7 @@ pub fn handle_hover_request(
     connection: &Connection,
     id: RequestId,
     params: &HoverParams,
-    curr_doc: &Option<FullTextDocument>,
+    text_store: &TextDocuments,
     names_to_info: &NameToInfoMaps,
     include_dirs: &[PathBuf],
 ) -> Result<()> {
@@ -40,7 +43,9 @@ pub fn handle_hover_request(
         error: None,
     };
 
-    let (word, file_word) = if let Some(ref doc) = curr_doc {
+    let (word, file_word) = if let Some(doc) =
+        text_store.get_document(&params.text_document_position_params.text_document.uri)
+    {
         (
             // get the word under the cursor
             get_word_from_pos_params(doc, &params.text_document_position_params, ""),
@@ -87,14 +92,14 @@ pub fn handle_completion_request(
     connection: &Connection,
     id: RequestId,
     params: &CompletionParams,
-    curr_doc: &Option<FullTextDocument>,
+    text_store: &TextDocuments,
     parser: &mut Parser,
     tree: &mut Option<Tree>,
     instruction_completion_items: &[CompletionItem],
     directive_completion_items: &[CompletionItem],
     register_completion_items: &[CompletionItem],
 ) -> Result<()> {
-    if let Some(ref doc) = curr_doc {
+    if let Some(doc) = text_store.get_document(&params.text_document_position.text_document.uri) {
         if let Some(comp_resp) = get_comp_resp(
             doc.get_content(None),
             parser,
@@ -136,11 +141,13 @@ pub fn handle_goto_def_request(
     connection: &Connection,
     id: RequestId,
     params: &GotoDefinitionParams,
-    curr_doc: &Option<FullTextDocument>,
+    text_store: &TextDocuments,
     parser: &mut Parser,
     tree: &mut Option<Tree>,
 ) -> Result<()> {
-    if let Some(ref doc) = curr_doc {
+    if let Some(doc) =
+        text_store.get_document(&params.text_document_position_params.text_document.uri)
+    {
         if let Some(def_resp) = get_goto_def_resp(doc, parser, tree, params) {
             let result = serde_json::to_value(def_resp).unwrap();
             let result = Response {
@@ -175,11 +182,11 @@ pub fn handle_document_symbols_request(
     connection: &Connection,
     id: RequestId,
     params: &DocumentSymbolParams,
-    curr_doc: &Option<FullTextDocument>,
+    text_store: &TextDocuments,
     parser: &mut Parser,
     tree: &mut Option<Tree>,
 ) -> Result<()> {
-    if let Some(ref doc) = curr_doc {
+    if let Some(doc) = text_store.get_document(&params.text_document.uri) {
         if let Some(symbols) = get_document_symbols(doc.get_content(None), parser, tree, params) {
             let resp = DocumentSymbolResponse::Nested(symbols);
             let result = serde_json::to_value(resp).unwrap();
@@ -214,12 +221,14 @@ pub fn handle_signature_help_request(
     connection: &Connection,
     id: RequestId,
     params: &SignatureHelpParams,
-    curr_doc: &Option<FullTextDocument>,
+    text_store: &TextDocuments,
     parser: &mut Parser,
     tree: &mut Option<Tree>,
     names_to_instructions: &NameToInstructionMap,
 ) -> Result<()> {
-    if let Some(ref doc) = curr_doc {
+    if let Some(doc) =
+        text_store.get_document(&params.text_document_position_params.text_document.uri)
+    {
         let sig_resp = get_sig_help_resp(
             doc.get_content(None),
             parser,
@@ -262,11 +271,11 @@ pub fn handle_references_request(
     connection: &Connection,
     id: RequestId,
     params: &ReferenceParams,
-    curr_doc: &Option<FullTextDocument>,
+    text_store: &TextDocuments,
     parser: &mut Parser,
     tree: &mut Option<Tree>,
 ) -> Result<()> {
-    if let Some(ref doc) = curr_doc {
+    if let Some(doc) = text_store.get_document(&params.text_document_position.text_document.uri) {
         let ref_resp = get_ref_resp(doc, parser, tree, params);
         if !ref_resp.is_empty() {
             let result = serde_json::to_value(&ref_resp).unwrap();
@@ -299,17 +308,14 @@ pub fn handle_references_request(
 ///
 /// Panics if JSON encoding of a response fails
 pub fn handle_did_open_text_document_notification(
-    params: DidOpenTextDocumentParams,
-    curr_doc: &mut Option<FullTextDocument>,
+    params: &DidOpenTextDocumentParams,
+    text_store: &mut TextDocuments,
     parser: &mut Parser,
     tree: &mut Option<Tree>,
 ) {
-    *curr_doc = Some(FullTextDocument::new(
-        params.text_document.language_id,
-        params.text_document.version,
-        params.text_document.text.clone(),
-    ));
-    *tree = parser.parse(params.text_document.text, None);
+    let raw_params = serde_json::to_value(params).unwrap();
+    text_store.listen(DidOpenTextDocument::METHOD, &raw_params);
+    *tree = parser.parse(&params.text_document.text, None);
 }
 
 /// Handles did change text document notifications
@@ -325,12 +331,12 @@ pub fn handle_did_open_text_document_notification(
 /// Panics if JSON encoding of a response fails
 pub fn handle_did_change_text_document_notification(
     params: &DidChangeTextDocumentParams,
-    curr_doc: &mut Option<FullTextDocument>,
+    text_store: &mut TextDocuments,
     tree: &mut Option<Tree>,
 ) -> Result<()> {
-    if let Some(ref mut doc) = curr_doc {
-        // Sync our in-memory copy of the current buffer
-        doc.update(&params.content_changes, params.text_document.version);
+    let raw_params = serde_json::to_value(params).unwrap();
+    text_store.listen(DidChangeTextDocument::METHOD, &raw_params);
+    if let Some(ref mut doc) = text_store.get_document(&params.text_document.uri) {
         // Update the TS tree
         if let Some(ref mut curr_tree) = tree {
             for change in &params.content_changes {
@@ -347,4 +353,18 @@ pub fn handle_did_change_text_document_notification(
     }
 
     Ok(())
+}
+
+/// Handles did close text document notifications
+///
+/// # Panics
+///
+/// Panics if JSON encoding of a response fails
+pub fn handle_did_close_text_document_notification(
+    params: &DidCloseTextDocumentParams,
+    text_store: &mut TextDocuments,
+    _tree: &mut Option<Tree>,
+) {
+    let raw_params = serde_json::to_value(params).unwrap();
+    text_store.listen(DidCloseTextDocument::METHOD, &raw_params);
 }
