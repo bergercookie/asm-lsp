@@ -59,6 +59,12 @@ x86_64 = true
 z80 = false
 ```
 
+### VSCode Support
+
+The project has not published any VSCode extension package yet. However, there is
+a development extension in the [`editors/code`](https://github.com/bergercookie/asm-lsp/blob/master/editors/code/README.md)
+directory with setup instructions.
+
 ## Root directory must contain `.git`
 
 The lsp searches for a `.git` directory to locate the root of your project.

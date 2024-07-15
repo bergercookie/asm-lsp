@@ -1,0 +1,63 @@
+{
+    "name": "asm-lsp",
+    "version": "1.0.0",
+    "description": "Language Server for Assembly",
+    "scripts": {
+        "vscode:prepublish": "npm run build-base -- --minify",
+        "package": "vsce package -o asm-lsp.vsix",
+        "build-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --target=node16",
+        "build": "npm run build-base -- --sourcemap",
+        "watch": "npm run build-base -- --sourcemap --watch",
+        "lint:check": "eslint ./src --ext .ts,.tsx",
+        "lint:fix": "npm run lint -- --fix",
+        "format:check": "prettier --check .",
+        "format:fix": "prettier --write .",
+        "typecheck": "tsc"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bergercookie/asm-lsp.git"
+    },
+    "keywords": [
+        "asm"
+    ],
+    "author": "Nikos Koukis",
+    "license": "BSD-2-Clause",
+    "bugs": {
+        "url": "https://github.com/bergercookie/asm-lsp/issues"
+    },
+    "homepage": "https://github.com/bergercookie/asm-lsp#readme",
+    "engines": {
+        "vscode": "^1.75.0"
+    },
+    "activationEvents": [
+        "onLanguage:asm"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "languages": [
+            {
+                "id": "asm",
+                "extensions": [
+                    ".s",
+                    ".S"
+                ]
+            }
+        ]
+    },
+    "devDependencies": {
+        "@types/node": "^18.14.6",
+        "@types/vscode": "^1.75.1",
+        "@typescript-eslint/eslint-plugin": "^7.1.0",
+        "@typescript-eslint/parser": "^7.1.0",
+        "@vscode/test-electron": "^2.3.9",
+        "@vscode/vsce": "^2.29.0",
+        "esbuild": "^0.23.0",
+        "eslint": "^8.57.0",
+        "typescript": "^5.3.3",
+        "prettier": "^3.0.0"
+    },
+    "dependencies": {
+        "vscode-languageclient": "^9.0.1"
+    }
+}
