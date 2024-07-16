@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::path::PathBuf;
 
 use asm_lsp::handle::{
@@ -7,12 +8,12 @@ use asm_lsp::handle::{
     handle_references_request, handle_signature_help_request,
 };
 use asm_lsp::{
-    get_completes, get_include_dirs, get_target_config, instr_filter_targets,
+    get_compile_cmds, get_completes, get_include_dirs, get_target_config, instr_filter_targets,
     populate_name_to_directive_map, populate_name_to_instruction_map,
-    populate_name_to_register_map, tree_sitter_logger, Arch, Assembler, Instruction,
-    NameToInfoMaps, TreeStore,
+    populate_name_to_register_map, Arch, Assembler, Instruction, NameToInfoMaps, TreeStore,
 };
 
+use compile_commands::{CompilationDatabase, SourceFile};
 use lsp_types::notification::{DidChangeTextDocument, DidCloseTextDocument, DidOpenTextDocument};
 use lsp_types::request::{
     Completion, DocumentSymbolRequest, GotoDefinition, HoverRequest, References,
@@ -251,7 +252,8 @@ pub fn main() -> Result<()> {
         Some(CompletionItemKind::OPERATOR),
     );
 
-    let include_dirs = get_include_dirs();
+    let compile_cmds = get_compile_cmds(&params).unwrap_or_default();
+    let include_dirs = get_include_dirs(&compile_cmds);
 
     main_loop(
         &connection,
@@ -260,6 +262,7 @@ pub fn main() -> Result<()> {
         &instr_completion_items,
         &directive_completion_items,
         &reg_completion_items,
+        &compile_cmds,
         &include_dirs,
     )?;
     io_threads.join()?;
@@ -268,6 +271,7 @@ pub fn main() -> Result<()> {
     Ok(())
 }
 
+#[allow(clippy::too_many_arguments)]
 fn main_loop(
     connection: &Connection,
     params: serde_json::Value,
@@ -275,14 +279,12 @@ fn main_loop(
     instruction_completion_items: &[CompletionItem],
     directive_completion_items: &[CompletionItem],
     register_completion_items: &[CompletionItem],
-    include_dirs: &[PathBuf],
+    _compile_cmds: &CompilationDatabase,
+    include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
 ) -> Result<()> {
     let _params: InitializeParams = serde_json::from_value(params).unwrap();
     let mut text_store = TextDocuments::new();
-    let mut parser = tree_sitter::Parser::new();
     let mut tree_store = TreeStore::new();
-    parser.set_logger(Some(Box::new(tree_sitter_logger)));
-    parser.set_language(tree_sitter_asm::language())?;
 
     info!("Starting asm_lsp loop...");
     for msg in &connection.receiver {

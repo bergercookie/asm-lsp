@@ -6,15 +6,17 @@ use std::path::PathBuf;
 use std::str::FromStr;
 
 use anyhow::{anyhow, Result};
+use compile_commands::{CompilationDatabase, SourceFile};
 use dirs::config_dir;
-use log::{error, info, log, log_enabled};
+use log::{error, info, log, log_enabled, warn};
 use lsp_textdocument::FullTextDocument;
 use lsp_types::{
     CompletionItem, CompletionItemKind, CompletionList, CompletionParams, CompletionTriggerKind,
     DocumentSymbol, DocumentSymbolParams, Documentation, GotoDefinitionParams,
-    GotoDefinitionResponse, Hover, HoverContents, InitializeParams, Location, MarkupContent,
-    MarkupKind, Position, Range, ReferenceParams, SignatureHelp, SignatureHelpParams,
-    SignatureInformation, SymbolKind, TextDocumentContentChangeEvent, TextDocumentPositionParams,
+    GotoDefinitionResponse, Hover, HoverContents, HoverParams, InitializeParams, Location,
+    MarkupContent, MarkupKind, Position, Range, ReferenceParams, SignatureHelp,
+    SignatureHelpParams, SignatureInformation, SymbolKind, TextDocumentContentChangeEvent,
+    TextDocumentPositionParams, Uri,
 };
 use once_cell::sync::Lazy;
 use symbolic::common::{Language, Name, NameMangling};
@@ -123,9 +125,35 @@ pub fn get_word_from_pos_params<'a>(
     &line_contents[word_start..word_end]
 }
 
-/// Returns a vector of #include directories
+/// Fetches default include directories, as well as any additional directories
+/// as specified by a `compile_commands.json` or `compile_flags.txt` file in the
+/// appropriate location
+///
+/// # Panics
 #[must_use]
-pub fn get_include_dirs() -> Vec<PathBuf> {
+pub fn get_include_dirs(compile_cmds: &CompilationDatabase) -> HashMap<SourceFile, Vec<PathBuf>> {
+    let mut include_map = HashMap::from([(SourceFile::All, Vec::new())]);
+
+    let global_dirs = include_map.get_mut(&SourceFile::All).unwrap();
+    for dir in get_default_include_dirs() {
+        global_dirs.push(dir);
+    }
+
+    for (source_file, ref dir) in get_additional_include_dirs(compile_cmds) {
+        include_map
+            .entry(source_file)
+            .and_modify(|dirs| dirs.push(dir.to_owned()))
+            .or_insert(vec![dir.to_owned()]);
+    }
+
+    info!("Include directory map: {:?}", include_map);
+
+    include_map
+}
+
+/// Returns a vector of default #include directories
+#[must_use]
+fn get_default_include_dirs() -> Vec<PathBuf> {
     let mut include_dirs = HashSet::new();
     // repeat "cpp" and "clang" so that each command can be run with
     // both set of args specified in `cmd_args`
@@ -171,6 +199,118 @@ pub fn get_include_dirs() -> Vec<PathBuf> {
     }
 
     include_dirs.iter().cloned().collect::<Vec<PathBuf>>()
+}
+
+/// Returns a vector of source files and their associated additional include directories,
+/// as specified by `compile_cmds`
+#[must_use]
+fn get_additional_include_dirs(compile_cmds: &CompilationDatabase) -> Vec<(SourceFile, PathBuf)> {
+    let mut additional_dirs = Vec::new();
+
+    for entry in compile_cmds {
+        let Ok(entry_dir) = entry.directory.canonicalize() else {
+            continue;
+        };
+
+        let source_file = match &entry.file {
+            SourceFile::All => SourceFile::All,
+            SourceFile::File(file) => {
+                if file.is_absolute() {
+                    entry.file.clone()
+                } else if let Ok(dir) = entry_dir.join(file).canonicalize() {
+                    SourceFile::File(dir)
+                } else {
+                    continue;
+                }
+            }
+        };
+
+        let mut check_dir = false;
+        if let Some(args) = &entry.arguments {
+            // `arguments` run as the compilation step for the translation unit `file`
+            // We will try to canonicalize non-absolute paths as relative to `file`,
+            // but this isn't possible if we have a SourceFile::All. Just don't
+            // add the include directory and issue a warning in this case
+            for arg in args.iter().map(|arg| arg.trim()) {
+                if check_dir {
+                    // current arg is preceeded by lone '-I'
+                    let dir = PathBuf::from(arg);
+                    if dir.is_absolute() {
+                        additional_dirs.push((source_file.clone(), dir));
+                    } else if let SourceFile::File(ref source_path) = source_file {
+                        if let Ok(full_include_path) = source_path.join(dir).canonicalize() {
+                            additional_dirs.push((source_file.clone(), full_include_path));
+                        }
+                    } else {
+                        warn!("Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'")
+                    }
+                    check_dir = false;
+                } else if arg.eq("-I") {
+                    // -Irelative is stored as two separate args if parsed from `compile_flags.txt`
+                    check_dir = true;
+                } else if arg.len() > 2 && arg.starts_with("-I") {
+                    // '-Irelative'
+                    let dir = PathBuf::from(&arg[2..]);
+                    if dir.is_absolute() {
+                        additional_dirs.push((source_file.clone(), dir));
+                    } else if let SourceFile::File(ref source_path) = source_file {
+                        if let Ok(full_include_path) = source_path.join(dir).canonicalize() {
+                            additional_dirs.push((source_file.clone(), full_include_path));
+                        }
+                    } else {
+                        warn!("Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'")
+                    }
+                }
+            }
+        } else if entry.command.is_some() {
+            if let Some(args) = entry.args_from_cmd() {
+                for arg in args {
+                    if arg.starts_with("-I") && arg.len() > 2 {
+                        // "All paths specified in the `command` or `file` fields must be either absolute or relative to..." the `directory` field
+                        let incl_path = PathBuf::from(&arg[2..]);
+                        if incl_path.is_absolute() {
+                            additional_dirs.push((source_file.clone(), incl_path));
+                        } else {
+                            let dir = entry_dir.join(incl_path);
+                            if let Ok(full_include_path) = dir.canonicalize() {
+                                additional_dirs.push((source_file.clone(), full_include_path));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    additional_dirs
+}
+
+/// Attempts to find either the `compile_commands.json` or `compile_flags.txt`
+/// file in the project's build directory, returning either as a `CompilationDatabase`
+/// object
+///
+/// If both are present, `compile_commands.json` will override `compile_flags.txt`
+pub fn get_compile_cmds(params: &InitializeParams) -> Option<CompilationDatabase> {
+    if let Some(mut path) = get_project_root(params) {
+        // "The convention is to name the file compile_commands.json and put it at the top of the
+        // build directory."
+        path.push("build");
+
+        // first check for compile_commands.json
+        let cmp_cmd_path = path.join("compile_commands.json");
+        if let Ok(conts) = std::fs::read_to_string(cmp_cmd_path) {
+            if let Ok(cmds) = serde_json::from_str(&conts) {
+                return Some(cmds);
+            }
+        }
+        // then check for compile_flags.txt
+        let cmp_flag_path = path.join("compile_flags.txt");
+        if let Ok(conts) = std::fs::read_to_string(cmp_flag_path) {
+            return Some(compile_commands::from_compile_flags_txt(&path, &conts));
+        }
+    }
+
+    None
 }
 
 /// Function allowing us to connect tree sitter's logging with the log crate
@@ -250,12 +390,13 @@ pub fn get_completes<T: Completable, U: ArchOrAssembler>(
 
 #[must_use]
 pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
+    params: &HoverParams,
     word: &str,
     file_word: &str,
     instruction_map: &HashMap<(Arch, &str), T>,
     register_map: &HashMap<(Arch, &str), U>,
     directive_map: &HashMap<(Assembler, &str), V>,
-    include_dirs: &[PathBuf],
+    include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
 ) -> Option<Hover> {
     let instr_lookup = lookup_hover_resp_by_arch(word, instruction_map);
     if instr_lookup.is_some() {
@@ -277,7 +418,11 @@ pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
         return demang;
     }
 
-    let include_path = get_include_resp(file_word, include_dirs);
+    let include_path = get_include_resp(
+        &params.text_document_position_params.text_document.uri,
+        file_word,
+        include_dirs,
+    );
     if include_path.is_some() {
         return include_path;
     }
@@ -377,9 +522,26 @@ fn get_demangle_resp(word: &str) -> Option<Hover> {
     None
 }
 
-fn get_include_resp(filename: &str, include_dirs: &[PathBuf]) -> Option<Hover> {
+fn get_include_resp(
+    source_file: &Uri,
+    filename: &str,
+    include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
+) -> Option<Hover> {
     let mut paths = String::new();
-    for dir in include_dirs {
+
+    let mut dir_iter: Box<dyn Iterator<Item = &PathBuf>> = match include_dirs.get(&SourceFile::All)
+    {
+        Some(dirs) => Box::new(dirs.iter()),
+        None => Box::new(std::iter::empty()),
+    };
+
+    if let Ok(src_path) = PathBuf::from(source_file.as_str()).canonicalize() {
+        if let Some(dirs) = include_dirs.get(&SourceFile::File(src_path)) {
+            dir_iter = Box::new(dir_iter.chain(dirs.iter()));
+        }
+    }
+
+    for dir in dir_iter {
         match std::fs::read_dir(dir) {
             Ok(dir_reader) => {
                 for file in dir_reader {
@@ -1004,45 +1166,40 @@ fn get_global_config() -> Option<TargetConfig> {
     None
 }
 
-/// checks for a config specific to the current buffer
-fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
-    // 1. if we have workspace folders, then iterate through them and assign the first valid one to
-    //    the root path
-    // 2. If we don't have worksace folders or none of them is a valid path, check the root_uri
-    //    variable
-    // 3. If we do have a root_path, check whether we can find a .asm-lsp file at its root.
-    let mut root_path: Option<PathBuf> = None;
-
+/// Attempts to find the project's root directory given its `InitializeParams`
+// 1. if we have workspace folders, then iterate through them and assign the first valid one to
+//    the root path
+// 2. If we don't have worksace folders or none of them is a valid path, check the (deprecated)
+//    root_uri field
+fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
     // first check workspace folders
     if let Some(folders) = &params.workspace_folders {
         // if there's multiple, just visit in order until we find a valid folder
-        let mut path = None;
         for folder in folders {
             if let Ok(parsed) = PathBuf::from_str(folder.uri.path().as_str()) {
                 if let Ok(parsed_path) = parsed.canonicalize() {
-                    path = Some(parsed_path);
-                    break;
+                    return Some(parsed_path);
                 }
             }
         }
-
-        root_path = path;
-    };
+    }
 
     // if workspace folders weren't set or came up empty, we check the root_uri
-    if root_path.is_none() {
-        #[allow(deprecated)]
-        if let Some(root_uri) = &params.root_uri {
-            if let Ok(parsed) = PathBuf::from_str(root_uri.path().as_str()) {
-                if let Ok(parsed_path) = parsed.canonicalize() {
-                    root_path = Some(parsed_path);
-                }
+    #[allow(deprecated)]
+    if let Some(root_uri) = &params.root_uri {
+        if let Ok(parsed) = PathBuf::from_str(root_uri.path().as_str()) {
+            if let Ok(parsed_path) = parsed.canonicalize() {
+                return Some(parsed_path);
             }
         }
-    };
+    }
 
-    // if we have a properly configured root path, check for the config file
-    if let Some(mut path) = root_path {
+    None
+}
+
+/// checks for a config specific to the project's root directory
+fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
+    if let Some(mut path) = get_project_root(params) {
         path.push(".asm-lsp.toml");
         if let Ok(config) = std::fs::read_to_string(&path) {
             let path_s = path.display();

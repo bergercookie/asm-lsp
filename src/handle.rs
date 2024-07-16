@@ -1,6 +1,7 @@
-use std::path::PathBuf;
+use std::{collections::HashMap, path::PathBuf};
 
 use anyhow::{anyhow, Result};
+use compile_commands::SourceFile;
 use lsp_server::{Connection, Message, RequestId, Response};
 use lsp_textdocument::TextDocuments;
 use lsp_types::{
@@ -35,7 +36,7 @@ pub fn handle_hover_request(
     params: &HoverParams,
     text_store: &TextDocuments,
     names_to_info: &NameToInfoMaps,
-    include_dirs: &[PathBuf],
+    include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
 ) -> Result<()> {
     let empty_resp = Response {
         id: id.clone(),
@@ -59,6 +60,7 @@ pub fn handle_hover_request(
     };
 
     if let Some(hover_resp) = get_hover_resp(
+        params,
         word,
         file_word,
         &names_to_info.instructions,
