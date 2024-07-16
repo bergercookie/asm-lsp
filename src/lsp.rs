@@ -3,22 +3,25 @@ use std::convert::TryFrom;
 use std::fs::{create_dir_all, File};
 use std::io::BufRead;
 use std::path::PathBuf;
+use std::process::Command;
 use std::str::FromStr;
+use std::u32;
 
 use anyhow::{anyhow, Result};
-use compile_commands::{CompilationDatabase, SourceFile};
+use compile_commands::{CompilationDatabase, CompileCommand, SourceFile};
 use dirs::config_dir;
 use log::{error, info, log, log_enabled, warn};
 use lsp_textdocument::FullTextDocument;
 use lsp_types::{
     CompletionItem, CompletionItemKind, CompletionList, CompletionParams, CompletionTriggerKind,
-    DocumentSymbol, DocumentSymbolParams, Documentation, GotoDefinitionParams,
+    Diagnostic, DocumentSymbol, DocumentSymbolParams, Documentation, GotoDefinitionParams,
     GotoDefinitionResponse, Hover, HoverContents, HoverParams, InitializeParams, Location,
     MarkupContent, MarkupKind, Position, Range, ReferenceParams, SignatureHelp,
     SignatureHelpParams, SignatureInformation, SymbolKind, TextDocumentContentChangeEvent,
     TextDocumentPositionParams, Uri,
 };
 use once_cell::sync::Lazy;
+use regex::Regex;
 use symbolic::common::{Language, Name, NameMangling};
 use symbolic_demangle::{Demangle, DemangleOptions};
 use tree_sitter::InputEdit;
@@ -242,7 +245,7 @@ fn get_additional_include_dirs(compile_cmds: &CompilationDatabase) -> Vec<(Sourc
                             additional_dirs.push((source_file.clone(), full_include_path));
                         }
                     } else {
-                        warn!("Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'")
+                        warn!("Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'");
                     }
                     check_dir = false;
                 } else if arg.eq("-I") {
@@ -258,7 +261,7 @@ fn get_additional_include_dirs(compile_cmds: &CompilationDatabase) -> Vec<(Sourc
                             additional_dirs.push((source_file.clone(), full_include_path));
                         }
                     } else {
-                        warn!("Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'")
+                        warn!("Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'");
                     }
                 }
             }
@@ -311,6 +314,79 @@ pub fn get_compile_cmds(params: &InitializeParams) -> Option<CompilationDatabase
     }
 
     None
+}
+
+/// Attempts to run the given compile command and parses the resulting output. Any
+/// relevant output will be translated into a `Diagnostic` object and pushed into
+/// `diagnostics`
+/// 
+/// # Panics
+///
+/// Will panic on failure to launch a child process to execute the given `compile_cmd`
+pub fn apply_compile_cmd(diagnostics: &mut Vec<Diagnostic>, compile_cmd: &CompileCommand) {
+    if let Some(ref args) = compile_cmd.arguments {
+        if args.len() < 2 {
+            return;
+        }
+        let output = Command::new(&args[0])
+            .args(&args[1..])
+            .output()
+            .expect("failed to launch assembler process");
+        if let Ok(output_str) = String::from_utf8(output.stderr) {
+            get_diagnostics(diagnostics, &output_str);
+        }
+    } else if let Some(args) = compile_cmd.args_from_cmd() {
+        if args.len() < 2 {
+            return;
+        }
+        let output = Command::new(&args[0])
+            .args(&args[1..])
+            .output()
+            .expect("failed to launch assembler process");
+        if let Ok(output_str) = String::from_utf8(output.stderr) {
+            get_diagnostics(diagnostics, &output_str);
+        }
+    }
+}
+
+/// Attempts to parse `tool_output`, translating it into `Diagnostic` objects
+/// and placing it into `diagnostics`
+///
+/// Looks for diagnostics of the following form:
+///
+/// <file name>:<line number>: Error: <Error message>
+///
+/// As more assemblers are incorporated, this can be updated
+///
+/// # Panics
+fn get_diagnostics(diagnostics: &mut Vec<Diagnostic>, tool_output: &str) {
+    static DIAG_REG: Lazy<Regex> = Lazy::new(|| Regex::new(r"^.*:(\d+):\s+(.*)$").unwrap());
+
+    for line in tool_output.lines() {
+        if let Some(caps) = DIAG_REG.captures(line) {
+            if caps.len() < 3 {
+                // the entire capture is always at the 0th index
+                continue;
+            }
+            let Ok(line_number) = caps[1].parse::<u32>() else {
+                continue;
+            };
+            let err_msg = &caps[2];
+            diagnostics.push(Diagnostic::new_simple(
+                Range {
+                    start: Position {
+                        line: line_number - 1,
+                        character: 0,
+                    },
+                    end: Position {
+                        line: line_number - 1,
+                        character: 0,
+                    },
+                },
+                String::from(err_msg),
+            ));
+        }
+    }
 }
 
 /// Function allowing us to connect tree sitter's logging with the log crate
