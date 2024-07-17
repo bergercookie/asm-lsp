@@ -5,7 +5,6 @@ use std::io::BufRead;
 use std::path::PathBuf;
 use std::process::Command;
 use std::str::FromStr;
-use std::u32;
 
 use anyhow::{anyhow, Result};
 use compile_commands::{CompilationDatabase, CompileCommand, SourceFile};
@@ -319,19 +318,20 @@ pub fn get_compile_cmds(params: &InitializeParams) -> Option<CompilationDatabase
 /// Attempts to run the given compile command and parses the resulting output. Any
 /// relevant output will be translated into a `Diagnostic` object and pushed into
 /// `diagnostics`
-/// 
-/// # Panics
-///
-/// Will panic on failure to launch a child process to execute the given `compile_cmd`
 pub fn apply_compile_cmd(diagnostics: &mut Vec<Diagnostic>, compile_cmd: &CompileCommand) {
+    // TODO: Consolidate this logic, a little tricky because we need to capture
+    // compile_cmd.arguments by reference, but we get an owned Vec out of args_from_cmd()...
     if let Some(ref args) = compile_cmd.arguments {
         if args.len() < 2 {
             return;
         }
-        let output = Command::new(&args[0])
-            .args(&args[1..])
-            .output()
-            .expect("failed to launch assembler process");
+        let output = match Command::new(&args[0]).args(&args[1..]).output() {
+            Ok(result) => result,
+            Err(e) => {
+                error!("Failed to launch compile command process -- Error: {e}");
+                return;
+            }
+        };
         if let Ok(output_str) = String::from_utf8(output.stderr) {
             get_diagnostics(diagnostics, &output_str);
         }
@@ -339,10 +339,13 @@ pub fn apply_compile_cmd(diagnostics: &mut Vec<Diagnostic>, compile_cmd: &Compil
         if args.len() < 2 {
             return;
         }
-        let output = Command::new(&args[0])
-            .args(&args[1..])
-            .output()
-            .expect("failed to launch assembler process");
+        let output = match Command::new(&args[0]).args(&args[1..]).output() {
+            Ok(result) => result,
+            Err(e) => {
+                error!("Failed to launch compile command process -- Error: {e}");
+                return;
+            }
+        };
         if let Ok(output_str) = String::from_utf8(output.stderr) {
             get_diagnostics(diagnostics, &output_str);
         }
@@ -350,7 +353,7 @@ pub fn apply_compile_cmd(diagnostics: &mut Vec<Diagnostic>, compile_cmd: &Compil
 }
 
 /// Attempts to parse `tool_output`, translating it into `Diagnostic` objects
-/// and placing it into `diagnostics`
+/// and placing them into `diagnostics`
 ///
 /// Looks for diagnostics of the following form:
 ///

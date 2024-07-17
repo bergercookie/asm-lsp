@@ -85,8 +85,6 @@ pub fn main() -> Result<()> {
         },
     }));
 
-    // need to request save notifications here?
-
     let capabilities = ServerCapabilities {
         position_encoding,
         hover_provider,
