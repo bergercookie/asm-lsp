@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 
 use asm_lsp::handle::{
-    handle_completion_request, handle_did_change_text_document_notification,
+    handle_completion_request, handle_diagnostics, handle_did_change_text_document_notification,
     handle_did_close_text_document_notification, handle_did_open_text_document_notification,
     handle_document_symbols_request, handle_goto_def_request, handle_hover_request,
     handle_references_request, handle_signature_help_request,
@@ -14,16 +14,18 @@ use asm_lsp::{
 };
 
 use compile_commands::{CompilationDatabase, SourceFile};
-use lsp_types::notification::{DidChangeTextDocument, DidCloseTextDocument, DidOpenTextDocument};
+use lsp_types::notification::{
+    DidChangeTextDocument, DidCloseTextDocument, DidOpenTextDocument, DidSaveTextDocument,
+};
 use lsp_types::request::{
-    Completion, DocumentSymbolRequest, GotoDefinition, HoverRequest, References,
-    SignatureHelpRequest,
+    Completion, DocumentDiagnosticRequest, DocumentSymbolRequest, GotoDefinition, HoverRequest,
+    References, SignatureHelpRequest,
 };
 use lsp_types::{
     CompletionItem, CompletionItemKind, CompletionOptions, CompletionOptionsCompletionItem,
-    HoverProviderCapability, InitializeParams, OneOf, PositionEncodingKind, ServerCapabilities,
-    SignatureHelpOptions, TextDocumentSyncCapability, TextDocumentSyncKind,
-    WorkDoneProgressOptions,
+    DiagnosticOptions, DiagnosticServerCapabilities, HoverProviderCapability, InitializeParams,
+    OneOf, PositionEncodingKind, ServerCapabilities, SignatureHelpOptions,
+    TextDocumentSyncCapability, TextDocumentSyncKind, WorkDoneProgressOptions,
 };
 
 use anyhow::Result;
@@ -74,6 +76,15 @@ pub fn main() -> Result<()> {
 
     let references_provider = Some(OneOf::Left(true));
 
+    let diagnostic_provider = Some(DiagnosticServerCapabilities::Options(DiagnosticOptions {
+        identifier: Some(String::from("asm-lsp")),
+        inter_file_dependencies: true,
+        workspace_diagnostics: false,
+        work_done_progress_options: WorkDoneProgressOptions {
+            work_done_progress: None,
+        },
+    }));
+
     let capabilities = ServerCapabilities {
         position_encoding,
         hover_provider,
@@ -83,6 +94,7 @@ pub fn main() -> Result<()> {
         text_document_sync,
         document_symbol_provider: Some(OneOf::Left(true)),
         references_provider,
+        diagnostic_provider,
         ..ServerCapabilities::default()
     };
     let server_capabilities = serde_json::to_value(capabilities).unwrap();
@@ -253,11 +265,11 @@ pub fn main() -> Result<()> {
     );
 
     let compile_cmds = get_compile_cmds(&params).unwrap_or_default();
+    info!("Loaded compile commands: {:?}", compile_cmds);
     let include_dirs = get_include_dirs(&compile_cmds);
 
     main_loop(
         &connection,
-        initialization_params,
         &names_to_info,
         &instr_completion_items,
         &directive_completion_items,
@@ -274,15 +286,13 @@ pub fn main() -> Result<()> {
 #[allow(clippy::too_many_arguments)]
 fn main_loop(
     connection: &Connection,
-    params: serde_json::Value,
     names_to_info: &NameToInfoMaps,
     instruction_completion_items: &[CompletionItem],
     directive_completion_items: &[CompletionItem],
     register_completion_items: &[CompletionItem],
-    _compile_cmds: &CompilationDatabase,
+    compile_cmds: &CompilationDatabase,
     include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
 ) -> Result<()> {
-    let _params: InitializeParams = serde_json::from_value(params).unwrap();
     let mut text_store = TextDocuments::new();
     let mut tree_store = TreeStore::new();
 
@@ -365,6 +375,13 @@ fn main_loop(
                         "References request serviced in {}ms",
                         start.elapsed().as_millis()
                     );
+                } else if let Ok((_id, params)) = cast_req::<DocumentDiagnosticRequest>(req.clone())
+                {
+                    handle_diagnostics(connection, &params.text_document.uri, compile_cmds)?;
+                    info!(
+                        "Diagnostics request serviced in {}ms",
+                        start.elapsed().as_millis()
+                    );
                 } else {
                     error!("Invalid request format -> {:#?}", req);
                 }
@@ -394,6 +411,12 @@ fn main_loop(
                     );
                     info!(
                         "Did close text document notification serviced in {}ms",
+                        start.elapsed().as_millis()
+                    );
+                } else if let Ok(params) = cast_notif::<DidSaveTextDocument>(notif.clone()) {
+                    handle_diagnostics(connection, &params.text_document.uri, compile_cmds)?;
+                    info!(
+                        "Published diagnostics on save in {}ms",
                         start.elapsed().as_millis()
                     );
                 }

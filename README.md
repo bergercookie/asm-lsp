@@ -59,6 +59,13 @@ x86_64 = true
 z80 = false
 ```
 
+### [OPTIONAL] Extend functionality via `compile_commands.json`/`compile_flags.txt`
+
+Add a [`compile_commands.json`](https://clang.llvm.org/docs/JSONCompilationDatabase.html#format)
+or [`compile_flags.txt`](https://clang.llvm.org/docs/JSONCompilationDatabase.html#alternatives)
+file to your project's `build` directory to enable inline diagnostic features, as
+well as to specify additional include directories for use in hover features.
+
 ### VSCode Support
 
 The project has not published any VSCode extension package yet. However, there is
@@ -80,6 +87,10 @@ git repository.
 ### Autocomplete
 
 ![](https://github.com/bergercookie/asm-lsp/blob/master/demo/autocomplete.gif)
+
+### Diagnostics
+
+![](https://github.com/bergercookie/asm-lsp/blob/master/demo/diagnostics.gif)
 
 ### Goto Definition
 

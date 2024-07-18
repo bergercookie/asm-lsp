@@ -1,24 +1,26 @@
 use std::{collections::HashMap, path::PathBuf};
 
 use anyhow::{anyhow, Result};
-use compile_commands::SourceFile;
+use compile_commands::{CompilationDatabase, SourceFile};
 use lsp_server::{Connection, Message, RequestId, Response};
 use lsp_textdocument::TextDocuments;
 use lsp_types::{
     notification::{
         DidChangeTextDocument, DidCloseTextDocument, DidOpenTextDocument, Notification,
+        PublishDiagnostics,
     },
-    CompletionItem, CompletionParams, DidChangeTextDocumentParams, DidCloseTextDocumentParams,
-    DidOpenTextDocumentParams, DocumentSymbolParams, DocumentSymbolResponse, GotoDefinitionParams,
-    HoverParams, ReferenceParams, SignatureHelpParams,
+    CompletionItem, CompletionParams, Diagnostic, DidChangeTextDocumentParams,
+    DidCloseTextDocumentParams, DidOpenTextDocumentParams, DocumentSymbolParams,
+    DocumentSymbolResponse, GotoDefinitionParams, HoverParams, PublishDiagnosticsParams,
+    ReferenceParams, SignatureHelpParams, Uri,
 };
 use serde_json::json;
 use tree_sitter::Parser;
 
 use crate::{
-    get_comp_resp, get_document_symbols, get_goto_def_resp, get_hover_resp, get_ref_resp,
-    get_sig_help_resp, get_word_from_pos_params, text_doc_change_to_ts_edit, NameToInfoMaps,
-    NameToInstructionMap, TreeEntry, TreeStore,
+    apply_compile_cmd, get_comp_resp, get_document_symbols, get_goto_def_resp, get_hover_resp,
+    get_ref_resp, get_sig_help_resp, get_word_from_pos_params, text_doc_change_to_ts_edit,
+    NameToInfoMaps, NameToInstructionMap, TreeEntry, TreeStore,
 };
 
 /// Handles hover requests
@@ -290,7 +292,7 @@ pub fn handle_references_request(
                     result: Some(result),
                     error: None,
                 };
-                return Ok(connection.sender.send(Message::Response(result.clone()))?);
+                return Ok(connection.sender.send(Message::Response(result))?);
             }
         }
     }
@@ -302,6 +304,52 @@ pub fn handle_references_request(
     };
 
     Ok(connection.sender.send(Message::Response(empty_resp))?)
+}
+
+/// Produces diagnostics and sends a `PublishDiagnostics` notification to the client
+/// Diagnostics are only produced for the file specified by `uri`
+/// Returns 'Err' if the response fails to send via `connection`
+///
+/// # Panics
+///
+/// Panics if JSON encoding of the notification fails
+pub fn handle_diagnostics(
+    connection: &Connection,
+    uri: &Uri,
+    compile_cmds: &CompilationDatabase,
+) -> Result<()> {
+    let req_source_path = PathBuf::from(uri.as_str());
+
+    let source_entries = compile_cmds.iter().filter(|entry| match entry.file {
+        SourceFile::File(ref file) => {
+            if file.is_absolute() {
+                file.eq(&req_source_path)
+            } else if let Ok(source_path) = file.canonicalize() {
+                source_path.eq(&req_source_path)
+            } else {
+                false
+            }
+        }
+        SourceFile::All => true,
+    });
+
+    let mut diagnostics: Vec<Diagnostic> = Vec::new();
+    for entry in source_entries {
+        apply_compile_cmd(&mut diagnostics, entry);
+    }
+
+    let params = PublishDiagnosticsParams {
+        uri: uri.clone(),
+        diagnostics,
+        version: None,
+    };
+    let result = serde_json::to_value(params).unwrap();
+
+    let notif = lsp_server::Notification {
+        method: PublishDiagnostics::METHOD.to_string(),
+        params: result,
+    };
+    Ok(connection.sender.send(Message::Notification(notif))?)
 }
 
 /// Handles did open text document notifications
