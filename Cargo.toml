@@ -1,6 +1,6 @@
 [package]
 name = "asm-lsp"
-version = "0.7.2"
+version = "0.7.3"
 authors = ["Nikos Koukis <nickkouk@gmail.com>"]
 edition = "2018"
 
@@ -12,7 +12,7 @@ repository = "https://github.com/bergercookie/asm-lsp"
 
 readme = "README.md"
 
-keywords = ["assembly", "language-server", "lsp", "tooling", "x86", "x86-64", "z80"]
+keywords = ["assembly", "language-server", "lsp", "tooling", "x86"]
 categories = ["command-line-utilities", "development-tools"]
 publish = true
 exclude = ["samples/*", "demo/*"]
