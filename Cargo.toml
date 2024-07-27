@@ -45,7 +45,6 @@ serde = "1.0.158"
 toml = "0.8.1"
 home = "0.5.5"
 tree-sitter = "0.20.10"
-tree-sitter-asm = "0.1.0"
 once_cell = "1.18.0"
 dirs = "5.0.1"
 symbolic = { version = "12.8.0", features = ["demangle"] }
@@ -55,6 +54,7 @@ quick-xml = "0.35.0"
 bincode = "1.3.3"
 lsp-textdocument = "0.4.0"
 compile_commands = "0.2.0"
+tree-sitter-asm = { git = "https://github.com/RubixDev/tree-sitter-asm" }
 
 [dev-dependencies]
 mockito = "1.2.0"

@@ -388,6 +388,30 @@ mod tests {
         test_autocomplete(source, expected_kind, trigger_kind, trigger_character);
     }
 
+    fn test_label_autocomplete(
+        source: &str,
+        trigger_kind: CompletionTriggerKind,
+        trigger_character: Option<String>,
+    ) {
+        let expected_kind = CompletionItemKind::VARIABLE;
+        test_autocomplete(source, expected_kind, trigger_kind, trigger_character);
+    }
+
+    #[test]
+    fn handle_autocomplete_it_provides_label_comps_as_instruction_arg() {
+        test_label_autocomplete(
+            r#"
+foo:
+        mov eax, 0
+
+bar:
+        call f<cursor>
+            "#,
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
     #[test]
     fn handle_autocomplete_x86_x86_64_it_provides_instr_comps_one_character_start() {
         test_instruction_autocomplete("s<cursor>", CompletionTriggerKind::INVOKED, None);
