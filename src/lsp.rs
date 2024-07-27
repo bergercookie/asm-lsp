@@ -728,8 +728,8 @@ pub fn get_comp_resp(
     // TODO: filter register completions by width allowed by corresponding instruction
     tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
     if let Some(ref tree) = tree_entry.tree {
-        let mut cursor = tree_sitter::QueryCursor::new();
-        cursor.set_point_range(std::ops::Range {
+        let mut line_cursor = tree_sitter::QueryCursor::new();
+        line_cursor.set_point_range(std::ops::Range {
             start: tree_sitter::Point {
                 row: cursor_line,
                 column: 0,
@@ -748,7 +748,7 @@ pub fn get_comp_resp(
             )
             .unwrap()
         });
-        let matches_iter = cursor.matches(&QUERY_DIRECTIVE, tree.root_node(), curr_doc);
+        let matches_iter = line_cursor.matches(&QUERY_DIRECTIVE, tree.root_node(), curr_doc);
 
         for match_ in matches_iter {
             let caps = match_.captures;
@@ -761,6 +761,26 @@ pub fn get_comp_resp(
                         is_incomplete: true,
                         items,
                     });
+                }
+            }
+        }
+
+        // tree-sitter-asm currently parses label arguments to instructions as *registers*
+        // We'll collect all of labels in the document (that are being parsed as labels, at least)
+        // and suggest those along with the register completions
+
+        // need a separate cursor to search the entire document
+        let mut doc_cursor = tree_sitter::QueryCursor::new();
+        static QUERY_LABEL: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(tree_sitter_asm::language(), "(label (ident) @label)").unwrap()
+        });
+        let captures = doc_cursor.captures(&QUERY_LABEL, tree.root_node(), curr_doc);
+        let mut labels = HashSet::new();
+        for caps in captures.map(|c| c.0) {
+            for cap in caps.captures {
+                match cap.node.utf8_text(curr_doc) {
+                    Ok(text) => _ = labels.insert(text),
+                    Err(_) => continue,
                 }
             }
         }
@@ -803,16 +823,30 @@ pub fn get_comp_resp(
             .unwrap()
         });
 
-        let matches_iter = cursor.matches(&QUERY_INSTR_ANY, tree.root_node(), curr_doc);
+        let matches_iter = line_cursor.matches(&QUERY_INSTR_ANY, tree.root_node(), curr_doc);
         for match_ in matches_iter {
             let caps = match_.captures;
             for (cap_num, cap) in caps.iter().enumerate() {
                 let arg_start = cap.node.range().start_point;
                 let arg_end = cap.node.range().end_point;
                 if cursor_matches!(cursor_line, cursor_char, arg_start, arg_end) {
-                    // an instruction is always capture #0, any capture number after must be a register
-                    let items =
-                        filtered_comp_list(if cap_num == 0 { instr_comps } else { reg_comps });
+                    // an instruction is always capture #0 for this query, any capture
+                    // number after must be a register or label
+                    let is_instr = cap_num == 0;
+                    let mut items =
+                        filtered_comp_list(if is_instr { instr_comps } else { reg_comps });
+                    if !is_instr {
+                        items.append(
+                            &mut labels
+                                .iter()
+                                .map(|l| CompletionItem {
+                                    label: l.to_string(),
+                                    kind: Some(CompletionItemKind::VARIABLE),
+                                    ..Default::default()
+                                })
+                                .collect(),
+                        );
+                    }
                     return Some(CompletionList {
                         is_incomplete: true,
                         items,
@@ -929,8 +963,8 @@ pub fn get_sig_help_resp(
 
     tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
     if let Some(ref tree) = tree_entry.tree {
-        let mut cursor = tree_sitter::QueryCursor::new();
-        cursor.set_point_range(std::ops::Range {
+        let mut line_cursor = tree_sitter::QueryCursor::new();
+        line_cursor.set_point_range(std::ops::Range {
             start: tree_sitter::Point {
                 row: cursor_line,
                 column: 0,
@@ -951,7 +985,7 @@ pub fn get_sig_help_resp(
             .unwrap()
         });
 
-        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = cursor
+        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = line_cursor
             .matches(&QUERY_INSTR_ANY_ARGS, tree.root_node(), curr_doc)
             .collect();
         if let Some(match_) = matches.first() {
