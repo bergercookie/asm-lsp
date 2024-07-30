@@ -44,7 +44,7 @@ pub fn main() -> Result<()> {
     info!("Starting asm_lsp...");
 
     // Create the transport
-    let (connection, io_threads) = Connection::stdio();
+    let (connection, _io_threads) = Connection::stdio();
 
     // specify UTF-16 encoding for compatibility with lsp-textdocument
     let position_encoding = Some(PositionEncodingKind::UTF16);
@@ -277,7 +277,11 @@ pub fn main() -> Result<()> {
         &compile_cmds,
         &include_dirs,
     )?;
-    io_threads.join()?;
+
+    // HACK: the `writer` thread of `connection` hangs on joining more often than
+    // not. Need to investigate this further, but for now just skipping the join
+    // (and thus allowing the process to exit) is fine
+    // _io_threads.join()?;
 
     info!("Shutting down asm_lsp");
     Ok(())
@@ -302,7 +306,7 @@ fn main_loop(
         match msg {
             Message::Request(req) => {
                 if connection.handle_shutdown(&req)? {
-                    info!("Shutting down asm_lsp");
+                    info!("Recieved shutdown request");
                     return Ok(());
                 } else if let Ok((id, params)) = cast_req::<HoverRequest>(req.clone()) {
                     handle_hover_request(
