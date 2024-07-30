@@ -310,6 +310,10 @@ pub fn handle_references_request(
 /// Diagnostics are only produced for the file specified by `uri`
 /// Returns 'Err' if the response fails to send via `connection`
 ///
+/// # Errors
+///
+/// Returns 'Err' if the response fails to send via `connection`
+///
 /// # Panics
 ///
 /// Panics if JSON encoding of the notification fails

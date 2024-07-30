@@ -840,7 +840,7 @@ pub fn get_comp_resp(
                             &mut labels
                                 .iter()
                                 .map(|l| CompletionItem {
-                                    label: l.to_string(),
+                                    label: (*l).to_string(),
                                     kind: Some(CompletionItemKind::VARIABLE),
                                     ..Default::default()
                                 })
