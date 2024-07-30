@@ -430,10 +430,15 @@ pub fn populate_name_to_instruction_map<'instruction>(
 
 #[cfg(test)]
 mod tests {
+    use mockito::ServerOpts;
+
     use crate::x86_parser::{get_cache_dir, populate_instructions};
     #[test]
     fn test_populate_instructions() {
-        let mut server = mockito::Server::new_with_port(8080);
+        let mut server = mockito::Server::new_with_opts(ServerOpts {
+            port: 8080,
+            ..Default::default()
+        });
 
         let _ = server
             .mock("GET", "/x86/")
