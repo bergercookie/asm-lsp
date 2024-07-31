@@ -167,7 +167,7 @@ pub fn handle_goto_def_request(
 
     let empty_resp = Response {
         id,
-        result: Some(json!("")),
+        result: None,
         error: None,
     };
 
