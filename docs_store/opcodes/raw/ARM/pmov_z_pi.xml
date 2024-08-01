@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="pmov_z_pi" title="PMOV (to vector)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="PMOV" />
+  </docvars>
+  <heading>PMOV (to vector)</heading>
+  <desc>
+    <brief>Move predicate to vector</brief>
+    <description>
+      <para>Copy the source SVE predicate register elements into the destination vector register as a packed bitmap with one bit per predicate element, where bit value 0b1 represents a TRUE predicate element, and bit value 0b0 represents a FALSE predicate element.</para>
+      <para>Because the number of bits in an SVE predicate element scales with the the vector element size, the behavior varies according to the specified element size.</para>
+      <list type="unordered">
+        <listitem>
+          <content>When the predicate element specifier is B, every bit in the predicate register is copied to the least-significant VL/8 bits of the destination vector register. The portion index, if specified, must be 0.</content>
+        </listitem>
+        <listitem>
+          <content>When the predicate element specifier is H, every second bit in the predicate register is copied to the indexed block of VL/16 bits in the destination vector register, where the portion index is in the range 0 to 1, inclusive.</content>
+        </listitem>
+        <listitem>
+          <content>When the predicate element specifier is S, every fourth bit in the predicate register is copied to the indexed block of VL/32 bits in the destination vector register, where the portion index is in the range 0 to 3, inclusive.</content>
+        </listitem>
+        <listitem>
+          <content>When the predicate element specifier is D, every eighth bit in the predicate register is copied to the indexed block of VL/64 bits in the destination vector register, where the portion index is in the range 0 to 7, inclusive.</content>
+        </listitem>
+      </list>
+      <para>The portion index is optional, defaulting to 0 if omitted. When the index is zero, the instruction writes zeroes to the most significant VL-(VL/esize) bits of the destination vector register. When a non-zero index is specified, the packed bitmap is inserted into the destination vector register, and the unindexed blocks remain unchanged.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <classesintro count="4">
+      <txt>It has encodings from 4 classes:</txt>
+      <a href="#iclass_esize_byte">Byte</a>
+      <txt>, </txt>
+      <a href="#iclass_esize_doubleword">Doubleword</a>
+      <txt>, </txt>
+      <a href="#iclass_esize_halfword">Halfword</a>
+      <txt> and </txt>
+      <a href="#iclass_esize_word">Word</a>
+    </classesintro>
+    <iclass name="Byte" oneof="4" id="iclass_esize_byte" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="PMOV" />
+        <docvar key="sve-esize" value="esize-byte" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SVE2p1" feature="FEAT_SVE2p1" />
+      </arch_variants>
+      <regdiagram form="32" psname="PMOV-Z.PI-B">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" name="opc&lt;1&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="opc&lt;0&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="3" settings="3">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="18" name="opc2&lt;1&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="17" name="opc2&lt;0&gt;" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="16" width="7" settings="7">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="8" width="4" name="Pn" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="pmov_z_pi_b" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="PMOV" />
+          <docvar key="sve-esize" value="esize-byte" />
+        </docvars>
+        <asmtemplate><text>PMOV    </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>, </text><a link="sa_pn" hover="Source scalable predicate register (field &quot;Pn&quot;)">&lt;Pn&gt;</a><text>.B</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="PMOV-Z.PI-B" mylink="PMOV-Z.PI-B" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE2p1) &amp;&amp; !IsFeatureImplemented(FEAT_SME2p1) then UNDEFINED;
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pn);
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd);
+constant integer esize = 8;
+constant integer imm = 0;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Doubleword" oneof="4" id="iclass_esize_doubleword" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="PMOV" />
+        <docvar key="sve-esize" value="esize-doubleword" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SVE2p1" feature="FEAT_SVE2p1" />
+      </arch_variants>
+      <regdiagram form="32" psname="PMOV-Z.PI-D">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" name="i3h" usename="1">
+          <c></c>
+        </box>
+        <box hibit="21" width="3" settings="3">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="18" width="2" name="i3l" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="16" width="7" settings="7">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="8" width="4" name="Pn" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="pmov_z_pi_d" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="PMOV" />
+          <docvar key="sve-esize" value="esize-doubleword" />
+        </docvars>
+        <asmtemplate><text>PMOV    </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>{</text><text>[</text><a link="sa_imm" hover="Optional portion index [0-7], default 0 (field &quot;i3h:i3l&quot;)">&lt;imm&gt;</a><text>]</text><text>}</text><text>, </text><a link="sa_pn" hover="Source scalable predicate register (field &quot;Pn&quot;)">&lt;Pn&gt;</a><text>.D</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="PMOV-Z.PI-D" mylink="PMOV-Z.PI-D" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE2p1) &amp;&amp; !IsFeatureImplemented(FEAT_SME2p1) then UNDEFINED;
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pn);
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd);
+constant integer esize = 64;
+constant integer imm = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i3h:i3l);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Halfword" oneof="4" id="iclass_esize_halfword" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="PMOV" />
+        <docvar key="sve-esize" value="esize-halfword" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SVE2p1" feature="FEAT_SVE2p1" />
+      </arch_variants>
+      <regdiagram form="32" psname="PMOV-Z.PI-H">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" name="opc&lt;1&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="opc&lt;0&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="3" settings="3">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="18" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="17" name="i1" usename="1">
+          <c></c>
+        </box>
+        <box hibit="16" width="7" settings="7">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="8" width="4" name="Pn" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="pmov_z_pi_h" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="PMOV" />
+          <docvar key="sve-esize" value="esize-halfword" />
+        </docvars>
+        <asmtemplate><text>PMOV    </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>{</text><text>[</text><a link="sa_imm_1" hover="Optional portion index [0-1], default 0 (field &quot;i1&quot;)">&lt;imm&gt;</a><text>]</text><text>}</text><text>, </text><a link="sa_pn" hover="Source scalable predicate register (field &quot;Pn&quot;)">&lt;Pn&gt;</a><text>.H</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="PMOV-Z.PI-H" mylink="PMOV-Z.PI-H" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE2p1) &amp;&amp; !IsFeatureImplemented(FEAT_SME2p1) then UNDEFINED;
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pn);
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd);
+constant integer esize = 16;
+constant integer imm = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i1);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Word" oneof="4" id="iclass_esize_word" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="PMOV" />
+        <docvar key="sve-esize" value="esize-word" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SVE2p1" feature="FEAT_SVE2p1" />
+      </arch_variants>
+      <regdiagram form="32" psname="PMOV-Z.PI-S">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" name="opc&lt;1&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="opc&lt;0&gt;" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" width="3" settings="3">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="18" width="2" name="i2" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="16" width="7" settings="7">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="8" width="4" name="Pn" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="pmov_z_pi_s" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="PMOV" />
+          <docvar key="sve-esize" value="esize-word" />
+        </docvars>
+        <asmtemplate><text>PMOV    </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>{</text><text>[</text><a link="sa_imm_2" hover="Optional portion index [0-3], default 0 (field &quot;i2&quot;)">&lt;imm&gt;</a><text>]</text><text>}</text><text>, </text><a link="sa_pn" hover="Source scalable predicate register (field &quot;Pn&quot;)">&lt;Pn&gt;</a><text>.S</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="PMOV-Z.PI-S" mylink="PMOV-Z.PI-S" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE2p1) &amp;&amp; !IsFeatureImplemented(FEAT_SME2p1) then UNDEFINED;
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pn);
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd);
+constant integer esize = 32;
+constant integer imm = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i2);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="pmov_z_pi_b, pmov_z_pi_d, pmov_z_pi_h, pmov_z_pi_s" symboldefcount="1">
+      <symbol link="sa_zd">&lt;Zd&gt;</symbol>
+      <account encodedin="Zd">
+        <intro>
+          <para>Is the name of the destination scalable vector register, encoded in the "Zd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="pmov_z_pi_d" symboldefcount="1">
+      <symbol link="sa_imm">&lt;imm&gt;</symbol>
+      <account encodedin="i3h:i3l">
+        <docvars>
+          <docvar key="sve-esize" value="esize-doubleword" />
+        </docvars>
+        <intro>
+          <para>For the doubleword variant: is the optional portion index, in the range 0 to 7, defaulting to 0, encoded in the "i3h:i3l" fields.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="pmov_z_pi_h" symboldefcount="2">
+      <symbol link="sa_imm_1">&lt;imm&gt;</symbol>
+      <account encodedin="i1">
+        <docvars>
+          <docvar key="sve-esize" value="esize-halfword" />
+        </docvars>
+        <intro>
+          <para>For the halfword variant: is the optional portion index, in the range 0 to 1, defaulting to 0, encoded in the "i1" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="pmov_z_pi_s" symboldefcount="3">
+      <symbol link="sa_imm_2">&lt;imm&gt;</symbol>
+      <account encodedin="i2">
+        <docvars>
+          <docvar key="sve-esize" value="esize-word" />
+        </docvars>
+        <intro>
+          <para>For the word variant: is the optional portion index, in the range 0 to 3, defaulting to 0, encoded in the "i2" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="pmov_z_pi_b, pmov_z_pi_d, pmov_z_pi_h, pmov_z_pi_s" symboldefcount="1">
+      <symbol link="sa_pn">&lt;Pn&gt;</symbol>
+      <account encodedin="Pn">
+        <intro>
+          <para>Is the name of the source scalable predicate register, encoded in the "Pn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="PMOV-Z.PI-B" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSVEEnabled()">CheckSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer PL = VL DIV 8;
+constant integer elements = VL DIV esize;
+constant bits(PL) operand = <a link="impl-aarch64.P.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) P[integer n, integer width]">P</a>[n, PL];
+bits(VL) result;
+
+if imm == 0 then
+    result = <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(VL);
+else
+    result = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[d, VL];
+
+for e = 0 to elements-1
+    result&lt;(elements * imm) + e&gt; = <a link="impl-aarch64.PredicateElement.3" file="shared_pseudocode.xml" hover="function: bit PredicateElement(bits(N) pred, integer e, integer esize)">PredicateElement</a>(operand, e, esize);
+
+<a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[d, VL] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

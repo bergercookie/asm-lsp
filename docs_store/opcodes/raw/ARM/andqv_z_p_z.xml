@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="andqv_z_p_z" title="ANDQV" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="ANDQV" />
+  </docvars>
+  <heading>ANDQV</heading>
+  <desc>
+    <brief>Bitwise AND reduction of quadword vector segments</brief>
+    <description>
+      <para>Bitwise AND of the same element numbers from each 128-bit source vector segment, placing each result into the corresponding element number of the 128-bit SIMD&amp;FP destination register. Inactive elements in the source vector are treated as all ones.</para>
+    </description>
+    <status>Green</status>
+    <predicated>True</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SVE2" oneof="1" id="iclass_sve2" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="ANDQV" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SVE2p1" feature="FEAT_SVE2p1" />
+      </arch_variants>
+      <regdiagram form="32" psname="ANDQV-Z.P.Z-_">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" width="4" settings="4">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="17" name="opc&lt;1&gt;" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="16" name="opc&lt;0&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="15" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="12" width="3" name="Pg" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Vd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="andqv_z_p_z_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="ANDQV" />
+        </docvars>
+        <asmtemplate><text>ANDQV   </text><a link="sa_vd" hover="Destination SIMD&amp;FP register (field &quot;Vd&quot;)">&lt;Vd&gt;</a><text>.</text><a link="sa_t" hover="Arrangement specifier (field &quot;size&quot;) [2D,4S,8H,16B]">&lt;T&gt;</a><text>, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>, </text><a link="sa_zn" hover="Source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.</text><a link="sa_tb" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;Tb&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="ANDQV-Z.P.Z-_" mylink="ANDQV-Z.P.Z-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE2p1) &amp;&amp; !IsFeatureImplemented(FEAT_SME2p1) then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer g = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pg);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Vd);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="andqv_z_p_z_" symboldefcount="1">
+      <symbol link="sa_vd">&lt;Vd&gt;</symbol>
+      <account encodedin="Vd">
+        <intro>
+          <para>Is the name of the destination SIMD&amp;FP register, encoded in the "Vd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="andqv_z_p_z_" symboldefcount="1">
+      <symbol link="sa_t">&lt;T&gt;</symbol>
+      <definition encodedin="size">
+        <intro>Is an arrangement specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">size</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">16B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">8H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10</entry>
+                <entry class="symbol">4S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11</entry>
+                <entry class="symbol">2D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="andqv_z_p_z_" symboldefcount="1">
+      <symbol link="sa_pg">&lt;Pg&gt;</symbol>
+      <account encodedin="Pg">
+        <intro>
+          <para>Is the name of the governing scalable predicate register P0-P7, encoded in the "Pg" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="andqv_z_p_z_" symboldefcount="1">
+      <symbol link="sa_zn">&lt;Zn&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the source scalable vector register, encoded in the "Zn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="andqv_z_p_z_" symboldefcount="1">
+      <symbol link="sa_tb">&lt;Tb&gt;</symbol>
+      <definition encodedin="size">
+        <intro>Is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">size</entry>
+                <entry class="symbol">&lt;Tb&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10</entry>
+                <entry class="symbol">S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11</entry>
+                <entry class="symbol">D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="ANDQV-Z.P.Z-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSVEEnabled()">CheckSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer PL = VL DIV 8;
+constant integer segments = VL DIV 128;
+constant integer elempersegment = 128 DIV esize;
+constant bits(PL) mask = <a link="impl-aarch64.P.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) P[integer n, integer width]">P</a>[g, PL];
+constant bits(VL) operand = if <a link="impl-aarch64.AnyActiveElement.2" file="shared_pseudocode.xml" hover="function: boolean AnyActiveElement(bits(N) mask, integer esize)">AnyActiveElement</a>(mask, esize) then <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[n, VL] else <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(VL);
+bits(128) result = <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(128);
+bits(128) stmp = <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(128);
+
+bits(esize) dtmp;
+
+for e = 0 to elempersegment-1
+    dtmp = <a link="impl-shared.Ones.1" file="shared_pseudocode.xml" hover="function: bits(N) Ones(integer N)">Ones</a>(esize);
+    for s = 0 to segments-1
+        if <a link="impl-aarch64.ActivePredicateElement.3" file="shared_pseudocode.xml" hover="function: boolean ActivePredicateElement(bits(N) pred, integer e, integer esize)">ActivePredicateElement</a>(mask, s * elempersegment + e, esize) then
+            stmp = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand, s, 128];
+            dtmp = dtmp AND <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[stmp, e, esize];
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, esize] = dtmp&lt;esize-1:0&gt;;
+
+<a link="impl-aarch64.V.write.2" file="shared_pseudocode.xml" hover="accessor: V[integer n, ESize width] = bits(width) value">V</a>[d, 128] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

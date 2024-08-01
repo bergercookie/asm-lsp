@@ -1,0 +1,434 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="alphaindex.xsl" version="1.0"?>
+<!DOCTYPE alphaindex PUBLIC "-//ARM//DTD alphaindex //EN" "alphaindex.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<alphaindex>
+  <toptitle instructionset="A64"/>
+  <iforms title="A64 -- SIMD and Floating-point Instructions (alphabetic order)">
+    <iform iformfile="abs_advsimd.xml" heading="ABS" id="ABS_advsimd">Absolute value (vector).</iform>
+    <iform iformfile="add_advsimd.xml" heading="ADD (vector)" id="ADD_advsimd">Add (vector).</iform>
+    <iform iformfile="addhn_advsimd.xml" heading="ADDHN, ADDHN2" id="ADDHN_advsimd">Add returning high narrow.</iform>
+    <iform iformfile="addp_advsimd_pair.xml" heading="ADDP (scalar)" id="ADDP_advsimd_pair">Add pair of elements (scalar).</iform>
+    <iform iformfile="addp_advsimd_vec.xml" heading="ADDP (vector)" id="ADDP_advsimd_vec">Add pairwise (vector).</iform>
+    <iform iformfile="addv_advsimd.xml" heading="ADDV" id="ADDV_advsimd">Add across vector.</iform>
+    <iform iformfile="aesd_advsimd.xml" heading="AESD" id="AESD_advsimd">AES single round decryption.</iform>
+    <iform iformfile="aese_advsimd.xml" heading="AESE" id="AESE_advsimd">AES single round encryption.</iform>
+    <iform iformfile="aesimc_advsimd.xml" heading="AESIMC" id="AESIMC_advsimd">AES inverse mix columns.</iform>
+    <iform iformfile="aesmc_advsimd.xml" heading="AESMC" id="AESMC_advsimd">AES mix columns.</iform>
+    <iform iformfile="and_advsimd.xml" heading="AND (vector)" id="AND_advsimd">Bitwise AND (vector).</iform>
+    <iform iformfile="bcax_advsimd.xml" heading="BCAX" id="BCAX_advsimd">Bit clear and exclusive-OR.</iform>
+    <iform iformfile="bf12cvtl_advsimd.xml" heading="BF1CVTL, BF1CVTL2, BF2CVTL, BF2CVTL2" id="BF12CVTL_advsimd">8-bit floating-point convert to BFloat16 (vector).</iform>
+    <iform iformfile="bfcvt_float.xml" heading="BFCVT" id="BFCVT_float">Floating-point convert from single-precision to BFloat16 format (scalar).</iform>
+    <iform iformfile="bfcvtn_advsimd.xml" heading="BFCVTN, BFCVTN2" id="BFCVTN_advsimd">Floating-point convert from single-precision to BFloat16 format (vector).</iform>
+    <iform iformfile="bfdot_advsimd_elt.xml" heading="BFDOT (by element)" id="BFDOT_advsimd_elt">BFloat16 floating-point dot product (vector, by element).</iform>
+    <iform iformfile="bfdot_advsimd_vec.xml" heading="BFDOT (vector)" id="BFDOT_advsimd_vec">BFloat16 floating-point dot product (vector).</iform>
+    <iform iformfile="bfmlal_advsimd_elt.xml" heading="BFMLALB, BFMLALT (by element)" id="BFMLAL_advsimd_elt">BFloat16 floating-point widening multiply-add long (by element).</iform>
+    <iform iformfile="bfmlal_advsimd_vec.xml" heading="BFMLALB, BFMLALT (vector)" id="BFMLAL_advsimd_vec">BFloat16 floating-point widening multiply-add long (vector).</iform>
+    <iform iformfile="bfmmla_advsimd.xml" heading="BFMMLA" id="BFMMLA_advsimd">BFloat16 floating-point matrix multiply-accumulate into 2x2 matrix.</iform>
+    <iform iformfile="bic_advsimd_imm.xml" heading="BIC (vector, immediate)" id="BIC_advsimd_imm">Bitwise bit clear (vector, immediate).</iform>
+    <iform iformfile="bic_advsimd_reg.xml" heading="BIC (vector, register)" id="BIC_advsimd_reg">Bitwise bit clear (vector, register).</iform>
+    <iform iformfile="bif_advsimd.xml" heading="BIF" id="BIF_advsimd">Bitwise insert if false.</iform>
+    <iform iformfile="bit_advsimd.xml" heading="BIT" id="BIT_advsimd">Bitwise insert if true.</iform>
+    <iform iformfile="bsl_advsimd.xml" heading="BSL" id="BSL_advsimd">Bitwise select.</iform>
+    <iform iformfile="cls_advsimd.xml" heading="CLS (vector)" id="CLS_advsimd">Count leading sign bits (vector).</iform>
+    <iform iformfile="clz_advsimd.xml" heading="CLZ (vector)" id="CLZ_advsimd">Count leading zero bits (vector).</iform>
+    <iform iformfile="cmeq_advsimd_reg.xml" heading="CMEQ (register)" id="CMEQ_advsimd_reg">Compare bitwise equal (vector).</iform>
+    <iform iformfile="cmeq_advsimd_zero.xml" heading="CMEQ (zero)" id="CMEQ_advsimd_zero">Compare bitwise equal to zero (vector).</iform>
+    <iform iformfile="cmge_advsimd_reg.xml" heading="CMGE (register)" id="CMGE_advsimd_reg">Compare signed greater than or equal (vector).</iform>
+    <iform iformfile="cmge_advsimd_zero.xml" heading="CMGE (zero)" id="CMGE_advsimd_zero">Compare signed greater than or equal to zero (vector).</iform>
+    <iform iformfile="cmgt_advsimd_reg.xml" heading="CMGT (register)" id="CMGT_advsimd_reg">Compare signed greater than (vector).</iform>
+    <iform iformfile="cmgt_advsimd_zero.xml" heading="CMGT (zero)" id="CMGT_advsimd_zero">Compare signed greater than zero (vector).</iform>
+    <iform iformfile="cmhi_advsimd.xml" heading="CMHI (register)" id="CMHI_advsimd">Compare unsigned higher (vector).</iform>
+    <iform iformfile="cmhs_advsimd.xml" heading="CMHS (register)" id="CMHS_advsimd">Compare unsigned higher or same (vector).</iform>
+    <iform iformfile="cmle_advsimd.xml" heading="CMLE (zero)" id="CMLE_advsimd">Compare signed less than or equal to zero (vector).</iform>
+    <iform iformfile="cmlt_advsimd.xml" heading="CMLT (zero)" id="CMLT_advsimd">Compare signed less than zero (vector).</iform>
+    <iform iformfile="cmtst_advsimd.xml" heading="CMTST" id="CMTST_advsimd">Compare bitwise test bits nonzero (vector).</iform>
+    <iform iformfile="cnt_advsimd.xml" heading="CNT" id="CNT_advsimd">Population count per byte.</iform>
+    <iform iformfile="dup_advsimd_elt.xml" heading="DUP (element)" id="DUP_advsimd_elt">Duplicate vector element to vector or scalar.</iform>
+    <iform iformfile="dup_advsimd_gen.xml" heading="DUP (general)" id="DUP_advsimd_gen">Duplicate general-purpose register to vector.</iform>
+    <iform iformfile="eor_advsimd.xml" heading="EOR (vector)" id="EOR_advsimd">Bitwise exclusive-OR (vector).</iform>
+    <iform iformfile="eor3_advsimd.xml" heading="EOR3" id="EOR3_advsimd">Three-way exclusive-OR.</iform>
+    <iform iformfile="ext_advsimd.xml" heading="EXT" id="EXT_advsimd">Extract vector from pair of vectors.</iform>
+    <iform iformfile="f12cvtl_advsimd.xml" heading="F1CVTL, F1CVTL2, F2CVTL, F2CVTL2" id="F12CVTL_advsimd">8-bit floating-point convert to half-precision (vector).</iform>
+    <iform iformfile="fabd_advsimd.xml" heading="FABD" id="FABD_advsimd">Floating-point absolute difference (vector).</iform>
+    <iform iformfile="fabs_float.xml" heading="FABS (scalar)" id="FABS_float">Floating-point absolute value (scalar).</iform>
+    <iform iformfile="fabs_advsimd.xml" heading="FABS (vector)" id="FABS_advsimd">Floating-point absolute value (vector).</iform>
+    <iform iformfile="facge_advsimd.xml" heading="FACGE" id="FACGE_advsimd">Floating-point absolute compare greater than or equal (vector).</iform>
+    <iform iformfile="facgt_advsimd.xml" heading="FACGT" id="FACGT_advsimd">Floating-point absolute compare greater than (vector).</iform>
+    <iform iformfile="fadd_float.xml" heading="FADD (scalar)" id="FADD_float">Floating-point add (scalar).</iform>
+    <iform iformfile="fadd_advsimd.xml" heading="FADD (vector)" id="FADD_advsimd">Floating-point add (vector).</iform>
+    <iform iformfile="faddp_advsimd_pair.xml" heading="FADDP (scalar)" id="FADDP_advsimd_pair">Floating-point add pair of elements (scalar).</iform>
+    <iform iformfile="faddp_advsimd_vec.xml" heading="FADDP (vector)" id="FADDP_advsimd_vec">Floating-point add pairwise (vector).</iform>
+    <iform iformfile="famax_advsimd.xml" heading="FAMAX" id="FAMAX_advsimd">Floating-point absolute maximum.</iform>
+    <iform iformfile="famin_advsimd.xml" heading="FAMIN" id="FAMIN_advsimd">Floating-point absolute minimum.</iform>
+    <iform iformfile="fcadd_advsimd_vec.xml" heading="FCADD" id="FCADD_advsimd_vec">Floating-point complex add.</iform>
+    <iform iformfile="fccmp_float.xml" heading="FCCMP" id="FCCMP_float">Floating-point conditional quiet compare (scalar).</iform>
+    <iform iformfile="fccmpe_float.xml" heading="FCCMPE" id="FCCMPE_float">Floating-point conditional signaling compare (scalar).</iform>
+    <iform iformfile="fcmeq_advsimd_reg.xml" heading="FCMEQ (register)" id="FCMEQ_advsimd_reg">Floating-point compare equal (vector).</iform>
+    <iform iformfile="fcmeq_advsimd_zero.xml" heading="FCMEQ (zero)" id="FCMEQ_advsimd_zero">Floating-point compare equal to zero (vector).</iform>
+    <iform iformfile="fcmge_advsimd_reg.xml" heading="FCMGE (register)" id="FCMGE_advsimd_reg">Floating-point compare greater than or equal (vector).</iform>
+    <iform iformfile="fcmge_advsimd_zero.xml" heading="FCMGE (zero)" id="FCMGE_advsimd_zero">Floating-point compare greater than or equal to zero (vector).</iform>
+    <iform iformfile="fcmgt_advsimd_reg.xml" heading="FCMGT (register)" id="FCMGT_advsimd_reg">Floating-point compare greater than (vector).</iform>
+    <iform iformfile="fcmgt_advsimd_zero.xml" heading="FCMGT (zero)" id="FCMGT_advsimd_zero">Floating-point compare greater than zero (vector).</iform>
+    <iform iformfile="fcmla_advsimd_vec.xml" heading="FCMLA" id="FCMLA_advsimd_vec">Floating-point complex multiply accumulate.</iform>
+    <iform iformfile="fcmla_advsimd_elt.xml" heading="FCMLA (by element)" id="FCMLA_advsimd_elt">Floating-point complex multiply accumulate (by element).</iform>
+    <iform iformfile="fcmle_advsimd.xml" heading="FCMLE (zero)" id="FCMLE_advsimd">Floating-point compare less than or equal to zero (vector).</iform>
+    <iform iformfile="fcmlt_advsimd.xml" heading="FCMLT (zero)" id="FCMLT_advsimd">Floating-point compare less than zero (vector).</iform>
+    <iform iformfile="fcmp_float.xml" heading="FCMP" id="FCMP_float">Floating-point quiet compare (scalar).</iform>
+    <iform iformfile="fcmpe_float.xml" heading="FCMPE" id="FCMPE_float">Floating-point signaling compare (scalar).</iform>
+    <iform iformfile="fcsel_float.xml" heading="FCSEL" id="FCSEL_float">Floating-point conditional select (scalar).</iform>
+    <iform iformfile="fcvt_float.xml" heading="FCVT" id="FCVT_float">Floating-point convert precision (scalar).</iform>
+    <iform iformfile="fcvtas_float.xml" heading="FCVTAS (scalar)" id="FCVTAS_float">Floating-point convert to signed integer, rounding to nearest with ties to away (scalar).</iform>
+    <iform iformfile="fcvtas_advsimd.xml" heading="FCVTAS (vector)" id="FCVTAS_advsimd">Floating-point convert to signed integer, rounding to nearest with ties to away (vector).</iform>
+    <iform iformfile="fcvtau_float.xml" heading="FCVTAU (scalar)" id="FCVTAU_float">Floating-point convert to unsigned integer, rounding to nearest with ties to away (scalar).</iform>
+    <iform iformfile="fcvtau_advsimd.xml" heading="FCVTAU (vector)" id="FCVTAU_advsimd">Floating-point convert to unsigned integer, rounding to nearest with ties to away (vector).</iform>
+    <iform iformfile="fcvtl_advsimd.xml" heading="FCVTL, FCVTL2" id="FCVTL_advsimd">Floating-point convert to higher precision long (vector).</iform>
+    <iform iformfile="fcvtms_float.xml" heading="FCVTMS (scalar)" id="FCVTMS_float">Floating-point convert to signed integer, rounding toward minus infinity (scalar).</iform>
+    <iform iformfile="fcvtms_advsimd.xml" heading="FCVTMS (vector)" id="FCVTMS_advsimd">Floating-point convert to signed integer, rounding toward minus infinity (vector).</iform>
+    <iform iformfile="fcvtmu_float.xml" heading="FCVTMU (scalar)" id="FCVTMU_float">Floating-point convert to unsigned integer, rounding toward minus infinity (scalar).</iform>
+    <iform iformfile="fcvtmu_advsimd.xml" heading="FCVTMU (vector)" id="FCVTMU_advsimd">Floating-point convert to unsigned integer, rounding toward minus infinity (vector).</iform>
+    <iform iformfile="fcvtn_advsimd_168.xml" heading="FCVTN (half-precision to 8-bit floating-point)" id="FCVTN_advsimd_168">Half-precision to 8-bit floating-point convert and narrow (vector).</iform>
+    <iform iformfile="fcvtn_advsimd.xml" heading="FCVTN, FCVTN2 (double to single-precision, single to half-precision)" id="FCVTN_advsimd">Floating-point convert to lower precision narrow (vector).</iform>
+    <iform iformfile="fcvtn_advsimd_328.xml" heading="FCVTN, FCVTN2 (single-precision to 8-bit floating-point)" id="FCVTN_advsimd_328">Single-precision to 8-bit floating-point convert and narrow (vector).</iform>
+    <iform iformfile="fcvtns_float.xml" heading="FCVTNS (scalar)" id="FCVTNS_float">Floating-point convert to signed integer, rounding to nearest with ties to even (scalar).</iform>
+    <iform iformfile="fcvtns_advsimd.xml" heading="FCVTNS (vector)" id="FCVTNS_advsimd">Floating-point convert to signed integer, rounding to nearest with ties to even (vector).</iform>
+    <iform iformfile="fcvtnu_float.xml" heading="FCVTNU (scalar)" id="FCVTNU_float">Floating-point convert to unsigned integer, rounding to nearest with ties to even (scalar).</iform>
+    <iform iformfile="fcvtnu_advsimd.xml" heading="FCVTNU (vector)" id="FCVTNU_advsimd">Floating-point convert to unsigned integer, rounding to nearest with ties to even (vector).</iform>
+    <iform iformfile="fcvtps_float.xml" heading="FCVTPS (scalar)" id="FCVTPS_float">Floating-point convert to signed integer, rounding toward plus infinity (scalar).</iform>
+    <iform iformfile="fcvtps_advsimd.xml" heading="FCVTPS (vector)" id="FCVTPS_advsimd">Floating-point convert to signed integer, rounding toward plus infinity (vector).</iform>
+    <iform iformfile="fcvtpu_float.xml" heading="FCVTPU (scalar)" id="FCVTPU_float">Floating-point convert to unsigned integer, rounding toward plus infinity (scalar).</iform>
+    <iform iformfile="fcvtpu_advsimd.xml" heading="FCVTPU (vector)" id="FCVTPU_advsimd">Floating-point convert to unsigned integer, rounding toward plus infinity (vector).</iform>
+    <iform iformfile="fcvtxn_advsimd.xml" heading="FCVTXN, FCVTXN2" id="FCVTXN_advsimd">Floating-point convert to lower precision narrow, rounding to odd (vector).</iform>
+    <iform iformfile="fcvtzs_float_fix.xml" heading="FCVTZS (scalar, fixed-point)" id="FCVTZS_float_fix">Floating-point convert to signed fixed-point, rounding toward zero (scalar).</iform>
+    <iform iformfile="fcvtzs_float_int.xml" heading="FCVTZS (scalar, integer)" id="FCVTZS_float_int">Floating-point convert to signed integer, rounding toward zero (scalar).</iform>
+    <iform iformfile="fcvtzs_advsimd_fix.xml" heading="FCVTZS (vector, fixed-point)" id="FCVTZS_advsimd_fix">Floating-point convert to signed fixed-point, rounding toward zero (vector).</iform>
+    <iform iformfile="fcvtzs_advsimd_int.xml" heading="FCVTZS (vector, integer)" id="FCVTZS_advsimd_int">Floating-point convert to signed integer, rounding toward zero (vector).</iform>
+    <iform iformfile="fcvtzu_float_fix.xml" heading="FCVTZU (scalar, fixed-point)" id="FCVTZU_float_fix">Floating-point convert to unsigned fixed-point, rounding toward zero (scalar).</iform>
+    <iform iformfile="fcvtzu_float_int.xml" heading="FCVTZU (scalar, integer)" id="FCVTZU_float_int">Floating-point convert to unsigned integer, rounding toward zero (scalar).</iform>
+    <iform iformfile="fcvtzu_advsimd_fix.xml" heading="FCVTZU (vector, fixed-point)" id="FCVTZU_advsimd_fix">Floating-point convert to unsigned fixed-point, rounding toward zero (vector).</iform>
+    <iform iformfile="fcvtzu_advsimd_int.xml" heading="FCVTZU (vector, integer)" id="FCVTZU_advsimd_int">Floating-point convert to unsigned integer, rounding toward zero (vector).</iform>
+    <iform iformfile="fdiv_float.xml" heading="FDIV (scalar)" id="FDIV_float">Floating-point divide (scalar).</iform>
+    <iform iformfile="fdiv_advsimd.xml" heading="FDIV (vector)" id="FDIV_advsimd">Floating-point divide (vector).</iform>
+    <iform iformfile="fdot_advsimd_2wayelem.xml" heading="FDOT (8-bit floating-point to half-precision, by element)" id="FDOT_advsimd_2wayelem">8-bit floating-point dot product to half-precision (vector, by element).</iform>
+    <iform iformfile="fdot_advsimd_2wayvec.xml" heading="FDOT (8-bit floating-point to half-precision, vector)" id="FDOT_advsimd_2wayvec">8-bit floating-point dot product to half-precision (vector).</iform>
+    <iform iformfile="fdot_advsimd_4wayelem.xml" heading="FDOT (8-bit floating-point to single-precision, by element)" id="FDOT_advsimd_4wayelem">8-bit floating-point dot product to single-precision (vector, by element).</iform>
+    <iform iformfile="fdot_advsimd_4wayvec.xml" heading="FDOT (8-bit floating-point to single-precision, vector)" id="FDOT_advsimd_4wayvec">8-bit floating-point dot product to single-precision (vector).</iform>
+    <iform iformfile="fjcvtzs.xml" heading="FJCVTZS" id="FJCVTZS">Floating-point Javascript convert to signed fixed-point, rounding toward zero.</iform>
+    <iform iformfile="fmadd_float.xml" heading="FMADD" id="FMADD_float">Floating-point fused multiply-add (scalar).</iform>
+    <iform iformfile="fmax_float.xml" heading="FMAX (scalar)" id="FMAX_float">Floating-point maximum (scalar).</iform>
+    <iform iformfile="fmax_advsimd.xml" heading="FMAX (vector)" id="FMAX_advsimd">Floating-point maximum (vector).</iform>
+    <iform iformfile="fmaxnm_float.xml" heading="FMAXNM (scalar)" id="FMAXNM_float">Floating-point maximum number (scalar).</iform>
+    <iform iformfile="fmaxnm_advsimd.xml" heading="FMAXNM (vector)" id="FMAXNM_advsimd">Floating-point maximum number (vector).</iform>
+    <iform iformfile="fmaxnmp_advsimd_pair.xml" heading="FMAXNMP (scalar)" id="FMAXNMP_advsimd_pair">Floating-point maximum number of pair of elements (scalar).</iform>
+    <iform iformfile="fmaxnmp_advsimd_vec.xml" heading="FMAXNMP (vector)" id="FMAXNMP_advsimd_vec">Floating-point maximum number pairwise (vector).</iform>
+    <iform iformfile="fmaxnmv_advsimd.xml" heading="FMAXNMV" id="FMAXNMV_advsimd">Floating-point maximum number across vector.</iform>
+    <iform iformfile="fmaxp_advsimd_pair.xml" heading="FMAXP (scalar)" id="FMAXP_advsimd_pair">Floating-point maximum of pair of elements (scalar).</iform>
+    <iform iformfile="fmaxp_advsimd_vec.xml" heading="FMAXP (vector)" id="FMAXP_advsimd_vec">Floating-point maximum pairwise (vector).</iform>
+    <iform iformfile="fmaxv_advsimd.xml" heading="FMAXV" id="FMAXV_advsimd">Floating-point maximum across vector.</iform>
+    <iform iformfile="fmin_float.xml" heading="FMIN (scalar)" id="FMIN_float">Floating-point minimum (scalar).</iform>
+    <iform iformfile="fmin_advsimd.xml" heading="FMIN (vector)" id="FMIN_advsimd">Floating-point minimum (vector).</iform>
+    <iform iformfile="fminnm_float.xml" heading="FMINNM (scalar)" id="FMINNM_float">Floating-point minimum number (scalar).</iform>
+    <iform iformfile="fminnm_advsimd.xml" heading="FMINNM (vector)" id="FMINNM_advsimd">Floating-point minimum number (vector).</iform>
+    <iform iformfile="fminnmp_advsimd_pair.xml" heading="FMINNMP (scalar)" id="FMINNMP_advsimd_pair">Floating-point minimum number of pair of elements (scalar).</iform>
+    <iform iformfile="fminnmp_advsimd_vec.xml" heading="FMINNMP (vector)" id="FMINNMP_advsimd_vec">Floating-point minimum number pairwise (vector).</iform>
+    <iform iformfile="fminnmv_advsimd.xml" heading="FMINNMV" id="FMINNMV_advsimd">Floating-point minimum number across vector.</iform>
+    <iform iformfile="fminp_advsimd_pair.xml" heading="FMINP (scalar)" id="FMINP_advsimd_pair">Floating-point minimum of pair of elements (scalar).</iform>
+    <iform iformfile="fminp_advsimd_vec.xml" heading="FMINP (vector)" id="FMINP_advsimd_vec">Floating-point minimum pairwise (vector).</iform>
+    <iform iformfile="fminv_advsimd.xml" heading="FMINV" id="FMINV_advsimd">Floating-point minimum across vector.</iform>
+    <iform iformfile="fmla_advsimd_elt.xml" heading="FMLA (by element)" id="FMLA_advsimd_elt">Floating-point fused multiply-add to accumulator (by element).</iform>
+    <iform iformfile="fmla_advsimd_vec.xml" heading="FMLA (vector)" id="FMLA_advsimd_vec">Floating-point fused multiply-add to accumulator (vector).</iform>
+    <iform iformfile="fmlal_advsimd_elt.xml" heading="FMLAL, FMLAL2 (by element)" id="FMLAL_advsimd_elt">Floating-point fused multiply-add long to accumulator (by element).</iform>
+    <iform iformfile="fmlal_advsimd_vec.xml" heading="FMLAL, FMLAL2 (vector)" id="FMLAL_advsimd_vec">Floating-point fused multiply-add long to accumulator (vector).</iform>
+    <iform iformfile="fmlalb_advsimd_elem.xml" heading="FMLALB, FMLALT (by element)" id="FMLALB_advsimd_elem">8-bit floating-point multiply-add long to half-precision (vector, by element).</iform>
+    <iform iformfile="fmlalb_advsimd_vec.xml" heading="FMLALB, FMLALT (vector)" id="FMLALB_advsimd_vec">8-bit floating-point multiply-add long to half-precision (vector).</iform>
+    <iform iformfile="fmlallbb_advsimd_elem.xml" heading="FMLALLBB, FMLALLBT, FMLALLTB, FMLALLTT (by element)" id="FMLALLBB_advsimd_elem">8-bit floating-point multiply-add long-long to single-precision (vector, by element).</iform>
+    <iform iformfile="fmlallbb_advsimd_vec.xml" heading="FMLALLBB, FMLALLBT, FMLALLTB, FMLALLTT (vector)" id="FMLALLBB_advsimd_vec">8-bit floating-point multiply-add long-long to single-precision (vector).</iform>
+    <iform iformfile="fmls_advsimd_elt.xml" heading="FMLS (by element)" id="FMLS_advsimd_elt">Floating-point fused multiply-subtract from accumulator (by element).</iform>
+    <iform iformfile="fmls_advsimd_vec.xml" heading="FMLS (vector)" id="FMLS_advsimd_vec">Floating-point fused multiply-subtract from accumulator (vector).</iform>
+    <iform iformfile="fmlsl_advsimd_elt.xml" heading="FMLSL, FMLSL2 (by element)" id="FMLSL_advsimd_elt">Floating-point fused multiply-subtract long from accumulator (by element).</iform>
+    <iform iformfile="fmlsl_advsimd_vec.xml" heading="FMLSL, FMLSL2 (vector)" id="FMLSL_advsimd_vec">Floating-point fused multiply-subtract long from accumulator (vector).</iform>
+    <iform iformfile="fmov_float_gen.xml" heading="FMOV (general)" id="FMOV_float_gen">Floating-point move to or from general-purpose register without conversion.</iform>
+    <iform iformfile="fmov_float.xml" heading="FMOV (register)" id="FMOV_float">Floating-point move register without conversion.</iform>
+    <iform iformfile="fmov_float_imm.xml" heading="FMOV (scalar, immediate)" id="FMOV_float_imm">Floating-point move immediate (scalar).</iform>
+    <iform iformfile="fmov_advsimd.xml" heading="FMOV (vector, immediate)" id="FMOV_advsimd">Floating-point move immediate (vector).</iform>
+    <iform iformfile="fmsub_float.xml" heading="FMSUB" id="FMSUB_float">Floating-point fused multiply-subtract (scalar).</iform>
+    <iform iformfile="fmul_advsimd_elt.xml" heading="FMUL (by element)" id="FMUL_advsimd_elt">Floating-point multiply (by element).</iform>
+    <iform iformfile="fmul_float.xml" heading="FMUL (scalar)" id="FMUL_float">Floating-point multiply (scalar).</iform>
+    <iform iformfile="fmul_advsimd_vec.xml" heading="FMUL (vector)" id="FMUL_advsimd_vec">Floating-point multiply (vector).</iform>
+    <iform iformfile="fmulx_advsimd_vec.xml" heading="FMULX" id="FMULX_advsimd_vec">Floating-point multiply extended.</iform>
+    <iform iformfile="fmulx_advsimd_elt.xml" heading="FMULX (by element)" id="FMULX_advsimd_elt">Floating-point multiply extended (by element).</iform>
+    <iform iformfile="fneg_float.xml" heading="FNEG (scalar)" id="FNEG_float">Floating-point negate (scalar).</iform>
+    <iform iformfile="fneg_advsimd.xml" heading="FNEG (vector)" id="FNEG_advsimd">Floating-point negate (vector).</iform>
+    <iform iformfile="fnmadd_float.xml" heading="FNMADD" id="FNMADD_float">Floating-point negated fused multiply-add (scalar).</iform>
+    <iform iformfile="fnmsub_float.xml" heading="FNMSUB" id="FNMSUB_float">Floating-point negated fused multiply-subtract (scalar).</iform>
+    <iform iformfile="fnmul_float.xml" heading="FNMUL (scalar)" id="FNMUL_float">Floating-point multiply-negate (scalar).</iform>
+    <iform iformfile="frecpe_advsimd.xml" heading="FRECPE" id="FRECPE_advsimd">Floating-point reciprocal estimate.</iform>
+    <iform iformfile="frecps_advsimd.xml" heading="FRECPS" id="FRECPS_advsimd">Floating-point reciprocal step.</iform>
+    <iform iformfile="frecpx_advsimd.xml" heading="FRECPX" id="FRECPX_advsimd">Floating-point reciprocal exponent (scalar).</iform>
+    <iform iformfile="frint32x_float.xml" heading="FRINT32X (scalar)" id="FRINT32X_float">Floating-point round to 32-bit integer, using current rounding mode (scalar).</iform>
+    <iform iformfile="frint32x_advsimd.xml" heading="FRINT32X (vector)" id="FRINT32X_advsimd">Floating-point round to 32-bit integer, using current rounding mode (vector).</iform>
+    <iform iformfile="frint32z_float.xml" heading="FRINT32Z (scalar)" id="FRINT32Z_float">Floating-point round to 32-bit integer toward zero (scalar).</iform>
+    <iform iformfile="frint32z_advsimd.xml" heading="FRINT32Z (vector)" id="FRINT32Z_advsimd">Floating-point round to 32-bit integer toward zero (vector).</iform>
+    <iform iformfile="frint64x_float.xml" heading="FRINT64X (scalar)" id="FRINT64X_float">Floating-point round to 64-bit integer, using current rounding mode (scalar).</iform>
+    <iform iformfile="frint64x_advsimd.xml" heading="FRINT64X (vector)" id="FRINT64X_advsimd">Floating-point round to 64-bit integer, using current rounding mode (vector).</iform>
+    <iform iformfile="frint64z_float.xml" heading="FRINT64Z (scalar)" id="FRINT64Z_float">Floating-point round to 64-bit integer toward zero (scalar).</iform>
+    <iform iformfile="frint64z_advsimd.xml" heading="FRINT64Z (vector)" id="FRINT64Z_advsimd">Floating-point round to 64-bit integer toward zero (vector).</iform>
+    <iform iformfile="frinta_float.xml" heading="FRINTA (scalar)" id="FRINTA_float">Floating-point round to integral, to nearest with ties to away (scalar).</iform>
+    <iform iformfile="frinta_advsimd.xml" heading="FRINTA (vector)" id="FRINTA_advsimd">Floating-point round to integral, to nearest with ties to away (vector).</iform>
+    <iform iformfile="frinti_float.xml" heading="FRINTI (scalar)" id="FRINTI_float">Floating-point round to integral, using current rounding mode (scalar).</iform>
+    <iform iformfile="frinti_advsimd.xml" heading="FRINTI (vector)" id="FRINTI_advsimd">Floating-point round to integral, using current rounding mode (vector).</iform>
+    <iform iformfile="frintm_float.xml" heading="FRINTM (scalar)" id="FRINTM_float">Floating-point round to integral, toward minus infinity (scalar).</iform>
+    <iform iformfile="frintm_advsimd.xml" heading="FRINTM (vector)" id="FRINTM_advsimd">Floating-point round to integral, toward minus infinity (vector).</iform>
+    <iform iformfile="frintn_float.xml" heading="FRINTN (scalar)" id="FRINTN_float">Floating-point round to integral, to nearest with ties to even (scalar).</iform>
+    <iform iformfile="frintn_advsimd.xml" heading="FRINTN (vector)" id="FRINTN_advsimd">Floating-point round to integral, to nearest with ties to even (vector).</iform>
+    <iform iformfile="frintp_float.xml" heading="FRINTP (scalar)" id="FRINTP_float">Floating-point round to integral, toward plus infinity (scalar).</iform>
+    <iform iformfile="frintp_advsimd.xml" heading="FRINTP (vector)" id="FRINTP_advsimd">Floating-point round to integral, toward plus infinity (vector).</iform>
+    <iform iformfile="frintx_float.xml" heading="FRINTX (scalar)" id="FRINTX_float">Floating-point round to integral exact, using current rounding mode (scalar).</iform>
+    <iform iformfile="frintx_advsimd.xml" heading="FRINTX (vector)" id="FRINTX_advsimd">Floating-point round to integral exact, using current rounding mode (vector).</iform>
+    <iform iformfile="frintz_float.xml" heading="FRINTZ (scalar)" id="FRINTZ_float">Floating-point round to integral, toward zero (scalar).</iform>
+    <iform iformfile="frintz_advsimd.xml" heading="FRINTZ (vector)" id="FRINTZ_advsimd">Floating-point round to integral, toward zero (vector).</iform>
+    <iform iformfile="frsqrte_advsimd.xml" heading="FRSQRTE" id="FRSQRTE_advsimd">Floating-point reciprocal square root estimate.</iform>
+    <iform iformfile="frsqrts_advsimd.xml" heading="FRSQRTS" id="FRSQRTS_advsimd">Floating-point reciprocal square root step.</iform>
+    <iform iformfile="fscale_advsimd.xml" heading="FSCALE" id="FSCALE_advsimd">Floating-point adjust exponent by vector.</iform>
+    <iform iformfile="fsqrt_float.xml" heading="FSQRT (scalar)" id="FSQRT_float">Floating-point square root (scalar).</iform>
+    <iform iformfile="fsqrt_advsimd.xml" heading="FSQRT (vector)" id="FSQRT_advsimd">Floating-point square root (vector).</iform>
+    <iform iformfile="fsub_float.xml" heading="FSUB (scalar)" id="FSUB_float">Floating-point subtract (scalar).</iform>
+    <iform iformfile="fsub_advsimd.xml" heading="FSUB (vector)" id="FSUB_advsimd">Floating-point subtract (vector).</iform>
+    <iform iformfile="ins_advsimd_elt.xml" heading="INS (element)" id="INS_advsimd_elt">Insert vector element from another vector element.</iform>
+    <iform iformfile="ins_advsimd_gen.xml" heading="INS (general)" id="INS_advsimd_gen">Insert vector element from general-purpose register.</iform>
+    <iform iformfile="ld1_advsimd_mult.xml" heading="LD1 (multiple structures)" id="LD1_advsimd_mult">Load multiple single-element structures to one, two, three, or four registers.</iform>
+    <iform iformfile="ld1_advsimd_sngl.xml" heading="LD1 (single structure)" id="LD1_advsimd_sngl">Load one single-element structure to one lane of one register.</iform>
+    <iform iformfile="ld1r_advsimd.xml" heading="LD1R" id="LD1R_advsimd">Load one single-element structure and replicate to all lanes (of one register).</iform>
+    <iform iformfile="ld2_advsimd_mult.xml" heading="LD2 (multiple structures)" id="LD2_advsimd_mult">Load multiple 2-element structures to two registers.</iform>
+    <iform iformfile="ld2_advsimd_sngl.xml" heading="LD2 (single structure)" id="LD2_advsimd_sngl">Load single 2-element structure to one lane of two registers.</iform>
+    <iform iformfile="ld2r_advsimd.xml" heading="LD2R" id="LD2R_advsimd">Load single 2-element structure and replicate to all lanes of two registers.</iform>
+    <iform iformfile="ld3_advsimd_mult.xml" heading="LD3 (multiple structures)" id="LD3_advsimd_mult">Load multiple 3-element structures to three registers.</iform>
+    <iform iformfile="ld3_advsimd_sngl.xml" heading="LD3 (single structure)" id="LD3_advsimd_sngl">Load single 3-element structure to one lane of three registers.</iform>
+    <iform iformfile="ld3r_advsimd.xml" heading="LD3R" id="LD3R_advsimd">Load single 3-element structure and replicate to all lanes of three registers.</iform>
+    <iform iformfile="ld4_advsimd_mult.xml" heading="LD4 (multiple structures)" id="LD4_advsimd_mult">Load multiple 4-element structures to four registers.</iform>
+    <iform iformfile="ld4_advsimd_sngl.xml" heading="LD4 (single structure)" id="LD4_advsimd_sngl">Load single 4-element structure to one lane of four registers.</iform>
+    <iform iformfile="ld4r_advsimd.xml" heading="LD4R" id="LD4R_advsimd">Load single 4-element structure and replicate to all lanes of four registers.</iform>
+    <iform iformfile="ldap1_advsimd_sngl.xml" heading="LDAP1 (SIMD&amp;FP)" id="LDAP1_advsimd_sngl">Load-acquire RCpc one single-element structure to one lane of one register.</iform>
+    <iform iformfile="ldapur_fpsimd.xml" heading="LDAPUR (SIMD&amp;FP)" id="LDAPUR_fpsimd">Load-acquire RCpc SIMD&amp;FP register (unscaled offset).</iform>
+    <iform iformfile="ldnp_fpsimd.xml" heading="LDNP (SIMD&amp;FP)" id="LDNP_fpsimd">Load pair of SIMD&amp;FP registers, with non-temporal hint.</iform>
+    <iform iformfile="ldp_fpsimd.xml" heading="LDP (SIMD&amp;FP)" id="LDP_fpsimd">Load pair of SIMD&amp;FP registers.</iform>
+    <iform iformfile="ldr_imm_fpsimd.xml" heading="LDR (immediate, SIMD&amp;FP)" id="LDR_imm_fpsimd">Load SIMD&amp;FP register (immediate offset).</iform>
+    <iform iformfile="ldr_lit_fpsimd.xml" heading="LDR (literal, SIMD&amp;FP)" id="LDR_lit_fpsimd">Load SIMD&amp;FP register (PC-relative literal).</iform>
+    <iform iformfile="ldr_reg_fpsimd.xml" heading="LDR (register, SIMD&amp;FP)" id="LDR_reg_fpsimd">Load SIMD&amp;FP register (register offset).</iform>
+    <iform iformfile="ldur_fpsimd.xml" heading="LDUR (SIMD&amp;FP)" id="LDUR_fpsimd">Load SIMD&amp;FP register (unscaled offset).</iform>
+    <iform iformfile="luti2_advsimd.xml" heading="LUTI2" id="LUTI2_advsimd">Lookup table read with 2-bit indices.</iform>
+    <iform iformfile="luti4_advsimd.xml" heading="LUTI4" id="LUTI4_advsimd">Lookup table read with 4-bit indices.</iform>
+    <iform iformfile="mla_advsimd_elt.xml" heading="MLA (by element)" id="MLA_advsimd_elt">Multiply-add to accumulator (vector, by element).</iform>
+    <iform iformfile="mla_advsimd_vec.xml" heading="MLA (vector)" id="MLA_advsimd_vec">Multiply-add to accumulator (vector).</iform>
+    <iform iformfile="mls_advsimd_elt.xml" heading="MLS (by element)" id="MLS_advsimd_elt">Multiply-subtract from accumulator (vector, by element).</iform>
+    <iform iformfile="mls_advsimd_vec.xml" heading="MLS (vector)" id="MLS_advsimd_vec">Multiply-subtract from accumulator (vector).</iform>
+    <iform iformfile="mov_ins_advsimd_elt.xml" heading="MOV (element)" id="MOV_INS_advsimd_elt">Move vector element to another vector element: an alias of INS (element).</iform>
+    <iform iformfile="mov_ins_advsimd_gen.xml" heading="MOV (from general)" id="MOV_INS_advsimd_gen">Move general-purpose register to a vector element: an alias of INS (general).</iform>
+    <iform iformfile="mov_dup_advsimd_elt.xml" heading="MOV (scalar)" id="MOV_DUP_advsimd_elt">Move vector element to scalar: an alias of DUP (element).</iform>
+    <iform iformfile="mov_umov_advsimd.xml" heading="MOV (to general)" id="MOV_UMOV_advsimd">Move vector element to general-purpose register: an alias of UMOV.</iform>
+    <iform iformfile="mov_orr_advsimd_reg.xml" heading="MOV (vector)" id="MOV_ORR_advsimd_reg">Move vector: an alias of ORR (vector, register).</iform>
+    <iform iformfile="movi_advsimd.xml" heading="MOVI" id="MOVI_advsimd">Move immediate (vector).</iform>
+    <iform iformfile="mul_advsimd_elt.xml" heading="MUL (by element)" id="MUL_advsimd_elt">Multiply (vector, by element).</iform>
+    <iform iformfile="mul_advsimd_vec.xml" heading="MUL (vector)" id="MUL_advsimd_vec">Multiply (vector).</iform>
+    <iform iformfile="mvn_not_advsimd.xml" heading="MVN" id="MVN_NOT_advsimd">Bitwise NOT (vector): an alias of NOT.</iform>
+    <iform iformfile="mvni_advsimd.xml" heading="MVNI" id="MVNI_advsimd">Move inverted immediate (vector).</iform>
+    <iform iformfile="neg_advsimd.xml" heading="NEG (vector)" id="NEG_advsimd">Negate (vector).</iform>
+    <iform iformfile="not_advsimd.xml" heading="NOT" id="NOT_advsimd">Bitwise NOT (vector).</iform>
+    <iform iformfile="orn_advsimd.xml" heading="ORN (vector)" id="ORN_advsimd">Bitwise inclusive OR NOT (vector).</iform>
+    <iform iformfile="orr_advsimd_imm.xml" heading="ORR (vector, immediate)" id="ORR_advsimd_imm">Bitwise inclusive OR (vector, immediate).</iform>
+    <iform iformfile="orr_advsimd_reg.xml" heading="ORR (vector, register)" id="ORR_advsimd_reg">Bitwise inclusive OR (vector, register).</iform>
+    <iform iformfile="pmul_advsimd.xml" heading="PMUL" id="PMUL_advsimd">Polynomial multiply.</iform>
+    <iform iformfile="pmull_advsimd.xml" heading="PMULL, PMULL2" id="PMULL_advsimd">Polynomial multiply long.</iform>
+    <iform iformfile="raddhn_advsimd.xml" heading="RADDHN, RADDHN2" id="RADDHN_advsimd">Rounding add returning high narrow.</iform>
+    <iform iformfile="rax1_advsimd.xml" heading="RAX1" id="RAX1_advsimd">Rotate and exclusive-OR.</iform>
+    <iform iformfile="rbit_advsimd.xml" heading="RBIT (vector)" id="RBIT_advsimd">Reverse bit order (vector).</iform>
+    <iform iformfile="rev16_advsimd.xml" heading="REV16 (vector)" id="REV16_advsimd">Reverse elements in 16-bit halfwords (vector).</iform>
+    <iform iformfile="rev32_advsimd.xml" heading="REV32 (vector)" id="REV32_advsimd">Reverse elements in 32-bit words (vector).</iform>
+    <iform iformfile="rev64_advsimd.xml" heading="REV64" id="REV64_advsimd">Reverse elements in 64-bit doublewords (vector).</iform>
+    <iform iformfile="rshrn_advsimd.xml" heading="RSHRN, RSHRN2" id="RSHRN_advsimd">Rounding shift right narrow (immediate).</iform>
+    <iform iformfile="rsubhn_advsimd.xml" heading="RSUBHN, RSUBHN2" id="RSUBHN_advsimd">Rounding subtract returning high narrow.</iform>
+    <iform iformfile="saba_advsimd.xml" heading="SABA" id="SABA_advsimd">Signed absolute difference and accumulate.</iform>
+    <iform iformfile="sabal_advsimd.xml" heading="SABAL, SABAL2" id="SABAL_advsimd">Signed absolute difference and accumulate long.</iform>
+    <iform iformfile="sabd_advsimd.xml" heading="SABD" id="SABD_advsimd">Signed absolute difference.</iform>
+    <iform iformfile="sabdl_advsimd.xml" heading="SABDL, SABDL2" id="SABDL_advsimd">Signed absolute difference long.</iform>
+    <iform iformfile="sadalp_advsimd.xml" heading="SADALP" id="SADALP_advsimd">Signed add and accumulate long pairwise.</iform>
+    <iform iformfile="saddl_advsimd.xml" heading="SADDL, SADDL2" id="SADDL_advsimd">Signed add long (vector).</iform>
+    <iform iformfile="saddlp_advsimd.xml" heading="SADDLP" id="SADDLP_advsimd">Signed add long pairwise.</iform>
+    <iform iformfile="saddlv_advsimd.xml" heading="SADDLV" id="SADDLV_advsimd">Signed add long across vector.</iform>
+    <iform iformfile="saddw_advsimd.xml" heading="SADDW, SADDW2" id="SADDW_advsimd">Signed add wide.</iform>
+    <iform iformfile="scvtf_float_fix.xml" heading="SCVTF (scalar, fixed-point)" id="SCVTF_float_fix">Signed fixed-point convert to floating-point (scalar).</iform>
+    <iform iformfile="scvtf_float_int.xml" heading="SCVTF (scalar, integer)" id="SCVTF_float_int">Signed integer convert to floating-point (scalar).</iform>
+    <iform iformfile="scvtf_advsimd_fix.xml" heading="SCVTF (vector, fixed-point)" id="SCVTF_advsimd_fix">Signed fixed-point convert to floating-point (vector).</iform>
+    <iform iformfile="scvtf_advsimd_int.xml" heading="SCVTF (vector, integer)" id="SCVTF_advsimd_int">Signed integer convert to floating-point (vector).</iform>
+    <iform iformfile="sdot_advsimd_elt.xml" heading="SDOT (by element)" id="SDOT_advsimd_elt">Dot product signed arithmetic (vector, by element).</iform>
+    <iform iformfile="sdot_advsimd_vec.xml" heading="SDOT (vector)" id="SDOT_advsimd_vec">Dot product signed arithmetic (vector).</iform>
+    <iform iformfile="sha1c_advsimd.xml" heading="SHA1C" id="SHA1C_advsimd">SHA1 hash update (choose).</iform>
+    <iform iformfile="sha1h_advsimd.xml" heading="SHA1H" id="SHA1H_advsimd">SHA1 fixed rotate.</iform>
+    <iform iformfile="sha1m_advsimd.xml" heading="SHA1M" id="SHA1M_advsimd">SHA1 hash update (majority).</iform>
+    <iform iformfile="sha1p_advsimd.xml" heading="SHA1P" id="SHA1P_advsimd">SHA1 hash update (parity).</iform>
+    <iform iformfile="sha1su0_advsimd.xml" heading="SHA1SU0" id="SHA1SU0_advsimd">SHA1 schedule update 0.</iform>
+    <iform iformfile="sha1su1_advsimd.xml" heading="SHA1SU1" id="SHA1SU1_advsimd">SHA1 schedule update 1.</iform>
+    <iform iformfile="sha256h_advsimd.xml" heading="SHA256H" id="SHA256H_advsimd">SHA256 hash update (part 1).</iform>
+    <iform iformfile="sha256h2_advsimd.xml" heading="SHA256H2" id="SHA256H2_advsimd">SHA256 hash update (part 2).</iform>
+    <iform iformfile="sha256su0_advsimd.xml" heading="SHA256SU0" id="SHA256SU0_advsimd">SHA256 schedule update 0.</iform>
+    <iform iformfile="sha256su1_advsimd.xml" heading="SHA256SU1" id="SHA256SU1_advsimd">SHA256 schedule update 1.</iform>
+    <iform iformfile="sha512h_advsimd.xml" heading="SHA512H" id="SHA512H_advsimd">SHA512 hash update part 1.</iform>
+    <iform iformfile="sha512h2_advsimd.xml" heading="SHA512H2" id="SHA512H2_advsimd">SHA512 hash update part 2.</iform>
+    <iform iformfile="sha512su0_advsimd.xml" heading="SHA512SU0" id="SHA512SU0_advsimd">SHA512 schedule update 0.</iform>
+    <iform iformfile="sha512su1_advsimd.xml" heading="SHA512SU1" id="SHA512SU1_advsimd">SHA512 schedule update 1.</iform>
+    <iform iformfile="shadd_advsimd.xml" heading="SHADD" id="SHADD_advsimd">Signed halving add.</iform>
+    <iform iformfile="shl_advsimd.xml" heading="SHL" id="SHL_advsimd">Shift left (immediate).</iform>
+    <iform iformfile="shll_advsimd.xml" heading="SHLL, SHLL2" id="SHLL_advsimd">Shift left long (by element size).</iform>
+    <iform iformfile="shrn_advsimd.xml" heading="SHRN, SHRN2" id="SHRN_advsimd">Shift right narrow (immediate).</iform>
+    <iform iformfile="shsub_advsimd.xml" heading="SHSUB" id="SHSUB_advsimd">Signed halving subtract.</iform>
+    <iform iformfile="sli_advsimd.xml" heading="SLI" id="SLI_advsimd">Shift left and insert (immediate).</iform>
+    <iform iformfile="sm3partw1_advsimd.xml" heading="SM3PARTW1" id="SM3PARTW1_advsimd">SM3PARTW1.</iform>
+    <iform iformfile="sm3partw2_advsimd.xml" heading="SM3PARTW2" id="SM3PARTW2_advsimd">SM3PARTW2.</iform>
+    <iform iformfile="sm3ss1_advsimd.xml" heading="SM3SS1" id="SM3SS1_advsimd">SM3SS1.</iform>
+    <iform iformfile="sm3tt1a_advsimd.xml" heading="SM3TT1A" id="SM3TT1A_advsimd">SM3TT1A.</iform>
+    <iform iformfile="sm3tt1b_advsimd.xml" heading="SM3TT1B" id="SM3TT1B_advsimd">SM3TT1B.</iform>
+    <iform iformfile="sm3tt2a_advsimd.xml" heading="SM3TT2A" id="SM3TT2A_advsimd">SM3TT2A.</iform>
+    <iform iformfile="sm3tt2b_advsimd.xml" heading="SM3TT2B" id="SM3TT2B_advsimd">SM3TT2B.</iform>
+    <iform iformfile="sm4e_advsimd.xml" heading="SM4E" id="SM4E_advsimd">SM4 encode.</iform>
+    <iform iformfile="sm4ekey_advsimd.xml" heading="SM4EKEY" id="SM4EKEY_advsimd">SM4 key.</iform>
+    <iform iformfile="smax_advsimd.xml" heading="SMAX" id="SMAX_advsimd">Signed maximum (vector).</iform>
+    <iform iformfile="smaxp_advsimd.xml" heading="SMAXP" id="SMAXP_advsimd">Signed maximum pairwise.</iform>
+    <iform iformfile="smaxv_advsimd.xml" heading="SMAXV" id="SMAXV_advsimd">Signed maximum across vector.</iform>
+    <iform iformfile="smin_advsimd.xml" heading="SMIN" id="SMIN_advsimd">Signed minimum (vector).</iform>
+    <iform iformfile="sminp_advsimd.xml" heading="SMINP" id="SMINP_advsimd">Signed minimum pairwise.</iform>
+    <iform iformfile="sminv_advsimd.xml" heading="SMINV" id="SMINV_advsimd">Signed minimum across vector.</iform>
+    <iform iformfile="smlal_advsimd_elt.xml" heading="SMLAL, SMLAL2 (by element)" id="SMLAL_advsimd_elt">Signed multiply-add long (vector, by element).</iform>
+    <iform iformfile="smlal_advsimd_vec.xml" heading="SMLAL, SMLAL2 (vector)" id="SMLAL_advsimd_vec">Signed multiply-add long (vector).</iform>
+    <iform iformfile="smlsl_advsimd_elt.xml" heading="SMLSL, SMLSL2 (by element)" id="SMLSL_advsimd_elt">Signed multiply-subtract long (vector, by element).</iform>
+    <iform iformfile="smlsl_advsimd_vec.xml" heading="SMLSL, SMLSL2 (vector)" id="SMLSL_advsimd_vec">Signed multiply-subtract long (vector).</iform>
+    <iform iformfile="smmla_advsimd_vec.xml" heading="SMMLA (vector)" id="SMMLA_advsimd_vec">Signed 8-bit integer matrix multiply-accumulate (vector).</iform>
+    <iform iformfile="smov_advsimd.xml" heading="SMOV" id="SMOV_advsimd">Signed move vector element to general-purpose register.</iform>
+    <iform iformfile="smull_advsimd_elt.xml" heading="SMULL, SMULL2 (by element)" id="SMULL_advsimd_elt">Signed multiply long (vector, by element).</iform>
+    <iform iformfile="smull_advsimd_vec.xml" heading="SMULL, SMULL2 (vector)" id="SMULL_advsimd_vec">Signed multiply long (vector).</iform>
+    <iform iformfile="sqabs_advsimd.xml" heading="SQABS" id="SQABS_advsimd">Signed saturating absolute value.</iform>
+    <iform iformfile="sqadd_advsimd.xml" heading="SQADD" id="SQADD_advsimd">Signed saturating add.</iform>
+    <iform iformfile="sqdmlal_advsimd_elt.xml" heading="SQDMLAL, SQDMLAL2 (by element)" id="SQDMLAL_advsimd_elt">Signed saturating doubling multiply-add long (by element).</iform>
+    <iform iformfile="sqdmlal_advsimd_vec.xml" heading="SQDMLAL, SQDMLAL2 (vector)" id="SQDMLAL_advsimd_vec">Signed saturating doubling multiply-add long.</iform>
+    <iform iformfile="sqdmlsl_advsimd_elt.xml" heading="SQDMLSL, SQDMLSL2 (by element)" id="SQDMLSL_advsimd_elt">Signed saturating doubling multiply-subtract long (by element).</iform>
+    <iform iformfile="sqdmlsl_advsimd_vec.xml" heading="SQDMLSL, SQDMLSL2 (vector)" id="SQDMLSL_advsimd_vec">Signed saturating doubling multiply-subtract long.</iform>
+    <iform iformfile="sqdmulh_advsimd_elt.xml" heading="SQDMULH (by element)" id="SQDMULH_advsimd_elt">Signed saturating doubling multiply returning high half (by element).</iform>
+    <iform iformfile="sqdmulh_advsimd_vec.xml" heading="SQDMULH (vector)" id="SQDMULH_advsimd_vec">Signed saturating doubling multiply returning high half.</iform>
+    <iform iformfile="sqdmull_advsimd_elt.xml" heading="SQDMULL, SQDMULL2 (by element)" id="SQDMULL_advsimd_elt">Signed saturating doubling multiply long (by element).</iform>
+    <iform iformfile="sqdmull_advsimd_vec.xml" heading="SQDMULL, SQDMULL2 (vector)" id="SQDMULL_advsimd_vec">Signed saturating doubling multiply long.</iform>
+    <iform iformfile="sqneg_advsimd.xml" heading="SQNEG" id="SQNEG_advsimd">Signed saturating negate.</iform>
+    <iform iformfile="sqrdmlah_advsimd_elt.xml" heading="SQRDMLAH (by element)" id="SQRDMLAH_advsimd_elt">Signed saturating rounding doubling multiply accumulate returning high half (by element).</iform>
+    <iform iformfile="sqrdmlah_advsimd_vec.xml" heading="SQRDMLAH (vector)" id="SQRDMLAH_advsimd_vec">Signed saturating rounding doubling multiply accumulate returning high half (vector).</iform>
+    <iform iformfile="sqrdmlsh_advsimd_elt.xml" heading="SQRDMLSH (by element)" id="SQRDMLSH_advsimd_elt">Signed saturating rounding doubling multiply subtract returning high half (by element).</iform>
+    <iform iformfile="sqrdmlsh_advsimd_vec.xml" heading="SQRDMLSH (vector)" id="SQRDMLSH_advsimd_vec">Signed saturating rounding doubling multiply subtract returning high half (vector).</iform>
+    <iform iformfile="sqrdmulh_advsimd_elt.xml" heading="SQRDMULH (by element)" id="SQRDMULH_advsimd_elt">Signed saturating rounding doubling multiply returning high half (by element).</iform>
+    <iform iformfile="sqrdmulh_advsimd_vec.xml" heading="SQRDMULH (vector)" id="SQRDMULH_advsimd_vec">Signed saturating rounding doubling multiply returning high half.</iform>
+    <iform iformfile="sqrshl_advsimd.xml" heading="SQRSHL" id="SQRSHL_advsimd">Signed saturating rounding shift left (register).</iform>
+    <iform iformfile="sqrshrn_advsimd.xml" heading="SQRSHRN, SQRSHRN2" id="SQRSHRN_advsimd">Signed saturating rounded shift right narrow (immediate).</iform>
+    <iform iformfile="sqrshrun_advsimd.xml" heading="SQRSHRUN, SQRSHRUN2" id="SQRSHRUN_advsimd">Signed saturating rounded shift right unsigned narrow (immediate).</iform>
+    <iform iformfile="sqshl_advsimd_imm.xml" heading="SQSHL (immediate)" id="SQSHL_advsimd_imm">Signed saturating shift left (immediate).</iform>
+    <iform iformfile="sqshl_advsimd_reg.xml" heading="SQSHL (register)" id="SQSHL_advsimd_reg">Signed saturating shift left (register).</iform>
+    <iform iformfile="sqshlu_advsimd.xml" heading="SQSHLU" id="SQSHLU_advsimd">Signed saturating shift left unsigned (immediate).</iform>
+    <iform iformfile="sqshrn_advsimd.xml" heading="SQSHRN, SQSHRN2" id="SQSHRN_advsimd">Signed saturating shift right narrow (immediate).</iform>
+    <iform iformfile="sqshrun_advsimd.xml" heading="SQSHRUN, SQSHRUN2" id="SQSHRUN_advsimd">Signed saturating shift right unsigned narrow (immediate).</iform>
+    <iform iformfile="sqsub_advsimd.xml" heading="SQSUB" id="SQSUB_advsimd">Signed saturating subtract.</iform>
+    <iform iformfile="sqxtn_advsimd.xml" heading="SQXTN, SQXTN2" id="SQXTN_advsimd">Signed saturating extract narrow.</iform>
+    <iform iformfile="sqxtun_advsimd.xml" heading="SQXTUN, SQXTUN2" id="SQXTUN_advsimd">Signed saturating extract unsigned narrow.</iform>
+    <iform iformfile="srhadd_advsimd.xml" heading="SRHADD" id="SRHADD_advsimd">Signed rounding halving add.</iform>
+    <iform iformfile="sri_advsimd.xml" heading="SRI" id="SRI_advsimd">Shift right and insert (immediate).</iform>
+    <iform iformfile="srshl_advsimd.xml" heading="SRSHL" id="SRSHL_advsimd">Signed rounding shift left (register).</iform>
+    <iform iformfile="srshr_advsimd.xml" heading="SRSHR" id="SRSHR_advsimd">Signed rounding shift right (immediate).</iform>
+    <iform iformfile="srsra_advsimd.xml" heading="SRSRA" id="SRSRA_advsimd">Signed rounding shift right and accumulate (immediate).</iform>
+    <iform iformfile="sshl_advsimd.xml" heading="SSHL" id="SSHL_advsimd">Signed shift left (register).</iform>
+    <iform iformfile="sshll_advsimd.xml" heading="SSHLL, SSHLL2" id="SSHLL_advsimd">Signed shift left long (immediate).</iform>
+    <iform iformfile="sshr_advsimd.xml" heading="SSHR" id="SSHR_advsimd">Signed shift right (immediate).</iform>
+    <iform iformfile="ssra_advsimd.xml" heading="SSRA" id="SSRA_advsimd">Signed shift right and accumulate (immediate).</iform>
+    <iform iformfile="ssubl_advsimd.xml" heading="SSUBL, SSUBL2" id="SSUBL_advsimd">Signed subtract long.</iform>
+    <iform iformfile="ssubw_advsimd.xml" heading="SSUBW, SSUBW2" id="SSUBW_advsimd">Signed subtract wide.</iform>
+    <iform iformfile="st1_advsimd_mult.xml" heading="ST1 (multiple structures)" id="ST1_advsimd_mult">Store multiple single-element structures from one, two, three, or four registers.</iform>
+    <iform iformfile="st1_advsimd_sngl.xml" heading="ST1 (single structure)" id="ST1_advsimd_sngl">Store a single-element structure from one lane of one register.</iform>
+    <iform iformfile="st2_advsimd_mult.xml" heading="ST2 (multiple structures)" id="ST2_advsimd_mult">Store multiple 2-element structures from two registers.</iform>
+    <iform iformfile="st2_advsimd_sngl.xml" heading="ST2 (single structure)" id="ST2_advsimd_sngl">Store single 2-element structure from one lane of two registers.</iform>
+    <iform iformfile="st3_advsimd_mult.xml" heading="ST3 (multiple structures)" id="ST3_advsimd_mult">Store multiple 3-element structures from three registers.</iform>
+    <iform iformfile="st3_advsimd_sngl.xml" heading="ST3 (single structure)" id="ST3_advsimd_sngl">Store single 3-element structure from one lane of three registers.</iform>
+    <iform iformfile="st4_advsimd_mult.xml" heading="ST4 (multiple structures)" id="ST4_advsimd_mult">Store multiple 4-element structures from four registers.</iform>
+    <iform iformfile="st4_advsimd_sngl.xml" heading="ST4 (single structure)" id="ST4_advsimd_sngl">Store single 4-element structure from one lane of four registers.</iform>
+    <iform iformfile="stl1_advsimd_sngl.xml" heading="STL1 (SIMD&amp;FP)" id="STL1_advsimd_sngl">Store-release a single-element structure from one lane of one register.</iform>
+    <iform iformfile="stlur_fpsimd.xml" heading="STLUR (SIMD&amp;FP)" id="STLUR_fpsimd">Store-release SIMD&amp;FP register (unscaled offset).</iform>
+    <iform iformfile="stnp_fpsimd.xml" heading="STNP (SIMD&amp;FP)" id="STNP_fpsimd">Store pair of SIMD&amp;FP registers, with non-temporal hint.</iform>
+    <iform iformfile="stp_fpsimd.xml" heading="STP (SIMD&amp;FP)" id="STP_fpsimd">Store pair of SIMD&amp;FP registers.</iform>
+    <iform iformfile="str_imm_fpsimd.xml" heading="STR (immediate, SIMD&amp;FP)" id="STR_imm_fpsimd">Store SIMD&amp;FP register (immediate offset).</iform>
+    <iform iformfile="str_reg_fpsimd.xml" heading="STR (register, SIMD&amp;FP)" id="STR_reg_fpsimd">Store SIMD&amp;FP register (register offset).</iform>
+    <iform iformfile="stur_fpsimd.xml" heading="STUR (SIMD&amp;FP)" id="STUR_fpsimd">Store SIMD&amp;FP register (unscaled offset).</iform>
+    <iform iformfile="sub_advsimd.xml" heading="SUB (vector)" id="SUB_advsimd">Subtract (vector).</iform>
+    <iform iformfile="subhn_advsimd.xml" heading="SUBHN, SUBHN2" id="SUBHN_advsimd">Subtract returning high narrow.</iform>
+    <iform iformfile="sudot_advsimd_elt.xml" heading="SUDOT (by element)" id="SUDOT_advsimd_elt">Dot product with signed and unsigned integers (vector, by element).</iform>
+    <iform iformfile="suqadd_advsimd.xml" heading="SUQADD" id="SUQADD_advsimd">Signed saturating accumulate of unsigned value.</iform>
+    <iform iformfile="sxtl_sshll_advsimd.xml" heading="SXTL, SXTL2" id="SXTL_SSHLL_advsimd">Signed extend long: an alias of SSHLL, SSHLL2.</iform>
+    <iform iformfile="tbl_advsimd.xml" heading="TBL" id="TBL_advsimd">Table vector lookup.</iform>
+    <iform iformfile="tbx_advsimd.xml" heading="TBX" id="TBX_advsimd">Table vector lookup extension.</iform>
+    <iform iformfile="trn1_advsimd.xml" heading="TRN1" id="TRN1_advsimd">Transpose vectors (primary).</iform>
+    <iform iformfile="trn2_advsimd.xml" heading="TRN2" id="TRN2_advsimd">Transpose vectors (secondary).</iform>
+    <iform iformfile="uaba_advsimd.xml" heading="UABA" id="UABA_advsimd">Unsigned absolute difference and accumulate.</iform>
+    <iform iformfile="uabal_advsimd.xml" heading="UABAL, UABAL2" id="UABAL_advsimd">Unsigned absolute difference and accumulate long.</iform>
+    <iform iformfile="uabd_advsimd.xml" heading="UABD" id="UABD_advsimd">Unsigned absolute difference (vector).</iform>
+    <iform iformfile="uabdl_advsimd.xml" heading="UABDL, UABDL2" id="UABDL_advsimd">Unsigned absolute difference long.</iform>
+    <iform iformfile="uadalp_advsimd.xml" heading="UADALP" id="UADALP_advsimd">Unsigned add and accumulate long pairwise.</iform>
+    <iform iformfile="uaddl_advsimd.xml" heading="UADDL, UADDL2" id="UADDL_advsimd">Unsigned add long (vector).</iform>
+    <iform iformfile="uaddlp_advsimd.xml" heading="UADDLP" id="UADDLP_advsimd">Unsigned add long pairwise.</iform>
+    <iform iformfile="uaddlv_advsimd.xml" heading="UADDLV" id="UADDLV_advsimd">Unsigned sum long across vector.</iform>
+    <iform iformfile="uaddw_advsimd.xml" heading="UADDW, UADDW2" id="UADDW_advsimd">Unsigned add wide.</iform>
+    <iform iformfile="ucvtf_float_fix.xml" heading="UCVTF (scalar, fixed-point)" id="UCVTF_float_fix">Unsigned fixed-point convert to floating-point (scalar).</iform>
+    <iform iformfile="ucvtf_float_int.xml" heading="UCVTF (scalar, integer)" id="UCVTF_float_int">Unsigned integer convert to floating-point (scalar).</iform>
+    <iform iformfile="ucvtf_advsimd_fix.xml" heading="UCVTF (vector, fixed-point)" id="UCVTF_advsimd_fix">Unsigned fixed-point convert to floating-point (vector).</iform>
+    <iform iformfile="ucvtf_advsimd_int.xml" heading="UCVTF (vector, integer)" id="UCVTF_advsimd_int">Unsigned integer convert to floating-point (vector).</iform>
+    <iform iformfile="udot_advsimd_elt.xml" heading="UDOT (by element)" id="UDOT_advsimd_elt">Dot product unsigned arithmetic (vector, by element).</iform>
+    <iform iformfile="udot_advsimd_vec.xml" heading="UDOT (vector)" id="UDOT_advsimd_vec">Dot product unsigned arithmetic (vector).</iform>
+    <iform iformfile="uhadd_advsimd.xml" heading="UHADD" id="UHADD_advsimd">Unsigned halving add.</iform>
+    <iform iformfile="uhsub_advsimd.xml" heading="UHSUB" id="UHSUB_advsimd">Unsigned halving subtract.</iform>
+    <iform iformfile="umax_advsimd.xml" heading="UMAX" id="UMAX_advsimd">Unsigned maximum (vector).</iform>
+    <iform iformfile="umaxp_advsimd.xml" heading="UMAXP" id="UMAXP_advsimd">Unsigned maximum pairwise.</iform>
+    <iform iformfile="umaxv_advsimd.xml" heading="UMAXV" id="UMAXV_advsimd">Unsigned maximum across vector.</iform>
+    <iform iformfile="umin_advsimd.xml" heading="UMIN" id="UMIN_advsimd">Unsigned minimum (vector).</iform>
+    <iform iformfile="uminp_advsimd.xml" heading="UMINP" id="UMINP_advsimd">Unsigned minimum pairwise.</iform>
+    <iform iformfile="uminv_advsimd.xml" heading="UMINV" id="UMINV_advsimd">Unsigned minimum across vector.</iform>
+    <iform iformfile="umlal_advsimd_elt.xml" heading="UMLAL, UMLAL2 (by element)" id="UMLAL_advsimd_elt">Unsigned multiply-add long (vector, by element).</iform>
+    <iform iformfile="umlal_advsimd_vec.xml" heading="UMLAL, UMLAL2 (vector)" id="UMLAL_advsimd_vec">Unsigned multiply-add long (vector).</iform>
+    <iform iformfile="umlsl_advsimd_elt.xml" heading="UMLSL, UMLSL2 (by element)" id="UMLSL_advsimd_elt">Unsigned multiply-subtract long (vector, by element).</iform>
+    <iform iformfile="umlsl_advsimd_vec.xml" heading="UMLSL, UMLSL2 (vector)" id="UMLSL_advsimd_vec">Unsigned multiply-subtract long (vector).</iform>
+    <iform iformfile="ummla_advsimd_vec.xml" heading="UMMLA (vector)" id="UMMLA_advsimd_vec">Unsigned 8-bit integer matrix multiply-accumulate (vector).</iform>
+    <iform iformfile="umov_advsimd.xml" heading="UMOV" id="UMOV_advsimd">Unsigned move vector element to general-purpose register.</iform>
+    <iform iformfile="umull_advsimd_elt.xml" heading="UMULL, UMULL2 (by element)" id="UMULL_advsimd_elt">Unsigned multiply long (vector, by element).</iform>
+    <iform iformfile="umull_advsimd_vec.xml" heading="UMULL, UMULL2 (vector)" id="UMULL_advsimd_vec">Unsigned multiply long (vector).</iform>
+    <iform iformfile="uqadd_advsimd.xml" heading="UQADD" id="UQADD_advsimd">Unsigned saturating add.</iform>
+    <iform iformfile="uqrshl_advsimd.xml" heading="UQRSHL" id="UQRSHL_advsimd">Unsigned saturating rounding shift left (register).</iform>
+    <iform iformfile="uqrshrn_advsimd.xml" heading="UQRSHRN, UQRSHRN2" id="UQRSHRN_advsimd">Unsigned saturating rounded shift right narrow (immediate).</iform>
+    <iform iformfile="uqshl_advsimd_imm.xml" heading="UQSHL (immediate)" id="UQSHL_advsimd_imm">Unsigned saturating shift left (immediate).</iform>
+    <iform iformfile="uqshl_advsimd_reg.xml" heading="UQSHL (register)" id="UQSHL_advsimd_reg">Unsigned saturating shift left (register).</iform>
+    <iform iformfile="uqshrn_advsimd.xml" heading="UQSHRN, UQSHRN2" id="UQSHRN_advsimd">Unsigned saturating shift right narrow (immediate).</iform>
+    <iform iformfile="uqsub_advsimd.xml" heading="UQSUB" id="UQSUB_advsimd">Unsigned saturating subtract.</iform>
+    <iform iformfile="uqxtn_advsimd.xml" heading="UQXTN, UQXTN2" id="UQXTN_advsimd">Unsigned saturating extract narrow.</iform>
+    <iform iformfile="urecpe_advsimd.xml" heading="URECPE" id="URECPE_advsimd">Unsigned reciprocal estimate.</iform>
+    <iform iformfile="urhadd_advsimd.xml" heading="URHADD" id="URHADD_advsimd">Unsigned rounding halving add.</iform>
+    <iform iformfile="urshl_advsimd.xml" heading="URSHL" id="URSHL_advsimd">Unsigned rounding shift left (register).</iform>
+    <iform iformfile="urshr_advsimd.xml" heading="URSHR" id="URSHR_advsimd">Unsigned rounding shift right (immediate).</iform>
+    <iform iformfile="ursqrte_advsimd.xml" heading="URSQRTE" id="URSQRTE_advsimd">Unsigned reciprocal square root estimate.</iform>
+    <iform iformfile="ursra_advsimd.xml" heading="URSRA" id="URSRA_advsimd">Unsigned rounding shift right and accumulate (immediate).</iform>
+    <iform iformfile="usdot_advsimd_elt.xml" heading="USDOT (by element)" id="USDOT_advsimd_elt">Dot product with unsigned and signed integers (vector, by element).</iform>
+    <iform iformfile="usdot_advsimd_vec.xml" heading="USDOT (vector)" id="USDOT_advsimd_vec">Dot product with unsigned and signed integers (vector).</iform>
+    <iform iformfile="ushl_advsimd.xml" heading="USHL" id="USHL_advsimd">Unsigned shift left (register).</iform>
+    <iform iformfile="ushll_advsimd.xml" heading="USHLL, USHLL2" id="USHLL_advsimd">Unsigned shift left long (immediate).</iform>
+    <iform iformfile="ushr_advsimd.xml" heading="USHR" id="USHR_advsimd">Unsigned shift right (immediate).</iform>
+    <iform iformfile="usmmla_advsimd_vec.xml" heading="USMMLA (vector)" id="USMMLA_advsimd_vec">Unsigned and signed 8-bit integer matrix multiply-accumulate (vector).</iform>
+    <iform iformfile="usqadd_advsimd.xml" heading="USQADD" id="USQADD_advsimd">Unsigned saturating accumulate of signed value.</iform>
+    <iform iformfile="usra_advsimd.xml" heading="USRA" id="USRA_advsimd">Unsigned shift right and accumulate (immediate).</iform>
+    <iform iformfile="usubl_advsimd.xml" heading="USUBL, USUBL2" id="USUBL_advsimd">Unsigned subtract long.</iform>
+    <iform iformfile="usubw_advsimd.xml" heading="USUBW, USUBW2" id="USUBW_advsimd">Unsigned subtract wide.</iform>
+    <iform iformfile="uxtl_ushll_advsimd.xml" heading="UXTL, UXTL2" id="UXTL_USHLL_advsimd">Unsigned extend long: an alias of USHLL, USHLL2.</iform>
+    <iform iformfile="uzp1_advsimd.xml" heading="UZP1" id="UZP1_advsimd">Unzip vectors (primary).</iform>
+    <iform iformfile="uzp2_advsimd.xml" heading="UZP2" id="UZP2_advsimd">Unzip vectors (secondary).</iform>
+    <iform iformfile="xar_advsimd.xml" heading="XAR" id="XAR_advsimd">Exclusive-OR and rotate.</iform>
+    <iform iformfile="xtn_advsimd.xml" heading="XTN, XTN2" id="XTN_advsimd">Extract narrow.</iform>
+    <iform iformfile="zip1_advsimd.xml" heading="ZIP1" id="ZIP1_advsimd">Zip vectors (primary).</iform>
+    <iform iformfile="zip2_advsimd.xml" heading="ZIP2" id="ZIP2_advsimd">Zip vectors (secondary).</iform>
+  </iforms>
+</alphaindex>

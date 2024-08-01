@@ -1,0 +1,121 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="LDRSW_lit" title="LDRSW (literal) -- A64" type="instruction">
+  <docvars>
+    <docvar key="address-form" value="literal"/>
+    <docvar key="address-form-reg-type" value="literal-64-reg"/>
+    <docvar key="atomic-ops" value="LDRSW-64-reg"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="LDRSW"/>
+    <docvar key="offset-type" value="off19s"/>
+    <docvar key="reg-type" value="64-reg"/>
+  </docvars>
+  <heading>LDRSW (literal)</heading>
+  <desc>
+    <brief>
+      <para>Load register signed word (literal)</para>
+    </brief>
+    <authored>
+      <para>This instruction calculates an address
+from the PC value and an immediate offset, loads a
+word from memory, and
+writes it to a register. For information about addressing modes, see
+<xref linkend="ARMARM_CHDIIIBB">Load/Store addressing modes</xref>.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1, the timing of this instruction is insensitive to the value of the data being loaded or stored.</para>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Literal" oneof="1" id="iclass_literal" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="address-form" value="literal"/>
+        <docvar key="address-form-reg-type" value="literal-64-reg"/>
+        <docvar key="atomic-ops" value="LDRSW-64-reg"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="LDRSW"/>
+        <docvar key="offset-type" value="off19s"/>
+        <docvar key="reg-type" value="64-reg"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.ldst.loadlit.LDRSW_64_loadlit" tworows="1">
+        <box hibit="31" width="2" name="opc" usename="1" settings="2" psbits="xx">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="VR" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="25" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="19" name="imm19" usename="1">
+          <c colspan="19"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="LDRSW_64_loadlit" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDRSW"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="address-form" value="literal"/>
+          <docvar key="address-form-reg-type" value="literal-64-reg"/>
+          <docvar key="atomic-ops" value="LDRSW-64-reg"/>
+          <docvar key="offset-type" value="off19s"/>
+          <docvar key="reg-type" value="64-reg"/>
+        </docvars>
+        <asmtemplate><text>LDRSW  </text><a hover="Is the 64-bit name of the general-purpose register to be loaded, encoded in the &quot;Rt&quot; field." link="XtOrXZR__8">&lt;Xt&gt;</a><text>, </text><a hover="Is the program label from which the data is to be loaded. Its offset from the address of this instruction, in the range +/-1MB, is encoded as &quot;imm19&quot; times 4." link="imm19_offset__2">&lt;label&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.loadlit.LDRSW_64_loadlit" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant boolean nontemporal = FALSE;
+constant boolean tagchecked = FALSE;
+
+constant bits(64) offset = <a link="impl-shared.SignExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) SignExtend(bits(M) x, integer N)">SignExtend</a>(imm19:'00', 64);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="LDRSW_64_loadlit" symboldefcount="1">
+      <symbol link="XtOrXZR__8">&lt;Xt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose register to be loaded, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDRSW_64_loadlit" symboldefcount="1">
+      <symbol link="imm19_offset__2">&lt;label&gt;</symbol>
+      <account encodedin="imm19">
+        <intro>
+          <para>Is the program label from which the data is to be loaded. Its offset from the address of this instruction, in the range +/-1MB, is encoded as "imm19" times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.loadlit.LDRSW_64_loadlit" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bits(64) address = PC64 + offset;
+constant boolean privileged = PSTATE.EL != <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>;
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = CreateAccDescGPR(<a link="MemOp_LOAD" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_LOAD</a>, nontemporal, privileged,
+                                                     tagchecked);
+
+constant bits(32) data = <a link="impl-aarch64.Mem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size*8) Mem[bits(64) address, integer size, AccessDescriptor accdesc_in]">Mem</a>[address, 4, accdesc];
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[t, 64] = <a link="impl-shared.SignExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) SignExtend(bits(M) x, integer N)">SignExtend</a>(data, 64);</pstext></ps>
+  </ps_section>
+</instructionsection>

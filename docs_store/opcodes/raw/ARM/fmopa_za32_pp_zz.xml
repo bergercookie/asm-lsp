@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="fmopa_za32_pp_zz" title="FMOPA (widening, 2-way, FP16 to FP32)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="FMOPA" />
+  </docvars>
+  <heading>FMOPA (widening, 2-way, FP16 to FP32)</heading>
+  <desc>
+    <brief>Half-precision floating-point sum of outer products and accumulate</brief>
+    <description>
+      <para>The half-precision floating-point sum of outer products and accumulate instruction works with a 32-bit element ZA tile.</para>
+      <para>This instruction widens the SVL<sub>S</sub>×2 sub-matrix of half-precision floating-point values held in the first source vector to single-precision floating-point values and multiplies it by the widened 2×SVL<sub>S</sub> sub-matrix of half-precision floating-point values in the second source vector to single-precision floating-point values.</para>
+      <para>Each source vector is independently predicated by a corresponding governing predicate. When a 16-bit source element is Inactive it is treated as having the value +0.0, but if both pairs of source vector elements that correspond to a 32-bit destination element contain Inactive elements, then the destination element remains unmodified.</para>
+      <para>The resulting SVL<sub>S</sub>×SVL<sub>S</sub> single-precision floating-point sum of outer products is then destructively added to the single-precision floating-point destination tile. This is equivalent to performing a 2-way dot product and accumulate to each of the destination tile elements.</para>
+      <para>Each 32-bit container of the first source vector holds 2 consecutive column elements of each row of a SVL<sub>S</sub>×2 sub-matrix. Similarly, each 32-bit container of the second source vector holds 2 consecutive row elements of each column of a 2×SVL<sub>S</sub> sub-matrix.</para>
+      <para>This instruction follows SME ZA-targeting floating-point behaviors.</para>
+    </description>
+    <status>Green</status>
+    <predicated>True</predicated>
+    <sm_policy>SM_1_only</sm_policy>
+    <is_gov_pred_pair>True</is_gov_pred_pair>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SME" oneof="1" id="iclass_mortlach" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="FMOPA" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME" feature="FEAT_SME" />
+      </arch_variants>
+      <regdiagram form="32" psname="FMOPA-ZA32.PP.ZZ-16" tworows="1">
+        <box hibit="31" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="29" width="9" settings="9">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Zm" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="15" width="3" name="Pm" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="12" width="3" name="Pn" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" name="S" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="3" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="2" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="1" width="2" name="ZAda" usename="1">
+          <c colspan="2"></c>
+        </box>
+      </regdiagram>
+      <encoding name="fmopa_za32_pp_zz_16" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="FMOPA" />
+        </docvars>
+        <asmtemplate><text>FMOPA   </text><a link="sa_zada" hover="ZA tile ZA0-ZA3 (field &quot;ZAda&quot;)">&lt;ZAda&gt;</a><text>.S, </text><a link="sa_pn" hover="First governing scalable predicate register P0-P7 (field &quot;Pn&quot;)">&lt;Pn&gt;</a><text>/M, </text><a link="sa_pm" hover="Second governing scalable predicate register P0-P7 (field &quot;Pm&quot;)">&lt;Pm&gt;</a><text>/M, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.H, </text><a link="sa_zm" hover="Second source scalable vector register (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.H</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="FMOPA-ZA32.PP.ZZ-16" mylink="FMOPA-ZA32.PP.ZZ-16" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer a = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pn);
+constant integer b = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pm);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer da = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(ZAda);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="fmopa_za32_pp_zz_16" symboldefcount="1">
+      <symbol link="sa_zada">&lt;ZAda&gt;</symbol>
+      <account encodedin="ZAda">
+        <intro>
+          <para>Is the name of the ZA tile ZA0-ZA3, encoded in the "ZAda" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fmopa_za32_pp_zz_16" symboldefcount="1">
+      <symbol link="sa_pn">&lt;Pn&gt;</symbol>
+      <account encodedin="Pn">
+        <intro>
+          <para>Is the name of the first governing scalable predicate register P0-P7, encoded in the "Pn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fmopa_za32_pp_zz_16" symboldefcount="1">
+      <symbol link="sa_pm">&lt;Pm&gt;</symbol>
+      <account encodedin="Pm">
+        <intro>
+          <para>Is the name of the second governing scalable predicate register P0-P7, encoded in the "Pm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fmopa_za32_pp_zz_16" symboldefcount="1">
+      <symbol link="sa_zn">&lt;Zn&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the first source scalable vector register, encoded in the "Zn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fmopa_za32_pp_zz_16" symboldefcount="1">
+      <symbol link="sa_zm">&lt;Zm&gt;</symbol>
+      <account encodedin="Zm">
+        <intro>
+          <para>Is the name of the second source scalable vector register, encoded in the "Zm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="FMOPA-ZA32.PP.ZZ-16" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckStreamingSVEAndZAEnabled.0" file="shared_pseudocode.xml" hover="function: CheckStreamingSVEAndZAEnabled()">CheckStreamingSVEAndZAEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer PL = VL DIV 8;
+constant integer dim = VL DIV 32;
+constant bits(PL) mask1 = <a link="impl-aarch64.P.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) P[integer n, integer width]">P</a>[a, PL];
+constant bits(PL) mask2 = <a link="impl-aarch64.P.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) P[integer n, integer width]">P</a>[b, PL];
+constant bits(VL) operand1 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[n, VL];
+constant bits(VL) operand2 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[m, VL];
+constant bits(dim*dim*32) operand3 = <a link="impl-aarch64.ZAtile.read.3" file="shared_pseudocode.xml" hover="accessor: bits(width) ZAtile[integer tile, ESize esize, integer width]">ZAtile</a>[da, 32, dim*dim*32];
+bits(dim*dim*32) result;
+
+for row = 0 to dim-1
+    for col = 0 to dim-1
+        // determine row/col predicates
+        constant boolean prow_0 = (<a link="impl-aarch64.ActivePredicateElement.3" file="shared_pseudocode.xml" hover="function: boolean ActivePredicateElement(bits(N) pred, integer e, integer esize)">ActivePredicateElement</a>(mask1, 2*row + 0, 16));
+        constant boolean prow_1 = (<a link="impl-aarch64.ActivePredicateElement.3" file="shared_pseudocode.xml" hover="function: boolean ActivePredicateElement(bits(N) pred, integer e, integer esize)">ActivePredicateElement</a>(mask1, 2*row + 1, 16));
+        constant boolean pcol_0 = (<a link="impl-aarch64.ActivePredicateElement.3" file="shared_pseudocode.xml" hover="function: boolean ActivePredicateElement(bits(N) pred, integer e, integer esize)">ActivePredicateElement</a>(mask2, 2*col + 0, 16));
+        constant boolean pcol_1 = (<a link="impl-aarch64.ActivePredicateElement.3" file="shared_pseudocode.xml" hover="function: boolean ActivePredicateElement(bits(N) pred, integer e, integer esize)">ActivePredicateElement</a>(mask2, 2*col + 1, 16));
+
+        bits(32) sum = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand3, row*dim+col, 32];
+        if (prow_0 &amp;&amp; pcol_0) || (prow_1 &amp;&amp; pcol_1) then
+            constant bits(16) erow_0 = (if prow_0 then <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand1, 2*row + 0, 16]
+                                        else <a link="impl-shared.FPZero.2" file="shared_pseudocode.xml" hover="function: bits(N) FPZero(bit sign, integer N)">FPZero</a>('0', 16));
+            constant bits(16) erow_1 = (if prow_1 then <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand1, 2*row + 1, 16]
+                                        else <a link="impl-shared.FPZero.2" file="shared_pseudocode.xml" hover="function: bits(N) FPZero(bit sign, integer N)">FPZero</a>('0', 16));
+            constant bits(16) ecol_0 = (if pcol_0 then <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand2, 2*col + 0, 16]
+                                        else <a link="impl-shared.FPZero.2" file="shared_pseudocode.xml" hover="function: bits(N) FPZero(bit sign, integer N)">FPZero</a>('0', 16));
+            constant bits(16) ecol_1 = (if pcol_1 then <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand2, 2*col + 1, 16]
+                                        else <a link="impl-shared.FPZero.2" file="shared_pseudocode.xml" hover="function: bits(N) FPZero(bit sign, integer N)">FPZero</a>('0', 16));
+            sum = <a link="impl-shared.FPDotAdd_ZA.6" file="shared_pseudocode.xml" hover="function: bits(N) FPDotAdd_ZA(bits(N) addend, bits(N DIV 2) op1_a, bits(N DIV 2) op1_b, bits(N DIV 2) op2_a, bits(N DIV 2) op2_b, FPCR_Type fpcr_in)">FPDotAdd_ZA</a>(sum, erow_0, erow_1, ecol_0, ecol_1, FPCR);
+
+        <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, row*dim+col, 32] = sum;
+
+<a link="impl-aarch64.ZAtile.write.3" file="shared_pseudocode.xml" hover="accessor: ZAtile[integer tile, ESize esize, integer width] = bits(width) value">ZAtile</a>[da, 32, dim*dim*32] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

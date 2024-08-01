@@ -1,0 +1,445 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="CPYFPWTRN" title="CPYFPWTRN, CPYFMWTRN, CPYFEWTRN -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+  </docvars>
+  <heading>CPYFPWTRN, CPYFMWTRN, CPYFEWTRN</heading>
+  <desc>
+    <brief>
+      <para>Memory copy forward-only, writes unprivileged, reads non-temporal</para>
+    </brief>
+    <authored>
+      <para>These instructions perform a memory copy. The prologue, main, and epilogue
+instructions are expected to be run in succession and to appear consecutively
+in memory: CPYFPWTRN, then CPYFMWTRN, and then CPYFEWTRN.</para>
+      <para>CPYFPWTRN performs some preconditioning of the arguments suitable for using the CPYFMWTRN instruction,
+and performs an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> amount of the memory copy.
+CPYFMWTRN performs an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> amount of the memory copy.
+CPYFEWTRN performs the last part of the memory copy.</para>
+      <note>
+        <para>The inclusion of <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> amounts of memory copy
+allows some optimization of the size that can be performed.</para>
+      </note>
+      <para>The memory copy performed by these instructions is in the forward direction only,
+so the instructions are suitable for a memory copy only where there is no overlap
+between the source and destination locations, or where the source address
+is greater than the destination address.</para>
+      <para>The architecture supports two algorithms for the memory copy: option A and option B.
+Which algorithm is used is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>.</para>
+      <note>
+        <para>Portable software should not assume that the choice of algorithm is constant.</para>
+      </note>
+      <para>After execution of CPYFPWTRN, option A (which results in encoding PSTATE.C = 0):</para>
+      <list type="unordered">
+        <listitem>
+          <content>If Xn&lt;63&gt; == 1, the copy size is saturated to <hexnumber>0x7FFFFFFFFFFFFFFF</hexnumber>.</content>
+        </listitem>
+        <listitem>
+          <content>Xs holds the original Xs + saturated Xn.</content>
+        </listitem>
+        <listitem>
+          <content>Xd holds the original Xd + saturated Xn.</content>
+        </listitem>
+        <listitem>
+          <content>Xn holds -1* saturated Xn + an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>
+number of bytes copied.</content>
+        </listitem>
+        <listitem>
+          <content>PSTATE.{N,Z,V} are set to {0,0,0}.</content>
+        </listitem>
+      </list>
+      <para>After execution of CPYFPWTRN, option B (which results in encoding PSTATE.C = 1):</para>
+      <list type="unordered">
+        <listitem>
+          <content>If Xn&lt;63&gt; == 1, the copy size is saturated to <hexnumber>0x7FFFFFFFFFFFFFFF</hexnumber>.</content>
+        </listitem>
+        <listitem>
+          <content>Xs holds the original Xs + an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>
+number of bytes copied.</content>
+        </listitem>
+        <listitem>
+          <content>Xd holds the original Xd + an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>
+number of bytes copied.</content>
+        </listitem>
+        <listitem>
+          <content>Xn holds the saturated Xn - an <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>
+number of bytes copied.</content>
+        </listitem>
+        <listitem>
+          <content>PSTATE.{N,Z,V} are set to {0,0,0}.</content>
+        </listitem>
+      </list>
+      <para>For CPYFMWTRN, option A (encoded by PSTATE.C = 0), the format of the arguments is:</para>
+      <list type="unordered">
+        <listitem>
+          <content>Xn is treated as a signed 64-bit number and holds -1* the number of bytes
+remaining to be copied in the memory copy in total.</content>
+        </listitem>
+        <listitem>
+          <content>Xs holds the lowest address that the copy is copied from -Xn.</content>
+        </listitem>
+        <listitem>
+          <content>Xd holds the lowest address that the copy is made to -Xn.</content>
+        </listitem>
+        <listitem>
+          <content>At the end of the instruction, the value of Xn is written back with -1* the
+number of bytes remaining to be copied in the memory copy in total.</content>
+        </listitem>
+      </list>
+      <para>For CPYFMWTRN, option B (encoded by PSTATE.C = 1), the format of the arguments is:</para>
+      <list type="unordered">
+        <listitem>
+          <content>Xn holds the number of bytes remaining to be copied in the memory copy in total.</content>
+        </listitem>
+        <listitem>
+          <content>Xs holds the lowest address that the copy is copied from.</content>
+        </listitem>
+        <listitem>
+          <content>Xd holds the lowest address that the copy is copied to.</content>
+        </listitem>
+        <listitem>
+          <content>At the end of the instruction:<list type="unordered">
+              <listitem>
+                <content>the value of Xn is written back with the number of bytes remaining to be copied
+in the memory copy in total.</content>
+              </listitem>
+              <listitem>
+                <content>the value of Xs is written back with the lowest address that has not been copied from.</content>
+              </listitem>
+              <listitem>
+                <content>the value of Xd is written back with the lowest address that has not been copied to.</content>
+              </listitem>
+            </list>
+          </content>
+        </listitem>
+      </list>
+      <para>For CPYFEWTRN, option A (encoded by PSTATE.C = 0), the format of the arguments is:</para>
+      <list type="unordered">
+        <listitem>
+          <content>Xn is treated as a signed 64-bit number and holds -1* the number of bytes
+remaining to be copied in the memory copy in total.</content>
+        </listitem>
+        <listitem>
+          <content>Xs holds the lowest address that the copy is copied from -Xn.</content>
+        </listitem>
+        <listitem>
+          <content>Xd holds the lowest address that the copy is made to -Xn.</content>
+        </listitem>
+        <listitem>
+          <content>At the end of the instruction, the value of Xn is written back with 0.</content>
+        </listitem>
+      </list>
+      <para>For CPYFEWTRN, option B (encoded by PSTATE.C = 1), the format of the arguments is:</para>
+      <list type="unordered">
+        <listitem>
+          <content>Xn holds the number of bytes remaining to be copied in the memory copy in total.</content>
+        </listitem>
+        <listitem>
+          <content>Xs holds the lowest address that the copy is copied from.</content>
+        </listitem>
+        <listitem>
+          <content>Xd holds the lowest address that the copy is copied to.</content>
+        </listitem>
+        <listitem>
+          <content>At the end of the instruction:<list type="unordered">
+              <listitem>
+                <content>the value of Xn is written back with 0.</content>
+              </listitem>
+              <listitem>
+                <content>the value of Xs is written back with the lowest address that has not been copied from.</content>
+              </listitem>
+              <listitem>
+                <content>the value of Xd is written back with the lowest address that has not been copied to.</content>
+              </listitem>
+            </list>
+          </content>
+        </listitem>
+      </list>
+      <para>Explicit Memory Write  effects produced by the instruction behave as if the instruction was
+  executed at EL0 if the <xref linkend="ARMARM_CBAICCHA">Effective value</xref> of
+  PSTATE.UAO is 0 and either:</para>
+      <list type="unordered">
+        <listitem>
+          <content>The instruction is executed at EL1.</content>
+        </listitem>
+        <listitem>
+          <content>The instruction is executed at EL2 when the <xref linkend="ARMARM_CBAICCHA">Effective value</xref>
+  of <register_link id="AArch64-hcr_el2.xml" state="AArch64">HCR_EL2</register_link>.{E2H, TGE} is {1, 1}.</content>
+        </listitem>
+      </list>
+      <para>Otherwise, the Explicit Memory Write  effects operate with the restrictions determined by
+  the Exception level at which the instruction is executed.</para>
+    </authored>
+    <encodingnotes>
+      <para>For information about the <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word> behavior of this instruction, see <xref linkend="CJAEGDJC">Architectural Constraints on UNPREDICTABLE behaviors</xref>, and particularly <xref linkend="CEGCIDDEI6">Memory Copy and Memory Set CPY*</xref>.</para>
+    </encodingnotes>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="3" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="3"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_MOPS" name="ARMv8.8"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.memcms.CPYFPWTRN_CPY_memcms" tworows="1">
+        <box hibit="31" width="2" name="sz" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="o0" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="25" width="2" settings="2">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="op1" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Rs" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="4" name="op2" usename="1" settings="4" psbits="xxxx">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="CPYFPWTRN_CPY_memcms" oneofinclass="3" oneof="3" label="Prologue" bitdiffs="op1 == 00">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="pme" value="pme-prologue"/>
+          <docvar key="mnemonic" value="CPYFPWTRN"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="2" name="op1">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>CPYFPWTRN  [</text><a hover="For the prologue variant: is the 64-bit name of the general-purpose register that holds the destination address and is updated by the instruction, encoded in the &quot;Rd&quot; field." link="XdOrXZR">&lt;Xd&gt;</a><text>]!, [</text><a hover="For the prologue variant: is the 64-bit name of the general-purpose register that holds the source address and is updated by the instruction, encoded in the &quot;Rs&quot; field." link="XsOrXZR__5">&lt;Xs&gt;</a><text>]!, </text><a hover="For the prologue variant: is the 64-bit name of the general-purpose register that holds the number of bytes to be transferred and is updated by the instruction to encode the remaining size and destination, encoded in the &quot;Rn&quot; field." link="XnOrXZR__2">&lt;Xn&gt;</a><text>!</text></asmtemplate>
+      </encoding>
+      <encoding name="CPYFMWTRN_CPY_memcms" oneofinclass="3" oneof="3" label="Main" bitdiffs="op1 == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="pme" value="pme-main"/>
+          <docvar key="mnemonic" value="CPYFMWTRN"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="2" name="op1">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>CPYFMWTRN  [</text><a hover="For the epilogue and main variant: is the 64-bit name of the general-purpose register that holds an encoding of the destination address, encoded in the &quot;Rd&quot; field." link="XdOrXZR__2">&lt;Xd&gt;</a><text>]!, [</text><a hover="For the epilogue and main variant: is the 64-bit name of the general-purpose register that holds an encoding of the source address, encoded in the &quot;Rs&quot; field." link="XsOrXZR__6">&lt;Xs&gt;</a><text>]!, </text><a hover="For the main variant: is the 64-bit name of the general-purpose register that holds an encoding of the number of bytes to be transferred, encoded in the &quot;Rn&quot; field." link="XnOrXZR__3">&lt;Xn&gt;</a><text>!</text></asmtemplate>
+      </encoding>
+      <encoding name="CPYFEWTRN_CPY_memcms" oneofinclass="3" oneof="3" label="Epilogue" bitdiffs="op1 == 10">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="pme" value="pme-epilogue"/>
+          <docvar key="mnemonic" value="CPYFEWTRN"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="2" name="op1">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>CPYFEWTRN  [</text><a hover="For the epilogue and main variant: is the 64-bit name of the general-purpose register that holds an encoding of the destination address, encoded in the &quot;Rd&quot; field." link="XdOrXZR__2">&lt;Xd&gt;</a><text>]!, [</text><a hover="For the epilogue and main variant: is the 64-bit name of the general-purpose register that holds an encoding of the source address, encoded in the &quot;Rs&quot; field." link="XsOrXZR__6">&lt;Xs&gt;</a><text>]!, </text><a hover="For the epilogue variant: is the 64-bit name of the general-purpose register that holds an encoding of the number of bytes to be transferred and is set to zero at the end of the instruction, encoded in the &quot;Rn&quot; field." link="XnOrXZR__4">&lt;Xn&gt;</a><text>!</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.memcms.CPYFPWTRN_CPY_memcms" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_MOPS) || sz != '00' then UNDEFINED;
+
+<a link="CPYParams" file="shared_pseudocode.xml" hover="type CPYParams is ( MOPSStage stage, boolean implements_option_a, boolean forward, integer cpysize, integer stagecpysize, bits(64) toaddress, bits(64) fromaddress, bits(4) nzcv, integer n, integer d, integer s )">CPYParams</a> memcpy;
+memcpy.d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+memcpy.s = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rs);
+memcpy.n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant bits(4) options = op2;
+constant boolean rnontemporal = options&lt;3&gt; == '1';
+constant boolean wnontemporal = options&lt;2&gt; == '1';
+case op1 of
+    when '00' memcpy.stage = <a link="MOPSStage_Prologue" file="shared_pseudocode.xml" hover="enumeration MOPSStage { MOPSStage_Prologue, MOPSStage_Main, MOPSStage_Epilogue }">MOPSStage_Prologue</a>;
+    when '01' memcpy.stage = <a link="MOPSStage_Main" file="shared_pseudocode.xml" hover="enumeration MOPSStage { MOPSStage_Prologue, MOPSStage_Main, MOPSStage_Epilogue }">MOPSStage_Main</a>;
+    when '10' memcpy.stage = <a link="MOPSStage_Epilogue" file="shared_pseudocode.xml" hover="enumeration MOPSStage { MOPSStage_Prologue, MOPSStage_Main, MOPSStage_Epilogue }">MOPSStage_Epilogue</a>;
+    otherwise SEE "Memory Copy and Memory Set";
+   </pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="CPYFPWTRN_CPY_memcms" symboldefcount="1">
+      <symbol link="XdOrXZR">&lt;Xd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>For the prologue variant: is the 64-bit name of the general-purpose register that holds the destination address and is updated by the instruction, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CPYFMWTRN_CPY_memcms, CPYFEWTRN_CPY_memcms" symboldefcount="2">
+      <symbol link="XdOrXZR__2">&lt;Xd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>For the epilogue and main variant: is the 64-bit name of the general-purpose register that holds an encoding of the destination address, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CPYFPWTRN_CPY_memcms" symboldefcount="1">
+      <symbol link="XsOrXZR__5">&lt;Xs&gt;</symbol>
+      <account encodedin="Rs">
+        <intro>
+          <para>For the prologue variant: is the 64-bit name of the general-purpose register that holds the source address and is updated by the instruction, encoded in the "Rs" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CPYFMWTRN_CPY_memcms, CPYFEWTRN_CPY_memcms" symboldefcount="2">
+      <symbol link="XsOrXZR__6">&lt;Xs&gt;</symbol>
+      <account encodedin="Rs">
+        <intro>
+          <para>For the epilogue and main variant: is the 64-bit name of the general-purpose register that holds an encoding of the source address, encoded in the "Rs" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CPYFPWTRN_CPY_memcms" symboldefcount="1">
+      <symbol link="XnOrXZR__2">&lt;Xn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>For the prologue variant: is the 64-bit name of the general-purpose register that holds the number of bytes to be transferred and is updated by the instruction to encode the remaining size and destination, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CPYFMWTRN_CPY_memcms" symboldefcount="2">
+      <symbol link="XnOrXZR__3">&lt;Xn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>For the main variant: is the 64-bit name of the general-purpose register that holds an encoding of the number of bytes to be transferred, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CPYFEWTRN_CPY_memcms" symboldefcount="3">
+      <symbol link="XnOrXZR__4">&lt;Xn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>For the epilogue variant: is the 64-bit name of the general-purpose register that holds an encoding of the number of bytes to be transferred and is set to zero at the end of the instruction, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.memcms.CPYFPWTRN_CPY_memcms" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckMOPSEnabled.0" file="shared_pseudocode.xml" hover="function: CheckMOPSEnabled()">CheckMOPSEnabled</a>();
+
+<a link="impl-aarch64.CheckCPYConstrainedUnpredictable.3" file="shared_pseudocode.xml" hover="function: CheckCPYConstrainedUnpredictable(integer n, integer d, integer s)">CheckCPYConstrainedUnpredictable</a>(memcpy.n, memcpy.d, memcpy.s);
+
+memcpy.nzcv        = PSTATE.&lt;N,Z,C,V&gt;;
+memcpy.toaddress   = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[memcpy.d, 64];
+memcpy.fromaddress = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[memcpy.s, 64];
+memcpy.cpysize     = SInt(<a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[memcpy.n, 64]);
+memcpy.implements_option_a = <a link="impl-aarch64.CPYFOptionA.0" file="shared_pseudocode.xml" hover="function: boolean CPYFOptionA()">CPYFOptionA</a>();
+
+constant boolean rprivileged = (if options&lt;1&gt; == '1' then <a link="AArch64.IsUnprivAccessPriv.0" file="shared_pseudocode.xml" hover="function: boolean AArch64.IsUnprivAccessPriv()">AArch64.IsUnprivAccessPriv</a>()
+                                else PSTATE.EL != <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>);
+constant boolean wprivileged = (if options&lt;0&gt; == '1' then <a link="AArch64.IsUnprivAccessPriv.0" file="shared_pseudocode.xml" hover="function: boolean AArch64.IsUnprivAccessPriv()">AArch64.IsUnprivAccessPriv</a>()
+                                else PSTATE.EL != <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>);
+
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> raccdesc = <a link="impl-shared.CreateAccDescMOPS.3" file="shared_pseudocode.xml" hover="function: AccessDescriptor CreateAccDescMOPS(MemOp memop, boolean privileged, boolean nontemporal)">CreateAccDescMOPS</a>(<a link="MemOp_LOAD" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_LOAD</a>,  rprivileged, rnontemporal);
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> waccdesc = <a link="impl-shared.CreateAccDescMOPS.3" file="shared_pseudocode.xml" hover="function: AccessDescriptor CreateAccDescMOPS(MemOp memop, boolean privileged, boolean nontemporal)">CreateAccDescMOPS</a>(<a link="MemOp_STORE" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_STORE</a>, wprivileged, wnontemporal);
+
+if memcpy.stage == <a link="MOPSStage_Prologue" file="shared_pseudocode.xml" hover="enumeration MOPSStage { MOPSStage_Prologue, MOPSStage_Main, MOPSStage_Epilogue }">MOPSStage_Prologue</a> then
+    if memcpy.cpysize&lt;63&gt; == '1' then memcpy.cpysize = <a link="ArchMaxMOPSBlockSize" file="shared_pseudocode.xml" hover="constant integer ArchMaxMOPSBlockSize = 0x7FFF_FFFF_FFFF_FFFF">ArchMaxMOPSBlockSize</a>;
+
+    if memcpy.implements_option_a then
+        memcpy.nzcv = '0000';
+        // Copy in the forward direction offsets the arguments.
+        memcpy.toaddress   = memcpy.toaddress   + memcpy.cpysize;
+        memcpy.fromaddress = memcpy.fromaddress + memcpy.cpysize;
+        memcpy.cpysize     = 0 - memcpy.cpysize;
+    else
+        memcpy.nzcv = '0010';
+
+memcpy.stagecpysize = <a link="impl-aarch64.MemCpyStageSize.1" file="shared_pseudocode.xml" hover="function: integer MemCpyStageSize(CPYParams memcpy)">MemCpyStageSize</a>(memcpy);
+
+if memcpy.stage != <a link="MOPSStage_Prologue" file="shared_pseudocode.xml" hover="enumeration MOPSStage { MOPSStage_Prologue, MOPSStage_Main, MOPSStage_Epilogue }">MOPSStage_Prologue</a> then
+    <a link="impl-aarch64.CheckMemCpyParams.2" file="shared_pseudocode.xml" hover="function: CheckMemCpyParams(CPYParams memcpy, bits(4) options)">CheckMemCpyParams</a>(memcpy, options);
+
+integer copied;
+boolean iswrite;
+<a link="AddressDescriptor" file="shared_pseudocode.xml" hover="type AddressDescriptor is ( FaultRecord fault, MemoryAttributes memattrs, FullAddress paddress, boolean s1assured, boolean s2fs1mro, bits(16) mecid, bits(64) vaddress )">AddressDescriptor</a> memaddrdesc;
+<a link="PhysMemRetStatus" file="shared_pseudocode.xml" hover="type PhysMemRetStatus is ( Fault statuscode, bit extflag, ErrorState merrorstate, bits(64) store64bstatus )">PhysMemRetStatus</a>  memstatus;
+memcpy.forward = TRUE;
+boolean fault  = FALSE;
+<a link="MOPSBlockSize" file="shared_pseudocode.xml" hover="type MOPSBlockSize">MOPSBlockSize</a> B;
+
+if memcpy.implements_option_a then
+    while memcpy.stagecpysize != 0 &amp;&amp; !fault do
+        // IMP DEF selection of the block size that is worked on. While many
+        // implementations might make this constant, that is not assumed.
+        B = <a link="impl-aarch64.CPYSizeChoice.1" file="shared_pseudocode.xml" hover="function: MOPSBlockSize CPYSizeChoice(CPYParams memcpy)">CPYSizeChoice</a>(memcpy);
+        assert B &lt;= -1 * memcpy.stagecpysize;
+
+        (copied, iswrite, memaddrdesc, memstatus) = MemCpyBytes(memcpy.toaddress   + memcpy.cpysize,
+                                                                memcpy.fromaddress + memcpy.cpysize,
+                                                                memcpy.forward, B,
+                                                                raccdesc, waccdesc);
+        if copied != B then
+            fault = TRUE;
+        else
+            memcpy.cpysize      = memcpy.cpysize + B;
+            memcpy.stagecpysize = memcpy.stagecpysize + B;
+else
+    while memcpy.stagecpysize &gt; 0 &amp;&amp; !fault do
+        // IMP DEF selection of the block size that is worked on. While many
+        // implementations might make this constant, that is not assumed.
+        B = <a link="impl-aarch64.CPYSizeChoice.1" file="shared_pseudocode.xml" hover="function: MOPSBlockSize CPYSizeChoice(CPYParams memcpy)">CPYSizeChoice</a>(memcpy);
+        assert B &lt;= memcpy.stagecpysize;
+
+        (copied, iswrite, memaddrdesc, memstatus) = MemCpyBytes(memcpy.toaddress,
+                                                                memcpy.fromaddress,
+                                                                memcpy.forward, B,
+                                                                raccdesc, waccdesc);
+        if copied != B then
+            fault = TRUE;
+        else
+            memcpy.fromaddress  = memcpy.fromaddress + B;
+            memcpy.toaddress    = memcpy.toaddress   + B;
+            memcpy.cpysize      = memcpy.cpysize     - B;
+            memcpy.stagecpysize = memcpy.stagecpysize - B;
+
+<a link="impl-aarch64.UpdateCpyRegisters.3" file="shared_pseudocode.xml" hover="function: UpdateCpyRegisters(CPYParams memcpy, boolean fault, integer copied)">UpdateCpyRegisters</a>(memcpy, fault, copied);
+
+if fault then
+    if <a link="impl-shared.IsFault.1" file="shared_pseudocode.xml" hover="function: boolean IsFault(AddressDescriptor addrdesc)">IsFault</a>(memaddrdesc) then
+        <a link="AArch64.Abort.2" file="shared_pseudocode.xml" hover="function: AArch64.Abort(bits(64) vaddress, FaultRecord fault)">AArch64.Abort</a>(memaddrdesc.vaddress, memaddrdesc.fault);
+
+    if <a link="impl-shared.IsFault.1" file="shared_pseudocode.xml" hover="function: boolean IsFault(AddressDescriptor addrdesc)">IsFault</a>(memstatus) then
+        constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = if iswrite then waccdesc else raccdesc;
+        <a link="impl-shared.HandleExternalAbort.5" file="shared_pseudocode.xml" hover="function: HandleExternalAbort(PhysMemRetStatus memretstatus, boolean iswrite, AddressDescriptor memaddrdesc, integer size, AccessDescriptor accdesc)">HandleExternalAbort</a>(memstatus, iswrite, memaddrdesc, B, accdesc);
+
+if memcpy.stage == <a link="MOPSStage_Prologue" file="shared_pseudocode.xml" hover="enumeration MOPSStage { MOPSStage_Prologue, MOPSStage_Main, MOPSStage_Epilogue }">MOPSStage_Prologue</a> then
+    PSTATE.&lt;N,Z,C,V&gt; = memcpy.nzcv;
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

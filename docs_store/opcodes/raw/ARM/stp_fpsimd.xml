@@ -1,0 +1,488 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="STP_fpsimd" title="STP (SIMD&amp;FP) -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="fpsimd"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="STP"/>
+    <docvar key="offset-type" value="off7s_s"/>
+  </docvars>
+  <heading>STP (SIMD&amp;FP)</heading>
+  <desc>
+    <brief>
+      <para>Store pair of SIMD&amp;FP registers</para>
+    </brief>
+    <authored>
+      <para>This instruction stores a pair of SIMD&amp;FP registers to memory.
+The address used for the store is
+calculated from a base register value and an immediate offset.</para>
+      <para>Depending on the settings in the <register_link id="AArch64-cpacr_el1.xml" state="AArch64">CPACR_EL1</register_link>,
+<register_link id="AArch64-cptr_el2.xml" state="AArch64">CPTR_EL2</register_link>, and <register_link id="AArch64-cptr_el3.xml" state="AArch64">CPTR_EL3</register_link> registers,
+and the current Security state and Exception level, an attempt to execute the instruction might be trapped.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1, the timing of this instruction is insensitive to the value of the data being loaded or stored.</para>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <classesintro count="3">
+      <txt>It has encodings from 3 classes:</txt>
+      <a href="#iclass_post_index">Post-index</a>
+      <txt>, </txt>
+      <a href="#iclass_pre_index">Pre-index</a>
+      <txt> and </txt>
+      <a href="#iclass_signed_offset">Signed offset</a>
+    </classesintro>
+    <iclass name="Post-index" oneof="3" id="iclass_post_index" no_encodings="3" isa="A64">
+      <docvars>
+        <docvar key="address-form" value="post-indexed"/>
+        <docvar key="instr-class" value="fpsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="STP"/>
+        <docvar key="offset-type" value="off7s_s"/>
+      </docvars>
+      <iclassintro count="3"/>
+      <regdiagram form="32" psname="A64.ldst.ldstpair_post.STP_S_ldstpair_post" tworows="1">
+        <box hibit="31" width="2" name="opc" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="VR" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="25" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="22" name="L" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="7" name="imm7" usename="1">
+          <c colspan="7"/>
+        </box>
+        <box hibit="14" width="5" name="Rt2" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="STP_S_ldstpair_post" oneofinclass="3" oneof="9" label="32-bit" bitdiffs="opc == 00">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STP"/>
+          <docvar key="address-form" value="post-indexed"/>
+          <docvar key="address-form-reg-type" value="post-indexed-pair-words"/>
+          <docvar key="atomic-ops" value="STP-pair-words"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off7s_s"/>
+          <docvar key="reg-type" value="pair-words"/>
+        </docvars>
+        <box hibit="31" width="2" name="opc">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>STP  </text><a hover="Is the 32-bit name of the first SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="St1">&lt;St1&gt;</a><text>, </text><a hover="Is the 32-bit name of the second SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt2&quot; field." link="St2">&lt;St2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>], #</text><a hover="For the 32-bit post-index and 32-bit pre-index variant: is the signed immediate byte offset, a multiple of 4 in the range -256 to 252, encoded in the &quot;imm7&quot; field as &amp;lt;imm&amp;gt;/4." link="imm__12">&lt;imm&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="STP_D_ldstpair_post" oneofinclass="3" oneof="9" label="64-bit" bitdiffs="opc == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STP"/>
+          <docvar key="address-form" value="post-indexed"/>
+          <docvar key="address-form-reg-type" value="post-indexed-pair-doublewords"/>
+          <docvar key="atomic-ops" value="STP-pair-doublewords"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off7s_s"/>
+          <docvar key="reg-type" value="pair-doublewords"/>
+        </docvars>
+        <box hibit="31" width="2" name="opc">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>STP  </text><a hover="Is the 64-bit name of the first SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Dt1">&lt;Dt1&gt;</a><text>, </text><a hover="Is the 64-bit name of the second SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt2&quot; field." link="Dt2">&lt;Dt2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>], #</text><a hover="For the 64-bit post-index and 64-bit pre-index variant: is the signed immediate byte offset, a multiple of 8 in the range -512 to 504, encoded in the &quot;imm7&quot; field as &amp;lt;imm&amp;gt;/8." link="imm__15">&lt;imm&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="STP_Q_ldstpair_post" oneofinclass="3" oneof="9" label="128-bit" bitdiffs="opc == 10">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STP"/>
+          <docvar key="address-form" value="post-indexed"/>
+          <docvar key="address-form-reg-type" value="post-indexed-pair-quadwords"/>
+          <docvar key="atomic-ops" value="STP-pair-quadwords"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off7s_s"/>
+          <docvar key="reg-type" value="pair-quadwords"/>
+        </docvars>
+        <box hibit="31" width="2" name="opc">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>STP  </text><a hover="Is the 128-bit name of the first SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Qt1">&lt;Qt1&gt;</a><text>, </text><a hover="Is the 128-bit name of the second SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt2&quot; field." link="Qt2">&lt;Qt2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>], #</text><a hover="For the 128-bit post-index and 128-bit pre-index variant: is the signed immediate byte offset, a multiple of 16 in the range -1024 to 1008, encoded in the &quot;imm7&quot; field as &amp;lt;imm&amp;gt;/16." link="imm__16">&lt;imm&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.ldstpair_post.STP_S_ldstpair_post" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant boolean wback = TRUE;
+constant boolean postindex = TRUE;</pstext></ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Pre-index" oneof="3" id="iclass_pre_index" no_encodings="3" isa="A64">
+      <docvars>
+        <docvar key="address-form" value="pre-indexed"/>
+        <docvar key="instr-class" value="fpsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="STP"/>
+        <docvar key="offset-type" value="off7s_s"/>
+      </docvars>
+      <iclassintro count="3"/>
+      <regdiagram form="32" psname="A64.ldst.ldstpair_pre.STP_S_ldstpair_pre" tworows="1">
+        <box hibit="31" width="2" name="opc" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="VR" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="25" width="3" settings="3">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="22" name="L" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="7" name="imm7" usename="1">
+          <c colspan="7"/>
+        </box>
+        <box hibit="14" width="5" name="Rt2" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="STP_S_ldstpair_pre" oneofinclass="3" oneof="9" label="32-bit" bitdiffs="opc == 00">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STP"/>
+          <docvar key="address-form" value="pre-indexed"/>
+          <docvar key="address-form-reg-type" value="pre-indexed-pair-words"/>
+          <docvar key="atomic-ops" value="STP-pair-words"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off7s_s"/>
+          <docvar key="reg-type" value="pair-words"/>
+        </docvars>
+        <box hibit="31" width="2" name="opc">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>STP  </text><a hover="Is the 32-bit name of the first SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="St1">&lt;St1&gt;</a><text>, </text><a hover="Is the 32-bit name of the second SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt2&quot; field." link="St2">&lt;St2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>, #</text><a hover="For the 32-bit post-index and 32-bit pre-index variant: is the signed immediate byte offset, a multiple of 4 in the range -256 to 252, encoded in the &quot;imm7&quot; field as &amp;lt;imm&amp;gt;/4." link="imm__12">&lt;imm&gt;</a><text>]!</text></asmtemplate>
+      </encoding>
+      <encoding name="STP_D_ldstpair_pre" oneofinclass="3" oneof="9" label="64-bit" bitdiffs="opc == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STP"/>
+          <docvar key="address-form" value="pre-indexed"/>
+          <docvar key="address-form-reg-type" value="pre-indexed-pair-doublewords"/>
+          <docvar key="atomic-ops" value="STP-pair-doublewords"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off7s_s"/>
+          <docvar key="reg-type" value="pair-doublewords"/>
+        </docvars>
+        <box hibit="31" width="2" name="opc">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>STP  </text><a hover="Is the 64-bit name of the first SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Dt1">&lt;Dt1&gt;</a><text>, </text><a hover="Is the 64-bit name of the second SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt2&quot; field." link="Dt2">&lt;Dt2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>, #</text><a hover="For the 64-bit post-index and 64-bit pre-index variant: is the signed immediate byte offset, a multiple of 8 in the range -512 to 504, encoded in the &quot;imm7&quot; field as &amp;lt;imm&amp;gt;/8." link="imm__15">&lt;imm&gt;</a><text>]!</text></asmtemplate>
+      </encoding>
+      <encoding name="STP_Q_ldstpair_pre" oneofinclass="3" oneof="9" label="128-bit" bitdiffs="opc == 10">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STP"/>
+          <docvar key="address-form" value="pre-indexed"/>
+          <docvar key="address-form-reg-type" value="pre-indexed-pair-quadwords"/>
+          <docvar key="atomic-ops" value="STP-pair-quadwords"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off7s_s"/>
+          <docvar key="reg-type" value="pair-quadwords"/>
+        </docvars>
+        <box hibit="31" width="2" name="opc">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>STP  </text><a hover="Is the 128-bit name of the first SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Qt1">&lt;Qt1&gt;</a><text>, </text><a hover="Is the 128-bit name of the second SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt2&quot; field." link="Qt2">&lt;Qt2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>, #</text><a hover="For the 128-bit post-index and 128-bit pre-index variant: is the signed immediate byte offset, a multiple of 16 in the range -1024 to 1008, encoded in the &quot;imm7&quot; field as &amp;lt;imm&amp;gt;/16." link="imm__16">&lt;imm&gt;</a><text>]!</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.ldstpair_pre.STP_S_ldstpair_pre" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant boolean wback = TRUE;
+constant boolean postindex = FALSE;</pstext></ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Signed offset" oneof="3" id="iclass_signed_offset" no_encodings="3" isa="A64">
+      <docvars>
+        <docvar key="address-form" value="signed-scaled-offset"/>
+        <docvar key="instr-class" value="fpsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="STP"/>
+        <docvar key="offset-type" value="off7s_s"/>
+      </docvars>
+      <iclassintro count="3"/>
+      <regdiagram form="32" psname="A64.ldst.ldstpair_off.STP_S_ldstpair_off" tworows="1">
+        <box hibit="31" width="2" name="opc" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="VR" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="25" width="3" settings="3">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="22" name="L" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="7" name="imm7" usename="1">
+          <c colspan="7"/>
+        </box>
+        <box hibit="14" width="5" name="Rt2" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="STP_S_ldstpair_off" oneofinclass="3" oneof="9" label="32-bit" bitdiffs="opc == 00">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STP"/>
+          <docvar key="address-form" value="signed-scaled-offset"/>
+          <docvar key="address-form-reg-type" value="signed-scaled-offset-pair-words"/>
+          <docvar key="atomic-ops" value="STP-pair-words"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off7s_s"/>
+          <docvar key="reg-type" value="pair-words"/>
+        </docvars>
+        <box hibit="31" width="2" name="opc">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>STP  </text><a hover="Is the 32-bit name of the first SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="St1">&lt;St1&gt;</a><text>, </text><a hover="Is the 32-bit name of the second SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt2&quot; field." link="St2">&lt;St2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #</text><a hover="For the 32-bit signed offset variant: is the optional signed immediate byte offset, a multiple of 4 in the range -256 to 252, defaulting to 0 and encoded in the &quot;imm7&quot; field as &amp;lt;imm&amp;gt;/4." link="imm__7">&lt;imm&gt;</a><text>}]</text></asmtemplate>
+      </encoding>
+      <encoding name="STP_D_ldstpair_off" oneofinclass="3" oneof="9" label="64-bit" bitdiffs="opc == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STP"/>
+          <docvar key="address-form" value="signed-scaled-offset"/>
+          <docvar key="address-form-reg-type" value="signed-scaled-offset-pair-doublewords"/>
+          <docvar key="atomic-ops" value="STP-pair-doublewords"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off7s_s"/>
+          <docvar key="reg-type" value="pair-doublewords"/>
+        </docvars>
+        <box hibit="31" width="2" name="opc">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>STP  </text><a hover="Is the 64-bit name of the first SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Dt1">&lt;Dt1&gt;</a><text>, </text><a hover="Is the 64-bit name of the second SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt2&quot; field." link="Dt2">&lt;Dt2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #</text><a hover="For the 64-bit signed offset variant: is the optional signed immediate byte offset, a multiple of 8 in the range -512 to 504, defaulting to 0 and encoded in the &quot;imm7&quot; field as &amp;lt;imm&amp;gt;/8." link="imm__10">&lt;imm&gt;</a><text>}]</text></asmtemplate>
+      </encoding>
+      <encoding name="STP_Q_ldstpair_off" oneofinclass="3" oneof="9" label="128-bit" bitdiffs="opc == 10">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STP"/>
+          <docvar key="address-form" value="signed-scaled-offset"/>
+          <docvar key="address-form-reg-type" value="signed-scaled-offset-pair-quadwords"/>
+          <docvar key="atomic-ops" value="STP-pair-quadwords"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off7s_s"/>
+          <docvar key="reg-type" value="pair-quadwords"/>
+        </docvars>
+        <box hibit="31" width="2" name="opc">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>STP  </text><a hover="Is the 128-bit name of the first SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Qt1">&lt;Qt1&gt;</a><text>, </text><a hover="Is the 128-bit name of the second SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt2&quot; field." link="Qt2">&lt;Qt2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #</text><a hover="For the 128-bit signed offset variant: is the optional signed immediate byte offset, a multiple of 16 in the range -1024 to 1008, defaulting to 0 and encoded in the &quot;imm7&quot; field as &amp;lt;imm&amp;gt;/16." link="imm__11">&lt;imm&gt;</a><text>}]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.ldstpair_off.STP_S_ldstpair_off" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant boolean wback = FALSE;
+constant boolean postindex = FALSE;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="STP_S_ldstpair_post, STP_S_ldstpair_pre, STP_S_ldstpair_off" symboldefcount="1">
+      <symbol link="St1">&lt;St1&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 32-bit name of the first SIMD&amp;FP register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STP_S_ldstpair_post, STP_S_ldstpair_pre, STP_S_ldstpair_off" symboldefcount="1">
+      <symbol link="St2">&lt;St2&gt;</symbol>
+      <account encodedin="Rt2">
+        <intro>
+          <para>Is the 32-bit name of the second SIMD&amp;FP register to be transferred, encoded in the "Rt2" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STP_S_ldstpair_post, STP_D_ldstpair_post, STP_Q_ldstpair_post, STP_S_ldstpair_pre, STP_D_ldstpair_pre, STP_Q_ldstpair_pre, STP_S_ldstpair_off, STP_D_ldstpair_off, STP_Q_ldstpair_off" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STP_S_ldstpair_post, STP_S_ldstpair_pre" symboldefcount="1">
+      <symbol link="imm__12">&lt;imm&gt;</symbol>
+      <account encodedin="imm7">
+        <intro>
+          <para>For the 32-bit post-index and 32-bit pre-index variant: is the signed immediate byte offset, a multiple of 4 in the range -256 to 252, encoded in the "imm7" field as &lt;imm&gt;/4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STP_D_ldstpair_post, STP_D_ldstpair_pre" symboldefcount="2">
+      <symbol link="imm__15">&lt;imm&gt;</symbol>
+      <account encodedin="imm7">
+        <intro>
+          <para>For the 64-bit post-index and 64-bit pre-index variant: is the signed immediate byte offset, a multiple of 8 in the range -512 to 504, encoded in the "imm7" field as &lt;imm&gt;/8.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STP_Q_ldstpair_post, STP_Q_ldstpair_pre" symboldefcount="3">
+      <symbol link="imm__16">&lt;imm&gt;</symbol>
+      <account encodedin="imm7">
+        <intro>
+          <para>For the 128-bit post-index and 128-bit pre-index variant: is the signed immediate byte offset, a multiple of 16 in the range -1024 to 1008, encoded in the "imm7" field as &lt;imm&gt;/16.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STP_S_ldstpair_off" symboldefcount="4">
+      <symbol link="imm__7">&lt;imm&gt;</symbol>
+      <account encodedin="imm7">
+        <intro>
+          <para>For the 32-bit signed offset variant: is the optional signed immediate byte offset, a multiple of 4 in the range -256 to 252, defaulting to 0 and encoded in the "imm7" field as &lt;imm&gt;/4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STP_D_ldstpair_off" symboldefcount="5">
+      <symbol link="imm__10">&lt;imm&gt;</symbol>
+      <account encodedin="imm7">
+        <intro>
+          <para>For the 64-bit signed offset variant: is the optional signed immediate byte offset, a multiple of 8 in the range -512 to 504, defaulting to 0 and encoded in the "imm7" field as &lt;imm&gt;/8.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STP_Q_ldstpair_off" symboldefcount="6">
+      <symbol link="imm__11">&lt;imm&gt;</symbol>
+      <account encodedin="imm7">
+        <intro>
+          <para>For the 128-bit signed offset variant: is the optional signed immediate byte offset, a multiple of 16 in the range -1024 to 1008, defaulting to 0 and encoded in the "imm7" field as &lt;imm&gt;/16.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STP_D_ldstpair_post, STP_D_ldstpair_pre, STP_D_ldstpair_off" symboldefcount="1">
+      <symbol link="Dt1">&lt;Dt1&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the first SIMD&amp;FP register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STP_D_ldstpair_post, STP_D_ldstpair_pre, STP_D_ldstpair_off" symboldefcount="1">
+      <symbol link="Dt2">&lt;Dt2&gt;</symbol>
+      <account encodedin="Rt2">
+        <intro>
+          <para>Is the 64-bit name of the second SIMD&amp;FP register to be transferred, encoded in the "Rt2" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STP_Q_ldstpair_post, STP_Q_ldstpair_pre, STP_Q_ldstpair_off" symboldefcount="1">
+      <symbol link="Qt1">&lt;Qt1&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 128-bit name of the first SIMD&amp;FP register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STP_Q_ldstpair_post, STP_Q_ldstpair_pre, STP_Q_ldstpair_off" symboldefcount="1">
+      <symbol link="Qt2">&lt;Qt2&gt;</symbol>
+      <account encodedin="Rt2">
+        <intro>
+          <para>Is the 128-bit name of the second SIMD&amp;FP register to be transferred, encoded in the "Rt2" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldstpair_post.STP_S_ldstpair_post" sections="1" secttype="Shared Decode">
+      <pstext mayhavelinks="1" section="Postdecode" rep_section="postdecode">constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer t2 = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt2);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant boolean nontemporal = FALSE;
+constant integer scale = 2 + (<a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(opc));
+constant integer datasize = 8 &lt;&lt; scale;
+constant bits(64) offset = <a link="impl-shared.LSL.2" file="shared_pseudocode.xml" hover="function: bits(N) LSL(bits(N) x, integer shift)">LSL</a>(<a link="impl-shared.SignExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) SignExtend(bits(M) x, integer N)">SignExtend</a>(imm7, 64), scale);
+constant boolean tagchecked = wback || n != 31;
+</pstext></ps>
+  </ps_section>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldstpair_post.STP_S_ldstpair_post" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckFPEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPEnabled64()">CheckFPEnabled64</a>();
+bits(64) address;
+bits(64) address2;
+constant integer dbytes = datasize DIV 8;
+
+constant boolean privileged = PSTATE.EL != <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>;
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = CreateAccDescASIMD(<a link="MemOp_STORE" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_STORE</a>, nontemporal,
+                                                       tagchecked, privileged);
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+if !postindex then
+    address = <a link="impl-shared.AddressAdd.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressAdd(bits(64) base, integer offset, AccessDescriptor accdesc)">AddressAdd</a>(address, offset, accdesc);
+
+address2 = <a link="impl-shared.AddressIncrement.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressIncrement(bits(64) base, integer increment, AccessDescriptor accdesc)">AddressIncrement</a>(address,  dbytes , accdesc);
+<a link="impl-aarch64.Mem.write.3" file="shared_pseudocode.xml" hover="accessor: Mem[bits(64) address, integer size, AccessDescriptor accdesc_in] = bits(size*8) value_in">Mem</a>[address , dbytes, accdesc] = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[t , datasize];
+<a link="impl-aarch64.Mem.write.3" file="shared_pseudocode.xml" hover="accessor: Mem[bits(64) address, integer size, AccessDescriptor accdesc_in] = bits(size*8) value_in">Mem</a>[address2, dbytes, accdesc] = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[t2, datasize];
+
+if wback then
+    if postindex then
+        address = <a link="impl-shared.AddressAdd.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressAdd(bits(64) base, integer offset, AccessDescriptor accdesc)">AddressAdd</a>(address, offset, accdesc);
+    if n == 31 then
+        <a link="impl-aarch64.SP.write.0" file="shared_pseudocode.xml" hover="accessor: SP[] = bits(64) value">SP</a>[] = address;
+    else
+        <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[n, 64] = address;
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

@@ -1,0 +1,265 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="SUBS_addsub_shift" title="SUBS (shifted register) -- A64" type="instruction">
+  <docvars>
+    <docvar key="cond-setting" value="S"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="SUBS"/>
+  </docvars>
+  <heading>SUBS (shifted register)</heading>
+  <desc>
+    <brief>
+      <para>Subtract (shifted register), setting flags</para>
+    </brief>
+    <authored>
+      <para>This instruction subtracts an optionally-shifted register value
+from a register value, and writes the result to the destination
+register. It updates the condition flags based on the
+result.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <alias_list howmany="2">
+    <alias_list_intro>This instruction is used by the aliases </alias_list_intro>
+    <aliasref aliaspageid="CMP_SUBS_addsub_shift" aliasfile="cmp_subs_addsub_shift.xml" hover="Compare (shifted register)" punct=" and ">
+      <text>CMP (shifted register)</text>
+      <aliaspref>Rd == '11111'</aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="NEGS_SUBS_addsub_shift" aliasfile="negs_subs_addsub_shift.xml" hover="Negate, setting flags" punct=".">
+      <text>NEGS</text>
+      <aliaspref>Rn == '11111' &amp;&amp; Rd != '11111'</aliaspref>
+    </aliasref>
+    <alias_list_outro>
+      <text>  See </text>
+      <aliastablelink/>
+      <text> below for details of when each alias is preferred.</text>
+    </alias_list_outro>
+  </alias_list>
+  <classes>
+    <iclass name="Setting the condition flags" oneof="1" id="iclass_setting_the_condition_flags" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="cond-setting" value="S"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="SUBS"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <regdiagram form="32" psname="A64.dpreg.addsub_shift.SUBS_32_addsub_shift" tworows="1">
+        <box hibit="31" width="1" name="sf" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="30" name="op" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="28" width="5" settings="5">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="shift" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Rm" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="6" name="imm6" usename="1">
+          <c colspan="6"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="SUBS_32_addsub_shift" oneofinclass="2" oneof="2" label="32-bit" bitdiffs="sf == 0">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SUBS"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="cond-setting" value="S"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>SUBS  </text><a hover="Is the 32-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="WdOrWZR">&lt;Wd&gt;</a><text>, </text><a hover="Is the 32-bit name of the first general-purpose source register, encoded in the &quot;Rn&quot; field." link="WnOrWZR__3">&lt;Wn&gt;</a><text>, </text><a hover="Is the 32-bit name of the second general-purpose source register, encoded in the &quot;Rm&quot; field." link="WmOrWZR__2">&lt;Wm&gt;</a><text>{, </text><a hover="Is the optional shift type to be applied to the second source operand, defaulting to LSL and " link="shift_option__2">&lt;shift&gt;</a><text> #</text><a hover="For the 32-bit variant: is the shift amount, in the range 0 to 31, defaulting to 0 and encoded in the &quot;imm6&quot; field." link="amount__5">&lt;amount&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <encoding name="SUBS_64_addsub_shift" oneofinclass="2" oneof="2" label="64-bit" bitdiffs="sf == 1">
+        <docvars>
+          <docvar key="datatype" value="64"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SUBS"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="cond-setting" value="S"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>SUBS  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="XdOrXZR__6">&lt;Xd&gt;</a><text>, </text><a hover="Is the 64-bit name of the first general-purpose source register, encoded in the &quot;Rn&quot; field." link="XnOrXZR__12">&lt;Xn&gt;</a><text>, </text><a hover="Is the 64-bit name of the second general-purpose source register, encoded in the &quot;Rm&quot; field." link="XmOrXZR__4">&lt;Xm&gt;</a><text>{, </text><a hover="Is the optional shift type to be applied to the second source operand, defaulting to LSL and " link="shift_option__2">&lt;shift&gt;</a><text> #</text><a hover="For the 64-bit variant: is the shift amount, in the range 0 to 63, defaulting to 0 and encoded in the &quot;imm6&quot; field." link="amount__6">&lt;amount&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpreg.addsub_shift.SUBS_32_addsub_shift" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if shift == '11' then UNDEFINED;
+if sf == '0' &amp;&amp; imm6&lt;5&gt; == '1' then UNDEFINED;
+
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rm);
+constant integer datasize = 32 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(sf);
+constant <a link="ShiftType" file="shared_pseudocode.xml" hover="enumeration ShiftType   {ShiftType_LSL, ShiftType_LSR, ShiftType_ASR, ShiftType_ROR}">ShiftType</a> shift_type = <a link="impl-aarch64.DecodeShift.1" file="shared_pseudocode.xml" hover="function: ShiftType DecodeShift(bits(2) op)">DecodeShift</a>(shift);
+constant integer shift_amount = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(imm6);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="SUBS_32_addsub_shift" symboldefcount="1">
+      <symbol link="WdOrWZR">&lt;Wd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SUBS_32_addsub_shift" symboldefcount="1">
+      <symbol link="WnOrWZR__3">&lt;Wn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 32-bit name of the first general-purpose source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SUBS_32_addsub_shift" symboldefcount="1">
+      <symbol link="WmOrWZR__2">&lt;Wm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the 32-bit name of the second general-purpose source register, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SUBS_32_addsub_shift, SUBS_64_addsub_shift" symboldefcount="1">
+      <symbol link="shift_option__2">&lt;shift&gt;</symbol>
+      <definition encodedin="shift">
+        <intro>Is the optional shift type to be applied to the second source operand, defaulting to LSL and </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">shift</entry>
+                <entry class="symbol">&lt;shift&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">LSL</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">LSR</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10</entry>
+                <entry class="symbol">ASR</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="SUBS_32_addsub_shift" symboldefcount="1">
+      <symbol link="amount__5">&lt;amount&gt;</symbol>
+      <account encodedin="imm6">
+        <intro>
+          <para>For the 32-bit variant: is the shift amount, in the range 0 to 31, defaulting to 0 and encoded in the "imm6" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SUBS_64_addsub_shift" symboldefcount="2">
+      <symbol link="amount__6">&lt;amount&gt;</symbol>
+      <account encodedin="imm6">
+        <intro>
+          <para>For the 64-bit variant: is the shift amount, in the range 0 to 63, defaulting to 0 and encoded in the "imm6" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SUBS_64_addsub_shift" symboldefcount="1">
+      <symbol link="XdOrXZR__6">&lt;Xd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SUBS_64_addsub_shift" symboldefcount="1">
+      <symbol link="XnOrXZR__12">&lt;Xn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the first general-purpose source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SUBS_64_addsub_shift" symboldefcount="1">
+      <symbol link="XmOrXZR__4">&lt;Xm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the 64-bit name of the second general-purpose source register, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <aliastablehook anchor="aliasconditions">Alias Conditions</aliastablehook>
+  <ps_section howmany="1">
+    <ps name="A64.dpreg.addsub_shift.SUBS_32_addsub_shift" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bits(datasize) operand1 = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, datasize];
+constant bits(datasize) operand2 = NOT(<a link="impl-aarch64.ShiftReg.4" file="shared_pseudocode.xml" hover="function: bits(N) ShiftReg(integer reg, ShiftType shiftype, integer amount, integer N)">ShiftReg</a>(m, shift_type, shift_amount, datasize));
+bits(datasize) result;
+bits(4) nzcv;
+
+(result, nzcv) = <a link="impl-shared.AddWithCarry.3" file="shared_pseudocode.xml" hover="function: (bits(N), bits(4)) AddWithCarry(bits(N) x, bits(N) y, bit carry_in)">AddWithCarry</a>(operand1, operand2, '1');
+
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, datasize] = result;
+PSTATE.&lt;N,Z,C,V&gt; = nzcv;</pstext></ps>
+  </ps_section>
+</instructionsection>

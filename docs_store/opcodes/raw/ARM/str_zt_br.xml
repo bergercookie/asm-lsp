@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="str_zt_br" title="STR (table)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="STR" />
+  </docvars>
+  <heading>STR (table)</heading>
+  <desc>
+    <brief>Store ZT0 register</brief>
+    <description>
+      <para>Store the 64-byte ZT0 register to the memory address provided in the 64-bit scalar base register. This instruction is unpredicated.</para>
+      <para>The store is performed as contiguous byte accesses, with no endian conversion and no guarantee of single-copy atomicity larger than a byte. However, if alignment is checked, then the base register must be aligned to 16 bytes.</para>
+      <para>This instruction does not require the PE to be in Streaming SVE mode, and it is expected that this instruction will not experience a significant slowdown due to contention with other PEs that are executing in Streaming SVE mode.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <is_store>True</is_store>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SME2" oneof="1" id="iclass_mortlach2" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="STR" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="STR-ZT.BR-_">
+        <box hibit="31" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="29" width="8" settings="8">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="21" width="2" name="opc&lt;5:4&gt;" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="19" width="3" name="opc&lt;3:1&gt;" settings="3">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="16" name="opc&lt;0&gt;" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="15" width="6" settings="6">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="3" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="2" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="1" width="2" name="opc2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="str_zt_br_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="STR" />
+        </docvars>
+        <asmtemplate><text>STR     ZT0, [</text><a link="sa_xn_sp" hover="64-bit general-purpose base register or SP (field &quot;Rn&quot;)">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="STR-ZT.BR-_" mylink="STR-ZT.BR-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="str_zt_br_" symboldefcount="1">
+      <symbol link="sa_xn_sp">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="STR-ZT.BR-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSMEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSMEEnabled()">CheckSMEEnabled</a>();
+<a link="impl-aarch64.CheckSMEZT0Enabled.0" file="shared_pseudocode.xml" hover="function: CheckSMEZT0Enabled()">CheckSMEZT0Enabled</a>();
+constant integer elements = 512 DIV 8;
+bits(64) addr;
+constant bits(512) table = <a link="impl-aarch64.ZT0.read.1" file="shared_pseudocode.xml" hover="accessor: bits(width) ZT0[integer width]">ZT0</a>[512];
+constant boolean contiguous = TRUE;
+constant boolean nontemporal = FALSE;
+constant boolean tagchecked = n != 31;
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = <a link="impl-shared.CreateAccDescSME.4" file="shared_pseudocode.xml" hover="function: AccessDescriptor CreateAccDescSME(MemOp memop, boolean nontemporal, boolean contiguous, boolean tagchecked)">CreateAccDescSME</a>(<a link="MemOp_STORE" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_STORE</a>, nontemporal, contiguous,
+                                                     tagchecked);
+
+if IsFeatureImplemented(FEAT_TME) &amp;&amp; TSTATE.depth &gt; 0 then
+    <a link="impl-aarch64.FailTransaction.2" file="shared_pseudocode.xml" hover="function: FailTransaction(TMFailure cause, boolean retry)">FailTransaction</a>(<a link="TMFailure_ERR" file="shared_pseudocode.xml" hover="enumeration TMFailure { TMFailure_CNCL, TMFailure_DBG, TMFailure_ERR, TMFailure_NEST, TMFailure_SIZE, TMFailure_MEM, TMFailure_TRIVIAL, TMFailure_IMP }">TMFailure_ERR</a>, FALSE);
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    addr = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    addr = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+constant boolean aligned = <a link="impl-shared.IsAligned.2" file="shared_pseudocode.xml" hover="function: boolean IsAligned(bits(N) x, integer y)">IsAligned</a>(addr, 16);
+
+if !aligned &amp;&amp; <a link="impl-shared.AlignmentEnforced.0" file="shared_pseudocode.xml" hover="function: boolean AlignmentEnforced()">AlignmentEnforced</a>() then
+    <a link="AArch64.Abort.2" file="shared_pseudocode.xml" hover="function: AArch64.Abort(bits(64) vaddress, FaultRecord fault)">AArch64.Abort</a>(addr, <a link="impl-shared.AlignmentFault.1" file="shared_pseudocode.xml" hover="function: FaultRecord AlignmentFault(AccessDescriptor accdesc)">AlignmentFault</a>(accdesc));
+
+for e = 0 to elements-1
+    <a link="AArch64.MemSingle.write.4" file="shared_pseudocode.xml" hover="accessor: AArch64.MemSingle[bits(64) address, integer size, AccessDescriptor accdesc, boolean aligned] = bits(size*8) value">AArch64.MemSingle</a>[addr, 1, accdesc, aligned] = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[table, e, 8];
+    addr = <a link="impl-shared.AddressIncrement.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressIncrement(bits(64) base, integer increment, AccessDescriptor accdesc)">AddressIncrement</a>(addr, 1, accdesc);</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="movt_zt_z" title="MOVT (vector to table)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="MOVT" />
+  </docvars>
+  <heading>MOVT (vector to table)</heading>
+  <desc>
+    <brief>Move vector register to ZT0</brief>
+    <description>
+      <para>Copy the source vector register to ZT0 at the vector length offset specified by the immediate index. When the index is zero, the instruction writes zeroes to the most significant (512-VL) bits of the ZT0 register. When the index is not zero, the unindexed portions of ZT0 remain unchanged.</para>
+      <para>This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <sm_policy>SM_1_only</sm_policy>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SME2" oneof="1" id="iclass_mortlach2" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="MOVT" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME_LUTv2" feature="FEAT_SME_LUTv2" />
+      </arch_variants>
+      <regdiagram form="32" psname="MOVT-ZT.Z-_">
+        <box hibit="31" width="18" settings="18">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="13" width="2" name="off2" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="11" width="2" name="opc&lt;6:5&gt;" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="4" name="opc&lt;4:1&gt;" settings="4">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="5" name="opc&lt;0&gt;" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="4" width="5" name="Zt" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="movt_zt_z_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="MOVT" />
+        </docvars>
+        <asmtemplate><text>MOVT    ZT0</text><text>{</text><text>[</text><a link="sa_offs" hover="Vector length offset [0-3], default 0 when omitted (field &quot;off2&quot;)">&lt;offs&gt;</a><text>, MUL VL]</text><text>}</text><text>, </text><a link="sa_zt" hover="Scalable vector register to be transferred (field &quot;Zt&quot;)">&lt;Zt&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="MOVT-ZT.Z-_" mylink="MOVT-ZT.Z-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME_LUTv2) then UNDEFINED;
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zt);
+constant integer imm = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(off2);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="movt_zt_z_" symboldefcount="1">
+      <symbol link="sa_offs">&lt;offs&gt;</symbol>
+      <account encodedin="off2">
+        <intro>
+          <para>Is the vector length offset, in the range 0 to 3, defaulting to 0 when omitted, encoded in the "off2" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="movt_zt_z_" symboldefcount="1">
+      <symbol link="sa_zt">&lt;Zt&gt;</symbol>
+      <account encodedin="Zt">
+        <intro>
+          <para>Is the name of the scalable vector register to be transferred, encoded in the "Zt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="MOVT-ZT.Z-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckStreamingSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckStreamingSVEEnabled()">CheckStreamingSVEEnabled</a>();
+<a link="impl-aarch64.CheckSMEZT0Enabled.0" file="shared_pseudocode.xml" hover="function: CheckSMEZT0Enabled()">CheckSMEZT0Enabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer tsize = if VL &lt;= 512 then VL else 512;
+constant integer offset = imm MOD (512 DIV tsize);
+bits(512) result = if imm == 0 then <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(512) else <a link="impl-aarch64.ZT0.read.1" file="shared_pseudocode.xml" hover="accessor: bits(width) ZT0[integer width]">ZT0</a>[512];
+
+<a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, offset, tsize] = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[t, VL]&lt;tsize-1:0&gt;;
+<a link="impl-aarch64.ZT0.write.1" file="shared_pseudocode.xml" hover="accessor: ZT0[integer width] = bits(width) value">ZT0</a>[512] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

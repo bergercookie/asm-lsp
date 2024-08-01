@@ -1,0 +1,102 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="AXFLAG" title="AXFLAG -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="AXFLAG"/>
+  </docvars>
+  <heading>AXFLAG</heading>
+  <desc>
+    <brief>
+      <para>Convert floating-point condition flags from Arm to external format</para>
+    </brief>
+    <authored>
+      <para>This instruction converts the state of the PSTATE.{N,Z,C,V} flags from
+a form representing the result of an Arm floating-point scalar compare
+instruction to an alternative representation required by some software.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="AXFLAG"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_FlagM2" name="ARMv8.5"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.control.pstate.AXFLAG_M_pstate" tworows="1">
+        <box hibit="31" width="13" settings="13">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="18" width="3" name="op1" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="15" width="4" settings="4">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1" settings="4" psbits="xxxx">
+          <c>(0)</c>
+          <c>(0)</c>
+          <c>(0)</c>
+          <c>(0)</c>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="AXFLAG_M_pstate" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="AXFLAG"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>AXFLAG</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.pstate.AXFLAG_M_pstate" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_FlagM2) then UNDEFINED;    </pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all"/>
+  <ps_section howmany="1">
+    <ps name="A64.control.pstate.AXFLAG_M_pstate" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bit z = PSTATE.Z OR PSTATE.V;
+constant bit c = PSTATE.C AND NOT(PSTATE.V);
+
+PSTATE.&lt;N,Z,C,V&gt; = '0' : z : c : '0';</pstext></ps>
+  </ps_section>
+</instructionsection>

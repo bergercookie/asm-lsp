@@ -1,0 +1,132 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="BRB_SYS" title="BRB -- A64" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="BRB"/>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="SYS"/>
+  </docvars>
+  <heading>BRB</heading>
+  <desc>
+    <brief>
+      <para>Branch record buffer</para>
+    </brief>
+    <authored>
+      <para>For more information, see
+<xref linkend="ARMARM_BABEJJJE">op0==0b01, cache maintenance, TLB maintenance, and address translation instructions</xref>.</para>
+    </authored>
+  </desc>
+  <aliasto refiform="sys.xml" iformid="SYS">SYS</aliasto>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="SYS"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_BRBE" name="ARMv9.2"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.control.systeminstrs.SYS_CR_systeminstrs.BRB" tworows="1">
+        <box hibit="31" width="10" settings="10">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="21" name="L" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="2" settings="2">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="18" width="3" name="op1" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" width="4" name="CRn" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1">
+          <c colspan="3"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="BRB_SYS_CR_systeminstrs" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SYS"/>
+          <docvar key="alias_mnemonic" value="BRB"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>BRB  </text><a hover="Is a BRB operation name, as listed for the BRB system instruction group, " link="brb_op_option">&lt;brb_op&gt;</a></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="sys.xml#SYS_CR_systeminstrs">SYS</a><text>  #1, C7, C2, #</text><a hover="Is a 3-bit unsigned immediate, in the range 0 to 7, encoded in the &quot;op2&quot; field." href="sys.xml#op2">&lt;op2&gt;</a><text>{, </text><a hover="Is the 64-bit name of the optional general-purpose source register, defaulting to '11111', encoded in the &quot;Rt&quot; field." href="sys.xml#XtOrXZR__2">&lt;Xt&gt;</a><text>}</text></asmtemplate>
+          <aliascond><a link="impl-aarch64.SysOp.4" file="shared_pseudocode.xml" hover="function: SystemOp SysOp(bits(3) op1, bits(4) CRn, bits(4) CRm, bits(3) op2)">SysOp</a>('001', '0111', '0010', op2) == <a link="Sys_BRB" file="shared_pseudocode.xml" hover="enumeration SystemOp {Sys_AT, Sys_BRB, Sys_DC, Sys_IC, Sys_TLBI, Sys_SYS}">Sys_BRB</a></aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="BRB_SYS_CR_systeminstrs" symboldefcount="1">
+      <symbol link="brb_op_option">&lt;brb_op&gt;</symbol>
+      <definition encodedin="op2">
+        <intro>Is a BRB operation name, as listed for the BRB system instruction group, </intro>
+        <table class="valuetable">
+          <tgroup cols="3">
+            <thead>
+              <row>
+                <entry class="bitfield">op2</entry>
+                <entry class="symbol">&lt;brb_op&gt;</entry>
+                <entry class="symbol">Architectural Feature</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">100</entry>
+                <entry class="symbol">IALL</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_BRBE"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">101</entry>
+                <entry class="symbol">INJ</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_BRBE"/>
+                  </arch_variants>
+                </entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+  </explanations>
+</instructionsection>

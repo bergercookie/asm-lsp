@@ -1,0 +1,670 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="umlall_za_zzi" title="UMLALL (multiple and indexed vector)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="UMLALL" />
+  </docvars>
+  <heading>UMLALL (multiple and indexed vector)</heading>
+  <desc>
+    <brief>Multi-vector unsigned integer multiply-add long-long by indexed element</brief>
+    <description>
+      <para>This unsigned integer multiply-add long-long instruction multiplies each unsigned 8-bit or 16-bit element in the one, two, or four first source vectors with each unsigned 8-bit or 16-bit indexed element of second source vector, widens each product to 32-bits or 64-bits and destructively adds these values to the corresponding 32-bit or 64-bit elements of the ZA quad-vector groups.</para>
+      <para>The elements within the second source vector are specified using an immediate element index which selects the same element position within each 128-bit vector segment. The index range is from 0 to one less than the number of elements per 128-bit segment, encoded in 3 to 4 bits depending on the size of the element.</para>
+      <para>The quad-vector group within all of, each half of, or each quarter of the ZA array is selected by the sum of the vector select register and offset range, modulo all, half, or quarter the number of ZA array vectors.</para>
+      <para>The <arm-defined-word>vector group</arm-defined-word> symbol, <syntax>VGx2</syntax> or <syntax>VGx4</syntax>, indicates that the ZA operand consists of two or four ZA quad-vector groups respectively. The <arm-defined-word>vector group</arm-defined-word> symbol is preferred for disassembly, but optional in assembler source code.</para>
+      <para>This instruction is unpredicated.</para>
+      <para>ID_AA64SMFR0_EL1.I16I64 indicates whether the 16-bit integer variant is implemented.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <sm_policy>SM_1_only</sm_policy>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <classesintro count="6">
+      <txt>It has encodings from 6 classes:</txt>
+      <a href="#iclass_sme_mall_4words">One ZA quad-vector of 32-bit elements</a>
+      <txt>, </txt>
+      <a href="#iclass_sme_mall_4dwords">One ZA quad-vector of 64-bit elements</a>
+      <txt>, </txt>
+      <a href="#iclass_sme_mall_8words">Two ZA quad-vectors of 32-bit elements</a>
+      <txt>, </txt>
+      <a href="#iclass_sme_mall_8dwords">Two ZA quad-vectors of 64-bit elements</a>
+      <txt>, </txt>
+      <a href="#iclass_sme_mall_16words">Four ZA quad-vectors of 32-bit elements</a>
+      <txt> and </txt>
+      <a href="#iclass_sme_mall_16dwords">Four ZA quad-vectors of 64-bit elements</a>
+    </classesintro>
+    <iclass name="One ZA quad-vector of 32-bit elements" oneof="6" id="iclass_sme_mall_4words" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="UMLALL" />
+        <docvar key="sme-mall-variants" value="sme-mall-4words" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="UMLALL-ZA.ZZi-S" tworows="1">
+        <box hibit="31" width="12" settings="12">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="19" width="4" name="Zm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" name="i4h" usename="1">
+          <c></c>
+        </box>
+        <box hibit="14" width="2" name="Rv" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" name="i4l" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" name="U" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="3" name="S" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="2" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="1" width="2" name="off2" usename="1">
+          <c colspan="2"></c>
+        </box>
+      </regdiagram>
+      <encoding name="umlall_za_zzi_s" oneofinclass="1" oneof="6" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="UMLALL" />
+          <docvar key="sme-mall-variants" value="sme-mall-4words" />
+        </docvars>
+        <asmtemplate><text>UMLALL  ZA.S[</text><a link="sa_wv" hover="32-bit vector select register W8-W11 (field &quot;Rv&quot;)">&lt;Wv&gt;</a><text>, </text><a link="sa_offs1" hover="First vector select offset, encoded as &quot;off2&quot; field times 4 (field off2)">&lt;offs1&gt;</a><text>:</text><a link="sa_offs4" hover="Fourth vector select offset, encoded as &quot;off2&quot; field times 4 plus 3 (field off2)">&lt;offs4&gt;</a><text>], </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.B, </text><a link="sa_zm" hover="Second source scalable vector register Z0-Z15 (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.B[</text><a link="sa_index_1" hover="Element index [0-15] (field &quot;i4h:i4l&quot;)">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="UMLALL-ZA.ZZi-S" mylink="UMLALL-ZA.ZZi-S" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+constant integer esize = 32;
+constant integer v = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('010':Rv);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('0':Zm);
+constant integer offset = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(off2:'00');
+constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i4h:i4l);
+constant integer nreg = 1;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="One ZA quad-vector of 64-bit elements" oneof="6" id="iclass_sme_mall_4dwords" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="UMLALL" />
+        <docvar key="sme-mall-variants" value="sme-mall-4dwords" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME_I16I64" feature="FEAT_SME_I16I64" />
+      </arch_variants>
+      <regdiagram form="32" psname="UMLALL-ZA.ZZi-D" tworows="1">
+        <box hibit="31" width="12" settings="12">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="19" width="4" name="Zm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" name="i3h" usename="1">
+          <c></c>
+        </box>
+        <box hibit="14" width="2" name="Rv" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="i3l" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" name="U" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="3" name="S" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="2" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="1" width="2" name="off2" usename="1">
+          <c colspan="2"></c>
+        </box>
+      </regdiagram>
+      <encoding name="umlall_za_zzi_d" oneofinclass="1" oneof="6" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="UMLALL" />
+          <docvar key="sme-mall-variants" value="sme-mall-4dwords" />
+        </docvars>
+        <asmtemplate><text>UMLALL  ZA.D[</text><a link="sa_wv" hover="32-bit vector select register W8-W11 (field &quot;Rv&quot;)">&lt;Wv&gt;</a><text>, </text><a link="sa_offs1" hover="First vector select offset, encoded as &quot;off2&quot; field times 4 (field off2)">&lt;offs1&gt;</a><text>:</text><a link="sa_offs4" hover="Fourth vector select offset, encoded as &quot;off2&quot; field times 4 plus 3 (field off2)">&lt;offs4&gt;</a><text>], </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.H, </text><a link="sa_zm" hover="Second source scalable vector register Z0-Z15 (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.H[</text><a link="sa_index" hover="Element index [0-7] (field &quot;i3h:i3l&quot;)">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="UMLALL-ZA.ZZi-D" mylink="UMLALL-ZA.ZZi-D" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !(IsFeatureImplemented(FEAT_SME2) &amp;&amp; IsFeatureImplemented(FEAT_SME_I16I64)) then UNDEFINED;
+constant integer esize = 64;
+constant integer v = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('010':Rv);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('0':Zm);
+constant integer offset = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(off2:'00');
+constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i3h:i3l);
+constant integer nreg = 1;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Two ZA quad-vectors of 32-bit elements" oneof="6" id="iclass_sme_mall_8words" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="UMLALL" />
+        <docvar key="sme-mall-variants" value="sme-mall-8words" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="UMLALL-ZA.ZZi-S2xi" tworows="1">
+        <box hibit="31" width="12" settings="12">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="19" width="4" name="Zm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="14" width="2" name="Rv" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="i4h" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="9" width="4" name="Zn" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="5" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="4" name="U" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="3" name="S" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="2" width="2" name="i4l" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="0" name="o1" usename="1">
+          <c></c>
+        </box>
+      </regdiagram>
+      <encoding name="umlall_za_zzi_s2xi" oneofinclass="1" oneof="6" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="UMLALL" />
+          <docvar key="sme-mall-variants" value="sme-mall-8words" />
+        </docvars>
+        <asmtemplate><text>UMLALL  ZA.S[</text><a link="sa_wv" hover="32-bit vector select register W8-W11 (field &quot;Rv&quot;)">&lt;Wv&gt;</a><text>, </text><a link="sa_offs1_1" hover="First vector select offset, encoded as &quot;o1&quot; field times 4 (field o1)">&lt;offs1&gt;</a><text>:</text><a link="sa_offs4_1" hover="Fourth vector select offset, encoded as &quot;o1&quot; field times 4 plus 3 (field o1)">&lt;offs4&gt;</a><a>{, VGx2}</a><text>], </text><text>{</text><text> </text><a link="sa_zn1" hover="First scalable vector register of first source multi-vector group (field Zn)">&lt;Zn1&gt;</a><text>.B-</text><a link="sa_zn2" hover="Second scalable vector register of first source multi-vector group (field Zn)">&lt;Zn2&gt;</a><text>.B </text><text>}</text><text>, </text><a link="sa_zm" hover="Second source scalable vector register Z0-Z15 (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.B[</text><a link="sa_index_1" hover="Element index [0-15] (field &quot;i4h:i4l&quot;)">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="UMLALL-ZA.ZZi-S2xi" mylink="UMLALL-ZA.ZZi-S2xi" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+constant integer esize = 32;
+constant integer v = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('010':Rv);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn:'0');
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('0':Zm);
+constant integer offset = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(o1:'00');
+constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i4h:i4l);
+constant integer nreg = 2;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Two ZA quad-vectors of 64-bit elements" oneof="6" id="iclass_sme_mall_8dwords" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="UMLALL" />
+        <docvar key="sme-mall-variants" value="sme-mall-8dwords" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME_I16I64" feature="FEAT_SME_I16I64" />
+      </arch_variants>
+      <regdiagram form="32" psname="UMLALL-ZA.ZZi-D2xi" tworows="1">
+        <box hibit="31" width="12" settings="12">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="19" width="4" name="Zm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="14" width="2" name="Rv" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="10" name="i3h" usename="1">
+          <c></c>
+        </box>
+        <box hibit="9" width="4" name="Zn" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="5" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="4" name="U" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="3" name="S" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="2" width="2" name="i3l" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="0" name="o1" usename="1">
+          <c></c>
+        </box>
+      </regdiagram>
+      <encoding name="umlall_za_zzi_d2xi" oneofinclass="1" oneof="6" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="UMLALL" />
+          <docvar key="sme-mall-variants" value="sme-mall-8dwords" />
+        </docvars>
+        <asmtemplate><text>UMLALL  ZA.D[</text><a link="sa_wv" hover="32-bit vector select register W8-W11 (field &quot;Rv&quot;)">&lt;Wv&gt;</a><text>, </text><a link="sa_offs1_1" hover="First vector select offset, encoded as &quot;o1&quot; field times 4 (field o1)">&lt;offs1&gt;</a><text>:</text><a link="sa_offs4_1" hover="Fourth vector select offset, encoded as &quot;o1&quot; field times 4 plus 3 (field o1)">&lt;offs4&gt;</a><a>{, VGx2}</a><text>], </text><text>{</text><text> </text><a link="sa_zn1" hover="First scalable vector register of first source multi-vector group (field Zn)">&lt;Zn1&gt;</a><text>.H-</text><a link="sa_zn2" hover="Second scalable vector register of first source multi-vector group (field Zn)">&lt;Zn2&gt;</a><text>.H </text><text>}</text><text>, </text><a link="sa_zm" hover="Second source scalable vector register Z0-Z15 (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.H[</text><a link="sa_index" hover="Element index [0-7] (field &quot;i3h:i3l&quot;)">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="UMLALL-ZA.ZZi-D2xi" mylink="UMLALL-ZA.ZZi-D2xi" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !(IsFeatureImplemented(FEAT_SME2) &amp;&amp; IsFeatureImplemented(FEAT_SME_I16I64)) then UNDEFINED;
+constant integer esize = 64;
+constant integer v = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('010':Rv);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn:'0');
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('0':Zm);
+constant integer offset = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(o1:'00');
+constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i3h:i3l);
+constant integer nreg = 2;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Four ZA quad-vectors of 32-bit elements" oneof="6" id="iclass_sme_mall_16words" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="UMLALL" />
+        <docvar key="sme-mall-variants" value="sme-mall-16words" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="UMLALL-ZA.ZZi-S4xi" tworows="1">
+        <box hibit="31" width="12" settings="12">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="19" width="4" name="Zm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="14" width="2" name="Rv" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="i4h" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="9" width="3" name="Zn" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="6" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="5" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="4" name="U" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="3" name="S" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="2" width="2" name="i4l" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="0" name="o1" usename="1">
+          <c></c>
+        </box>
+      </regdiagram>
+      <encoding name="umlall_za_zzi_s4xi" oneofinclass="1" oneof="6" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="UMLALL" />
+          <docvar key="sme-mall-variants" value="sme-mall-16words" />
+        </docvars>
+        <asmtemplate><text>UMLALL  ZA.S[</text><a link="sa_wv" hover="32-bit vector select register W8-W11 (field &quot;Rv&quot;)">&lt;Wv&gt;</a><text>, </text><a link="sa_offs1_1" hover="First vector select offset, encoded as &quot;o1&quot; field times 4 (field o1)">&lt;offs1&gt;</a><text>:</text><a link="sa_offs4_1" hover="Fourth vector select offset, encoded as &quot;o1&quot; field times 4 plus 3 (field o1)">&lt;offs4&gt;</a><a>{, VGx4}</a><text>], </text><text>{</text><text> </text><a link="sa_zn1_1" hover="First scalable vector register of first source multi-vector group (field Zn)">&lt;Zn1&gt;</a><text>.B-</text><a link="sa_zn4" hover="Fourth scalable vector register of first source multi-vector group (field Zn)">&lt;Zn4&gt;</a><text>.B </text><text>}</text><text>, </text><a link="sa_zm" hover="Second source scalable vector register Z0-Z15 (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.B[</text><a link="sa_index_1" hover="Element index [0-15] (field &quot;i4h:i4l&quot;)">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="UMLALL-ZA.ZZi-S4xi" mylink="UMLALL-ZA.ZZi-S4xi" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+constant integer esize = 32;
+constant integer v = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('010':Rv);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn:'00');
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('0':Zm);
+constant integer offset = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(o1:'00');
+constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i4h:i4l);
+constant integer nreg = 4;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Four ZA quad-vectors of 64-bit elements" oneof="6" id="iclass_sme_mall_16dwords" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="UMLALL" />
+        <docvar key="sme-mall-variants" value="sme-mall-16dwords" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME_I16I64" feature="FEAT_SME_I16I64" />
+      </arch_variants>
+      <regdiagram form="32" psname="UMLALL-ZA.ZZi-D4xi" tworows="1">
+        <box hibit="31" width="12" settings="12">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="19" width="4" name="Zm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="14" width="2" name="Rv" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="10" name="i3h" usename="1">
+          <c></c>
+        </box>
+        <box hibit="9" width="3" name="Zn" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="6" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="4" name="U" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="3" name="S" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="2" width="2" name="i3l" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="0" name="o1" usename="1">
+          <c></c>
+        </box>
+      </regdiagram>
+      <encoding name="umlall_za_zzi_d4xi" oneofinclass="1" oneof="6" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="UMLALL" />
+          <docvar key="sme-mall-variants" value="sme-mall-16dwords" />
+        </docvars>
+        <asmtemplate><text>UMLALL  ZA.D[</text><a link="sa_wv" hover="32-bit vector select register W8-W11 (field &quot;Rv&quot;)">&lt;Wv&gt;</a><text>, </text><a link="sa_offs1_1" hover="First vector select offset, encoded as &quot;o1&quot; field times 4 (field o1)">&lt;offs1&gt;</a><text>:</text><a link="sa_offs4_1" hover="Fourth vector select offset, encoded as &quot;o1&quot; field times 4 plus 3 (field o1)">&lt;offs4&gt;</a><a>{, VGx4}</a><text>], </text><text>{</text><text> </text><a link="sa_zn1_1" hover="First scalable vector register of first source multi-vector group (field Zn)">&lt;Zn1&gt;</a><text>.H-</text><a link="sa_zn4" hover="Fourth scalable vector register of first source multi-vector group (field Zn)">&lt;Zn4&gt;</a><text>.H </text><text>}</text><text>, </text><a link="sa_zm" hover="Second source scalable vector register Z0-Z15 (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.H[</text><a link="sa_index" hover="Element index [0-7] (field &quot;i3h:i3l&quot;)">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="UMLALL-ZA.ZZi-D4xi" mylink="UMLALL-ZA.ZZi-D4xi" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !(IsFeatureImplemented(FEAT_SME2) &amp;&amp; IsFeatureImplemented(FEAT_SME_I16I64)) then UNDEFINED;
+constant integer esize = 64;
+constant integer v = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('010':Rv);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn:'00');
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('0':Zm);
+constant integer offset = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(o1:'00');
+constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i3h:i3l);
+constant integer nreg = 4;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="umlall_za_zzi_d, umlall_za_zzi_d2xi, umlall_za_zzi_d4xi, umlall_za_zzi_s, umlall_za_zzi_s2xi, umlall_za_zzi_s4xi" symboldefcount="1">
+      <symbol link="sa_wv">&lt;Wv&gt;</symbol>
+      <account encodedin="Rv">
+        <intro>
+          <para>Is the 32-bit name of the vector select register W8-W11, encoded in the "Rv" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="umlall_za_zzi_d, umlall_za_zzi_s" symboldefcount="1">
+      <symbol link="sa_offs1">&lt;offs1&gt;</symbol>
+      <account encodedin="off2">
+        <intro>
+          <para>For the one ZA quad-vector of 32-bit elements and one ZA quad-vector of 64-bit elements variant: is the first vector select offset, encoded as "off2" field times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="umlall_za_zzi_d2xi, umlall_za_zzi_d4xi, umlall_za_zzi_s2xi, umlall_za_zzi_s4xi" symboldefcount="2">
+      <symbol link="sa_offs1_1">&lt;offs1&gt;</symbol>
+      <account encodedin="o1">
+        <intro>
+          <para>For the four ZA quad-vectors of 32-bit elements, four ZA quad-vectors of 64-bit elements, two ZA quad-vectors of 32-bit elements and two ZA quad-vectors of 64-bit elements variant: is the first vector select offset, encoded as "o1" field times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="umlall_za_zzi_d, umlall_za_zzi_s" symboldefcount="1">
+      <symbol link="sa_offs4">&lt;offs4&gt;</symbol>
+      <account encodedin="off2">
+        <intro>
+          <para>For the one ZA quad-vector of 32-bit elements and one ZA quad-vector of 64-bit elements variant: is the fourth vector select offset, encoded as "off2" field times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="umlall_za_zzi_d2xi, umlall_za_zzi_d4xi, umlall_za_zzi_s2xi, umlall_za_zzi_s4xi" symboldefcount="2">
+      <symbol link="sa_offs4_1">&lt;offs4&gt;</symbol>
+      <account encodedin="o1">
+        <intro>
+          <para>For the four ZA quad-vectors of 32-bit elements, four ZA quad-vectors of 64-bit elements, two ZA quad-vectors of 32-bit elements and two ZA quad-vectors of 64-bit elements variant: is the fourth vector select offset, encoded as "o1" field times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="umlall_za_zzi_d, umlall_za_zzi_s" symboldefcount="1">
+      <symbol link="sa_zn">&lt;Zn&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the first source scalable vector register, encoded in the "Zn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="umlall_za_zzi_d2xi, umlall_za_zzi_s2xi" symboldefcount="1">
+      <symbol link="sa_zn1">&lt;Zn1&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>For the two ZA quad-vectors of 32-bit elements and two ZA quad-vectors of 64-bit elements variant: is the name of the first scalable vector register of the first source multi-vector group, encoded as "Zn" times 2.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="umlall_za_zzi_d4xi, umlall_za_zzi_s4xi" symboldefcount="2">
+      <symbol link="sa_zn1_1">&lt;Zn1&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>For the four ZA quad-vectors of 32-bit elements and four ZA quad-vectors of 64-bit elements variant: is the name of the first scalable vector register of the first source multi-vector group, encoded as "Zn" times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="umlall_za_zzi_d4xi, umlall_za_zzi_s4xi" symboldefcount="1">
+      <symbol link="sa_zn4">&lt;Zn4&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the fourth scalable vector register of the first source multi-vector group, encoded as "Zn" times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="umlall_za_zzi_d2xi, umlall_za_zzi_s2xi" symboldefcount="1">
+      <symbol link="sa_zn2">&lt;Zn2&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the second scalable vector register of the first source multi-vector group, encoded as "Zn" times 2 plus 1.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="umlall_za_zzi_d, umlall_za_zzi_d2xi, umlall_za_zzi_d4xi, umlall_za_zzi_s, umlall_za_zzi_s2xi, umlall_za_zzi_s4xi" symboldefcount="1">
+      <symbol link="sa_zm">&lt;Zm&gt;</symbol>
+      <account encodedin="Zm">
+        <intro>
+          <para>Is the name of the second source scalable vector register Z0-Z15, encoded in the "Zm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="umlall_za_zzi_s, umlall_za_zzi_s2xi, umlall_za_zzi_s4xi" symboldefcount="1">
+      <symbol link="sa_index_1">&lt;index&gt;</symbol>
+      <account encodedin="i4h:i4l">
+        <intro>
+          <para>For the four ZA quad-vectors of 32-bit elements, one ZA quad-vector of 32-bit elements and two ZA quad-vectors of 32-bit elements variant: is the element index, in the range 0 to 15, encoded in the "i4h:i4l" fields.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="umlall_za_zzi_d, umlall_za_zzi_d2xi, umlall_za_zzi_d4xi" symboldefcount="2">
+      <symbol link="sa_index">&lt;index&gt;</symbol>
+      <account encodedin="i3h:i3l">
+        <intro>
+          <para>For the four ZA quad-vectors of 64-bit elements, one ZA quad-vector of 64-bit elements and two ZA quad-vectors of 64-bit elements variant: is the element index, in the range 0 to 7, encoded in the "i3h:i3l" fields.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="UMLALL-ZA.ZZi-S" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckStreamingSVEAndZAEnabled.0" file="shared_pseudocode.xml" hover="function: CheckStreamingSVEAndZAEnabled()">CheckStreamingSVEAndZAEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer elements = VL DIV esize;
+constant integer vectors = VL DIV 8;
+constant integer vstride = vectors DIV nreg;
+constant integer eltspersegment = 128 DIV esize;
+constant bits(32) vbase = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[v, 32];
+integer vec = (<a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(vbase) + offset) MOD vstride;
+bits(VL) result;
+vec = vec - (vec MOD 4);
+
+for r = 0 to nreg-1
+    constant bits(VL) operand1 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[n+r, VL];
+    constant bits(VL) operand2 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[m, VL];
+    for i = 0 to 3
+        constant bits(VL) operand3 = <a link="impl-aarch64.ZAvector.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) ZAvector[integer index, integer width]">ZAvector</a>[vec + i, VL];
+        for e = 0 to elements-1
+            constant integer segmentbase = e - (e MOD eltspersegment);
+            constant integer s = 4 * segmentbase + index;
+            constant integer element1 = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand1, 4 * e + i, esize DIV 4]);
+            constant integer element2 = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand2, s, esize DIV 4]);
+            constant bits(esize) product = (element1 * element2)&lt;esize-1:0&gt;;
+            <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, esize] = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand3, e, esize] + product;
+        <a link="impl-aarch64.ZAvector.write.2" file="shared_pseudocode.xml" hover="accessor: ZAvector[integer index, integer width] = bits(width) value">ZAvector</a>[vec + i, VL] = result;
+    vec = vec + vstride;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

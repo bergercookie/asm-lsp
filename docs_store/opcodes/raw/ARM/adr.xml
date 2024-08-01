@@ -1,0 +1,94 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="ADR" title="ADR -- A64" type="instruction">
+  <docvars>
+    <docvar key="address-form" value="literal"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="ADR"/>
+    <docvar key="offset-type" value="off19s"/>
+  </docvars>
+  <heading>ADR</heading>
+  <desc>
+    <brief>
+      <para>Form PC-relative address</para>
+    </brief>
+    <authored>
+      <para>This instruction adds an immediate value to the PC value to form a
+PC-relative address, and writes the result to the destination register.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Literal" oneof="1" id="iclass_literal" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="address-form" value="literal"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="ADR"/>
+        <docvar key="offset-type" value="off19s"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.dpimm.pcreladdr.ADR_only_pcreladdr" tworows="1">
+        <box hibit="31" name="op" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="30" width="2" name="immlo" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="28" width="5" settings="5">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="19" name="immhi" usename="1">
+          <c colspan="19"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="ADR_only_pcreladdr" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="ADR"/>
+          <docvar key="address-form" value="literal"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="offset-type" value="off19s"/>
+        </docvars>
+        <asmtemplate><text>ADR  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="XdOrXZR__6">&lt;Xd&gt;</a><text>, </text><a hover="Is the program label whose address is to be calculated. Its offset from the address of this instruction, in the range +/-1MB, is encoded in &quot;immhi:immlo&quot;." link="immhiimmlo_offset">&lt;label&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpimm.pcreladdr.ADR_only_pcreladdr" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant bits(64) imm = <a link="impl-shared.SignExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) SignExtend(bits(M) x, integer N)">SignExtend</a>(immhi:immlo, 64);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="ADR_only_pcreladdr" symboldefcount="1">
+      <symbol link="XdOrXZR__6">&lt;Xd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="ADR_only_pcreladdr" symboldefcount="1">
+      <symbol link="immhiimmlo_offset">&lt;label&gt;</symbol>
+      <account encodedin="immhi:immlo">
+        <intro>
+          <para>Is the program label whose address is to be calculated. Its offset from the address of this instruction, in the range +/-1MB, is encoded in "immhi:immlo".</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.dpimm.pcreladdr.ADR_only_pcreladdr" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, 64] = PC64 + imm;</pstext></ps>
+  </ps_section>
+</instructionsection>

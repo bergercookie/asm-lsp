@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="alphaindex.xsl" version="1.0"?>
+<!DOCTYPE alphaindex PUBLIC "-//ARM//DTD alphaindex //EN" "alphaindex.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<alphaindex>
+  <toptitle instructionset="A64" />
+  <iforms title="A64 -- SME Instructions (alphabetic order)">
+    <iform iformfile="add_za_zw.xml" heading="ADD (array accumulators)" id="add_za_zw">Add multi-vector to ZA array vector accumulators.</iform>
+    <iform iformfile="add_za_zzv.xml" heading="ADD (array results, multiple and single vector)" id="add_za_zzv">Add replicated single vector to multi-vector with ZA array vector results.</iform>
+    <iform iformfile="add_za_zzw.xml" heading="ADD (array results, multiple vectors)" id="add_za_zzw">Add multi-vector to multi-vector with ZA array vector results.</iform>
+    <iform iformfile="add_mz_zzv.xml" heading="ADD (to vector)" id="add_mz_zzv">Add replicated single vector to multi-vector with multi-vector result.</iform>
+    <iform iformfile="addha_za_pp_z.xml" heading="ADDHA" id="addha_za_pp_z">Add horizontally vector elements to ZA tile.</iform>
+    <iform iformfile="addspl_r_ri.xml" heading="ADDSPL" id="addspl_r_ri">Add multiple of Streaming SVE predicate register size to scalar register.</iform>
+    <iform iformfile="addsvl_r_ri.xml" heading="ADDSVL" id="addsvl_r_ri">Add multiple of Streaming SVE vector register size to scalar register.</iform>
+    <iform iformfile="addva_za_pp_z.xml" heading="ADDVA" id="addva_za_pp_z">Add vertically vector elements to ZA tile.</iform>
+    <iform iformfile="bf1cvt_mz2_z8.xml" heading="BF1CVT, BF2CVT" id="bf1cvt_mz2_z8">Multi-vector floating-point convert from 8-bit floating-point to BFloat16 (in-order).</iform>
+    <iform iformfile="bf1cvtl_mz2_z8.xml" heading="BF1CVTL, BF2CVTL" id="bf1cvtl_mz2_z8">Multi-vector floating-point convert from 8-bit floating-point to deinterleaved BFloat16.</iform>
+    <iform iformfile="bfadd_za_zw.xml" heading="BFADD" id="bfadd_za_zw">BFloat16 floating-point add multi-vector to ZA array vector accumulators.</iform>
+    <iform iformfile="bfclamp_mz_zz.xml" heading="BFCLAMP" id="bfclamp_mz_zz">Multi-vector BFloat16 floating-point clamp to minimum/maximum number.</iform>
+    <iform iformfile="bfcvt_z8_mz2.xml" heading="BFCVT" id="bfcvt_z8_mz2">Multi-vector floating-point convert from BFloat16 to packed 8-bit floating-point format.</iform>
+    <iform iformfile="bfcvt_z_mz2.xml" heading="BFCVT" id="bfcvt_z_mz2">Multi-vector floating-point convert from single-precision to packed BFloat16 format.</iform>
+    <iform iformfile="bfcvtn_z_mz2.xml" heading="BFCVTN" id="bfcvtn_z_mz2">Multi-vector floating-point convert from single-precision to interleaved BFloat16 format.</iform>
+    <iform iformfile="bfdot_za_zzi.xml" heading="BFDOT (multiple and indexed vector)" id="bfdot_za_zzi">Multi-vector BFloat16 floating-point dot-product by indexed element.</iform>
+    <iform iformfile="bfdot_za_zzv.xml" heading="BFDOT (multiple and single vector)" id="bfdot_za_zzv">Multi-vector BFloat16 floating-point dot-product by vector.</iform>
+    <iform iformfile="bfdot_za_zzw.xml" heading="BFDOT (multiple vectors)" id="bfdot_za_zzw">Multi-vector BFloat16 floating-point dot-product.</iform>
+    <iform iformfile="bfmax_mz_zzv.xml" heading="BFMAX (multiple and single vector)" id="bfmax_mz_zzv">Multi-vector BFloat16 floating-point maximum by vector.</iform>
+    <iform iformfile="bfmax_mz_zzw.xml" heading="BFMAX (multiple vectors)" id="bfmax_mz_zzw">Multi-vector BFloat16 floating-point maximum.</iform>
+    <iform iformfile="bfmaxnm_mz_zzv.xml" heading="BFMAXNM (multiple and single vector)" id="bfmaxnm_mz_zzv">Multi-vector BFloat16 floating-point maximum number by vector.</iform>
+    <iform iformfile="bfmaxnm_mz_zzw.xml" heading="BFMAXNM (multiple vectors)" id="bfmaxnm_mz_zzw">Multi-vector BFloat16 floating-point maximum number.</iform>
+    <iform iformfile="bfmin_mz_zzv.xml" heading="BFMIN (multiple and single vector)" id="bfmin_mz_zzv">Multi-vector BFloat16 floating-point minimum by vector.</iform>
+    <iform iformfile="bfmin_mz_zzw.xml" heading="BFMIN (multiple vectors)" id="bfmin_mz_zzw">Multi-vector BFloat16 floating-point minimum.</iform>
+    <iform iformfile="bfminnm_mz_zzv.xml" heading="BFMINNM (multiple and single vector)" id="bfminnm_mz_zzv">Multi-vector BFloat16 floating-point minimum number by vector.</iform>
+    <iform iformfile="bfminnm_mz_zzw.xml" heading="BFMINNM (multiple vectors)" id="bfminnm_mz_zzw">Multi-vector BFloat16 floating-point minimum number.</iform>
+    <iform iformfile="bfmla_za_zzi.xml" heading="BFMLA (multiple and indexed vector)" id="bfmla_za_zzi">Multi-vector BFloat16 floating-point fused multiply-add by indexed element.</iform>
+    <iform iformfile="bfmla_za_zzv.xml" heading="BFMLA (multiple and single vector)" id="bfmla_za_zzv">Multi-vector BFloat16 floating-point fused multiply-add by vector.</iform>
+    <iform iformfile="bfmla_za_zzw.xml" heading="BFMLA (multiple vectors)" id="bfmla_za_zzw">Multi-vector BFloat16 floating-point fused multiply-add.</iform>
+    <iform iformfile="bfmlal_za_zzi.xml" heading="BFMLAL (multiple and indexed vector)" id="bfmlal_za_zzi">Multi-vector BFloat16 floating-point multiply-add long by indexed element.</iform>
+    <iform iformfile="bfmlal_za_zzv.xml" heading="BFMLAL (multiple and single vector)" id="bfmlal_za_zzv">Multi-vector BFloat16 floating-point multiply-add long by vector.</iform>
+    <iform iformfile="bfmlal_za_zzw.xml" heading="BFMLAL (multiple vectors)" id="bfmlal_za_zzw">Multi-vector BFloat16 floating-point multiply-add long.</iform>
+    <iform iformfile="bfmls_za_zzi.xml" heading="BFMLS (multiple and indexed vector)" id="bfmls_za_zzi">Multi-vector BFloat16 floating-point fused multiply-subtract by indexed element.</iform>
+    <iform iformfile="bfmls_za_zzv.xml" heading="BFMLS (multiple and single vector)" id="bfmls_za_zzv">Multi-vector BFloat16 floating-point fused multiply-subtract by vector.</iform>
+    <iform iformfile="bfmls_za_zzw.xml" heading="BFMLS (multiple vectors)" id="bfmls_za_zzw">Multi-vector BFloat16 floating-point fused multiply-subtract.</iform>
+    <iform iformfile="bfmlsl_za_zzi.xml" heading="BFMLSL (multiple and indexed vector)" id="bfmlsl_za_zzi">Multi-vector BFloat16 floating-point multiply-subtract long by indexed element.</iform>
+    <iform iformfile="bfmlsl_za_zzv.xml" heading="BFMLSL (multiple and single vector)" id="bfmlsl_za_zzv">Multi-vector BFloat16 floating-point multiply-subtract long by vector.</iform>
+    <iform iformfile="bfmlsl_za_zzw.xml" heading="BFMLSL (multiple vectors)" id="bfmlsl_za_zzw">Multi-vector BFloat16 floating-point multiply-subtract long.</iform>
+    <iform iformfile="bfmopa_za_pp_zz.xml" heading="BFMOPA (non-widening)" id="bfmopa_za_pp_zz">BFloat16 floating-point outer product and accumulate.</iform>
+    <iform iformfile="bfmopa_za32_pp_zz.xml" heading="BFMOPA (widening)" id="bfmopa_za32_pp_zz">BFloat16 sum of outer products and accumulate.</iform>
+    <iform iformfile="bfmops_za_pp_zz.xml" heading="BFMOPS (non-widening)" id="bfmops_za_pp_zz">BFloat16 floating-point outer product and subtract.</iform>
+    <iform iformfile="bfmops_za32_pp_zz.xml" heading="BFMOPS (widening)" id="bfmops_za32_pp_zz">BFloat16 sum of outer products and subtract.</iform>
+    <iform iformfile="bfsub_za_zw.xml" heading="BFSUB" id="bfsub_za_zw">BFloat16 floating-point subtract multi-vector from ZA array vector accumulators.</iform>
+    <iform iformfile="bfvdot_za_zzi.xml" heading="BFVDOT" id="bfvdot_za_zzi">Multi-vector BFloat16 floating-point vertical dot-product by indexed element.</iform>
+    <iform iformfile="bmopa_za_pp_zz.xml" heading="BMOPA" id="bmopa_za_pp_zz">Bitwise exclusive NOR population count outer product and accumulate.</iform>
+    <iform iformfile="bmops_za_pp_zz.xml" heading="BMOPS" id="bmops_za_pp_zz">Bitwise exclusive NOR population count outer product and subtract.</iform>
+    <iform iformfile="f1cvt_mz2_z8.xml" heading="F1CVT, F2CVT" id="f1cvt_mz2_z8">Multi-vector floating-point convert from 8-bit floating-point to half-precision (in-order).</iform>
+    <iform iformfile="f1cvtl_mz2_z8.xml" heading="F1CVTL, F2CVTL" id="f1cvtl_mz2_z8">Multi-vector floating-point convert from 8-bit floating-point to deinterleaved half-precision.</iform>
+    <iform iformfile="fadd_za_zw.xml" heading="FADD" id="fadd_za_zw">Floating-point add multi-vector to ZA array vector accumulators.</iform>
+    <iform iformfile="famax_mz_zzw.xml" heading="FAMAX" id="famax_mz_zzw">Multi-vector floating-point absolute maximum.</iform>
+    <iform iformfile="famin_mz_zzw.xml" heading="FAMIN" id="famin_mz_zzw">Multi-vector floating-point absolute minimum.</iform>
+    <iform iformfile="fclamp_mz_zz.xml" heading="FCLAMP" id="fclamp_mz_zz">Multi-vector floating-point clamp to minimum/maximum number.</iform>
+    <iform iformfile="fcvt_z8_mz2.xml" heading="FCVT (narrowing, FP16 to FP8)" id="fcvt_z8_mz2">Multi-vector floating-point convert from half-precision to packed 8-bit floating-point format.</iform>
+    <iform iformfile="fcvt_z_mz2.xml" heading="FCVT (narrowing, FP32 to FP16)" id="fcvt_z_mz2">Multi-vector floating-point convert from single-precision to packed half-precision.</iform>
+    <iform iformfile="fcvt_z8_mz4.xml" heading="FCVT (narrowing, FP32 to FP8)" id="fcvt_z8_mz4">Multi-vector floating-point convert from single-precision to packed 8-bit floating-point format.</iform>
+    <iform iformfile="fcvt_mz2_z.xml" heading="FCVT (widening)" id="fcvt_mz2_z">Multi-vector floating-point convert from half-precision to single-precision (in-order).</iform>
+    <iform iformfile="fcvtl_mz2_z.xml" heading="FCVTL" id="fcvtl_mz2_z">Multi-vector floating-point convert from half-precision to deinterleaved single-precision.</iform>
+    <iform iformfile="fcvtn_z_mz2.xml" heading="FCVTN (FP32 to FP16)" id="fcvtn_z_mz2">Multi-vector floating-point convert from single-precision to interleaved half-precision.</iform>
+    <iform iformfile="fcvtn_z8_mz4.xml" heading="FCVTN (FP32 to FP8)" id="fcvtn_z8_mz4">Multi-vector floating-point convert from single-precision to interleaved 8-bit floating-point format.</iform>
+    <iform iformfile="fcvtzs_mz_z.xml" heading="FCVTZS" id="fcvtzs_mz_z">Multi-vector floating-point convert to signed integer, rounding toward zero.</iform>
+    <iform iformfile="fcvtzu_mz_z.xml" heading="FCVTZU" id="fcvtzu_mz_z">Multi-vector floating-point convert to unsigned integer, rounding toward zero.</iform>
+    <iform iformfile="fdot_za_zzi.xml" heading="FDOT (2-way, multiple and indexed vector, FP16 to FP32)" id="fdot_za_zzi">Multi-vector half-precision floating-point dot-product by indexed element.</iform>
+    <iform iformfile="fdot_za_z8z8i.xml" heading="FDOT (2-way, multiple and indexed vector, FP8 to FP16)" id="fdot_za_z8z8i">Multi-vector 8-bit floating-point dot-product by indexed element to half-precision.</iform>
+    <iform iformfile="fdot_za_zzv.xml" heading="FDOT (2-way, multiple and single vector, FP16 to FP32)" id="fdot_za_zzv">Multi-vector half-precision floating-point dot-product by vector.</iform>
+    <iform iformfile="fdot_za_z8z8v.xml" heading="FDOT (2-way, multiple and single vector, FP8 to FP16)" id="fdot_za_z8z8v">Multi-vector 8-bit floating-point dot-product by vector to half-precision.</iform>
+    <iform iformfile="fdot_za_zzw.xml" heading="FDOT (2-way, multiple vectors, FP16 to FP32)" id="fdot_za_zzw">Multi-vector half-precision floating-point dot-product.</iform>
+    <iform iformfile="fdot_za_z8z8w.xml" heading="FDOT (2-way, multiple vectors, FP8 to FP16)" id="fdot_za_z8z8w">Multi-vector 8-bit floating-point dot-product to half-precision.</iform>
+    <iform iformfile="fdot_za32_z8z8i.xml" heading="FDOT (4-way, multiple and indexed vector)" id="fdot_za32_z8z8i">Multi-vector 8-bit floating-point dot-product by indexed element to single-precision.</iform>
+    <iform iformfile="fdot_za32_z8z8v.xml" heading="FDOT (4-way, multiple and single vector)" id="fdot_za32_z8z8v">Multi-vector 8-bit floating-point dot-product by vector to single-precision.</iform>
+    <iform iformfile="fdot_za32_z8z8w.xml" heading="FDOT (4-way, multiple vectors)" id="fdot_za32_z8z8w">Multi-vector 8-bit floating-point dot-product to single-precision.</iform>
+    <iform iformfile="fmax_mz_zzv.xml" heading="FMAX (multiple and single vector)" id="fmax_mz_zzv">Multi-vector floating-point maximum by vector.</iform>
+    <iform iformfile="fmax_mz_zzw.xml" heading="FMAX (multiple vectors)" id="fmax_mz_zzw">Multi-vector floating-point maximum.</iform>
+    <iform iformfile="fmaxnm_mz_zzv.xml" heading="FMAXNM (multiple and single vector)" id="fmaxnm_mz_zzv">Multi-vector floating-point maximum number by vector.</iform>
+    <iform iformfile="fmaxnm_mz_zzw.xml" heading="FMAXNM (multiple vectors)" id="fmaxnm_mz_zzw">Multi-vector floating-point maximum number.</iform>
+    <iform iformfile="fmin_mz_zzv.xml" heading="FMIN (multiple and single vector)" id="fmin_mz_zzv">Multi-vector floating-point minimum by vector.</iform>
+    <iform iformfile="fmin_mz_zzw.xml" heading="FMIN (multiple vectors)" id="fmin_mz_zzw">Multi-vector floating-point minimum.</iform>
+    <iform iformfile="fminnm_mz_zzv.xml" heading="FMINNM (multiple and single vector)" id="fminnm_mz_zzv">Multi-vector floating-point minimum number by vector.</iform>
+    <iform iformfile="fminnm_mz_zzw.xml" heading="FMINNM (multiple vectors)" id="fminnm_mz_zzw">Multi-vector floating-point minimum number.</iform>
+    <iform iformfile="fmla_za_zzi.xml" heading="FMLA (multiple and indexed vector)" id="fmla_za_zzi">Multi-vector floating-point fused multiply-add by indexed element.</iform>
+    <iform iformfile="fmla_za_zzv.xml" heading="FMLA (multiple and single vector)" id="fmla_za_zzv">Multi-vector floating-point fused multiply-add by vector.</iform>
+    <iform iformfile="fmla_za_zzw.xml" heading="FMLA (multiple vectors)" id="fmla_za_zzw">Multi-vector floating-point fused multiply-add.</iform>
+    <iform iformfile="fmlal_za_zzi.xml" heading="FMLAL (multiple and indexed vector, FP16 to FP32)" id="fmlal_za_zzi">Multi-vector floating-point multiply-add long by indexed element.</iform>
+    <iform iformfile="fmlal_za_z8z8i.xml" heading="FMLAL (multiple and indexed vector, FP8 to FP16)" id="fmlal_za_z8z8i">Multi-vector 8-bit floating-point multiply-add long by indexed element to half-precision.</iform>
+    <iform iformfile="fmlal_za_zzv.xml" heading="FMLAL (multiple and single vector, FP16 to FP32)" id="fmlal_za_zzv">Multi-vector floating-point multiply-add long by vector.</iform>
+    <iform iformfile="fmlal_za_z8z8v.xml" heading="FMLAL (multiple and single vector, FP8 to FP16)" id="fmlal_za_z8z8v">Multi-vector 8-bit floating-point multiply-add long by vector to half-precision.</iform>
+    <iform iformfile="fmlal_za_zzw.xml" heading="FMLAL (multiple vectors, FP16 to FP32)" id="fmlal_za_zzw">Multi-vector floating-point multiply-add long.</iform>
+    <iform iformfile="fmlal_za_z8z8w.xml" heading="FMLAL (multiple vectors, FP8 to FP16)" id="fmlal_za_z8z8w">Multi-vector 8-bit floating-point multiply-add long to half-precision.</iform>
+    <iform iformfile="fmlall_za32_z8z8i.xml" heading="FMLALL (multiple and indexed vector)" id="fmlall_za32_z8z8i">Multi-vector 8-bit floating-point multiply-add long-long by indexed element to single-precision.</iform>
+    <iform iformfile="fmlall_za32_z8z8v.xml" heading="FMLALL (multiple and single vector)" id="fmlall_za32_z8z8v">Multi-vector 8-bit floating-point multiply-add long-long by vector to single-precision.</iform>
+    <iform iformfile="fmlall_za32_z8z8w.xml" heading="FMLALL (multiple vectors)" id="fmlall_za32_z8z8w">Multi-vector 8-bit floating-point multiply-add long-long to single-precision.</iform>
+    <iform iformfile="fmls_za_zzi.xml" heading="FMLS (multiple and indexed vector)" id="fmls_za_zzi">Multi-vector floating-point fused multiply-subtract by indexed element.</iform>
+    <iform iformfile="fmls_za_zzv.xml" heading="FMLS (multiple and single vector)" id="fmls_za_zzv">Multi-vector floating-point fused multiply-subtract by vector.</iform>
+    <iform iformfile="fmls_za_zzw.xml" heading="FMLS (multiple vectors)" id="fmls_za_zzw">Multi-vector floating-point fused multiply-subtract.</iform>
+    <iform iformfile="fmlsl_za_zzi.xml" heading="FMLSL (multiple and indexed vector)" id="fmlsl_za_zzi">Multi-vector floating-point multiply-subtract long by indexed element.</iform>
+    <iform iformfile="fmlsl_za_zzv.xml" heading="FMLSL (multiple and single vector)" id="fmlsl_za_zzv">Multi-vector floating-point multiply-subtract long by vector.</iform>
+    <iform iformfile="fmlsl_za_zzw.xml" heading="FMLSL (multiple vectors)" id="fmlsl_za_zzw">Multi-vector floating-point multiply-subtract long.</iform>
+    <iform iformfile="fmopa_za_pp_zz.xml" heading="FMOPA (non-widening)" id="fmopa_za_pp_zz">Floating-point outer product and accumulate.</iform>
+    <iform iformfile="fmopa_za32_pp_zz.xml" heading="FMOPA (widening, 2-way, FP16 to FP32)" id="fmopa_za32_pp_zz">Half-precision floating-point sum of outer products and accumulate.</iform>
+    <iform iformfile="fmopa_za16_pp_z8z8.xml" heading="FMOPA (widening, 2-way, FP8 to FP16)" id="fmopa_za16_pp_z8z8">8-bit floating-point sum of outer products and accumulate.</iform>
+    <iform iformfile="fmopa_za32_pp_z8z8.xml" heading="FMOPA (widening, 4-way)" id="fmopa_za32_pp_z8z8">8-bit floating-point sum of outer products and accumulate.</iform>
+    <iform iformfile="fmops_za_pp_zz.xml" heading="FMOPS (non-widening)" id="fmops_za_pp_zz">Floating-point outer product and subtract.</iform>
+    <iform iformfile="fmops_za32_pp_zz.xml" heading="FMOPS (widening)" id="fmops_za32_pp_zz">Half-precision floating-point sum of outer products and subtract.</iform>
+    <iform iformfile="frinta_mz_z.xml" heading="FRINTA" id="frinta_mz_z">Multi-vector floating-point round to integral value, to nearest with ties away from zero.</iform>
+    <iform iformfile="frintm_mz_z.xml" heading="FRINTM" id="frintm_mz_z">Multi-vector floating-point round to integral value, toward minus Infinity.</iform>
+    <iform iformfile="frintn_mz_z.xml" heading="FRINTN" id="frintn_mz_z">Multi-vector floating-point round to integral value, to nearest with ties to even.</iform>
+    <iform iformfile="frintp_mz_z.xml" heading="FRINTP" id="frintp_mz_z">Multi-vector floating-point round to integral value, toward plus Infinity.</iform>
+    <iform iformfile="fscale_mz_zzv.xml" heading="FSCALE (multiple and single vector)" id="fscale_mz_zzv">Multi-vector floating-point adjust exponent by vector.</iform>
+    <iform iformfile="fscale_mz_zzw.xml" heading="FSCALE (multiple vectors)" id="fscale_mz_zzw">Multi-vector floating-point adjust exponent.</iform>
+    <iform iformfile="fsub_za_zw.xml" heading="FSUB" id="fsub_za_zw">Floating-point subtract multi-vector from ZA array vector accumulators.</iform>
+    <iform iformfile="fvdot_za_zzi.xml" heading="FVDOT (FP16 to FP32)" id="fvdot_za_zzi">Multi-vector half-precision floating-point vertical dot-product by indexed element.</iform>
+    <iform iformfile="fvdot_za_z8z8i.xml" heading="FVDOT (FP8 to FP16)" id="fvdot_za_z8z8i">Multi-vector 8-bit floating-point vertical dot-product by indexed element to half-precision.</iform>
+    <iform iformfile="fvdotb_za32_z8z8i.xml" heading="FVDOTB" id="fvdotb_za32_z8z8i">Multi-vector 8-bit floating-point vertical dot-product by indexed element to single-precision (bottom).</iform>
+    <iform iformfile="fvdott_za32_z8z8i.xml" heading="FVDOTT" id="fvdott_za32_z8z8i">Multi-vector 8-bit floating-point vertical dot-product by indexed element to single-precision (top).</iform>
+    <iform iformfile="ld1b_mzx_p_bi.xml" heading="LD1B (scalar plus immediate, strided registers)" id="ld1b_mzx_p_bi">Contiguous load of bytes to multiple strided vectors (immediate index).</iform>
+    <iform iformfile="ld1b_mzx_p_br.xml" heading="LD1B (scalar plus scalar, strided registers)" id="ld1b_mzx_p_br">Contiguous load of bytes to multiple strided vectors (scalar index).</iform>
+    <iform iformfile="ld1b_za_p_rrr.xml" heading="LD1B (scalar plus scalar, tile slice)" id="ld1b_za_p_rrr">Contiguous load of bytes to 8-bit element ZA tile slice.</iform>
+    <iform iformfile="ld1d_mzx_p_bi.xml" heading="LD1D (scalar plus immediate, strided registers)" id="ld1d_mzx_p_bi">Contiguous load of doublewords to multiple strided vectors (immediate index).</iform>
+    <iform iformfile="ld1d_mzx_p_br.xml" heading="LD1D (scalar plus scalar, strided registers)" id="ld1d_mzx_p_br">Contiguous load of doublewords to multiple strided vectors (scalar index).</iform>
+    <iform iformfile="ld1d_za_p_rrr.xml" heading="LD1D (scalar plus scalar, tile slice)" id="ld1d_za_p_rrr">Contiguous load of doublewords to 64-bit element ZA tile slice.</iform>
+    <iform iformfile="ld1h_mzx_p_bi.xml" heading="LD1H (scalar plus immediate, strided registers)" id="ld1h_mzx_p_bi">Contiguous load of halfwords to multiple strided vectors (immediate index).</iform>
+    <iform iformfile="ld1h_mzx_p_br.xml" heading="LD1H (scalar plus scalar, strided registers)" id="ld1h_mzx_p_br">Contiguous load of halfwords to multiple strided vectors (scalar index).</iform>
+    <iform iformfile="ld1h_za_p_rrr.xml" heading="LD1H (scalar plus scalar, tile slice)" id="ld1h_za_p_rrr">Contiguous load of halfwords to 16-bit element ZA tile slice.</iform>
+    <iform iformfile="ld1q_za_p_rrr.xml" heading="LD1Q" id="ld1q_za_p_rrr">Contiguous load of quadwords to 128-bit element ZA tile slice.</iform>
+    <iform iformfile="ld1w_mzx_p_bi.xml" heading="LD1W (scalar plus immediate, strided registers)" id="ld1w_mzx_p_bi">Contiguous load of words to multiple strided vectors (immediate index).</iform>
+    <iform iformfile="ld1w_mzx_p_br.xml" heading="LD1W (scalar plus scalar, strided registers)" id="ld1w_mzx_p_br">Contiguous load of words to multiple strided vectors (scalar index).</iform>
+    <iform iformfile="ld1w_za_p_rrr.xml" heading="LD1W (scalar plus scalar, tile slice)" id="ld1w_za_p_rrr">Contiguous load of words to 32-bit element ZA tile slice.</iform>
+    <iform iformfile="ldnt1b_mzx_p_bi.xml" heading="LDNT1B (scalar plus immediate, strided registers)" id="ldnt1b_mzx_p_bi">Contiguous load non-temporal of bytes to multiple strided vectors (immediate index).</iform>
+    <iform iformfile="ldnt1b_mzx_p_br.xml" heading="LDNT1B (scalar plus scalar, strided registers)" id="ldnt1b_mzx_p_br">Contiguous load non-temporal of bytes to multiple strided vectors (scalar index).</iform>
+    <iform iformfile="ldnt1d_mzx_p_bi.xml" heading="LDNT1D (scalar plus immediate, strided registers)" id="ldnt1d_mzx_p_bi">Contiguous load non-temporal of doublewords to multiple strided vectors (immediate index).</iform>
+    <iform iformfile="ldnt1d_mzx_p_br.xml" heading="LDNT1D (scalar plus scalar, strided registers)" id="ldnt1d_mzx_p_br">Contiguous load non-temporal of doublewords to multiple strided vectors (scalar index).</iform>
+    <iform iformfile="ldnt1h_mzx_p_bi.xml" heading="LDNT1H (scalar plus immediate, strided registers)" id="ldnt1h_mzx_p_bi">Contiguous load non-temporal of halfwords to multiple strided vectors (immediate index).</iform>
+    <iform iformfile="ldnt1h_mzx_p_br.xml" heading="LDNT1H (scalar plus scalar, strided registers)" id="ldnt1h_mzx_p_br">Contiguous load non-temporal of halfwords to multiple strided vectors (scalar index).</iform>
+    <iform iformfile="ldnt1w_mzx_p_bi.xml" heading="LDNT1W (scalar plus immediate, strided registers)" id="ldnt1w_mzx_p_bi">Contiguous load non-temporal of words to multiple strided vectors (immediate index).</iform>
+    <iform iformfile="ldnt1w_mzx_p_br.xml" heading="LDNT1W (scalar plus scalar, strided registers)" id="ldnt1w_mzx_p_br">Contiguous load non-temporal of words to multiple strided vectors (scalar index).</iform>
+    <iform iformfile="ldr_za_ri.xml" heading="LDR (array vector)" id="ldr_za_ri">Load ZA array vector.</iform>
+    <iform iformfile="ldr_zt_br.xml" heading="LDR (table)" id="ldr_zt_br">Load ZT0 register.</iform>
+    <iform iformfile="luti2_mz4_ztz.xml" heading="LUTI2 (four registers)" id="luti2_mz4_ztz">Lookup table read with 2-bit indexes.</iform>
+    <iform iformfile="luti2_z_ztz.xml" heading="LUTI2 (single)" id="luti2_z_ztz">Lookup table read with 2-bit indexes.</iform>
+    <iform iformfile="luti2_mz2_ztz.xml" heading="LUTI2 (two registers)" id="luti2_mz2_ztz">Lookup table read with 2-bit indexes.</iform>
+    <iform iformfile="luti4_mz4_ztz.xml" heading="LUTI4 (four registers, 16-bit &amp; 32-bit)" id="luti4_mz4_ztz">Lookup table read with 4-bit indexes.</iform>
+    <iform iformfile="luti4_mz4_ztmz2.xml" heading="LUTI4 (four registers, 8-bit)" id="luti4_mz4_ztmz2">Lookup table read with 4-bit indexes and 8-bit elements.</iform>
+    <iform iformfile="luti4_z_ztz.xml" heading="LUTI4 (single)" id="luti4_z_ztz">Lookup table read with 4-bit indexes.</iform>
+    <iform iformfile="luti4_mz2_ztz.xml" heading="LUTI4 (two registers)" id="luti4_mz2_ztz">Lookup table read with 4-bit indexes.</iform>
+    <iform iformfile="mov_mova_mz_za4.xml" heading="MOV (array to vector, four registers)" id="MOV_mova_mz_za4">Move four ZA single-vector groups to four vector registers: an alias of MOVA (array to vector, four registers).</iform>
+    <iform iformfile="mov_mova_mz_za2.xml" heading="MOV (array to vector, two registers)" id="MOV_mova_mz_za2">Move two ZA single-vector groups to two vector registers: an alias of MOVA (array to vector, two registers).</iform>
+    <iform iformfile="mov_mova_mz4_za.xml" heading="MOV (tile to vector, four registers)" id="MOV_mova_mz4_za">Move four ZA tile slices to four vector registers: an alias of MOVA (tile to vector, four registers).</iform>
+    <iform iformfile="mov_mova_z_p_rza.xml" heading="MOV (tile to vector, single)" id="MOV_mova_z_p_rza">Move ZA tile slice to vector register: an alias of MOVA (tile to vector, single).</iform>
+    <iform iformfile="mov_mova_mz2_za.xml" heading="MOV (tile to vector, two registers)" id="MOV_mova_mz2_za">Move two ZA tile slices to two vector registers: an alias of MOVA (tile to vector, two registers).</iform>
+    <iform iformfile="mov_mova_za_mz4.xml" heading="MOV (vector to array, four registers)" id="MOV_mova_za_mz4">Move four vector registers to four ZA single-vector groups: an alias of MOVA (vector to array, four registers).</iform>
+    <iform iformfile="mov_mova_za_mz2.xml" heading="MOV (vector to array, two registers)" id="MOV_mova_za_mz2">Move two vector registers to two ZA single-vector groups: an alias of MOVA (vector to array, two registers).</iform>
+    <iform iformfile="mov_mova_za4_z.xml" heading="MOV (vector to tile, four registers)" id="MOV_mova_za4_z">Move four vector registers to four ZA tile slices: an alias of MOVA (vector to tile, four registers).</iform>
+    <iform iformfile="mov_mova_za_p_rz.xml" heading="MOV (vector to tile, single)" id="MOV_mova_za_p_rz">Move vector register to ZA tile slice: an alias of MOVA (vector to tile, single).</iform>
+    <iform iformfile="mov_mova_za2_z.xml" heading="MOV (vector to tile, two registers)" id="MOV_mova_za2_z">Move two vector registers to two ZA tile slices: an alias of MOVA (vector to tile, two registers).</iform>
+    <iform iformfile="mova_mz_za4.xml" heading="MOVA (array to vector, four registers)" id="mova_mz_za4">Move four ZA single-vector groups to four vector registers.</iform>
+    <iform iformfile="mova_mz_za2.xml" heading="MOVA (array to vector, two registers)" id="mova_mz_za2">Move two ZA single-vector groups to two vector registers.</iform>
+    <iform iformfile="mova_mz4_za.xml" heading="MOVA (tile to vector, four registers)" id="mova_mz4_za">Move four ZA tile slices to four vector registers.</iform>
+    <iform iformfile="mova_z_p_rza.xml" heading="MOVA (tile to vector, single)" id="mova_z_p_rza">Move ZA tile slice to vector register.</iform>
+    <iform iformfile="mova_mz2_za.xml" heading="MOVA (tile to vector, two registers)" id="mova_mz2_za">Move two ZA tile slices to two vector registers.</iform>
+    <iform iformfile="mova_za_mz4.xml" heading="MOVA (vector to array, four registers)" id="mova_za_mz4">Move four vector registers to four ZA single-vector groups.</iform>
+    <iform iformfile="mova_za_mz2.xml" heading="MOVA (vector to array, two registers)" id="mova_za_mz2">Move two vector registers to two ZA single-vector groups.</iform>
+    <iform iformfile="mova_za4_z.xml" heading="MOVA (vector to tile, four registers)" id="mova_za4_z">Move four vector registers to four ZA tile slices.</iform>
+    <iform iformfile="mova_za_p_rz.xml" heading="MOVA (vector to tile, single)" id="mova_za_p_rz">Move vector register to ZA tile slice.</iform>
+    <iform iformfile="mova_za2_z.xml" heading="MOVA (vector to tile, two registers)" id="mova_za2_z">Move two vector registers to two ZA tile slices.</iform>
+    <iform iformfile="movaz_mz_za4.xml" heading="MOVAZ (array to vector, four registers)" id="movaz_mz_za4">Move and zero four ZA single-vector groups to vector registers.</iform>
+    <iform iformfile="movaz_mz_za2.xml" heading="MOVAZ (array to vector, two registers)" id="movaz_mz_za2">Move and zero two ZA single-vector groups to vector registers.</iform>
+    <iform iformfile="movaz_mz4_za.xml" heading="MOVAZ (tile to vector, four registers)" id="movaz_mz4_za">Move and zero four ZA tile slices to vector registers.</iform>
+    <iform iformfile="movaz_z_rza.xml" heading="MOVAZ (tile to vector, single)" id="movaz_z_rza">Move and zero ZA tile slice to vector register.</iform>
+    <iform iformfile="movaz_mz2_za.xml" heading="MOVAZ (tile to vector, two registers)" id="movaz_mz2_za">Move and zero two ZA tile slices to vector registers.</iform>
+    <iform iformfile="movt_zt_r.xml" heading="MOVT (scalar to table)" id="movt_zt_r">Move 8 bytes from general-purpose register to ZT0.</iform>
+    <iform iformfile="movt_r_zt.xml" heading="MOVT (table to scalar)" id="movt_r_zt">Move 8 bytes from ZT0 to general-purpose register.</iform>
+    <iform iformfile="movt_zt_z.xml" heading="MOVT (vector to table)" id="movt_zt_z">Move vector register to ZT0.</iform>
+    <iform iformfile="rdsvl_r_i.xml" heading="RDSVL" id="rdsvl_r_i">Read multiple of Streaming SVE vector register size to scalar register.</iform>
+    <iform iformfile="sclamp_mz_zz.xml" heading="SCLAMP" id="sclamp_mz_zz">Multi-vector signed clamp to minimum/maximum vector.</iform>
+    <iform iformfile="scvtf_mz_z.xml" heading="SCVTF" id="scvtf_mz_z">Multi-vector signed integer convert to floating-point.</iform>
+    <iform iformfile="sdot_za32_zzi.xml" heading="SDOT (2-way, multiple and indexed vector)" id="sdot_za32_zzi">Multi-vector signed integer dot-product by indexed element.</iform>
+    <iform iformfile="sdot_za32_zzv.xml" heading="SDOT (2-way, multiple and single vector)" id="sdot_za32_zzv">Multi-vector signed integer dot-product by vector.</iform>
+    <iform iformfile="sdot_za32_zzw.xml" heading="SDOT (2-way, multiple vectors)" id="sdot_za32_zzw">Multi-vector signed integer dot-product.</iform>
+    <iform iformfile="sdot_za_zzi.xml" heading="SDOT (4-way, multiple and indexed vector)" id="sdot_za_zzi">Multi-vector signed integer dot-product by indexed element.</iform>
+    <iform iformfile="sdot_za_zzv.xml" heading="SDOT (4-way, multiple and single vector)" id="sdot_za_zzv">Multi-vector signed integer dot-product by vector.</iform>
+    <iform iformfile="sdot_za_zzw.xml" heading="SDOT (4-way, multiple vectors)" id="sdot_za_zzw">Multi-vector signed integer dot-product.</iform>
+    <iform iformfile="sel_mz_p_zz.xml" heading="SEL" id="sel_mz_p_zz">Multi-vector conditionally select elements from two vectors.</iform>
+    <iform iformfile="smax_mz_zzv.xml" heading="SMAX (multiple and single vector)" id="smax_mz_zzv">Multi-vector signed maximum by vector.</iform>
+    <iform iformfile="smax_mz_zzw.xml" heading="SMAX (multiple vectors)" id="smax_mz_zzw">Multi-vector signed maximum.</iform>
+    <iform iformfile="smin_mz_zzv.xml" heading="SMIN (multiple and single vector)" id="smin_mz_zzv">Multi-vector signed minimum by vector.</iform>
+    <iform iformfile="smin_mz_zzw.xml" heading="SMIN (multiple vectors)" id="smin_mz_zzw">Multi-vector signed minimum.</iform>
+    <iform iformfile="smlal_za_zzi.xml" heading="SMLAL (multiple and indexed vector)" id="smlal_za_zzi">Multi-vector signed integer multiply-add long by indexed element.</iform>
+    <iform iformfile="smlal_za_zzv.xml" heading="SMLAL (multiple and single vector)" id="smlal_za_zzv">Multi-vector signed integer multiply-add long by vector.</iform>
+    <iform iformfile="smlal_za_zzw.xml" heading="SMLAL (multiple vectors)" id="smlal_za_zzw">Multi-vector signed integer multiply-add long.</iform>
+    <iform iformfile="smlall_za_zzi.xml" heading="SMLALL (multiple and indexed vector)" id="smlall_za_zzi">Multi-vector signed integer multiply-add long-long by indexed element.</iform>
+    <iform iformfile="smlall_za_zzv.xml" heading="SMLALL (multiple and single vector)" id="smlall_za_zzv">Multi-vector signed integer multiply-add long-long by vector.</iform>
+    <iform iformfile="smlall_za_zzw.xml" heading="SMLALL (multiple vectors)" id="smlall_za_zzw">Multi-vector signed integer multiply-add long-long.</iform>
+    <iform iformfile="smlsl_za_zzi.xml" heading="SMLSL (multiple and indexed vector)" id="smlsl_za_zzi">Multi-vector signed integer multiply-subtract long by indexed element.</iform>
+    <iform iformfile="smlsl_za_zzv.xml" heading="SMLSL (multiple and single vector)" id="smlsl_za_zzv">Multi-vector signed integer multiply-subtract long by vector.</iform>
+    <iform iformfile="smlsl_za_zzw.xml" heading="SMLSL (multiple vectors)" id="smlsl_za_zzw">Multi-vector signed integer multiply-subtract long.</iform>
+    <iform iformfile="smlsll_za_zzi.xml" heading="SMLSLL (multiple and indexed vector)" id="smlsll_za_zzi">Multi-vector signed integer multiply-subtract long-long by indexed element.</iform>
+    <iform iformfile="smlsll_za_zzv.xml" heading="SMLSLL (multiple and single vector)" id="smlsll_za_zzv">Multi-vector signed integer multiply-subtract long-long by vector.</iform>
+    <iform iformfile="smlsll_za_zzw.xml" heading="SMLSLL (multiple vectors)" id="smlsll_za_zzw">Multi-vector signed integer multiply-subtract long-long.</iform>
+    <iform iformfile="smopa_za32_pp_zz.xml" heading="SMOPA (2-way)" id="smopa_za32_pp_zz">Signed integer sum of outer products and accumulate.</iform>
+    <iform iformfile="smopa_za_pp_zz.xml" heading="SMOPA (4-way)" id="smopa_za_pp_zz">Signed integer sum of outer products and accumulate.</iform>
+    <iform iformfile="smops_za32_pp_zz.xml" heading="SMOPS (2-way)" id="smops_za32_pp_zz">Signed integer sum of outer products and subtract.</iform>
+    <iform iformfile="smops_za_pp_zz.xml" heading="SMOPS (4-way)" id="smops_za_pp_zz">Signed integer sum of outer products and subtract.</iform>
+    <iform iformfile="sqcvt_z_mz4.xml" heading="SQCVT (four registers)" id="sqcvt_z_mz4">Multi-vector signed saturating extract narrow.</iform>
+    <iform iformfile="sqcvt_z_mz2.xml" heading="SQCVT (two registers)" id="sqcvt_z_mz2">Multi-vector signed saturating extract narrow.</iform>
+    <iform iformfile="sqcvtn_z_mz4.xml" heading="SQCVTN" id="sqcvtn_z_mz4">Multi-vector signed saturating extract narrow and interleave.</iform>
+    <iform iformfile="sqcvtu_z_mz4.xml" heading="SQCVTU (four registers)" id="sqcvtu_z_mz4">Multi-vector signed saturating unsigned extract narrow.</iform>
+    <iform iformfile="sqcvtu_z_mz2.xml" heading="SQCVTU (two registers)" id="sqcvtu_z_mz2">Multi-vector signed saturating unsigned extract narrow.</iform>
+    <iform iformfile="sqcvtun_z_mz4.xml" heading="SQCVTUN" id="sqcvtun_z_mz4">Multi-vector signed saturating unsigned extract narrow and interleave.</iform>
+    <iform iformfile="sqdmulh_mz_zzv.xml" heading="SQDMULH (multiple and single vector)" id="sqdmulh_mz_zzv">Multi-vector signed saturating doubling multiply high by vector.</iform>
+    <iform iformfile="sqdmulh_mz_zzw.xml" heading="SQDMULH (multiple vectors)" id="sqdmulh_mz_zzw">Multi-vector signed saturating doubling multiply high.</iform>
+    <iform iformfile="sqrshr_z_mz4.xml" heading="SQRSHR (four registers)" id="sqrshr_z_mz4">Multi-vector signed saturating rounding shift right narrow by immediate.</iform>
+    <iform iformfile="sqrshr_z_mz2.xml" heading="SQRSHR (two registers)" id="sqrshr_z_mz2">Multi-vector signed saturating rounding shift right narrow by immediate.</iform>
+    <iform iformfile="sqrshrn_z_mz4.xml" heading="SQRSHRN" id="sqrshrn_z_mz4">Multi-vector signed saturating rounding shift right narrow by immediate and interleave.</iform>
+    <iform iformfile="sqrshru_z_mz4.xml" heading="SQRSHRU (four registers)" id="sqrshru_z_mz4">Multi-vector signed saturating rounding shift right unsigned narrow by immediate.</iform>
+    <iform iformfile="sqrshru_z_mz2.xml" heading="SQRSHRU (two registers)" id="sqrshru_z_mz2">Multi-vector signed saturating rounding shift right unsigned narrow by immediate.</iform>
+    <iform iformfile="sqrshrun_z_mz4.xml" heading="SQRSHRUN" id="sqrshrun_z_mz4">Multi-vector signed saturating rounding shift right unsigned narrow by immediate and interleave.</iform>
+    <iform iformfile="srshl_mz_zzv.xml" heading="SRSHL (multiple and single vector)" id="srshl_mz_zzv">Multi-vector signed rounding shift left by vector.</iform>
+    <iform iformfile="srshl_mz_zzw.xml" heading="SRSHL (multiple vectors)" id="srshl_mz_zzw">Multi-vector signed rounding shift left.</iform>
+    <iform iformfile="st1b_mzx_p_bi.xml" heading="ST1B (scalar plus immediate, strided registers)" id="st1b_mzx_p_bi">Contiguous store of bytes from multiple strided vectors (immediate index).</iform>
+    <iform iformfile="st1b_mzx_p_br.xml" heading="ST1B (scalar plus scalar, strided registers)" id="st1b_mzx_p_br">Contiguous store of bytes from multiple strided vectors (scalar index).</iform>
+    <iform iformfile="st1b_za_p_rrr.xml" heading="ST1B (scalar plus scalar, tile slice)" id="st1b_za_p_rrr">Contiguous store of bytes from 8-bit element ZA tile slice.</iform>
+    <iform iformfile="st1d_mzx_p_bi.xml" heading="ST1D (scalar plus immediate, strided registers)" id="st1d_mzx_p_bi">Contiguous store of doublewords from multiple strided vectors (immediate index).</iform>
+    <iform iformfile="st1d_mzx_p_br.xml" heading="ST1D (scalar plus scalar, strided registers)" id="st1d_mzx_p_br">Contiguous store of doublewords from multiple strided vectors (scalar index).</iform>
+    <iform iformfile="st1d_za_p_rrr.xml" heading="ST1D (scalar plus scalar, tile slice)" id="st1d_za_p_rrr">Contiguous store of doublewords from 64-bit element ZA tile slice.</iform>
+    <iform iformfile="st1h_mzx_p_bi.xml" heading="ST1H (scalar plus immediate, strided registers)" id="st1h_mzx_p_bi">Contiguous store of halfwords from multiple strided vectors (immediate index).</iform>
+    <iform iformfile="st1h_mzx_p_br.xml" heading="ST1H (scalar plus scalar, strided registers)" id="st1h_mzx_p_br">Contiguous store of halfwords from multiple strided vectors (scalar index).</iform>
+    <iform iformfile="st1h_za_p_rrr.xml" heading="ST1H (scalar plus scalar, tile slice)" id="st1h_za_p_rrr">Contiguous store of halfwords from 16-bit element ZA tile slice.</iform>
+    <iform iformfile="st1q_za_p_rrr.xml" heading="ST1Q" id="st1q_za_p_rrr">Contiguous store of quadwords from 128-bit element ZA tile slice.</iform>
+    <iform iformfile="st1w_mzx_p_bi.xml" heading="ST1W (scalar plus immediate, strided registers)" id="st1w_mzx_p_bi">Contiguous store of words from multiple strided vectors (immediate index).</iform>
+    <iform iformfile="st1w_mzx_p_br.xml" heading="ST1W (scalar plus scalar, strided registers)" id="st1w_mzx_p_br">Contiguous store of words from multiple strided vectors (scalar index).</iform>
+    <iform iformfile="st1w_za_p_rrr.xml" heading="ST1W (scalar plus scalar, tile slice)" id="st1w_za_p_rrr">Contiguous store of words from 32-bit element ZA tile slice.</iform>
+    <iform iformfile="stnt1b_mzx_p_bi.xml" heading="STNT1B (scalar plus immediate, strided registers)" id="stnt1b_mzx_p_bi">Contiguous store non-temporal of bytes from multiple strided vectors (immediate index).</iform>
+    <iform iformfile="stnt1b_mzx_p_br.xml" heading="STNT1B (scalar plus scalar, strided registers)" id="stnt1b_mzx_p_br">Contiguous store non-temporal of bytes from multiple strided vectors (scalar index).</iform>
+    <iform iformfile="stnt1d_mzx_p_bi.xml" heading="STNT1D (scalar plus immediate, strided registers)" id="stnt1d_mzx_p_bi">Contiguous store non-temporal of doublewords from multiple strided vectors (immediate index).</iform>
+    <iform iformfile="stnt1d_mzx_p_br.xml" heading="STNT1D (scalar plus scalar, strided registers)" id="stnt1d_mzx_p_br">Contiguous store non-temporal of doublewords from multiple strided vectors (scalar index).</iform>
+    <iform iformfile="stnt1h_mzx_p_bi.xml" heading="STNT1H (scalar plus immediate, strided registers)" id="stnt1h_mzx_p_bi">Contiguous store non-temporal of halfwords from multiple strided vectors (immediate index).</iform>
+    <iform iformfile="stnt1h_mzx_p_br.xml" heading="STNT1H (scalar plus scalar, strided registers)" id="stnt1h_mzx_p_br">Contiguous store non-temporal of halfwords from multiple strided vectors (scalar index).</iform>
+    <iform iformfile="stnt1w_mzx_p_bi.xml" heading="STNT1W (scalar plus immediate, strided registers)" id="stnt1w_mzx_p_bi">Contiguous store non-temporal of words from multiple strided vectors (immediate index).</iform>
+    <iform iformfile="stnt1w_mzx_p_br.xml" heading="STNT1W (scalar plus scalar, strided registers)" id="stnt1w_mzx_p_br">Contiguous store non-temporal of words from multiple strided vectors (scalar index).</iform>
+    <iform iformfile="str_za_ri.xml" heading="STR (array vector)" id="str_za_ri">Store ZA array vector.</iform>
+    <iform iformfile="str_zt_br.xml" heading="STR (table)" id="str_zt_br">Store ZT0 register.</iform>
+    <iform iformfile="sub_za_zw.xml" heading="SUB (array accumulators)" id="sub_za_zw">Subtract multi-vector from ZA array vector accumulators.</iform>
+    <iform iformfile="sub_za_zzv.xml" heading="SUB (array results, multiple and single vector)" id="sub_za_zzv">Subtract replicated single vector from multi-vector with ZA array vector results.</iform>
+    <iform iformfile="sub_za_zzw.xml" heading="SUB (array results, multiple vectors)" id="sub_za_zzw">Subtract multi-vector from multi-vector with ZA array vector results.</iform>
+    <iform iformfile="sudot_za_zzi.xml" heading="SUDOT (multiple and indexed vector)" id="sudot_za_zzi">Multi-vector signed by unsigned integer dot-product by indexed elements.</iform>
+    <iform iformfile="sudot_za_zzv.xml" heading="SUDOT (multiple and single vector)" id="sudot_za_zzv">Multi-vector signed by unsigned integer dot-product by vector.</iform>
+    <iform iformfile="sumlall_za_zzi.xml" heading="SUMLALL (multiple and indexed vector)" id="sumlall_za_zzi">Multi-vector signed by unsigned integer multiply-add long-long by indexed element.</iform>
+    <iform iformfile="sumlall_za_zzv.xml" heading="SUMLALL (multiple and single vector)" id="sumlall_za_zzv">Multi-vector signed by unsigned integer multiply-add long-long by vector.</iform>
+    <iform iformfile="sumopa_za_pp_zz.xml" heading="SUMOPA" id="sumopa_za_pp_zz">Signed by unsigned integer sum of outer products and accumulate.</iform>
+    <iform iformfile="sumops_za_pp_zz.xml" heading="SUMOPS" id="sumops_za_pp_zz">Signed by unsigned integer sum of outer products and subtract.</iform>
+    <iform iformfile="sunpk_mz_z.xml" heading="SUNPK" id="sunpk_mz_z">Unpack and sign-extend multi-vector elements.</iform>
+    <iform iformfile="suvdot_za_zzi.xml" heading="SUVDOT" id="suvdot_za_zzi">Multi-vector signed by unsigned integer vertical dot-product by indexed element.</iform>
+    <iform iformfile="svdot_za32_zzi.xml" heading="SVDOT (2-way)" id="svdot_za32_zzi">Multi-vector signed integer vertical dot-product by indexed element.</iform>
+    <iform iformfile="svdot_za_zzi.xml" heading="SVDOT (4-way)" id="svdot_za_zzi">Multi-vector signed integer vertical dot-product by indexed element.</iform>
+    <iform iformfile="uclamp_mz_zz.xml" heading="UCLAMP" id="uclamp_mz_zz">Multi-vector unsigned clamp to minimum/maximum vector.</iform>
+    <iform iformfile="ucvtf_mz_z.xml" heading="UCVTF" id="ucvtf_mz_z">Multi-vector unsigned integer convert to floating-point.</iform>
+    <iform iformfile="udot_za32_zzi.xml" heading="UDOT (2-way, multiple and indexed vector)" id="udot_za32_zzi">Multi-vector unsigned integer dot-product by indexed element.</iform>
+    <iform iformfile="udot_za32_zzv.xml" heading="UDOT (2-way, multiple and single vector)" id="udot_za32_zzv">Multi-vector unsigned integer dot-product by vector.</iform>
+    <iform iformfile="udot_za32_zzw.xml" heading="UDOT (2-way, multiple vectors)" id="udot_za32_zzw">Multi-vector unsigned integer dot-product.</iform>
+    <iform iformfile="udot_za_zzi.xml" heading="UDOT (4-way, multiple and indexed vector)" id="udot_za_zzi">Multi-vector unsigned integer dot-product by indexed element.</iform>
+    <iform iformfile="udot_za_zzv.xml" heading="UDOT (4-way, multiple and single vector)" id="udot_za_zzv">Multi-vector unsigned integer dot-product by vector.</iform>
+    <iform iformfile="udot_za_zzw.xml" heading="UDOT (4-way, multiple vectors)" id="udot_za_zzw">Multi-vector unsigned integer dot-product.</iform>
+    <iform iformfile="umax_mz_zzv.xml" heading="UMAX (multiple and single vector)" id="umax_mz_zzv">Multi-vector unsigned maximum by vector.</iform>
+    <iform iformfile="umax_mz_zzw.xml" heading="UMAX (multiple vectors)" id="umax_mz_zzw">Multi-vector unsigned maximum.</iform>
+    <iform iformfile="umin_mz_zzv.xml" heading="UMIN (multiple and single vector)" id="umin_mz_zzv">Multi-vector unsigned minimum by vector.</iform>
+    <iform iformfile="umin_mz_zzw.xml" heading="UMIN (multiple vectors)" id="umin_mz_zzw">Multi-vector unsigned minimum.</iform>
+    <iform iformfile="umlal_za_zzi.xml" heading="UMLAL (multiple and indexed vector)" id="umlal_za_zzi">Multi-vector unsigned integer multiply-add long by indexed element.</iform>
+    <iform iformfile="umlal_za_zzv.xml" heading="UMLAL (multiple and single vector)" id="umlal_za_zzv">Multi-vector unsigned integer multiply-add long by vector.</iform>
+    <iform iformfile="umlal_za_zzw.xml" heading="UMLAL (multiple vectors)" id="umlal_za_zzw">Multi-vector unsigned integer multiply-add long.</iform>
+    <iform iformfile="umlall_za_zzi.xml" heading="UMLALL (multiple and indexed vector)" id="umlall_za_zzi">Multi-vector unsigned integer multiply-add long-long by indexed element.</iform>
+    <iform iformfile="umlall_za_zzv.xml" heading="UMLALL (multiple and single vector)" id="umlall_za_zzv">Multi-vector unsigned integer multiply-add long-long by vector.</iform>
+    <iform iformfile="umlall_za_zzw.xml" heading="UMLALL (multiple vectors)" id="umlall_za_zzw">Multi-vector unsigned integer multiply-add long-long.</iform>
+    <iform iformfile="umlsl_za_zzi.xml" heading="UMLSL (multiple and indexed vector)" id="umlsl_za_zzi">Multi-vector unsigned integer multiply-subtract long by indexed element.</iform>
+    <iform iformfile="umlsl_za_zzv.xml" heading="UMLSL (multiple and single vector)" id="umlsl_za_zzv">Multi-vector unsigned integer multiply-subtract long by vector.</iform>
+    <iform iformfile="umlsl_za_zzw.xml" heading="UMLSL (multiple vectors)" id="umlsl_za_zzw">Multi-vector unsigned integer multiply-subtract long.</iform>
+    <iform iformfile="umlsll_za_zzi.xml" heading="UMLSLL (multiple and indexed vector)" id="umlsll_za_zzi">Multi-vector unsigned integer multiply-subtract long-long by indexed element.</iform>
+    <iform iformfile="umlsll_za_zzv.xml" heading="UMLSLL (multiple and single vector)" id="umlsll_za_zzv">Multi-vector unsigned integer multiply-subtract long-long by vector.</iform>
+    <iform iformfile="umlsll_za_zzw.xml" heading="UMLSLL (multiple vectors)" id="umlsll_za_zzw">Multi-vector unsigned integer multiply-subtract long-long.</iform>
+    <iform iformfile="umopa_za32_pp_zz.xml" heading="UMOPA (2-way)" id="umopa_za32_pp_zz">Unsigned integer sum of outer products and accumulate.</iform>
+    <iform iformfile="umopa_za_pp_zz.xml" heading="UMOPA (4-way)" id="umopa_za_pp_zz">Unsigned integer sum of outer products and accumulate.</iform>
+    <iform iformfile="umops_za32_pp_zz.xml" heading="UMOPS (2-way)" id="umops_za32_pp_zz">Unsigned integer sum of outer products and subtract.</iform>
+    <iform iformfile="umops_za_pp_zz.xml" heading="UMOPS (4-way)" id="umops_za_pp_zz">Unsigned integer sum of outer products and subtract.</iform>
+    <iform iformfile="uqcvt_z_mz4.xml" heading="UQCVT (four registers)" id="uqcvt_z_mz4">Multi-vector unsigned saturating extract narrow.</iform>
+    <iform iformfile="uqcvt_z_mz2.xml" heading="UQCVT (two registers)" id="uqcvt_z_mz2">Multi-vector unsigned saturating extract narrow.</iform>
+    <iform iformfile="uqcvtn_z_mz4.xml" heading="UQCVTN" id="uqcvtn_z_mz4">Multi-vector unsigned saturating extract narrow and interleave.</iform>
+    <iform iformfile="uqrshr_z_mz4.xml" heading="UQRSHR (four registers)" id="uqrshr_z_mz4">Multi-vector unsigned saturating rounding shift right narrow by immediate.</iform>
+    <iform iformfile="uqrshr_z_mz2.xml" heading="UQRSHR (two registers)" id="uqrshr_z_mz2">Multi-vector unsigned saturating rounding shift right narrow by immediate.</iform>
+    <iform iformfile="uqrshrn_z_mz4.xml" heading="UQRSHRN" id="uqrshrn_z_mz4">Multi-vector unsigned saturating rounding shift right narrow by immediate and interleave.</iform>
+    <iform iformfile="urshl_mz_zzv.xml" heading="URSHL (multiple and single vector)" id="urshl_mz_zzv">Multi-vector unsigned rounding shift left by vector.</iform>
+    <iform iformfile="urshl_mz_zzw.xml" heading="URSHL (multiple vectors)" id="urshl_mz_zzw">Multi-vector unsigned rounding shift left.</iform>
+    <iform iformfile="usdot_za_zzi.xml" heading="USDOT (multiple and indexed vector)" id="usdot_za_zzi">Multi-vector unsigned by signed integer dot-product by indexed element.</iform>
+    <iform iformfile="usdot_za_zzv.xml" heading="USDOT (multiple and single vector)" id="usdot_za_zzv">Multi-vector unsigned by signed integer dot-product by vector.</iform>
+    <iform iformfile="usdot_za_zzw.xml" heading="USDOT (multiple vectors)" id="usdot_za_zzw">Multi-vector unsigned by signed integer dot-product.</iform>
+    <iform iformfile="usmlall_za_zzi.xml" heading="USMLALL (multiple and indexed vector)" id="usmlall_za_zzi">Multi-vector unsigned by signed integer multiply-add long-long by indexed element.</iform>
+    <iform iformfile="usmlall_za_zzv.xml" heading="USMLALL (multiple and single vector)" id="usmlall_za_zzv">Multi-vector unsigned by signed integer multiply-add long-long by vector.</iform>
+    <iform iformfile="usmlall_za_zzw.xml" heading="USMLALL (multiple vectors)" id="usmlall_za_zzw">Multi-vector unsigned by signed integer multiply-add long-long.</iform>
+    <iform iformfile="usmopa_za_pp_zz.xml" heading="USMOPA" id="usmopa_za_pp_zz">Unsigned by signed integer sum of outer products and accumulate.</iform>
+    <iform iformfile="usmops_za_pp_zz.xml" heading="USMOPS" id="usmops_za_pp_zz">Unsigned by signed integer sum of outer products and subtract.</iform>
+    <iform iformfile="usvdot_za_zzi.xml" heading="USVDOT" id="usvdot_za_zzi">Multi-vector unsigned by signed integer vertical dot-product by indexed element.</iform>
+    <iform iformfile="uunpk_mz_z.xml" heading="UUNPK" id="uunpk_mz_z">Unpack and zero-extend multi-vector elements.</iform>
+    <iform iformfile="uvdot_za32_zzi.xml" heading="UVDOT (2-way)" id="uvdot_za32_zzi">Multi-vector unsigned integer vertical dot-product by indexed element.</iform>
+    <iform iformfile="uvdot_za_zzi.xml" heading="UVDOT (4-way)" id="uvdot_za_zzi">Multi-vector unsigned integer vertical dot-product by indexed element.</iform>
+    <iform iformfile="uzp_mz_z.xml" heading="UZP (four registers)" id="uzp_mz_z">Concatenate elements from four vectors.</iform>
+    <iform iformfile="uzp_mz_zz.xml" heading="UZP (two registers)" id="uzp_mz_zz">Concatenate elements from two vectors.</iform>
+    <iform iformfile="zero_za2_ri.xml" heading="ZERO (double-vector)" id="zero_za2_ri">Zero ZA double-vector groups.</iform>
+    <iform iformfile="zero_za4_ri.xml" heading="ZERO (quad-vector)" id="zero_za4_ri">Zero ZA quad-vector groups.</iform>
+    <iform iformfile="zero_za1_ri.xml" heading="ZERO (single-vector)" id="zero_za1_ri">Zero ZA single-vector groups.</iform>
+    <iform iformfile="zero_zt_i.xml" heading="ZERO (table)" id="zero_zt_i">Zero ZT0.</iform>
+    <iform iformfile="zero_za_i.xml" heading="ZERO (tiles)" id="zero_za_i">Zero a list of 64-bit element ZA tiles.</iform>
+    <iform iformfile="zip_mz_z.xml" heading="ZIP (four registers)" id="zip_mz_z">Interleave elements from four vectors.</iform>
+    <iform iformfile="zip_mz_zz.xml" heading="ZIP (two registers)" id="zip_mz_zz">Interleave elements from two vectors.</iform>
+  </iforms>
+</alphaindex>

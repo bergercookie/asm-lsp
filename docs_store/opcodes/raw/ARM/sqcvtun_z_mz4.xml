@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="sqcvtun_z_mz4" title="SQCVTUN" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="SQCVTUN" />
+  </docvars>
+  <heading>SQCVTUN</heading>
+  <desc>
+    <brief>Multi-vector signed saturating unsigned extract narrow and interleave</brief>
+    <description>
+      <para>Saturate the signed integer value in each element of the four source vectors to unsigned integer value that is quarter the original source element width, and place the four-way interleaved results in the quarter-width destination elements.</para>
+      <para>This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <sm_policy>SM_1_only</sm_policy>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SME2" oneof="1" id="iclass_mortlach2" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="SQCVTUN" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="SQCVTUN-Z.MZ4-_" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" name="sz" usename="1">
+          <c></c>
+        </box>
+        <box hibit="22" name="op" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" width="12" settings="12">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="3" name="Zn" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="6" name="N" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="5" name="U" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="sqcvtun_z_mz4_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="SQCVTUN" />
+        </docvars>
+        <asmtemplate><text>SQCVTUN </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;sz&quot;) [B,H]">&lt;T&gt;</a><text>, </text><text>{</text><text> </text><a link="sa_zn1" hover="First scalable vector register of source multi-vector group (field Zn)">&lt;Zn1&gt;</a><text>.</text><a link="sa_tb" hover="Size specifier (field &quot;sz&quot;) [D,S]">&lt;Tb&gt;</a><text>-</text><a link="sa_zn4" hover="Fourth scalable vector register of source multi-vector group (field Zn)">&lt;Zn4&gt;</a><text>.</text><a link="sa_tb" hover="Size specifier (field &quot;sz&quot;) [D,S]">&lt;Tb&gt;</a><text> </text><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="SQCVTUN-Z.MZ4-_" mylink="SQCVTUN-Z.MZ4-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(sz);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn:'00');
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="sqcvtun_z_mz4_" symboldefcount="1">
+      <symbol link="sa_zd">&lt;Zd&gt;</symbol>
+      <account encodedin="Zd">
+        <intro>
+          <para>Is the name of the destination scalable vector register, encoded in the "Zd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="sqcvtun_z_mz4_" symboldefcount="1">
+      <symbol link="sa_t">&lt;T&gt;</symbol>
+      <definition encodedin="sz">
+        <intro>Is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">sz</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">H</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="sqcvtun_z_mz4_" symboldefcount="1">
+      <symbol link="sa_zn1">&lt;Zn1&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the first scalable vector register of the source multi-vector group, encoded as "Zn" times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="sqcvtun_z_mz4_" symboldefcount="1">
+      <symbol link="sa_tb">&lt;Tb&gt;</symbol>
+      <definition encodedin="sz">
+        <intro>Is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">sz</entry>
+                <entry class="symbol">&lt;Tb&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="sqcvtun_z_mz4_" symboldefcount="1">
+      <symbol link="sa_zn4">&lt;Zn4&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the fourth scalable vector register of the source multi-vector group, encoded as "Zn" times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="SQCVTUN-Z.MZ4-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckStreamingSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckStreamingSVEEnabled()">CheckStreamingSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer elements = VL DIV (4 * esize);
+bits(VL) result;
+
+for e = 0 to elements-1
+    for i = 0 to 3
+        constant bits(VL) operand = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[n+i, VL];
+        constant integer element = <a link="impl-shared.SInt.1" file="shared_pseudocode.xml" hover="function: integer SInt(bits(N) x)">SInt</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand, e, 4 * esize]);
+        <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, 4*e + i, esize] = <a link="impl-aarch32.UnsignedSat.2" file="shared_pseudocode.xml" hover="function: bits(N) UnsignedSat(integer i, integer N)">UnsignedSat</a>(element, esize);
+
+<a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[d, VL] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

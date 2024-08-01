@@ -1,0 +1,154 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="TSTART" title="TSTART -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="TSTART"/>
+  </docvars>
+  <heading>TSTART</heading>
+  <desc>
+    <brief>
+      <para>Start transaction</para>
+    </brief>
+    <authored>
+      <para>This instruction starts a new transaction. If the transaction started
+successfully, the destination register is set to zero. If the transaction
+failed or was canceled, then all state modifications that were performed
+transactionally are discarded and the destination register is written with a
+nonzero value that encodes the cause of the failure.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="TSTART"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_TME" name="ARMv9.0"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.control.systemresult.TSTART_BR_systemresult" tworows="1">
+        <box hibit="31" width="13" settings="13">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="18" width="3" name="op1" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" width="4" name="CRn" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="TSTART_BR_systemresult" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="TSTART"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>TSTART  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rt&quot; field." link="XtOrXZR__4">&lt;Xt&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.systemresult.TSTART_BR_systemresult" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_TME) then UNDEFINED;
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="TSTART_BR_systemresult" symboldefcount="1">
+      <symbol link="XtOrXZR__4">&lt;Xt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose destination register, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.control.systemresult.TSTART_BR_systemresult" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">if !<a link="impl-aarch64.IsTMEEnabled.0" file="shared_pseudocode.xml" hover="function: boolean IsTMEEnabled()">IsTMEEnabled</a>() then UNDEFINED;
+
+boolean IsEL1Regime;
+bit tme;
+bit tmt;
+case PSTATE.EL of
+    when <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>
+        IsEL1Regime = <a link="impl-shared.S1TranslationRegime.0" file="shared_pseudocode.xml" hover="function: bits(2) S1TranslationRegime()">S1TranslationRegime</a>() == <a link="EL1" file="shared_pseudocode.xml" hover="constant bits(2) EL1 = '01'">EL1</a>;
+        if IsEL1Regime then
+            tme = SCTLR_EL1.TME0;
+            tmt = SCTLR_EL1.TMT0;
+        else
+            tme = SCTLR_EL2.TME0;
+            tmt = SCTLR_EL2.TMT0;
+    when <a link="EL1" file="shared_pseudocode.xml" hover="constant bits(2) EL1 = '01'">EL1</a>
+        tme = SCTLR_EL1.TME;
+        tmt = SCTLR_EL1.TMT;
+    when <a link="EL2" file="shared_pseudocode.xml" hover="constant bits(2) EL2 = '10'">EL2</a>
+        tme = SCTLR_EL2.TME;
+        tmt = SCTLR_EL2.TMT;
+    when <a link="EL3" file="shared_pseudocode.xml" hover="constant bits(2) EL3 = '11'">EL3</a>
+        tme = SCTLR_EL3.TME;
+        tmt = SCTLR_EL3.TMT;
+    otherwise
+        Unreachable();
+
+constant boolean enable  = tme == '1';
+constant boolean trivial = tmt == '1';
+
+if !enable then
+    <a link="impl-aarch64.TransactionStartTrap.1" file="shared_pseudocode.xml" hover="function: TransactionStartTrap(integer dreg)">TransactionStartTrap</a>(t);
+elsif trivial then
+    TSTATE.nPC = <a link="impl-shared.NextInstrAddr.1" file="shared_pseudocode.xml" hover="function: bits(N) NextInstrAddr(integer N)">NextInstrAddr</a>(64);
+    TSTATE.Rt = t;
+    <a link="impl-aarch64.FailTransaction.2" file="shared_pseudocode.xml" hover="function: FailTransaction(TMFailure cause, boolean retry)">FailTransaction</a>(<a link="TMFailure_TRIVIAL" file="shared_pseudocode.xml" hover="enumeration TMFailure { TMFailure_CNCL, TMFailure_DBG, TMFailure_ERR, TMFailure_NEST, TMFailure_SIZE, TMFailure_MEM, TMFailure_TRIVIAL, TMFailure_IMP }">TMFailure_TRIVIAL</a>, FALSE);
+elsif IsFeatureImplemented(FEAT_SME) &amp;&amp; PSTATE.SM == '1' then
+    <a link="impl-aarch64.FailTransaction.2" file="shared_pseudocode.xml" hover="function: FailTransaction(TMFailure cause, boolean retry)">FailTransaction</a>(<a link="TMFailure_ERR" file="shared_pseudocode.xml" hover="enumeration TMFailure { TMFailure_CNCL, TMFailure_DBG, TMFailure_ERR, TMFailure_NEST, TMFailure_SIZE, TMFailure_MEM, TMFailure_TRIVIAL, TMFailure_IMP }">TMFailure_ERR</a>, FALSE);
+elsif TSTATE.depth == 255 then
+    <a link="impl-aarch64.FailTransaction.2" file="shared_pseudocode.xml" hover="function: FailTransaction(TMFailure cause, boolean retry)">FailTransaction</a>(<a link="TMFailure_NEST" file="shared_pseudocode.xml" hover="enumeration TMFailure { TMFailure_CNCL, TMFailure_DBG, TMFailure_ERR, TMFailure_NEST, TMFailure_SIZE, TMFailure_MEM, TMFailure_TRIVIAL, TMFailure_IMP }">TMFailure_NEST</a>, FALSE);
+elsif TSTATE.depth == 0 then
+    TSTATE.nPC = <a link="impl-shared.NextInstrAddr.1" file="shared_pseudocode.xml" hover="function: bits(N) NextInstrAddr(integer N)">NextInstrAddr</a>(64);
+    TSTATE.Rt = t;
+    <a link="impl-shared.ClearExclusiveLocal.1" file="shared_pseudocode.xml" hover="function: ClearExclusiveLocal(integer processorid)">ClearExclusiveLocal</a>(<a link="impl-shared.ProcessorID.0" file="shared_pseudocode.xml" hover="function: integer ProcessorID()">ProcessorID</a>());
+    <a link="impl-aarch64.TakeTransactionCheckpoint.0" file="shared_pseudocode.xml" hover="function: TakeTransactionCheckpoint()">TakeTransactionCheckpoint</a>();
+    <a link="impl-aarch64.StartTrackingTransactionalReadsWrites.0" file="shared_pseudocode.xml" hover="function: StartTrackingTransactionalReadsWrites()">StartTrackingTransactionalReadsWrites</a>();
+
+TSTATE.depth = TSTATE.depth + 1;
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[t, 64] = <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(64);</pstext></ps>
+  </ps_section>
+</instructionsection>

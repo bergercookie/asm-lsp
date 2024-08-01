@@ -1,0 +1,271 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="FMAXNMV_advsimd" title="FMAXNMV -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="advsimd"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="FMAXNMV"/>
+  </docvars>
+  <heading>FMAXNMV</heading>
+  <desc>
+    <brief>
+      <para>Floating-point maximum number across vector</para>
+    </brief>
+    <authored>
+      <para>This instruction compares all the
+vector elements in the source SIMD&amp;FP register,
+and writes the largest of the values
+as a scalar to the destination SIMD&amp;FP register.
+All the values in this instruction are floating-point values.</para>
+      <para>Regardless of the value of <register_link id="AArch64-fpcr.xml" state="AArch64">FPCR</register_link>.AH,
+the behavior is as follows:</para>
+      <list type="unordered">
+        <listitem>
+          <content>Negative zero compares less than positive zero.</content>
+        </listitem>
+        <listitem>
+          <content>If one value is numeric and the other is a quiet NaN,
+  the result is the numeric value.</content>
+        </listitem>
+        <listitem>
+          <content>When <register_link id="AArch64-fpcr.xml" state="AArch64">FPCR</register_link>.DN is 0, if either value is a signaling NaN
+  or if both values are NaNs, the result is a quiet NaN.</content>
+        </listitem>
+        <listitem>
+          <content>When <register_link id="AArch64-fpcr.xml" state="AArch64">FPCR</register_link>.DN is 1, if either value is a signaling NaN
+  or if both values are NaNs, the result is Default NaN.</content>
+        </listitem>
+      </list>
+      <para>This instruction can generate a floating-point exception.
+Depending on the settings in <register_link id="AArch64-fpcr.xml" state="AArch64">FPCR</register_link>,
+the exception results in either a flag being set in <register_link id="AArch64-fpsr.xml" state="AArch64">FPSR</register_link>
+or a synchronous exception being generated.
+For more information, see
+<xref linkend="ARMARM_BEIJDDAG">Floating-point exception traps</xref>.</para>
+      <para>Depending on the settings in the <register_link id="AArch64-cpacr_el1.xml" state="AArch64">CPACR_EL1</register_link>,
+<register_link id="AArch64-cptr_el2.xml" state="AArch64">CPTR_EL2</register_link>, and <register_link id="AArch64-cptr_el3.xml" state="AArch64">CPTR_EL3</register_link> registers,
+and the current Security state and Exception level,
+an attempt to execute the instruction might be trapped.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <classesintro count="2">
+      <txt>It has encodings from 2 classes:</txt>
+      <a href="#iclass_half_precision">Half-precision</a>
+      <txt> and </txt>
+      <a href="#iclass_single_precision">Single-precision</a>
+    </classesintro>
+    <iclass name="Half-precision" oneof="2" id="iclass_half_precision" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="datatype" value="half"/>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="FMAXNMV"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_FP16" name="ARMv8.2"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.simd_dp.asimdall.FMAXNMV_asimdall_only_H" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" width="1" name="Q" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="29" name="U" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="5" settings="5">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="o1" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="22" width="6" settings="6">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="16" width="5" name="opcode" usename="1" settings="5" psbits="xxxxx">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="FMAXNMV_asimdall_only_H" oneofinclass="1" oneof="2" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="datatype" value="half"/>
+          <docvar key="mnemonic" value="FMAXNMV"/>
+          <docvar key="instr-class" value="advsimd"/>
+        </docvars>
+        <asmtemplate><text>FMAXNMV  </text><a hover="Is the destination width specifier, H." link="V_hv">&lt;V&gt;</a><a hover="Is the number of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="d">&lt;d&gt;</a><text>, </text><a hover="Is the name of the SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn">&lt;Vn&gt;</a><text>.</text><a hover="Is an arrangement specifier, " link="T_option__28">&lt;T&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.asimdall.FMAXNMV_asimdall_only_H" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_FP16) then UNDEFINED;
+
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer esize = 16;
+constant integer datasize = 64 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Q);</pstext></ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Single-precision" oneof="2" id="iclass_single_precision" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="datatype" value="single"/>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="FMAXNMV"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.simd_dp.asimdall.FMAXNMV_asimdall_only_SD" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" name="Q" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="29" name="U" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="28" width="5" settings="5">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="o1" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="sz" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="5" settings="5">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="16" width="5" name="opcode" usename="1" settings="5" psbits="xxxxx">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="FMAXNMV_asimdall_only_SD" oneofinclass="1" oneof="2" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="datatype" value="single"/>
+          <docvar key="mnemonic" value="FMAXNMV"/>
+          <docvar key="instr-class" value="advsimd"/>
+        </docvars>
+        <asmtemplate><text>FMAXNMV  S</text><a hover="Is the number of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="d">&lt;d&gt;</a><text>, </text><a hover="Is the name of the SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn">&lt;Vn&gt;</a><text>.4S</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.asimdall.FMAXNMV_asimdall_only_SD" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if sz:Q != '01' then UNDEFINED;        // .4S only
+
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer esize = 32;
+constant integer datasize = 64 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Q);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="FMAXNMV_asimdall_only_H" symboldefcount="1">
+      <symbol link="V_hv">&lt;V&gt;</symbol>
+      <account encodedin="">
+        <intro>
+          <para>Is the destination width specifier, H.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="FMAXNMV_asimdall_only_H, FMAXNMV_asimdall_only_SD" symboldefcount="1">
+      <symbol link="d">&lt;d&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the number of the SIMD&amp;FP destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="FMAXNMV_asimdall_only_H, FMAXNMV_asimdall_only_SD" symboldefcount="1">
+      <symbol link="Vn">&lt;Vn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="FMAXNMV_asimdall_only_H" symboldefcount="1">
+      <symbol link="T_option__28">&lt;T&gt;</symbol>
+      <definition encodedin="Q">
+        <intro>Is an arrangement specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">Q</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">4H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">8H</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.simd_dp.asimdall.FMAXNMV_asimdall_only_H" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckFPAdvSIMDEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPAdvSIMDEnabled64()">CheckFPAdvSIMDEnabled64</a>();
+constant bits(datasize) operand = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[n, datasize];
+<a link="impl-aarch64.V.write.2" file="shared_pseudocode.xml" hover="accessor: V[integer n, ESize width] = bits(width) value">V</a>[d, esize] = <a link="impl-aarch64.FPReduce.4" file="shared_pseudocode.xml" hover="function: bits(esize) FPReduce(ReduceOp op, bits(N) input, integer esize, FPCR_Type fpcr)">FPReduce</a>(<a link="ReduceOp_FMAXNUM" file="shared_pseudocode.xml" hover="enumeration ReduceOp {ReduceOp_FMINNUM, ReduceOp_FMAXNUM, ReduceOp_FMIN, ReduceOp_FMAX, ReduceOp_FADD, ReduceOp_ADD}">ReduceOp_FMAXNUM</a>, operand, esize, FPCR);</pstext></ps>
+  </ps_section>
+</instructionsection>

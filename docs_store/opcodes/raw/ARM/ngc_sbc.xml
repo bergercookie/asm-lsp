@@ -1,0 +1,175 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="NGC_SBC" title="NGC -- A64" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="NGC"/>
+    <docvar key="cond-setting" value="no-s"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="SBC"/>
+  </docvars>
+  <heading>NGC</heading>
+  <desc>
+    <brief>
+      <para>Negate with carry</para>
+    </brief>
+    <authored>
+      <para>This instruction negates the sum of a register value and
+the value of NOT (Carry flag), and writes the result
+to the destination register.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <aliasto refiform="sbc.xml" iformid="SBC">SBC</aliasto>
+  <classes>
+    <iclass name="Not setting the condition flags" oneof="1" id="iclass_not_setting_the_condition_flags" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="cond-setting" value="no-s"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="SBC"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <regdiagram form="32" psname="A64.dpreg.addsub_carry.SBC_32_addsub_carry.NGC" tworows="1">
+        <box hibit="31" width="1" name="sf" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="30" name="op" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Rm" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="6" settings="6">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="NGC_SBC_32_addsub_carry" oneofinclass="2" oneof="2" label="32-bit" bitdiffs="sf == 0">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SBC"/>
+          <docvar key="alias_mnemonic" value="NGC"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="cond-setting" value="no-s"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>NGC  </text><a hover="Is the 32-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="WdOrWZR">&lt;Wd&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose source register, encoded in the &quot;Rm&quot; field." link="WmOrWZR__3">&lt;Wm&gt;</a></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="sbc.xml#SBC_32_addsub_carry">SBC</a><text>  </text><a hover="Is the 32-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." href="sbc.xml#WdOrWZR">&lt;Wd&gt;</a><text>, WZR, </text><a hover="Is the 32-bit name of the second general-purpose source register, encoded in the &quot;Rm&quot; field." href="sbc.xml#WmOrWZR__2">&lt;Wm&gt;</a></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+      <encoding name="NGC_SBC_64_addsub_carry" oneofinclass="2" oneof="2" label="64-bit" bitdiffs="sf == 1">
+        <docvars>
+          <docvar key="datatype" value="64"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SBC"/>
+          <docvar key="alias_mnemonic" value="NGC"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="cond-setting" value="no-s"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>NGC  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="XdOrXZR__6">&lt;Xd&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose source register, encoded in the &quot;Rm&quot; field." link="XmOrXZR">&lt;Xm&gt;</a></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="sbc.xml#SBC_64_addsub_carry">SBC</a><text>  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." href="sbc.xml#XdOrXZR__6">&lt;Xd&gt;</a><text>, XZR, </text><a hover="Is the 64-bit name of the second general-purpose source register, encoded in the &quot;Rm&quot; field." href="sbc.xml#XmOrXZR__4">&lt;Xm&gt;</a></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="NGC_SBC_32_addsub_carry" symboldefcount="1">
+      <symbol link="WdOrWZR">&lt;Wd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="NGC_SBC_32_addsub_carry" symboldefcount="1">
+      <symbol link="WmOrWZR__3">&lt;Wm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose source register, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="NGC_SBC_64_addsub_carry" symboldefcount="1">
+      <symbol link="XdOrXZR__6">&lt;Xd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="NGC_SBC_64_addsub_carry" symboldefcount="1">
+      <symbol link="XmOrXZR">&lt;Xm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose source register, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

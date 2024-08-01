@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="MOV_mova_za_mz4" title="MOV (vector to array, four registers)" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="MOV" />
+    <docvar key="instr-class" value="mortlach2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="MOVA" />
+  </docvars>
+  <heading>MOV (vector to array, four registers)</heading>
+  <desc>
+    <brief>Move four vector registers to four ZA single-vector groups</brief>
+    <description>
+      <para>The instruction operates on four ZA single-vector groups.</para>
+      <para>The single-vector group within each quarter of the ZA array is selected by the sum of the vector select register and offset, modulo quarter the number of ZA array vectors.</para>
+      <para>The <arm-defined-word>vector group</arm-defined-word> symbol <syntax>VGx4</syntax> indicates that the instruction operates on four ZA single-vector groups.</para>
+      <para>The preferred disassembly syntax uses a 64-bit element size, but an assembler should accept any element size if it is used consistently for all operands. The <arm-defined-word>vector group</arm-defined-word> symbol is preferred for disassembly, but optional in assembler source code.</para>
+      <para>This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <sm_policy>SM_1_only</sm_policy>
+  </desc>
+  <aliasto refiform="mova_za_mz4.xml" iformid="mova_za_mz4">MOVA (vector to array, four registers)</aliasto>
+  <classes>
+    <iclass name="SME2" oneof="1" id="iclass_mortlach2" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="MOVA" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="MOVA-ZA.MZ4-1">
+        <box hibit="31" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="29" width="15" settings="15">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="14" width="2" name="Rv" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" settings="3">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="9" width="3" name="Zn" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="6" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="3" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="2" width="3" name="off3" usename="1">
+          <c colspan="3"></c>
+        </box>
+      </regdiagram>
+      <encoding name="MOV_mova_za_mz4_1" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="alias_mnemonic" value="MOV" />
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="MOVA" />
+        </docvars>
+        <asmtemplate><text>MOV     ZA.D[</text><a link="sa_wv" hover="32-bit vector select register W8-W11 (field &quot;Rv&quot;)">&lt;Wv&gt;</a><text>, </text><a link="sa_offs" hover="Vector select offset [0-7] (field &quot;off3&quot;)">&lt;offs&gt;</a><a>{, VGx4}</a><text>], </text><text>{</text><text> </text><a link="sa_zn1" hover="First scalable vector register of source multi-vector group (field Zn)">&lt;Zn1&gt;</a><text>.D-</text><a link="sa_zn4" hover="Fourth scalable vector register of source multi-vector group (field Zn)">&lt;Zn4&gt;</a><text>.D </text><text>}</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="mova_za_mz4.xml#mova_za_mz4_1">MOVA</a><text>    ZA.D[</text><a link="sa_wv" hover="32-bit vector select register W8-W11 (field &quot;Rv&quot;)">&lt;Wv&gt;</a><text>, </text><a link="sa_offs" hover="Vector select offset [0-7] (field &quot;off3&quot;)">&lt;offs&gt;</a><a>{, VGx4}</a><text>], </text><text>{</text><text> </text><a link="sa_zn1" hover="First scalable vector register of source multi-vector group (field Zn)">&lt;Zn1&gt;</a><text>.D-</text><a link="sa_zn4" hover="Fourth scalable vector register of source multi-vector group (field Zn)">&lt;Zn4&gt;</a><text>.D </text><text>}</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="MOV_mova_za_mz4_1" symboldefcount="1">
+      <symbol link="sa_wv">&lt;Wv&gt;</symbol>
+      <account encodedin="Rv">
+        <intro>
+          <para>Is the 32-bit name of the vector select register W8-W11, encoded in the "Rv" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_mova_za_mz4_1" symboldefcount="1">
+      <symbol link="sa_offs">&lt;offs&gt;</symbol>
+      <account encodedin="off3">
+        <intro>
+          <para>Is the vector select offset, in the range 0 to 7, encoded in the "off3" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_mova_za_mz4_1" symboldefcount="1">
+      <symbol link="sa_zn1">&lt;Zn1&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the first scalable vector register of the source multi-vector group, encoded as "Zn" times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_mova_za_mz4_1" symboldefcount="1">
+      <symbol link="sa_zn4">&lt;Zn4&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the fourth scalable vector register of the source multi-vector group, encoded as "Zn" times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

@@ -1,0 +1,101 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="DRPS" title="DRPS -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="DRPS"/>
+  </docvars>
+  <heading>DRPS</heading>
+  <desc>
+    <brief>
+      <para>Debug restore PE state</para>
+    </brief>
+    <authored>
+      <para>This instruction restores <xref linkend="ARMARM_BEIDIGBH">PSTATE</xref> from the SPSR.</para>
+      <para>The SPSR is checked for the current Exception level for an illegal return event.
+See <xref linkend="ARMARM_BEIEGDFD">Illegal return events from AArch64 state</xref>.</para>
+      <para>This instruction is <arm-defined-word>UNDEFINED</arm-defined-word> at EL0.</para>
+      <para>This instruction is <arm-defined-word>UNDEFINED</arm-defined-word> in Non-debug state.</para>
+      <para>For more information on the operation of <instruction>DRPS</instruction>,
+see <xref linkend="ARMARM_BABGGBHH">DRPS</xref>.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="DRPS"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.control.branch_reg.DRPS_64E_branch_reg" tworows="1">
+        <box hibit="31" width="7" settings="7">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="24" width="4" name="opc" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="op2" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" width="6" name="op3" usename="1" settings="6" psbits="xxxxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="4" width="5" name="op4" usename="1" settings="5" psbits="xxxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="DRPS_64E_branch_reg" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="DRPS"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>DRPS</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.branch_reg.DRPS_64E_branch_reg" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">// Empty.</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all"/>
+  <ps_section howmany="1">
+    <ps name="A64.control.branch_reg.DRPS_64E_branch_reg" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">if !<a link="impl-shared.Halted.0" file="shared_pseudocode.xml" hover="function: boolean Halted()">Halted</a>() || PSTATE.EL == <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a> then UNDEFINED;
+<a link="impl-shared.DRPSInstruction.0" file="shared_pseudocode.xml" hover="function: DRPSInstruction()">DRPSInstruction</a>();</pstext></ps>
+  </ps_section>
+</instructionsection>

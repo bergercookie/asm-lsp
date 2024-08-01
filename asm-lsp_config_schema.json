@@ -43,9 +43,13 @@
                 "z80": {
                     "description": "Flag to turn features related to the z80 instruction set on/off.",
                     "type": "boolean"
+                },
+                "arm": {
+                    "description": "Flag to turn features related to the arm instruction set on/off.",
+                    "type": "boolean"
                 }
             },
-            "required": [ "x86", "x86_64", "z80" ]
+            "required": [ "x86", "x86_64", "z80", "arm" ]
         }
     },
     "required": [ "version", "assemblers", "instruction_sets" ]

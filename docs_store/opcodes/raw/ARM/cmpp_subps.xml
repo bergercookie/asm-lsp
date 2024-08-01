@@ -1,0 +1,111 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="CMPP_SUBPS" title="CMPP -- A64" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="CMPP"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="SUBPS"/>
+  </docvars>
+  <heading>CMPP</heading>
+  <desc>
+    <brief>
+      <para>Compare with tag</para>
+    </brief>
+    <authored>
+      <para>This instruction subtracts the 56-bit address held in the second source
+register from the 56-bit address held in the first source register,
+updates the condition flags based on the result of the subtraction,
+and discards the result.</para>
+    </authored>
+  </desc>
+  <aliasto refiform="subps.xml" iformid="SUBPS">SUBPS</aliasto>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="SUBPS"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_MTE" name="ARMv8.5"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.dpreg.dp_2src.SUBPS_64S_dp_2src.CMPP" tworows="1">
+        <box hibit="31" name="sf" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="30" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="28" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Xm" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="6" name="opcode" usename="1" settings="6" psbits="xxxxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Xn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Xd" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="CMPP_SUBPS_64S_dp_2src" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SUBPS"/>
+          <docvar key="alias_mnemonic" value="CMPP"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <asmtemplate><text>CMPP  </text><a hover="Is the 64-bit name of the first source general-purpose register or stack pointer, encoded in the &quot;Xn&quot; field." link="XnSP_option__8">&lt;Xn|SP&gt;</a><text>, </text><a hover="Is the 64-bit name of the second general-purpose source register or stack pointer, encoded in the &quot;Xm&quot; field." link="XmSP_option__2">&lt;Xm|SP&gt;</a></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="subps.xml#SUBPS_64S_dp_2src">SUBPS</a><text>  XZR, </text><a hover="Is the 64-bit name of the first source general-purpose register or stack pointer, encoded in the &quot;Xn&quot; field." href="subps.xml#XnSP_option__8">&lt;Xn|SP&gt;</a><text>, </text><a hover="Is the 64-bit name of the second general-purpose source register or stack pointer, encoded in the &quot;Xm&quot; field." href="subps.xml#XmSP_option__2">&lt;Xm|SP&gt;</a></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="CMPP_SUBPS_64S_dp_2src" symboldefcount="1">
+      <symbol link="XnSP_option__8">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Xn">
+        <intro>
+          <para>Is the 64-bit name of the first source general-purpose register or stack pointer, encoded in the "Xn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CMPP_SUBPS_64S_dp_2src" symboldefcount="1">
+      <symbol link="XmSP_option__2">&lt;Xm|SP&gt;</symbol>
+      <account encodedin="Xm">
+        <intro>
+          <para>Is the 64-bit name of the second general-purpose source register or stack pointer, encoded in the "Xm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

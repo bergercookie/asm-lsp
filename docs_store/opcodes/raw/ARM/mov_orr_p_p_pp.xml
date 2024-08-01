@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="MOV_orr_p_p_pp" title="MOV" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="MOV" />
+    <docvar key="cond-setting" value="no-s" />
+    <docvar key="instr-class" value="sve" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="ORR" />
+  </docvars>
+  <heading>MOV</heading>
+  <desc>
+    <brief>Move predicate (unpredicated)</brief>
+    <description>
+      <para>Read all elements from the source predicate and place in the destination predicate. This instruction is unpredicated. Does not set the condition flags.</para>
+      <para>For programmer convenience, an assembler must also accept predicate-as-counter register names for the source and destination predicate registers.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+  </desc>
+  <aliasto refiform="orr_p_p_pp.xml" iformid="orr_p_p_pp">ORR (predicates)</aliasto>
+  <classes>
+    <iclass name="Not setting the condition flags" oneof="1" id="iclass_no_s" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="cond-setting" value="no-s" />
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="ORR" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="ORR-P.P.PP-Z" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" name="op" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" name="S" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="19" width="4" name="Pm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" width="2" settings="2">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="13" width="4" name="Pg" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="9" name="o2" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="8" width="4" name="Pn" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="4" name="o3" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="3" width="4" name="Pd" usename="1">
+          <c colspan="4"></c>
+        </box>
+      </regdiagram>
+      <encoding name="MOV_orr_p_p_pp_z" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="alias_mnemonic" value="MOV" />
+          <docvar key="cond-setting" value="no-s" />
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="ORR" />
+        </docvars>
+        <asmtemplate><text>MOV     </text><a link="sa_pd" hover="Destination scalable predicate register (field &quot;Pd&quot;)">&lt;Pd&gt;</a><text>.B, </text><a link="sa_pn" hover="First source scalable predicate register (field &quot;Pn&quot;)">&lt;Pn&gt;</a><text>.B</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="orr_p_p_pp.xml#orr_p_p_pp_z">ORR</a><text> </text><a link="sa_pd" hover="Destination scalable predicate register (field &quot;Pd&quot;)">&lt;Pd&gt;</a><text>.B, </text><a link="sa_pn" hover="First source scalable predicate register (field &quot;Pn&quot;)">&lt;Pn&gt;</a><text>/Z, </text><a link="sa_pn" hover="First source scalable predicate register (field &quot;Pn&quot;)">&lt;Pn&gt;</a><text>.B, </text><a link="sa_pn" hover="First source scalable predicate register (field &quot;Pn&quot;)">&lt;Pn&gt;</a><text>.B</text></asmtemplate>
+          <aliascond>S == '0' &amp;&amp; Pn == Pm &amp;&amp; Pm == Pg</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="MOV_orr_p_p_pp_z" symboldefcount="1">
+      <symbol link="sa_pd">&lt;Pd&gt;</symbol>
+      <account encodedin="Pd">
+        <intro>
+          <para>Is the name of the destination scalable predicate register, encoded in the "Pd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_orr_p_p_pp_z" symboldefcount="1">
+      <symbol link="sa_pn">&lt;Pn&gt;</symbol>
+      <account encodedin="Pn">
+        <intro>
+          <para>Is the name of the first source scalable predicate register, encoded in the "Pn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

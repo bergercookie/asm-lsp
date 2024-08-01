@@ -1,0 +1,239 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="CRC32" title="CRC32B, CRC32H, CRC32W, CRC32X -- A64" type="instruction">
+  <docvars>
+    <docvar key="feature" value="crc"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+  </docvars>
+  <heading>CRC32B, CRC32H, CRC32W, CRC32X</heading>
+  <desc>
+    <brief>
+      <para>CRC32 checksum</para>
+    </brief>
+    <authored>
+      <para>This instruction performs a cyclic redundancy check (CRC)
+calculation on a value held in a general-purpose register. It takes
+an input CRC value in the first source operand, performs a CRC on
+the input value in the second source operand, and returns the output
+CRC value. The second source operand can be 8, 16, 32, or 64
+bits. To align with common usage, the bit order of the values is
+reversed as part of the operation, and the polynomial
+<hexnumber>0x04C11DB7</hexnumber> is used for the CRC calculation.</para>
+      <para>In an Armv8.0 implementation, this is an <arm-defined-word>OPTIONAL</arm-defined-word> instruction.
+From Armv8.1, it is mandatory for all implementations to implement this instruction.</para>
+      <note>
+        <para><register_link id="AArch64-id_aa64isar0_el1.xml" state="AArch64">ID_AA64ISAR0_EL1</register_link>.CRC32
+indicates whether this instruction is supported.</para>
+      </note>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="CRC" oneof="1" id="iclass_crc" no_encodings="4" isa="A64">
+      <docvars>
+        <docvar key="feature" value="crc"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="4"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_CRC32" name="ARMv8.0"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.dpreg.dp_2src.CRC32B_32C_dp_2src" tworows="1">
+        <box hibit="31" width="1" name="sf" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="30" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Rm" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="3" settings="3">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="12" name="C" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="sz" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="CRC32B_32C_dp_2src" oneofinclass="4" oneof="4" label="CRC32B" bitdiffs="sf == 0 &amp;&amp; sz == 00">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="feature" value="crc"/>
+          <docvar key="mnemonic" value="CRC32B"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="sz">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>CRC32B  </text><a hover="Is the 32-bit name of the general-purpose accumulator output register, encoded in the &quot;Rd&quot; field." link="WdOrWZR__2">&lt;Wd&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose accumulator input register, encoded in the &quot;Rn&quot; field." link="WnOrWZR__4">&lt;Wn&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose data source register, encoded in the &quot;Rm&quot; field." link="WmOrWZR__5">&lt;Wm&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="CRC32H_32C_dp_2src" oneofinclass="4" oneof="4" label="CRC32H" bitdiffs="sf == 0 &amp;&amp; sz == 01">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="feature" value="crc"/>
+          <docvar key="mnemonic" value="CRC32H"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="sz">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>CRC32H  </text><a hover="Is the 32-bit name of the general-purpose accumulator output register, encoded in the &quot;Rd&quot; field." link="WdOrWZR__2">&lt;Wd&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose accumulator input register, encoded in the &quot;Rn&quot; field." link="WnOrWZR__4">&lt;Wn&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose data source register, encoded in the &quot;Rm&quot; field." link="WmOrWZR__5">&lt;Wm&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="CRC32W_32C_dp_2src" oneofinclass="4" oneof="4" label="CRC32W" bitdiffs="sf == 0 &amp;&amp; sz == 10">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="feature" value="crc"/>
+          <docvar key="mnemonic" value="CRC32W"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="sz">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>CRC32W  </text><a hover="Is the 32-bit name of the general-purpose accumulator output register, encoded in the &quot;Rd&quot; field." link="WdOrWZR__2">&lt;Wd&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose accumulator input register, encoded in the &quot;Rn&quot; field." link="WnOrWZR__4">&lt;Wn&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose data source register, encoded in the &quot;Rm&quot; field." link="WmOrWZR__5">&lt;Wm&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="CRC32X_64C_dp_2src" oneofinclass="4" oneof="4" label="CRC32X" bitdiffs="sf == 1 &amp;&amp; sz == 11">
+        <docvars>
+          <docvar key="datatype" value="64"/>
+          <docvar key="feature" value="crc"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="CRC32X"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>1</c>
+        </box>
+        <box hibit="11" width="2" name="sz">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>CRC32X  </text><a hover="Is the 32-bit name of the general-purpose accumulator output register, encoded in the &quot;Rd&quot; field." link="WdOrWZR__2">&lt;Wd&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose accumulator input register, encoded in the &quot;Rn&quot; field." link="WnOrWZR__4">&lt;Wn&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose data source register, encoded in the &quot;Rm&quot; field." link="XmOrXZR__8">&lt;Xm&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpreg.dp_2src.CRC32B_32C_dp_2src" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_CRC32) then UNDEFINED;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rm);
+if sf == '1' &amp;&amp; sz != '11' then UNDEFINED;
+if sf == '0' &amp;&amp; sz == '11' then UNDEFINED;
+constant integer size = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(sz);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="CRC32B_32C_dp_2src, CRC32H_32C_dp_2src, CRC32W_32C_dp_2src, CRC32X_64C_dp_2src" symboldefcount="1">
+      <symbol link="WdOrWZR__2">&lt;Wd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose accumulator output register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CRC32B_32C_dp_2src, CRC32H_32C_dp_2src, CRC32W_32C_dp_2src, CRC32X_64C_dp_2src" symboldefcount="1">
+      <symbol link="WnOrWZR__4">&lt;Wn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose accumulator input register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CRC32B_32C_dp_2src, CRC32H_32C_dp_2src, CRC32W_32C_dp_2src" symboldefcount="1">
+      <symbol link="WmOrWZR__5">&lt;Wm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose data source register, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CRC32X_64C_dp_2src" symboldefcount="1">
+      <symbol link="XmOrXZR__8">&lt;Xm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose data source register, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.dpreg.dp_2src.CRC32B_32C_dp_2src" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bits(32)      acc     = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 32];     // accumulator
+constant bits(size)    val     = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[m, size];   // input value
+constant bits(32)      poly    = 0x04C11DB7&lt;31:0&gt;;
+
+constant bits(32+size) tempacc = <a link="impl-shared.BitReverse.1" file="shared_pseudocode.xml" hover="function: bits(N) BitReverse(bits(N) data)">BitReverse</a>(acc):<a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(size);
+constant bits(size+32) tempval = <a link="impl-shared.BitReverse.1" file="shared_pseudocode.xml" hover="function: bits(N) BitReverse(bits(N) data)">BitReverse</a>(val):<a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(32);
+
+// Poly32Mod2 on a bitstring does a polynomial Modulus over {0,1} operation
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, 32] = <a link="impl-shared.BitReverse.1" file="shared_pseudocode.xml" hover="function: bits(N) BitReverse(bits(N) data)">BitReverse</a>(<a link="impl-shared.Poly32Mod2.2" file="shared_pseudocode.xml" hover="function: bits(32) Poly32Mod2(bits(N) data_in, bits(32) poly)">Poly32Mod2</a>(tempacc EOR tempval, poly));</pstext></ps>
+  </ps_section>
+</instructionsection>

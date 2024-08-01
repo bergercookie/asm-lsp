@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="MOV_orr_z_zz" title="MOV (vector, unpredicated)" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="MOV" />
+    <docvar key="instr-class" value="sve" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="ORR" />
+  </docvars>
+  <heading>MOV (vector, unpredicated)</heading>
+  <desc>
+    <brief>Move vector register (unpredicated)</brief>
+    <description>
+      <para>Move vector register. This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+  </desc>
+  <aliasto refiform="orr_z_zz.xml" iformid="orr_z_zz">ORR (vectors, unpredicated)</aliasto>
+  <classes>
+    <iclass name="SVE" oneof="1" id="iclass_sve" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="ORR" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="ORR-Z.ZZ-_">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="opc&lt;1&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="opc&lt;0&gt;" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Zm" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="15" width="6" settings="6">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="MOV_orr_z_zz_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="alias_mnemonic" value="MOV" />
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="ORR" />
+        </docvars>
+        <asmtemplate><text>MOV     </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.D, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.D</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="orr_z_zz.xml#orr_z_zz_">ORR</a><text> </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.D, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.D, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.D</text></asmtemplate>
+          <aliascond>Zn == Zm</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="MOV_orr_z_zz_" symboldefcount="1">
+      <symbol link="sa_zd">&lt;Zd&gt;</symbol>
+      <account encodedin="Zd">
+        <intro>
+          <para>Is the name of the destination scalable vector register, encoded in the "Zd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_orr_z_zz_" symboldefcount="1">
+      <symbol link="sa_zn">&lt;Zn&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the first source scalable vector register, encoded in the "Zn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

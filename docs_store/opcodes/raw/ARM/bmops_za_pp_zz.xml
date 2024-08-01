@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="bmops_za_pp_zz" title="BMOPS" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="BMOPS" />
+  </docvars>
+  <heading>BMOPS</heading>
+  <desc>
+    <brief>Bitwise exclusive NOR population count outer product and subtract</brief>
+    <description>
+      <para>This instruction works with 32-bit element ZA tile. This instruction generates an outer product of the first source SVL<sub>S</sub>×1 vector and the second source 1×SVL<sub>S</sub> vector. Each outer product element is obtained as population count of the bitwise XNOR result of the corresponding 32-bit elements of the first source vector and the second source vector. Each source vector is independently predicated by a corresponding governing predicate. When either source vector element is inactive the corresponding destination tile element remains unmodified. The resulting SVL<sub>S</sub>×SVL<sub>S</sub> product is then destructively subtracted from the destination tile.</para>
+    </description>
+    <status>Green</status>
+    <predicated>True</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <sm_policy>SM_1_only</sm_policy>
+    <is_gov_pred_pair>True</is_gov_pred_pair>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SME2" oneof="1" id="iclass_mortlach2" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="BMOPS" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="BMOPS-ZA.PP.ZZ-32" tworows="1">
+        <box hibit="31" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="29" width="9" settings="9">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Zm" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="15" width="3" name="Pm" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="12" width="3" name="Pn" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" name="S" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="3" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="2" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="1" width="2" name="ZAda" usename="1">
+          <c colspan="2"></c>
+        </box>
+      </regdiagram>
+      <encoding name="bmops_za_pp_zz_32" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="BMOPS" />
+        </docvars>
+        <asmtemplate><text>BMOPS   </text><a link="sa_zada" hover="ZA tile ZA0-ZA3 (field &quot;ZAda&quot;)">&lt;ZAda&gt;</a><text>.S, </text><a link="sa_pn" hover="First governing scalable predicate register P0-P7 (field &quot;Pn&quot;)">&lt;Pn&gt;</a><text>/M, </text><a link="sa_pm" hover="Second governing scalable predicate register P0-P7 (field &quot;Pm&quot;)">&lt;Pm&gt;</a><text>/M, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.S, </text><a link="sa_zm" hover="Second source scalable vector register (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.S</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="BMOPS-ZA.PP.ZZ-32" mylink="BMOPS-ZA.PP.ZZ-32" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+constant integer esize = 32;
+constant integer a = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pn);
+constant integer b = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pm);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer da = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(ZAda);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="bmops_za_pp_zz_32" symboldefcount="1">
+      <symbol link="sa_zada">&lt;ZAda&gt;</symbol>
+      <account encodedin="ZAda">
+        <intro>
+          <para>Is the name of the ZA tile ZA0-ZA3, encoded in the "ZAda" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="bmops_za_pp_zz_32" symboldefcount="1">
+      <symbol link="sa_pn">&lt;Pn&gt;</symbol>
+      <account encodedin="Pn">
+        <intro>
+          <para>Is the name of the first governing scalable predicate register P0-P7, encoded in the "Pn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="bmops_za_pp_zz_32" symboldefcount="1">
+      <symbol link="sa_pm">&lt;Pm&gt;</symbol>
+      <account encodedin="Pm">
+        <intro>
+          <para>Is the name of the second governing scalable predicate register P0-P7, encoded in the "Pm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="bmops_za_pp_zz_32" symboldefcount="1">
+      <symbol link="sa_zn">&lt;Zn&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the first source scalable vector register, encoded in the "Zn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="bmops_za_pp_zz_32" symboldefcount="1">
+      <symbol link="sa_zm">&lt;Zm&gt;</symbol>
+      <account encodedin="Zm">
+        <intro>
+          <para>Is the name of the second source scalable vector register, encoded in the "Zm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="BMOPS-ZA.PP.ZZ-32" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckStreamingSVEAndZAEnabled.0" file="shared_pseudocode.xml" hover="function: CheckStreamingSVEAndZAEnabled()">CheckStreamingSVEAndZAEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer PL = VL DIV 8;
+constant integer dim = VL DIV esize;
+constant bits(PL) mask1 = <a link="impl-aarch64.P.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) P[integer n, integer width]">P</a>[a, PL];
+constant bits(PL) mask2 = <a link="impl-aarch64.P.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) P[integer n, integer width]">P</a>[b, PL];
+constant bits(VL) operand1 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[n, VL];
+constant bits(VL) operand2 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[m, VL];
+constant bits(dim*dim*esize) operand3 = <a link="impl-aarch64.ZAtile.read.3" file="shared_pseudocode.xml" hover="accessor: bits(width) ZAtile[integer tile, ESize esize, integer width]">ZAtile</a>[da, esize, dim*dim*esize];
+bits(dim*dim*esize) result;
+
+for row = 0 to dim-1
+    constant bits(esize) element1 = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand1, row, esize];
+    for col = 0 to dim-1
+        constant bits(esize) element2 = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand2, col, esize];
+        constant bits(esize) element3 = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand3, row*dim + col, esize];
+        if (<a link="impl-aarch64.ActivePredicateElement.3" file="shared_pseudocode.xml" hover="function: boolean ActivePredicateElement(bits(N) pred, integer e, integer esize)">ActivePredicateElement</a>(mask1, row, esize) &amp;&amp;
+              <a link="impl-aarch64.ActivePredicateElement.3" file="shared_pseudocode.xml" hover="function: boolean ActivePredicateElement(bits(N) pred, integer e, integer esize)">ActivePredicateElement</a>(mask2, col, esize)) then
+            constant integer res = <a link="impl-shared.BitCount.1" file="shared_pseudocode.xml" hover="function: integer BitCount(bits(N) x)">BitCount</a>(NOT(element1 EOR element2));
+            <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, row*dim + col, esize] = element3 - res;
+        else
+            <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, row*dim + col, esize] = element3;
+<a link="impl-aarch64.ZAtile.write.3" file="shared_pseudocode.xml" hover="accessor: ZAtile[integer tile, ESize esize, integer width] = bits(width) value">ZAtile</a>[da, esize, dim*dim*esize] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

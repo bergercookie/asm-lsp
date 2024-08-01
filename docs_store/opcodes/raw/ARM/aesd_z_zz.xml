@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="aesd_z_zz" title="AESD" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="AESD" />
+  </docvars>
+  <heading>AESD</heading>
+  <desc>
+    <brief>AES single round decryption</brief>
+    <description>
+      <para>The <instruction>AESD</instruction> instruction reads a 16-byte state array from each 128-bit segment of the first source vector, together with a round key from the corresponding 128-bit segment of the second source vector. Each state array undergoes a single round of the <arm-defined-word>AddRoundKey()</arm-defined-word>, <arm-defined-word>InvSubBytes()</arm-defined-word> and <arm-defined-word>InvShiftRows()</arm-defined-word> transformations in accordance with the AES standard. Each updated state array is destructively placed in the corresponding segment of the first source vector. This instruction is unpredicated.</para>
+      <para>ID_AA64ZFR0_EL1.AES indicates whether this instruction is implemented.</para>
+      <para>This instruction is illegal when executed in Streaming SVE mode, unless FEAT_SME_FA64 is implemented and enabled.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <sm_policy>SM_0_only</sm_policy>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SVE2" oneof="1" id="iclass_sve2" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="AESD" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SVE_AES" feature="FEAT_SVE_AES" />
+      </arch_variants>
+      <regdiagram form="32" psname="AESD-Z.ZZ-_" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="5" settings="5">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="16" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="15" width="5" settings="5">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="10" name="o2" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Zm" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Zdn" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="aesd_z_zz_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="AESD" />
+        </docvars>
+        <asmtemplate><text>AESD    </text><a link="sa_zdn" hover="First source and destination scalable vector register (field &quot;Zdn&quot;)">&lt;Zdn&gt;</a><text>.B, </text><a link="sa_zdn" hover="First source and destination scalable vector register (field &quot;Zdn&quot;)">&lt;Zdn&gt;</a><text>.B, </text><a link="sa_zm" hover="Second source scalable vector register (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.B</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="AESD-Z.ZZ-_" mylink="AESD-Z.ZZ-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) || !IsFeatureImplemented(FEAT_SVE_AES) then UNDEFINED;
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer dn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zdn);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="aesd_z_zz_" symboldefcount="1">
+      <symbol link="sa_zdn">&lt;Zdn&gt;</symbol>
+      <account encodedin="Zdn">
+        <intro>
+          <para>Is the name of the first source and destination scalable vector register, encoded in the "Zdn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="aesd_z_zz_" symboldefcount="1">
+      <symbol link="sa_zm">&lt;Zm&gt;</symbol>
+      <account encodedin="Zm">
+        <intro>
+          <para>Is the name of the second source scalable vector register, encoded in the "Zm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="AESD-Z.ZZ-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckNonStreamingSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckNonStreamingSVEEnabled()">CheckNonStreamingSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer segments = VL DIV 128;
+constant bits(VL) operand1 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[dn, VL];
+constant bits(VL) operand2 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[m, VL];
+bits(VL) result;
+
+result = operand1 EOR operand2;
+for s = 0 to segments-1
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, s, 128] = <a link="impl-shared.AESInvSubBytes.1" file="shared_pseudocode.xml" hover="function: bits(128) AESInvSubBytes(bits(128) op)">AESInvSubBytes</a>(<a link="impl-shared.AESInvShiftRows.1" file="shared_pseudocode.xml" hover="function: bits(128) AESInvShiftRows(bits(128) op)">AESInvShiftRows</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[result, s, 128]));
+
+<a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[dn, VL] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

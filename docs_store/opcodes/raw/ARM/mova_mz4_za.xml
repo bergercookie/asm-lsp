@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="mova_mz4_za" title="MOVA (tile to vector, four registers)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="MOVA" />
+  </docvars>
+  <heading>MOVA (tile to vector, four registers)</heading>
+  <desc>
+    <brief>Move four ZA tile slices to four vector registers</brief>
+    <description>
+      <para>The instruction operates on four consecutive horizontal or vertical slices within a named ZA tile of the specified element size.</para>
+      <para>The consecutive slice numbers within the tile are selected starting from the sum of the slice index register and immediate offset, modulo the number of such elements in a vector. The immediate offset is a multiple of 4 in the range 0 to the number of elements in a 128-bit vector segment minus 4.</para>
+      <para>This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <sm_policy>SM_1_only</sm_policy>
+  </desc>
+  <alias_list howmany="1">
+    <alias_list_intro>This instruction is used by the alias </alias_list_intro>
+    <aliasref aliaspageid="MOV_mova_mz4_za" aliasfile="mov_mova_mz4_za.xml" hover="Move four ZA tile slices to four vector registers" punct=".">
+      <text>MOV (tile to vector, four registers)</text>
+      <aliaspref>Unconditionally</aliaspref>
+    </aliasref>
+    <alias_list_outro> The alias is always the preferred disassembly.</alias_list_outro>
+  </alias_list>
+  <classes>
+    <classesintro count="4">
+      <txt>It has encodings from 4 classes:</txt>
+      <a href="#iclass_per_byte">8-bit</a>
+      <txt>, </txt>
+      <a href="#iclass_per_halfword">16-bit</a>
+      <txt>, </txt>
+      <a href="#iclass_per_word">32-bit</a>
+      <txt> and </txt>
+      <a href="#iclass_per_doubleword">64-bit</a>
+    </classesintro>
+    <iclass name="8-bit" oneof="4" id="iclass_per_byte" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="asimdimm-datatype" value="per-byte" />
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="MOVA" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="MOVA-MZ4.ZA-B1" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="6" settings="6">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="15" name="V" usename="1">
+          <c></c>
+        </box>
+        <box hibit="14" width="2" name="Rs" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="9" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="6" width="2" name="off2" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="4" width="3" name="Zd" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="1" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="mova_mz4_za_b1" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-byte" />
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="MOVA" />
+        </docvars>
+        <asmtemplate><text>MOVA    </text><text>{</text><text> </text><a link="sa_zd1" hover="First scalable vector register of destination multi-vector group (field Zd)">&lt;Zd1&gt;</a><text>.B-</text><a link="sa_zd4" hover="Fourth scalable vector register of destination multi-vector group (field Zd)">&lt;Zd4&gt;</a><text>.B </text><text>}</text><text>, ZA0</text><a link="sa_hv" hover="Horizontal or vertical slice indicator (field &quot;V&quot;) [H,V]">&lt;HV&gt;</a><text>.B[</text><a link="sa_ws" hover="32-bit slice index register W12-W15 (field &quot;Rs&quot;)">&lt;Ws&gt;</a><text>, </text><a link="sa_offs1" hover="First slice index offset, encoded as &quot;off2&quot; field times 4 (field off2)">&lt;offs1&gt;</a><text>:</text><a link="sa_offs4" hover="Fourth slice index offset, encoded as &quot;off2&quot; field times 4 plus 3 (field off2)">&lt;offs4&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="MOVA-MZ4.ZA-B1" mylink="MOVA-MZ4.ZA-B1" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+constant integer s = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('011':Rs);
+constant integer nreg = 4;
+constant integer esize = 8;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd:'00');
+constant integer n = 0;
+constant integer offset = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(off2:'00');
+constant boolean vertical = V == '1';</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="16-bit" oneof="4" id="iclass_per_halfword" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="asimdimm-datatype" value="per-halfword" />
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="MOVA" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="MOVA-MZ4.ZA-H1" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" width="6" settings="6">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="15" name="V" usename="1">
+          <c></c>
+        </box>
+        <box hibit="14" width="2" name="Rs" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="9" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="6" name="ZAn" usename="1">
+          <c></c>
+        </box>
+        <box hibit="5" name="o1" usename="1">
+          <c></c>
+        </box>
+        <box hibit="4" width="3" name="Zd" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="1" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="mova_mz4_za_h1" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-halfword" />
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="MOVA" />
+        </docvars>
+        <asmtemplate><text>MOVA    </text><text>{</text><text> </text><a link="sa_zd1" hover="First scalable vector register of destination multi-vector group (field Zd)">&lt;Zd1&gt;</a><text>.H-</text><a link="sa_zd4" hover="Fourth scalable vector register of destination multi-vector group (field Zd)">&lt;Zd4&gt;</a><text>.H </text><text>}</text><text>, </text><a link="sa_zan_1" hover="ZA tile ZA0-ZA1 to be accessed (field &quot;ZAn&quot;)">&lt;ZAn&gt;</a><a link="sa_hv" hover="Horizontal or vertical slice indicator (field &quot;V&quot;) [H,V]">&lt;HV&gt;</a><text>.H[</text><a link="sa_ws" hover="32-bit slice index register W12-W15 (field &quot;Rs&quot;)">&lt;Ws&gt;</a><text>, </text><a link="sa_offs1_2" hover="First slice index offset, encoded as &quot;o1&quot; field times 4 (field o1)">&lt;offs1&gt;</a><text>:</text><a link="sa_offs4_2" hover="Fourth slice index offset, encoded as &quot;o1&quot; field times 4 plus 3 (field o1)">&lt;offs4&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="MOVA-MZ4.ZA-H1" mylink="MOVA-MZ4.ZA-H1" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+constant integer s = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('011':Rs);
+constant integer nreg = 4;
+constant integer esize = 16;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd:'00');
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(ZAn);
+constant integer offset = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(o1:'00');
+constant boolean vertical = V == '1';</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="32-bit" oneof="4" id="iclass_per_word" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="asimdimm-datatype" value="per-word" />
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="MOVA" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="MOVA-MZ4.ZA-W1" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="6" settings="6">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="15" name="V" usename="1">
+          <c></c>
+        </box>
+        <box hibit="14" width="2" name="Rs" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="9" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="6" width="2" name="ZAn" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="4" width="3" name="Zd" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="1" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="mova_mz4_za_w1" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-word" />
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="MOVA" />
+        </docvars>
+        <asmtemplate><text>MOVA    </text><text>{</text><text> </text><a link="sa_zd1" hover="First scalable vector register of destination multi-vector group (field Zd)">&lt;Zd1&gt;</a><text>.S-</text><a link="sa_zd4" hover="Fourth scalable vector register of destination multi-vector group (field Zd)">&lt;Zd4&gt;</a><text>.S </text><text>}</text><text>, </text><a link="sa_zan_2" hover="ZA tile ZA0-ZA3 to be accessed (field &quot;ZAn&quot;)">&lt;ZAn&gt;</a><a link="sa_hv" hover="Horizontal or vertical slice indicator (field &quot;V&quot;) [H,V]">&lt;HV&gt;</a><text>.S[</text><a link="sa_ws" hover="32-bit slice index register W12-W15 (field &quot;Rs&quot;)">&lt;Ws&gt;</a><text>, </text><a link="sa_offs1_1" hover="First slice index offset, with implicit value 0">&lt;offs1&gt;</a><text>:</text><a link="sa_offs4_1" hover="Fourth slice index offset, with implicit value 3">&lt;offs4&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="MOVA-MZ4.ZA-W1" mylink="MOVA-MZ4.ZA-W1" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+constant integer s = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('011':Rs);
+constant integer nreg = 4;
+constant integer esize = 32;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd:'00');
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(ZAn);
+constant integer offset = 0;
+constant boolean vertical = V == '1';</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="64-bit" oneof="4" id="iclass_per_doubleword" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="asimdimm-datatype" value="per-doubleword" />
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="MOVA" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="MOVA-MZ4.ZA-D1" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" width="6" settings="6">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="15" name="V" usename="1">
+          <c></c>
+        </box>
+        <box hibit="14" width="2" name="Rs" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="9" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="3" name="ZAn" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="4" width="3" name="Zd" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="1" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="mova_mz4_za_d1" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-doubleword" />
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="MOVA" />
+        </docvars>
+        <asmtemplate><text>MOVA    </text><text>{</text><text> </text><a link="sa_zd1" hover="First scalable vector register of destination multi-vector group (field Zd)">&lt;Zd1&gt;</a><text>.D-</text><a link="sa_zd4" hover="Fourth scalable vector register of destination multi-vector group (field Zd)">&lt;Zd4&gt;</a><text>.D </text><text>}</text><text>, </text><a link="sa_zan" hover="ZA tile ZA0-ZA7 to be accessed (field &quot;ZAn&quot;)">&lt;ZAn&gt;</a><a link="sa_hv" hover="Horizontal or vertical slice indicator (field &quot;V&quot;) [H,V]">&lt;HV&gt;</a><text>.D[</text><a link="sa_ws" hover="32-bit slice index register W12-W15 (field &quot;Rs&quot;)">&lt;Ws&gt;</a><text>, </text><a link="sa_offs1_1" hover="First slice index offset, with implicit value 0">&lt;offs1&gt;</a><text>:</text><a link="sa_offs4_1" hover="Fourth slice index offset, with implicit value 3">&lt;offs4&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="MOVA-MZ4.ZA-D1" mylink="MOVA-MZ4.ZA-D1" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+if <a link="impl-aarch64.MaxImplementedSVL.0" file="shared_pseudocode.xml" hover="function: VecLen MaxImplementedSVL()">MaxImplementedSVL</a>() &lt; 256 then UNDEFINED;
+constant integer s = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('011':Rs);
+constant integer nreg = 4;
+constant integer esize = 64;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd:'00');
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(ZAn);
+constant integer offset = 0;
+constant boolean vertical = V == '1';</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="mova_mz4_za_b1, mova_mz4_za_d1, mova_mz4_za_h1, mova_mz4_za_w1" symboldefcount="1">
+      <symbol link="sa_zd1">&lt;Zd1&gt;</symbol>
+      <account encodedin="Zd">
+        <intro>
+          <para>Is the name of the first scalable vector register of the destination multi-vector group, encoded as "Zd" times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="mova_mz4_za_b1, mova_mz4_za_d1, mova_mz4_za_h1, mova_mz4_za_w1" symboldefcount="1">
+      <symbol link="sa_zd4">&lt;Zd4&gt;</symbol>
+      <account encodedin="Zd">
+        <intro>
+          <para>Is the name of the fourth scalable vector register of the destination multi-vector group, encoded as "Zd" times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="mova_mz4_za_h1" symboldefcount="1">
+      <symbol link="sa_zan_1">&lt;ZAn&gt;</symbol>
+      <account encodedin="ZAn">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-halfword" />
+        </docvars>
+        <intro>
+          <para>For the 16-bit variant: is the name of the ZA tile ZA0-ZA1 to be accessed, encoded in the "ZAn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="mova_mz4_za_w1" symboldefcount="2">
+      <symbol link="sa_zan_2">&lt;ZAn&gt;</symbol>
+      <account encodedin="ZAn">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-word" />
+        </docvars>
+        <intro>
+          <para>For the 32-bit variant: is the name of the ZA tile ZA0-ZA3 to be accessed, encoded in the "ZAn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="mova_mz4_za_d1" symboldefcount="3">
+      <symbol link="sa_zan">&lt;ZAn&gt;</symbol>
+      <account encodedin="ZAn">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-doubleword" />
+        </docvars>
+        <intro>
+          <para>For the 64-bit variant: is the name of the ZA tile ZA0-ZA7 to be accessed, encoded in the "ZAn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="mova_mz4_za_b1, mova_mz4_za_d1, mova_mz4_za_h1, mova_mz4_za_w1" symboldefcount="1">
+      <symbol link="sa_hv">&lt;HV&gt;</symbol>
+      <definition encodedin="V">
+        <intro>Is the horizontal or vertical slice indicator, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">V</entry>
+                <entry class="symbol">&lt;HV&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">V</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="mova_mz4_za_b1, mova_mz4_za_d1, mova_mz4_za_h1, mova_mz4_za_w1" symboldefcount="1">
+      <symbol link="sa_ws">&lt;Ws&gt;</symbol>
+      <account encodedin="Rs">
+        <intro>
+          <para>Is the 32-bit name of the slice index register W12-W15, encoded in the "Rs" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="mova_mz4_za_b1" symboldefcount="1">
+      <symbol link="sa_offs1">&lt;offs1&gt;</symbol>
+      <account encodedin="off2">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-byte" />
+        </docvars>
+        <intro>
+          <para>For the 8-bit variant: is the first slice index offset, encoded as "off2" field times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="mova_mz4_za_h1" symboldefcount="2">
+      <symbol link="sa_offs1_2">&lt;offs1&gt;</symbol>
+      <account encodedin="o1">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-halfword" />
+        </docvars>
+        <intro>
+          <para>For the 16-bit variant: is the first slice index offset, encoded as "o1" field times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="mova_mz4_za_d1, mova_mz4_za_w1" symboldefcount="3">
+      <symbol link="sa_offs1_1">&lt;offs1&gt;</symbol>
+      <account encodedin="">
+        <intro>
+          <para>For the 32-bit and 64-bit variant: is the first slice index offset, with implicit value 0.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="mova_mz4_za_b1" symboldefcount="1">
+      <symbol link="sa_offs4">&lt;offs4&gt;</symbol>
+      <account encodedin="off2">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-byte" />
+        </docvars>
+        <intro>
+          <para>For the 8-bit variant: is the fourth slice index offset, encoded as "off2" field times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="mova_mz4_za_h1" symboldefcount="2">
+      <symbol link="sa_offs4_2">&lt;offs4&gt;</symbol>
+      <account encodedin="o1">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-halfword" />
+        </docvars>
+        <intro>
+          <para>For the 16-bit variant: is the fourth slice index offset, encoded as "o1" field times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="mova_mz4_za_d1, mova_mz4_za_w1" symboldefcount="3">
+      <symbol link="sa_offs4_1">&lt;offs4&gt;</symbol>
+      <account encodedin="">
+        <intro>
+          <para>For the 32-bit and 64-bit variant: is the fourth slice index offset, with implicit value 3.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="MOVA-MZ4.ZA-B1" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckStreamingSVEAndZAEnabled.0" file="shared_pseudocode.xml" hover="function: CheckStreamingSVEAndZAEnabled()">CheckStreamingSVEAndZAEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+if nreg == 4 &amp;&amp; esize == 64 &amp;&amp; VL &lt; 256 then UNDEFINED;
+constant integer slices = VL DIV esize;
+constant bits(32) index = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[s, 32];
+constant integer slice = ((<a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(index) - (<a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(index) MOD nreg)) + offset) MOD slices;
+
+for r = 0 to nreg-1
+    constant bits(VL) result = <a link="impl-aarch64.ZAslice.read.5" file="shared_pseudocode.xml" hover="accessor: bits(width) ZAslice[integer tile, ESize esize, boolean vertical, integer slice, integer width]">ZAslice</a>[n, esize, vertical, slice + r, VL];
+    <a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[d + r, VL] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

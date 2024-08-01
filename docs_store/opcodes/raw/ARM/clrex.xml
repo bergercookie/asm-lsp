@@ -1,0 +1,96 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="CLREX" title="CLREX -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="CLREX"/>
+  </docvars>
+  <heading>CLREX</heading>
+  <desc>
+    <brief>
+      <para>Clear exclusive</para>
+    </brief>
+    <authored>
+      <para>This instruction clears the local monitor of the executing PE.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="CLREX"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.control.barriers.CLREX_BN_barriers" tworows="1">
+        <box hibit="31" width="20" settings="20">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1">
+          <c colspan="4"/>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="CLREX_BN_barriers" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="CLREX"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>CLREX  {#</text><a hover="Is an optional 4-bit unsigned immediate, in the range 0 to 15, defaulting to 15 and encoded in the &quot;CRm&quot; field." link="option">&lt;imm&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.barriers.CLREX_BN_barriers" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">// CRm field is ignored</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="CLREX_BN_barriers" symboldefcount="1">
+      <symbol link="option">&lt;imm&gt;</symbol>
+      <account encodedin="CRm">
+        <intro>
+          <para>Is an optional 4-bit unsigned immediate, in the range 0 to 15, defaulting to 15 and encoded in the "CRm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.control.barriers.CLREX_BN_barriers" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-shared.ClearExclusiveLocal.1" file="shared_pseudocode.xml" hover="function: ClearExclusiveLocal(integer processorid)">ClearExclusiveLocal</a>(<a link="impl-shared.ProcessorID.0" file="shared_pseudocode.xml" hover="function: integer ProcessorID()">ProcessorID</a>());</pstext></ps>
+  </ps_section>
+</instructionsection>

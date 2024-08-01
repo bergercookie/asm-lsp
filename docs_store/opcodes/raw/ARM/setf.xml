@@ -1,0 +1,158 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="SETF" title="SETF8, SETF16 -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+  </docvars>
+  <heading>SETF8, SETF16</heading>
+  <desc>
+    <brief>
+      <para>Evaluation of 8-bit or 16-bit flag values</para>
+    </brief>
+    <authored>
+      <para>This instruction sets the PSTATE.NZV flags based on the value in the specified
+general-purpose register. <instruction>SETF8</instruction> treats the value as an 8-bit
+value. <instruction>SETF16</instruction> treats the value as a 16-bit value.</para>
+      <para>The PSTATE.C flag is not affected by these instructions.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_FlagM" name="ARMv8.4"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.dpreg.setf.SETF8_only_setf" tworows="1">
+        <box hibit="31" name="sf" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="30" name="op" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="28" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="6" name="opcode2" usename="1" settings="6" psbits="xxxxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="14" width="1" name="sz" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="13" width="4" settings="4">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" name="o3" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="3" width="4" name="mask" usename="1" settings="4" psbits="xxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="SETF8_only_setf" oneofinclass="2" oneof="2" label="SETF8" bitdiffs="sz == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SETF8"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="14" width="1" name="sz">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>SETF8  </text><a hover="Is the 32-bit name of the general-purpose source register, encoded in the &quot;Rn&quot; field." link="WnOrWZR">&lt;Wn&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="SETF16_only_setf" oneofinclass="2" oneof="2" label="SETF16" bitdiffs="sz == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SETF16"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="14" width="1" name="sz">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>SETF16  </text><a hover="Is the 32-bit name of the general-purpose source register, encoded in the &quot;Rn&quot; field." link="WnOrWZR">&lt;Wn&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpreg.setf.SETF8_only_setf" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_FlagM) then UNDEFINED;
+constant integer size = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(sz);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="SETF8_only_setf, SETF16_only_setf" symboldefcount="1">
+      <symbol link="WnOrWZR">&lt;Wn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.dpreg.setf.SETF8_only_setf" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bits(32) reg = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 32];
+PSTATE.N = reg&lt;size-1&gt;;
+PSTATE.Z = if (reg&lt;size-1:0&gt; == <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(size)) then '1' else '0';
+PSTATE.V = reg&lt;size&gt; EOR reg&lt;size-1&gt;;
+//PSTATE.C unchanged;</pstext></ps>
+  </ps_section>
+</instructionsection>

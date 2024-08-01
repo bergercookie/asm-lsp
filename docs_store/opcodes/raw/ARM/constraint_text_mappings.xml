@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE constraint_text_mappings PUBLIC "-//ARM//DTD constraint_text_mappings //EN" "constraint_text_mappings.dtd">
+
+<!-- Map constraint IDs on to humanly-readable text. This is used by the XSL
+     that handles the CONSTRAINED UNPREDICTABLE behaviour of instructions. -->
+
+<!-- Copyright (c) 2016-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and
+     distributed in accordance with the terms of the agreement entered
+     into by Arm and the party that Arm delivered this document to. -->
+
+<constraint_text_mappings>
+  <constraint_text_mapping>
+    <constraint_id>Constraint_NONE</constraint_id>
+    <constraint_text>The instruction executes as described, with no change to its behavior and no additional side effects.</constraint_text>
+  </constraint_text_mapping>
+  <constraint_text_mapping>
+    <constraint_id>Constraint_UNKNOWN</constraint_id>
+    <constraint_text>The value in the destination register is <arm-defined-word>unknown</arm-defined-word>.</constraint_text>
+  </constraint_text_mapping>
+  <constraint_text_mapping>
+    <constraint_id>Constraint_UNDEF</constraint_id>
+    <constraint_text>The instruction is <arm-defined-word>undefined</arm-defined-word>.</constraint_text>
+  </constraint_text_mapping>
+  <constraint_text_mapping>
+    <constraint_id>Constraint_NOP</constraint_id>
+    <constraint_text>The instruction executes as <instruction>NOP</instruction>.</constraint_text>
+  </constraint_text_mapping>
+  <constraint_text_mapping>
+    <constraint_id>Constraint_UNCOND</constraint_id>
+    <constraint_text>The instruction executes unconditionally.</constraint_text>
+  </constraint_text_mapping>
+  <constraint_text_mapping>
+    <constraint_id>Constraint_COND</constraint_id>
+    <constraint_text>The instruction executes conditionally.</constraint_text>
+  </constraint_text_mapping>
+  <constraint_text_mapping>
+    <constraint_id>Constraint_WBSUPPRESS</constraint_id>
+    <constraint_text>The instruction executes without writeback of the base address.</constraint_text>
+  </constraint_text_mapping>
+  <constraint_text_mapping>
+    <constraint_id>Constraint_ADDITIONAL_DECODE</constraint_id>
+    <constraint_text>The instruction executes with the additional decode: $pseudocode.</constraint_text>
+  </constraint_text_mapping>
+  <constraint_text_mapping>
+    <constraint_id>Constraint_EXECUTES_AS_IF</constraint_id>
+    <constraint_text>The instruction executes as if $pseudocode.</constraint_text>
+  </constraint_text_mapping>
+  <constraint_text_mapping>
+    <constraint_id>Constraint_LDUNKNOWN</constraint_id>
+    <constraint_text>The load instruction executes but the destination register takes an <arm-defined-word>unknown</arm-defined-word> value.</constraint_text>
+  </constraint_text_mapping>
+  <constraint_text_mapping>
+    <constraint_id>Constraint_STUNKNOWN</constraint_id>
+    <constraint_text>The store instruction executes but the value stored is <arm-defined-word>unknown</arm-defined-word>.</constraint_text>
+  </constraint_text_mapping>
+  <constraint_text_mapping>
+    <constraint_id>Constraint_BASEUNKNOWN</constraint_id>
+    <constraint_text>The store instruction executes but the value stored for the base register is <arm-defined-word>unknown</arm-defined-word>.</constraint_text>
+  </constraint_text_mapping>
+</constraint_text_mappings>

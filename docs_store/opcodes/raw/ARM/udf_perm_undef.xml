@@ -1,0 +1,82 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="UDF_perm_undef" title="UDF -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="UDF"/>
+  </docvars>
+  <heading>UDF</heading>
+  <desc>
+    <brief>
+      <para>Permanently undefined</para>
+    </brief>
+    <authored>
+      <para>This instruction generates an Undefined Instruction exception (<xref linkend="ARMARM_ESR_ELx">ESR_ELx</xref>.EC = <binarynumber>0b000000</binarynumber>).
+The encodings for <instruction>UDF</instruction> used in this section are defined as permanently <arm-defined-word>UNDEFINED</arm-defined-word>.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="UDF"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.reserved.perm_undef.UDF_only_perm_undef">
+        <box hibit="31" width="16" settings="16">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="15" width="16" name="imm16" usename="1">
+          <c colspan="16"/>
+        </box>
+      </regdiagram>
+      <encoding name="UDF_only_perm_undef" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="UDF"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <asmtemplate><text>UDF  #</text><a hover="is a 16-bit unsigned immediate, in the range 0 to 65535, encoded in the &quot;imm16&quot; field. The PE ignores the value of this constant." link="imm__21">&lt;imm&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.reserved.perm_undef.UDF_only_perm_undef" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">// The imm16 field is ignored by hardware.
+UNDEFINED;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="UDF_only_perm_undef" symboldefcount="1">
+      <symbol link="imm__21">&lt;imm&gt;</symbol>
+      <account encodedin="imm16">
+        <intro>
+          <para>is a 16-bit unsigned immediate, in the range 0 to 65535, encoded in the "imm16" field. The PE ignores the value of this constant.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.reserved.perm_undef.UDF_only_perm_undef" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">// No operation.</pstext></ps>
+  </ps_section>
+</instructionsection>

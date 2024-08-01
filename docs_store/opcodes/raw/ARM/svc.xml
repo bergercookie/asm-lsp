@@ -1,0 +1,91 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="SVC" title="SVC -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="SVC"/>
+  </docvars>
+  <heading>SVC</heading>
+  <desc>
+    <brief>
+      <para>Supervisor call</para>
+    </brief>
+    <authored>
+      <para>This instruction causes an exception to be taken to EL1.</para>
+      <para>On executing an <instruction>SVC</instruction> instruction, the PE records the exception
+as a Supervisor Call exception in
+<xref linkend="ARMARM_ESR_ELx">ESR_ELx</xref>, using the EC value
+<hexnumber>0x15</hexnumber>, and the value of the immediate argument.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="SVC"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.control.exception.SVC_EX_exception" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="3" name="opc" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="16" name="imm16" usename="1">
+          <c colspan="16"/>
+        </box>
+        <box hibit="4" width="3" name="op2" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="1" width="2" name="LL" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="SVC_EX_exception" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SVC"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>SVC  #</text><a hover="Is a 16-bit unsigned immediate, in the range 0 to 65535, encoded in the &quot;imm16&quot; field." link="imm">&lt;imm&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.exception.SVC_EX_exception" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant bits(16) imm = imm16;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="SVC_EX_exception" symboldefcount="1">
+      <symbol link="imm">&lt;imm&gt;</symbol>
+      <account encodedin="imm16">
+        <intro>
+          <para>Is a 16-bit unsigned immediate, in the range 0 to 65535, encoded in the "imm16" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.control.exception.SVC_EX_exception" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="AArch64.CheckForSVCTrap.1" file="shared_pseudocode.xml" hover="function: AArch64.CheckForSVCTrap(bits(16) immediate)">AArch64.CheckForSVCTrap</a>(imm);
+<a link="AArch64.CallSupervisor.1" file="shared_pseudocode.xml" hover="function: AArch64.CallSupervisor(bits(16) immediate)">AArch64.CallSupervisor</a>(imm);</pstext></ps>
+  </ps_section>
+</instructionsection>

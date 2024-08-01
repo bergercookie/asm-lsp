@@ -1,0 +1,602 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="LD1_advsimd_sngl" title="LD1 (single structure) -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="advsimd"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="LD1"/>
+  </docvars>
+  <heading>LD1 (single structure)</heading>
+  <desc>
+    <brief>
+      <para>Load one single-element structure to one lane of one register</para>
+    </brief>
+    <authored>
+      <para>This instruction loads a single-element structure
+from memory and writes the result to the specified lane of the SIMD&amp;FP register
+without affecting the other bits of the register.</para>
+      <para>Depending on the settings in the <register_link id="AArch64-cpacr_el1.xml" state="AArch64">CPACR_EL1</register_link>,
+<register_link id="AArch64-cptr_el2.xml" state="AArch64">CPTR_EL2</register_link>, and <register_link id="AArch64-cptr_el3.xml" state="AArch64">CPTR_EL3</register_link> registers,
+and the current Security state and Exception level,
+an attempt to execute the instruction might be trapped.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1, the timing of this instruction is insensitive to the value of the data being loaded or stored.</para>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <classesintro count="2">
+      <txt>It has encodings from 2 classes:</txt>
+      <a href="#iclass_no_offset">No offset</a>
+      <txt> and </txt>
+      <a href="#iclass_post_index">Post-index</a>
+    </classesintro>
+    <iclass name="No offset" oneof="2" id="iclass_no_offset" no_encodings="4" isa="A64">
+      <docvars>
+        <docvar key="as-structure-post-index" value="as-no-post-index"/>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="LD1"/>
+      </docvars>
+      <iclassintro count="4"/>
+      <regdiagram form="32" psname="A64.ldst.asisdlso.LD1_asisdlso_B1_1b" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" width="1" name="Q" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="29" width="7" settings="7">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="22" name="L" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="21" name="R" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="4" settings="4">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="16" name="o2" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="15" width="3" name="opcode" usename="1" settings="1" psbits="xxx">
+          <c>x</c>
+          <c>x</c>
+          <c>0</c>
+        </box>
+        <box hibit="12" width="1" name="S" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="11" width="2" name="size" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="LD1_asisdlso_B1_1b" oneofinclass="4" oneof="12" label="8-bit" bitdiffs="opcode == 000">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LD1"/>
+          <docvar key="as-structure-org" value="of-bytes"/>
+          <docvar key="as-structure-post-index" value="as-no-post-index"/>
+          <docvar key="instr-class" value="advsimd"/>
+        </docvars>
+        <box hibit="15" width="3" name="opcode">
+          <c>0</c>
+          <c>0</c>
+          <c/>
+        </box>
+        <asmtemplate><text>LD1  { </text><a hover="Is the name of the first or only SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Vt">&lt;Vt&gt;</a><text>.B }[</text><a hover="For the 8-bit variant: is the element index, encoded in &quot;Q:S:size&quot;." link="index">&lt;index&gt;</a><text>], [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="LD1_asisdlso_H1_1h" oneofinclass="4" oneof="12" label="16-bit" bitdiffs="opcode == 010 &amp;&amp; size == x0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LD1"/>
+          <docvar key="as-structure-org" value="of-halfwords"/>
+          <docvar key="as-structure-post-index" value="as-no-post-index"/>
+          <docvar key="instr-class" value="advsimd"/>
+        </docvars>
+        <box hibit="15" width="3" name="opcode">
+          <c>0</c>
+          <c>1</c>
+          <c/>
+        </box>
+        <box hibit="11" width="2" name="size">
+          <c>x</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>LD1  { </text><a hover="Is the name of the first or only SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Vt">&lt;Vt&gt;</a><text>.H }[</text><a hover="For the 16-bit variant: is the element index, encoded in &quot;Q:S:size&amp;lt;1&amp;gt;&quot;." link="index__2">&lt;index&gt;</a><text>], [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="LD1_asisdlso_S1_1s" oneofinclass="4" oneof="12" label="32-bit" bitdiffs="opcode == 100 &amp;&amp; size == 00">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LD1"/>
+          <docvar key="as-structure-org" value="of-words"/>
+          <docvar key="as-structure-post-index" value="as-no-post-index"/>
+          <docvar key="instr-class" value="advsimd"/>
+        </docvars>
+        <box hibit="15" width="3" name="opcode">
+          <c>1</c>
+          <c>0</c>
+          <c/>
+        </box>
+        <box hibit="11" width="2" name="size">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>LD1  { </text><a hover="Is the name of the first or only SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Vt">&lt;Vt&gt;</a><text>.S }[</text><a hover="For the 32-bit variant: is the element index, encoded in &quot;Q:S&quot;." link="index__3">&lt;index&gt;</a><text>], [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="LD1_asisdlso_D1_1d" oneofinclass="4" oneof="12" label="64-bit" bitdiffs="opcode == 100 &amp;&amp; S == 0 &amp;&amp; size == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LD1"/>
+          <docvar key="as-structure-org" value="of-doublewords"/>
+          <docvar key="as-structure-post-index" value="as-no-post-index"/>
+          <docvar key="instr-class" value="advsimd"/>
+        </docvars>
+        <box hibit="15" width="3" name="opcode">
+          <c>1</c>
+          <c>0</c>
+          <c/>
+        </box>
+        <box hibit="12" width="1" name="S">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="size">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>LD1  { </text><a hover="Is the name of the first or only SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Vt">&lt;Vt&gt;</a><text>.D }[</text><a hover="For the 64-bit variant: is the element index, encoded in &quot;Q&quot;." link="index__4">&lt;index&gt;</a><text>], [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.asisdlso.LD1_asisdlso_B1_1b" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer m = integer UNKNOWN;
+constant boolean wback = FALSE;
+constant boolean nontemporal = FALSE;
+constant boolean tagchecked = wback || n != 31;</pstext></ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Post-index" oneof="2" id="iclass_post_index" no_encodings="8" isa="A64">
+      <docvars>
+        <docvar key="as-structure-post-index" value="as-post-index"/>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="LD1"/>
+      </docvars>
+      <iclassintro count="8"/>
+      <regdiagram form="32" psname="A64.ldst.asisdlsop.LD1_asisdlsop_B1_i1b" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" width="1" name="Q" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="29" width="7" settings="7">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="22" name="L" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="21" name="R" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Rm" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="3" name="opcode" usename="1" settings="1" psbits="xxx">
+          <c>x</c>
+          <c>x</c>
+          <c>0</c>
+        </box>
+        <box hibit="12" width="1" name="S" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="11" width="2" name="size" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="LD1_asisdlsop_B1_i1b" oneofinclass="8" oneof="12" label="8-bit, immediate offset" bitdiffs="Rm == 11111 &amp;&amp; opcode == 000">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LD1"/>
+          <docvar key="as-structure-org" value="of-bytes"/>
+          <docvar key="as-structure-post-index" value="as-post-index"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="as-structure-index-source" value="post-index-imm"/>
+          <docvar key="ld1-single-labels" value="of-bytes-post-index-imm"/>
+        </docvars>
+        <box hibit="20" width="5" name="Rm">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" width="3" name="opcode">
+          <c>0</c>
+          <c>0</c>
+          <c/>
+        </box>
+        <asmtemplate><text>LD1  { </text><a hover="Is the name of the first or only SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Vt">&lt;Vt&gt;</a><text>.B }[</text><a hover="For the 8-bit variant: is the element index, encoded in &quot;Q:S:size&quot;." link="index">&lt;index&gt;</a><text>], [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>], #1</text></asmtemplate>
+      </encoding>
+      <encoding name="LD1_asisdlsop_BX1_r1b" oneofinclass="8" oneof="12" label="8-bit, register offset" bitdiffs="Rm != 11111 &amp;&amp; opcode == 000">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LD1"/>
+          <docvar key="as-structure-index-source" value="post-index-reg"/>
+          <docvar key="as-structure-org" value="of-bytes"/>
+          <docvar key="as-structure-post-index" value="as-post-index"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="ld1-single-labels" value="of-bytes-post-index-reg"/>
+        </docvars>
+        <box hibit="20" width="5" name="Rm">
+          <c>N</c>
+          <c>N</c>
+          <c>N</c>
+          <c>N</c>
+          <c>N</c>
+        </box>
+        <box hibit="15" width="3" name="opcode">
+          <c>0</c>
+          <c>0</c>
+          <c/>
+        </box>
+        <asmtemplate><text>LD1  { </text><a hover="Is the name of the first or only SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Vt">&lt;Vt&gt;</a><text>.B }[</text><a hover="For the 8-bit variant: is the element index, encoded in &quot;Q:S:size&quot;." link="index">&lt;index&gt;</a><text>], [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>], </text><a hover="Is the 64-bit name of the general-purpose post-index register, excluding XZR, encoded in the &quot;Rm&quot; field." link="Xm__2">&lt;Xm&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="LD1_asisdlsop_D1_i1d" oneofinclass="8" oneof="12" label="64-bit, immediate offset" bitdiffs="Rm == 11111 &amp;&amp; opcode == 100 &amp;&amp; S == 0 &amp;&amp; size == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LD1"/>
+          <docvar key="as-structure-org" value="of-doublewords"/>
+          <docvar key="as-structure-post-index" value="as-post-index"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="as-structure-index-source" value="post-index-imm"/>
+          <docvar key="ld1-single-labels" value="of-doublewords-post-index-imm"/>
+        </docvars>
+        <box hibit="20" width="5" name="Rm">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" width="3" name="opcode">
+          <c>1</c>
+          <c>0</c>
+          <c/>
+        </box>
+        <box hibit="12" width="1" name="S">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="size">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>LD1  { </text><a hover="Is the name of the first or only SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Vt">&lt;Vt&gt;</a><text>.D }[</text><a hover="For the 64-bit variant: is the element index, encoded in &quot;Q&quot;." link="index__4">&lt;index&gt;</a><text>], [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>], #8</text></asmtemplate>
+      </encoding>
+      <encoding name="LD1_asisdlsop_DX1_r1d" oneofinclass="8" oneof="12" label="64-bit, register offset" bitdiffs="Rm != 11111 &amp;&amp; opcode == 100 &amp;&amp; S == 0 &amp;&amp; size == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LD1"/>
+          <docvar key="as-structure-index-source" value="post-index-reg"/>
+          <docvar key="as-structure-org" value="of-doublewords"/>
+          <docvar key="as-structure-post-index" value="as-post-index"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="ld1-single-labels" value="of-doublewords-post-index-reg"/>
+        </docvars>
+        <box hibit="20" width="5" name="Rm">
+          <c>N</c>
+          <c>N</c>
+          <c>N</c>
+          <c>N</c>
+          <c>N</c>
+        </box>
+        <box hibit="15" width="3" name="opcode">
+          <c>1</c>
+          <c>0</c>
+          <c/>
+        </box>
+        <box hibit="12" width="1" name="S">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="size">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>LD1  { </text><a hover="Is the name of the first or only SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Vt">&lt;Vt&gt;</a><text>.D }[</text><a hover="For the 64-bit variant: is the element index, encoded in &quot;Q&quot;." link="index__4">&lt;index&gt;</a><text>], [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>], </text><a hover="Is the 64-bit name of the general-purpose post-index register, excluding XZR, encoded in the &quot;Rm&quot; field." link="Xm__2">&lt;Xm&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="LD1_asisdlsop_H1_i1h" oneofinclass="8" oneof="12" label="16-bit, immediate offset" bitdiffs="Rm == 11111 &amp;&amp; opcode == 010 &amp;&amp; size == x0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LD1"/>
+          <docvar key="as-structure-org" value="of-halfwords"/>
+          <docvar key="as-structure-post-index" value="as-post-index"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="as-structure-index-source" value="post-index-imm"/>
+          <docvar key="ld1-single-labels" value="of-halfwords-post-index-imm"/>
+        </docvars>
+        <box hibit="20" width="5" name="Rm">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" width="3" name="opcode">
+          <c>0</c>
+          <c>1</c>
+          <c/>
+        </box>
+        <box hibit="11" width="2" name="size">
+          <c>x</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>LD1  { </text><a hover="Is the name of the first or only SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Vt">&lt;Vt&gt;</a><text>.H }[</text><a hover="For the 16-bit variant: is the element index, encoded in &quot;Q:S:size&amp;lt;1&amp;gt;&quot;." link="index__2">&lt;index&gt;</a><text>], [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>], #2</text></asmtemplate>
+      </encoding>
+      <encoding name="LD1_asisdlsop_HX1_r1h" oneofinclass="8" oneof="12" label="16-bit, register offset" bitdiffs="Rm != 11111 &amp;&amp; opcode == 010 &amp;&amp; size == x0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LD1"/>
+          <docvar key="as-structure-index-source" value="post-index-reg"/>
+          <docvar key="as-structure-org" value="of-halfwords"/>
+          <docvar key="as-structure-post-index" value="as-post-index"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="ld1-single-labels" value="of-halfwords-post-index-reg"/>
+        </docvars>
+        <box hibit="20" width="5" name="Rm">
+          <c>N</c>
+          <c>N</c>
+          <c>N</c>
+          <c>N</c>
+          <c>N</c>
+        </box>
+        <box hibit="15" width="3" name="opcode">
+          <c>0</c>
+          <c>1</c>
+          <c/>
+        </box>
+        <box hibit="11" width="2" name="size">
+          <c>x</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>LD1  { </text><a hover="Is the name of the first or only SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Vt">&lt;Vt&gt;</a><text>.H }[</text><a hover="For the 16-bit variant: is the element index, encoded in &quot;Q:S:size&amp;lt;1&amp;gt;&quot;." link="index__2">&lt;index&gt;</a><text>], [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>], </text><a hover="Is the 64-bit name of the general-purpose post-index register, excluding XZR, encoded in the &quot;Rm&quot; field." link="Xm__2">&lt;Xm&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="LD1_asisdlsop_S1_i1s" oneofinclass="8" oneof="12" label="32-bit, immediate offset" bitdiffs="Rm == 11111 &amp;&amp; opcode == 100 &amp;&amp; size == 00">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LD1"/>
+          <docvar key="as-structure-org" value="of-words"/>
+          <docvar key="as-structure-post-index" value="as-post-index"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="as-structure-index-source" value="post-index-imm"/>
+          <docvar key="ld1-single-labels" value="of-words-post-index-imm"/>
+        </docvars>
+        <box hibit="20" width="5" name="Rm">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" width="3" name="opcode">
+          <c>1</c>
+          <c>0</c>
+          <c/>
+        </box>
+        <box hibit="11" width="2" name="size">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>LD1  { </text><a hover="Is the name of the first or only SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Vt">&lt;Vt&gt;</a><text>.S }[</text><a hover="For the 32-bit variant: is the element index, encoded in &quot;Q:S&quot;." link="index__3">&lt;index&gt;</a><text>], [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>], #4</text></asmtemplate>
+      </encoding>
+      <encoding name="LD1_asisdlsop_SX1_r1s" oneofinclass="8" oneof="12" label="32-bit, register offset" bitdiffs="Rm != 11111 &amp;&amp; opcode == 100 &amp;&amp; size == 00">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LD1"/>
+          <docvar key="as-structure-index-source" value="post-index-reg"/>
+          <docvar key="as-structure-org" value="of-words"/>
+          <docvar key="as-structure-post-index" value="as-post-index"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="ld1-single-labels" value="of-words-post-index-reg"/>
+        </docvars>
+        <box hibit="20" width="5" name="Rm">
+          <c>N</c>
+          <c>N</c>
+          <c>N</c>
+          <c>N</c>
+          <c>N</c>
+        </box>
+        <box hibit="15" width="3" name="opcode">
+          <c>1</c>
+          <c>0</c>
+          <c/>
+        </box>
+        <box hibit="11" width="2" name="size">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>LD1  { </text><a hover="Is the name of the first or only SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Vt">&lt;Vt&gt;</a><text>.S }[</text><a hover="For the 32-bit variant: is the element index, encoded in &quot;Q:S&quot;." link="index__3">&lt;index&gt;</a><text>], [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>], </text><a hover="Is the 64-bit name of the general-purpose post-index register, excluding XZR, encoded in the &quot;Rm&quot; field." link="Xm__2">&lt;Xm&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.asisdlsop.LD1_asisdlsop_B1_i1b" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rm);
+constant boolean wback = TRUE;
+constant boolean nontemporal = FALSE;
+constant boolean tagchecked = wback || n != 31;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="LD1_asisdlso_B1_1b, LD1_asisdlso_H1_1h, LD1_asisdlso_S1_1s, LD1_asisdlso_D1_1d, LD1_asisdlsop_B1_i1b, LD1_asisdlsop_BX1_r1b, LD1_asisdlsop_D1_i1d, LD1_asisdlsop_DX1_r1d, LD1_asisdlsop_H1_i1h, LD1_asisdlsop_HX1_r1h, LD1_asisdlsop_S1_i1s, LD1_asisdlsop_SX1_r1s" symboldefcount="1">
+      <symbol link="Vt">&lt;Vt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the name of the first or only SIMD&amp;FP register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LD1_asisdlso_B1_1b, LD1_asisdlsop_B1_i1b, LD1_asisdlsop_BX1_r1b" symboldefcount="1">
+      <symbol link="index">&lt;index&gt;</symbol>
+      <account encodedin="Q:S:size">
+        <intro>
+          <para>For the 8-bit variant: is the element index, encoded in "Q:S:size".</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LD1_asisdlso_H1_1h, LD1_asisdlsop_H1_i1h, LD1_asisdlsop_HX1_r1h" symboldefcount="2">
+      <symbol link="index__2">&lt;index&gt;</symbol>
+      <account encodedin="Q:S:size&lt;1&gt;">
+        <intro>
+          <para>For the 16-bit variant: is the element index, encoded in "Q:S:size&lt;1&gt;".</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LD1_asisdlso_S1_1s, LD1_asisdlsop_S1_i1s, LD1_asisdlsop_SX1_r1s" symboldefcount="3">
+      <symbol link="index__3">&lt;index&gt;</symbol>
+      <account encodedin="Q:S">
+        <intro>
+          <para>For the 32-bit variant: is the element index, encoded in "Q:S".</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LD1_asisdlso_D1_1d, LD1_asisdlsop_D1_i1d, LD1_asisdlsop_DX1_r1d" symboldefcount="4">
+      <symbol link="index__4">&lt;index&gt;</symbol>
+      <account encodedin="Q">
+        <intro>
+          <para>For the 64-bit variant: is the element index, encoded in "Q".</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LD1_asisdlso_B1_1b, LD1_asisdlso_H1_1h, LD1_asisdlso_S1_1s, LD1_asisdlso_D1_1d, LD1_asisdlsop_B1_i1b, LD1_asisdlsop_BX1_r1b, LD1_asisdlsop_D1_i1d, LD1_asisdlsop_DX1_r1d, LD1_asisdlsop_H1_i1h, LD1_asisdlsop_HX1_r1h, LD1_asisdlsop_S1_i1s, LD1_asisdlsop_SX1_r1s" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LD1_asisdlsop_BX1_r1b, LD1_asisdlsop_DX1_r1d, LD1_asisdlsop_HX1_r1h, LD1_asisdlsop_SX1_r1s" symboldefcount="1">
+      <symbol link="Xm__2">&lt;Xm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose post-index register, excluding XZR, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.asisdlso.LD1_asisdlso_B1_1b" sections="1" secttype="Shared Decode">
+      <pstext mayhavelinks="1" section="Postdecode" rep_section="postdecode">bits(2) scale = opcode&lt;2:1&gt;;
+constant integer selem = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(opcode&lt;0&gt;:R) + 1;
+boolean replicate = FALSE;
+integer index;
+
+case scale of
+    when '11'
+        // load and replicate
+        if L == '0' || S == '1' then UNDEFINED;
+        scale = size;
+        replicate = TRUE;
+    when '00'
+        index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Q:S:size);       // B[0-15]
+    when '01'
+        if size&lt;0&gt; == '1' then UNDEFINED;
+        index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Q:S:size&lt;1&gt;);    // H[0-7]
+    when '10'
+        if size&lt;1&gt; == '1' then UNDEFINED;
+        if size&lt;0&gt; == '0' then
+            index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Q:S);        // S[0-3]
+        else
+            if S == '1' then UNDEFINED;
+            index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Q);          // D[0-1]
+            scale = '11';
+
+constant integer datasize = 64 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Q);
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(scale);</pstext></ps>
+  </ps_section>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.asisdlso.LD1_asisdlso_B1_1b" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckFPAdvSIMDEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPAdvSIMDEnabled64()">CheckFPAdvSIMDEnabled64</a>();
+
+bits(64) address;
+bits(64) eaddr;
+bits(64) offs;
+bits(128) rval;
+bits(esize) element;
+constant integer ebytes = esize DIV 8;
+
+constant boolean privileged = PSTATE.EL != <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>;
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = CreateAccDescASIMD(<a link="MemOp_LOAD" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_LOAD</a>, nontemporal, tagchecked,
+                                                       privileged);
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+offs = <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(64);
+
+if replicate then
+    // load and replicate to all elements
+    for s = 0 to selem-1
+        eaddr = <a link="impl-shared.AddressIncrement.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressIncrement(bits(64) base, integer increment, AccessDescriptor accdesc)">AddressIncrement</a>(address, offs, accdesc);
+        element = <a link="impl-aarch64.Mem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size*8) Mem[bits(64) address, integer size, AccessDescriptor accdesc_in]">Mem</a>[eaddr, ebytes, accdesc];
+        // replicate to fill 128- or 64-bit register
+        <a link="impl-aarch64.V.write.2" file="shared_pseudocode.xml" hover="accessor: V[integer n, ESize width] = bits(width) value">V</a>[t, datasize] = <a link="impl-shared.Replicate.2" file="shared_pseudocode.xml" hover="function: bits(M*N) Replicate(bits(M) x, integer N)">Replicate</a>(element, datasize DIV esize);
+        offs = offs + ebytes;
+        t = (t + 1) MOD 32;
+else
+    // load/store one element per register
+    for s = 0 to selem-1
+        rval = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[t, 128];
+        eaddr = <a link="impl-shared.AddressIncrement.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressIncrement(bits(64) base, integer increment, AccessDescriptor accdesc)">AddressIncrement</a>(address, offs, accdesc);
+        <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[rval, index, esize] = <a link="impl-aarch64.Mem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size*8) Mem[bits(64) address, integer size, AccessDescriptor accdesc_in]">Mem</a>[eaddr, ebytes, accdesc];
+        <a link="impl-aarch64.V.write.2" file="shared_pseudocode.xml" hover="accessor: V[integer n, ESize width] = bits(width) value">V</a>[t, 128] = rval;
+        offs = offs + ebytes;
+        t = ( t + 1 ) MOD 32;
+if wback then
+    if m != 31 then
+        offs = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[m, 64];
+    address = <a link="impl-shared.AddressAdd.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressAdd(bits(64) base, integer offset, AccessDescriptor accdesc)">AddressAdd</a>(address, offs, accdesc);
+    if n == 31 then
+        <a link="impl-aarch64.SP.write.0" file="shared_pseudocode.xml" hover="accessor: SP[] = bits(64) value">SP</a>[] = address;
+    else
+        <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[n, 64] = address;
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

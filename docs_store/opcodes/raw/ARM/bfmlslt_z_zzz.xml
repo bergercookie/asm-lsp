@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="bfmlslt_z_zzz" title="BFMLSLT (vectors)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="BFMLSLT" />
+  </docvars>
+  <heading>BFMLSLT (vectors)</heading>
+  <desc>
+    <brief>BFloat16 floating-point multiply-subtract long from single-precision (top)</brief>
+    <description>
+      <para>This BFloat16 floating-point multiply-subtract long instruction widens the odd-numbered BFloat16 elements in the first source vector and the corresponding elements in the second source vector to single-precision format and then destructively multiplies and subtracts these values without intermediate rounding from the single-precision elements of the destination vector that overlap with the corresponding BFloat16 elements in the source vectors. This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <takes_movprfx>True</takes_movprfx>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SVE2" oneof="1" id="iclass_sve2" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="BFMLSLT" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SVE2p1" feature="FEAT_SVE2p1" />
+      </arch_variants>
+      <regdiagram form="32" psname="BFMLSLT-Z.ZZZ-_" tworows="1">
+        <box hibit="31" width="9" settings="9">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="22" name="o2" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Zm" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="15" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="13" name="op" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="12" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="10" name="T" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Zda" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="bfmlslt_z_zzz_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="BFMLSLT" />
+        </docvars>
+        <asmtemplate><text>BFMLSLT </text><a link="sa_zda" hover="Third source and destination scalable vector register (field &quot;Zda&quot;)">&lt;Zda&gt;</a><text>.S, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.H, </text><a link="sa_zm" hover="Second source scalable vector register (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.H</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="BFMLSLT-Z.ZZZ-_" mylink="BFMLSLT-Z.ZZZ-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) &amp;&amp; !IsFeatureImplemented(FEAT_SVE2p1) then UNDEFINED;
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer da = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zda);
+constant boolean op1_neg = TRUE;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="bfmlslt_z_zzz_" symboldefcount="1">
+      <symbol link="sa_zda">&lt;Zda&gt;</symbol>
+      <account encodedin="Zda">
+        <intro>
+          <para>Is the name of the third source and destination scalable vector register, encoded in the "Zda" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="bfmlslt_z_zzz_" symboldefcount="1">
+      <symbol link="sa_zn">&lt;Zn&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the first source scalable vector register, encoded in the "Zn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="bfmlslt_z_zzz_" symboldefcount="1">
+      <symbol link="sa_zm">&lt;Zm&gt;</symbol>
+      <account encodedin="Zm">
+        <intro>
+          <para>Is the name of the second source scalable vector register, encoded in the "Zm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="BFMLSLT-Z.ZZZ-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSVEEnabled()">CheckSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer PL = VL DIV 8;
+constant integer elements = VL DIV 32;
+constant bits(VL) op1 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[n, VL];
+constant bits(VL) op2 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[m, VL];
+constant bits(VL) op3 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[da, VL];
+bits(VL) result;
+
+for e = 0 to elements-1
+    constant bits(16) elem1 = (if op1_neg then <a link="impl-shared.BFNeg.1" file="shared_pseudocode.xml" hover="function: bits(N) BFNeg(bits(N) op)">BFNeg</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[op1, 2*e + 1, 16])
+                               else <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[op1, 2*e + 1, 16]);
+    constant bits(16) elem2 = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[op2, 2*e + 1, 16];
+    constant bits(32) elem3 = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[op3, e, 32];
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, 32] = <a link="impl-shared.BFMulAddH.4" file="shared_pseudocode.xml" hover="function: bits(N) BFMulAddH(bits(N) addend, bits(N DIV 2) op1, bits(N DIV 2) op2, FPCR_Type fpcr_in)">BFMulAddH</a>(elem3, elem1, elem2, FPCR);
+
+<a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[da, VL] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

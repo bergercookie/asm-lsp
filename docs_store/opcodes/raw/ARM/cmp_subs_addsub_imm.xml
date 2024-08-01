@@ -1,0 +1,190 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="CMP_SUBS_addsub_imm" title="CMP (immediate) -- A64" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="CMP"/>
+    <docvar key="cond-setting" value="S"/>
+    <docvar key="immediate-type" value="imm12u"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="SUBS"/>
+  </docvars>
+  <heading>CMP (immediate)</heading>
+  <desc>
+    <brief>
+      <para>Compare (immediate)</para>
+    </brief>
+    <authored>
+      <para>This instruction subtracts an optionally-shifted immediate
+value from a register value. It updates the condition flags based
+on the result, and discards the result.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <aliasto refiform="subs_addsub_imm.xml" iformid="SUBS_addsub_imm">SUBS (immediate)</aliasto>
+  <classes>
+    <iclass name="Setting the condition flags" oneof="1" id="iclass_setting_the_condition_flags" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="cond-setting" value="S"/>
+        <docvar key="immediate-type" value="imm12u"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="SUBS"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <regdiagram form="32" psname="A64.dpimm.addsub_imm.SUBS_32S_addsub_imm.CMP" tworows="1">
+        <box hibit="31" width="1" name="sf" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="30" name="op" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="28" width="6" settings="6">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="sh" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="21" width="12" name="imm12" usename="1">
+          <c colspan="12"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="CMP_SUBS_32S_addsub_imm" oneofinclass="2" oneof="2" label="32-bit" bitdiffs="sf == 0">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SUBS"/>
+          <docvar key="alias_mnemonic" value="CMP"/>
+          <docvar key="cond-setting" value="S"/>
+          <docvar key="immediate-type" value="imm12u"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>CMP  </text><a hover="Is the 32-bit name of the source general-purpose register or stack pointer, encoded in the &quot;Rn&quot; field." link="WnWSP_option">&lt;Wn|WSP&gt;</a><text>, #</text><a hover="Is an unsigned immediate, in the range 0 to 4095, encoded in the &quot;imm12&quot; field." link="imm__17">&lt;imm&gt;</a><text>{, </text><a hover="Is the optional left shift to apply to the immediate, defaulting to LSL #0 and " link="shift_option">&lt;shift&gt;</a><text>}</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="subs_addsub_imm.xml#SUBS_32S_addsub_imm">SUBS</a><text>  WZR, </text><a hover="Is the 32-bit name of the source general-purpose register or stack pointer, encoded in the &quot;Rn&quot; field." href="subs_addsub_imm.xml#WnWSP_option">&lt;Wn|WSP&gt;</a><text>, #</text><a hover="Is an unsigned immediate, in the range 0 to 4095, encoded in the &quot;imm12&quot; field." href="subs_addsub_imm.xml#imm__17">&lt;imm&gt;</a><text>{, </text><a hover="Is the optional left shift to apply to the immediate, defaulting to LSL #0 and " href="subs_addsub_imm.xml#shift_option">&lt;shift&gt;</a><text>}</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+      <encoding name="CMP_SUBS_64S_addsub_imm" oneofinclass="2" oneof="2" label="64-bit" bitdiffs="sf == 1">
+        <docvars>
+          <docvar key="datatype" value="64"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SUBS"/>
+          <docvar key="alias_mnemonic" value="CMP"/>
+          <docvar key="cond-setting" value="S"/>
+          <docvar key="immediate-type" value="imm12u"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>CMP  </text><a hover="Is the 64-bit name of the source general-purpose register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option__3">&lt;Xn|SP&gt;</a><text>, #</text><a hover="Is an unsigned immediate, in the range 0 to 4095, encoded in the &quot;imm12&quot; field." link="imm__17">&lt;imm&gt;</a><text>{, </text><a hover="Is the optional left shift to apply to the immediate, defaulting to LSL #0 and " link="shift_option">&lt;shift&gt;</a><text>}</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="subs_addsub_imm.xml#SUBS_64S_addsub_imm">SUBS</a><text>  XZR, </text><a hover="Is the 64-bit name of the source general-purpose register or stack pointer, encoded in the &quot;Rn&quot; field." href="subs_addsub_imm.xml#XnSP_option__3">&lt;Xn|SP&gt;</a><text>, #</text><a hover="Is an unsigned immediate, in the range 0 to 4095, encoded in the &quot;imm12&quot; field." href="subs_addsub_imm.xml#imm__17">&lt;imm&gt;</a><text>{, </text><a hover="Is the optional left shift to apply to the immediate, defaulting to LSL #0 and " href="subs_addsub_imm.xml#shift_option">&lt;shift&gt;</a><text>}</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="CMP_SUBS_32S_addsub_imm" symboldefcount="1">
+      <symbol link="WnWSP_option">&lt;Wn|WSP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 32-bit name of the source general-purpose register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CMP_SUBS_32S_addsub_imm, CMP_SUBS_64S_addsub_imm" symboldefcount="1">
+      <symbol link="imm__17">&lt;imm&gt;</symbol>
+      <account encodedin="imm12">
+        <intro>
+          <para>Is an unsigned immediate, in the range 0 to 4095, encoded in the "imm12" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CMP_SUBS_32S_addsub_imm, CMP_SUBS_64S_addsub_imm" symboldefcount="1">
+      <symbol link="shift_option">&lt;shift&gt;</symbol>
+      <definition encodedin="sh">
+        <intro>Is the optional left shift to apply to the immediate, defaulting to LSL #0 and </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">sh</entry>
+                <entry class="symbol">&lt;shift&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">LSL #0</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">LSL #12</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="CMP_SUBS_64S_addsub_imm" symboldefcount="1">
+      <symbol link="XnSP_option__3">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the source general-purpose register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

@@ -1,0 +1,141 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="TBZ" title="TBZ -- A64" type="instruction">
+  <docvars>
+    <docvar key="branch-offset" value="br14"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="TBZ"/>
+  </docvars>
+  <heading>TBZ</heading>
+  <desc>
+    <brief>
+      <para>Test bit and branch if zero</para>
+    </brief>
+    <authored>
+      <para>This instruction compares the value of a test bit with zero,
+and conditionally branches to a label at a PC-relative offset if the
+comparison is equal. It provides a hint that this is not a subroutine call
+or return. This instruction does not affect condition flags.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="14-bit signed PC-relative branch offset" oneof="1" id="iclass_14_bit_signed_pc_relative_branch_offset" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="branch-offset" value="br14"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="TBZ"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.control.testbranch.TBZ_only_testbranch" tworows="1">
+        <box hibit="31" width="1" name="b5" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="30" width="6" settings="6">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="24" name="op" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="23" width="5" name="b40" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="18" width="14" name="imm14" usename="1">
+          <c colspan="14"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="TBZ_only_testbranch" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="TBZ"/>
+          <docvar key="branch-offset" value="br14"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <asmtemplate><text>TBZ  </text><a hover="Is a width specifier, " link="R_option">&lt;R&gt;</a><a hover="Is the number [0-30] of the general-purpose register to be tested or the name ZR (31), encoded in the &quot;Rt&quot; field." link="Rt_option">&lt;t&gt;</a><text>, #</text><a hover="Is the bit number to be tested, in the range 0 to 63, encoded in &quot;b5:b40&quot;." link="b40_b5">&lt;imm&gt;</a><text>, </text><a hover="Is the program label to be conditionally branched to. Its offset from the address of this instruction, in the range +/-32KB, is encoded as &quot;imm14&quot; times 4." link="imm14_offset">&lt;label&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.testbranch.TBZ_only_testbranch" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+
+constant integer datasize = 32 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(b5);
+constant integer bit_pos = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(b5:b40);
+constant bits(64) offset = <a link="impl-shared.SignExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) SignExtend(bits(M) x, integer N)">SignExtend</a>(imm14:'00', 64);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="TBZ_only_testbranch" symboldefcount="1">
+      <symbol link="R_option">&lt;R&gt;</symbol>
+      <definition encodedin="b5">
+        <intro>Is a width specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">b5</entry>
+                <entry class="symbol">&lt;R&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">W</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">X</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+        <after>In assembler source code an 'X' specifier is always permitted, but a 'W' specifier is only permitted when the bit number is less than 32.</after>
+      </definition>
+    </explanation>
+    <explanation enclist="TBZ_only_testbranch" symboldefcount="1">
+      <symbol link="Rt_option">&lt;t&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the number [0-30] of the general-purpose register to be tested or the name ZR (31), encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="TBZ_only_testbranch" symboldefcount="1">
+      <symbol link="b40_b5">&lt;imm&gt;</symbol>
+      <account encodedin="b40:b5">
+        <intro>
+          <para>Is the bit number to be tested, in the range 0 to 63, encoded in "b5:b40".</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="TBZ_only_testbranch" symboldefcount="1">
+      <symbol link="imm14_offset">&lt;label&gt;</symbol>
+      <account encodedin="imm14">
+        <intro>
+          <para>Is the program label to be conditionally branched to. Its offset from the address of this instruction, in the range +/-32KB, is encoded as "imm14" times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.control.testbranch.TBZ_only_testbranch" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bits(datasize) operand = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[t, datasize];
+constant boolean branch_conditional = TRUE;
+if operand&lt;bit_pos&gt; == '0' then
+    <a link="impl-shared.BranchTo.3" file="shared_pseudocode.xml" hover="function: BranchTo(bits(N) target, BranchType branch_type, boolean branch_conditional)">BranchTo</a>(PC64 + offset, <a link="BranchType_DIR" file="shared_pseudocode.xml" hover="enumeration BranchType { BranchType_DIRCALL, BranchType_INDCALL, BranchType_ERET, BranchType_DBGEXIT, BranchType_RET, BranchType_DIR, BranchType_INDIR, BranchType_EXCEPTION, BranchType_TMFAIL, BranchType_RESET, BranchType_UNKNOWN}">BranchType_DIR</a>, branch_conditional);
+else
+    <a link="impl-shared.BranchNotTaken.2" file="shared_pseudocode.xml" hover="function: BranchNotTaken(BranchType branchtype, boolean branch_conditional)">BranchNotTaken</a>(<a link="BranchType_DIR" file="shared_pseudocode.xml" hover="enumeration BranchType { BranchType_DIRCALL, BranchType_INDCALL, BranchType_ERET, BranchType_DBGEXIT, BranchType_RET, BranchType_DIR, BranchType_INDIR, BranchType_EXCEPTION, BranchType_TMFAIL, BranchType_RESET, BranchType_UNKNOWN}">BranchType_DIR</a>, branch_conditional);
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

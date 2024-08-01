@@ -1,0 +1,224 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="FMLALLBB_advsimd_elem" title="FMLALLBB, FMLALLBT, FMLALLTB, FMLALLTT (by element) -- A64" type="instruction">
+  <docvars>
+    <docvar key="advsimd-only" value="simd-only"/>
+    <docvar key="advsimd-reguse" value="2reg-element"/>
+    <docvar key="instr-class" value="advsimd"/>
+    <docvar key="isa" value="A64"/>
+  </docvars>
+  <heading>FMLALLBB, FMLALLBT, FMLALLTB, FMLALLTT (by element)</heading>
+  <desc>
+    <brief>
+      <para>8-bit floating-point multiply-add long-long to single-precision (vector, by element)</para>
+    </brief>
+    <authored>
+      <para>This instruction widens the first (bottom bottom), second (bottom top),
+third (top bottom), or fourth (top top) 8-bit element of each 32-bit
+container in the first source vector and the indexed element from the
+second source vector to single-precision format and multiplies the corresponding
+elements. The intermediate products are scaled by 2<sup>-UInt(FPMR.LSCALE)</sup>,
+before being destructively added without intermediate rounding to the
+single-precision elements of the destination vector that overlap with the
+corresponding 8-bit floating-point elements in the first source vector.</para>
+      <para>The 8-bit floating-point encoding format for the elements of the first
+source vector is selected by <register_link id="AArch64-fpmr.xml" state="AArch64">FPMR</register_link>.F8S1.
+The 8-bit floating-point encoding format for the elements of the second
+source vector is selected by <register_link id="AArch64-fpmr.xml" state="AArch64">FPMR</register_link>.F8S2.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Advanced SIMD" oneof="1" id="iclass_advanced_simd" no_encodings="4" isa="A64">
+      <docvars>
+        <docvar key="advsimd-only" value="simd-only"/>
+        <docvar key="advsimd-reguse" value="2reg-element"/>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="4"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_FP8FMA" name="ARMv9.5"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.simd_dp.asimdelem.FMLALLBB_asimdelem_J" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" width="1" name="Q" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="29" name="U" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="28" width="5" settings="5">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1" settings="1" psbits="xx">
+          <c>0</c>
+          <c>x</c>
+        </box>
+        <box hibit="21" width="1" name="L" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="20" width="1" name="M" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="19" width="4" name="Rm" usename="1">
+          <c colspan="4"/>
+        </box>
+        <box hibit="15" width="4" name="opcode" usename="1" settings="4" psbits="xxxx">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="1" name="H" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="10" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="FMLALLBB_asimdelem_J" oneofinclass="4" oneof="4" label="FMLALLBB" bitdiffs="Q == 0 &amp;&amp; size == 00">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="FMLALLBB"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="advsimd-only" value="simd-only"/>
+          <docvar key="advsimd-reguse" value="2reg-element"/>
+        </docvars>
+        <box hibit="30" width="1" name="Q">
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="size">
+          <c/>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>FMLALLBB  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.4S, </text><a hover="Is the name of the first SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn__2">&lt;Vn&gt;</a><text>.16B, </text><a hover="Is the name of the second SIMD&amp;amp;FP source register, in the range V0 to V7, encoded in the &quot;Rm&amp;lt;2:0&amp;gt;&quot; field." link="Vm__6">&lt;Vm&gt;</a><text>.B[</text><a hover="Is the element index, in the range 0 to 15, encoded in the &quot;H:L:M:Rm&amp;lt;3&amp;gt;&quot; fields." link="index__15">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="FMLALLBT_asimdelem_J" oneofinclass="4" oneof="4" label="FMLALLBT" bitdiffs="Q == 0 &amp;&amp; size == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="FMLALLBT"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="advsimd-only" value="simd-only"/>
+          <docvar key="advsimd-reguse" value="2reg-element"/>
+        </docvars>
+        <box hibit="30" width="1" name="Q">
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="size">
+          <c/>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>FMLALLBT  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.4S, </text><a hover="Is the name of the first SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn__2">&lt;Vn&gt;</a><text>.16B, </text><a hover="Is the name of the second SIMD&amp;amp;FP source register, in the range V0 to V7, encoded in the &quot;Rm&amp;lt;2:0&amp;gt;&quot; field." link="Vm__6">&lt;Vm&gt;</a><text>.B[</text><a hover="Is the element index, in the range 0 to 15, encoded in the &quot;H:L:M:Rm&amp;lt;3&amp;gt;&quot; fields." link="index__15">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="FMLALLTB_asimdelem_J" oneofinclass="4" oneof="4" label="FMLALLTB" bitdiffs="Q == 1 &amp;&amp; size == 00">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="FMLALLTB"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="advsimd-only" value="simd-only"/>
+          <docvar key="advsimd-reguse" value="2reg-element"/>
+        </docvars>
+        <box hibit="30" width="1" name="Q">
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size">
+          <c/>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>FMLALLTB  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.4S, </text><a hover="Is the name of the first SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn__2">&lt;Vn&gt;</a><text>.16B, </text><a hover="Is the name of the second SIMD&amp;amp;FP source register, in the range V0 to V7, encoded in the &quot;Rm&amp;lt;2:0&amp;gt;&quot; field." link="Vm__6">&lt;Vm&gt;</a><text>.B[</text><a hover="Is the element index, in the range 0 to 15, encoded in the &quot;H:L:M:Rm&amp;lt;3&amp;gt;&quot; fields." link="index__15">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="FMLALLTT_asimdelem_J" oneofinclass="4" oneof="4" label="FMLALLTT" bitdiffs="Q == 1 &amp;&amp; size == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="FMLALLTT"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="advsimd-only" value="simd-only"/>
+          <docvar key="advsimd-reguse" value="2reg-element"/>
+        </docvars>
+        <box hibit="30" width="1" name="Q">
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size">
+          <c/>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>FMLALLTT  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.4S, </text><a hover="Is the name of the first SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn__2">&lt;Vn&gt;</a><text>.16B, </text><a hover="Is the name of the second SIMD&amp;amp;FP source register, in the range V0 to V7, encoded in the &quot;Rm&amp;lt;2:0&amp;gt;&quot; field." link="Vm__6">&lt;Vm&gt;</a><text>.B[</text><a hover="Is the element index, in the range 0 to 15, encoded in the &quot;H:L:M:Rm&amp;lt;3&amp;gt;&quot; fields." link="index__15">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.asimdelem.FMLALLBB_asimdelem_J" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_FP8FMA) then UNDEFINED;
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('00':Rm&lt;2:0&gt;);
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(H:L:M:Rm&lt;3&gt;);
+constant integer elements = 128 DIV 32;
+constant integer sel = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Q:size&lt;0&gt;);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="FMLALLBB_asimdelem_J, FMLALLBT_asimdelem_J, FMLALLTB_asimdelem_J, FMLALLTT_asimdelem_J" symboldefcount="1">
+      <symbol link="Vd">&lt;Vd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="FMLALLBB_asimdelem_J, FMLALLBT_asimdelem_J, FMLALLTB_asimdelem_J, FMLALLTT_asimdelem_J" symboldefcount="1">
+      <symbol link="Vn__2">&lt;Vn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the name of the first SIMD&amp;FP source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="FMLALLBB_asimdelem_J, FMLALLBT_asimdelem_J, FMLALLTB_asimdelem_J, FMLALLTT_asimdelem_J" symboldefcount="1">
+      <symbol link="Vm__6">&lt;Vm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the name of the second SIMD&amp;FP source register, in the range V0 to V7, encoded in the "Rm&lt;2:0&gt;" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="FMLALLBB_asimdelem_J, FMLALLBT_asimdelem_J, FMLALLTB_asimdelem_J, FMLALLTT_asimdelem_J" symboldefcount="1">
+      <symbol link="index__15">&lt;index&gt;</symbol>
+      <account encodedin="H:L:M:Rm">
+        <intro>
+          <para>Is the element index, in the range 0 to 15, encoded in the "H:L:M:Rm&lt;3&gt;" fields.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.simd_dp.asimdelem.FMLALLBB_asimdelem_J" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckFPMREnabled.0" file="shared_pseudocode.xml" hover="function: CheckFPMREnabled()">CheckFPMREnabled</a>(); <a link="impl-aarch64.CheckFPAdvSIMDEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPAdvSIMDEnabled64()">CheckFPAdvSIMDEnabled64</a>();
+constant bits(128) operand1 = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[n, 128];
+constant bits(128) operand2 = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[m, 128];
+constant bits(128) operand3 = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[d, 128];
+bits(128) result;
+
+for e = 0 to elements-1
+    constant bits(8) element1  = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand1, 4 * e + sel, 8];
+    constant bits(8) element2  = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand2, index, 8];
+    constant bits(32) element3 = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand3, e, 32];
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, 32] = <a link="impl-shared.FP8MulAddFP.5" file="shared_pseudocode.xml" hover="function: bits(M) FP8MulAddFP(bits(M) addend, bits(N) op1, bits(N) op2, FPCR_Type fpcr, FPMR_Type fpmr)">FP8MulAddFP</a>(element3, element1, element2, FPCR, FPMR);
+
+<a link="impl-aarch64.V.write.2" file="shared_pseudocode.xml" hover="accessor: V[integer n, ESize width] = bits(width) value">V</a>[d, 128] = result;</pstext></ps>
+  </ps_section>
+</instructionsection>

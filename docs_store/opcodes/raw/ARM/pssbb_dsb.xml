@@ -1,0 +1,96 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="PSSBB_DSB" title="PSSBB -- A64" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="PSSBB"/>
+    <docvar key="dsb-variants" value="dsb-memory"/>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="DSB"/>
+  </docvars>
+  <heading>PSSBB</heading>
+  <desc>
+    <brief>
+      <para>Physical speculative store bypass barrier</para>
+    </brief>
+    <authored>
+      <para>This instruction is a memory barrier that prevents speculative
+loads from bypassing earlier stores to the same physical address under certain conditions.
+For more information and details of the semantics, see
+<xref linkend="ARMARM_CHDECEBA">Physical Speculative Store Bypass Barrier (PSSBB)</xref>.</para>
+    </authored>
+  </desc>
+  <aliasto refiform="dsb.xml" iformid="DSB">DSB</aliasto>
+  <classes>
+    <iclass name="Memory barrier" oneof="1" id="iclass_memory_barrier" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="dsb-variants" value="dsb-memory"/>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="DSB"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.control.barriers.DSB_BO_barriers.PSSBB" tworows="1">
+        <box hibit="31" width="20" settings="20">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="6" width="2" name="opc" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="PSSBB_DSB_BO_barriers" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="DSB"/>
+          <docvar key="alias_mnemonic" value="PSSBB"/>
+          <docvar key="instr-class" value="system"/>
+          <docvar key="dsb-variants" value="dsb-memory"/>
+        </docvars>
+        <asmtemplate><text>PSSBB</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="dsb.xml#DSB_BO_barriers">DSB</a><text>  #4</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all"/>
+</instructionsection>

@@ -1,0 +1,481 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="alphaindex.xsl" version="1.0"?>
+<!DOCTYPE alphaindex PUBLIC "-//ARM//DTD alphaindex //EN" "alphaindex.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<alphaindex>
+  <toptitle instructionset="A64"/>
+  <iforms title="A64 -- Base Instructions (alphabetic order)">
+    <iform iformfile="abs.xml" heading="ABS" id="ABS">Absolute value.</iform>
+    <iform iformfile="adc.xml" heading="ADC" id="ADC">Add with carry.</iform>
+    <iform iformfile="adcs.xml" heading="ADCS" id="ADCS">Add with carry, setting flags.</iform>
+    <iform iformfile="add_addsub_ext.xml" heading="ADD (extended register)" id="ADD_addsub_ext">Add (extended register).</iform>
+    <iform iformfile="add_addsub_imm.xml" heading="ADD (immediate)" id="ADD_addsub_imm">Add (immediate).</iform>
+    <iform iformfile="add_addsub_shift.xml" heading="ADD (shifted register)" id="ADD_addsub_shift">Add (shifted register).</iform>
+    <iform iformfile="addg.xml" heading="ADDG" id="ADDG">Add with tag.</iform>
+    <iform iformfile="addpt.xml" heading="ADDPT" id="ADDPT">Add checked pointer.</iform>
+    <iform iformfile="adds_addsub_ext.xml" heading="ADDS (extended register)" id="ADDS_addsub_ext">Add (extended register), setting flags.</iform>
+    <iform iformfile="adds_addsub_imm.xml" heading="ADDS (immediate)" id="ADDS_addsub_imm">Add (immediate), setting flags.</iform>
+    <iform iformfile="adds_addsub_shift.xml" heading="ADDS (shifted register)" id="ADDS_addsub_shift">Add (shifted register), setting flags.</iform>
+    <iform iformfile="adr.xml" heading="ADR" id="ADR">Form PC-relative address.</iform>
+    <iform iformfile="adrp.xml" heading="ADRP" id="ADRP">Form PC-relative address to 4KB page.</iform>
+    <iform iformfile="and_log_imm.xml" heading="AND (immediate)" id="AND_log_imm">Bitwise AND (immediate).</iform>
+    <iform iformfile="and_log_shift.xml" heading="AND (shifted register)" id="AND_log_shift">Bitwise AND (shifted register).</iform>
+    <iform iformfile="ands_log_imm.xml" heading="ANDS (immediate)" id="ANDS_log_imm">Bitwise AND (immediate), setting flags.</iform>
+    <iform iformfile="ands_log_shift.xml" heading="ANDS (shifted register)" id="ANDS_log_shift">Bitwise AND (shifted register), setting flags.</iform>
+    <iform iformfile="asr_sbfm.xml" heading="ASR (immediate)" id="ASR_SBFM">Arithmetic shift right (immediate): an alias of SBFM.</iform>
+    <iform iformfile="asr_asrv.xml" heading="ASR (register)" id="ASR_ASRV">Arithmetic shift right (register): an alias of ASRV.</iform>
+    <iform iformfile="asrv.xml" heading="ASRV" id="ASRV">Arithmetic shift right variable.</iform>
+    <iform iformfile="at_sys.xml" heading="AT" id="AT_SYS">Address translate: an alias of SYS.</iform>
+    <iform iformfile="autda.xml" heading="AUTDA, AUTDZA" id="AUTDA">Authenticate data address, using key A.</iform>
+    <iform iformfile="autdb.xml" heading="AUTDB, AUTDZB" id="AUTDB">Authenticate data address, using key B.</iform>
+    <iform iformfile="autia.xml" heading="AUTIA, AUTIA1716, AUTIASP, AUTIAZ, AUTIZA" id="AUTIA">Authenticate instruction address, using key A.</iform>
+    <iform iformfile="autia171615.xml" heading="AUTIA171615" id="AUTIA171615">Authenticate instruction address, using key A.</iform>
+    <iform iformfile="autiasppc_imm.xml" heading="AUTIASPPC" id="AUTIASPPC_imm">Authenticate return address using key A, using an immediate offset.</iform>
+    <iform iformfile="autiasppcr.xml" heading="AUTIASPPCR" id="AUTIASPPCR">Authenticate return address using key A, using a register.</iform>
+    <iform iformfile="autib.xml" heading="AUTIB, AUTIB1716, AUTIBSP, AUTIBZ, AUTIZB" id="AUTIB">Authenticate instruction address, using key B.</iform>
+    <iform iformfile="autib171615.xml" heading="AUTIB171615" id="AUTIB171615">Authenticate instruction address, using key B.</iform>
+    <iform iformfile="autibsppc_imm.xml" heading="AUTIBSPPC" id="AUTIBSPPC_imm">Authenticate return address using key B, using an immediate offset.</iform>
+    <iform iformfile="autibsppcr.xml" heading="AUTIBSPPCR" id="AUTIBSPPCR">Authenticate return address using key B, using a register.</iform>
+    <iform iformfile="axflag.xml" heading="AXFLAG" id="AXFLAG">Convert floating-point condition flags from Arm to external format.</iform>
+    <iform iformfile="b_uncond.xml" heading="B" id="B_uncond">Branch.</iform>
+    <iform iformfile="b_cond.xml" heading="B.cond" id="B_cond">Branch conditionally.</iform>
+    <iform iformfile="bc_cond.xml" heading="BC.cond" id="BC_cond">Branch consistent conditionally.</iform>
+    <iform iformfile="bfc_bfm.xml" heading="BFC" id="BFC_BFM">Bitfield clear: an alias of BFM.</iform>
+    <iform iformfile="bfi_bfm.xml" heading="BFI" id="BFI_BFM">Bitfield insert: an alias of BFM.</iform>
+    <iform iformfile="bfm.xml" heading="BFM" id="BFM">Bitfield move.</iform>
+    <iform iformfile="bfxil_bfm.xml" heading="BFXIL" id="BFXIL_BFM">Bitfield extract and insert at low end: an alias of BFM.</iform>
+    <iform iformfile="bic_log_shift.xml" heading="BIC (shifted register)" id="BIC_log_shift">Bitwise bit clear (shifted register).</iform>
+    <iform iformfile="bics.xml" heading="BICS (shifted register)" id="BICS">Bitwise bit clear (shifted register), setting flags.</iform>
+    <iform iformfile="bl.xml" heading="BL" id="BL">Branch with link.</iform>
+    <iform iformfile="blr.xml" heading="BLR" id="BLR">Branch with link to register.</iform>
+    <iform iformfile="blra.xml" heading="BLRAA, BLRAAZ, BLRAB, BLRABZ" id="BLRA">Branch with link to register, with pointer authentication.</iform>
+    <iform iformfile="br.xml" heading="BR" id="BR">Branch to register.</iform>
+    <iform iformfile="bra.xml" heading="BRAA, BRAAZ, BRAB, BRABZ" id="BRA">Branch to register, with pointer authentication.</iform>
+    <iform iformfile="brb_sys.xml" heading="BRB" id="BRB_SYS">Branch record buffer: an alias of SYS.</iform>
+    <iform iformfile="brk.xml" heading="BRK" id="BRK">Breakpoint instruction.</iform>
+    <iform iformfile="bti.xml" heading="BTI" id="BTI">Branch target identification.</iform>
+    <iform iformfile="cas.xml" heading="CAS, CASA, CASAL, CASL" id="CAS">Compare and swap word or doubleword in memory.</iform>
+    <iform iformfile="casb.xml" heading="CASB, CASAB, CASALB, CASLB" id="CASB">Compare and swap byte in memory.</iform>
+    <iform iformfile="cash.xml" heading="CASH, CASAH, CASALH, CASLH" id="CASH">Compare and swap halfword in memory.</iform>
+    <iform iformfile="casp.xml" heading="CASP, CASPA, CASPAL, CASPL" id="CASP">Compare and swap pair of words or doublewords in memory.</iform>
+    <iform iformfile="cbnz.xml" heading="CBNZ" id="CBNZ">Compare and branch on nonzero.</iform>
+    <iform iformfile="cbz.xml" heading="CBZ" id="CBZ">Compare and branch on zero.</iform>
+    <iform iformfile="ccmn_imm.xml" heading="CCMN (immediate)" id="CCMN_imm">Conditional compare negative (immediate).</iform>
+    <iform iformfile="ccmn_reg.xml" heading="CCMN (register)" id="CCMN_reg">Conditional compare negative (register).</iform>
+    <iform iformfile="ccmp_imm.xml" heading="CCMP (immediate)" id="CCMP_imm">Conditional compare (immediate).</iform>
+    <iform iformfile="ccmp_reg.xml" heading="CCMP (register)" id="CCMP_reg">Conditional compare (register).</iform>
+    <iform iformfile="cfinv.xml" heading="CFINV" id="CFINV">Invert carry flag.</iform>
+    <iform iformfile="cfp_sys.xml" heading="CFP" id="CFP_SYS">Control flow prediction restriction by context: an alias of SYS.</iform>
+    <iform iformfile="chkfeat.xml" heading="CHKFEAT" id="CHKFEAT">Check feature status.</iform>
+    <iform iformfile="cinc_csinc.xml" heading="CINC" id="CINC_CSINC">Conditional increment: an alias of CSINC.</iform>
+    <iform iformfile="cinv_csinv.xml" heading="CINV" id="CINV_CSINV">Conditional invert: an alias of CSINV.</iform>
+    <iform iformfile="clrbhb.xml" heading="CLRBHB" id="CLRBHB">Clear branch history.</iform>
+    <iform iformfile="clrex.xml" heading="CLREX" id="CLREX">Clear exclusive.</iform>
+    <iform iformfile="cls_int.xml" heading="CLS" id="CLS_int">Count leading sign bits.</iform>
+    <iform iformfile="clz_int.xml" heading="CLZ" id="CLZ_int">Count leading zeros.</iform>
+    <iform iformfile="cmn_adds_addsub_ext.xml" heading="CMN (extended register)" id="CMN_ADDS_addsub_ext">Compare negative (extended register): an alias of ADDS (extended register).</iform>
+    <iform iformfile="cmn_adds_addsub_imm.xml" heading="CMN (immediate)" id="CMN_ADDS_addsub_imm">Compare negative (immediate): an alias of ADDS (immediate).</iform>
+    <iform iformfile="cmn_adds_addsub_shift.xml" heading="CMN (shifted register)" id="CMN_ADDS_addsub_shift">Compare negative (shifted register): an alias of ADDS (shifted register).</iform>
+    <iform iformfile="cmp_subs_addsub_ext.xml" heading="CMP (extended register)" id="CMP_SUBS_addsub_ext">Compare (extended register): an alias of SUBS (extended register).</iform>
+    <iform iformfile="cmp_subs_addsub_imm.xml" heading="CMP (immediate)" id="CMP_SUBS_addsub_imm">Compare (immediate): an alias of SUBS (immediate).</iform>
+    <iform iformfile="cmp_subs_addsub_shift.xml" heading="CMP (shifted register)" id="CMP_SUBS_addsub_shift">Compare (shifted register): an alias of SUBS (shifted register).</iform>
+    <iform iformfile="cmpp_subps.xml" heading="CMPP" id="CMPP_SUBPS">Compare with tag: an alias of SUBPS.</iform>
+    <iform iformfile="cneg_csneg.xml" heading="CNEG" id="CNEG_CSNEG">Conditional negate: an alias of CSNEG.</iform>
+    <iform iformfile="cnt.xml" heading="CNT" id="CNT">Count bits.</iform>
+    <iform iformfile="cosp_sys.xml" heading="COSP" id="COSP_SYS">Clear other speculative prediction restriction by context: an alias of SYS.</iform>
+    <iform iformfile="cpp_sys.xml" heading="CPP" id="CPP_SYS">Cache prefetch prediction restriction by context: an alias of SYS.</iform>
+    <iform iformfile="cpyfp.xml" heading="CPYFP, CPYFM, CPYFE" id="CPYFP">Memory copy forward-only.</iform>
+    <iform iformfile="cpyfpn.xml" heading="CPYFPN, CPYFMN, CPYFEN" id="CPYFPN">Memory copy forward-only, reads and writes non-temporal.</iform>
+    <iform iformfile="cpyfprn.xml" heading="CPYFPRN, CPYFMRN, CPYFERN" id="CPYFPRN">Memory copy forward-only, reads non-temporal.</iform>
+    <iform iformfile="cpyfprt.xml" heading="CPYFPRT, CPYFMRT, CPYFERT" id="CPYFPRT">Memory copy forward-only, reads unprivileged.</iform>
+    <iform iformfile="cpyfprtn.xml" heading="CPYFPRTN, CPYFMRTN, CPYFERTN" id="CPYFPRTN">Memory copy forward-only, reads unprivileged, reads and writes non-temporal.</iform>
+    <iform iformfile="cpyfprtrn.xml" heading="CPYFPRTRN, CPYFMRTRN, CPYFERTRN" id="CPYFPRTRN">Memory copy forward-only, reads unprivileged and non-temporal.</iform>
+    <iform iformfile="cpyfprtwn.xml" heading="CPYFPRTWN, CPYFMRTWN, CPYFERTWN" id="CPYFPRTWN">Memory copy forward-only, reads unprivileged, writes non-temporal.</iform>
+    <iform iformfile="cpyfpt.xml" heading="CPYFPT, CPYFMT, CPYFET" id="CPYFPT">Memory copy forward-only, reads and writes unprivileged.</iform>
+    <iform iformfile="cpyfptn.xml" heading="CPYFPTN, CPYFMTN, CPYFETN" id="CPYFPTN">Memory copy forward-only, reads and writes unprivileged and non-temporal.</iform>
+    <iform iformfile="cpyfptrn.xml" heading="CPYFPTRN, CPYFMTRN, CPYFETRN" id="CPYFPTRN">Memory copy forward-only, reads and writes unprivileged, reads non-temporal.</iform>
+    <iform iformfile="cpyfptwn.xml" heading="CPYFPTWN, CPYFMTWN, CPYFETWN" id="CPYFPTWN">Memory copy forward-only, reads and writes unprivileged, writes non-temporal.</iform>
+    <iform iformfile="cpyfpwn.xml" heading="CPYFPWN, CPYFMWN, CPYFEWN" id="CPYFPWN">Memory copy forward-only, writes non-temporal.</iform>
+    <iform iformfile="cpyfpwt.xml" heading="CPYFPWT, CPYFMWT, CPYFEWT" id="CPYFPWT">Memory copy forward-only, writes unprivileged.</iform>
+    <iform iformfile="cpyfpwtn.xml" heading="CPYFPWTN, CPYFMWTN, CPYFEWTN" id="CPYFPWTN">Memory copy forward-only, writes unprivileged, reads and writes non-temporal.</iform>
+    <iform iformfile="cpyfpwtrn.xml" heading="CPYFPWTRN, CPYFMWTRN, CPYFEWTRN" id="CPYFPWTRN">Memory copy forward-only, writes unprivileged, reads non-temporal.</iform>
+    <iform iformfile="cpyfpwtwn.xml" heading="CPYFPWTWN, CPYFMWTWN, CPYFEWTWN" id="CPYFPWTWN">Memory copy forward-only, writes unprivileged and non-temporal.</iform>
+    <iform iformfile="cpyp.xml" heading="CPYP, CPYM, CPYE" id="CPYP">Memory copy.</iform>
+    <iform iformfile="cpypn.xml" heading="CPYPN, CPYMN, CPYEN" id="CPYPN">Memory copy, reads and writes non-temporal.</iform>
+    <iform iformfile="cpyprn.xml" heading="CPYPRN, CPYMRN, CPYERN" id="CPYPRN">Memory copy, reads non-temporal.</iform>
+    <iform iformfile="cpyprt.xml" heading="CPYPRT, CPYMRT, CPYERT" id="CPYPRT">Memory copy, reads unprivileged.</iform>
+    <iform iformfile="cpyprtn.xml" heading="CPYPRTN, CPYMRTN, CPYERTN" id="CPYPRTN">Memory copy, reads unprivileged, reads and writes non-temporal.</iform>
+    <iform iformfile="cpyprtrn.xml" heading="CPYPRTRN, CPYMRTRN, CPYERTRN" id="CPYPRTRN">Memory copy, reads unprivileged and non-temporal.</iform>
+    <iform iformfile="cpyprtwn.xml" heading="CPYPRTWN, CPYMRTWN, CPYERTWN" id="CPYPRTWN">Memory copy, reads unprivileged, writes non-temporal.</iform>
+    <iform iformfile="cpypt.xml" heading="CPYPT, CPYMT, CPYET" id="CPYPT">Memory copy, reads and writes unprivileged.</iform>
+    <iform iformfile="cpyptn.xml" heading="CPYPTN, CPYMTN, CPYETN" id="CPYPTN">Memory copy, reads and writes unprivileged and non-temporal.</iform>
+    <iform iformfile="cpyptrn.xml" heading="CPYPTRN, CPYMTRN, CPYETRN" id="CPYPTRN">Memory copy, reads and writes unprivileged, reads non-temporal.</iform>
+    <iform iformfile="cpyptwn.xml" heading="CPYPTWN, CPYMTWN, CPYETWN" id="CPYPTWN">Memory copy, reads and writes unprivileged, writes non-temporal.</iform>
+    <iform iformfile="cpypwn.xml" heading="CPYPWN, CPYMWN, CPYEWN" id="CPYPWN">Memory copy, writes non-temporal.</iform>
+    <iform iformfile="cpypwt.xml" heading="CPYPWT, CPYMWT, CPYEWT" id="CPYPWT">Memory copy, writes unprivileged.</iform>
+    <iform iformfile="cpypwtn.xml" heading="CPYPWTN, CPYMWTN, CPYEWTN" id="CPYPWTN">Memory copy, writes unprivileged, reads and writes non-temporal.</iform>
+    <iform iformfile="cpypwtrn.xml" heading="CPYPWTRN, CPYMWTRN, CPYEWTRN" id="CPYPWTRN">Memory copy, writes unprivileged, reads non-temporal.</iform>
+    <iform iformfile="cpypwtwn.xml" heading="CPYPWTWN, CPYMWTWN, CPYEWTWN" id="CPYPWTWN">Memory copy, writes unprivileged and non-temporal.</iform>
+    <iform iformfile="crc32.xml" heading="CRC32B, CRC32H, CRC32W, CRC32X" id="CRC32">CRC32 checksum.</iform>
+    <iform iformfile="crc32c.xml" heading="CRC32CB, CRC32CH, CRC32CW, CRC32CX" id="CRC32C">CRC32C checksum.</iform>
+    <iform iformfile="csdb.xml" heading="CSDB" id="CSDB">Consumption of speculative data barrier.</iform>
+    <iform iformfile="csel.xml" heading="CSEL" id="CSEL">Conditional select.</iform>
+    <iform iformfile="cset_csinc.xml" heading="CSET" id="CSET_CSINC">Conditional set: an alias of CSINC.</iform>
+    <iform iformfile="csetm_csinv.xml" heading="CSETM" id="CSETM_CSINV">Conditional set mask: an alias of CSINV.</iform>
+    <iform iformfile="csinc.xml" heading="CSINC" id="CSINC">Conditional select increment.</iform>
+    <iform iformfile="csinv.xml" heading="CSINV" id="CSINV">Conditional select invert.</iform>
+    <iform iformfile="csneg.xml" heading="CSNEG" id="CSNEG">Conditional select negation.</iform>
+    <iform iformfile="ctz.xml" heading="CTZ" id="CTZ">Count trailing zeros.</iform>
+    <iform iformfile="dc_sys.xml" heading="DC" id="DC_SYS">Data cache operation: an alias of SYS.</iform>
+    <iform iformfile="dcps1.xml" heading="DCPS1" id="DCPS1">Debug change PE state to EL1.</iform>
+    <iform iformfile="dcps2.xml" heading="DCPS2" id="DCPS2">Debug change PE state to EL2.</iform>
+    <iform iformfile="dcps3.xml" heading="DCPS3" id="DCPS3">Debug change PE state to EL3.</iform>
+    <iform iformfile="dgh.xml" heading="DGH" id="DGH">Data gathering hint.</iform>
+    <iform iformfile="dmb.xml" heading="DMB" id="DMB">Data memory barrier.</iform>
+    <iform iformfile="drps.xml" heading="DRPS" id="DRPS">Debug restore PE state.</iform>
+    <iform iformfile="dsb.xml" heading="DSB" id="DSB">Data synchronization barrier.</iform>
+    <iform iformfile="dvp_sys.xml" heading="DVP" id="DVP_SYS">Data value prediction restriction by context: an alias of SYS.</iform>
+    <iform iformfile="eon.xml" heading="EON (shifted register)" id="EON">Bitwise exclusive-OR NOT (shifted register).</iform>
+    <iform iformfile="eor_log_imm.xml" heading="EOR (immediate)" id="EOR_log_imm">Bitwise exclusive-OR (immediate).</iform>
+    <iform iformfile="eor_log_shift.xml" heading="EOR (shifted register)" id="EOR_log_shift">Bitwise exclusive-OR (shifted register).</iform>
+    <iform iformfile="eret.xml" heading="ERET" id="ERET">Exception return.</iform>
+    <iform iformfile="ereta.xml" heading="ERETAA, ERETAB" id="ERETA">Exception return, with pointer authentication.</iform>
+    <iform iformfile="esb.xml" heading="ESB" id="ESB">Error synchronization barrier.</iform>
+    <iform iformfile="extr.xml" heading="EXTR" id="EXTR">Extract register.</iform>
+    <iform iformfile="gcsb.xml" heading="GCSB" id="GCSB">Guarded Control Stack barrier.</iform>
+    <iform iformfile="gcspopcx_sys.xml" heading="GCSPOPCX" id="GCSPOPCX_SYS">Guarded Control Stack pop and compare exception return record: an alias of SYS.</iform>
+    <iform iformfile="gcspopm_sysl.xml" heading="GCSPOPM" id="GCSPOPM_SYSL">Guarded Control Stack pop: an alias of SYSL.</iform>
+    <iform iformfile="gcspopx_sys.xml" heading="GCSPOPX" id="GCSPOPX_SYS">Guarded Control Stack pop exception return record: an alias of SYS.</iform>
+    <iform iformfile="gcspushm_sys.xml" heading="GCSPUSHM" id="GCSPUSHM_SYS">Guarded Control Stack push: an alias of SYS.</iform>
+    <iform iformfile="gcspushx_sys.xml" heading="GCSPUSHX" id="GCSPUSHX_SYS">Guarded Control Stack push exception return record: an alias of SYS.</iform>
+    <iform iformfile="gcsss1_sys.xml" heading="GCSSS1" id="GCSSS1_SYS">Guarded Control Stack switch stack 1: an alias of SYS.</iform>
+    <iform iformfile="gcsss2_sysl.xml" heading="GCSSS2" id="GCSSS2_SYSL">Guarded Control Stack switch stack 2: an alias of SYSL.</iform>
+    <iform iformfile="gcsstr.xml" heading="GCSSTR" id="GCSSTR">Guarded Control Stack store.</iform>
+    <iform iformfile="gcssttr.xml" heading="GCSSTTR" id="GCSSTTR">Guarded Control Stack unprivileged store.</iform>
+    <iform iformfile="gmi.xml" heading="GMI" id="GMI">Tag mask insert.</iform>
+    <iform iformfile="hint.xml" heading="HINT" id="HINT">Hint instruction.</iform>
+    <iform iformfile="hlt.xml" heading="HLT" id="HLT">Halt instruction.</iform>
+    <iform iformfile="hvc.xml" heading="HVC" id="HVC">Hypervisor call.</iform>
+    <iform iformfile="ic_sys.xml" heading="IC" id="IC_SYS">Instruction cache operation: an alias of SYS.</iform>
+    <iform iformfile="irg.xml" heading="IRG" id="IRG">Insert random tag.</iform>
+    <iform iformfile="isb.xml" heading="ISB" id="ISB">Instruction synchronization barrier.</iform>
+    <iform iformfile="ld64b.xml" heading="LD64B" id="LD64B">Single-copy atomic 64-byte Load.</iform>
+    <iform iformfile="ldadd.xml" heading="LDADD, LDADDA, LDADDAL, LDADDL" id="LDADD">Atomic add on word or doubleword in memory.</iform>
+    <iform iformfile="ldaddb.xml" heading="LDADDB, LDADDAB, LDADDALB, LDADDLB" id="LDADDB">Atomic add on byte in memory.</iform>
+    <iform iformfile="ldaddh.xml" heading="LDADDH, LDADDAH, LDADDALH, LDADDLH" id="LDADDH">Atomic add on halfword in memory.</iform>
+    <iform iformfile="ldapr.xml" heading="LDAPR" id="LDAPR">Load-acquire RCpc register.</iform>
+    <iform iformfile="ldaprb.xml" heading="LDAPRB" id="LDAPRB">Load-acquire RCpc register byte.</iform>
+    <iform iformfile="ldaprh.xml" heading="LDAPRH" id="LDAPRH">Load-acquire RCpc register halfword.</iform>
+    <iform iformfile="ldapur_gen.xml" heading="LDAPUR" id="LDAPUR_gen">Load-acquire RCpc register (unscaled).</iform>
+    <iform iformfile="ldapurb.xml" heading="LDAPURB" id="LDAPURB">Load-acquire RCpc register byte (unscaled).</iform>
+    <iform iformfile="ldapurh.xml" heading="LDAPURH" id="LDAPURH">Load-acquire RCpc register halfword (unscaled).</iform>
+    <iform iformfile="ldapursb.xml" heading="LDAPURSB" id="LDAPURSB">Load-acquire RCpc register signed byte (unscaled).</iform>
+    <iform iformfile="ldapursh.xml" heading="LDAPURSH" id="LDAPURSH">Load-acquire RCpc register signed halfword (unscaled).</iform>
+    <iform iformfile="ldapursw.xml" heading="LDAPURSW" id="LDAPURSW">Load-acquire RCpc register signed word (unscaled).</iform>
+    <iform iformfile="ldar.xml" heading="LDAR" id="LDAR">Load-acquire register.</iform>
+    <iform iformfile="ldarb.xml" heading="LDARB" id="LDARB">Load-acquire register byte.</iform>
+    <iform iformfile="ldarh.xml" heading="LDARH" id="LDARH">Load-acquire register halfword.</iform>
+    <iform iformfile="ldaxp.xml" heading="LDAXP" id="LDAXP">Load-acquire exclusive pair of registers.</iform>
+    <iform iformfile="ldaxr.xml" heading="LDAXR" id="LDAXR">Load-acquire exclusive register.</iform>
+    <iform iformfile="ldaxrb.xml" heading="LDAXRB" id="LDAXRB">Load-acquire exclusive register byte.</iform>
+    <iform iformfile="ldaxrh.xml" heading="LDAXRH" id="LDAXRH">Load-acquire exclusive register halfword.</iform>
+    <iform iformfile="ldclr.xml" heading="LDCLR, LDCLRA, LDCLRAL, LDCLRL" id="LDCLR">Atomic bit clear on word or doubleword in memory.</iform>
+    <iform iformfile="ldclrb.xml" heading="LDCLRB, LDCLRAB, LDCLRALB, LDCLRLB" id="LDCLRB">Atomic bit clear on byte in memory.</iform>
+    <iform iformfile="ldclrh.xml" heading="LDCLRH, LDCLRAH, LDCLRALH, LDCLRLH" id="LDCLRH">Atomic bit clear on halfword in memory.</iform>
+    <iform iformfile="ldclrp.xml" heading="LDCLRP, LDCLRPA, LDCLRPAL, LDCLRPL" id="LDCLRP">Atomic bit clear on quadword in memory.</iform>
+    <iform iformfile="ldeor.xml" heading="LDEOR, LDEORA, LDEORAL, LDEORL" id="LDEOR">Atomic exclusive-OR on word or doubleword in memory.</iform>
+    <iform iformfile="ldeorb.xml" heading="LDEORB, LDEORAB, LDEORALB, LDEORLB" id="LDEORB">Atomic exclusive-OR on byte in memory.</iform>
+    <iform iformfile="ldeorh.xml" heading="LDEORH, LDEORAH, LDEORALH, LDEORLH" id="LDEORH">Atomic exclusive-OR on halfword in memory.</iform>
+    <iform iformfile="ldg.xml" heading="LDG" id="LDG">Load Allocation Tag.</iform>
+    <iform iformfile="ldgm.xml" heading="LDGM" id="LDGM">Load tag multiple.</iform>
+    <iform iformfile="ldiapp.xml" heading="LDIAPP" id="LDIAPP">Load-Acquire RCpc ordered pair of registers.</iform>
+    <iform iformfile="ldlar.xml" heading="LDLAR" id="LDLAR">Load LOAcquire register.</iform>
+    <iform iformfile="ldlarb.xml" heading="LDLARB" id="LDLARB">Load LOAcquire register byte.</iform>
+    <iform iformfile="ldlarh.xml" heading="LDLARH" id="LDLARH">Load LOAcquire register halfword.</iform>
+    <iform iformfile="ldnp_gen.xml" heading="LDNP" id="LDNP_gen">Load pair of registers, with non-temporal hint.</iform>
+    <iform iformfile="ldp_gen.xml" heading="LDP" id="LDP_gen">Load pair of registers.</iform>
+    <iform iformfile="ldpsw.xml" heading="LDPSW" id="LDPSW">Load pair of registers signed word.</iform>
+    <iform iformfile="ldr_imm_gen.xml" heading="LDR (immediate)" id="LDR_imm_gen">Load register (immediate).</iform>
+    <iform iformfile="ldr_lit_gen.xml" heading="LDR (literal)" id="LDR_lit_gen">Load register (literal).</iform>
+    <iform iformfile="ldr_reg_gen.xml" heading="LDR (register)" id="LDR_reg_gen">Load register (register).</iform>
+    <iform iformfile="ldra.xml" heading="LDRAA, LDRAB" id="LDRA">Load register, with pointer authentication.</iform>
+    <iform iformfile="ldrb_imm.xml" heading="LDRB (immediate)" id="LDRB_imm">Load register byte (immediate).</iform>
+    <iform iformfile="ldrb_reg.xml" heading="LDRB (register)" id="LDRB_reg">Load register byte (register).</iform>
+    <iform iformfile="ldrh_imm.xml" heading="LDRH (immediate)" id="LDRH_imm">Load register halfword (immediate).</iform>
+    <iform iformfile="ldrh_reg.xml" heading="LDRH (register)" id="LDRH_reg">Load register halfword (register).</iform>
+    <iform iformfile="ldrsb_imm.xml" heading="LDRSB (immediate)" id="LDRSB_imm">Load register signed byte (immediate).</iform>
+    <iform iformfile="ldrsb_reg.xml" heading="LDRSB (register)" id="LDRSB_reg">Load register signed byte (register).</iform>
+    <iform iformfile="ldrsh_imm.xml" heading="LDRSH (immediate)" id="LDRSH_imm">Load register signed halfword (immediate).</iform>
+    <iform iformfile="ldrsh_reg.xml" heading="LDRSH (register)" id="LDRSH_reg">Load register signed halfword (register).</iform>
+    <iform iformfile="ldrsw_imm.xml" heading="LDRSW (immediate)" id="LDRSW_imm">Load register signed word (immediate).</iform>
+    <iform iformfile="ldrsw_lit.xml" heading="LDRSW (literal)" id="LDRSW_lit">Load register signed word (literal).</iform>
+    <iform iformfile="ldrsw_reg.xml" heading="LDRSW (register)" id="LDRSW_reg">Load register signed word (register).</iform>
+    <iform iformfile="ldset.xml" heading="LDSET, LDSETA, LDSETAL, LDSETL" id="LDSET">Atomic bit set on word or doubleword in memory.</iform>
+    <iform iformfile="ldsetb.xml" heading="LDSETB, LDSETAB, LDSETALB, LDSETLB" id="LDSETB">Atomic bit set on byte in memory.</iform>
+    <iform iformfile="ldseth.xml" heading="LDSETH, LDSETAH, LDSETALH, LDSETLH" id="LDSETH">Atomic bit set on halfword in memory.</iform>
+    <iform iformfile="ldsetp.xml" heading="LDSETP, LDSETPA, LDSETPAL, LDSETPL" id="LDSETP">Atomic bit set on quadword in memory.</iform>
+    <iform iformfile="ldsmax.xml" heading="LDSMAX, LDSMAXA, LDSMAXAL, LDSMAXL" id="LDSMAX">Atomic signed maximum on word or doubleword in memory.</iform>
+    <iform iformfile="ldsmaxb.xml" heading="LDSMAXB, LDSMAXAB, LDSMAXALB, LDSMAXLB" id="LDSMAXB">Atomic signed maximum on byte in memory.</iform>
+    <iform iformfile="ldsmaxh.xml" heading="LDSMAXH, LDSMAXAH, LDSMAXALH, LDSMAXLH" id="LDSMAXH">Atomic signed maximum on halfword in memory.</iform>
+    <iform iformfile="ldsmin.xml" heading="LDSMIN, LDSMINA, LDSMINAL, LDSMINL" id="LDSMIN">Atomic signed minimum on word or doubleword in memory.</iform>
+    <iform iformfile="ldsminb.xml" heading="LDSMINB, LDSMINAB, LDSMINALB, LDSMINLB" id="LDSMINB">Atomic signed minimum on byte in memory.</iform>
+    <iform iformfile="ldsminh.xml" heading="LDSMINH, LDSMINAH, LDSMINALH, LDSMINLH" id="LDSMINH">Atomic signed minimum on halfword in memory.</iform>
+    <iform iformfile="ldtr.xml" heading="LDTR" id="LDTR">Load register (unprivileged).</iform>
+    <iform iformfile="ldtrb.xml" heading="LDTRB" id="LDTRB">Load register byte (unprivileged).</iform>
+    <iform iformfile="ldtrh.xml" heading="LDTRH" id="LDTRH">Load register halfword (unprivileged).</iform>
+    <iform iformfile="ldtrsb.xml" heading="LDTRSB" id="LDTRSB">Load register signed byte (unprivileged).</iform>
+    <iform iformfile="ldtrsh.xml" heading="LDTRSH" id="LDTRSH">Load register signed halfword (unprivileged).</iform>
+    <iform iformfile="ldtrsw.xml" heading="LDTRSW" id="LDTRSW">Load register signed word (unprivileged).</iform>
+    <iform iformfile="ldumax.xml" heading="LDUMAX, LDUMAXA, LDUMAXAL, LDUMAXL" id="LDUMAX">Atomic unsigned maximum on word or doubleword in memory.</iform>
+    <iform iformfile="ldumaxb.xml" heading="LDUMAXB, LDUMAXAB, LDUMAXALB, LDUMAXLB" id="LDUMAXB">Atomic unsigned maximum on byte in memory.</iform>
+    <iform iformfile="ldumaxh.xml" heading="LDUMAXH, LDUMAXAH, LDUMAXALH, LDUMAXLH" id="LDUMAXH">Atomic unsigned maximum on halfword in memory.</iform>
+    <iform iformfile="ldumin.xml" heading="LDUMIN, LDUMINA, LDUMINAL, LDUMINL" id="LDUMIN">Atomic unsigned minimum on word or doubleword in memory.</iform>
+    <iform iformfile="lduminb.xml" heading="LDUMINB, LDUMINAB, LDUMINALB, LDUMINLB" id="LDUMINB">Atomic unsigned minimum on byte in memory.</iform>
+    <iform iformfile="lduminh.xml" heading="LDUMINH, LDUMINAH, LDUMINALH, LDUMINLH" id="LDUMINH">Atomic unsigned minimum on halfword in memory.</iform>
+    <iform iformfile="ldur_gen.xml" heading="LDUR" id="LDUR_gen">Load register (unscaled).</iform>
+    <iform iformfile="ldurb.xml" heading="LDURB" id="LDURB">Load register byte (unscaled).</iform>
+    <iform iformfile="ldurh.xml" heading="LDURH" id="LDURH">Load register halfword (unscaled).</iform>
+    <iform iformfile="ldursb.xml" heading="LDURSB" id="LDURSB">Load register signed byte (unscaled).</iform>
+    <iform iformfile="ldursh.xml" heading="LDURSH" id="LDURSH">Load register signed halfword (unscaled).</iform>
+    <iform iformfile="ldursw.xml" heading="LDURSW" id="LDURSW">Load register signed word (unscaled).</iform>
+    <iform iformfile="ldxp.xml" heading="LDXP" id="LDXP">Load exclusive pair of registers.</iform>
+    <iform iformfile="ldxr.xml" heading="LDXR" id="LDXR">Load exclusive register.</iform>
+    <iform iformfile="ldxrb.xml" heading="LDXRB" id="LDXRB">Load exclusive register byte.</iform>
+    <iform iformfile="ldxrh.xml" heading="LDXRH" id="LDXRH">Load exclusive register halfword.</iform>
+    <iform iformfile="lsl_ubfm.xml" heading="LSL (immediate)" id="LSL_UBFM">Logical shift left (immediate): an alias of UBFM.</iform>
+    <iform iformfile="lsl_lslv.xml" heading="LSL (register)" id="LSL_LSLV">Logical shift left (register): an alias of LSLV.</iform>
+    <iform iformfile="lslv.xml" heading="LSLV" id="LSLV">Logical shift left variable.</iform>
+    <iform iformfile="lsr_ubfm.xml" heading="LSR (immediate)" id="LSR_UBFM">Logical shift right (immediate): an alias of UBFM.</iform>
+    <iform iformfile="lsr_lsrv.xml" heading="LSR (register)" id="LSR_LSRV">Logical shift right (register): an alias of LSRV.</iform>
+    <iform iformfile="lsrv.xml" heading="LSRV" id="LSRV">Logical shift right variable.</iform>
+    <iform iformfile="madd.xml" heading="MADD" id="MADD">Multiply-add.</iform>
+    <iform iformfile="maddpt.xml" heading="MADDPT" id="MADDPT">Multiply-add checked pointer.</iform>
+    <iform iformfile="mneg_msub.xml" heading="MNEG" id="MNEG_MSUB">Multiply-negate: an alias of MSUB.</iform>
+    <iform iformfile="mov_orr_log_imm.xml" heading="MOV (bitmask immediate)" id="MOV_ORR_log_imm">Move (bitmask immediate): an alias of ORR (immediate).</iform>
+    <iform iformfile="mov_movn.xml" heading="MOV (inverted wide immediate)" id="MOV_MOVN">Move (inverted wide immediate): an alias of MOVN.</iform>
+    <iform iformfile="mov_orr_log_shift.xml" heading="MOV (register)" id="MOV_ORR_log_shift">Move (register): an alias of ORR (shifted register).</iform>
+    <iform iformfile="mov_add_addsub_imm.xml" heading="MOV (to/from SP)" id="MOV_ADD_addsub_imm">Move (to/from SP): an alias of ADD (immediate).</iform>
+    <iform iformfile="mov_movz.xml" heading="MOV (wide immediate)" id="MOV_MOVZ">Move (wide immediate): an alias of MOVZ.</iform>
+    <iform iformfile="movk.xml" heading="MOVK" id="MOVK">Move wide with keep.</iform>
+    <iform iformfile="movn.xml" heading="MOVN" id="MOVN">Move wide with NOT.</iform>
+    <iform iformfile="movz.xml" heading="MOVZ" id="MOVZ">Move wide with zero.</iform>
+    <iform iformfile="mrrs.xml" heading="MRRS" id="MRRS">Move System register to two adjacent general-purpose registers.</iform>
+    <iform iformfile="mrs.xml" heading="MRS" id="MRS">Move System register to general-purpose register.</iform>
+    <iform iformfile="msr_imm.xml" heading="MSR (immediate)" id="MSR_imm">Move immediate value to special register.</iform>
+    <iform iformfile="msr_reg.xml" heading="MSR (register)" id="MSR_reg">Move general-purpose register to System register.</iform>
+    <iform iformfile="msrr.xml" heading="MSRR" id="MSRR">Move two adjacent general-purpose registers to System register.</iform>
+    <iform iformfile="msub.xml" heading="MSUB" id="MSUB">Multiply-subtract.</iform>
+    <iform iformfile="msubpt.xml" heading="MSUBPT" id="MSUBPT">Multiply-subtract checked pointer.</iform>
+    <iform iformfile="mul_madd.xml" heading="MUL" id="MUL_MADD">Multiply: an alias of MADD.</iform>
+    <iform iformfile="mvn_orn_log_shift.xml" heading="MVN" id="MVN_ORN_log_shift">Bitwise NOT: an alias of ORN (shifted register).</iform>
+    <iform iformfile="neg_sub_addsub_shift.xml" heading="NEG (shifted register)" id="NEG_SUB_addsub_shift">Negate (shifted register): an alias of SUB (shifted register).</iform>
+    <iform iformfile="negs_subs_addsub_shift.xml" heading="NEGS" id="NEGS_SUBS_addsub_shift">Negate, setting flags: an alias of SUBS (shifted register).</iform>
+    <iform iformfile="ngc_sbc.xml" heading="NGC" id="NGC_SBC">Negate with carry: an alias of SBC.</iform>
+    <iform iformfile="ngcs_sbcs.xml" heading="NGCS" id="NGCS_SBCS">Negate with carry, setting flags: an alias of SBCS.</iform>
+    <iform iformfile="nop.xml" heading="NOP" id="NOP">No operation.</iform>
+    <iform iformfile="orn_log_shift.xml" heading="ORN (shifted register)" id="ORN_log_shift">Bitwise OR NOT (shifted register).</iform>
+    <iform iformfile="orr_log_imm.xml" heading="ORR (immediate)" id="ORR_log_imm">Bitwise OR (immediate).</iform>
+    <iform iformfile="orr_log_shift.xml" heading="ORR (shifted register)" id="ORR_log_shift">Bitwise OR (shifted register).</iform>
+    <iform iformfile="pacda.xml" heading="PACDA, PACDZA" id="PACDA">Pointer Authentication Code for data address, using key A.</iform>
+    <iform iformfile="pacdb.xml" heading="PACDB, PACDZB" id="PACDB">Pointer Authentication Code for data address, using key B.</iform>
+    <iform iformfile="pacga.xml" heading="PACGA" id="PACGA">Pointer Authentication Code, using generic key.</iform>
+    <iform iformfile="pacia.xml" heading="PACIA, PACIA1716, PACIASP, PACIAZ, PACIZA" id="PACIA">Pointer Authentication Code for instruction address, using key A.</iform>
+    <iform iformfile="pacia171615.xml" heading="PACIA171615" id="PACIA171615">Pointer Authentication Code for instruction address, using key A.</iform>
+    <iform iformfile="paciasppc.xml" heading="PACIASPPC" id="PACIASPPC">Pointer Authentication Code for return address, using key A.</iform>
+    <iform iformfile="pacib.xml" heading="PACIB, PACIB1716, PACIBSP, PACIBZ, PACIZB" id="PACIB">Pointer Authentication Code for instruction address, using key B.</iform>
+    <iform iformfile="pacib171615.xml" heading="PACIB171615" id="PACIB171615">Pointer Authentication Code for instruction address, using key B.</iform>
+    <iform iformfile="pacibsppc.xml" heading="PACIBSPPC" id="PACIBSPPC">Pointer Authentication Code for return address, using key B.</iform>
+    <iform iformfile="pacm.xml" heading="PACM" id="PACM">Pointer authentication modifier.</iform>
+    <iform iformfile="pacnbiasppc.xml" heading="PACNBIASPPC" id="PACNBIASPPC">Pointer Authentication Code for return address, using key A, not a branch target.</iform>
+    <iform iformfile="pacnbibsppc.xml" heading="PACNBIBSPPC" id="PACNBIBSPPC">Pointer Authentication Code for return address, using key B, not a branch target.</iform>
+    <iform iformfile="prfm_imm.xml" heading="PRFM (immediate)" id="PRFM_imm">Prefetch memory (immediate).</iform>
+    <iform iformfile="prfm_lit.xml" heading="PRFM (literal)" id="PRFM_lit">Prefetch memory (literal).</iform>
+    <iform iformfile="prfm_reg.xml" heading="PRFM (register)" id="PRFM_reg">Prefetch memory (register).</iform>
+    <iform iformfile="prfum.xml" heading="PRFUM" id="PRFUM">Prefetch memory (unscaled offset).</iform>
+    <iform iformfile="psb.xml" heading="PSB" id="PSB">Profiling synchronization barrier.</iform>
+    <iform iformfile="pssbb_dsb.xml" heading="PSSBB" id="PSSBB_DSB">Physical speculative store bypass barrier: an alias of DSB.</iform>
+    <iform iformfile="rbit_int.xml" heading="RBIT" id="RBIT_int">Reverse bits.</iform>
+    <iform iformfile="rcwcas.xml" heading="RCWCAS, RCWCASA, RCWCASL, RCWCASAL" id="RCWCAS">Read check write compare and swap doubleword in memory.</iform>
+    <iform iformfile="rcwcasp.xml" heading="RCWCASP, RCWCASPA, RCWCASPL, RCWCASPAL" id="RCWCASP">Read check write compare and swap quadword in memory.</iform>
+    <iform iformfile="rcwclr.xml" heading="RCWCLR, RCWCLRA, RCWCLRL, RCWCLRAL" id="RCWCLR">Read check write atomic bit clear on doubleword in memory.</iform>
+    <iform iformfile="rcwclrp.xml" heading="RCWCLRP, RCWCLRPA, RCWCLRPL, RCWCLRPAL" id="RCWCLRP">Read check write atomic bit clear on quadword in memory.</iform>
+    <iform iformfile="rcwscas.xml" heading="RCWSCAS, RCWSCASA, RCWSCASL, RCWSCASAL" id="RCWSCAS">Read check write software compare and swap doubleword in memory.</iform>
+    <iform iformfile="rcwscasp.xml" heading="RCWSCASP, RCWSCASPA, RCWSCASPL, RCWSCASPAL" id="RCWSCASP">Read check write software compare and swap quadword in memory.</iform>
+    <iform iformfile="rcwsclr.xml" heading="RCWSCLR, RCWSCLRA, RCWSCLRL, RCWSCLRAL" id="RCWSCLR">Read check write software atomic bit clear on doubleword in memory.</iform>
+    <iform iformfile="rcwsclrp.xml" heading="RCWSCLRP, RCWSCLRPA, RCWSCLRPL, RCWSCLRPAL" id="RCWSCLRP">Read check write software atomic bit clear on quadword in memory.</iform>
+    <iform iformfile="rcwset.xml" heading="RCWSET, RCWSETA, RCWSETL, RCWSETAL" id="RCWSET">Read check write atomic bit set on doubleword in memory.</iform>
+    <iform iformfile="rcwsetp.xml" heading="RCWSETP, RCWSETPA, RCWSETPL, RCWSETPAL" id="RCWSETP">Read check write atomic bit set on quadword in memory.</iform>
+    <iform iformfile="rcwsset.xml" heading="RCWSSET, RCWSSETA, RCWSSETL, RCWSSETAL" id="RCWSSET">Read check write software atomic bit set on doubleword in memory.</iform>
+    <iform iformfile="rcwssetp.xml" heading="RCWSSETP, RCWSSETPA, RCWSSETPL, RCWSSETPAL" id="RCWSSETP">Read check write software atomic bit set on quadword in memory.</iform>
+    <iform iformfile="rcwsswp.xml" heading="RCWSSWP, RCWSSWPA, RCWSSWPL, RCWSSWPAL" id="RCWSSWP">Read check write software swap doubleword in memory.</iform>
+    <iform iformfile="rcwsswpp.xml" heading="RCWSSWPP, RCWSSWPPA, RCWSSWPPL, RCWSSWPPAL" id="RCWSSWPP">Read check write software swap quadword in memory.</iform>
+    <iform iformfile="rcwswp.xml" heading="RCWSWP, RCWSWPA, RCWSWPL, RCWSWPAL" id="RCWSWP">Read check write swap doubleword in memory.</iform>
+    <iform iformfile="rcwswpp.xml" heading="RCWSWPP, RCWSWPPA, RCWSWPPL, RCWSWPPAL" id="RCWSWPP">Read check write swap quadword in memory.</iform>
+    <iform iformfile="ret.xml" heading="RET" id="RET">Return from subroutine.</iform>
+    <iform iformfile="reta.xml" heading="RETAA, RETAB" id="RETA">Return from subroutine, with pointer authentication.</iform>
+    <iform iformfile="retasppc_imm.xml" heading="RETAASPPC, RETABSPPC" id="RETASPPC_imm">Return from subroutine, with enhanced pointer authentication return using an immediate offset.</iform>
+    <iform iformfile="retasppcr_reg.xml" heading="RETAASPPCR, RETABSPPCR" id="RETASPPCR_reg">Return from subroutine, with enhanced pointer authentication return using a register.</iform>
+    <iform iformfile="rev.xml" heading="REV" id="REV">Reverse bytes.</iform>
+    <iform iformfile="rev16_int.xml" heading="REV16" id="REV16_int">Reverse bytes in 16-bit halfwords.</iform>
+    <iform iformfile="rev32_int.xml" heading="REV32" id="REV32_int">Reverse bytes in 32-bit words.</iform>
+    <iform iformfile="rev64_rev.xml" heading="REV64" id="REV64_REV">Reverse bytes: an alias of REV.</iform>
+    <iform iformfile="rmif.xml" heading="RMIF" id="RMIF">Rotate, mask insert flags.</iform>
+    <iform iformfile="ror_extr.xml" heading="ROR (immediate)" id="ROR_EXTR">Rotate right (immediate): an alias of EXTR.</iform>
+    <iform iformfile="ror_rorv.xml" heading="ROR (register)" id="ROR_RORV">Rotate right (register): an alias of RORV.</iform>
+    <iform iformfile="rorv.xml" heading="RORV" id="RORV">Rotate right variable.</iform>
+    <iform iformfile="rprfm_reg.xml" heading="RPRFM" id="RPRFM_reg">Range prefetch memory.</iform>
+    <iform iformfile="sb.xml" heading="SB" id="SB">Speculation barrier.</iform>
+    <iform iformfile="sbc.xml" heading="SBC" id="SBC">Subtract with carry.</iform>
+    <iform iformfile="sbcs.xml" heading="SBCS" id="SBCS">Subtract with carry, setting flags.</iform>
+    <iform iformfile="sbfiz_sbfm.xml" heading="SBFIZ" id="SBFIZ_SBFM">Signed bitfield insert in zeros: an alias of SBFM.</iform>
+    <iform iformfile="sbfm.xml" heading="SBFM" id="SBFM">Signed bitfield move.</iform>
+    <iform iformfile="sbfx_sbfm.xml" heading="SBFX" id="SBFX_SBFM">Signed bitfield extract: an alias of SBFM.</iform>
+    <iform iformfile="sdiv.xml" heading="SDIV" id="SDIV">Signed divide.</iform>
+    <iform iformfile="setf.xml" heading="SETF8, SETF16" id="SETF">Evaluation of 8-bit or 16-bit flag values.</iform>
+    <iform iformfile="setgp.xml" heading="SETGP, SETGM, SETGE" id="SETGP">Memory set with tag setting.</iform>
+    <iform iformfile="setgpn.xml" heading="SETGPN, SETGMN, SETGEN" id="SETGPN">Memory set with tag setting, non-temporal.</iform>
+    <iform iformfile="setgpt.xml" heading="SETGPT, SETGMT, SETGET" id="SETGPT">Memory set with tag setting, unprivileged.</iform>
+    <iform iformfile="setgptn.xml" heading="SETGPTN, SETGMTN, SETGETN" id="SETGPTN">Memory set with tag setting, unprivileged and non-temporal.</iform>
+    <iform iformfile="setp.xml" heading="SETP, SETM, SETE" id="SETP">Memory set.</iform>
+    <iform iformfile="setpn.xml" heading="SETPN, SETMN, SETEN" id="SETPN">Memory set, non-temporal.</iform>
+    <iform iformfile="setpt.xml" heading="SETPT, SETMT, SETET" id="SETPT">Memory set, unprivileged.</iform>
+    <iform iformfile="setptn.xml" heading="SETPTN, SETMTN, SETETN" id="SETPTN">Memory set, unprivileged and non-temporal.</iform>
+    <iform iformfile="sev.xml" heading="SEV" id="SEV">Send event.</iform>
+    <iform iformfile="sevl.xml" heading="SEVL" id="SEVL">Send event local.</iform>
+    <iform iformfile="smaddl.xml" heading="SMADDL" id="SMADDL">Signed multiply-add long.</iform>
+    <iform iformfile="smax_imm.xml" heading="SMAX (immediate)" id="SMAX_imm">Signed maximum (immediate).</iform>
+    <iform iformfile="smax_reg.xml" heading="SMAX (register)" id="SMAX_reg">Signed maximum (register).</iform>
+    <iform iformfile="smc.xml" heading="SMC" id="SMC">Secure monitor call.</iform>
+    <iform iformfile="smin_imm.xml" heading="SMIN (immediate)" id="SMIN_imm">Signed minimum (immediate).</iform>
+    <iform iformfile="smin_reg.xml" heading="SMIN (register)" id="SMIN_reg">Signed minimum (register).</iform>
+    <iform iformfile="smnegl_smsubl.xml" heading="SMNEGL" id="SMNEGL_SMSUBL">Signed multiply-negate long: an alias of SMSUBL.</iform>
+    <iform iformfile="smstart_msr_imm.xml" heading="SMSTART" id="SMSTART_MSR_imm">Enables access to Streaming SVE mode and SME architectural state: an alias of MSR (immediate).</iform>
+    <iform iformfile="smstop_msr_imm.xml" heading="SMSTOP" id="SMSTOP_MSR_imm">Disables access to Streaming SVE mode and SME architectural state: an alias of MSR (immediate).</iform>
+    <iform iformfile="smsubl.xml" heading="SMSUBL" id="SMSUBL">Signed multiply-subtract long.</iform>
+    <iform iformfile="smulh.xml" heading="SMULH" id="SMULH">Signed multiply high.</iform>
+    <iform iformfile="smull_smaddl.xml" heading="SMULL" id="SMULL_SMADDL">Signed multiply long: an alias of SMADDL.</iform>
+    <iform iformfile="ssbb_dsb.xml" heading="SSBB" id="SSBB_DSB">Speculative store bypass barrier: an alias of DSB.</iform>
+    <iform iformfile="st2g.xml" heading="ST2G" id="ST2G">Store Allocation Tags.</iform>
+    <iform iformfile="st64b.xml" heading="ST64B" id="ST64B">Single-copy atomic 64-byte store without status result.</iform>
+    <iform iformfile="st64bv.xml" heading="ST64BV" id="ST64BV">Single-copy atomic 64-byte store with status result.</iform>
+    <iform iformfile="st64bv0.xml" heading="ST64BV0" id="ST64BV0">Single-copy atomic 64-byte EL0 store with status result.</iform>
+    <iform iformfile="stadd_ldadd.xml" heading="STADD, STADDL" id="STADD_LDADD">Atomic add on word or doubleword in memory, without return: an alias of LDADD, LDADDA, LDADDAL, LDADDL.</iform>
+    <iform iformfile="staddb_ldaddb.xml" heading="STADDB, STADDLB" id="STADDB_LDADDB">Atomic add on byte in memory, without return: an alias of LDADDB, LDADDAB, LDADDALB, LDADDLB.</iform>
+    <iform iformfile="staddh_ldaddh.xml" heading="STADDH, STADDLH" id="STADDH_LDADDH">Atomic add on halfword in memory, without return: an alias of LDADDH, LDADDAH, LDADDALH, LDADDLH.</iform>
+    <iform iformfile="stclr_ldclr.xml" heading="STCLR, STCLRL" id="STCLR_LDCLR">Atomic bit clear on word or doubleword in memory, without return: an alias of LDCLR, LDCLRA, LDCLRAL, LDCLRL.</iform>
+    <iform iformfile="stclrb_ldclrb.xml" heading="STCLRB, STCLRLB" id="STCLRB_LDCLRB">Atomic bit clear on byte in memory, without return: an alias of LDCLRB, LDCLRAB, LDCLRALB, LDCLRLB.</iform>
+    <iform iformfile="stclrh_ldclrh.xml" heading="STCLRH, STCLRLH" id="STCLRH_LDCLRH">Atomic bit clear on halfword in memory, without return: an alias of LDCLRH, LDCLRAH, LDCLRALH, LDCLRLH.</iform>
+    <iform iformfile="steor_ldeor.xml" heading="STEOR, STEORL" id="STEOR_LDEOR">Atomic exclusive-OR on word or doubleword in memory, without return: an alias of LDEOR, LDEORA, LDEORAL, LDEORL.</iform>
+    <iform iformfile="steorb_ldeorb.xml" heading="STEORB, STEORLB" id="STEORB_LDEORB">Atomic exclusive-OR on byte in memory, without return: an alias of LDEORB, LDEORAB, LDEORALB, LDEORLB.</iform>
+    <iform iformfile="steorh_ldeorh.xml" heading="STEORH, STEORLH" id="STEORH_LDEORH">Atomic exclusive-OR on halfword in memory, without return: an alias of LDEORH, LDEORAH, LDEORALH, LDEORLH.</iform>
+    <iform iformfile="stg.xml" heading="STG" id="STG">Store Allocation Tag.</iform>
+    <iform iformfile="stgm.xml" heading="STGM" id="STGM">Store Allocation Tag multiple.</iform>
+    <iform iformfile="stgp.xml" heading="STGP" id="STGP">Store Allocation Tag and pair of registers.</iform>
+    <iform iformfile="stilp.xml" heading="STILP" id="STILP">Store-release ordered pair of registers.</iform>
+    <iform iformfile="stllr.xml" heading="STLLR" id="STLLR">Store LORelease register.</iform>
+    <iform iformfile="stllrb.xml" heading="STLLRB" id="STLLRB">Store LORelease register byte.</iform>
+    <iform iformfile="stllrh.xml" heading="STLLRH" id="STLLRH">Store LORelease register halfword.</iform>
+    <iform iformfile="stlr.xml" heading="STLR" id="STLR">Store-release register.</iform>
+    <iform iformfile="stlrb.xml" heading="STLRB" id="STLRB">Store-release register byte.</iform>
+    <iform iformfile="stlrh.xml" heading="STLRH" id="STLRH">Store-release register halfword.</iform>
+    <iform iformfile="stlur_gen.xml" heading="STLUR" id="STLUR_gen">Store-release register (unscaled).</iform>
+    <iform iformfile="stlurb.xml" heading="STLURB" id="STLURB">Store-release register byte (unscaled).</iform>
+    <iform iformfile="stlurh.xml" heading="STLURH" id="STLURH">Store-release register halfword (unscaled).</iform>
+    <iform iformfile="stlxp.xml" heading="STLXP" id="STLXP">Store-release exclusive pair of registers.</iform>
+    <iform iformfile="stlxr.xml" heading="STLXR" id="STLXR">Store-release exclusive register.</iform>
+    <iform iformfile="stlxrb.xml" heading="STLXRB" id="STLXRB">Store-release exclusive register byte.</iform>
+    <iform iformfile="stlxrh.xml" heading="STLXRH" id="STLXRH">Store-release exclusive register halfword.</iform>
+    <iform iformfile="stnp_gen.xml" heading="STNP" id="STNP_gen">Store pair of registers, with non-temporal hint.</iform>
+    <iform iformfile="stp_gen.xml" heading="STP" id="STP_gen">Store pair of registers.</iform>
+    <iform iformfile="str_imm_gen.xml" heading="STR (immediate)" id="STR_imm_gen">Store register (immediate).</iform>
+    <iform iformfile="str_reg_gen.xml" heading="STR (register)" id="STR_reg_gen">Store register (register).</iform>
+    <iform iformfile="strb_imm.xml" heading="STRB (immediate)" id="STRB_imm">Store register byte (immediate).</iform>
+    <iform iformfile="strb_reg.xml" heading="STRB (register)" id="STRB_reg">Store register byte (register).</iform>
+    <iform iformfile="strh_imm.xml" heading="STRH (immediate)" id="STRH_imm">Store register halfword (immediate).</iform>
+    <iform iformfile="strh_reg.xml" heading="STRH (register)" id="STRH_reg">Store register halfword (register).</iform>
+    <iform iformfile="stset_ldset.xml" heading="STSET, STSETL" id="STSET_LDSET">Atomic bit set on word or doubleword in memory, without return: an alias of LDSET, LDSETA, LDSETAL, LDSETL.</iform>
+    <iform iformfile="stsetb_ldsetb.xml" heading="STSETB, STSETLB" id="STSETB_LDSETB">Atomic bit set on byte in memory, without return: an alias of LDSETB, LDSETAB, LDSETALB, LDSETLB.</iform>
+    <iform iformfile="stseth_ldseth.xml" heading="STSETH, STSETLH" id="STSETH_LDSETH">Atomic bit set on halfword in memory, without return: an alias of LDSETH, LDSETAH, LDSETALH, LDSETLH.</iform>
+    <iform iformfile="stsmax_ldsmax.xml" heading="STSMAX, STSMAXL" id="STSMAX_LDSMAX">Atomic signed maximum on word or doubleword in memory, without return: an alias of LDSMAX, LDSMAXA, LDSMAXAL, LDSMAXL.</iform>
+    <iform iformfile="stsmaxb_ldsmaxb.xml" heading="STSMAXB, STSMAXLB" id="STSMAXB_LDSMAXB">Atomic signed maximum on byte in memory, without return: an alias of LDSMAXB, LDSMAXAB, LDSMAXALB, LDSMAXLB.</iform>
+    <iform iformfile="stsmaxh_ldsmaxh.xml" heading="STSMAXH, STSMAXLH" id="STSMAXH_LDSMAXH">Atomic signed maximum on halfword in memory, without return: an alias of LDSMAXH, LDSMAXAH, LDSMAXALH, LDSMAXLH.</iform>
+    <iform iformfile="stsmin_ldsmin.xml" heading="STSMIN, STSMINL" id="STSMIN_LDSMIN">Atomic signed minimum on word or doubleword in memory, without return: an alias of LDSMIN, LDSMINA, LDSMINAL, LDSMINL.</iform>
+    <iform iformfile="stsminb_ldsminb.xml" heading="STSMINB, STSMINLB" id="STSMINB_LDSMINB">Atomic signed minimum on byte in memory, without return: an alias of LDSMINB, LDSMINAB, LDSMINALB, LDSMINLB.</iform>
+    <iform iformfile="stsminh_ldsminh.xml" heading="STSMINH, STSMINLH" id="STSMINH_LDSMINH">Atomic signed minimum on halfword in memory, without return: an alias of LDSMINH, LDSMINAH, LDSMINALH, LDSMINLH.</iform>
+    <iform iformfile="sttr.xml" heading="STTR" id="STTR">Store register (unprivileged).</iform>
+    <iform iformfile="sttrb.xml" heading="STTRB" id="STTRB">Store register byte (unprivileged).</iform>
+    <iform iformfile="sttrh.xml" heading="STTRH" id="STTRH">Store register halfword (unprivileged).</iform>
+    <iform iformfile="stumax_ldumax.xml" heading="STUMAX, STUMAXL" id="STUMAX_LDUMAX">Atomic unsigned maximum on word or doubleword in memory, without return: an alias of LDUMAX, LDUMAXA, LDUMAXAL, LDUMAXL.</iform>
+    <iform iformfile="stumaxb_ldumaxb.xml" heading="STUMAXB, STUMAXLB" id="STUMAXB_LDUMAXB">Atomic unsigned maximum on byte in memory, without return: an alias of LDUMAXB, LDUMAXAB, LDUMAXALB, LDUMAXLB.</iform>
+    <iform iformfile="stumaxh_ldumaxh.xml" heading="STUMAXH, STUMAXLH" id="STUMAXH_LDUMAXH">Atomic unsigned maximum on halfword in memory, without return: an alias of LDUMAXH, LDUMAXAH, LDUMAXALH, LDUMAXLH.</iform>
+    <iform iformfile="stumin_ldumin.xml" heading="STUMIN, STUMINL" id="STUMIN_LDUMIN">Atomic unsigned minimum on word or doubleword in memory, without return: an alias of LDUMIN, LDUMINA, LDUMINAL, LDUMINL.</iform>
+    <iform iformfile="stuminb_lduminb.xml" heading="STUMINB, STUMINLB" id="STUMINB_LDUMINB">Atomic unsigned minimum on byte in memory, without return: an alias of LDUMINB, LDUMINAB, LDUMINALB, LDUMINLB.</iform>
+    <iform iformfile="stuminh_lduminh.xml" heading="STUMINH, STUMINLH" id="STUMINH_LDUMINH">Atomic unsigned minimum on halfword in memory, without return: an alias of LDUMINH, LDUMINAH, LDUMINALH, LDUMINLH.</iform>
+    <iform iformfile="stur_gen.xml" heading="STUR" id="STUR_gen">Store register (unscaled).</iform>
+    <iform iformfile="sturb.xml" heading="STURB" id="STURB">Store register byte (unscaled).</iform>
+    <iform iformfile="sturh.xml" heading="STURH" id="STURH">Store register halfword (unscaled).</iform>
+    <iform iformfile="stxp.xml" heading="STXP" id="STXP">Store exclusive pair of registers.</iform>
+    <iform iformfile="stxr.xml" heading="STXR" id="STXR">Store exclusive register.</iform>
+    <iform iformfile="stxrb.xml" heading="STXRB" id="STXRB">Store exclusive register byte.</iform>
+    <iform iformfile="stxrh.xml" heading="STXRH" id="STXRH">Store exclusive register halfword.</iform>
+    <iform iformfile="stz2g.xml" heading="STZ2G" id="STZ2G">Store Allocation Tags, zeroing.</iform>
+    <iform iformfile="stzg.xml" heading="STZG" id="STZG">Store Allocation Tag, zeroing.</iform>
+    <iform iformfile="stzgm.xml" heading="STZGM" id="STZGM">Store Allocation Tag and zero multiple.</iform>
+    <iform iformfile="sub_addsub_ext.xml" heading="SUB (extended register)" id="SUB_addsub_ext">Subtract (extended register).</iform>
+    <iform iformfile="sub_addsub_imm.xml" heading="SUB (immediate)" id="SUB_addsub_imm">Subtract (immediate).</iform>
+    <iform iformfile="sub_addsub_shift.xml" heading="SUB (shifted register)" id="SUB_addsub_shift">Subtract (shifted register).</iform>
+    <iform iformfile="subg.xml" heading="SUBG" id="SUBG">Subtract with tag.</iform>
+    <iform iformfile="subp.xml" heading="SUBP" id="SUBP">Subtract pointer.</iform>
+    <iform iformfile="subps.xml" heading="SUBPS" id="SUBPS">Subtract pointer, setting flags.</iform>
+    <iform iformfile="subpt.xml" heading="SUBPT" id="SUBPT">Subtract checked pointer.</iform>
+    <iform iformfile="subs_addsub_ext.xml" heading="SUBS (extended register)" id="SUBS_addsub_ext">Subtract (extended register), setting flags.</iform>
+    <iform iformfile="subs_addsub_imm.xml" heading="SUBS (immediate)" id="SUBS_addsub_imm">Subtract (immediate), setting flags.</iform>
+    <iform iformfile="subs_addsub_shift.xml" heading="SUBS (shifted register)" id="SUBS_addsub_shift">Subtract (shifted register), setting flags.</iform>
+    <iform iformfile="svc.xml" heading="SVC" id="SVC">Supervisor call.</iform>
+    <iform iformfile="swp.xml" heading="SWP, SWPA, SWPAL, SWPL" id="SWP">Swap word or doubleword in memory.</iform>
+    <iform iformfile="swpb.xml" heading="SWPB, SWPAB, SWPALB, SWPLB" id="SWPB">Swap byte in memory.</iform>
+    <iform iformfile="swph.xml" heading="SWPH, SWPAH, SWPALH, SWPLH" id="SWPH">Swap halfword in memory.</iform>
+    <iform iformfile="swpp.xml" heading="SWPP, SWPPA, SWPPAL, SWPPL" id="SWPP">Swap quadword in memory.</iform>
+    <iform iformfile="sxtb_sbfm.xml" heading="SXTB" id="SXTB_SBFM">Signed extend byte: an alias of SBFM.</iform>
+    <iform iformfile="sxth_sbfm.xml" heading="SXTH" id="SXTH_SBFM">Sign extend halfword: an alias of SBFM.</iform>
+    <iform iformfile="sxtw_sbfm.xml" heading="SXTW" id="SXTW_SBFM">Sign extend word: an alias of SBFM.</iform>
+    <iform iformfile="sys.xml" heading="SYS" id="SYS">System instruction.</iform>
+    <iform iformfile="sysl.xml" heading="SYSL" id="SYSL">System instruction with result.</iform>
+    <iform iformfile="sysp.xml" heading="SYSP" id="SYSP">128-bit system instruction.</iform>
+    <iform iformfile="tbnz.xml" heading="TBNZ" id="TBNZ">Test bit and branch if nonzero.</iform>
+    <iform iformfile="tbz.xml" heading="TBZ" id="TBZ">Test bit and branch if zero.</iform>
+    <iform iformfile="tcancel.xml" heading="TCANCEL" id="TCANCEL">Cancel current transaction.</iform>
+    <iform iformfile="tcommit.xml" heading="TCOMMIT" id="TCOMMIT">Commit current transaction.</iform>
+    <iform iformfile="tlbi_sys.xml" heading="TLBI" id="TLBI_SYS">TLB invalidate operation: an alias of SYS.</iform>
+    <iform iformfile="tlbip_sysp.xml" heading="TLBIP" id="TLBIP_SYSP">TLB invalidate pair operation: an alias of SYSP.</iform>
+    <iform iformfile="trcit_sys.xml" heading="TRCIT" id="TRCIT_SYS">Trace instrumentation: an alias of SYS.</iform>
+    <iform iformfile="tsb.xml" heading="TSB" id="TSB">Trace synchronization barrier.</iform>
+    <iform iformfile="tst_ands_log_imm.xml" heading="TST (immediate)" id="TST_ANDS_log_imm">Test bits (immediate): an alias of ANDS (immediate).</iform>
+    <iform iformfile="tst_ands_log_shift.xml" heading="TST (shifted register)" id="TST_ANDS_log_shift">Test (shifted register): an alias of ANDS (shifted register).</iform>
+    <iform iformfile="tstart.xml" heading="TSTART" id="TSTART">Start transaction.</iform>
+    <iform iformfile="ttest.xml" heading="TTEST" id="TTEST">Test transaction state.</iform>
+    <iform iformfile="ubfiz_ubfm.xml" heading="UBFIZ" id="UBFIZ_UBFM">Unsigned bitfield insert in zeros: an alias of UBFM.</iform>
+    <iform iformfile="ubfm.xml" heading="UBFM" id="UBFM">Unsigned bitfield move.</iform>
+    <iform iformfile="ubfx_ubfm.xml" heading="UBFX" id="UBFX_UBFM">Unsigned bitfield extract: an alias of UBFM.</iform>
+    <iform iformfile="udf_perm_undef.xml" heading="UDF" id="UDF_perm_undef">Permanently undefined.</iform>
+    <iform iformfile="udiv.xml" heading="UDIV" id="UDIV">Unsigned divide.</iform>
+    <iform iformfile="umaddl.xml" heading="UMADDL" id="UMADDL">Unsigned multiply-add long.</iform>
+    <iform iformfile="umax_imm.xml" heading="UMAX (immediate)" id="UMAX_imm">Unsigned maximum (immediate).</iform>
+    <iform iformfile="umax_reg.xml" heading="UMAX (register)" id="UMAX_reg">Unsigned maximum (register).</iform>
+    <iform iformfile="umin_imm.xml" heading="UMIN (immediate)" id="UMIN_imm">Unsigned minimum (immediate).</iform>
+    <iform iformfile="umin_reg.xml" heading="UMIN (register)" id="UMIN_reg">Unsigned minimum (register).</iform>
+    <iform iformfile="umnegl_umsubl.xml" heading="UMNEGL" id="UMNEGL_UMSUBL">Unsigned multiply-negate long: an alias of UMSUBL.</iform>
+    <iform iformfile="umsubl.xml" heading="UMSUBL" id="UMSUBL">Unsigned multiply-subtract long.</iform>
+    <iform iformfile="umulh.xml" heading="UMULH" id="UMULH">Unsigned multiply high.</iform>
+    <iform iformfile="umull_umaddl.xml" heading="UMULL" id="UMULL_UMADDL">Unsigned multiply long: an alias of UMADDL.</iform>
+    <iform iformfile="uxtb_ubfm.xml" heading="UXTB" id="UXTB_UBFM">Unsigned extend byte: an alias of UBFM.</iform>
+    <iform iformfile="uxth_ubfm.xml" heading="UXTH" id="UXTH_UBFM">Unsigned extend halfword: an alias of UBFM.</iform>
+    <iform iformfile="wfe.xml" heading="WFE" id="WFE">Wait for event.</iform>
+    <iform iformfile="wfet.xml" heading="WFET" id="WFET">Wait for event with timeout.</iform>
+    <iform iformfile="wfi.xml" heading="WFI" id="WFI">Wait for interrupt.</iform>
+    <iform iformfile="wfit.xml" heading="WFIT" id="WFIT">Wait for interrupt with timeout.</iform>
+    <iform iformfile="xaflag.xml" heading="XAFLAG" id="XAFLAG">Convert floating-point condition flags from external format to Arm format.</iform>
+    <iform iformfile="xpac.xml" heading="XPACD, XPACI, XPACLRI" id="XPAC">Strip Pointer Authentication Code.</iform>
+    <iform iformfile="yield.xml" heading="YIELD" id="YIELD">Yield.</iform>
+  </iforms>
+</alphaindex>

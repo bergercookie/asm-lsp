@@ -1,0 +1,147 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="IRG" title="IRG -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="IRG"/>
+  </docvars>
+  <heading>IRG</heading>
+  <desc>
+    <brief>
+      <para>Insert random tag</para>
+    </brief>
+    <authored>
+      <para>This instruction inserts a random Logical Address Tag into the address in the
+first source register, and writes the result to the destination register. Any
+tags specified in the optional second source register or in <register_link id="AArch64-gcr_el1.xml" state="AArch64">GCR_EL1</register_link>.Exclude
+are excluded from the selection of the random Logical Address Tag.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="IRG"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_MTE" name="ARMv8.5"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.dpreg.dp_2src.IRG_64I_dp_2src" tworows="1">
+        <box hibit="31" name="sf" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="30" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Xm" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="6" name="opcode" usename="1" settings="6" psbits="xxxxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Xn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Xd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="IRG_64I_dp_2src" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="IRG"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <asmtemplate><text>IRG  </text><a hover="Is the 64-bit name of the destination general-purpose register or stack pointer, encoded in the &quot;Xd&quot; field." link="XdSP_option__2">&lt;Xd|SP&gt;</a><text>, </text><a hover="Is the 64-bit name of the first source general-purpose register or stack pointer, encoded in the &quot;Xn&quot; field." link="XnSP_option__8">&lt;Xn|SP&gt;</a><text>{, </text><a hover="Is the 64-bit name of the second general-purpose source register, encoded in the &quot;Xm&quot; field. Defaults to XZR if absent." link="XmOrXZR__5">&lt;Xm&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpreg.dp_2src.IRG_64I_dp_2src" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_MTE) then UNDEFINED;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Xd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Xn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Xm);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="IRG_64I_dp_2src" symboldefcount="1">
+      <symbol link="XdSP_option__2">&lt;Xd|SP&gt;</symbol>
+      <account encodedin="Xd">
+        <intro>
+          <para>Is the 64-bit name of the destination general-purpose register or stack pointer, encoded in the "Xd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="IRG_64I_dp_2src" symboldefcount="1">
+      <symbol link="XnSP_option__8">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Xn">
+        <intro>
+          <para>Is the 64-bit name of the first source general-purpose register or stack pointer, encoded in the "Xn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="IRG_64I_dp_2src" symboldefcount="1">
+      <symbol link="XmOrXZR__5">&lt;Xm&gt;</symbol>
+      <account encodedin="Xm">
+        <intro>
+          <para>Is the 64-bit name of the second general-purpose source register, encoded in the "Xm" field. Defaults to XZR if absent.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.dpreg.dp_2src.IRG_64I_dp_2src" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bits(64) operand = if n == 31 then <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[] else <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+constant bits(64) exclude_reg = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[m, 64];
+constant bits(16) exclude = exclude_reg&lt;15:0&gt; OR GCR_EL1.Exclude;
+bits(4) rtag;
+
+if <a link="AArch64.AllocationTagAccessIsEnabled.1" file="shared_pseudocode.xml" hover="function: boolean AArch64.AllocationTagAccessIsEnabled(bits(2) el)">AArch64.AllocationTagAccessIsEnabled</a>(PSTATE.EL) then
+    if GCR_EL1.RRND == '1' then
+        if <a link="impl-shared.IsOnes.1" file="shared_pseudocode.xml" hover="function: boolean IsOnes(bits(N) x)">IsOnes</a>(exclude) then
+            rtag = '0000';
+        else
+            rtag = <a link="impl-aarch64.ChooseRandomNonExcludedTag.1" file="shared_pseudocode.xml" hover="function: bits(4) ChooseRandomNonExcludedTag(bits(16) exclude_in)">ChooseRandomNonExcludedTag</a>(exclude);
+    else
+        constant bits(4) start_tag = RGSR_EL1.TAG;
+        constant bits(4) offset = <a link="AArch64.RandomTag.0" file="shared_pseudocode.xml" hover="function: bits(4) AArch64.RandomTag()">AArch64.RandomTag</a>();
+
+        rtag = <a link="AArch64.ChooseNonExcludedTag.3" file="shared_pseudocode.xml" hover="function: bits(4) AArch64.ChooseNonExcludedTag(bits(4) tag_in, bits(4) offset_in, bits(16) exclude)">AArch64.ChooseNonExcludedTag</a>(start_tag, offset, exclude);
+
+        RGSR_EL1.TAG = rtag;
+else
+    rtag = '0000';
+
+constant bits(64) result = <a link="AArch64.AddressWithAllocationTag.2" file="shared_pseudocode.xml" hover="function: bits(64) AArch64.AddressWithAllocationTag(bits(64) address, bits(4) allocation_tag)">AArch64.AddressWithAllocationTag</a>(operand, rtag);
+
+if d == 31 then
+    <a link="impl-aarch64.SP.write.0" file="shared_pseudocode.xml" hover="accessor: SP[] = bits(64) value">SP</a>[] = result;
+else
+    <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, 64] = result;
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

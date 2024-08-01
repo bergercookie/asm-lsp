@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="fmls_z_zzzi" title="FMLS (indexed)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="FMLS" />
+  </docvars>
+  <heading>FMLS (indexed)</heading>
+  <desc>
+    <brief>Floating-point fused multiply-subtract by indexed elements (Zda = Zda + -Zn * Zm[indexed])</brief>
+    <description>
+      <para>Multiply all floating-point elements within each 128-bit segment of the first source vector by the specified element in the corresponding second source vector segment. The products are then destructively subtracted without intermediate rounding from the corresponding elements of the addend and destination vector.</para>
+      <para>The elements within the second source vector are specified using an immediate index which selects the same element position within each 128-bit vector segment. The index range is from 0 to one less than the number of elements per 128-bit segment, encoded in 1 to 3 bits depending on the size of the element. This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <takes_movprfx>True</takes_movprfx>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <classesintro count="3">
+      <txt>It has encodings from 3 classes:</txt>
+      <a href="#iclass_half">Half-precision</a>
+      <txt>, </txt>
+      <a href="#iclass_single">Single-precision</a>
+      <txt> and </txt>
+      <a href="#iclass_double">Double-precision</a>
+    </classesintro>
+    <iclass name="Half-precision" oneof="3" id="iclass_half" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="datatype" value="half" />
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="FMLS" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="FMLS-Z.ZZZi-H" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="i3h" usename="1">
+          <c></c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="2" name="i3l" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="18" width="3" name="Zm" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="15" width="4" settings="4">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" name="o2" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="10" name="op" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Zda" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="fmls_z_zzzi_h" oneofinclass="1" oneof="3" label="">
+        <docvars>
+          <docvar key="datatype" value="half" />
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="FMLS" />
+        </docvars>
+        <asmtemplate><text>FMLS    </text><a link="sa_zda" hover="Third source and destination scalable vector register (field &quot;Zda&quot;)">&lt;Zda&gt;</a><text>.H, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.H, </text><a link="sa_zm_1" hover="Second source scalable vector register Z0-Z7 (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.H[</text><a link="sa_imm_1" hover="Immediate index [0-7] (field &quot;i3h:i3l&quot;)">&lt;imm&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="FMLS-Z.ZZZi-H" mylink="FMLS-Z.ZZZi-H" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer esize = 16;
+constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i3h:i3l);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer da = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zda);
+constant boolean op1_neg = TRUE;
+constant boolean op3_neg = FALSE;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Single-precision" oneof="3" id="iclass_single" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="datatype" value="single" />
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="FMLS" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="FMLS-Z.ZZZi-S" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="2" name="i2" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="18" width="3" name="Zm" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="15" width="4" settings="4">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" name="o2" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="10" name="op" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Zda" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="fmls_z_zzzi_s" oneofinclass="1" oneof="3" label="">
+        <docvars>
+          <docvar key="datatype" value="single" />
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="FMLS" />
+        </docvars>
+        <asmtemplate><text>FMLS    </text><a link="sa_zda" hover="Third source and destination scalable vector register (field &quot;Zda&quot;)">&lt;Zda&gt;</a><text>.S, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.S, </text><a link="sa_zm_1" hover="Second source scalable vector register Z0-Z7 (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.S[</text><a link="sa_imm_2" hover="Immediate index [0-3] (field &quot;i2&quot;)">&lt;imm&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="FMLS-Z.ZZZi-S" mylink="FMLS-Z.ZZZi-S" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer esize = 32;
+constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i2);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer da = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zda);
+constant boolean op1_neg = TRUE;
+constant boolean op3_neg = FALSE;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Double-precision" oneof="3" id="iclass_double" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="datatype" value="double" />
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="FMLS" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="FMLS-Z.ZZZi-D" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" name="i1" usename="1">
+          <c></c>
+        </box>
+        <box hibit="19" width="4" name="Zm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" width="4" settings="4">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" name="o2" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="10" name="op" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Zda" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="fmls_z_zzzi_d" oneofinclass="1" oneof="3" label="">
+        <docvars>
+          <docvar key="datatype" value="double" />
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="FMLS" />
+        </docvars>
+        <asmtemplate><text>FMLS    </text><a link="sa_zda" hover="Third source and destination scalable vector register (field &quot;Zda&quot;)">&lt;Zda&gt;</a><text>.D, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.D, </text><a link="sa_zm" hover="Second source scalable vector register Z0-Z15 (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.D[</text><a link="sa_imm" hover="Immediate index [0-1] (field &quot;i1&quot;)">&lt;imm&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="FMLS-Z.ZZZi-D" mylink="FMLS-Z.ZZZi-D" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer esize = 64;
+constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i1);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer da = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zda);
+constant boolean op1_neg = TRUE;
+constant boolean op3_neg = FALSE;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="fmls_z_zzzi_d, fmls_z_zzzi_h, fmls_z_zzzi_s" symboldefcount="1">
+      <symbol link="sa_zda">&lt;Zda&gt;</symbol>
+      <account encodedin="Zda">
+        <intro>
+          <para>Is the name of the third source and destination scalable vector register, encoded in the "Zda" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fmls_z_zzzi_d, fmls_z_zzzi_h, fmls_z_zzzi_s" symboldefcount="1">
+      <symbol link="sa_zn">&lt;Zn&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the first source scalable vector register, encoded in the "Zn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fmls_z_zzzi_h, fmls_z_zzzi_s" symboldefcount="1">
+      <symbol link="sa_zm_1">&lt;Zm&gt;</symbol>
+      <account encodedin="Zm">
+        <intro>
+          <para>For the half-precision and single-precision variant: is the name of the second source scalable vector register Z0-Z7, encoded in the "Zm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fmls_z_zzzi_d" symboldefcount="2">
+      <symbol link="sa_zm">&lt;Zm&gt;</symbol>
+      <account encodedin="Zm">
+        <docvars>
+          <docvar key="datatype" value="double" />
+        </docvars>
+        <intro>
+          <para>For the double-precision variant: is the name of the second source scalable vector register Z0-Z15, encoded in the "Zm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fmls_z_zzzi_h" symboldefcount="1">
+      <symbol link="sa_imm_1">&lt;imm&gt;</symbol>
+      <account encodedin="i3h:i3l">
+        <docvars>
+          <docvar key="datatype" value="half" />
+        </docvars>
+        <intro>
+          <para>For the half-precision variant: is the immediate index, in the range 0 to 7, encoded in the "i3h:i3l" fields.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fmls_z_zzzi_s" symboldefcount="2">
+      <symbol link="sa_imm_2">&lt;imm&gt;</symbol>
+      <account encodedin="i2">
+        <docvars>
+          <docvar key="datatype" value="single" />
+        </docvars>
+        <intro>
+          <para>For the single-precision variant: is the immediate index, in the range 0 to 3, encoded in the "i2" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fmls_z_zzzi_d" symboldefcount="3">
+      <symbol link="sa_imm">&lt;imm&gt;</symbol>
+      <account encodedin="i1">
+        <docvars>
+          <docvar key="datatype" value="double" />
+        </docvars>
+        <intro>
+          <para>For the double-precision variant: is the immediate index, in the range 0 to 1, encoded in the "i1" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="FMLS-Z.ZZZi-H" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSVEEnabled()">CheckSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer PL = VL DIV 8;
+constant integer elements = VL DIV esize;
+constant integer eltspersegment = 128 DIV esize;
+constant bits(VL) op1 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[n, VL];
+constant bits(VL) op2 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[m, VL];
+bits(VL) result = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[da, VL];
+
+for e = 0 to elements-1
+    constant integer segmentbase = e - (e MOD eltspersegment);
+    constant integer s = segmentbase + index;
+    constant bits(esize) elem2 = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[op2, s, esize];
+    constant bits(esize) elem1 = (if op1_neg then <a link="impl-shared.FPNeg.2" file="shared_pseudocode.xml" hover="function: bits(N) FPNeg(bits(N) op, FPCR_Type fpcr)">FPNeg</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[op1, e, esize], FPCR)
+                                  else <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[op1, e, esize]);
+    constant bits(esize) elem3 = (if op3_neg then <a link="impl-shared.FPNeg.2" file="shared_pseudocode.xml" hover="function: bits(N) FPNeg(bits(N) op, FPCR_Type fpcr)">FPNeg</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[result, e, esize], FPCR)
+                                  else <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[result, e, esize]);
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, esize] = <a link="impl-shared.FPMulAdd.4" file="shared_pseudocode.xml" hover="function: bits(N) FPMulAdd(bits(N) addend, bits(N) op1, bits(N) op2, FPCR_Type fpcr)">FPMulAdd</a>(elem3, elem1, elem2, FPCR);
+
+<a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[da, VL] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

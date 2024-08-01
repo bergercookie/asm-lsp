@@ -1,0 +1,282 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="UMOV_advsimd" title="UMOV -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="advsimd"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="UMOV"/>
+    <docvar key="vector-xfer-type" value="general-from-element"/>
+  </docvars>
+  <heading>UMOV</heading>
+  <desc>
+    <brief>
+      <para>Unsigned move vector element to general-purpose register</para>
+    </brief>
+    <authored>
+      <para>This instruction reads the unsigned integer from the
+source SIMD&amp;FP register,
+zero-extends it to form a 32-bit or 64-bit value, and writes the result to
+the destination general-purpose register.</para>
+      <para>Depending on the settings in the <register_link id="AArch64-cpacr_el1.xml" state="AArch64">CPACR_EL1</register_link>,
+<register_link id="AArch64-cptr_el2.xml" state="AArch64">CPTR_EL2</register_link>, and <register_link id="AArch64-cptr_el3.xml" state="AArch64">CPTR_EL3</register_link> registers,
+and the current Security state and Exception level,
+an attempt to execute the instruction might be trapped.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <alias_list howmany="1">
+    <alias_list_intro>This instruction is used by the alias </alias_list_intro>
+    <aliasref aliaspageid="MOV_UMOV_advsimd" aliasfile="mov_umov_advsimd.xml" hover="Move vector element to general-purpose register" punct=".">
+      <text>MOV (to general)</text>
+      <aliaspref labels="32-bit">imm5 IN {'xx100'}</aliaspref>
+      <aliaspref labels="64-bit">imm5 IN {'x1000'}</aliaspref>
+    </aliasref>
+    <alias_list_outro>
+      <text>  See </text>
+      <aliastablelink/>
+      <text> below for details of when the alias is preferred.</text>
+    </alias_list_outro>
+  </alias_list>
+  <classes>
+    <iclass name="Advanced SIMD" oneof="1" id="iclass_advanced_simd" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="UMOV"/>
+        <docvar key="vector-xfer-type" value="general-from-element"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <regdiagram form="32" psname="A64.simd_dp.asimdins.UMOV_asimdins_W_w" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" width="1" name="Q" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="29" name="op" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="8" settings="8">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="imm5" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="14" width="4" name="imm4" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="10" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="UMOV_asimdins_W_w" oneofinclass="2" oneof="2" label="32-bit" bitdiffs="Q == 0">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="UMOV"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="vector-xfer-type" value="general-from-element"/>
+        </docvars>
+        <box hibit="30" width="1" name="Q">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>UMOV  </text><a hover="Is the 32-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="WdOrWZR">&lt;Wd&gt;</a><text>, </text><a hover="Is the name of the SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn">&lt;Vn&gt;</a><text>.</text><a hover="Is an element size specifier, " link="Ts_option__3">&lt;Ts&gt;</a><text>[</text><a hover="For the 32-bit variant: is the element index " link="imm5_index__3">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="UMOV_asimdins_X_x" oneofinclass="2" oneof="2" label="64-bit" bitdiffs="Q == 1 &amp;&amp; imm5 == x1000">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="UMOV"/>
+          <docvar key="atomic-ops" value="UMOV-64-reg"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="reg-type" value="64-reg"/>
+          <docvar key="vector-xfer-type" value="general-from-element"/>
+        </docvars>
+        <box hibit="30" width="1" name="Q">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="imm5">
+          <c/>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>UMOV  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="XdOrXZR__6">&lt;Xd&gt;</a><text>, </text><a hover="Is the name of the SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn">&lt;Vn&gt;</a><text>.D[</text><a hover="For the 64-bit variant: is the element index encoded in &quot;imm5&amp;lt;4&amp;gt;&quot;." link="index__7">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.asimdins.UMOV_asimdins_W_w" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if imm5 IN 'x0000' then UNDEFINED;
+constant integer size = <a link="impl-shared.LowestSetBitNZ.1" file="shared_pseudocode.xml" hover="function: integer LowestSetBitNZ(bits(N) x)">LowestSetBitNZ</a>(imm5&lt;3:0&gt;);
+
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer esize = 8 &lt;&lt; size;
+constant integer datasize = 32 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Q);
+if datasize == 64 &amp;&amp; esize &lt; 64 then UNDEFINED;
+if datasize == 32 &amp;&amp; esize &gt;= 64 then UNDEFINED;
+constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(imm5&lt;4:size+1&gt;);
+constant integer idxdsize = 64 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(imm5&lt;4&gt;);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="UMOV_asimdins_W_w" symboldefcount="1">
+      <symbol link="WdOrWZR">&lt;Wd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="UMOV_asimdins_W_w, UMOV_asimdins_X_x" symboldefcount="1">
+      <symbol link="Vn">&lt;Vn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="UMOV_asimdins_W_w" symboldefcount="1">
+      <symbol link="Ts_option__3">&lt;Ts&gt;</symbol>
+      <definition encodedin="imm5">
+        <intro>Is an element size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">imm5</entry>
+                <entry class="symbol">&lt;Ts&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">xx000</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxxx1</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxx10</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xx100</entry>
+                <entry class="symbol">S</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="UMOV_asimdins_W_w" symboldefcount="1">
+      <symbol link="imm5_index__3">&lt;index&gt;</symbol>
+      <definition encodedin="imm5">
+        <intro>For the 32-bit variant: is the element index </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">imm5</entry>
+                <entry class="symbol">&lt;index&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">xx000</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxxx1</entry>
+                <entry class="symbol">UInt(imm5&lt;4:1&gt;)</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxx10</entry>
+                <entry class="symbol">UInt(imm5&lt;4:2&gt;)</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xx100</entry>
+                <entry class="symbol">UInt(imm5&lt;4:3&gt;)</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="UMOV_asimdins_X_x" symboldefcount="2">
+      <symbol link="index__7">&lt;index&gt;</symbol>
+      <account encodedin="imm5&lt;4&gt;">
+        <intro>
+          <para>For the 64-bit variant: is the element index encoded in "imm5&lt;4&gt;".</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="UMOV_asimdins_X_x" symboldefcount="1">
+      <symbol link="XdOrXZR__6">&lt;Xd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <aliastablehook anchor="aliasconditions">Alias Conditions</aliastablehook>
+  <ps_section howmany="1">
+    <ps name="A64.simd_dp.asimdins.UMOV_asimdins_W_w" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">if index == 0 then
+    <a link="impl-aarch64.CheckFPEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPEnabled64()">CheckFPEnabled64</a>();
+else
+    <a link="impl-aarch64.CheckFPAdvSIMDEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPAdvSIMDEnabled64()">CheckFPAdvSIMDEnabled64</a>();
+constant bits(idxdsize) operand = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[n, idxdsize];
+
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, datasize] = ZeroExtend(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand, index, esize], datasize);</pstext></ps>
+  </ps_section>
+</instructionsection>

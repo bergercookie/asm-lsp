@@ -1,0 +1,193 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="BFCVTN_advsimd" title="BFCVTN, BFCVTN2 -- A64" type="instruction">
+  <docvars>
+    <docvar key="advsimd-datatype" value="simd-single-and-bf16"/>
+    <docvar key="advsimd-type" value="simd"/>
+    <docvar key="datatype" value="single-and-bf16"/>
+    <docvar key="instr-class" value="advsimd"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="BFCVTN"/>
+  </docvars>
+  <heading>BFCVTN, BFCVTN2</heading>
+  <desc>
+    <brief>
+      <para>Floating-point convert from single-precision to BFloat16 format (vector)</para>
+    </brief>
+    <authored>
+      <para>This instruction reads
+each single-precision element in the SIMD&amp;FP source vector, converts each value to BFloat16
+format, and writes the results in the lower or upper half of the SIMD&amp;FP destination vector.
+The result elements are half the width of the source elements.</para>
+      <para>The <instruction>BFCVTN</instruction> instruction writes the half-width results to the lower half
+of the destination vector and clears the upper half to zero.
+The <instruction>BFCVTN2</instruction> instruction writes the results to the upper half
+of the destination vector without affecting the other bits in the register.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Vector single-precision to BFloat16" oneof="1" id="iclass_vector_single_precision_to_bfloat16" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="advsimd-datatype" value="simd-single-and-bf16"/>
+        <docvar key="advsimd-type" value="simd"/>
+        <docvar key="datatype" value="single-and-bf16"/>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="BFCVTN"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_BF16" name="ARMv8.6"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.simd_dp.asimdmisc.BFCVTN_asimdmisc_4S" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" width="1" name="Q" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="29" name="U" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="5" settings="5">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1" settings="2" psbits="xx">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="21" width="5" settings="5">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="16" width="5" name="opcode" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="BFCVTN_asimdmisc_4S" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="datatype" value="single-and-bf16"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="BFCVTN"/>
+          <docvar key="advsimd-datatype" value="simd-single-and-bf16"/>
+          <docvar key="advsimd-type" value="simd"/>
+          <docvar key="instr-class" value="advsimd"/>
+        </docvars>
+        <asmtemplate><text>BFCVTN{</text><a hover="Is the second and upper half specifier. If present it causes the operation to be performed on the upper 64 bits of the registers holding the narrower elements, and is " link="s_2_option">2</a><text>}  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.</text><a hover="Is an arrangement specifier, " link="Ta_option__7">&lt;Ta&gt;</a><text>, </text><a hover="Is the name of the SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn">&lt;Vn&gt;</a><text>.4S</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.asimdmisc.BFCVTN_asimdmisc_4S" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_BF16) then UNDEFINED;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer part = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Q);
+constant integer elements = 64 DIV 16;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="BFCVTN_asimdmisc_4S" symboldefcount="1">
+      <symbol link="s_2_option">2</symbol>
+      <definition encodedin="Q">
+        <intro>Is the second and upper half specifier. If present it causes the operation to be performed on the upper 64 bits of the registers holding the narrower elements, and is </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">Q</entry>
+                <entry class="symbol">2</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">[absent]</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">[present]</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="BFCVTN_asimdmisc_4S" symboldefcount="1">
+      <symbol link="Vd">&lt;Vd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="BFCVTN_asimdmisc_4S" symboldefcount="1">
+      <symbol link="Ta_option__7">&lt;Ta&gt;</symbol>
+      <definition encodedin="Q">
+        <intro>Is an arrangement specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">Q</entry>
+                <entry class="symbol">&lt;Ta&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">4H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">8H</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="BFCVTN_asimdmisc_4S" symboldefcount="1">
+      <symbol link="Vn">&lt;Vn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.simd_dp.asimdmisc.BFCVTN_asimdmisc_4S" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckFPAdvSIMDEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPAdvSIMDEnabled64()">CheckFPAdvSIMDEnabled64</a>();
+constant bits(128) operand = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[n, 128];
+bits(64) result;
+
+for e = 0 to elements-1
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, 16] = FPConvertBF(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand, e, 32], FPCR);
+
+<a link="impl-aarch64.Vpart.write.3" file="shared_pseudocode.xml" hover="accessor: Vpart[integer n, integer part, ESize width] = bits(width) value">Vpart</a>[d, part, 64] = result;</pstext></ps>
+  </ps_section>
+</instructionsection>

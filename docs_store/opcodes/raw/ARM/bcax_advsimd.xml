@@ -1,0 +1,158 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="BCAX_advsimd" title="BCAX -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="advsimd"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="BCAX"/>
+  </docvars>
+  <heading>BCAX</heading>
+  <desc>
+    <brief>
+      <para>Bit clear and exclusive-OR</para>
+    </brief>
+    <authored>
+      <para>This instruction performs a bitwise AND of the 128-bit
+vector in a source SIMD&amp;FP register and the complement of
+the vector in another source SIMD&amp;FP register, then performs a
+bitwise exclusive-OR of the resulting vector and the vector in a
+third source SIMD&amp;FP register, and writes the result to the
+destination SIMD&amp;FP register.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Advanced SIMD" oneof="1" id="iclass_advanced_simd" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="BCAX"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_SHA3" name="ARMv8.2"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.simd_dp.crypto4.BCAX_VVV16_crypto4" tworows="1">
+        <box hibit="31" width="9" settings="9">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="22" width="2" name="Op0" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Rm" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="14" width="5" name="Ra" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="BCAX_VVV16_crypto4" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="BCAX"/>
+          <docvar key="instr-class" value="advsimd"/>
+        </docvars>
+        <asmtemplate><text>BCAX  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.16B, </text><a hover="Is the name of the first SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn__2">&lt;Vn&gt;</a><text>.16B, </text><a hover="Is the name of the second SIMD&amp;amp;FP source register, encoded in the &quot;Rm&quot; field." link="Vm">&lt;Vm&gt;</a><text>.16B, </text><a hover="Is the name of the third SIMD&amp;amp;FP source register, encoded in the &quot;Ra&quot; field." link="Va">&lt;Va&gt;</a><text>.16B</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.crypto4.BCAX_VVV16_crypto4" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SHA3) then UNDEFINED;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rm);
+constant integer a = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Ra);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="BCAX_VVV16_crypto4" symboldefcount="1">
+      <symbol link="Vd">&lt;Vd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="BCAX_VVV16_crypto4" symboldefcount="1">
+      <symbol link="Vn__2">&lt;Vn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the name of the first SIMD&amp;FP source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="BCAX_VVV16_crypto4" symboldefcount="1">
+      <symbol link="Vm">&lt;Vm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the name of the second SIMD&amp;FP source register, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="BCAX_VVV16_crypto4" symboldefcount="1">
+      <symbol link="Va">&lt;Va&gt;</symbol>
+      <account encodedin="Ra">
+        <intro>
+          <para>Is the name of the third SIMD&amp;FP source register, encoded in the "Ra" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.simd_dp.crypto4.BCAX_VVV16_crypto4" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="AArch64.CheckFPAdvSIMDEnabled.0" file="shared_pseudocode.xml" hover="function: AArch64.CheckFPAdvSIMDEnabled()">AArch64.CheckFPAdvSIMDEnabled</a>();
+
+constant bits(128) operand1 = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[m, 128];
+constant bits(128) operand2 = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[n, 128];
+constant bits(128) operand3 = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[a, 128];
+
+<a link="impl-aarch64.V.write.2" file="shared_pseudocode.xml" hover="accessor: V[integer n, ESize width] = bits(width) value">V</a>[d, 128] = operand2 EOR (operand1 AND NOT(operand3));</pstext></ps>
+  </ps_section>
+</instructionsection>

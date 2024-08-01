@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="zero_zt_i" title="ZERO (table)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="ZERO" />
+  </docvars>
+  <heading>ZERO (table)</heading>
+  <desc>
+    <brief>Zero ZT0</brief>
+    <description>
+      <para>Zero all bytes of the ZT0 register.</para>
+      <para>This instruction does not require the PE to be in Streaming SVE mode, and it is expected that this instruction will not experience a significant slowdown due to contention with other PEs that are executing in Streaming SVE mode.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SME2" oneof="1" id="iclass_mortlach2" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="ZERO" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="ZERO-ZT.I-_">
+        <box hibit="31" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="29" width="10" settings="10">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="19" width="10" settings="10">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="6" settings="6">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="3" name="opc&lt;3&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="2" name="opc&lt;2&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="1" name="opc&lt;1&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="0" name="opc&lt;0&gt;" settings="1">
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="zero_zt_i_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="ZERO" />
+        </docvars>
+        <asmtemplate><text>ZERO    </text><a>{ ZT0 }</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="ZERO-ZT.I-_" mylink="ZERO-ZT.I-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all"></explanations>
+  <ps_section howmany="1">
+    <ps name="ZERO-ZT.I-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSMEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSMEEnabled()">CheckSMEEnabled</a>();
+<a link="impl-aarch64.CheckSMEZT0Enabled.0" file="shared_pseudocode.xml" hover="function: CheckSMEZT0Enabled()">CheckSMEZT0Enabled</a>();
+
+if IsFeatureImplemented(FEAT_TME) &amp;&amp; TSTATE.depth &gt; 0 then
+    <a link="impl-aarch64.FailTransaction.2" file="shared_pseudocode.xml" hover="function: FailTransaction(TMFailure cause, boolean retry)">FailTransaction</a>(<a link="TMFailure_ERR" file="shared_pseudocode.xml" hover="enumeration TMFailure { TMFailure_CNCL, TMFailure_DBG, TMFailure_ERR, TMFailure_NEST, TMFailure_SIZE, TMFailure_MEM, TMFailure_TRIVIAL, TMFailure_IMP }">TMFailure_ERR</a>, FALSE);
+
+<a link="impl-aarch64.ZT0.write.1" file="shared_pseudocode.xml" hover="accessor: ZT0[integer width] = bits(width) value">ZT0</a>[512] = <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(512);</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

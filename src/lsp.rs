@@ -514,13 +514,14 @@ fn lookup_hover_resp_by_arch<T: Hoverable>(
     map: &HashMap<(Arch, &str), T>,
 ) -> Option<Hover> {
     // switch over to vec?
-    let (x86_resp, x86_64_resp, z80_resp) = search_for_hoverable_by_arch(word, map);
+    let (x86_resp, x86_64_resp, z80_resp, arm_resp) = search_for_hoverable_by_arch(word, map);
     match (
         x86_resp.is_some(),
         x86_64_resp.is_some(),
         z80_resp.is_some(),
+        arm_resp.is_some(),
     ) {
-        (true, _, _) | (_, true, _) | (_, _, true) => {
+        (true, _, _, _) | (_, true, _, _) | (_, _, true, _) | (_, _, _, true) => {
             let mut value = String::new();
             if let Some(x86_resp) = x86_resp {
                 value += &format!("{x86_resp}");
@@ -534,6 +535,9 @@ fn lookup_hover_resp_by_arch<T: Hoverable>(
             }
             if let Some(z80_resp) = z80_resp {
                 value += &format!("{}{}", if value.is_empty() { "" } else { "\n\n" }, z80_resp);
+            }
+            if let Some(arm_resp) = arm_resp {
+                value += &format!("{}{}", if value.is_empty() { "" } else { "\n\n" }, arm_resp);
             }
             Some(Hover {
                 contents: HoverContents::Markup(MarkupContent {
@@ -996,7 +1000,8 @@ pub fn get_sig_help_resp(
                     let mut has_x86 = false;
                     let mut has_x86_64 = false;
                     let mut has_z80 = false;
-                    let (x86_info, x86_64_info, z80_info) =
+                    let mut has_arm = false;
+                    let (x86_info, x86_64_info, z80_info, arm_info) =
                         search_for_hoverable_by_arch(instr_name, instr_info);
                     if let Some(sig) = x86_info {
                         for form in &sig.forms {
@@ -1051,6 +1056,15 @@ pub fn get_sig_help_resp(
                                     value += &format!("{form}\n");
                                 }
                             }
+                        }
+                    }
+                    if let Some(sig) = arm_info {
+                        for form in &sig.asm_templates {
+                            if !has_arm {
+                                value += "**arm**\n";
+                                has_arm = true;
+                            }
+                            value += &format!("{form}\n");
                         }
                     }
                     if !value.is_empty() {
@@ -1217,12 +1231,13 @@ pub fn get_ref_resp(
 fn search_for_hoverable_by_arch<'a, T: Hoverable>(
     word: &'a str,
     map: &'a HashMap<(Arch, &str), T>,
-) -> (Option<&'a T>, Option<&'a T>, Option<&'a T>) {
+) -> (Option<&'a T>, Option<&'a T>, Option<&'a T>, Option<&'a T>) {
     let x86_resp = map.get(&(Arch::X86, word));
     let x86_64_resp = map.get(&(Arch::X86_64, word));
     let z80_resp = map.get(&(Arch::Z80, word));
+    let arm_resp = map.get(&(Arch::ARM, word));
 
-    (x86_resp, x86_64_resp, z80_resp)
+    (x86_resp, x86_64_resp, z80_resp, arm_resp)
 }
 
 fn search_for_hoverable_by_assembler<'a, T: Hoverable>(

@@ -1,0 +1,104 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="PACIA171615" title="PACIA171615 -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="PACIA171615"/>
+  </docvars>
+  <heading>PACIA171615</heading>
+  <desc>
+    <brief>
+      <para>Pointer Authentication Code for instruction address, using key A</para>
+    </brief>
+    <authored>
+      <para>This instruction computes and inserts a pointer authentication code for
+an instruction address, using two modifiers and key A. The address is in X17.
+The 64-bit value of modifier1 is the value in X16. The 64-bit value
+of modifier2 is the value in X15.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="PACIA171615"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_PAuth_LR" name="ARMv9.5"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.dpreg.dp_1src.PACIA171615_64LR_dp_1src" tworows="1">
+        <box hibit="31" name="sf" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="30" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="opcode2" usename="1" settings="5" psbits="xxxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" width="6" name="opcode" usename="1" settings="6" psbits="xxxxxx">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="PACIA171615_64LR_dp_1src" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="PACIA171615"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <asmtemplate><text>PACIA171615</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpreg.dp_1src.PACIA171615_64LR_dp_1src" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_PAuth_LR) then UNDEFINED;    </pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all"/>
+  <ps_section howmany="1">
+    <ps name="A64.dpreg.dp_1src.PACIA171615_64LR_dp_1src" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[17, 64] = AddPACIA2(<a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[17, 64], <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[16, 64], <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[15, 64]);</pstext></ps>
+  </ps_section>
+</instructionsection>

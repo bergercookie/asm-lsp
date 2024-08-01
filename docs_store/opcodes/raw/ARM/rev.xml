@@ -1,0 +1,201 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="REV" title="REV -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="REV"/>
+  </docvars>
+  <heading>REV</heading>
+  <desc>
+    <brief>
+      <para>Reverse bytes</para>
+    </brief>
+    <authored>
+      <para>This instruction reverses the byte order in a register.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <alias_list howmany="1">
+    <alias_list_intro>This instruction is used by the alias </alias_list_intro>
+    <aliasref aliaspageid="REV64_REV" aliasfile="rev64_rev.xml" hover="Reverse bytes" punct=".">
+      <text>REV64</text>
+      <aliaspref>Never</aliaspref>
+    </aliasref>
+    <alias_list_outro>
+      <text>  See </text>
+      <aliastablelink/>
+      <text> below for details of when the alias is preferred.</text>
+    </alias_list_outro>
+  </alias_list>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="REV"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <regdiagram form="32" psname="A64.dpreg.dp_1src.REV_32_dp_1src" tworows="1">
+        <box hibit="31" width="1" name="sf" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="30" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="opcode2" usename="1" settings="5" psbits="xxxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="15" width="4" settings="4">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="opc" usename="1" settings="1" psbits="xx">
+          <c>1</c>
+          <c>x</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="REV_32_dp_1src" oneofinclass="2" oneof="2" label="32-bit" bitdiffs="sf == 0 &amp;&amp; opc == 10">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="REV"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="opc">
+          <c/>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>REV  </text><a hover="Is the 32-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="WdOrWZR">&lt;Wd&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose source register, encoded in the &quot;Rn&quot; field." link="WnOrWZR">&lt;Wn&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="REV_64_dp_1src" oneofinclass="2" oneof="2" label="64-bit" bitdiffs="sf == 1 &amp;&amp; opc == 11">
+        <docvars>
+          <docvar key="datatype" value="64"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="REV"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>1</c>
+        </box>
+        <box hibit="11" width="2" name="opc">
+          <c/>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>REV  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="XdOrXZR__6">&lt;Xd&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose source register, encoded in the &quot;Rn&quot; field." link="XnOrXZR__11">&lt;Xn&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpreg.dp_1src.REV_32_dp_1src" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if opc == '11' &amp;&amp; sf == '0' then UNDEFINED;
+
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer datasize = 32 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(sf);
+constant integer container_size = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(opc);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="REV_32_dp_1src" symboldefcount="1">
+      <symbol link="WdOrWZR">&lt;Wd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="REV_32_dp_1src" symboldefcount="1">
+      <symbol link="WnOrWZR">&lt;Wn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="REV_64_dp_1src" symboldefcount="1">
+      <symbol link="XdOrXZR__6">&lt;Xd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="REV_64_dp_1src" symboldefcount="1">
+      <symbol link="XnOrXZR__11">&lt;Xn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <aliastablehook anchor="aliasconditions">Alias Conditions</aliastablehook>
+  <ps_section howmany="1">
+    <ps name="A64.dpreg.dp_1src.REV_32_dp_1src" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bits(datasize) operand = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, datasize];
+bits(datasize) result;
+
+constant integer containers = datasize DIV container_size;
+for c = 0 to containers-1
+    constant bits(container_size) container = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand, c, container_size];
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, c, container_size] = <a link="impl-shared.Reverse.2" file="shared_pseudocode.xml" hover="function: bits(N) Reverse(bits(N) word, integer M)">Reverse</a>(container, 8);
+
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, datasize] = result;</pstext></ps>
+  </ps_section>
+</instructionsection>

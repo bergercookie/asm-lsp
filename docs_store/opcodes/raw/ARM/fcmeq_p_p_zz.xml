@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="fcmeq_p_p_zz" title="FCM&lt;cc&gt; (vectors)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve" />
+    <docvar key="isa" value="A64" />
+  </docvars>
+  <heading>FCM&lt;cc&gt; (vectors)</heading>
+  <desc>
+    <brief>Floating-point compare vectors</brief>
+    <description>
+      <para>Compare active floating-point elements in the first source vector with corresponding elements in the second source vector, and place the boolean results of the specified comparison in the corresponding elements of the destination predicate. Inactive elements in the destination predicate register are set to zero. Does not set the condition flags.</para>
+      <para />
+      <table class="valuetable">
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>&lt;cc&gt;</entry>
+              <entry>Comparison</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>EQ</entry>
+              <entry>equal</entry>
+            </row>
+            <row>
+              <entry>GE</entry>
+              <entry>greater than or equal</entry>
+            </row>
+            <row>
+              <entry>GT</entry>
+              <entry>greater than</entry>
+            </row>
+            <row>
+              <entry>NE</entry>
+              <entry>not equal</entry>
+            </row>
+            <row>
+              <entry>UO</entry>
+              <entry>unordered</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </description>
+    <status>Green</status>
+    <predicated>True</predicated>
+    <affected_by_sme output="predicate register" />
+  </desc>
+  <alias_list howmany="2">
+    <alias_list_intro>This instruction is used by the aliases </alias_list_intro>
+    <aliasref aliaspageid="FCMLE_fcmeq_p_p_zz" aliasfile="fcmle_fcmeq_p_p_zz.xml" hover="Floating-point compare less than or equal to vector" punct=" and ">
+      <text>FCMLE (vectors)</text>
+      <aliaspref>Never</aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="FCMLT_fcmeq_p_p_zz" aliasfile="fcmlt_fcmeq_p_p_zz.xml" hover="Floating-point compare less than vector" punct=".">
+      <text>FCMLT (vectors)</text>
+      <aliaspref>Never</aliaspref>
+    </aliasref>
+    <alias_list_outro>
+      <text>  See </text>
+      <aliastablelink />
+      <text> below for details of when each alias is preferred.</text>
+    </alias_list_outro>
+  </alias_list>
+  <classes>
+    <classesintro count="5">
+      <txt>It has encodings from 5 classes:</txt>
+      <a href="#iclass_eq">Equal</a>
+      <txt>, </txt>
+      <a href="#iclass_gt">Greater than</a>
+      <txt>, </txt>
+      <a href="#iclass_ge">Greater than or equal</a>
+      <txt>, </txt>
+      <a href="#iclass_ne">Not equal</a>
+      <txt> and </txt>
+      <a href="#iclass_uo">Unordered</a>
+    </classesintro>
+    <iclass name="Equal" oneof="5" id="iclass_eq" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="FCMEQ" />
+        <docvar key="sve-compare-type" value="eq" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="FCMEQ-P.P.ZZ-_" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Zm" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="15" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="14" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="13" name="cmph" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="12" width="3" name="Pg" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" name="cmpl" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="3" width="4" name="Pd" usename="1">
+          <c colspan="4"></c>
+        </box>
+      </regdiagram>
+      <encoding name="fcmeq_p_p_zz_" oneofinclass="1" oneof="5" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="FCMEQ" />
+          <docvar key="sve-compare-type" value="eq" />
+        </docvars>
+        <asmtemplate><text>FCMEQ   </text><a link="sa_pd" hover="Destination scalable predicate register (field &quot;Pd&quot;)">&lt;Pd&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/Z, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_zm" hover="Second source scalable vector register (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="FCMEQ-P.P.ZZ-_" mylink="FCMEQ-P.P.ZZ-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+if size == '00' then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer g = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pg);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pd);
+constant <a link="SVECmp" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">SVECmp</a> cmp_op = <a link="Cmp_EQ" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">Cmp_EQ</a>;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Greater than" oneof="5" id="iclass_gt" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="FCMGT" />
+        <docvar key="sve-compare-type" value="gt" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="FCMGT-P.P.ZZ-_" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Zm" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="15" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="14" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="13" name="cmph" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="12" width="3" name="Pg" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" name="cmpl" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="3" width="4" name="Pd" usename="1">
+          <c colspan="4"></c>
+        </box>
+      </regdiagram>
+      <encoding name="fcmgt_p_p_zz_" oneofinclass="1" oneof="5" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="FCMGT" />
+          <docvar key="sve-compare-type" value="gt" />
+        </docvars>
+        <asmtemplate><text>FCMGT   </text><a link="sa_pd" hover="Destination scalable predicate register (field &quot;Pd&quot;)">&lt;Pd&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/Z, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_zm" hover="Second source scalable vector register (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="FCMGT-P.P.ZZ-_" mylink="FCMGT-P.P.ZZ-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+if size == '00' then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer g = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pg);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pd);
+constant <a link="SVECmp" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">SVECmp</a> cmp_op = <a link="Cmp_GT" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">Cmp_GT</a>;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Greater than or equal" oneof="5" id="iclass_ge" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="FCMGE" />
+        <docvar key="sve-compare-type" value="ge" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="FCMGE-P.P.ZZ-_" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Zm" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="15" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="14" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="13" name="cmph" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="12" width="3" name="Pg" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" name="cmpl" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="3" width="4" name="Pd" usename="1">
+          <c colspan="4"></c>
+        </box>
+      </regdiagram>
+      <encoding name="fcmge_p_p_zz_" oneofinclass="1" oneof="5" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="FCMGE" />
+          <docvar key="sve-compare-type" value="ge" />
+        </docvars>
+        <asmtemplate><text>FCMGE   </text><a link="sa_pd" hover="Destination scalable predicate register (field &quot;Pd&quot;)">&lt;Pd&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/Z, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_zm" hover="Second source scalable vector register (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="FCMGE-P.P.ZZ-_" mylink="FCMGE-P.P.ZZ-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+if size == '00' then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer g = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pg);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pd);
+constant <a link="SVECmp" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">SVECmp</a> cmp_op = <a link="Cmp_GE" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">Cmp_GE</a>;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Not equal" oneof="5" id="iclass_ne" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="FCMNE" />
+        <docvar key="sve-compare-type" value="ne" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="FCMNE-P.P.ZZ-_" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Zm" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="15" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="14" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="13" name="cmph" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="12" width="3" name="Pg" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" name="cmpl" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="3" width="4" name="Pd" usename="1">
+          <c colspan="4"></c>
+        </box>
+      </regdiagram>
+      <encoding name="fcmne_p_p_zz_" oneofinclass="1" oneof="5" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="FCMNE" />
+          <docvar key="sve-compare-type" value="ne" />
+        </docvars>
+        <asmtemplate><text>FCMNE   </text><a link="sa_pd" hover="Destination scalable predicate register (field &quot;Pd&quot;)">&lt;Pd&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/Z, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_zm" hover="Second source scalable vector register (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="FCMNE-P.P.ZZ-_" mylink="FCMNE-P.P.ZZ-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+if size == '00' then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer g = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pg);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pd);
+constant <a link="SVECmp" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">SVECmp</a> cmp_op = <a link="Cmp_NE" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">Cmp_NE</a>;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Unordered" oneof="5" id="iclass_uo" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="FCMUO" />
+        <docvar key="sve-compare-type" value="uo" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="FCMUO-P.P.ZZ-_">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Zm" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="15" name="op" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="14" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="13" name="o2" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="12" width="3" name="Pg" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" name="o3" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="3" width="4" name="Pd" usename="1">
+          <c colspan="4"></c>
+        </box>
+      </regdiagram>
+      <encoding name="fcmuo_p_p_zz_" oneofinclass="1" oneof="5" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="FCMUO" />
+          <docvar key="sve-compare-type" value="uo" />
+        </docvars>
+        <asmtemplate><text>FCMUO   </text><a link="sa_pd" hover="Destination scalable predicate register (field &quot;Pd&quot;)">&lt;Pd&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/Z, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_zm" hover="Second source scalable vector register (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="FCMUO-P.P.ZZ-_" mylink="FCMUO-P.P.ZZ-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+if size == '00' then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer g = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pg);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pd);
+constant <a link="SVECmp" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">SVECmp</a> cmp_op = <a link="Cmp_UN" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">Cmp_UN</a>;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="fcmeq_p_p_zz_, fcmge_p_p_zz_, fcmgt_p_p_zz_, fcmne_p_p_zz_, fcmuo_p_p_zz_" symboldefcount="1">
+      <symbol link="sa_pd">&lt;Pd&gt;</symbol>
+      <account encodedin="Pd">
+        <intro>
+          <para>Is the name of the destination scalable predicate register, encoded in the "Pd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fcmeq_p_p_zz_, fcmge_p_p_zz_, fcmgt_p_p_zz_, fcmne_p_p_zz_, fcmuo_p_p_zz_" symboldefcount="1">
+      <symbol link="sa_t">&lt;T&gt;</symbol>
+      <definition encodedin="size">
+        <intro>Is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">size</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10</entry>
+                <entry class="symbol">S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11</entry>
+                <entry class="symbol">D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="fcmeq_p_p_zz_, fcmge_p_p_zz_, fcmgt_p_p_zz_, fcmne_p_p_zz_, fcmuo_p_p_zz_" symboldefcount="1">
+      <symbol link="sa_pg">&lt;Pg&gt;</symbol>
+      <account encodedin="Pg">
+        <intro>
+          <para>Is the name of the governing scalable predicate register P0-P7, encoded in the "Pg" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fcmeq_p_p_zz_, fcmge_p_p_zz_, fcmgt_p_p_zz_, fcmne_p_p_zz_, fcmuo_p_p_zz_" symboldefcount="1">
+      <symbol link="sa_zn">&lt;Zn&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the first source scalable vector register, encoded in the "Zn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fcmeq_p_p_zz_, fcmge_p_p_zz_, fcmgt_p_p_zz_, fcmne_p_p_zz_, fcmuo_p_p_zz_" symboldefcount="1">
+      <symbol link="sa_zm">&lt;Zm&gt;</symbol>
+      <account encodedin="Zm">
+        <intro>
+          <para>Is the name of the second source scalable vector register, encoded in the "Zm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <aliastablehook anchor="aliasconditions">Alias Conditions</aliastablehook>
+  <ps_section howmany="1">
+    <ps name="FCMEQ-P.P.ZZ-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSVEEnabled()">CheckSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer PL = VL DIV 8;
+constant integer elements = VL DIV esize;
+constant bits(PL) mask = <a link="impl-aarch64.P.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) P[integer n, integer width]">P</a>[g, PL];
+constant bits(VL) operand1 = if <a link="impl-aarch64.AnyActiveElement.2" file="shared_pseudocode.xml" hover="function: boolean AnyActiveElement(bits(N) mask, integer esize)">AnyActiveElement</a>(mask, esize) then <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[n, VL] else <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(VL);
+constant bits(VL) operand2 = if <a link="impl-aarch64.AnyActiveElement.2" file="shared_pseudocode.xml" hover="function: boolean AnyActiveElement(bits(N) mask, integer esize)">AnyActiveElement</a>(mask, esize) then <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[m, VL] else <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(VL);
+bits(PL) result;
+constant integer psize = esize DIV 8;
+
+for e = 0 to elements-1
+    if <a link="impl-aarch64.ActivePredicateElement.3" file="shared_pseudocode.xml" hover="function: boolean ActivePredicateElement(bits(N) pred, integer e, integer esize)">ActivePredicateElement</a>(mask, e, esize) then
+        constant bits(esize) element1 = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand1, e, esize];
+        constant bits(esize) element2 = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand2, e, esize];
+        boolean res;
+        case cmp_op of
+            when <a link="Cmp_EQ" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">Cmp_EQ</a> res = <a link="impl-shared.FPCompareEQ.3" file="shared_pseudocode.xml" hover="function: boolean FPCompareEQ(bits(N) op1, bits(N) op2, FPCR_Type fpcr)">FPCompareEQ</a>(element1, element2, FPCR);
+            when <a link="Cmp_GE" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">Cmp_GE</a> res = <a link="impl-shared.FPCompareGE.3" file="shared_pseudocode.xml" hover="function: boolean FPCompareGE(bits(N) op1, bits(N) op2, FPCR_Type fpcr)">FPCompareGE</a>(element1, element2, FPCR);
+            when <a link="Cmp_GT" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">Cmp_GT</a> res = <a link="impl-shared.FPCompareGT.3" file="shared_pseudocode.xml" hover="function: boolean FPCompareGT(bits(N) op1, bits(N) op2, FPCR_Type fpcr)">FPCompareGT</a>(element1, element2, FPCR);
+            when <a link="Cmp_UN" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">Cmp_UN</a> res = <a link="impl-aarch64.FPCompareUN.3" file="shared_pseudocode.xml" hover="function: boolean FPCompareUN(bits(N) op1, bits(N) op2, FPCR_Type fpcr)">FPCompareUN</a>(element1, element2, FPCR);
+            when <a link="Cmp_NE" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">Cmp_NE</a> res = <a link="impl-aarch64.FPCompareNE.3" file="shared_pseudocode.xml" hover="function: boolean FPCompareNE(bits(N) op1, bits(N) op2, FPCR_Type fpcr)">FPCompareNE</a>(element1, element2, FPCR);
+            when <a link="Cmp_LT" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">Cmp_LT</a> res = <a link="impl-shared.FPCompareGT.3" file="shared_pseudocode.xml" hover="function: boolean FPCompareGT(bits(N) op1, bits(N) op2, FPCR_Type fpcr)">FPCompareGT</a>(element2, element1, FPCR);
+            when <a link="Cmp_LE" file="shared_pseudocode.xml" hover="enumeration SVECmp { Cmp_EQ, Cmp_NE, Cmp_GE, Cmp_GT, Cmp_LT, Cmp_LE, Cmp_UN }">Cmp_LE</a> res = <a link="impl-shared.FPCompareGE.3" file="shared_pseudocode.xml" hover="function: boolean FPCompareGE(bits(N) op1, bits(N) op2, FPCR_Type fpcr)">FPCompareGE</a>(element2, element1, FPCR);
+        constant bit pbit = if res then '1' else '0';
+        <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, psize] = <a link="impl-shared.ZeroExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) ZeroExtend(bits(M) x, integer N)">ZeroExtend</a>(pbit, psize);
+    else
+        <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, psize] = <a link="impl-shared.ZeroExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) ZeroExtend(bits(M) x, integer N)">ZeroExtend</a>('0', psize);
+
+<a link="impl-aarch64.P.write.2" file="shared_pseudocode.xml" hover="accessor: P[integer n, integer width] = bits(width) value">P</a>[d, PL] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

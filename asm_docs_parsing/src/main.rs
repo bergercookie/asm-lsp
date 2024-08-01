@@ -1,7 +1,9 @@
 use std::path::PathBuf;
 
-use ::asm_lsp::x86_parser::{populate_instructions, populate_registers};
-use asm_lsp::populate_directives;
+use ::asm_lsp::parser::{populate_instructions, populate_registers};
+use asm_lsp::{
+    parser::populate_arm_instructions, populate_directives, Arch, Directive, Instruction, Register,
+};
 
 use anyhow::{anyhow, Result};
 use clap::{Parser, Subcommand};
@@ -16,10 +18,13 @@ enum DocType {
 
 #[derive(Parser, Debug)]
 struct SerializeDocs {
-    #[clap(required = true, help = "Path to the xml docs file")]
+    #[clap(
+        required = true,
+        help = "Path to the xml docs file or directory of docs files"
+    )]
     input_path: PathBuf,
     #[arg(long, short, help = "Path to store the output file")]
-    output_path: Option<PathBuf>,
+    output_path: PathBuf,
     #[arg(
         long,
         short,
@@ -27,6 +32,12 @@ struct SerializeDocs {
         help = "Serialize input as set of `instruction`, `register`, or `directive` items"
     )]
     doc_type: DocType,
+    #[arg(
+        long,
+        short,
+        help = "Architecture. Must be specified if `input_path` is a directory, ignored otherwise"
+    )]
+    arch: Option<Arch>,
 }
 
 #[derive(Subcommand)]
@@ -39,84 +50,75 @@ fn run(opts: &SerializeDocs) -> Result<()> {
     match opts.doc_type {
         DocType::Instruction => {
             let path = opts.input_path.canonicalize()?;
-            let conts = std::fs::read_to_string(path)?;
-            let instrs = populate_instructions(&conts)?;
-            // For now we'll assume all instructions out of a single file share
-            // a common architecture
-            let arch = if let Some(instr) = instrs.first() {
-                if let Some(arch) = instr.arch {
-                    arch
-                } else {
+            let instrs: Vec<Instruction>;
+            match (path.is_dir(), opts.arch) {
+                (true, Some(arch)) => {
+                    if arch == Arch::ARM {
+                        instrs = populate_arm_instructions(&opts.input_path)?;
+                    } else {
+                        return Err(anyhow!(
+                            "Directory parsing for {arch} instructions is not supported"
+                        ));
+                    }
+                }
+                (true, None) => {
                     return Err(anyhow!(
-                        "Failed to determine architecture -- Empty 'arch' field"
+                        "`Arch` argument must be supplied when `input_path` is a directory"
                     ));
                 }
-            } else {
-                return Err(anyhow!(
-                    "Failed to determine architecture -- Zero instructions read in"
-                ));
-            };
+                (false, arch_in) => {
+                    if arch_in.is_some() {
+                        println!("WARNING: `Arch` argument is ignored when `input_path` isn't a directory");
+                    }
+                    let conts = std::fs::read_to_string(&path)?;
+                    instrs = populate_instructions(&conts)?;
+                }
+            }
+            if instrs.is_empty() {
+                return Err(anyhow!("Zero instructions read in"));
+            }
             let serialized = bincode::serialize(&instrs)?;
-            let output_path: PathBuf = if let Some(ref path) = opts.output_path {
-                path.to_owned()
-            } else {
-                format!("{arch}_instrs").into()
-            };
-            std::fs::write(output_path, serialized)?;
+            std::fs::write(&opts.output_path, serialized)?;
         }
         DocType::Register => {
             let path = opts.input_path.canonicalize()?;
-            let conts = std::fs::read_to_string(path)?;
-            let regs = populate_registers(&conts)?;
-            // For now we'll assume all registers out of a single file share
-            // a common architecture
-            let arch = if let Some(instr) = regs.first() {
-                if let Some(arch) = instr.arch {
-                    arch
-                } else {
-                    return Err(anyhow!(
-                        "Failed to determine architecture -- Empty 'arch' field"
-                    ));
+            let conts = std::fs::read_to_string(&path)?;
+            let regs: Vec<Register> = match (path.is_dir(), opts.arch) {
+                (true, _) => {
+                    return Err(anyhow!("Directory parsing is not supported for registers"));
                 }
-            } else {
-                return Err(anyhow!(
-                    "Failed to determine architecture -- Zero registers read in"
-                ));
+                (false, arch_in) => {
+                    if arch_in.is_some() {
+                        println!("WARNING: `Arch` argument is ignored when `input_path` isn't a directory");
+                    }
+                    populate_registers(&conts)?
+                }
             };
+            if regs.is_empty() {
+                return Err(anyhow!("Zero registers read in"));
+            }
             let serialized = bincode::serialize(&regs)?;
-            let output_path: PathBuf = if let Some(ref path) = opts.output_path {
-                path.to_owned()
-            } else {
-                format!("{arch}_regs").into()
-            };
-            std::fs::write(output_path, serialized)?;
+            std::fs::write(&opts.output_path, serialized)?;
         }
         DocType::Directive => {
             let path = opts.input_path.canonicalize()?;
-            let conts = std::fs::read_to_string(path)?;
-            let directives = populate_directives(&conts)?;
-            // For now we'll assume all directives out of a single file share
-            // a common assembler
-            let assembler = if let Some(instr) = directives.first() {
-                if let Some(assem) = instr.assembler {
-                    assem
-                } else {
-                    return Err(anyhow!(
-                        "Failed to determine architecture -- Empty 'assembler' field"
-                    ));
+            let conts = std::fs::read_to_string(&path)?;
+            let directives: Vec<Directive> = match (path.is_dir(), opts.arch) {
+                (true, _) => {
+                    return Err(anyhow!("Directory parsing is not supported for directives"));
                 }
-            } else {
-                return Err(anyhow!(
-                    "Failed to determine assembler -- Zero directives read in"
-                ));
+                (false, arch_in) => {
+                    if arch_in.is_some() {
+                        println!("WARNING: `Arch` argument is ignored when `input_path` isn't a directory");
+                    }
+                    populate_directives(&conts)?
+                }
             };
+            if directives.is_empty() {
+                return Err(anyhow!("Zero directives read in"));
+            }
             let serialized = bincode::serialize(&directives)?;
-            let output_path: PathBuf = if let Some(ref path) = opts.output_path {
-                path.to_owned()
-            } else {
-                format!("{assembler}_directives").into()
-            };
-            std::fs::write(output_path, serialized)?;
+            std::fs::write(&opts.output_path, serialized)?;
         }
     }
     Ok(())

@@ -1,0 +1,129 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="DCPS1" title="DCPS1 -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="DCPS1"/>
+  </docvars>
+  <heading>DCPS1</heading>
+  <desc>
+    <brief>
+      <para>Debug change PE state to EL1</para>
+    </brief>
+    <authored>
+      <para>This instruction, when executed in Debug state:</para>
+      <list type="unordered">
+        <listitem>
+          <content>If executed at EL0, changes the current Exception level and SP to EL1 using <register_link id="AArch64-sp_el1.xml" state="AArch64">SP_EL1</register_link>.</content>
+        </listitem>
+        <listitem>
+          <content>Otherwise, if executed at ELx, selects <xref linkend="ARMARM_SP_ELx">SP_ELx</xref>.</content>
+        </listitem>
+      </list>
+      <para>The target exception level of a DCPS1 instruction is:</para>
+      <list type="unordered">
+        <listitem>
+          <content>EL1 if the instruction is executed at EL0.</content>
+        </listitem>
+        <listitem>
+          <content>Otherwise, the Exception level at which the instruction is executed.</content>
+        </listitem>
+      </list>
+      <para>When the target Exception level of a DCPS1 instruction is ELx, on executing this instruction:</para>
+      <list type="unordered">
+        <listitem>
+          <content>
+            <xref linkend="ARMARM_ELR_ELx">ELR_ELx</xref> becomes <arm-defined-word>UNKNOWN</arm-defined-word>.</content>
+        </listitem>
+        <listitem>
+          <content>
+            <xref linkend="ARMARM_SPSR_ELx">SPSR_ELx</xref> becomes <arm-defined-word>UNKNOWN</arm-defined-word>.</content>
+        </listitem>
+        <listitem>
+          <content>
+            <xref linkend="ARMARM_ESR_ELx">ESR_ELx</xref> becomes <arm-defined-word>UNKNOWN</arm-defined-word>.</content>
+        </listitem>
+        <listitem>
+          <content>
+            <register_link id="AArch64-dlr_el0.xml" state="AArch64">DLR_EL0</register_link> and <register_link id="AArch64-dspsr_el0.xml" state="AArch64">DSPSR_EL0</register_link> become <arm-defined-word>UNKNOWN</arm-defined-word>.</content>
+        </listitem>
+        <listitem>
+          <content>The endianness is set according to <xref linkend="ARMARM_SCTLR_ELx">SCTLR_ELx</xref>.EE.</content>
+        </listitem>
+      </list>
+      <para>This instruction is <arm-defined-word>UNDEFINED</arm-defined-word> at EL0 in Non-secure state if EL2 is implemented and <register_link id="AArch64-hcr_el2.xml" state="AArch64">HCR_EL2</register_link>.TGE == 1.</para>
+      <para>This instruction is always <arm-defined-word>UNDEFINED</arm-defined-word> in Non-debug state.</para>
+      <para>For more information on the operation of the DCPS&lt;n&gt; instructions, see <xref linkend="ARMARM_dcps">DCPS</xref>.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="DCPS1"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.control.exception.DCPS1_DC_exception" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="3" name="opc" usename="1" settings="3" psbits="xxx">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="20" width="16" name="imm16" usename="1">
+          <c colspan="16"/>
+        </box>
+        <box hibit="4" width="3" name="op2" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="1" width="2" name="LL" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="DCPS1_DC_exception" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="DCPS1"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>DCPS1  {#</text><a hover="Is an optional 16-bit unsigned immediate, in the range 0 to 65535, defaulting to 0 and encoded in the &quot;imm16&quot; field." link="imm__2">&lt;imm&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.exception.DCPS1_DC_exception" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">// Empty.</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="DCPS1_DC_exception" symboldefcount="1">
+      <symbol link="imm__2">&lt;imm&gt;</symbol>
+      <account encodedin="imm16">
+        <intro>
+          <para>Is an optional 16-bit unsigned immediate, in the range 0 to 65535, defaulting to 0 and encoded in the "imm16" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.control.exception.DCPS1_DC_exception" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">if !<a link="impl-shared.Halted.0" file="shared_pseudocode.xml" hover="function: boolean Halted()">Halted</a>() then UNDEFINED;
+<a link="impl-shared.DCPSInstruction.1" file="shared_pseudocode.xml" hover="function: DCPSInstruction(bits(2) target_el)">DCPSInstruction</a>(<a link="EL1" file="shared_pseudocode.xml" hover="constant bits(2) EL1 = '01'">EL1</a>);</pstext></ps>
+  </ps_section>
+</instructionsection>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="lsl_z_p_zi" title="LSL (immediate, predicated)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="LSL" />
+  </docvars>
+  <heading>LSL (immediate, predicated)</heading>
+  <desc>
+    <brief>Logical shift left by immediate (predicated)</brief>
+    <description>
+      <para>Shift left by immediate each active element of the source vector, and destructively place the results in the corresponding elements of the source vector. The immediate shift amount is an unsigned value in the range 0 to number of bits per element minus 1. Inactive elements in the destination vector register remain unmodified.</para>
+    </description>
+    <status>Green</status>
+    <predicated>True</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <takes_movprfx>True</takes_movprfx>
+    <takes_pred_movprfx>True</takes_pred_movprfx>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SVE" oneof="1" id="iclass_sve" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="LSL" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="LSL-Z.P.ZI-_" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="tszh" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="19" name="opc&lt;1&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="18" name="opc&lt;0&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="17" name="L" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="16" name="U" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="15" width="3" settings="3">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="12" width="3" name="Pg" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" width="2" name="tszl" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="7" width="3" name="imm3" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="4" width="5" name="Zdn" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="lsl_z_p_zi_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="LSL" />
+        </docvars>
+        <asmtemplate><text>LSL     </text><a link="sa_zdn" hover="Source and destination scalable vector register (field &quot;Zdn&quot;)">&lt;Zdn&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;tszh:tszl&quot;) [B,D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/M, </text><a link="sa_zdn" hover="Source and destination scalable vector register (field &quot;Zdn&quot;)">&lt;Zdn&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;tszh:tszl&quot;) [B,D,H,S]">&lt;T&gt;</a><text>, #</text><a link="sa_const" hover="Immediate shift amount [0-number of bits per element minus 1] (field &quot;tszh:tszl:imm3&quot;)">&lt;const&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="LSL-Z.P.ZI-_" mylink="LSL-Z.P.ZI-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant bits(4) tsize = tszh:tszl;
+if tsize == '0000' then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.HighestSetBit.1" file="shared_pseudocode.xml" hover="function: integer HighestSetBit(bits(N) x)">HighestSetBit</a>(tsize);
+constant integer g = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pg);
+constant integer dn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zdn);
+constant integer shift = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(tsize:imm3) - esize;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="lsl_z_p_zi_" symboldefcount="1">
+      <symbol link="sa_zdn">&lt;Zdn&gt;</symbol>
+      <account encodedin="Zdn">
+        <intro>
+          <para>Is the name of the source and destination scalable vector register, encoded in the "Zdn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="lsl_z_p_zi_" symboldefcount="1">
+      <symbol link="sa_t">&lt;T&gt;</symbol>
+      <definition encodedin="tszh:tszl">
+        <intro>Is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="3">
+            <thead>
+              <row>
+                <entry class="bitfield">tszh</entry>
+                <entry class="bitfield">tszl</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="bitfield">1x</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="bitfield">xx</entry>
+                <entry class="symbol">S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1x</entry>
+                <entry class="bitfield">xx</entry>
+                <entry class="symbol">D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="lsl_z_p_zi_" symboldefcount="1">
+      <symbol link="sa_pg">&lt;Pg&gt;</symbol>
+      <account encodedin="Pg">
+        <intro>
+          <para>Is the name of the governing scalable predicate register P0-P7, encoded in the "Pg" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="lsl_z_p_zi_" symboldefcount="1">
+      <symbol link="sa_const">&lt;const&gt;</symbol>
+      <account encodedin="imm3:tszh:tszl">
+        <intro>
+          <para>Is the immediate shift amount, in the range 0 to number of bits per element minus 1, encoded in "tszh:tszl:imm3".</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="LSL-Z.P.ZI-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSVEEnabled()">CheckSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer elements = VL DIV esize;
+constant integer PL = VL DIV 8;
+constant bits(VL) operand1 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[dn, VL];
+constant bits(PL) mask = <a link="impl-aarch64.P.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) P[integer n, integer width]">P</a>[g, PL];
+bits(VL) result;
+
+for e = 0 to elements-1
+    constant bits(esize) element1 = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand1, e, esize];
+    if <a link="impl-aarch64.ActivePredicateElement.3" file="shared_pseudocode.xml" hover="function: boolean ActivePredicateElement(bits(N) pred, integer e, integer esize)">ActivePredicateElement</a>(mask, e, esize) then
+        <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, esize] = <a link="impl-shared.LSL.2" file="shared_pseudocode.xml" hover="function: bits(N) LSL(bits(N) x, integer shift)">LSL</a>(element1, shift);
+    else
+        <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, esize] = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand1, e, esize];
+
+<a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[dn, VL] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

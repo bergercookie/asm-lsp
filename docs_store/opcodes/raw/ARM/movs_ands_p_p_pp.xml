@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="MOVS_ands_p_p_pp" title="MOVS (predicated)" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="MOVS" />
+    <docvar key="cond-setting" value="s" />
+    <docvar key="instr-class" value="sve" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="ANDS" />
+  </docvars>
+  <heading>MOVS (predicated)</heading>
+  <desc>
+    <brief>Move predicates (zeroing), setting the condition flags</brief>
+    <description>
+      <para>Read active elements from the source predicate and place in the corresponding elements of the destination predicate. Inactive elements in the destination predicate register are set to zero. Sets the <arm-defined-word>First</arm-defined-word> (N), <arm-defined-word>None</arm-defined-word> (Z), <arm-defined-word>!Last</arm-defined-word> (C) condition flags based on the predicate result, and the V flag to zero.</para>
+    </description>
+    <status>Green</status>
+    <predicated>True</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <affected_by_sme output="NZCV condition flags" />
+  </desc>
+  <aliasto refiform="ands_p_p_pp.xml" iformid="ands_p_p_pp">ANDS</aliasto>
+  <classes>
+    <iclass name="Setting the condition flags" oneof="1" id="iclass_s" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="cond-setting" value="s" />
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="ANDS" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="ANDS-P.P.PP-Z" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="S" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="19" width="4" name="Pm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" width="2" settings="2">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="13" width="4" name="Pg" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="9" name="o2" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="8" width="4" name="Pn" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="4" name="o3" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="3" width="4" name="Pd" usename="1">
+          <c colspan="4"></c>
+        </box>
+      </regdiagram>
+      <encoding name="MOVS_ands_p_p_pp_z" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="alias_mnemonic" value="MOVS" />
+          <docvar key="cond-setting" value="s" />
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="ANDS" />
+        </docvars>
+        <asmtemplate><text>MOVS    </text><a link="sa_pd" hover="Destination scalable predicate register (field &quot;Pd&quot;)">&lt;Pd&gt;</a><text>.B, </text><a link="sa_pg" hover="Governing scalable predicate register (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/Z, </text><a link="sa_pn" hover="First source scalable predicate register (field &quot;Pn&quot;)">&lt;Pn&gt;</a><text>.B</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="ands_p_p_pp.xml#ands_p_p_pp_z">ANDS</a><text> </text><a link="sa_pd" hover="Destination scalable predicate register (field &quot;Pd&quot;)">&lt;Pd&gt;</a><text>.B, </text><a link="sa_pg" hover="Governing scalable predicate register (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/Z, </text><a link="sa_pn" hover="First source scalable predicate register (field &quot;Pn&quot;)">&lt;Pn&gt;</a><text>.B, </text><a link="sa_pn" hover="First source scalable predicate register (field &quot;Pn&quot;)">&lt;Pn&gt;</a><text>.B</text></asmtemplate>
+          <aliascond>S == '1' &amp;&amp; Pn == Pm</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="MOVS_ands_p_p_pp_z" symboldefcount="1">
+      <symbol link="sa_pd">&lt;Pd&gt;</symbol>
+      <account encodedin="Pd">
+        <intro>
+          <para>Is the name of the destination scalable predicate register, encoded in the "Pd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOVS_ands_p_p_pp_z" symboldefcount="1">
+      <symbol link="sa_pg">&lt;Pg&gt;</symbol>
+      <account encodedin="Pg">
+        <intro>
+          <para>Is the name of the governing scalable predicate register, encoded in the "Pg" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOVS_ands_p_p_pp_z" symboldefcount="1">
+      <symbol link="sa_pn">&lt;Pn&gt;</symbol>
+      <account encodedin="Pn">
+        <intro>
+          <para>Is the name of the first source scalable predicate register, encoded in the "Pn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

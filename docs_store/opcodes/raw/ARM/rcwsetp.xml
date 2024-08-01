@@ -1,0 +1,249 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="RCWSETP" title="RCWSETP, RCWSETPA, RCWSETPL, RCWSETPAL -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+  </docvars>
+  <heading>RCWSETP, RCWSETPA, RCWSETPL, RCWSETPAL</heading>
+  <desc>
+    <brief>
+      <para>Read check write atomic bit set on quadword in memory</para>
+    </brief>
+    <authored>
+      <para>This instruction atomically loads
+a 128-bit quadword from memory, performs a bitwise OR with the value
+held in a pair of registers on it, and conditionally stores the result back to memory.
+Storing of the result back to memory is conditional on RCW Checks.
+The value initially loaded from memory is returned in the same pair of registers.
+This instruction updates the condition flags based on the result of the update of memory.</para>
+      <list type="unordered">
+        <listitem>
+          <content>
+            <instruction>RCWSETPA</instruction> and <instruction>RCWSETPAL</instruction> load from memory with acquire semantics.</content>
+        </listitem>
+        <listitem>
+          <content>
+            <instruction>RCWSETPL</instruction> and <instruction>RCWSETPAL</instruction> store to memory with release semantics.</content>
+        </listitem>
+        <listitem>
+          <content>
+            <instruction>RCWSETP</instruction> has neither acquire nor release semantics.</content>
+        </listitem>
+      </list>
+    </authored>
+    <encodingnotes>
+      <para>For information about the <arm-defined-word>CONSTRAINED UNPREDICTABLE</arm-defined-word> behavior of this instruction, see <xref linkend="CHDJDBHJ">Architectural Constraints on UNPREDICTABLE behaviors</xref>, and particularly <xref linkend="CEGIFAEA">CONSTRAINED UNPREDICTABLE behavior for A64 instructions</xref>.</para>
+    </encodingnotes>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1, the timing of this instruction is insensitive to the value of the data being loaded or stored.</para>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="4" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="4"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_D128 &amp;&amp; FEAT_THE" name="FEAT_D128 &amp;&amp; FEAT_THE"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.memop_128.RCWSETP_128_memop_128" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" name="S" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="29" width="6" settings="6">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="1" name="A" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="22" width="1" name="R" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Rt2" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" name="o3" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="14" width="3" name="opc" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="RCWSETP_128_memop_128" oneofinclass="4" oneof="4" label="RCWSETP" bitdiffs="A == 0 &amp;&amp; R == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="RCWSETP"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="1" name="A">
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>RCWSETP  </text><a hover="Is the 64-bit name of the first general-purpose register to be transferred, encoded in the &quot;Rt&quot; field." link="Xt1OrXZR">&lt;Xt1&gt;</a><text>, </text><a hover="Is the 64-bit name of the second general-purpose register to be transferred, encoded in the &quot;Rt2&quot; field." link="Xt2OrXZR">&lt;Xt2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="RCWSETPA_128_memop_128" oneofinclass="4" oneof="4" label="RCWSETPA" bitdiffs="A == 1 &amp;&amp; R == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="RCWSETPA"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="1" name="A">
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>RCWSETPA  </text><a hover="Is the 64-bit name of the first general-purpose register to be transferred, encoded in the &quot;Rt&quot; field." link="Xt1OrXZR">&lt;Xt1&gt;</a><text>, </text><a hover="Is the 64-bit name of the second general-purpose register to be transferred, encoded in the &quot;Rt2&quot; field." link="Xt2OrXZR">&lt;Xt2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="RCWSETPAL_128_memop_128" oneofinclass="4" oneof="4" label="RCWSETPAL" bitdiffs="A == 1 &amp;&amp; R == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="RCWSETPAL"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="1" name="A">
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>RCWSETPAL  </text><a hover="Is the 64-bit name of the first general-purpose register to be transferred, encoded in the &quot;Rt&quot; field." link="Xt1OrXZR">&lt;Xt1&gt;</a><text>, </text><a hover="Is the 64-bit name of the second general-purpose register to be transferred, encoded in the &quot;Rt2&quot; field." link="Xt2OrXZR">&lt;Xt2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="RCWSETPL_128_memop_128" oneofinclass="4" oneof="4" label="RCWSETPL" bitdiffs="A == 0 &amp;&amp; R == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="RCWSETPL"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="1" name="A">
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>RCWSETPL  </text><a hover="Is the 64-bit name of the first general-purpose register to be transferred, encoded in the &quot;Rt&quot; field." link="Xt1OrXZR">&lt;Xt1&gt;</a><text>, </text><a hover="Is the 64-bit name of the second general-purpose register to be transferred, encoded in the &quot;Rt2&quot; field." link="Xt2OrXZR">&lt;Xt2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.memop_128.RCWSETP_128_memop_128" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_D128) || !IsFeatureImplemented(FEAT_THE) then UNDEFINED;
+if Rt  == '11111' then UNDEFINED;
+if Rt2 == '11111' then UNDEFINED;
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer t2 = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt2);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant boolean soft = FALSE;
+
+constant boolean acquire = A == '1';
+constant boolean release = R == '1';
+constant boolean tagchecked = n != 31;
+
+boolean rt_unknown = FALSE;
+
+if t == t2 then
+    constant <a link="Constraint" file="shared_pseudocode.xml" hover="enumeration Constraint    { Constraint_NONE,   Constraint_UNKNOWN,  Constraint_UNDEF, Constraint_UNDEFEL0, Constraint_NOP, Constraint_TRUE, Constraint_FALSE, Constraint_DISABLED, Constraint_UNCOND, Constraint_COND, Constraint_ADDITIONAL_DECODE,   Constraint_WBSUPPRESS, Constraint_FAULT, Constraint_LIMITED_ATOMICITY,   Constraint_NVNV1_00, Constraint_NVNV1_01, Constraint_NVNV1_11, Constraint_EL1TIMESTAMP, Constraint_EL2TIMESTAMP, Constraint_OSH, Constraint_ISH, Constraint_NSH,  Constraint_NC, Constraint_WT, Constraint_WB,   Constraint_FORCE, Constraint_FORCENOSLCHECK,  Constraint_MAPTOALLOCATED,  Constraint_PMSCR_PCT_VIRT }">Constraint</a> c = <a link="impl-shared.ConstrainUnpredictable.1" file="shared_pseudocode.xml" hover="function: Constraint ConstrainUnpredictable(Unpredictable which)">ConstrainUnpredictable</a>(<a link="Unpredictable_LSE128OVERLAP" file="shared_pseudocode.xml" hover="enumeration Unpredictable {  Unpredictable_VMSR,  Unpredictable_WBOVERLAPLD,  Unpredictable_WBOVERLAPST,  Unpredictable_LDPOVERLAP,  Unpredictable_BASEOVERLAP,  Unpredictable_DATAOVERLAP,  Unpredictable_DEVPAGE2,  Unpredictable_INSTRDEVICE,  Unpredictable_RESCPACR,  Unpredictable_RESMAIR,  Unpredictable_S1CTAGGED,  Unpredictable_S2RESMEMATTR,  Unpredictable_RESTEXCB,  Unpredictable_RESPRRR,  Unpredictable_RESDACR,  Unpredictable_RESVTCRS,  Unpredictable_RESTnSZ,  Unpredictable_RESTCF,  Unpredictable_DEVICETAGSTORE,  Unpredictable_OORTnSZ,   Unpredictable_LARGEIPA,  Unpredictable_ESRCONDPASS,  Unpredictable_ILZEROIT,  Unpredictable_ILZEROT,  Unpredictable_BPVECTORCATCHPRI,  Unpredictable_VCMATCHHALF,   Unpredictable_VCMATCHDAPA,  Unpredictable_WPMASKANDBAS,  Unpredictable_WPBASCONTIGUOUS,  Unpredictable_RESWPMASK,  Unpredictable_WPMASKEDBITS,  Unpredictable_RESBPWPCTRL,  Unpredictable_BPNOTIMPL,  Unpredictable_RESBPTYPE,  Unpredictable_RESMDSELR,  Unpredictable_BPNOTCTXCMP,  Unpredictable_BPMATCHHALF,  Unpredictable_BPMISMATCHHALF,   Unpredictable_BPLINKINGDISABLED,  Unpredictable_RESBPMASK,   Unpredictable_BPMASK,  Unpredictable_BPMASKEDBITS,   Unpredictable_BPLINKEDADDRMATCH,  Unpredictable_RESTARTALIGNPC,  Unpredictable_RESTARTZEROUPPERPC,  Unpredictable_ZEROUPPER,   Unpredictable_ERETZEROUPPERPC,   Unpredictable_A32FORCEALIGNPC,  Unpredictable_SMD,  Unpredictable_NONFAULT,  Unpredictable_SVEZEROUPPER,  Unpredictable_SVELDNFDATA,  Unpredictable_SVELDNFZERO,  Unpredictable_CHECKSPNONEACTIVE,  Unpredictable_SMEZEROUPPER,   Unpredictable_16BYTEROUNDEDUPACCESS,   Unpredictable_16BYTEROUNDEDDOWNACCESS,  Unpredictable_NVNV1,  Unpredictable_Shareability,  Unpredictable_AFUPDATE,  Unpredictable_DBUPDATE,  Unpredictable_IESBinDebug,  Unpredictable_BADPMSFCR,  Unpredictable_ZEROBTYPE,  Unpredictable_EL2TIMESTAMP, Unpredictable_EL1TIMESTAMP,  Unpredictable_RESERVEDNSxB,  Unpredictable_WFxTDEBUG,  Unpredictable_LS64UNSUPPORTED,    Unpredictable_MISALIGNEDATOMIC,  Unpredictable_LSE128OVERLAP,  Unpredictable_CLEARERRITEZERO,   Unpredictable_ALUEXCEPTIONRETURN,  Unpredictable_IGNORETRAPINDEBUG,  Unpredictable_DBGxVR_RESS,  Unpredictable_PMUEVENTCOUNTER,  Unpredictable_PMSCR_PCT,   Unpredictable_RES_HPMN,  Unpredictable_BRBFILTRATE,  Unpredictable_PMUSNAPSHOTEVENT,  Unpredictable_RESEPMSSAD,  Unpredictable_RESPMSSE,  Unpredictable_RESPMEE,  Unpredictable_MOPSOVERLAP,   Unpredictable_MOPS_R31,  Unpredictable_STOREONLYTAGCHECKEDCAS,  Unpredictable_RES_ETBAD,  Unpredictable_RES_PMU_VS,   Unpredictable_CPACHECK,  Unpredictable_RESTC,    Unpredictable_NODTRTAGCHK,    Unpredictable_Atomic_SYNC_ABORT, Unpredictable_Atomic_SERROR, Unpredictable_Atomic_MMU_IMPDEF_FAULT, Unpredictable_Atomic_NOP,  Unpredictable_MRC_APSR_TARGET }">Unpredictable_LSE128OVERLAP</a>);
+    assert c IN {<a link="Constraint_UNKNOWN" file="shared_pseudocode.xml" hover="enumeration Constraint    { Constraint_NONE,   Constraint_UNKNOWN,  Constraint_UNDEF, Constraint_UNDEFEL0, Constraint_NOP, Constraint_TRUE, Constraint_FALSE, Constraint_DISABLED, Constraint_UNCOND, Constraint_COND, Constraint_ADDITIONAL_DECODE,   Constraint_WBSUPPRESS, Constraint_FAULT, Constraint_LIMITED_ATOMICITY,   Constraint_NVNV1_00, Constraint_NVNV1_01, Constraint_NVNV1_11, Constraint_EL1TIMESTAMP, Constraint_EL2TIMESTAMP, Constraint_OSH, Constraint_ISH, Constraint_NSH,  Constraint_NC, Constraint_WT, Constraint_WB,   Constraint_FORCE, Constraint_FORCENOSLCHECK,  Constraint_MAPTOALLOCATED,  Constraint_PMSCR_PCT_VIRT }">Constraint_UNKNOWN</a>, <a link="Constraint_UNDEF" file="shared_pseudocode.xml" hover="enumeration Constraint    { Constraint_NONE,   Constraint_UNKNOWN,  Constraint_UNDEF, Constraint_UNDEFEL0, Constraint_NOP, Constraint_TRUE, Constraint_FALSE, Constraint_DISABLED, Constraint_UNCOND, Constraint_COND, Constraint_ADDITIONAL_DECODE,   Constraint_WBSUPPRESS, Constraint_FAULT, Constraint_LIMITED_ATOMICITY,   Constraint_NVNV1_00, Constraint_NVNV1_01, Constraint_NVNV1_11, Constraint_EL1TIMESTAMP, Constraint_EL2TIMESTAMP, Constraint_OSH, Constraint_ISH, Constraint_NSH,  Constraint_NC, Constraint_WT, Constraint_WB,   Constraint_FORCE, Constraint_FORCENOSLCHECK,  Constraint_MAPTOALLOCATED,  Constraint_PMSCR_PCT_VIRT }">Constraint_UNDEF</a>, <a link="Constraint_NOP" file="shared_pseudocode.xml" hover="enumeration Constraint    { Constraint_NONE,   Constraint_UNKNOWN,  Constraint_UNDEF, Constraint_UNDEFEL0, Constraint_NOP, Constraint_TRUE, Constraint_FALSE, Constraint_DISABLED, Constraint_UNCOND, Constraint_COND, Constraint_ADDITIONAL_DECODE,   Constraint_WBSUPPRESS, Constraint_FAULT, Constraint_LIMITED_ATOMICITY,   Constraint_NVNV1_00, Constraint_NVNV1_01, Constraint_NVNV1_11, Constraint_EL1TIMESTAMP, Constraint_EL2TIMESTAMP, Constraint_OSH, Constraint_ISH, Constraint_NSH,  Constraint_NC, Constraint_WT, Constraint_WB,   Constraint_FORCE, Constraint_FORCENOSLCHECK,  Constraint_MAPTOALLOCATED,  Constraint_PMSCR_PCT_VIRT }">Constraint_NOP</a>};
+    case c of
+        when <a link="Constraint_UNKNOWN" file="shared_pseudocode.xml" hover="enumeration Constraint    { Constraint_NONE,   Constraint_UNKNOWN,  Constraint_UNDEF, Constraint_UNDEFEL0, Constraint_NOP, Constraint_TRUE, Constraint_FALSE, Constraint_DISABLED, Constraint_UNCOND, Constraint_COND, Constraint_ADDITIONAL_DECODE,   Constraint_WBSUPPRESS, Constraint_FAULT, Constraint_LIMITED_ATOMICITY,   Constraint_NVNV1_00, Constraint_NVNV1_01, Constraint_NVNV1_11, Constraint_EL1TIMESTAMP, Constraint_EL2TIMESTAMP, Constraint_OSH, Constraint_ISH, Constraint_NSH,  Constraint_NC, Constraint_WT, Constraint_WB,   Constraint_FORCE, Constraint_FORCENOSLCHECK,  Constraint_MAPTOALLOCATED,  Constraint_PMSCR_PCT_VIRT }">Constraint_UNKNOWN</a> rt_unknown = TRUE;    // result is UNKNOWN
+        when <a link="Constraint_UNDEF" file="shared_pseudocode.xml" hover="enumeration Constraint    { Constraint_NONE,   Constraint_UNKNOWN,  Constraint_UNDEF, Constraint_UNDEFEL0, Constraint_NOP, Constraint_TRUE, Constraint_FALSE, Constraint_DISABLED, Constraint_UNCOND, Constraint_COND, Constraint_ADDITIONAL_DECODE,   Constraint_WBSUPPRESS, Constraint_FAULT, Constraint_LIMITED_ATOMICITY,   Constraint_NVNV1_00, Constraint_NVNV1_01, Constraint_NVNV1_11, Constraint_EL1TIMESTAMP, Constraint_EL2TIMESTAMP, Constraint_OSH, Constraint_ISH, Constraint_NSH,  Constraint_NC, Constraint_WT, Constraint_WB,   Constraint_FORCE, Constraint_FORCENOSLCHECK,  Constraint_MAPTOALLOCATED,  Constraint_PMSCR_PCT_VIRT }">Constraint_UNDEF</a>   UNDEFINED;
+        when <a link="Constraint_NOP" file="shared_pseudocode.xml" hover="enumeration Constraint    { Constraint_NONE,   Constraint_UNKNOWN,  Constraint_UNDEF, Constraint_UNDEFEL0, Constraint_NOP, Constraint_TRUE, Constraint_FALSE, Constraint_DISABLED, Constraint_UNCOND, Constraint_COND, Constraint_ADDITIONAL_DECODE,   Constraint_WBSUPPRESS, Constraint_FAULT, Constraint_LIMITED_ATOMICITY,   Constraint_NVNV1_00, Constraint_NVNV1_01, Constraint_NVNV1_11, Constraint_EL1TIMESTAMP, Constraint_EL2TIMESTAMP, Constraint_OSH, Constraint_ISH, Constraint_NSH,  Constraint_NC, Constraint_WT, Constraint_WB,   Constraint_FORCE, Constraint_FORCENOSLCHECK,  Constraint_MAPTOALLOCATED,  Constraint_PMSCR_PCT_VIRT }">Constraint_NOP</a>     <a link="impl-shared.ExecuteAsNOP.0" file="shared_pseudocode.xml" hover="function: ExecuteAsNOP()">ExecuteAsNOP</a>();
+   </pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="RCWSETP_128_memop_128, RCWSETPA_128_memop_128, RCWSETPAL_128_memop_128, RCWSETPL_128_memop_128" symboldefcount="1">
+      <symbol link="Xt1OrXZR">&lt;Xt1&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the first general-purpose register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="RCWSETP_128_memop_128, RCWSETPA_128_memop_128, RCWSETPAL_128_memop_128, RCWSETPL_128_memop_128" symboldefcount="1">
+      <symbol link="Xt2OrXZR">&lt;Xt2&gt;</symbol>
+      <account encodedin="Rt2">
+        <intro>
+          <para>Is the 64-bit name of the second general-purpose register to be transferred, encoded in the "Rt2" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="RCWSETP_128_memop_128, RCWSETPA_128_memop_128, RCWSETPAL_128_memop_128, RCWSETPL_128_memop_128" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.memop_128.RCWSETP_128_memop_128" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">if !<a link="impl-aarch64.IsD128Enabled.1" file="shared_pseudocode.xml" hover="function: boolean IsD128Enabled(bits(2) el)">IsD128Enabled</a>(PSTATE.EL) then UNDEFINED;
+bits(64) address;
+bits(64) value1;
+bits(64) value2;
+bits(128) newdata;
+bits(128) readdata;
+bits(4) nzcv;
+
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = CreateAccDescRCW(<a link="MemAtomicOp_ORR" file="shared_pseudocode.xml" hover="enumeration MemAtomicOp { MemAtomicOp_GCSSS1, MemAtomicOp_ADD, MemAtomicOp_BIC, MemAtomicOp_EOR, MemAtomicOp_ORR, MemAtomicOp_SMAX, MemAtomicOp_SMIN, MemAtomicOp_UMAX, MemAtomicOp_UMIN, MemAtomicOp_SWP, MemAtomicOp_CAS }">MemAtomicOp_ORR</a>, soft, acquire, release,
+                                                     tagchecked);
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+value1 = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[t, 64];
+value2 = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[t2, 64];
+
+newdata = if <a link="impl-shared.BigEndian.1" file="shared_pseudocode.xml" hover="function: boolean BigEndian(AccessType acctype)">BigEndian</a>(accdesc.acctype) then value1:value2 else value2:value1;
+
+constant bits(128) compdata = bits(128) UNKNOWN;    // Irrelevant when not executing CAS
+(nzcv, readdata) = <a link="impl-aarch64.MemAtomicRCW.4" file="shared_pseudocode.xml" hover="function: (bits(4), bits(size)) MemAtomicRCW(bits(64) address, bits(size) cmpoperand, bits(size) operand, AccessDescriptor accdesc_in)">MemAtomicRCW</a>(address, compdata, newdata, accdesc);
+
+PSTATE.&lt;N,Z,C,V&gt; = nzcv;
+if rt_unknown then
+    readdata = bits(128) UNKNOWN;
+
+if <a link="impl-shared.BigEndian.1" file="shared_pseudocode.xml" hover="function: boolean BigEndian(AccessType acctype)">BigEndian</a>(accdesc.acctype) then
+    <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[t, 64] = readdata&lt;127:64&gt;;
+    <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[t2, 64] = readdata&lt;63:0&gt;;
+else
+    <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[t, 64] = readdata&lt;63:0&gt;;
+    <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[t2, 64] = readdata&lt;127:64&gt;;
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

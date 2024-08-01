@@ -1,0 +1,154 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="RMIF" title="RMIF -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="RMIF"/>
+  </docvars>
+  <heading>RMIF</heading>
+  <desc>
+    <brief>
+      <para>Rotate, mask insert flags</para>
+    </brief>
+    <authored>
+      <para>This instruction performs a rotation right of a value held in a
+general-purpose register by an immediate value, and then inserts a
+selection of the bottom four bits of the result of the rotation
+into the PSTATE flags, under the control of a second immediate mask.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="RMIF"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_FlagM" name="ARMv8.4"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.dpreg.rmif.RMIF_only_rmif" tworows="1">
+        <box hibit="31" name="sf" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="30" name="op" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="28" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="6" name="imm6" usename="1">
+          <c colspan="6"/>
+        </box>
+        <box hibit="14" width="5" settings="5">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" name="o2" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="3" width="4" name="mask" usename="1">
+          <c colspan="4"/>
+        </box>
+      </regdiagram>
+      <encoding name="RMIF_only_rmif" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="RMIF"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <asmtemplate><text>RMIF  </text><a hover="Is the 64-bit name of the general-purpose source register, encoded in the &quot;Rn&quot; field." link="XnOrXZR__11">&lt;Xn&gt;</a><text>, #</text><a hover="Is the shift amount, in the range 0 to 63, defaulting to 0 and encoded in the &quot;imm6&quot; field," link="shift__9">&lt;shift&gt;</a><text>, #</text><a hover="Is the flag bit mask, an immediate in the range 0 to 15, which selects the bits that are inserted into the NZCV condition flags, encoded in the &quot;mask&quot; field." link="mask">&lt;mask&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpreg.rmif.RMIF_only_rmif" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_FlagM) then UNDEFINED;
+constant integer imm = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(imm6);
+constant bits(4) flagmask = mask;
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="RMIF_only_rmif" symboldefcount="1">
+      <symbol link="XnOrXZR__11">&lt;Xn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="RMIF_only_rmif" symboldefcount="1">
+      <symbol link="shift__9">&lt;shift&gt;</symbol>
+      <account encodedin="imm6">
+        <intro>
+          <para>Is the shift amount, in the range 0 to 63, defaulting to 0 and encoded in the "imm6" field,</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="RMIF_only_rmif" symboldefcount="1">
+      <symbol link="mask">&lt;mask&gt;</symbol>
+      <account encodedin="mask">
+        <intro>
+          <para>Is the flag bit mask, an immediate in the range 0 to 15, which selects the bits that are inserted into the NZCV condition flags, encoded in the "mask" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.dpreg.rmif.RMIF_only_rmif" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bits(64) reg = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+constant bits(4) flags = (reg:reg)&lt;imm+3:imm&gt;;
+if flagmask&lt;3&gt; == '1' then PSTATE.N = flags&lt;3&gt;;
+if flagmask&lt;2&gt; == '1' then PSTATE.Z = flags&lt;2&gt;;
+if flagmask&lt;1&gt; == '1' then PSTATE.C = flags&lt;1&gt;;
+if flagmask&lt;0&gt; == '1' then PSTATE.V = flags&lt;0&gt;;    </pstext></ps>
+  </ps_section>
+</instructionsection>

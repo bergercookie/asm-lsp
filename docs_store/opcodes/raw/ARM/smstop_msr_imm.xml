@@ -1,0 +1,146 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="SMSTOP_MSR_imm" title="SMSTOP -- A64" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="SMSTOP"/>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="MSR"/>
+    <docvar key="msr-sysreg-target" value="whole-register"/>
+  </docvars>
+  <heading>SMSTOP</heading>
+  <desc>
+    <brief>
+      <para>Disables access to Streaming SVE mode and SME architectural state</para>
+    </brief>
+    <authored>
+      <para>This instruction disables access to Streaming SVE mode and SME architectural state.</para>
+      <para>SMSTOP exits Streaming SVE mode, and disables the SME ZA storage.</para>
+      <para>SMSTOP SM exits Streaming SVE mode, but does not disable the SME ZA storage.</para>
+      <para>SMSTOP ZA disables the SME ZA storage, but does not cause an exit from Streaming SVE mode.</para>
+    </authored>
+  </desc>
+  <aliasto refiform="msr_imm.xml" iformid="MSR_imm">MSR (immediate)</aliasto>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="MSR"/>
+        <docvar key="msr-sysreg-target" value="whole-register"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_SME" name="ARMv9.2"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.control.pstate.MSR_SI_pstate.SMSTOP" tworows="1">
+        <box hibit="31" width="13" settings="13">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="18" width="3" name="op1" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" width="4" settings="4">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1" settings="2" psbits="xxxx">
+          <c>0</c>
+          <c>x</c>
+          <c>x</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="SMSTOP_MSR_SI_pstate" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="MSR"/>
+          <docvar key="alias_mnemonic" value="SMSTOP"/>
+          <docvar key="instr-class" value="system"/>
+          <docvar key="msr-sysreg-target" value="whole-register"/>
+        </docvars>
+        <asmtemplate><text>SMSTOP  {</text><a hover="Is an optional mode, " link="pstatefield_option__3">&lt;option&gt;</a><text>}</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="msr_imm.xml#MSR_SI_pstate">MSR</a><text>  </text><a hover="Is a PSTATE field name. For the MSR instruction, this is " href="msr_imm.xml#pstatefield_option">&lt;pstatefield&gt;</a><text>,   #0</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="SMSTOP_MSR_SI_pstate" symboldefcount="1">
+      <symbol link="pstatefield_option__3">&lt;option&gt;</symbol>
+      <definition encodedin="CRm&lt;3:1&gt;">
+        <intro>Is an optional mode, </intro>
+        <table class="valuetable">
+          <tgroup cols="3">
+            <thead>
+              <row>
+                <entry class="bitfield">CRm&lt;3:1&gt;</entry>
+                <entry class="symbol">&lt;option&gt;</entry>
+                <entry class="symbol">Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">001</entry>
+                <entry class="symbol">SM</entry>
+                <entry class="description">
+                  <para>Maps to <syntax>&lt;pstatefield&gt;</syntax> SVCRSM.</para>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">010</entry>
+                <entry class="symbol">ZA</entry>
+                <entry class="description">
+                  <para>Maps to <syntax>&lt;pstatefield&gt;</syntax> SVCRZA.</para>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">[absent]</entry>
+                <entry class="description">
+                  <para>Maps to <syntax>&lt;pstatefield&gt;</syntax> SVCRSMZA.</para>
+                </entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+  </explanations>
+</instructionsection>

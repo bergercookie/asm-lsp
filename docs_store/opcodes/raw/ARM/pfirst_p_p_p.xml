@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="pfirst_p_p_p" title="PFIRST" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="PFIRST" />
+  </docvars>
+  <heading>PFIRST</heading>
+  <desc>
+    <brief>Set the first active predicate element to true</brief>
+    <description>
+      <para>Sets the first active element in the destination predicate to true, otherwise elements from the source predicate are passed through unchanged. Sets the <arm-defined-word>First</arm-defined-word> (N), <arm-defined-word>None</arm-defined-word> (Z), <arm-defined-word>!Last</arm-defined-word> (C) condition flags based on the predicate result, and the V flag to zero.</para>
+    </description>
+    <status>Green</status>
+    <predicated>True</predicated>
+    <affected_by_sme output="NZCV condition flags" />
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SVE" oneof="1" id="iclass_sve" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="PFIRST" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="PFIRST-P.P.P-_" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="S" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" width="12" settings="12">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="8" width="4" name="Pg" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="4" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="3" width="4" name="Pdn" usename="1">
+          <c colspan="4"></c>
+        </box>
+      </regdiagram>
+      <encoding name="pfirst_p_p_p_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="PFIRST" />
+        </docvars>
+        <asmtemplate><text>PFIRST  </text><a link="sa_pdn" hover="Source and destination scalable predicate register (field &quot;Pdn&quot;)">&lt;Pdn&gt;</a><text>.B, </text><a link="sa_pg" hover="Governing scalable predicate register (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>, </text><a link="sa_pdn" hover="Source and destination scalable predicate register (field &quot;Pdn&quot;)">&lt;Pdn&gt;</a><text>.B</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="PFIRST-P.P.P-_" mylink="PFIRST-P.P.P-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer esize = 8;
+constant integer g = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pg);
+constant integer dn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pdn);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="pfirst_p_p_p_" symboldefcount="1">
+      <symbol link="sa_pdn">&lt;Pdn&gt;</symbol>
+      <account encodedin="Pdn">
+        <intro>
+          <para>Is the name of the source and destination scalable predicate register, encoded in the "Pdn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="pfirst_p_p_p_" symboldefcount="1">
+      <symbol link="sa_pg">&lt;Pg&gt;</symbol>
+      <account encodedin="Pg">
+        <intro>
+          <para>Is the name of the governing scalable predicate register, encoded in the "Pg" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="PFIRST-P.P.P-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSVEEnabled()">CheckSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer PL = VL DIV 8;
+constant integer elements = VL DIV esize;
+constant bits(PL) mask = <a link="impl-aarch64.P.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) P[integer n, integer width]">P</a>[g, PL];
+bits(PL) result = <a link="impl-aarch64.P.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) P[integer n, integer width]">P</a>[dn, PL];
+integer first = -1;
+constant integer psize = esize DIV 8;
+
+for e = 0 to elements-1
+    if <a link="impl-aarch64.ActivePredicateElement.3" file="shared_pseudocode.xml" hover="function: boolean ActivePredicateElement(bits(N) pred, integer e, integer esize)">ActivePredicateElement</a>(mask, e, esize) &amp;&amp; first == -1 then
+        first = e;
+
+if first &gt;= 0 then
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, first, psize] = <a link="impl-shared.ZeroExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) ZeroExtend(bits(M) x, integer N)">ZeroExtend</a>('1', psize);
+
+PSTATE.&lt;N,Z,C,V&gt; = <a link="impl-aarch64.PredTest.3" file="shared_pseudocode.xml" hover="function: bits(4) PredTest(bits(N) mask, bits(N) result, integer esize)">PredTest</a>(mask, result, esize);
+<a link="impl-aarch64.P.write.2" file="shared_pseudocode.xml" hover="accessor: P[integer n, integer width] = bits(width) value">P</a>[dn, PL] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

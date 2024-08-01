@@ -1,0 +1,209 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="STNP_gen" title="STNP -- A64" type="instruction">
+  <docvars>
+    <docvar key="address-form" value="signed-scaled-offset"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="STNP"/>
+    <docvar key="offset-type" value="off7s_s"/>
+  </docvars>
+  <heading>STNP</heading>
+  <desc>
+    <brief>
+      <para>Store pair of registers, with non-temporal hint</para>
+    </brief>
+    <authored>
+      <para>This instruction
+calculates an address from a base register value and an immediate offset,
+and stores two 32-bit words or two 64-bit doublewords to the calculated address,
+from two registers.
+For information about addressing modes, see
+<xref linkend="ARMARM_CHDIIIBB">Load/Store addressing modes</xref>.
+For information about non-temporal pair instructions, see
+<xref linkend="ARMARM_CEGJCGDF">Load/Store non-temporal pair</xref>.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1, the timing of this instruction is insensitive to the value of the data being loaded or stored.</para>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Signed offset" oneof="1" id="iclass_signed_offset" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="address-form" value="signed-scaled-offset"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="STNP"/>
+        <docvar key="offset-type" value="off7s_s"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <regdiagram form="32" psname="A64.ldst.ldstnapair_offs.STNP_32_ldstnapair_offs" tworows="1">
+        <box hibit="31" width="2" name="opc" usename="1" settings="1" psbits="xx">
+          <c>x</c>
+          <c>0</c>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="VR" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="25" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="22" name="L" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="7" name="imm7" usename="1">
+          <c colspan="7"/>
+        </box>
+        <box hibit="14" width="5" name="Rt2" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="STNP_32_ldstnapair_offs" oneofinclass="2" oneof="2" label="32-bit" bitdiffs="opc == 00">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STNP"/>
+          <docvar key="address-form" value="signed-scaled-offset"/>
+          <docvar key="address-form-reg-type" value="signed-scaled-offset-pair-32"/>
+          <docvar key="atomic-ops" value="STNP-pair-32"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="offset-type" value="off7s_s"/>
+          <docvar key="reg-type" value="pair-32"/>
+        </docvars>
+        <box hibit="31" width="2" name="opc">
+          <c>0</c>
+          <c/>
+        </box>
+        <asmtemplate><text>STNP  </text><a hover="Is the 32-bit name of the first general-purpose register to be transferred, encoded in the &quot;Rt&quot; field." link="Wt1OrWZR">&lt;Wt1&gt;</a><text>, </text><a hover="Is the 32-bit name of the second general-purpose register to be transferred, encoded in the &quot;Rt2&quot; field." link="Wt2OrWZR">&lt;Wt2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #</text><a hover="For the 32-bit variant: is the optional signed immediate byte offset, a multiple of 4 in the range -256 to 252, defaulting to 0 and encoded in the &quot;imm7&quot; field as &amp;lt;imm&amp;gt;/4." link="imm__4">&lt;imm&gt;</a><text>}]</text></asmtemplate>
+      </encoding>
+      <encoding name="STNP_64_ldstnapair_offs" oneofinclass="2" oneof="2" label="64-bit" bitdiffs="opc == 10">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STNP"/>
+          <docvar key="address-form" value="signed-scaled-offset"/>
+          <docvar key="address-form-reg-type" value="signed-scaled-offset-pair-64"/>
+          <docvar key="atomic-ops" value="STNP-pair-64"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="offset-type" value="off7s_s"/>
+          <docvar key="reg-type" value="pair-64"/>
+        </docvars>
+        <box hibit="31" width="2" name="opc">
+          <c>1</c>
+          <c/>
+        </box>
+        <asmtemplate><text>STNP  </text><a hover="Is the 64-bit name of the first general-purpose register to be transferred, encoded in the &quot;Rt&quot; field." link="Xt1OrXZR">&lt;Xt1&gt;</a><text>, </text><a hover="Is the 64-bit name of the second general-purpose register to be transferred, encoded in the &quot;Rt2&quot; field." link="Xt2OrXZR">&lt;Xt2&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #</text><a hover="For the 64-bit variant: is the optional signed immediate byte offset, a multiple of 8 in the range -512 to 504, defaulting to 0 and encoded in the &quot;imm7&quot; field as &amp;lt;imm&amp;gt;/8." link="imm__5">&lt;imm&gt;</a><text>}]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.ldstnapair_offs.STNP_32_ldstnapair_offs" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">// Empty.</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="STNP_32_ldstnapair_offs" symboldefcount="1">
+      <symbol link="Wt1OrWZR">&lt;Wt1&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 32-bit name of the first general-purpose register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STNP_32_ldstnapair_offs" symboldefcount="1">
+      <symbol link="Wt2OrWZR">&lt;Wt2&gt;</symbol>
+      <account encodedin="Rt2">
+        <intro>
+          <para>Is the 32-bit name of the second general-purpose register to be transferred, encoded in the "Rt2" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STNP_32_ldstnapair_offs, STNP_64_ldstnapair_offs" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STNP_32_ldstnapair_offs" symboldefcount="1">
+      <symbol link="imm__4">&lt;imm&gt;</symbol>
+      <account encodedin="imm7">
+        <intro>
+          <para>For the 32-bit variant: is the optional signed immediate byte offset, a multiple of 4 in the range -256 to 252, defaulting to 0 and encoded in the "imm7" field as &lt;imm&gt;/4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STNP_64_ldstnapair_offs" symboldefcount="2">
+      <symbol link="imm__5">&lt;imm&gt;</symbol>
+      <account encodedin="imm7">
+        <intro>
+          <para>For the 64-bit variant: is the optional signed immediate byte offset, a multiple of 8 in the range -512 to 504, defaulting to 0 and encoded in the "imm7" field as &lt;imm&gt;/8.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STNP_64_ldstnapair_offs" symboldefcount="1">
+      <symbol link="Xt1OrXZR">&lt;Xt1&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the first general-purpose register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STNP_64_ldstnapair_offs" symboldefcount="1">
+      <symbol link="Xt2OrXZR">&lt;Xt2&gt;</symbol>
+      <account encodedin="Rt2">
+        <intro>
+          <para>Is the 64-bit name of the second general-purpose register to be transferred, encoded in the "Rt2" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldstnapair_offs.STNP_32_ldstnapair_offs" sections="1" secttype="Shared Decode">
+      <pstext mayhavelinks="1" section="Postdecode" rep_section="postdecode">if opc&lt;0&gt; == '1' then UNDEFINED;
+
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer t2 = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt2);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant boolean nontemporal = TRUE;
+constant integer scale = 2 + <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(opc&lt;1&gt;);
+constant integer datasize = 8 &lt;&lt; scale;
+constant bits(64) offset = <a link="impl-shared.LSL.2" file="shared_pseudocode.xml" hover="function: bits(N) LSL(bits(N) x, integer shift)">LSL</a>(<a link="impl-shared.SignExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) SignExtend(bits(M) x, integer N)">SignExtend</a>(imm7, 64), scale);
+constant boolean tagchecked = n != 31;</pstext></ps>
+  </ps_section>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldstnapair_offs.STNP_32_ldstnapair_offs" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">bits(64) address;
+bits(64) address2;
+constant integer dbytes = datasize DIV 8;
+constant boolean privileged = PSTATE.EL != <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>;
+
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = CreateAccDescGPR(<a link="MemOp_STORE" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_STORE</a>, nontemporal, privileged,
+                                            tagchecked);
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+address = <a link="impl-shared.AddressAdd.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressAdd(bits(64) base, integer offset, AccessDescriptor accdesc)">AddressAdd</a>(address, offset, accdesc);
+address2 = <a link="impl-shared.AddressIncrement.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressIncrement(bits(64) base, integer increment, AccessDescriptor accdesc)">AddressIncrement</a>(address, dbytes, accdesc);
+<a link="impl-aarch64.Mem.write.3" file="shared_pseudocode.xml" hover="accessor: Mem[bits(64) address, integer size, AccessDescriptor accdesc_in] = bits(size*8) value_in">Mem</a>[address , dbytes, accdesc] = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[t,  datasize];
+<a link="impl-aarch64.Mem.write.3" file="shared_pseudocode.xml" hover="accessor: Mem[bits(64) address, integer size, AccessDescriptor accdesc_in] = bits(size*8) value_in">Mem</a>[address2, dbytes, accdesc] = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[t2, datasize];</pstext></ps>
+  </ps_section>
+</instructionsection>

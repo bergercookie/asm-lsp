@@ -1,0 +1,152 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="LDLARB" title="LDLARB -- A64" type="instruction">
+  <docvars>
+    <docvar key="address-form" value="base-register"/>
+    <docvar key="address-form-reg-type" value="base-register-32-reg"/>
+    <docvar key="atomic-ops" value="LDLARB-32-reg"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="LDLARB"/>
+    <docvar key="reg-type" value="32-reg"/>
+  </docvars>
+  <heading>LDLARB</heading>
+  <desc>
+    <brief>
+      <para>Load LOAcquire register byte</para>
+    </brief>
+    <authored>
+      <para>This instruction loads a byte
+from memory, zero-extends it and writes it to a register.
+The instruction also has memory ordering
+semantics as described in
+<xref linkend="ARMARM_BEIJDIJG">Load LOAcquire, Store LORelease</xref>.
+For information about addressing modes, see
+<xref linkend="ARMARM_CHDIIIBB">Load/Store addressing modes</xref>.</para>
+      <note>
+        <para>For this instruction, if the destination is WZR/XZR, it is impossible
+for software to observe the presence of the acquire semantic other
+than its effect on the arrival at endpoints.</para>
+      </note>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1, the timing of this instruction is insensitive to the value of the data being loaded or stored.</para>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="No offset" oneof="1" id="iclass_no_offset" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="address-form" value="base-register"/>
+        <docvar key="address-form-reg-type" value="base-register-32-reg"/>
+        <docvar key="atomic-ops" value="LDLARB-32-reg"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="LDLARB"/>
+        <docvar key="reg-type" value="32-reg"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_LOR" name="ARMv8.1"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.ldstord.LDLARB_LR32_ldstord" tworows="1">
+        <box hibit="31" width="2" name="size" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="29" width="7" settings="7">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="22" name="L" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Rs" usename="1" settings="5" psbits="xxxxx">
+          <c>(1)</c>
+          <c>(1)</c>
+          <c>(1)</c>
+          <c>(1)</c>
+          <c>(1)</c>
+        </box>
+        <box hibit="15" name="o0" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="14" width="5" name="Rt2" usename="1" settings="5" psbits="xxxxx">
+          <c>(1)</c>
+          <c>(1)</c>
+          <c>(1)</c>
+          <c>(1)</c>
+          <c>(1)</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="LDLARB_LR32_ldstord" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDLARB"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="address-form" value="base-register"/>
+          <docvar key="address-form-reg-type" value="base-register-32-reg"/>
+          <docvar key="atomic-ops" value="LDLARB-32-reg"/>
+          <docvar key="reg-type" value="32-reg"/>
+        </docvars>
+        <asmtemplate><text>LDLARB  </text><a hover="Is the 32-bit name of the general-purpose register to be transferred, encoded in the &quot;Rt&quot; field." link="WtOrWZR__4">&lt;Wt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #0}]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.ldstord.LDLARB_LR32_ldstord" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_LOR) then UNDEFINED;
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant boolean tagchecked = n != 31;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="LDLARB_LR32_ldstord" symboldefcount="1">
+      <symbol link="WtOrWZR__4">&lt;Wt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDLARB_LR32_ldstord" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldstord.LDLARB_LR32_ldstord" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">bits(64) address;
+
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = <a link="impl-shared.CreateAccDescLOR.2" file="shared_pseudocode.xml" hover="function: AccessDescriptor CreateAccDescLOR(MemOp memop, boolean tagchecked)">CreateAccDescLOR</a>(<a link="MemOp_LOAD" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_LOAD</a>, tagchecked);
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+constant bits(8) data = <a link="impl-aarch64.Mem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size*8) Mem[bits(64) address, integer size, AccessDescriptor accdesc_in]">Mem</a>[address,  1, accdesc];
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[t, 32] = <a link="impl-shared.ZeroExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) ZeroExtend(bits(M) x, integer N)">ZeroExtend</a>(data, 32);</pstext></ps>
+  </ps_section>
+</instructionsection>

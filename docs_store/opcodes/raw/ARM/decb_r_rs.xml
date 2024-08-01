@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="decb_r_rs" title="DECB, DECD, DECH, DECW (scalar)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve" />
+    <docvar key="isa" value="A64" />
+  </docvars>
+  <heading>DECB, DECD, DECH, DECW (scalar)</heading>
+  <desc>
+    <brief>Decrement scalar by multiple of predicate constraint element count</brief>
+    <description>
+      <para>Determines the number of active elements implied by the named predicate constraint, multiplies that by an immediate in the range 1 to 16 inclusive, and then uses the result to decrement the scalar destination.</para>
+      <para>The named predicate constraint limits the number of active elements in a single predicate to:</para>
+      <list type="unordered">
+        <listitem>
+          <content>A fixed number (<value>VL1</value> to <value>VL256</value>)</content>
+        </listitem>
+        <listitem>
+          <content>The largest power of two (<value>POW2</value>)</content>
+        </listitem>
+        <listitem>
+          <content>The largest multiple of three or four (<value>MUL3</value> or <value>MUL4</value>)</content>
+        </listitem>
+        <listitem>
+          <content>All available, implicitly a multiple of two (<value>ALL</value>).</content>
+        </listitem>
+      </list>
+      <para>Unspecified or out of range constraint encodings generate an empty predicate or zero element count rather than Undefined Instruction exception.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <classesintro count="4">
+      <txt>It has encodings from 4 classes:</txt>
+      <a href="#iclass_esize_byte">Byte</a>
+      <txt>, </txt>
+      <a href="#iclass_esize_doubleword">Doubleword</a>
+      <txt>, </txt>
+      <a href="#iclass_esize_halfword">Halfword</a>
+      <txt> and </txt>
+      <a href="#iclass_esize_word">Word</a>
+    </classesintro>
+    <iclass name="Byte" oneof="4" id="iclass_esize_byte" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="DECB" />
+        <docvar key="sve-esize" value="esize-byte" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="DECB-R.RS-_" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="19" width="4" name="imm4" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" width="5" settings="5">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="10" name="D" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="pattern" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Rdn" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="decb_r_rs_" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="DECB" />
+          <docvar key="sve-esize" value="esize-byte" />
+        </docvars>
+        <asmtemplate><text>DECB    </text><a link="sa_xdn" hover="64-bit source and destination general-purpose register (field &quot;Rdn&quot;)">&lt;Xdn&gt;</a><text>{</text><text>, </text><a link="sa_pattern" hover="Optional pattern specifier, default ALL (field &quot;pattern&quot;) [#uimm5,ALL,MUL3,MUL4,POW2,VL1,VL2,VL3,VL4,VL5,VL6,VL7,VL8,VL16,VL32,VL64,VL128,VL256]">&lt;pattern&gt;</a><text>{</text><text>, MUL #</text><a link="sa_imm" hover="Immediate multiplier [1-16], default 1 (field &quot;imm4&quot;)">&lt;imm&gt;</a><text>}</text><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="DECB-R.RS-_" mylink="DECB-R.RS-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer esize = 8;
+constant integer dn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rdn);
+constant bits(5) pat = pattern;
+constant integer imm = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(imm4) + 1;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Doubleword" oneof="4" id="iclass_esize_doubleword" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="DECD" />
+        <docvar key="sve-esize" value="esize-doubleword" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="DECD-R.RS-_" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="19" width="4" name="imm4" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" width="5" settings="5">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="10" name="D" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="pattern" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Rdn" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="decd_r_rs_" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="DECD" />
+          <docvar key="sve-esize" value="esize-doubleword" />
+        </docvars>
+        <asmtemplate><text>DECD    </text><a link="sa_xdn" hover="64-bit source and destination general-purpose register (field &quot;Rdn&quot;)">&lt;Xdn&gt;</a><text>{</text><text>, </text><a link="sa_pattern" hover="Optional pattern specifier, default ALL (field &quot;pattern&quot;) [#uimm5,ALL,MUL3,MUL4,POW2,VL1,VL2,VL3,VL4,VL5,VL6,VL7,VL8,VL16,VL32,VL64,VL128,VL256]">&lt;pattern&gt;</a><text>{</text><text>, MUL #</text><a link="sa_imm" hover="Immediate multiplier [1-16], default 1 (field &quot;imm4&quot;)">&lt;imm&gt;</a><text>}</text><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="DECD-R.RS-_" mylink="DECD-R.RS-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer esize = 64;
+constant integer dn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rdn);
+constant bits(5) pat = pattern;
+constant integer imm = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(imm4) + 1;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Halfword" oneof="4" id="iclass_esize_halfword" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="DECH" />
+        <docvar key="sve-esize" value="esize-halfword" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="DECH-R.RS-_" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="19" width="4" name="imm4" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" width="5" settings="5">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="10" name="D" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="pattern" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Rdn" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="dech_r_rs_" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="DECH" />
+          <docvar key="sve-esize" value="esize-halfword" />
+        </docvars>
+        <asmtemplate><text>DECH    </text><a link="sa_xdn" hover="64-bit source and destination general-purpose register (field &quot;Rdn&quot;)">&lt;Xdn&gt;</a><text>{</text><text>, </text><a link="sa_pattern" hover="Optional pattern specifier, default ALL (field &quot;pattern&quot;) [#uimm5,ALL,MUL3,MUL4,POW2,VL1,VL2,VL3,VL4,VL5,VL6,VL7,VL8,VL16,VL32,VL64,VL128,VL256]">&lt;pattern&gt;</a><text>{</text><text>, MUL #</text><a link="sa_imm" hover="Immediate multiplier [1-16], default 1 (field &quot;imm4&quot;)">&lt;imm&gt;</a><text>}</text><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="DECH-R.RS-_" mylink="DECH-R.RS-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer esize = 16;
+constant integer dn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rdn);
+constant bits(5) pat = pattern;
+constant integer imm = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(imm4) + 1;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Word" oneof="4" id="iclass_esize_word" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="DECW" />
+        <docvar key="sve-esize" value="esize-word" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="DECW-R.RS-_" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="19" width="4" name="imm4" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" width="5" settings="5">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="10" name="D" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="pattern" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Rdn" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="decw_r_rs_" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="DECW" />
+          <docvar key="sve-esize" value="esize-word" />
+        </docvars>
+        <asmtemplate><text>DECW    </text><a link="sa_xdn" hover="64-bit source and destination general-purpose register (field &quot;Rdn&quot;)">&lt;Xdn&gt;</a><text>{</text><text>, </text><a link="sa_pattern" hover="Optional pattern specifier, default ALL (field &quot;pattern&quot;) [#uimm5,ALL,MUL3,MUL4,POW2,VL1,VL2,VL3,VL4,VL5,VL6,VL7,VL8,VL16,VL32,VL64,VL128,VL256]">&lt;pattern&gt;</a><text>{</text><text>, MUL #</text><a link="sa_imm" hover="Immediate multiplier [1-16], default 1 (field &quot;imm4&quot;)">&lt;imm&gt;</a><text>}</text><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="DECW-R.RS-_" mylink="DECW-R.RS-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer esize = 32;
+constant integer dn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rdn);
+constant bits(5) pat = pattern;
+constant integer imm = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(imm4) + 1;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="decb_r_rs_, decd_r_rs_, dech_r_rs_, decw_r_rs_" symboldefcount="1">
+      <symbol link="sa_xdn">&lt;Xdn&gt;</symbol>
+      <account encodedin="Rdn">
+        <intro>
+          <para>Is the 64-bit name of the source and destination general-purpose register, encoded in the "Rdn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="decb_r_rs_, decd_r_rs_, dech_r_rs_, decw_r_rs_" symboldefcount="1">
+      <symbol link="sa_pattern">&lt;pattern&gt;</symbol>
+      <definition encodedin="pattern">
+        <intro>Is the optional pattern specifier, defaulting to ALL, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">pattern</entry>
+                <entry class="symbol">&lt;pattern&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00000</entry>
+                <entry class="symbol">POW2</entry>
+              </row>
+              <row>
+                <entry class="bitfield">00001</entry>
+                <entry class="symbol">VL1</entry>
+              </row>
+              <row>
+                <entry class="bitfield">00010</entry>
+                <entry class="symbol">VL2</entry>
+              </row>
+              <row>
+                <entry class="bitfield">00011</entry>
+                <entry class="symbol">VL3</entry>
+              </row>
+              <row>
+                <entry class="bitfield">00100</entry>
+                <entry class="symbol">VL4</entry>
+              </row>
+              <row>
+                <entry class="bitfield">00101</entry>
+                <entry class="symbol">VL5</entry>
+              </row>
+              <row>
+                <entry class="bitfield">00110</entry>
+                <entry class="symbol">VL6</entry>
+              </row>
+              <row>
+                <entry class="bitfield">00111</entry>
+                <entry class="symbol">VL7</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01000</entry>
+                <entry class="symbol">VL8</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01001</entry>
+                <entry class="symbol">VL16</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01010</entry>
+                <entry class="symbol">VL32</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01011</entry>
+                <entry class="symbol">VL64</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01100</entry>
+                <entry class="symbol">VL128</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01101</entry>
+                <entry class="symbol">VL256</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0111x</entry>
+                <entry class="symbol">#uimm5</entry>
+              </row>
+              <row>
+                <entry class="bitfield">101x1</entry>
+                <entry class="symbol">#uimm5</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10110</entry>
+                <entry class="symbol">#uimm5</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1x0x1</entry>
+                <entry class="symbol">#uimm5</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1x010</entry>
+                <entry class="symbol">#uimm5</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1xx00</entry>
+                <entry class="symbol">#uimm5</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11101</entry>
+                <entry class="symbol">MUL4</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11110</entry>
+                <entry class="symbol">MUL3</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11111</entry>
+                <entry class="symbol">ALL</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="decb_r_rs_, decd_r_rs_, dech_r_rs_, decw_r_rs_" symboldefcount="1">
+      <symbol link="sa_imm">&lt;imm&gt;</symbol>
+      <account encodedin="imm4">
+        <intro>
+          <para>Is the immediate multiplier, in the range 1 to 16, defaulting to 1, encoded in the "imm4" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="DECB-R.RS-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSVEEnabled()">CheckSVEEnabled</a>();
+constant integer count = <a link="impl-aarch64.DecodePredCount.2" file="shared_pseudocode.xml" hover="function: integer DecodePredCount(bits(5) bitpattern, integer esize)">DecodePredCount</a>(pat, esize);
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant bits(64) operand1 = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[dn, 64];
+
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[dn, 64] = operand1 - (count * imm);</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

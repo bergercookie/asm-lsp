@@ -1,0 +1,154 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="STUMAXH_LDUMAXH" title="STUMAXH, STUMAXLH -- A64" type="alias">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+  </docvars>
+  <heading>STUMAXH, STUMAXLH</heading>
+  <desc>
+    <brief>
+      <para>Atomic unsigned maximum on halfword in memory, without return</para>
+    </brief>
+    <authored>
+      <para>This instruction
+atomically loads a 16-bit halfword from memory,
+compares it against the value held in a register,
+and stores the larger value back to memory,
+treating the values as unsigned numbers.</para>
+      <list type="unordered">
+        <listitem>
+          <content>
+            <instruction>STUMAXH</instruction> does not have release semantics.</content>
+        </listitem>
+        <listitem>
+          <content>
+            <instruction>STUMAXLH</instruction> stores to memory with release semantics, as described
+  in <xref linkend="ARMARM_BEIHCHEF">Load-Acquire, Store-Release</xref>.</content>
+        </listitem>
+      </list>
+      <para>For information about addressing modes, see
+<xref linkend="ARMARM_CHDIIIBB">Load/Store addressing modes</xref>.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1, the timing of this instruction is insensitive to the value of the data being loaded or stored.</para>
+  </operationalnotes>
+  <aliasto refiform="ldumaxh.xml" iformid="LDUMAXH">LDUMAXH, LDUMAXAH, LDUMAXALH, LDUMAXLH</aliasto>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_LSE" name="ARMv8.1"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.memop.LDUMAXH_32_memop.STUMAXH" tworows="1">
+        <box hibit="31" width="2" name="size" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="VR" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="25" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="A" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="R" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Rs" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" name="o3" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="14" width="3" name="opc" usename="1" settings="3" psbits="xxx">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="STUMAXH_LDUMAXH_32_memop" oneofinclass="2" oneof="2" label="No memory ordering" bitdiffs="R == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDUMAXH"/>
+          <docvar key="alias_mnemonic" value="STUMAXH"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="22" width="1" name="R">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>STUMAXH  </text><a hover="Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." link="WsOrWZR">&lt;Ws&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="ldumaxh.xml#LDUMAXH_32_memop">LDUMAXH</a><text>  </text><a hover="Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." href="ldumaxh.xml#WsOrWZR">&lt;Ws&gt;</a><text>, WZR, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." href="ldumaxh.xml#XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+      <encoding name="STUMAXLH_LDUMAXLH_32_memop" oneofinclass="2" oneof="2" label="Release" bitdiffs="R == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDUMAXLH"/>
+          <docvar key="alias_mnemonic" value="STUMAXLH"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="22" width="1" name="R">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>STUMAXLH  </text><a hover="Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." link="WsOrWZR">&lt;Ws&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="ldumaxh.xml#LDUMAXLH_32_memop">LDUMAXLH</a><text>  </text><a hover="Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." href="ldumaxh.xml#WsOrWZR">&lt;Ws&gt;</a><text>, WZR, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." href="ldumaxh.xml#XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="STUMAXH_LDUMAXH_32_memop, STUMAXLH_LDUMAXLH_32_memop" symboldefcount="1">
+      <symbol link="WsOrWZR">&lt;Ws&gt;</symbol>
+      <account encodedin="Rs">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the "Rs" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STUMAXH_LDUMAXH_32_memop, STUMAXLH_LDUMAXLH_32_memop" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

@@ -1,0 +1,217 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="STSET_LDSET" title="STSET, STSETL -- A64" type="alias">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+  </docvars>
+  <heading>STSET, STSETL</heading>
+  <desc>
+    <brief>
+      <para>Atomic bit set on word or doubleword in memory, without return</para>
+    </brief>
+    <authored>
+      <para>This instruction
+atomically loads a 32-bit word or 64-bit doubleword from memory, performs a
+bitwise OR with the value held in a register on
+it, and stores the result back to memory.</para>
+      <list type="unordered">
+        <listitem>
+          <content>
+            <instruction>STSET</instruction> does not have release semantics.</content>
+        </listitem>
+        <listitem>
+          <content>
+            <instruction>STSETL</instruction> stores to memory with release semantics, as described
+  in <xref linkend="ARMARM_BEIHCHEF">Load-Acquire, Store-Release</xref>.</content>
+        </listitem>
+      </list>
+      <para>For information about addressing modes, see
+<xref linkend="ARMARM_CHDIIIBB">Load/Store addressing modes</xref>.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1, the timing of this instruction is insensitive to the value of the data being loaded or stored.</para>
+  </operationalnotes>
+  <aliasto refiform="ldset.xml" iformid="LDSET">LDSET, LDSETA, LDSETAL, LDSETL</aliasto>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="4" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="4"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_LSE" name="ARMv8.1"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.memop.LDSET_32_memop.STSET" tworows="1">
+        <box hibit="31" width="2" name="size" usename="1" settings="1" psbits="xx">
+          <c>1</c>
+          <c>x</c>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="VR" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="25" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="A" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="R" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Rs" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" name="o3" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="14" width="3" name="opc" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="STSET_LDSET_32_memop" oneofinclass="4" oneof="4" label="32-bit no memory ordering" bitdiffs="size == 10 &amp;&amp; R == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDSET"/>
+          <docvar key="alias_mnemonic" value="STSET"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="atomic-ops" value="LDSET-32-reg"/>
+          <docvar key="reg-type" value="32-reg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c/>
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>STSET  </text><a hover="Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." link="WsOrWZR">&lt;Ws&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="ldset.xml#LDSET_32_memop">LDSET</a><text>  </text><a hover="Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." href="ldset.xml#WsOrWZR">&lt;Ws&gt;</a><text>, WZR, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." href="ldset.xml#XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+      <encoding name="STSETL_LDSETL_32_memop" oneofinclass="4" oneof="4" label="32-bit release" bitdiffs="size == 10 &amp;&amp; R == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDSETL"/>
+          <docvar key="alias_mnemonic" value="STSETL"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="atomic-ops" value="LDSETL-32-reg"/>
+          <docvar key="reg-type" value="32-reg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c/>
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>STSETL  </text><a hover="Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." link="WsOrWZR">&lt;Ws&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="ldset.xml#LDSETL_32_memop">LDSETL</a><text>  </text><a hover="Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." href="ldset.xml#WsOrWZR">&lt;Ws&gt;</a><text>, WZR, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." href="ldset.xml#XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+      <encoding name="STSET_LDSET_64_memop" oneofinclass="4" oneof="4" label="64-bit no memory ordering" bitdiffs="size == 11 &amp;&amp; R == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDSET"/>
+          <docvar key="alias_mnemonic" value="STSET"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="atomic-ops" value="LDSET-64-reg"/>
+          <docvar key="reg-type" value="64-reg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c/>
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>STSET  </text><a hover="Is the 64-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." link="XsOrXZR__2">&lt;Xs&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="ldset.xml#LDSET_64_memop">LDSET</a><text>  </text><a hover="Is the 64-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." href="ldset.xml#XsOrXZR__2">&lt;Xs&gt;</a><text>, XZR, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." href="ldset.xml#XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+      <encoding name="STSETL_LDSETL_64_memop" oneofinclass="4" oneof="4" label="64-bit release" bitdiffs="size == 11 &amp;&amp; R == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDSETL"/>
+          <docvar key="alias_mnemonic" value="STSETL"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="atomic-ops" value="LDSETL-64-reg"/>
+          <docvar key="reg-type" value="64-reg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c/>
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>STSETL  </text><a hover="Is the 64-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." link="XsOrXZR__2">&lt;Xs&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="ldset.xml#LDSETL_64_memop">LDSETL</a><text>  </text><a hover="Is the 64-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." href="ldset.xml#XsOrXZR__2">&lt;Xs&gt;</a><text>, XZR, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." href="ldset.xml#XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="STSET_LDSET_32_memop, STSETL_LDSETL_32_memop" symboldefcount="1">
+      <symbol link="WsOrWZR">&lt;Ws&gt;</symbol>
+      <account encodedin="Rs">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the "Rs" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STSET_LDSET_32_memop, STSETL_LDSETL_32_memop, STSET_LDSET_64_memop, STSETL_LDSETL_64_memop" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STSET_LDSET_64_memop, STSETL_LDSETL_64_memop" symboldefcount="1">
+      <symbol link="XsOrXZR__2">&lt;Xs&gt;</symbol>
+      <account encodedin="Rs">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the "Rs" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

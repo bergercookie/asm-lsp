@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="smax_mz_zzw" title="SMAX (multiple vectors)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="SMAX" />
+  </docvars>
+  <heading>SMAX (multiple vectors)</heading>
+  <desc>
+    <brief>Multi-vector signed maximum</brief>
+    <description>
+      <para>Determine the signed maximum of elements of the two or four second source vectors and the corresponding elements of the two or four first source vectors and destructively place the results in the corresponding elements of the two or four first source vectors.</para>
+      <para>This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <sm_policy>SM_1_only</sm_policy>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <classesintro count="2">
+      <txt>It has encodings from 2 classes:</txt>
+      <a href="#iclass_to_2reg">Two registers</a>
+      <txt> and </txt>
+      <a href="#iclass_to_4reg">Four registers</a>
+    </classesintro>
+    <iclass name="Two registers" oneof="2" id="iclass_to_2reg" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="ldstruct-regcount" value="to-2reg" />
+        <docvar key="mnemonic" value="SMAX" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="SMAX-MZ.ZZW-2x2" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="4" name="Zm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="16" width="7" settings="7">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="6" name="opc&lt;1&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="5" name="opc&lt;0&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="4" width="4" name="Zdn" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="0" name="U" usename="1" settings="1">
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="smax_mz_zzw_2x2" oneofinclass="1" oneof="2" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="ldstruct-regcount" value="to-2reg" />
+          <docvar key="mnemonic" value="SMAX" />
+        </docvars>
+        <asmtemplate><text>SMAX    </text><text>{</text><text> </text><a link="sa_zdn1" hover="First scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn1&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>-</text><a link="sa_zdn2" hover="Second scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn2&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text> </text><text>}</text><text>, </text><text>{</text><text> </text><a link="sa_zdn1" hover="First scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn1&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>-</text><a link="sa_zdn2" hover="Second scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn2&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text> </text><text>}</text><text>, </text><text>{</text><text> </text><a link="sa_zm1" hover="First scalable vector register of second source multi-vector group (field Zm)">&lt;Zm1&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>-</text><a link="sa_zm2" hover="Second scalable vector register of second source multi-vector group (field Zm)">&lt;Zm2&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text> </text><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="SMAX-MZ.ZZW-2x2" mylink="SMAX-MZ.ZZW-2x2" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer dn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zdn:'0');
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm:'0');
+constant integer nreg = 2;
+constant boolean unsigned = FALSE;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Four registers" oneof="2" id="iclass_to_4reg" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="ldstruct-regcount" value="to-4reg" />
+        <docvar key="mnemonic" value="SMAX" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="SMAX-MZ.ZZW-4x4" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="3" name="Zm" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="17" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="6" name="opc&lt;1&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="5" name="opc&lt;0&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="4" width="3" name="Zdn" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="0" name="U" usename="1" settings="1">
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="smax_mz_zzw_4x4" oneofinclass="1" oneof="2" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="ldstruct-regcount" value="to-4reg" />
+          <docvar key="mnemonic" value="SMAX" />
+        </docvars>
+        <asmtemplate><text>SMAX    </text><text>{</text><text> </text><a link="sa_zdn1_1" hover="First scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn1&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>-</text><a link="sa_zdn4" hover="Fourth scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn4&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text> </text><text>}</text><text>, </text><text>{</text><text> </text><a link="sa_zdn1_1" hover="First scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn1&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>-</text><a link="sa_zdn4" hover="Fourth scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn4&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text> </text><text>}</text><text>, </text><text>{</text><text> </text><a link="sa_zm1_1" hover="First scalable vector register of second source multi-vector group (field Zm)">&lt;Zm1&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>-</text><a link="sa_zm4" hover="Fourth scalable vector register of second source multi-vector group (field Zm)">&lt;Zm4&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text> </text><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="SMAX-MZ.ZZW-4x4" mylink="SMAX-MZ.ZZW-4x4" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer dn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zdn:'00');
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm:'00');
+constant integer nreg = 4;
+constant boolean unsigned = FALSE;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="smax_mz_zzw_2x2" symboldefcount="1">
+      <symbol link="sa_zdn1">&lt;Zdn1&gt;</symbol>
+      <account encodedin="Zdn">
+        <docvars>
+          <docvar key="ldstruct-regcount" value="to-2reg" />
+        </docvars>
+        <intro>
+          <para>For the two registers variant: is the name of the first scalable vector register of the destination and first source multi-vector group, encoded as "Zdn" times 2.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="smax_mz_zzw_4x4" symboldefcount="2">
+      <symbol link="sa_zdn1_1">&lt;Zdn1&gt;</symbol>
+      <account encodedin="Zdn">
+        <docvars>
+          <docvar key="ldstruct-regcount" value="to-4reg" />
+        </docvars>
+        <intro>
+          <para>For the four registers variant: is the name of the first scalable vector register of the destination and first source multi-vector group, encoded as "Zdn" times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="smax_mz_zzw_2x2, smax_mz_zzw_4x4" symboldefcount="1">
+      <symbol link="sa_t">&lt;T&gt;</symbol>
+      <definition encodedin="size">
+        <intro>Is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">size</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10</entry>
+                <entry class="symbol">S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11</entry>
+                <entry class="symbol">D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="smax_mz_zzw_4x4" symboldefcount="1">
+      <symbol link="sa_zdn4">&lt;Zdn4&gt;</symbol>
+      <account encodedin="Zdn">
+        <intro>
+          <para>Is the name of the fourth scalable vector register of the destination and first source multi-vector group, encoded as "Zdn" times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="smax_mz_zzw_2x2" symboldefcount="1">
+      <symbol link="sa_zdn2">&lt;Zdn2&gt;</symbol>
+      <account encodedin="Zdn">
+        <intro>
+          <para>Is the name of the second scalable vector register of the destination and first source multi-vector group, encoded as "Zdn" times 2 plus 1.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="smax_mz_zzw_2x2" symboldefcount="1">
+      <symbol link="sa_zm1">&lt;Zm1&gt;</symbol>
+      <account encodedin="Zm">
+        <docvars>
+          <docvar key="ldstruct-regcount" value="to-2reg" />
+        </docvars>
+        <intro>
+          <para>For the two registers variant: is the name of the first scalable vector register of the second source multi-vector group, encoded as "Zm" times 2.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="smax_mz_zzw_4x4" symboldefcount="2">
+      <symbol link="sa_zm1_1">&lt;Zm1&gt;</symbol>
+      <account encodedin="Zm">
+        <docvars>
+          <docvar key="ldstruct-regcount" value="to-4reg" />
+        </docvars>
+        <intro>
+          <para>For the four registers variant: is the name of the first scalable vector register of the second source multi-vector group, encoded as "Zm" times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="smax_mz_zzw_4x4" symboldefcount="1">
+      <symbol link="sa_zm4">&lt;Zm4&gt;</symbol>
+      <account encodedin="Zm">
+        <intro>
+          <para>Is the name of the fourth scalable vector register of the second source multi-vector group, encoded as "Zm" times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="smax_mz_zzw_2x2" symboldefcount="1">
+      <symbol link="sa_zm2">&lt;Zm2&gt;</symbol>
+      <account encodedin="Zm">
+        <intro>
+          <para>Is the name of the second scalable vector register of the second source multi-vector group, encoded as "Zm" times 2 plus 1.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="SMAX-MZ.ZZW-2x2" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckStreamingSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckStreamingSVEEnabled()">CheckStreamingSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer elements = VL DIV esize;
+array [0..3] of bits(VL) results;
+
+for r = 0 to nreg-1
+    constant bits(VL) operand1 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[dn+r, VL];
+    constant bits(VL) operand2 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[m+r, VL];
+    for e = 0 to elements-1
+        constant integer element1 = <a link="impl-shared.Int.2" file="shared_pseudocode.xml" hover="function: integer Int(bits(N) x, boolean unsigned)">Int</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand1, e, esize], unsigned);
+        constant integer element2 = <a link="impl-shared.Int.2" file="shared_pseudocode.xml" hover="function: integer Int(bits(N) x, boolean unsigned)">Int</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand2, e, esize], unsigned);
+        constant integer res = <a link="impl-shared.Max.2" file="shared_pseudocode.xml" hover="function: integer Max(integer a, integer b)">Max</a>(element1, element2);
+        <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[results[r], e, esize] = res&lt;esize-1:0&gt;;
+
+for r = 0 to nreg-1
+    <a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[dn+r, VL] = results[r];</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>
