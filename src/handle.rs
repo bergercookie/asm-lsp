@@ -14,7 +14,6 @@ use lsp_types::{
     DocumentSymbolResponse, GotoDefinitionParams, HoverParams, PublishDiagnosticsParams,
     ReferenceParams, SignatureHelpParams, Uri,
 };
-use serde_json::json;
 use tree_sitter::Parser;
 
 use crate::{
@@ -42,7 +41,7 @@ pub fn handle_hover_request(
 ) -> Result<()> {
     let empty_resp = Response {
         id: id.clone(),
-        result: Some(json!("")),
+        result: None,
         error: None,
     };
 
@@ -126,7 +125,7 @@ pub fn handle_completion_request(
 
     let empty_resp = Response {
         id,
-        result: Some(json!("")),
+        result: None,
         error: None,
     };
 
@@ -208,7 +207,7 @@ pub fn handle_document_symbols_request(
 
     let empty_resp = Response {
         id,
-        result: Some(json!("")),
+        result: None,
         error: None,
     };
 
@@ -257,7 +256,7 @@ pub fn handle_signature_help_request(
 
     let empty_resp = Response {
         id,
-        result: Some(json!("")),
+        result: None,
         error: None,
     };
 
@@ -299,7 +298,7 @@ pub fn handle_references_request(
 
     let empty_resp = Response {
         id,
-        result: Some(json!("")),
+        result: None,
         error: None,
     };
 
