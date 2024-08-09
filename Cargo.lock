@@ -1886,9 +1886,9 @@ dependencies = [
 
 [[package]]
 name = "tree-sitter"
-version = "0.20.10"
+version = "0.22.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e747b1f9b7b931ed39a548c1fae149101497de3c1fc8d9e18c62c1a66c683d3d"
+checksum = "df7cc499ceadd4dcdf7ec6d4cbc34ece92c3fa07821e287aedecd4416c516dca"
 dependencies = [
  "cc",
  "regex",
@@ -1896,9 +1896,9 @@ dependencies = [
 
 [[package]]
 name = "tree-sitter-asm"
-version = "0.1.0"
+version = "0.22.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fbdc74797a3118e3f8b440d58b341a7c1d4538e26ddfa1b4254129a0f1280b94"
+checksum = "af70c4c362b4dca989cb46eab0af6cb70c7d7aa1b11d5526137b9d16faa7b0bf"
 dependencies = [
  "cc",
  "tree-sitter",

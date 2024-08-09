@@ -407,6 +407,10 @@ fn main_loop(
                         &mut text_store,
                         &mut tree_store,
                     )?;
+                    info!(
+                        "Did change text document notification serviced in {}ms",
+                        start.elapsed().as_millis()
+                    );
                 } else if let Ok(params) = cast_notif::<DidCloseTextDocument>(notif.clone()) {
                     handle_did_close_text_document_notification(
                         &params,

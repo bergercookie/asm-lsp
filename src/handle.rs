@@ -374,7 +374,7 @@ pub fn handle_did_open_text_document_notification(
     text_store.listen(DidOpenTextDocument::METHOD, &raw_params);
 
     let mut parser = Parser::new();
-    parser.set_language(tree_sitter_asm::language()).unwrap();
+    parser.set_language(&tree_sitter_asm::language()).unwrap();
     tree_store.insert(
         params.text_document.uri.clone(),
         TreeEntry {

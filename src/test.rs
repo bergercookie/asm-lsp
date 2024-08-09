@@ -297,7 +297,7 @@ mod tests {
         let source_code = source.replace("<cursor>", "");
 
         let mut parser = Parser::new();
-        parser.set_language(tree_sitter_asm::language()).unwrap();
+        parser.set_language(&tree_sitter_asm::language()).unwrap();
         let tree = parser.parse(&source_code, None);
         let mut tree_entry = TreeEntry { tree, parser };
 
