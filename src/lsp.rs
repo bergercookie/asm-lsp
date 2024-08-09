@@ -743,7 +743,7 @@ pub fn get_comp_resp(
 
         static QUERY_DIRECTIVE: Lazy<tree_sitter::Query> = Lazy::new(|| {
             tree_sitter::Query::new(
-                tree_sitter_asm::language(),
+                &tree_sitter_asm::language(),
                 "(meta kind: (meta_ident) @directive)",
             )
             .unwrap()
@@ -772,7 +772,7 @@ pub fn get_comp_resp(
         // need a separate cursor to search the entire document
         let mut doc_cursor = tree_sitter::QueryCursor::new();
         static QUERY_LABEL: Lazy<tree_sitter::Query> = Lazy::new(|| {
-            tree_sitter::Query::new(tree_sitter_asm::language(), "(label (ident) @label)").unwrap()
+            tree_sitter::Query::new(&tree_sitter_asm::language(), "(label (ident) @label)").unwrap()
         });
         let captures = doc_cursor.captures(&QUERY_LABEL, tree.root_node(), curr_doc);
         let mut labels = HashSet::new();
@@ -787,7 +787,7 @@ pub fn get_comp_resp(
 
         static QUERY_INSTR_ANY: Lazy<tree_sitter::Query> = Lazy::new(|| {
             tree_sitter::Query::new(
-                tree_sitter_asm::language(),
+                &tree_sitter_asm::language(),
                 "[
                     (instruction kind: (word) @instr_name)
                     (
@@ -979,7 +979,7 @@ pub fn get_sig_help_resp(
         // Instruction with any (including zero) argument(s)
         static QUERY_INSTR_ANY_ARGS: Lazy<tree_sitter::Query> = Lazy::new(|| {
             tree_sitter::Query::new(
-                tree_sitter_asm::language(),
+                &tree_sitter_asm::language(),
                 "(instruction kind: (word) @instr_name)",
             )
             .unwrap()
@@ -1086,7 +1086,7 @@ pub fn get_goto_def_resp(
 
     if let Some(ref tree) = tree_entry.tree {
         static QUERY_LABEL: Lazy<tree_sitter::Query> = Lazy::new(|| {
-            tree_sitter::Query::new(tree_sitter_asm::language(), "(label) @label").unwrap()
+            tree_sitter::Query::new(&tree_sitter_asm::language(), "(label) @label").unwrap()
         });
 
         let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
@@ -1138,14 +1138,14 @@ pub fn get_ref_resp(
     if let Some(ref tree) = tree_entry.tree {
         static QUERY_LABEL: Lazy<tree_sitter::Query> = Lazy::new(|| {
             tree_sitter::Query::new(
-                tree_sitter_asm::language(),
+                &tree_sitter_asm::language(),
                 "(label (ident (reg (word)))) @label",
             )
             .unwrap()
         });
 
         static QUERY_WORD: Lazy<tree_sitter::Query> = Lazy::new(|| {
-            tree_sitter::Query::new(tree_sitter_asm::language(), "(ident) @ident").unwrap()
+            tree_sitter::Query::new(&tree_sitter_asm::language(), "(ident) @ident").unwrap()
         });
 
         let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
