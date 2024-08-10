@@ -321,7 +321,7 @@ pub fn handle_diagnostics(
     uri: &Uri,
     compile_cmds: &CompilationDatabase,
 ) -> Result<()> {
-    let req_source_path = PathBuf::from(uri.as_str().replace("file://", ""));
+    let req_source_path = PathBuf::from(uri.path().as_str());
 
     let source_entries = compile_cmds.iter().filter(|entry| match entry.file {
         SourceFile::File(ref file) => {
