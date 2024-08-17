@@ -1,0 +1,492 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="LDR_reg_fpsimd" title="LDR (register, SIMD&amp;FP) -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="fpsimd"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="LDR"/>
+    <docvar key="offset-type" value="off-reg"/>
+  </docvars>
+  <heading>LDR (register, SIMD&amp;FP)</heading>
+  <desc>
+    <brief>
+      <para>Load SIMD&amp;FP register (register offset)</para>
+    </brief>
+    <authored>
+      <para>This instruction loads a SIMD&amp;FP register from memory.
+The address that is used for the load is calculated from a base register value
+and an offset register value. The offset can be optionally shifted and extended.</para>
+      <para>Depending on the settings in the <register_link id="AArch64-cpacr_el1.xml" state="AArch64">CPACR_EL1</register_link>,
+<register_link id="AArch64-cptr_el2.xml" state="AArch64">CPTR_EL2</register_link>, and <register_link id="AArch64-cptr_el3.xml" state="AArch64">CPTR_EL3</register_link> registers,
+and the current Security state and Exception level,
+an attempt to execute the instruction might be trapped.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1, the timing of this instruction is insensitive to the value of the data being loaded or stored.</para>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="SIMD&amp;FP registers" oneof="1" id="iclass_simd_fp_registers" no_encodings="6" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="fpsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="LDR"/>
+        <docvar key="offset-type" value="off-reg"/>
+      </docvars>
+      <iclassintro count="6"/>
+      <regdiagram form="32" psname="A64.ldst.ldst_regoff.LDR_B_ldst_regoff" tworows="1">
+        <box hibit="31" width="2" name="size" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="VR" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="25" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="opc" usename="1" settings="1" psbits="xx">
+          <c>x</c>
+          <c>1</c>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Rm" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="3" name="option" usename="1">
+          <c colspan="3"/>
+        </box>
+        <box hibit="12" width="1" name="S" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="LDR_B_ldst_regoff" oneofinclass="6" oneof="6" label="8-bit" bitdiffs="size == 00 &amp;&amp; opc == 01 &amp;&amp; option != 011">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="reguse" value="ext-reg"/>
+          <docvar key="mnemonic" value="LDR"/>
+          <docvar key="atomic-ops" value="LDR-8-fsreg"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off-reg"/>
+          <docvar key="reg-type" value="8-fsreg"/>
+          <docvar key="reg-type-and-use" value="8-fsreg-ext-reg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="opc">
+          <c>0</c>
+          <c/>
+        </box>
+        <box hibit="15" width="3" name="option">
+          <c>Z</c>
+          <c>N</c>
+          <c>N</c>
+        </box>
+        <asmtemplate><text>LDR  </text><a hover="Is the 8-bit name of the SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Bt">&lt;Bt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>, (</text><a hover="When &lt;field&gt;option&amp;lt;0&amp;gt;&lt;/field&gt; is set to 0, is the 32-bit name of the general-purpose index register, encoded in the &quot;Rm&quot; field." link="WmOrWZR">&lt;Wm&gt;</a><text>|</text><a hover="When &lt;field&gt;option&amp;lt;0&amp;gt;&lt;/field&gt; is set to 1, is the 64-bit name of the general-purpose index register, encoded in the &quot;Rm&quot; field." link="XmOrXZR__2">&lt;Xm&gt;</a><text>), </text><a hover="For the 8-bit variant: is the index extend specifier, " link="extend_option__2">&lt;extend&gt;</a><text> {</text><a hover="For the 8-bit variant: is the index shift amount, it must be &lt;value&gt;#0&lt;/value&gt;, encoded in &quot;S&quot; as 0 if omitted, or as 1 if present." link="amount__2">&lt;amount&gt;</a><text>}]</text></asmtemplate>
+      </encoding>
+      <encoding name="LDR_BL_ldst_regoff" oneofinclass="6" oneof="6" label="8-bit" bitdiffs="size == 00 &amp;&amp; opc == 01 &amp;&amp; option == 011">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="reguse" value="shifted-reg"/>
+          <docvar key="mnemonic" value="LDR"/>
+          <docvar key="atomic-ops" value="LDR-8-fsreg"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off-reg"/>
+          <docvar key="reg-type" value="8-fsreg"/>
+          <docvar key="reg-type-and-use" value="8-fsreg-shifted-reg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="opc">
+          <c>0</c>
+          <c/>
+        </box>
+        <box hibit="15" width="3" name="option">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>LDR  </text><a hover="Is the 8-bit name of the SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Bt">&lt;Bt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>, </text><a hover="When &lt;field&gt;option&amp;lt;0&amp;gt;&lt;/field&gt; is set to 1, is the 64-bit name of the general-purpose index register, encoded in the &quot;Rm&quot; field." link="XmOrXZR__2">&lt;Xm&gt;</a><text>{, LSL </text><a hover="For the 8-bit variant: is the index shift amount, it must be &lt;value&gt;#0&lt;/value&gt;, encoded in &quot;S&quot; as 0 if omitted, or as 1 if present." link="amount__2">&lt;amount&gt;</a><text>}]</text></asmtemplate>
+      </encoding>
+      <encoding name="LDR_H_ldst_regoff" oneofinclass="6" oneof="6" label="16-bit" bitdiffs="size == 01 &amp;&amp; opc == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDR"/>
+          <docvar key="atomic-ops" value="LDR-16-fsreg"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off-reg"/>
+          <docvar key="reg-type" value="16-fsreg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="opc">
+          <c>0</c>
+          <c/>
+        </box>
+        <asmtemplate><text>LDR  </text><a hover="Is the 16-bit name of the SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Ht">&lt;Ht&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>, (</text><a hover="When &lt;field&gt;option&amp;lt;0&amp;gt;&lt;/field&gt; is set to 0, is the 32-bit name of the general-purpose index register, encoded in the &quot;Rm&quot; field." link="WmOrWZR">&lt;Wm&gt;</a><text>|</text><a hover="When &lt;field&gt;option&amp;lt;0&amp;gt;&lt;/field&gt; is set to 1, is the 64-bit name of the general-purpose index register, encoded in the &quot;Rm&quot; field." link="XmOrXZR__2">&lt;Xm&gt;</a><text>){, </text><a hover="For the 128-bit, 16-bit, 32-bit and 64-bit variant: is the index extend/shift specifier, defaulting to LSL, and which must be omitted for the LSL option when &amp;lt;amount&amp;gt; is omitted. " link="extend_option__3">&lt;extend&gt;</a><text> {</text><a hover="For the 16-bit variant: is the index shift amount, optional only when &amp;lt;extend&amp;gt; is not LSL. Where it is permitted to be optional, it defaults to #0. It is " link="amount_option__3">&lt;amount&gt;</a><text>}}]</text></asmtemplate>
+      </encoding>
+      <encoding name="LDR_S_ldst_regoff" oneofinclass="6" oneof="6" label="32-bit" bitdiffs="size == 10 &amp;&amp; opc == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDR"/>
+          <docvar key="atomic-ops" value="LDR-32-fsreg"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off-reg"/>
+          <docvar key="reg-type" value="32-fsreg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="opc">
+          <c>0</c>
+          <c/>
+        </box>
+        <asmtemplate><text>LDR  </text><a hover="Is the 32-bit name of the SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="St">&lt;St&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>, (</text><a hover="When &lt;field&gt;option&amp;lt;0&amp;gt;&lt;/field&gt; is set to 0, is the 32-bit name of the general-purpose index register, encoded in the &quot;Rm&quot; field." link="WmOrWZR">&lt;Wm&gt;</a><text>|</text><a hover="When &lt;field&gt;option&amp;lt;0&amp;gt;&lt;/field&gt; is set to 1, is the 64-bit name of the general-purpose index register, encoded in the &quot;Rm&quot; field." link="XmOrXZR__2">&lt;Xm&gt;</a><text>){, </text><a hover="For the 128-bit, 16-bit, 32-bit and 64-bit variant: is the index extend/shift specifier, defaulting to LSL, and which must be omitted for the LSL option when &amp;lt;amount&amp;gt; is omitted. " link="extend_option__3">&lt;extend&gt;</a><text> {</text><a hover="For the 32-bit variant: is the index shift amount, optional only when &amp;lt;extend&amp;gt; is not LSL. Where it is permitted to be optional, it defaults to #0. It is " link="amount_option__4">&lt;amount&gt;</a><text>}}]</text></asmtemplate>
+      </encoding>
+      <encoding name="LDR_D_ldst_regoff" oneofinclass="6" oneof="6" label="64-bit" bitdiffs="size == 11 &amp;&amp; opc == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDR"/>
+          <docvar key="atomic-ops" value="LDR-64-fsreg"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off-reg"/>
+          <docvar key="reg-type" value="64-fsreg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="opc">
+          <c>0</c>
+          <c/>
+        </box>
+        <asmtemplate><text>LDR  </text><a hover="Is the 64-bit name of the SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Dt">&lt;Dt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>, (</text><a hover="When &lt;field&gt;option&amp;lt;0&amp;gt;&lt;/field&gt; is set to 0, is the 32-bit name of the general-purpose index register, encoded in the &quot;Rm&quot; field." link="WmOrWZR">&lt;Wm&gt;</a><text>|</text><a hover="When &lt;field&gt;option&amp;lt;0&amp;gt;&lt;/field&gt; is set to 1, is the 64-bit name of the general-purpose index register, encoded in the &quot;Rm&quot; field." link="XmOrXZR__2">&lt;Xm&gt;</a><text>){, </text><a hover="For the 128-bit, 16-bit, 32-bit and 64-bit variant: is the index extend/shift specifier, defaulting to LSL, and which must be omitted for the LSL option when &amp;lt;amount&amp;gt; is omitted. " link="extend_option__3">&lt;extend&gt;</a><text> {</text><a hover="For the 64-bit variant: is the index shift amount, optional only when &amp;lt;extend&amp;gt; is not LSL. Where it is permitted to be optional, it defaults to #0. It is " link="amount_option__6">&lt;amount&gt;</a><text>}}]</text></asmtemplate>
+      </encoding>
+      <encoding name="LDR_Q_ldst_regoff" oneofinclass="6" oneof="6" label="128-bit" bitdiffs="size == 00 &amp;&amp; opc == 11">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDR"/>
+          <docvar key="atomic-ops" value="LDR-128-fsreg"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off-reg"/>
+          <docvar key="reg-type" value="128-fsreg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="opc">
+          <c>1</c>
+          <c/>
+        </box>
+        <asmtemplate><text>LDR  </text><a hover="Is the 128-bit name of the SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Qt">&lt;Qt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>, (</text><a hover="When &lt;field&gt;option&amp;lt;0&amp;gt;&lt;/field&gt; is set to 0, is the 32-bit name of the general-purpose index register, encoded in the &quot;Rm&quot; field." link="WmOrWZR">&lt;Wm&gt;</a><text>|</text><a hover="When &lt;field&gt;option&amp;lt;0&amp;gt;&lt;/field&gt; is set to 1, is the 64-bit name of the general-purpose index register, encoded in the &quot;Rm&quot; field." link="XmOrXZR__2">&lt;Xm&gt;</a><text>){, </text><a hover="For the 128-bit, 16-bit, 32-bit and 64-bit variant: is the index extend/shift specifier, defaulting to LSL, and which must be omitted for the LSL option when &amp;lt;amount&amp;gt; is omitted. " link="extend_option__3">&lt;extend&gt;</a><text> {</text><a hover="For the 128-bit variant: is the index shift amount, optional only when &amp;lt;extend&amp;gt; is not LSL. Where it is permitted to be optional, it defaults to #0. It is " link="amount_option">&lt;amount&gt;</a><text>}}]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.ldst_regoff.LDR_B_ldst_regoff" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if option&lt;1&gt; == '0' then UNDEFINED;             // sub-word index
+if opc&lt;1&gt; == '1' &amp;&amp; size != '00' then UNDEFINED;
+constant integer scale = if opc&lt;1&gt; == '1' then 4 else <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant <a link="ExtendType" file="shared_pseudocode.xml" hover="enumeration ExtendType  {ExtendType_SXTB, ExtendType_SXTH, ExtendType_SXTW, ExtendType_SXTX, ExtendType_UXTB, ExtendType_UXTH, ExtendType_UXTW, ExtendType_UXTX}">ExtendType</a> extend_type = <a link="impl-aarch64.DecodeRegExtend.1" file="shared_pseudocode.xml" hover="function: ExtendType DecodeRegExtend(bits(3) op)">DecodeRegExtend</a>(option);
+constant integer shift = if S == '1' then scale else 0;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="LDR_B_ldst_regoff, LDR_BL_ldst_regoff" symboldefcount="1">
+      <symbol link="Bt">&lt;Bt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 8-bit name of the SIMD&amp;FP register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDR_B_ldst_regoff, LDR_BL_ldst_regoff, LDR_H_ldst_regoff, LDR_S_ldst_regoff, LDR_D_ldst_regoff, LDR_Q_ldst_regoff" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDR_B_ldst_regoff, LDR_H_ldst_regoff, LDR_S_ldst_regoff, LDR_D_ldst_regoff, LDR_Q_ldst_regoff" symboldefcount="1">
+      <symbol link="WmOrWZR">&lt;Wm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>When <field>option&lt;0&gt;</field> is set to 0, is the 32-bit name of the general-purpose index register, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDR_B_ldst_regoff, LDR_BL_ldst_regoff, LDR_H_ldst_regoff, LDR_S_ldst_regoff, LDR_D_ldst_regoff, LDR_Q_ldst_regoff" symboldefcount="1">
+      <symbol link="XmOrXZR__2">&lt;Xm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>When <field>option&lt;0&gt;</field> is set to 1, is the 64-bit name of the general-purpose index register, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDR_B_ldst_regoff" symboldefcount="1">
+      <symbol link="extend_option__2">&lt;extend&gt;</symbol>
+      <definition encodedin="option">
+        <intro>For the 8-bit variant: is the index extend specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">option</entry>
+                <entry class="symbol">&lt;extend&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">010</entry>
+                <entry class="symbol">UXTW</entry>
+              </row>
+              <row>
+                <entry class="bitfield">110</entry>
+                <entry class="symbol">SXTW</entry>
+              </row>
+              <row>
+                <entry class="bitfield">111</entry>
+                <entry class="symbol">SXTX</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="LDR_H_ldst_regoff, LDR_S_ldst_regoff, LDR_D_ldst_regoff, LDR_Q_ldst_regoff" symboldefcount="2">
+      <symbol link="extend_option__3">&lt;extend&gt;</symbol>
+      <definition encodedin="option">
+        <intro>For the 128-bit, 16-bit, 32-bit and 64-bit variant: is the index extend/shift specifier, defaulting to LSL, and which must be omitted for the LSL option when &lt;amount&gt; is omitted. </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">option</entry>
+                <entry class="symbol">&lt;extend&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">010</entry>
+                <entry class="symbol">UXTW</entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">LSL</entry>
+              </row>
+              <row>
+                <entry class="bitfield">110</entry>
+                <entry class="symbol">SXTW</entry>
+              </row>
+              <row>
+                <entry class="bitfield">111</entry>
+                <entry class="symbol">SXTX</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="LDR_B_ldst_regoff, LDR_BL_ldst_regoff" symboldefcount="1">
+      <symbol link="amount__2">&lt;amount&gt;</symbol>
+      <account encodedin="S">
+        <intro>
+          <para>For the 8-bit variant: is the index shift amount, it must be <value>#0</value>, encoded in "S" as 0 if omitted, or as 1 if present.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDR_H_ldst_regoff" symboldefcount="2">
+      <symbol link="amount_option__3">&lt;amount&gt;</symbol>
+      <definition encodedin="S">
+        <intro>For the 16-bit variant: is the index shift amount, optional only when &lt;extend&gt; is not LSL. Where it is permitted to be optional, it defaults to #0. It is </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">S</entry>
+                <entry class="symbol">&lt;amount&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">#0</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">#1</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="LDR_S_ldst_regoff" symboldefcount="3">
+      <symbol link="amount_option__4">&lt;amount&gt;</symbol>
+      <definition encodedin="S">
+        <intro>For the 32-bit variant: is the index shift amount, optional only when &lt;extend&gt; is not LSL. Where it is permitted to be optional, it defaults to #0. It is </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">S</entry>
+                <entry class="symbol">&lt;amount&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">#0</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">#2</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="LDR_D_ldst_regoff" symboldefcount="4">
+      <symbol link="amount_option__6">&lt;amount&gt;</symbol>
+      <definition encodedin="S">
+        <intro>For the 64-bit variant: is the index shift amount, optional only when &lt;extend&gt; is not LSL. Where it is permitted to be optional, it defaults to #0. It is </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">S</entry>
+                <entry class="symbol">&lt;amount&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">#0</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">#3</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="LDR_Q_ldst_regoff" symboldefcount="5">
+      <symbol link="amount_option">&lt;amount&gt;</symbol>
+      <definition encodedin="S">
+        <intro>For the 128-bit variant: is the index shift amount, optional only when &lt;extend&gt; is not LSL. Where it is permitted to be optional, it defaults to #0. It is </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">S</entry>
+                <entry class="symbol">&lt;amount&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">#0</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">#4</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="LDR_H_ldst_regoff" symboldefcount="1">
+      <symbol link="Ht">&lt;Ht&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 16-bit name of the SIMD&amp;FP register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDR_S_ldst_regoff" symboldefcount="1">
+      <symbol link="St">&lt;St&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 32-bit name of the SIMD&amp;FP register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDR_D_ldst_regoff" symboldefcount="1">
+      <symbol link="Dt">&lt;Dt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the SIMD&amp;FP register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDR_Q_ldst_regoff" symboldefcount="1">
+      <symbol link="Qt">&lt;Qt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 128-bit name of the SIMD&amp;FP register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldst_regoff.LDR_B_ldst_regoff" sections="1" secttype="Shared Decode">
+      <pstext mayhavelinks="1" section="Postdecode" rep_section="postdecode">constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rm);
+constant integer datasize = 8 &lt;&lt; scale;
+constant boolean nontemporal = FALSE;
+constant boolean tagchecked = TRUE;</pstext></ps>
+  </ps_section>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldst_regoff.LDR_B_ldst_regoff" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckFPEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPEnabled64()">CheckFPEnabled64</a>();
+constant bits(64) offset = <a link="impl-aarch64.ExtendReg.4" file="shared_pseudocode.xml" hover="function: bits(N) ExtendReg(integer reg, ExtendType exttype, integer shift, integer N)">ExtendReg</a>(m, extend_type, shift, 64);
+bits(64) address;
+
+constant boolean privileged = PSTATE.EL != <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>;
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = CreateAccDescASIMD(<a link="MemOp_LOAD" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_LOAD</a>, nontemporal, tagchecked,
+                                                       privileged);
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+address = <a link="impl-shared.AddressAdd.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressAdd(bits(64) base, integer offset, AccessDescriptor accdesc)">AddressAdd</a>(address, offset, accdesc);
+
+<a link="impl-aarch64.V.write.2" file="shared_pseudocode.xml" hover="accessor: V[integer n, ESize width] = bits(width) value">V</a>[t, datasize] = <a link="impl-aarch64.Mem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size*8) Mem[bits(64) address, integer size, AccessDescriptor accdesc_in]">Mem</a>[address, datasize DIV 8, accdesc];</pstext></ps>
+  </ps_section>
+</instructionsection>

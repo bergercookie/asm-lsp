@@ -1,0 +1,186 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="MOVZ" title="MOVZ -- A64" type="instruction">
+  <docvars>
+    <docvar key="immediate-type" value="imm18-packed"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="MOVZ"/>
+  </docvars>
+  <heading>MOVZ</heading>
+  <desc>
+    <brief>
+      <para>Move wide with zero</para>
+    </brief>
+    <authored>
+      <para>This instruction moves an optionally-shifted 16-bit immediate
+value to a register.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <alias_list howmany="1">
+    <alias_list_intro>This instruction is used by the alias </alias_list_intro>
+    <aliasref aliaspageid="MOV_MOVZ" aliasfile="mov_movz.xml" hover="Move (wide immediate)" punct=".">
+      <text>MOV (wide immediate)</text>
+      <aliaspref>!(<a link="impl-shared.IsZero.1" file="shared_pseudocode.xml" hover="function: boolean IsZero(bits(N) x)">IsZero</a>(imm16) &amp;&amp; hw != '00')</aliaspref>
+    </aliasref>
+    <alias_list_outro>
+      <text>  See </text>
+      <aliastablelink/>
+      <text> below for details of when the alias is preferred.</text>
+    </alias_list_outro>
+  </alias_list>
+  <classes>
+    <iclass name="Immediate packed into 16-bit value and 2-bit shift" oneof="1" id="iclass_immediate_packed_into_16_bit_value_and_2_bit_shift" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="immediate-type" value="imm18-packed"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="MOVZ"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <regdiagram form="32" psname="A64.dpimm.movewide.MOVZ_32_movewide" tworows="1">
+        <box hibit="31" width="1" name="sf" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="30" width="2" name="opc" usename="1" settings="2" psbits="xx">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="28" width="6" settings="6">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="22" width="2" name="hw" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="20" width="16" name="imm16" usename="1">
+          <c colspan="16"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="MOVZ_32_movewide" oneofinclass="2" oneof="2" label="32-bit" bitdiffs="sf == 0 &amp;&amp; hw == 0x">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="MOVZ"/>
+          <docvar key="immediate-type" value="imm18-packed"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>0</c>
+        </box>
+        <box hibit="22" width="2" name="hw">
+          <c>0</c>
+          <c/>
+        </box>
+        <asmtemplate><text>MOVZ  </text><a hover="Is the 32-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="WdOrWZR">&lt;Wd&gt;</a><text>, #</text><a hover="Is the 16-bit unsigned immediate, in the range 0 to 65535, encoded in the &quot;imm16&quot; field." link="imm__18">&lt;imm&gt;</a><text>{, LSL #</text><a hover="For the 32-bit variant: is the amount by which to shift the immediate left, either 0 (the default) or 16, encoded in the &quot;hw&quot; field as &amp;lt;shift&amp;gt;/16." link="shift__7">&lt;shift&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <encoding name="MOVZ_64_movewide" oneofinclass="2" oneof="2" label="64-bit" bitdiffs="sf == 1">
+        <docvars>
+          <docvar key="datatype" value="64"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="MOVZ"/>
+          <docvar key="immediate-type" value="imm18-packed"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>MOVZ  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="XdOrXZR__6">&lt;Xd&gt;</a><text>, #</text><a hover="Is the 16-bit unsigned immediate, in the range 0 to 65535, encoded in the &quot;imm16&quot; field." link="imm__18">&lt;imm&gt;</a><text>{, LSL #</text><a hover="For the 64-bit variant: is the amount by which to shift the immediate left, either 0 (the default), 16, 32 or 48, encoded in the &quot;hw&quot; field as &amp;lt;shift&amp;gt;/16." link="shift__8">&lt;shift&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpimm.movewide.MOVZ_32_movewide" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if sf == '0' &amp;&amp; hw&lt;1&gt; == '1' then UNDEFINED;
+
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer datasize = 32 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(sf);
+constant bits(16) imm = imm16;
+constant integer pos = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(hw:'0000');</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="MOVZ_32_movewide" symboldefcount="1">
+      <symbol link="WdOrWZR">&lt;Wd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOVZ_32_movewide, MOVZ_64_movewide" symboldefcount="1">
+      <symbol link="imm__18">&lt;imm&gt;</symbol>
+      <account encodedin="imm16">
+        <intro>
+          <para>Is the 16-bit unsigned immediate, in the range 0 to 65535, encoded in the "imm16" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOVZ_32_movewide" symboldefcount="1">
+      <symbol link="shift__7">&lt;shift&gt;</symbol>
+      <account encodedin="hw">
+        <intro>
+          <para>For the 32-bit variant: is the amount by which to shift the immediate left, either 0 (the default) or 16, encoded in the "hw" field as &lt;shift&gt;/16.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOVZ_64_movewide" symboldefcount="2">
+      <symbol link="shift__8">&lt;shift&gt;</symbol>
+      <account encodedin="hw">
+        <intro>
+          <para>For the 64-bit variant: is the amount by which to shift the immediate left, either 0 (the default), 16, 32 or 48, encoded in the "hw" field as &lt;shift&gt;/16.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOVZ_64_movewide" symboldefcount="1">
+      <symbol link="XdOrXZR__6">&lt;Xd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <aliastablehook anchor="aliasconditions">Alias Conditions</aliastablehook>
+  <ps_section howmany="1">
+    <ps name="A64.dpimm.movewide.MOVZ_32_movewide" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">bits(datasize) result = <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(datasize);
+result&lt;pos+15:pos&gt; = imm;
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, datasize] = result;</pstext></ps>
+  </ps_section>
+</instructionsection>

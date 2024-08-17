@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="mova_mz_za4" title="MOVA (array to vector, four registers)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="MOVA" />
+  </docvars>
+  <heading>MOVA (array to vector, four registers)</heading>
+  <desc>
+    <brief>Move four ZA single-vector groups to four vector registers</brief>
+    <description>
+      <para>The instruction operates on four ZA single-vector groups.</para>
+      <para>The single-vector group within each quarter of the ZA array is selected by the sum of the vector select register and offset, modulo quarter the number of ZA array vectors.</para>
+      <para>The <arm-defined-word>vector group</arm-defined-word> symbol <syntax>VGx4</syntax> indicates that the instruction operates on four ZA single-vector groups.</para>
+      <para>The preferred disassembly syntax uses a 64-bit element size, but an assembler should accept any element size if it is used consistently for all operands. The <arm-defined-word>vector group</arm-defined-word> symbol is preferred for disassembly, but optional in assembler source code.</para>
+      <para>This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <sm_policy>SM_1_only</sm_policy>
+  </desc>
+  <alias_list howmany="1">
+    <alias_list_intro>This instruction is used by the alias </alias_list_intro>
+    <aliasref aliaspageid="MOV_mova_mz_za4" aliasfile="mov_mova_mz_za4.xml" hover="Move four ZA single-vector groups to four vector registers" punct=".">
+      <text>MOV (array to vector, four registers)</text>
+      <aliaspref>Unconditionally</aliaspref>
+    </aliasref>
+    <alias_list_outro> The alias is always the preferred disassembly.</alias_list_outro>
+  </alias_list>
+  <classes>
+    <iclass name="SME2" oneof="1" id="iclass_mortlach2" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="MOVA" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="MOVA-MZ.ZA4-1">
+        <box hibit="31" width="17" settings="17">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="14" width="2" name="Rv" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" settings="3">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="9" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="3" name="off3" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="4" width="3" name="Zd" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="1" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="mova_mz_za4_1" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="MOVA" />
+        </docvars>
+        <asmtemplate><text>MOVA    </text><text>{</text><text> </text><a link="sa_zd1" hover="First scalable vector register of destination multi-vector group (field Zd)">&lt;Zd1&gt;</a><text>.D-</text><a link="sa_zd4" hover="Fourth scalable vector register of destination multi-vector group (field Zd)">&lt;Zd4&gt;</a><text>.D </text><text>}</text><text>, ZA.D[</text><a link="sa_wv" hover="32-bit vector select register W8-W11 (field &quot;Rv&quot;)">&lt;Wv&gt;</a><text>, </text><a link="sa_offs" hover="Vector select offset [0-7] (field &quot;off3&quot;)">&lt;offs&gt;</a><a>{, VGx4}</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="MOVA-MZ.ZA4-1" mylink="MOVA-MZ.ZA4-1" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+constant integer v = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('010':Rv);
+constant integer offset = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(off3);
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd:'00');
+constant integer nreg = 4;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="mova_mz_za4_1" symboldefcount="1">
+      <symbol link="sa_zd1">&lt;Zd1&gt;</symbol>
+      <account encodedin="Zd">
+        <intro>
+          <para>Is the name of the first scalable vector register of the destination multi-vector group, encoded as "Zd" times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="mova_mz_za4_1" symboldefcount="1">
+      <symbol link="sa_zd4">&lt;Zd4&gt;</symbol>
+      <account encodedin="Zd">
+        <intro>
+          <para>Is the name of the fourth scalable vector register of the destination multi-vector group, encoded as "Zd" times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="mova_mz_za4_1" symboldefcount="1">
+      <symbol link="sa_wv">&lt;Wv&gt;</symbol>
+      <account encodedin="Rv">
+        <intro>
+          <para>Is the 32-bit name of the vector select register W8-W11, encoded in the "Rv" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="mova_mz_za4_1" symboldefcount="1">
+      <symbol link="sa_offs">&lt;offs&gt;</symbol>
+      <account encodedin="off3">
+        <intro>
+          <para>Is the vector select offset, in the range 0 to 7, encoded in the "off3" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="MOVA-MZ.ZA4-1" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckStreamingSVEAndZAEnabled.0" file="shared_pseudocode.xml" hover="function: CheckStreamingSVEAndZAEnabled()">CheckStreamingSVEAndZAEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer vectors = VL DIV 8;
+constant integer vstride = vectors DIV nreg;
+constant bits(32) vbase = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[v, 32];
+integer vec = (<a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(vbase) + offset) MOD vstride;
+
+for r = 0 to nreg-1
+    constant bits(VL) result = <a link="impl-aarch64.ZAvector.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) ZAvector[integer index, integer width]">ZAvector</a>[vec, VL];
+    <a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[d + r, VL] = result;
+    vec = vec + vstride;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

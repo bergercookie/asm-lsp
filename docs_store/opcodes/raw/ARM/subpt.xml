@@ -1,0 +1,144 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="SUBPT" title="SUBPT -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="SUBPT"/>
+  </docvars>
+  <heading>SUBPT</heading>
+  <desc>
+    <brief>
+      <para>Subtract checked pointer</para>
+    </brief>
+    <authored>
+      <para>This instruction subtracts an optionally-shifted register value
+from a base address register value, and writes the result to the
+destination register. The optionally-shifted register value is treated
+as the offset.</para>
+      <para>If the operation would have generated a result where the most significant 8 bits
+of the result register differ from the most significant 8 bits of the base
+register, then the result is modified such that it is likely to be non-canonical
+when used as an address.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="SUBPT"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_CPA" name="ARMv9.5"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.dpreg.addsub_pt.SUBPT_64_addsub_pt" tworows="1">
+        <box hibit="31" name="sf" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="30" name="op" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Rm" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="12" width="3" name="imm3" usename="1">
+          <c colspan="3"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="SUBPT_64_addsub_pt" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SUBPT"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <asmtemplate><text>SUBPT  </text><a hover="Is the 64-bit name of the general-purpose destination register or stack pointer, encoded in the &quot;Rd&quot; field." link="XdSP_option__3">&lt;Xd|SP&gt;</a><text>, </text><a hover="Is the 64-bit name of the first general-purpose source register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option__5">&lt;Xn|SP&gt;</a><text>, </text><a hover="Is the 64-bit name of the second general-purpose source register, encoded in the &quot;Rm&quot; field." link="XmOrXZR__4">&lt;Xm&gt;</a><text>{, LSL #</text><a hover="Is the left shift amount, in the range 0 to 7, defaulting to 0, encoded in the &quot;imm3&quot; field." link="amount__3">&lt;amount&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpreg.addsub_pt.SUBPT_64_addsub_pt" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_CPA) then UNDEFINED;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rm);
+constant integer shift = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(imm3);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="SUBPT_64_addsub_pt" symboldefcount="1">
+      <symbol link="XdSP_option__3">&lt;Xd|SP&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose destination register or stack pointer, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SUBPT_64_addsub_pt" symboldefcount="1">
+      <symbol link="XnSP_option__5">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the first general-purpose source register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SUBPT_64_addsub_pt" symboldefcount="1">
+      <symbol link="XmOrXZR__4">&lt;Xm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the 64-bit name of the second general-purpose source register, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SUBPT_64_addsub_pt" symboldefcount="1">
+      <symbol link="amount__3">&lt;amount&gt;</symbol>
+      <account encodedin="imm3">
+        <intro>
+          <para>Is the left shift amount, in the range 0 to 7, defaulting to 0, encoded in the "imm3" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.dpreg.addsub_pt.SUBPT_64_addsub_pt" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">bits(64) result;
+constant bits(64) base = if n == 31 then <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[] else <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+constant bits(64) offset = LSL(<a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[m, 64], shift);
+
+result = base - offset;
+result = <a link="impl-aarch64.PointerAddCheck.2" file="shared_pseudocode.xml" hover="function: bits(64) PointerAddCheck(bits(64) result, bits(64) base)">PointerAddCheck</a>(result, base);
+
+if d == 31 then
+    <a link="impl-aarch64.SP.write.0" file="shared_pseudocode.xml" hover="accessor: SP[] = bits(64) value">SP</a>[] = result;
+else
+    <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, 64] = result;
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

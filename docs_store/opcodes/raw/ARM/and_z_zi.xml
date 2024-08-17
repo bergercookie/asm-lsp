@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="and_z_zi" title="AND (immediate)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="AND" />
+  </docvars>
+  <heading>AND (immediate)</heading>
+  <desc>
+    <brief>Bitwise AND with immediate (unpredicated)</brief>
+    <description>
+      <para>Bitwise AND an immediate with each 64-bit element of the source vector, and destructively place the results in the corresponding elements of the source vector. The immediate is a 64-bit value consisting of a single run of ones or zeros repeating every 2, 4, 8, 16, 32 or 64 bits. This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <takes_movprfx>True</takes_movprfx>
+  </desc>
+  <alias_list howmany="1">
+    <alias_list_intro>This instruction is used by the alias </alias_list_intro>
+    <aliasref aliaspageid="BIC_and_z_zi" aliasfile="bic_and_z_zi.xml" hover="Bitwise clear bits using immediate (unpredicated)" punct=".">
+      <text>BIC (immediate)</text>
+      <aliaspref>Never</aliaspref>
+    </aliasref>
+    <alias_list_outro>
+      <text>  See </text>
+      <aliastablelink />
+      <text> below for details of when the alias is preferred.</text>
+    </alias_list_outro>
+  </alias_list>
+  <classes>
+    <iclass name="SVE" oneof="1" id="iclass_sve" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="AND" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="AND-Z.ZI-_">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" name="opc&lt;1&gt;" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" name="opc" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="4" settings="4">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="17" width="13" name="imm13" usename="1">
+          <c colspan="13"></c>
+        </box>
+        <box hibit="4" width="5" name="Zdn" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="and_z_zi_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="AND" />
+        </docvars>
+        <asmtemplate><text>AND     </text><a link="sa_zdn" hover="Source and destination scalable vector register (field &quot;Zdn&quot;)">&lt;Zdn&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;imm13&lt;12&gt;:imm13&lt;5:0&gt;&quot;) [B,D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_zdn" hover="Source and destination scalable vector register (field &quot;Zdn&quot;)">&lt;Zdn&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;imm13&lt;12&gt;:imm13&lt;5:0&gt;&quot;) [B,D,H,S]">&lt;T&gt;</a><text>, #</text><a link="sa_const" hover="64, 32, 16 or 8-bit bitmask consisting of replicated 2, 4, 8, 16, 32 or 64 bit fields, each field containing a rotated run of non-zero bits (field &quot;imm13&quot;)">&lt;const&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="AND-Z.ZI-_" mylink="AND-Z.ZI-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer dn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zdn);
+bits(64) imm;
+(imm, -) = <a link="impl-aarch64.DecodeBitMasks.5" file="shared_pseudocode.xml" hover="function: (bits(M), bits(M)) DecodeBitMasks(bit immN, bits(6) imms, bits(6) immr, boolean immediate, integer M)">DecodeBitMasks</a>(imm13&lt;12&gt;, imm13&lt;5:0&gt;, imm13&lt;11:6&gt;, TRUE, 64);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="and_z_zi_" symboldefcount="1">
+      <symbol link="sa_zdn">&lt;Zdn&gt;</symbol>
+      <account encodedin="Zdn">
+        <intro>
+          <para>Is the name of the source and destination scalable vector register, encoded in the "Zdn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="and_z_zi_" symboldefcount="1">
+      <symbol link="sa_t">&lt;T&gt;</symbol>
+      <definition encodedin="imm13&lt;12&gt;:imm13&lt;5:0&gt;">
+        <intro>Is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="3">
+            <thead>
+              <row>
+                <entry class="bitfield">imm13&lt;12&gt;</entry>
+                <entry class="bitfield">imm13&lt;5:0&gt;</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">0xxxxx</entry>
+                <entry class="symbol">S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">10xxxx</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">110xxx</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">1110xx</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">11110x</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">111110</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">111111</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="bitfield">xxxxxx</entry>
+                <entry class="symbol">D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="and_z_zi_" symboldefcount="1">
+      <symbol link="sa_const">&lt;const&gt;</symbol>
+      <account encodedin="imm13">
+        <intro>
+          <para>Is a 64, 32, 16 or 8-bit bitmask consisting of replicated 2, 4, 8, 16, 32 or 64 bit fields, each field containing a rotated run of non-zero bits, encoded in the "imm13" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <aliastablehook anchor="aliasconditions">Alias Conditions</aliastablehook>
+  <ps_section howmany="1">
+    <ps name="AND-Z.ZI-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSVEEnabled()">CheckSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer PL = VL DIV 8;
+constant integer elements = VL DIV 64;
+constant bits(VL) operand = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[dn, VL];
+bits(VL) result;
+
+for e = 0 to elements-1
+    constant bits(64) element1 = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand, e, 64];
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, 64] = element1 AND imm;
+
+<a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[dn, VL] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

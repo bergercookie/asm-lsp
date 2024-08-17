@@ -1,0 +1,388 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="CAS" title="CAS, CASA, CASAL, CASL -- A64" type="instruction">
+  <docvars>
+    <docvar key="address-form" value="base-register"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+  </docvars>
+  <heading>CAS, CASA, CASAL, CASL</heading>
+  <desc>
+    <brief>
+      <para>Compare and swap word or doubleword in memory</para>
+    </brief>
+    <authored>
+      <para>This instruction
+reads a 32-bit word or 64-bit
+doubleword from memory, and compares it against the value held in a
+first register. If the comparison is equal, the value in a second register
+is written to memory.
+If the write is performed, the read and write occur atomically such
+that no other modification of the memory location can take place
+between the read and write.</para>
+      <list type="unordered">
+        <listitem>
+          <content>
+            <instruction>CASA</instruction> and <instruction>CASAL</instruction> load from memory with acquire semantics.</content>
+        </listitem>
+        <listitem>
+          <content>
+            <instruction>CASL</instruction> and <instruction>CASAL</instruction> store to memory with release semantics.</content>
+        </listitem>
+        <listitem>
+          <content>
+            <instruction>CAS</instruction> has neither acquire nor release semantics.</content>
+        </listitem>
+      </list>
+      <para>The architecture permits that the data read clears any exclusive
+monitors associated with that location, even if the compare
+subsequently fails.</para>
+      <para>If the instruction generates a synchronous Data Abort, the register
+which is compared and loaded, that is <syntax>&lt;Ws&gt;</syntax>, or
+<syntax>&lt;Xs&gt;</syntax>, is restored to the value held in the register
+before the instruction was executed.</para>
+      <para>For a <instruction>CAS</instruction> or <instruction>CASA</instruction> instruction, when <syntax>&lt;Ws&gt;</syntax>
+or <syntax>&lt;Xs&gt;</syntax> specifies the same register as <syntax>&lt;Wt&gt;</syntax> or <syntax>&lt;Xt&gt;</syntax>,
+this signals to the memory system that an additional subsequent <instruction>CAS</instruction>,
+<instruction>CASA</instruction>, <instruction>CASAL</instruction>, or <instruction>CASL</instruction>
+access to the specified location is likely to occur in the near future. The memory system can respond by
+taking actions that are expected to enable the subsequent <instruction>CAS</instruction>,
+<instruction>CASA</instruction>, <instruction>CASAL</instruction>, or <instruction>CASL</instruction> access to succeed when it does occur.</para>
+      <para>A code sequence starting with a <instruction>CAS</instruction> or <instruction>CASA</instruction> instruction for which
+<syntax>&lt;Ws&gt;</syntax> or <syntax>&lt;Xs&gt;</syntax> specifies the same register as <syntax>&lt;Wt&gt;</syntax>
+or <syntax>&lt;Xt&gt;</syntax>, and ending with a subsequent <instruction>CAS</instruction>, <instruction>CASA</instruction>,
+<instruction>CASAL</instruction>, or <instruction>CASL</instruction> to the same location, exhibits the following
+properties for best performance when the location may be accessed concurrently, on one or more other PEs:</para>
+      <list type="unordered">
+        <listitem>
+          <content>The sequence does not contain any direct system register writes, address translation instructions, cache or TLB
+  maintenance operations, exception producing instructions, exception returns, or <instruction>ISB</instruction> barriers.</content>
+        </listitem>
+        <listitem>
+          <content>The execution of the sequence includes 32 or fewer instructions.</content>
+        </listitem>
+        <listitem>
+          <content>The value provided in <syntax>&lt;Ws&gt;</syntax> or <syntax>&lt;Xs&gt;</syntax> of the first <instruction>CAS</instruction> or <instruction>CASA</instruction>
+  is a value likely to result in the comparison failing.
+  A failing comparison result may lead to better performance due to the hardware not performing a write to memory.</content>
+        </listitem>
+      </list>
+      <note>
+        <para>For a <instruction>CAS</instruction> or <instruction>CASA</instruction> instruction, when <syntax>&lt;Ws&gt;</syntax> or
+<syntax>&lt;Xs&gt;</syntax> specifies the same register as <syntax>&lt;Wt&gt;</syntax> or <syntax>&lt;Xt&gt;</syntax>, the
+value in memory is not modified, because the <instruction>CAS</instruction> or <instruction>CASA</instruction> either fails its compare or writes the same value back to memory.</para>
+      </note>
+      <para>For more information about memory ordering semantics, see
+<xref linkend="ARMARM_BEIHCHEF">Load-Acquire, Store-Release</xref>.</para>
+      <para>For information about addressing modes, see
+<xref linkend="ARMARM_CHDIIIBB">Load/Store addressing modes</xref>.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="No offset" oneof="1" id="iclass_no_offset" no_encodings="8" isa="A64">
+      <docvars>
+        <docvar key="address-form" value="base-register"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="8"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_LSE" name="ARMv8.1"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.comswap.CAS_C32_comswap" tworows="1">
+        <box hibit="31" width="2" name="size" usename="1" settings="1" psbits="xx">
+          <c>1</c>
+          <c>x</c>
+        </box>
+        <box hibit="29" width="7" settings="7">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="L" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Rs" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="1" name="o0" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="14" width="5" name="Rt2" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="CAS_C32_comswap" oneofinclass="8" oneof="8" label="32-bit CAS" bitdiffs="size == 10 &amp;&amp; L == 0 &amp;&amp; o0 == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="CAS"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="address-form" value="base-register"/>
+          <docvar key="address-form-reg-type" value="base-register-32-reg"/>
+          <docvar key="atomic-ops" value="CAS-32-reg"/>
+          <docvar key="reg-type" value="32-reg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c/>
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="L">
+          <c>0</c>
+        </box>
+        <box hibit="15" width="1" name="o0">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>CAS  </text><a hover="Is the 32-bit name of the general-purpose register to be compared and loaded, encoded in the &quot;Rs&quot; field." link="WsOrWZR__3">&lt;Ws&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose register to be conditionally stored, encoded in the &quot;Rt&quot; field." link="WtOrWZR__3">&lt;Wt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #0}]</text></asmtemplate>
+      </encoding>
+      <encoding name="CASA_C32_comswap" oneofinclass="8" oneof="8" label="32-bit CASA" bitdiffs="size == 10 &amp;&amp; L == 1 &amp;&amp; o0 == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="CASA"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="address-form" value="base-register"/>
+          <docvar key="address-form-reg-type" value="base-register-32-reg"/>
+          <docvar key="atomic-ops" value="CASA-32-reg"/>
+          <docvar key="reg-type" value="32-reg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c/>
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="L">
+          <c>1</c>
+        </box>
+        <box hibit="15" width="1" name="o0">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>CASA  </text><a hover="Is the 32-bit name of the general-purpose register to be compared and loaded, encoded in the &quot;Rs&quot; field." link="WsOrWZR__3">&lt;Ws&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose register to be conditionally stored, encoded in the &quot;Rt&quot; field." link="WtOrWZR__3">&lt;Wt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #0}]</text></asmtemplate>
+      </encoding>
+      <encoding name="CASAL_C32_comswap" oneofinclass="8" oneof="8" label="32-bit CASAL" bitdiffs="size == 10 &amp;&amp; L == 1 &amp;&amp; o0 == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="CASAL"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="address-form" value="base-register"/>
+          <docvar key="address-form-reg-type" value="base-register-32-reg"/>
+          <docvar key="atomic-ops" value="CASAL-32-reg"/>
+          <docvar key="reg-type" value="32-reg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c/>
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="L">
+          <c>1</c>
+        </box>
+        <box hibit="15" width="1" name="o0">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>CASAL  </text><a hover="Is the 32-bit name of the general-purpose register to be compared and loaded, encoded in the &quot;Rs&quot; field." link="WsOrWZR__3">&lt;Ws&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose register to be conditionally stored, encoded in the &quot;Rt&quot; field." link="WtOrWZR__3">&lt;Wt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #0}]</text></asmtemplate>
+      </encoding>
+      <encoding name="CASL_C32_comswap" oneofinclass="8" oneof="8" label="32-bit CASL" bitdiffs="size == 10 &amp;&amp; L == 0 &amp;&amp; o0 == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="CASL"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="address-form" value="base-register"/>
+          <docvar key="address-form-reg-type" value="base-register-32-reg"/>
+          <docvar key="atomic-ops" value="CASL-32-reg"/>
+          <docvar key="reg-type" value="32-reg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c/>
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="L">
+          <c>0</c>
+        </box>
+        <box hibit="15" width="1" name="o0">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>CASL  </text><a hover="Is the 32-bit name of the general-purpose register to be compared and loaded, encoded in the &quot;Rs&quot; field." link="WsOrWZR__3">&lt;Ws&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose register to be conditionally stored, encoded in the &quot;Rt&quot; field." link="WtOrWZR__3">&lt;Wt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #0}]</text></asmtemplate>
+      </encoding>
+      <encoding name="CAS_C64_comswap" oneofinclass="8" oneof="8" label="64-bit CAS" bitdiffs="size == 11 &amp;&amp; L == 0 &amp;&amp; o0 == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="CAS"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="address-form" value="base-register"/>
+          <docvar key="address-form-reg-type" value="base-register-64-reg"/>
+          <docvar key="atomic-ops" value="CAS-64-reg"/>
+          <docvar key="reg-type" value="64-reg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c/>
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="L">
+          <c>0</c>
+        </box>
+        <box hibit="15" width="1" name="o0">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>CAS  </text><a hover="Is the 64-bit name of the general-purpose register to be compared and loaded, encoded in the &quot;Rs&quot; field." link="XsOrXZR__4">&lt;Xs&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose register to be conditionally stored, encoded in the &quot;Rt&quot; field." link="XtOrXZR__10">&lt;Xt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #0}]</text></asmtemplate>
+      </encoding>
+      <encoding name="CASA_C64_comswap" oneofinclass="8" oneof="8" label="64-bit CASA" bitdiffs="size == 11 &amp;&amp; L == 1 &amp;&amp; o0 == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="CASA"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="address-form" value="base-register"/>
+          <docvar key="address-form-reg-type" value="base-register-64-reg"/>
+          <docvar key="atomic-ops" value="CASA-64-reg"/>
+          <docvar key="reg-type" value="64-reg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c/>
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="L">
+          <c>1</c>
+        </box>
+        <box hibit="15" width="1" name="o0">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>CASA  </text><a hover="Is the 64-bit name of the general-purpose register to be compared and loaded, encoded in the &quot;Rs&quot; field." link="XsOrXZR__4">&lt;Xs&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose register to be conditionally stored, encoded in the &quot;Rt&quot; field." link="XtOrXZR__10">&lt;Xt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #0}]</text></asmtemplate>
+      </encoding>
+      <encoding name="CASAL_C64_comswap" oneofinclass="8" oneof="8" label="64-bit CASAL" bitdiffs="size == 11 &amp;&amp; L == 1 &amp;&amp; o0 == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="CASAL"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="address-form" value="base-register"/>
+          <docvar key="address-form-reg-type" value="base-register-64-reg"/>
+          <docvar key="atomic-ops" value="CASAL-64-reg"/>
+          <docvar key="reg-type" value="64-reg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c/>
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="L">
+          <c>1</c>
+        </box>
+        <box hibit="15" width="1" name="o0">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>CASAL  </text><a hover="Is the 64-bit name of the general-purpose register to be compared and loaded, encoded in the &quot;Rs&quot; field." link="XsOrXZR__4">&lt;Xs&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose register to be conditionally stored, encoded in the &quot;Rt&quot; field." link="XtOrXZR__10">&lt;Xt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #0}]</text></asmtemplate>
+      </encoding>
+      <encoding name="CASL_C64_comswap" oneofinclass="8" oneof="8" label="64-bit CASL" bitdiffs="size == 11 &amp;&amp; L == 0 &amp;&amp; o0 == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="CASL"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="address-form" value="base-register"/>
+          <docvar key="address-form-reg-type" value="base-register-64-reg"/>
+          <docvar key="atomic-ops" value="CASL-64-reg"/>
+          <docvar key="reg-type" value="64-reg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c/>
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="L">
+          <c>0</c>
+        </box>
+        <box hibit="15" width="1" name="o0">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>CASL  </text><a hover="Is the 64-bit name of the general-purpose register to be compared and loaded, encoded in the &quot;Rs&quot; field." link="XsOrXZR__4">&lt;Xs&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose register to be conditionally stored, encoded in the &quot;Rt&quot; field." link="XtOrXZR__10">&lt;Xt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #0}]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.comswap.CAS_C32_comswap" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_LSE) then UNDEFINED;
+constant integer s = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rs);
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer datasize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer regsize = if datasize == 64 then 64 else 32;
+constant boolean acquire = L == '1';
+constant boolean release = o0 == '1';
+constant boolean tagchecked = n != 31;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="CAS_C32_comswap, CASA_C32_comswap, CASAL_C32_comswap, CASL_C32_comswap" symboldefcount="1">
+      <symbol link="WsOrWZR__3">&lt;Ws&gt;</symbol>
+      <account encodedin="Rs">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose register to be compared and loaded, encoded in the "Rs" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CAS_C32_comswap, CASA_C32_comswap, CASAL_C32_comswap, CASL_C32_comswap" symboldefcount="1">
+      <symbol link="WtOrWZR__3">&lt;Wt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose register to be conditionally stored, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CAS_C32_comswap, CASA_C32_comswap, CASAL_C32_comswap, CASL_C32_comswap, CAS_C64_comswap, CASA_C64_comswap, CASAL_C64_comswap, CASL_C64_comswap" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CAS_C64_comswap, CASA_C64_comswap, CASAL_C64_comswap, CASL_C64_comswap" symboldefcount="1">
+      <symbol link="XsOrXZR__4">&lt;Xs&gt;</symbol>
+      <account encodedin="Rs">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose register to be compared and loaded, encoded in the "Rs" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CAS_C64_comswap, CASA_C64_comswap, CASAL_C64_comswap, CASL_C64_comswap" symboldefcount="1">
+      <symbol link="XtOrXZR__10">&lt;Xt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose register to be conditionally stored, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.comswap.CAS_C32_comswap" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">bits(64) address;
+bits(datasize) comparevalue;
+bits(datasize) newvalue;
+
+constant boolean privileged = PSTATE.EL != <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>;
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = CreateAccDescAtomicOp(<a link="MemAtomicOp_CAS" file="shared_pseudocode.xml" hover="enumeration MemAtomicOp { MemAtomicOp_GCSSS1, MemAtomicOp_ADD, MemAtomicOp_BIC, MemAtomicOp_EOR, MemAtomicOp_ORR, MemAtomicOp_SMAX, MemAtomicOp_SMIN, MemAtomicOp_UMAX, MemAtomicOp_UMIN, MemAtomicOp_SWP, MemAtomicOp_CAS }">MemAtomicOp_CAS</a>, acquire, release,
+                                                          tagchecked, privileged);
+comparevalue = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[s, datasize];
+newvalue = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[t, datasize];
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+constant bits(datasize) data = <a link="impl-aarch64.MemAtomic.4" file="shared_pseudocode.xml" hover="function: bits(size) MemAtomic(bits(64) address, bits(size) cmpoperand, bits(size) operand, AccessDescriptor accdesc_in)">MemAtomic</a>(address, comparevalue, newvalue, accdesc);
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[s, regsize] = <a link="impl-shared.ZeroExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) ZeroExtend(bits(M) x, integer N)">ZeroExtend</a>(data, regsize);</pstext></ps>
+  </ps_section>
+</instructionsection>

@@ -1,0 +1,172 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="LDR_lit_fpsimd" title="LDR (literal, SIMD&amp;FP) -- A64" type="instruction">
+  <docvars>
+    <docvar key="address-form" value="literal"/>
+    <docvar key="instr-class" value="fpsimd"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="LDR"/>
+    <docvar key="offset-type" value="off19s"/>
+  </docvars>
+  <heading>LDR (literal, SIMD&amp;FP)</heading>
+  <desc>
+    <brief>
+      <para>Load SIMD&amp;FP register (PC-relative literal)</para>
+    </brief>
+    <authored>
+      <para>This instruction loads a SIMD&amp;FP register from memory.
+The address that is used for the load is calculated from the PC value
+and an immediate offset.</para>
+      <para>Depending on the settings in the <register_link id="AArch64-cpacr_el1.xml" state="AArch64">CPACR_EL1</register_link>,
+<register_link id="AArch64-cptr_el2.xml" state="AArch64">CPTR_EL2</register_link>, and <register_link id="AArch64-cptr_el3.xml" state="AArch64">CPTR_EL3</register_link> registers,
+and the current Security state and Exception level,
+an attempt to execute the instruction might be trapped.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1, the timing of this instruction is insensitive to the value of the data being loaded or stored.</para>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Literal" oneof="1" id="iclass_literal" no_encodings="3" isa="A64">
+      <docvars>
+        <docvar key="address-form" value="literal"/>
+        <docvar key="instr-class" value="fpsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="LDR"/>
+        <docvar key="offset-type" value="off19s"/>
+      </docvars>
+      <iclassintro count="3"/>
+      <regdiagram form="32" psname="A64.ldst.loadlit.LDR_S_loadlit" tworows="1">
+        <box hibit="31" width="2" name="opc" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="VR" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="25" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="19" name="imm19" usename="1">
+          <c colspan="19"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="LDR_S_loadlit" oneofinclass="3" oneof="3" label="32-bit" bitdiffs="opc == 00">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDR"/>
+          <docvar key="address-form" value="literal"/>
+          <docvar key="address-form-reg-type" value="literal-32-fsreg"/>
+          <docvar key="atomic-ops" value="LDR-32-fsreg"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off19s"/>
+          <docvar key="reg-type" value="32-fsreg"/>
+        </docvars>
+        <box hibit="31" width="2" name="opc">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>LDR  </text><a hover="Is the 32-bit name of the SIMD&amp;amp;FP register to be loaded, encoded in the &quot;Rt&quot; field." link="St__2">&lt;St&gt;</a><text>, </text><a hover="Is the program label from which the data is to be loaded. Its offset from the address of this instruction, in the range +/-1MB, is encoded as &quot;imm19&quot; times 4." link="imm19_offset__2">&lt;label&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="LDR_D_loadlit" oneofinclass="3" oneof="3" label="64-bit" bitdiffs="opc == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDR"/>
+          <docvar key="address-form" value="literal"/>
+          <docvar key="address-form-reg-type" value="literal-64-fsreg"/>
+          <docvar key="atomic-ops" value="LDR-64-fsreg"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off19s"/>
+          <docvar key="reg-type" value="64-fsreg"/>
+        </docvars>
+        <box hibit="31" width="2" name="opc">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>LDR  </text><a hover="Is the 64-bit name of the SIMD&amp;amp;FP register to be loaded, encoded in the &quot;Rt&quot; field." link="Dt__2">&lt;Dt&gt;</a><text>, </text><a hover="Is the program label from which the data is to be loaded. Its offset from the address of this instruction, in the range +/-1MB, is encoded as &quot;imm19&quot; times 4." link="imm19_offset__2">&lt;label&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="LDR_Q_loadlit" oneofinclass="3" oneof="3" label="128-bit" bitdiffs="opc == 10">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDR"/>
+          <docvar key="address-form" value="literal"/>
+          <docvar key="address-form-reg-type" value="literal-128-fsreg"/>
+          <docvar key="atomic-ops" value="LDR-128-fsreg"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off19s"/>
+          <docvar key="reg-type" value="128-fsreg"/>
+        </docvars>
+        <box hibit="31" width="2" name="opc">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>LDR  </text><a hover="Is the 128-bit name of the SIMD&amp;amp;FP register to be loaded, encoded in the &quot;Rt&quot; field." link="Qt__2">&lt;Qt&gt;</a><text>, </text><a hover="Is the program label from which the data is to be loaded. Its offset from the address of this instruction, in the range +/-1MB, is encoded as &quot;imm19&quot; times 4." link="imm19_offset__2">&lt;label&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.loadlit.LDR_S_loadlit" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+if opc == '11' then UNDEFINED;
+constant integer size = 4 &lt;&lt; (<a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(opc));
+constant boolean nontemporal = FALSE;
+constant boolean tagchecked = FALSE;
+
+constant bits(64) offset = <a link="impl-shared.SignExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) SignExtend(bits(M) x, integer N)">SignExtend</a>(imm19:'00', 64);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="LDR_S_loadlit" symboldefcount="1">
+      <symbol link="St__2">&lt;St&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 32-bit name of the SIMD&amp;FP register to be loaded, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDR_S_loadlit, LDR_D_loadlit, LDR_Q_loadlit" symboldefcount="1">
+      <symbol link="imm19_offset__2">&lt;label&gt;</symbol>
+      <account encodedin="imm19">
+        <intro>
+          <para>Is the program label from which the data is to be loaded. Its offset from the address of this instruction, in the range +/-1MB, is encoded as "imm19" times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDR_D_loadlit" symboldefcount="1">
+      <symbol link="Dt__2">&lt;Dt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the SIMD&amp;FP register to be loaded, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDR_Q_loadlit" symboldefcount="1">
+      <symbol link="Qt__2">&lt;Qt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 128-bit name of the SIMD&amp;FP register to be loaded, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.loadlit.LDR_S_loadlit" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bits(64) address = PC64 + offset;
+<a link="impl-aarch64.CheckFPEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPEnabled64()">CheckFPEnabled64</a>();
+constant boolean privileged = PSTATE.EL != <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>;
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = CreateAccDescASIMD(<a link="MemOp_LOAD" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_LOAD</a>, nontemporal,
+                                                       tagchecked, privileged);
+constant bits(size*8) data = <a link="impl-aarch64.Mem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size*8) Mem[bits(64) address, integer size, AccessDescriptor accdesc_in]">Mem</a>[address, size, accdesc];
+<a link="impl-aarch64.V.write.2" file="shared_pseudocode.xml" hover="accessor: V[integer n, ESize width] = bits(width) value">V</a>[t, size*8] = data;</pstext></ps>
+  </ps_section>
+</instructionsection>

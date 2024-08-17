@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="zero_za_i" title="ZERO (tiles)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="ZERO" />
+  </docvars>
+  <heading>ZERO (tiles)</heading>
+  <desc>
+    <brief>Zero a list of 64-bit element ZA tiles</brief>
+    <description>
+      <para>Zeroes all bytes within each of the up to eight listed 64-bit element tiles named <asm-code>ZA0.D</asm-code> to <asm-code>ZA7.D</asm-code>, leaving the other 64-bit element tiles unmodified.</para>
+      <para>This instruction does not require the PE to be in Streaming SVE mode, and it is expected that this instruction will not experience a significant slowdown due to contention with other PEs that are executing in Streaming SVE mode.</para>
+      <para>For programmer convenience an assembler must also accept the names of 32-bit, 16-bit, and 8-bit element tiles which are converted into the corresponding set of 64-bit element tiles.</para>
+      <para>In accordance with the architecturally defined mapping between different element size tiles:</para>
+      <list type="unordered">
+        <listitem>
+          <content>Zeroing the 8-bit element tile name <asm-code>ZA0.B</asm-code>, or the entire array name <asm-code>ZA</asm-code>, is equivalent to zeroing all eight 64-bit element tiles named <asm-code>ZA0.D</asm-code> to <asm-code>ZA7.D</asm-code>.</content>
+        </listitem>
+        <listitem>
+          <content>Zeroing the 16-bit element tile name <asm-code>ZA0.H</asm-code> is equivalent to zeroing 64-bit element tiles named <asm-code>ZA0.D</asm-code>, <asm-code>ZA2.D</asm-code>, <asm-code>ZA4.D</asm-code>, and <asm-code>ZA6.D</asm-code>.</content>
+        </listitem>
+        <listitem>
+          <content>Zeroing the 16-bit element tile name <asm-code>ZA1.H</asm-code> is equivalent to zeroing 64-bit element tiles named <asm-code>ZA1.D</asm-code>, <asm-code>ZA3.D</asm-code>, <asm-code>ZA5.D</asm-code>, and <asm-code>ZA7.D</asm-code>.</content>
+        </listitem>
+        <listitem>
+          <content>Zeroing the 32-bit element tile name <asm-code>ZA0.S</asm-code> is equivalent to zeroing 64-bit element tiles named <asm-code>ZA0.D</asm-code> and <asm-code>ZA4.D</asm-code>.</content>
+        </listitem>
+        <listitem>
+          <content>Zeroing the 32-bit element tile name <asm-code>ZA1.S</asm-code> is equivalent to zeroing 64-bit element tiles named <asm-code>ZA1.D</asm-code> and <asm-code>ZA5.D</asm-code>.</content>
+        </listitem>
+        <listitem>
+          <content>Zeroing the 32-bit element tile name <asm-code>ZA2.S</asm-code> is equivalent to zeroing 64-bit element tiles named <asm-code>ZA2.D</asm-code> and <asm-code>ZA6.D</asm-code>.</content>
+        </listitem>
+        <listitem>
+          <content>Zeroing the 32-bit element tile name <asm-code>ZA3.S</asm-code> is equivalent to zeroing 64-bit element tiles named <asm-code>ZA3.D</asm-code> and <asm-code>ZA7.D</asm-code>.</content>
+        </listitem>
+      </list>
+      <para>The preferred disassembly of this instruction uses the shortest list of tile names that represent the encoded immediate mask.</para>
+      <para>For example:</para>
+      <list type="unordered">
+        <listitem>
+          <content>An immediate which encodes 64-bit element tiles <asm-code>ZA0.D</asm-code>, <asm-code>ZA1.D</asm-code>, <asm-code>ZA4.D</asm-code>, and <asm-code>ZA5.D</asm-code> is disassembled as {<asm-code>ZA0.S</asm-code>, <asm-code>ZA1.S</asm-code>}.</content>
+        </listitem>
+        <listitem>
+          <content>An immediate which encodes 64-bit element tiles <asm-code>ZA0.D</asm-code>, <asm-code>ZA2.D</asm-code>, <asm-code>ZA4.D</asm-code>, and <asm-code>ZA6.D</asm-code> is disassembled as {<asm-code>ZA0.H</asm-code>}.</content>
+        </listitem>
+        <listitem>
+          <content>An all-ones immediate is disassembled as {<asm-code>ZA</asm-code>}.</content>
+        </listitem>
+        <listitem>
+          <content>An all-zeros immediate is disassembled as an empty list { }.</content>
+        </listitem>
+      </list>
+    </description>
+    <status>Green</status>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SME" oneof="1" id="iclass_mortlach" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="ZERO" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME" feature="FEAT_SME" />
+      </arch_variants>
+      <regdiagram form="32" psname="ZERO-ZA.I-_">
+        <box hibit="31" width="22" settings="22">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="8" name="imm8" usename="1">
+          <c colspan="8"></c>
+        </box>
+      </regdiagram>
+      <encoding name="zero_za_i_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="ZERO" />
+        </docvars>
+        <asmtemplate><text>ZERO    </text><text>{</text><text> </text><a link="sa_mask" hover="List of up to eight 64-bit element tile names separated by commas (field &quot;imm8&quot;)">&lt;mask&gt;</a><text> </text><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="ZERO-ZA.I-_" mylink="ZERO-ZA.I-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant bits(8) mask = imm8;
+constant integer esize = 64;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="zero_za_i_" symboldefcount="1">
+      <symbol link="sa_mask">&lt;mask&gt;</symbol>
+      <account encodedin="imm8">
+        <intro>
+          <para>Is a list of up to eight 64-bit element tile names separated by commas, encoded in the "imm8" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="ZERO-ZA.I-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSMEAndZAEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSMEAndZAEnabled()">CheckSMEAndZAEnabled</a>();
+constant integer SVL = <a link="impl-aarch64.CurrentSVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentSVL">CurrentSVL</a>;
+constant integer dim = SVL DIV esize;
+constant bits(dim*dim*esize) result = <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(dim*dim*esize);
+
+if IsFeatureImplemented(FEAT_TME) &amp;&amp; TSTATE.depth &gt; 0 then
+    <a link="impl-aarch64.FailTransaction.2" file="shared_pseudocode.xml" hover="function: FailTransaction(TMFailure cause, boolean retry)">FailTransaction</a>(<a link="TMFailure_ERR" file="shared_pseudocode.xml" hover="enumeration TMFailure { TMFailure_CNCL, TMFailure_DBG, TMFailure_ERR, TMFailure_NEST, TMFailure_SIZE, TMFailure_MEM, TMFailure_TRIVIAL, TMFailure_IMP }">TMFailure_ERR</a>, FALSE);
+
+for i = 0 to 7
+    if mask&lt;i&gt; == '1' then <a link="impl-aarch64.ZAtile.write.3" file="shared_pseudocode.xml" hover="accessor: ZAtile[integer tile, ESize esize, integer width] = bits(width) value">ZAtile</a>[i, esize, dim*dim*esize] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

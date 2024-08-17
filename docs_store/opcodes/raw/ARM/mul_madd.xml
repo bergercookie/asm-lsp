@@ -1,0 +1,184 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="MUL_MADD" title="MUL -- A64" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="MUL"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="MADD"/>
+  </docvars>
+  <heading>MUL</heading>
+  <desc>
+    <brief>
+      <para>Multiply</para>
+    </brief>
+    <authored>
+      <para>This instruction multiplies two register values and
+writes the result to the destination register.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <aliasto refiform="madd.xml" iformid="MADD">MADD</aliasto>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="MADD"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <regdiagram form="32" psname="A64.dpreg.dp_3src.MADD_32A_dp_3src.MUL" tworows="1">
+        <box hibit="31" width="1" name="sf" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="30" width="2" name="op54" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="28" width="5" settings="5">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="3" name="op31" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Rm" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" name="o0" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="14" width="5" name="Ra" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="MUL_MADD_32A_dp_3src" oneofinclass="2" oneof="2" label="32-bit" bitdiffs="sf == 0">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="MADD"/>
+          <docvar key="alias_mnemonic" value="MUL"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>MUL  </text><a hover="Is the 32-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="WdOrWZR">&lt;Wd&gt;</a><text>, </text><a hover="Is the 32-bit name of the first general-purpose source register holding the multiplicand, encoded in the &quot;Rn&quot; field." link="WnOrWZR__5">&lt;Wn&gt;</a><text>, </text><a hover="Is the 32-bit name of the second general-purpose source register holding the multiplier, encoded in the &quot;Rm&quot; field." link="WmOrWZR__6">&lt;Wm&gt;</a></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="madd.xml#MADD_32A_dp_3src">MADD</a><text>  </text><a hover="Is the 32-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." href="madd.xml#WdOrWZR">&lt;Wd&gt;</a><text>, </text><a hover="Is the 32-bit name of the first general-purpose source register holding the multiplicand, encoded in the &quot;Rn&quot; field." href="madd.xml#WnOrWZR__5">&lt;Wn&gt;</a><text>, </text><a hover="Is the 32-bit name of the second general-purpose source register holding the multiplier, encoded in the &quot;Rm&quot; field." href="madd.xml#WmOrWZR__6">&lt;Wm&gt;</a><text>, WZR</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+      <encoding name="MUL_MADD_64A_dp_3src" oneofinclass="2" oneof="2" label="64-bit" bitdiffs="sf == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="datatype" value="64"/>
+          <docvar key="mnemonic" value="MADD"/>
+          <docvar key="alias_mnemonic" value="MUL"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>MUL  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="XdOrXZR__6">&lt;Xd&gt;</a><text>, </text><a hover="Is the 64-bit name of the first general-purpose source register holding the multiplicand, encoded in the &quot;Rn&quot; field." link="XnOrXZR__13">&lt;Xn&gt;</a><text>, </text><a hover="Is the 64-bit name of the second general-purpose source register holding the multiplier, encoded in the &quot;Rm&quot; field." link="XmOrXZR__9">&lt;Xm&gt;</a></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="madd.xml#MADD_64A_dp_3src">MADD</a><text>  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." href="madd.xml#XdOrXZR__6">&lt;Xd&gt;</a><text>, </text><a hover="Is the 64-bit name of the first general-purpose source register holding the multiplicand, encoded in the &quot;Rn&quot; field." href="madd.xml#XnOrXZR__13">&lt;Xn&gt;</a><text>, </text><a hover="Is the 64-bit name of the second general-purpose source register holding the multiplier, encoded in the &quot;Rm&quot; field." href="madd.xml#XmOrXZR__9">&lt;Xm&gt;</a><text>, XZR</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="MUL_MADD_32A_dp_3src" symboldefcount="1">
+      <symbol link="WdOrWZR">&lt;Wd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MUL_MADD_32A_dp_3src" symboldefcount="1">
+      <symbol link="WnOrWZR__5">&lt;Wn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 32-bit name of the first general-purpose source register holding the multiplicand, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MUL_MADD_32A_dp_3src" symboldefcount="1">
+      <symbol link="WmOrWZR__6">&lt;Wm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the 32-bit name of the second general-purpose source register holding the multiplier, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MUL_MADD_64A_dp_3src" symboldefcount="1">
+      <symbol link="XdOrXZR__6">&lt;Xd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MUL_MADD_64A_dp_3src" symboldefcount="1">
+      <symbol link="XnOrXZR__13">&lt;Xn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the first general-purpose source register holding the multiplicand, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MUL_MADD_64A_dp_3src" symboldefcount="1">
+      <symbol link="XmOrXZR__9">&lt;Xm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the 64-bit name of the second general-purpose source register holding the multiplier, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

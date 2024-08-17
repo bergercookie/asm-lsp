@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="fmlalt_z_z8z8z8i" title="FMLALT (indexed, FP8 to FP16)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="FMLALT" />
+  </docvars>
+  <heading>FMLALT (indexed, FP8 to FP16)</heading>
+  <desc>
+    <brief>8-bit floating-point multiply-add long to half-precision (top, indexed)</brief>
+    <description>
+      <para>This 8-bit floating-point multiply-add long instruction widens the odd 8-bit elements in the first source vector and the indexed element from the corresponding 128-bit segment in the second source vector to half-precision format and multiplies the corresponding elements. The intermediate products are scaled by 2<sup>-UInt(FPMR.LSCALE[3:0])</sup> before being destructively added without intermediate rounding to the half-precision elements of the destination vector that overlap with the corresponding 8-bit floating-point elements in the first source vector. The 8-bit floating-point encoding format for the elements of the first source vector and the second source vector is selected by <asm-code>FPMR.F8S1</asm-code> and <asm-code>FPMR.F8S2</asm-code> respectively.</para>
+      <para>This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <takes_movprfx>True</takes_movprfx>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SVE2" oneof="1" id="iclass_sve2" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="FMLALT" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_FP8FMA" feature="FEAT_FP8FMA" />
+      </arch_variants>
+      <regdiagram form="32" psname="FMLALT-Z.Z8Z8Z8i-_" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="T" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" width="2" settings="2">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="20" width="2" name="i4h" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="18" width="3" name="Zm" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="15" width="4" settings="4">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="2" name="i4l" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Zda" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="fmlalt_z_z8z8z8i_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="FMLALT" />
+        </docvars>
+        <asmtemplate><text>FMLALT  </text><a link="sa_zda" hover="Third source and destination scalable vector register (field &quot;Zda&quot;)">&lt;Zda&gt;</a><text>.H, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.B, </text><a link="sa_zm" hover="Second source scalable vector register Z0-Z7 (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.B[</text><a link="sa_imm" hover="Immediate index [0-15] (field &quot;i4h:i4l&quot;)">&lt;imm&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="FMLALT-Z.Z8Z8Z8i-_" mylink="FMLALT-Z.Z8Z8Z8i-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !<a link="impl-aarch64.HaveSVE2FP8FMA.0" file="shared_pseudocode.xml" hover="function: boolean HaveSVE2FP8FMA()">HaveSVE2FP8FMA</a>() then UNDEFINED;
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer da = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zda);
+constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i4h:i4l);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="fmlalt_z_z8z8z8i_" symboldefcount="1">
+      <symbol link="sa_zda">&lt;Zda&gt;</symbol>
+      <account encodedin="Zda">
+        <intro>
+          <para>Is the name of the third source and destination scalable vector register, encoded in the "Zda" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fmlalt_z_z8z8z8i_" symboldefcount="1">
+      <symbol link="sa_zn">&lt;Zn&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the first source scalable vector register, encoded in the "Zn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fmlalt_z_z8z8z8i_" symboldefcount="1">
+      <symbol link="sa_zm">&lt;Zm&gt;</symbol>
+      <account encodedin="Zm">
+        <intro>
+          <para>Is the name of the second source scalable vector register Z0-Z7, encoded in the "Zm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="fmlalt_z_z8z8z8i_" symboldefcount="1">
+      <symbol link="sa_imm">&lt;imm&gt;</symbol>
+      <account encodedin="i4h:i4l">
+        <intro>
+          <para>Is the immediate index, in the range 0 to 15, encoded in the "i4h:i4l" fields.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="FMLALT-Z.Z8Z8Z8i-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckFPMREnabled.0" file="shared_pseudocode.xml" hover="function: CheckFPMREnabled()">CheckFPMREnabled</a>();
+if IsFeatureImplemented(FEAT_FP8FMA) then <a link="impl-aarch64.CheckSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSVEEnabled()">CheckSVEEnabled</a>(); else <a link="impl-aarch64.CheckStreamingSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckStreamingSVEEnabled()">CheckStreamingSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer elements = VL DIV 16;
+constant integer eltspersegment = 128 DIV 16;
+constant bits(VL) operand1 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[n, VL];
+constant bits(VL) operand2 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[m, VL];
+constant bits(VL) operand3 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[da, VL];
+bits(VL) result;
+
+for e = 0 to elements-1
+    constant integer segmentbase = e - (e MOD eltspersegment);
+    constant integer s = 2 * segmentbase + index;
+    constant bits(8) element1 = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand1, 2 * e + 1, 8];
+    constant bits(8) element2 = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand2, s, 8];
+    constant bits(16) element3 = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand3, e, 16];
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, 16] = <a link="impl-shared.FP8MulAddFP.5" file="shared_pseudocode.xml" hover="function: bits(M) FP8MulAddFP(bits(M) addend, bits(N) op1, bits(N) op2, FPCR_Type fpcr, FPMR_Type fpmr)">FP8MulAddFP</a>(element3, element1, element2, FPCR, FPMR);
+
+<a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[da, VL] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

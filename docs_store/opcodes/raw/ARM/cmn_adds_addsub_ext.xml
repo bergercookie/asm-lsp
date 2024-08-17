@@ -1,0 +1,328 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="CMN_ADDS_addsub_ext" title="CMN (extended register) -- A64" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="CMN"/>
+    <docvar key="cond-setting" value="S"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="ADDS"/>
+  </docvars>
+  <heading>CMN (extended register)</heading>
+  <desc>
+    <brief>
+      <para>Compare negative (extended register)</para>
+    </brief>
+    <authored>
+      <para>This instruction adds a register value and a
+sign or zero-extended register value, followed by an optional
+left shift amount. The argument that is extended from the
+<syntax>&lt;Rm&gt;</syntax> register can be a byte, halfword, word, or
+doubleword. It updates the condition flags based on the
+result, and discards the result.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <aliasto refiform="adds_addsub_ext.xml" iformid="ADDS_addsub_ext">ADDS (extended register)</aliasto>
+  <classes>
+    <iclass name="Setting the condition flags" oneof="1" id="iclass_setting_the_condition_flags" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="cond-setting" value="S"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="ADDS"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <regdiagram form="32" psname="A64.dpreg.addsub_ext.ADDS_32S_addsub_ext.CMN" tworows="1">
+        <box hibit="31" width="1" name="sf" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="30" name="op" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="28" width="5" settings="5">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="opt" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Rm" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="3" name="option" usename="1">
+          <c colspan="3"/>
+        </box>
+        <box hibit="12" width="3" name="imm3" usename="1">
+          <c colspan="3"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="CMN_ADDS_32S_addsub_ext" oneofinclass="2" oneof="2" label="32-bit" bitdiffs="sf == 0">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="ADDS"/>
+          <docvar key="alias_mnemonic" value="CMN"/>
+          <docvar key="cond-setting" value="S"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>CMN  </text><a hover="Is the 32-bit name of the first source general-purpose register or stack pointer, encoded in the &quot;Rn&quot; field." link="WnWSP_option__2">&lt;Wn|WSP&gt;</a><text>, </text><a hover="Is the 32-bit name of the second general-purpose source register, encoded in the &quot;Rm&quot; field." link="WmOrWZR__2">&lt;Wm&gt;</a><text>{, </text><a hover="For the 32-bit variant: is the extension to be applied to the second source operand, " link="extend_option__6">&lt;extend&gt;</a><text> {#</text><a hover="Is the left shift amount to be applied after extension in the range 0 to 4, defaulting to 0, encoded in the &quot;imm3&quot; field. It must be absent when &amp;lt;extend&amp;gt; is absent, is required when &amp;lt;extend&amp;gt; is LSL, and is optional when &amp;lt;extend&amp;gt; is present but not LSL." link="amount__4">&lt;amount&gt;</a><text>}}</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="adds_addsub_ext.xml#ADDS_32S_addsub_ext">ADDS</a><text>  WZR, </text><a hover="Is the 32-bit name of the first source general-purpose register or stack pointer, encoded in the &quot;Rn&quot; field." href="adds_addsub_ext.xml#WnWSP_option__2">&lt;Wn|WSP&gt;</a><text>, </text><a hover="Is the 32-bit name of the second general-purpose source register, encoded in the &quot;Rm&quot; field." href="adds_addsub_ext.xml#WmOrWZR__2">&lt;Wm&gt;</a><text>{, </text><a hover="For the 32-bit variant: is the extension to be applied to the second source operand, " href="adds_addsub_ext.xml#extend_option__6">&lt;extend&gt;</a><text> {#</text><a hover="Is the left shift amount to be applied after extension in the range 0 to 4, defaulting to 0, encoded in the &quot;imm3&quot; field. It must be absent when &amp;lt;extend&amp;gt; is absent, is required when &amp;lt;extend&amp;gt; is LSL, and is optional when &amp;lt;extend&amp;gt; is present but not LSL." href="adds_addsub_ext.xml#amount__4">&lt;amount&gt;</a><text>}}</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+      <encoding name="CMN_ADDS_64S_addsub_ext" oneofinclass="2" oneof="2" label="64-bit" bitdiffs="sf == 1">
+        <docvars>
+          <docvar key="datatype" value="64"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="ADDS"/>
+          <docvar key="alias_mnemonic" value="CMN"/>
+          <docvar key="cond-setting" value="S"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>CMN  </text><a hover="Is the 64-bit name of the first source general-purpose register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option__6">&lt;Xn|SP&gt;</a><text>, </text><a hover="Is a width specifier, " link="R_option__2">&lt;R&gt;</a><a hover="Is the number [0-30] of the second general-purpose source register or the name ZR (31), encoded in the &quot;Rm&quot; field." link="Rm_option">&lt;m&gt;</a><text>{, </text><a hover="For the 64-bit variant: is the extension to be applied to the second source operand, " link="extend_option__8">&lt;extend&gt;</a><text> {#</text><a hover="Is the left shift amount to be applied after extension in the range 0 to 4, defaulting to 0, encoded in the &quot;imm3&quot; field. It must be absent when &amp;lt;extend&amp;gt; is absent, is required when &amp;lt;extend&amp;gt; is LSL, and is optional when &amp;lt;extend&amp;gt; is present but not LSL." link="amount__4">&lt;amount&gt;</a><text>}}</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="adds_addsub_ext.xml#ADDS_64S_addsub_ext">ADDS</a><text>  XZR, </text><a hover="Is the 64-bit name of the first source general-purpose register or stack pointer, encoded in the &quot;Rn&quot; field." href="adds_addsub_ext.xml#XnSP_option__6">&lt;Xn|SP&gt;</a><text>, </text><a hover="Is a width specifier, " href="adds_addsub_ext.xml#R_option__2">&lt;R&gt;</a><a hover="Is the number [0-30] of the second general-purpose source register or the name ZR (31), encoded in the &quot;Rm&quot; field." href="adds_addsub_ext.xml#Rm_option">&lt;m&gt;</a><text>{, </text><a hover="For the 64-bit variant: is the extension to be applied to the second source operand, " href="adds_addsub_ext.xml#extend_option__8">&lt;extend&gt;</a><text> {#</text><a hover="Is the left shift amount to be applied after extension in the range 0 to 4, defaulting to 0, encoded in the &quot;imm3&quot; field. It must be absent when &amp;lt;extend&amp;gt; is absent, is required when &amp;lt;extend&amp;gt; is LSL, and is optional when &amp;lt;extend&amp;gt; is present but not LSL." href="adds_addsub_ext.xml#amount__4">&lt;amount&gt;</a><text>}}</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="CMN_ADDS_32S_addsub_ext" symboldefcount="1">
+      <symbol link="WnWSP_option__2">&lt;Wn|WSP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 32-bit name of the first source general-purpose register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CMN_ADDS_32S_addsub_ext" symboldefcount="1">
+      <symbol link="WmOrWZR__2">&lt;Wm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the 32-bit name of the second general-purpose source register, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CMN_ADDS_32S_addsub_ext" symboldefcount="1">
+      <symbol link="extend_option__6">&lt;extend&gt;</symbol>
+      <definition encodedin="option">
+        <intro>For the 32-bit variant: is the extension to be applied to the second source operand, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">option</entry>
+                <entry class="symbol">&lt;extend&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="symbol">UXTB</entry>
+              </row>
+              <row>
+                <entry class="bitfield">001</entry>
+                <entry class="symbol">UXTH</entry>
+              </row>
+              <row>
+                <entry class="bitfield">010</entry>
+                <entry class="symbol">LSL|UXTW</entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">UXTX</entry>
+              </row>
+              <row>
+                <entry class="bitfield">100</entry>
+                <entry class="symbol">SXTB</entry>
+              </row>
+              <row>
+                <entry class="bitfield">101</entry>
+                <entry class="symbol">SXTH</entry>
+              </row>
+              <row>
+                <entry class="bitfield">110</entry>
+                <entry class="symbol">SXTW</entry>
+              </row>
+              <row>
+                <entry class="bitfield">111</entry>
+                <entry class="symbol">SXTX</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+        <after>If "Rn" is '11111' (WSP) and "option" is '010' then LSL is preferred, but may be omitted when "imm3" is '000'. In all other cases &lt;extend&gt; is required and must be UXTW when "option" is '010'.</after>
+      </definition>
+    </explanation>
+    <explanation enclist="CMN_ADDS_64S_addsub_ext" symboldefcount="2">
+      <symbol link="extend_option__8">&lt;extend&gt;</symbol>
+      <definition encodedin="option">
+        <intro>For the 64-bit variant: is the extension to be applied to the second source operand, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">option</entry>
+                <entry class="symbol">&lt;extend&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="symbol">UXTB</entry>
+              </row>
+              <row>
+                <entry class="bitfield">001</entry>
+                <entry class="symbol">UXTH</entry>
+              </row>
+              <row>
+                <entry class="bitfield">010</entry>
+                <entry class="symbol">UXTW</entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">LSL|UXTX</entry>
+              </row>
+              <row>
+                <entry class="bitfield">100</entry>
+                <entry class="symbol">SXTB</entry>
+              </row>
+              <row>
+                <entry class="bitfield">101</entry>
+                <entry class="symbol">SXTH</entry>
+              </row>
+              <row>
+                <entry class="bitfield">110</entry>
+                <entry class="symbol">SXTW</entry>
+              </row>
+              <row>
+                <entry class="bitfield">111</entry>
+                <entry class="symbol">SXTX</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+        <after>If "Rn" is '11111' (SP) and "option" is '011' then LSL is preferred, but may be omitted when "imm3" is '000'. In all other cases &lt;extend&gt; is required and must be UXTX when "option" is '011'.</after>
+      </definition>
+    </explanation>
+    <explanation enclist="CMN_ADDS_32S_addsub_ext, CMN_ADDS_64S_addsub_ext" symboldefcount="1">
+      <symbol link="amount__4">&lt;amount&gt;</symbol>
+      <account encodedin="imm3">
+        <intro>
+          <para>Is the left shift amount to be applied after extension in the range 0 to 4, defaulting to 0, encoded in the "imm3" field. It must be absent when &lt;extend&gt; is absent, is required when &lt;extend&gt; is LSL, and is optional when &lt;extend&gt; is present but not LSL.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CMN_ADDS_64S_addsub_ext" symboldefcount="1">
+      <symbol link="XnSP_option__6">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the first source general-purpose register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="CMN_ADDS_64S_addsub_ext" symboldefcount="1">
+      <symbol link="R_option__2">&lt;R&gt;</symbol>
+      <definition encodedin="option">
+        <intro>Is a width specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">option</entry>
+                <entry class="symbol">&lt;R&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00x</entry>
+                <entry class="symbol">W</entry>
+              </row>
+              <row>
+                <entry class="bitfield">010</entry>
+                <entry class="symbol">W</entry>
+              </row>
+              <row>
+                <entry class="bitfield">x11</entry>
+                <entry class="symbol">X</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10x</entry>
+                <entry class="symbol">W</entry>
+              </row>
+              <row>
+                <entry class="bitfield">110</entry>
+                <entry class="symbol">W</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="CMN_ADDS_64S_addsub_ext" symboldefcount="1">
+      <symbol link="Rm_option">&lt;m&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the number [0-30] of the second general-purpose source register or the name ZR (31), encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

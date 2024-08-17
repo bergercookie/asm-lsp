@@ -1,0 +1,277 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="LDUR_fpsimd" title="LDUR (SIMD&amp;FP) -- A64" type="instruction">
+  <docvars>
+    <docvar key="address-form" value="base-plus-offset"/>
+    <docvar key="instr-class" value="fpsimd"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="LDUR"/>
+    <docvar key="offset-type" value="off9s_u"/>
+  </docvars>
+  <heading>LDUR (SIMD&amp;FP)</heading>
+  <desc>
+    <brief>
+      <para>Load SIMD&amp;FP register (unscaled offset)</para>
+    </brief>
+    <authored>
+      <para>This instruction loads a SIMD&amp;FP register from memory.
+The address that is used for the load is calculated from a base register value
+and an optional immediate offset.</para>
+      <para>Depending on the settings in the <register_link id="AArch64-cpacr_el1.xml" state="AArch64">CPACR_EL1</register_link>,
+<register_link id="AArch64-cptr_el2.xml" state="AArch64">CPTR_EL2</register_link>, and <register_link id="AArch64-cptr_el3.xml" state="AArch64">CPTR_EL3</register_link> registers,
+and the current Security state and Exception level,
+an attempt to execute the instruction might be trapped.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1, the timing of this instruction is insensitive to the value of the data being loaded or stored.</para>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Unscaled offset" oneof="1" id="iclass_unscaled_offset" no_encodings="5" isa="A64">
+      <docvars>
+        <docvar key="address-form" value="base-plus-offset"/>
+        <docvar key="instr-class" value="fpsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="LDUR"/>
+        <docvar key="offset-type" value="off9s_u"/>
+      </docvars>
+      <iclassintro count="5"/>
+      <regdiagram form="32" psname="A64.ldst.ldst_unscaled.LDUR_B_ldst_unscaled" tworows="1">
+        <box hibit="31" width="2" name="size" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="VR" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="25" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="opc" usename="1" settings="1" psbits="xx">
+          <c>x</c>
+          <c>1</c>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="9" name="imm9" usename="1">
+          <c colspan="9"/>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="LDUR_B_ldst_unscaled" oneofinclass="5" oneof="5" label="8-bit" bitdiffs="size == 00 &amp;&amp; opc == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDUR"/>
+          <docvar key="address-form" value="base-plus-offset"/>
+          <docvar key="address-form-reg-type" value="base-plus-offset-8-fsreg"/>
+          <docvar key="atomic-ops" value="LDUR-8-fsreg"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off9s_u"/>
+          <docvar key="reg-type" value="8-fsreg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="opc">
+          <c>0</c>
+          <c/>
+        </box>
+        <asmtemplate><text>LDUR  </text><a hover="Is the 8-bit name of the SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Bt">&lt;Bt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #</text><a hover="Is the optional signed immediate byte offset, in the range -256 to 255, defaulting to 0 and encoded in the &quot;imm9&quot; field." link="simm">&lt;simm&gt;</a><text>}]</text></asmtemplate>
+      </encoding>
+      <encoding name="LDUR_H_ldst_unscaled" oneofinclass="5" oneof="5" label="16-bit" bitdiffs="size == 01 &amp;&amp; opc == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDUR"/>
+          <docvar key="address-form" value="base-plus-offset"/>
+          <docvar key="address-form-reg-type" value="base-plus-offset-16-fsreg"/>
+          <docvar key="atomic-ops" value="LDUR-16-fsreg"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off9s_u"/>
+          <docvar key="reg-type" value="16-fsreg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="opc">
+          <c>0</c>
+          <c/>
+        </box>
+        <asmtemplate><text>LDUR  </text><a hover="Is the 16-bit name of the SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Ht">&lt;Ht&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #</text><a hover="Is the optional signed immediate byte offset, in the range -256 to 255, defaulting to 0 and encoded in the &quot;imm9&quot; field." link="simm">&lt;simm&gt;</a><text>}]</text></asmtemplate>
+      </encoding>
+      <encoding name="LDUR_S_ldst_unscaled" oneofinclass="5" oneof="5" label="32-bit" bitdiffs="size == 10 &amp;&amp; opc == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDUR"/>
+          <docvar key="address-form" value="base-plus-offset"/>
+          <docvar key="address-form-reg-type" value="base-plus-offset-32-fsreg"/>
+          <docvar key="atomic-ops" value="LDUR-32-fsreg"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off9s_u"/>
+          <docvar key="reg-type" value="32-fsreg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="opc">
+          <c>0</c>
+          <c/>
+        </box>
+        <asmtemplate><text>LDUR  </text><a hover="Is the 32-bit name of the SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="St">&lt;St&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #</text><a hover="Is the optional signed immediate byte offset, in the range -256 to 255, defaulting to 0 and encoded in the &quot;imm9&quot; field." link="simm">&lt;simm&gt;</a><text>}]</text></asmtemplate>
+      </encoding>
+      <encoding name="LDUR_D_ldst_unscaled" oneofinclass="5" oneof="5" label="64-bit" bitdiffs="size == 11 &amp;&amp; opc == 01">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDUR"/>
+          <docvar key="address-form" value="base-plus-offset"/>
+          <docvar key="address-form-reg-type" value="base-plus-offset-64-fsreg"/>
+          <docvar key="atomic-ops" value="LDUR-64-fsreg"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off9s_u"/>
+          <docvar key="reg-type" value="64-fsreg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="opc">
+          <c>0</c>
+          <c/>
+        </box>
+        <asmtemplate><text>LDUR  </text><a hover="Is the 64-bit name of the SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Dt">&lt;Dt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #</text><a hover="Is the optional signed immediate byte offset, in the range -256 to 255, defaulting to 0 and encoded in the &quot;imm9&quot; field." link="simm">&lt;simm&gt;</a><text>}]</text></asmtemplate>
+      </encoding>
+      <encoding name="LDUR_Q_ldst_unscaled" oneofinclass="5" oneof="5" label="128-bit" bitdiffs="size == 00 &amp;&amp; opc == 11">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDUR"/>
+          <docvar key="address-form" value="base-plus-offset"/>
+          <docvar key="address-form-reg-type" value="base-plus-offset-128-fsreg"/>
+          <docvar key="atomic-ops" value="LDUR-128-fsreg"/>
+          <docvar key="instr-class" value="fpsimd"/>
+          <docvar key="offset-type" value="off9s_u"/>
+          <docvar key="reg-type" value="128-fsreg"/>
+        </docvars>
+        <box hibit="31" width="2" name="size">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="opc">
+          <c>1</c>
+          <c/>
+        </box>
+        <asmtemplate><text>LDUR  </text><a hover="Is the 128-bit name of the SIMD&amp;amp;FP register to be transferred, encoded in the &quot;Rt&quot; field." link="Qt">&lt;Qt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>{, #</text><a hover="Is the optional signed immediate byte offset, in the range -256 to 255, defaulting to 0 and encoded in the &quot;imm9&quot; field." link="simm">&lt;simm&gt;</a><text>}]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.ldst_unscaled.LDUR_B_ldst_unscaled" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if opc&lt;1&gt; == '1' &amp;&amp; size != '00' then UNDEFINED;
+constant integer scale = if opc&lt;1&gt; == '1' then 4 else <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant bits(64) offset = <a link="impl-shared.SignExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) SignExtend(bits(M) x, integer N)">SignExtend</a>(imm9, 64);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="LDUR_B_ldst_unscaled" symboldefcount="1">
+      <symbol link="Bt">&lt;Bt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 8-bit name of the SIMD&amp;FP register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDUR_B_ldst_unscaled, LDUR_H_ldst_unscaled, LDUR_S_ldst_unscaled, LDUR_D_ldst_unscaled, LDUR_Q_ldst_unscaled" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDUR_B_ldst_unscaled, LDUR_H_ldst_unscaled, LDUR_S_ldst_unscaled, LDUR_D_ldst_unscaled, LDUR_Q_ldst_unscaled" symboldefcount="1">
+      <symbol link="simm">&lt;simm&gt;</symbol>
+      <account encodedin="imm9">
+        <intro>
+          <para>Is the optional signed immediate byte offset, in the range -256 to 255, defaulting to 0 and encoded in the "imm9" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDUR_H_ldst_unscaled" symboldefcount="1">
+      <symbol link="Ht">&lt;Ht&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 16-bit name of the SIMD&amp;FP register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDUR_S_ldst_unscaled" symboldefcount="1">
+      <symbol link="St">&lt;St&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 32-bit name of the SIMD&amp;FP register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDUR_D_ldst_unscaled" symboldefcount="1">
+      <symbol link="Dt">&lt;Dt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the SIMD&amp;FP register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDUR_Q_ldst_unscaled" symboldefcount="1">
+      <symbol link="Qt">&lt;Qt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 128-bit name of the SIMD&amp;FP register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldst_unscaled.LDUR_B_ldst_unscaled" sections="1" secttype="Shared Decode">
+      <pstext mayhavelinks="1" section="Postdecode" rep_section="postdecode">constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer datasize = 8 &lt;&lt; scale;
+constant boolean nontemporal = FALSE;
+constant boolean tagchecked = n != 31;</pstext></ps>
+  </ps_section>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldst_unscaled.LDUR_B_ldst_unscaled" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckFPEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPEnabled64()">CheckFPEnabled64</a>();
+bits(64) address;
+
+constant boolean privileged = PSTATE.EL != <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>;
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = CreateAccDescASIMD(<a link="MemOp_LOAD" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_LOAD</a>, nontemporal, tagchecked,
+                                                       privileged);
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+address = <a link="impl-shared.AddressAdd.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressAdd(bits(64) base, integer offset, AccessDescriptor accdesc)">AddressAdd</a>(address, offset, accdesc);
+
+<a link="impl-aarch64.V.write.2" file="shared_pseudocode.xml" hover="accessor: V[integer n, ESize width] = bits(width) value">V</a>[t, datasize] = <a link="impl-aarch64.Mem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size*8) Mem[bits(64) address, integer size, AccessDescriptor accdesc_in]">Mem</a>[address, datasize DIV 8, accdesc];</pstext></ps>
+  </ps_section>
+</instructionsection>

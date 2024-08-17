@@ -1,0 +1,215 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="RCWCAS" title="RCWCAS, RCWCASA, RCWCASL, RCWCASAL -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+  </docvars>
+  <heading>RCWCAS, RCWCASA, RCWCASL, RCWCASAL</heading>
+  <desc>
+    <brief>
+      <para>Read check write compare and swap doubleword in memory</para>
+    </brief>
+    <authored>
+      <para>This instruction reads a 64-bit doubleword
+from memory, and compares it against the value held in a register. If the comparison
+is equal, the value in a second register is conditionally written to memory.
+Storing back to memory is conditional on RCW Checks.
+If the write is performed, the read and the write occur atomically such that no other
+modification of the memory location can take place between the read and the write.
+This instruction updates the condition flags based on the result of the update of
+memory.</para>
+      <list type="unordered">
+        <listitem>
+          <content>
+            <instruction>RCWCASA</instruction> and <instruction>RCWCASAL</instruction> load from memory with acquire semantics.</content>
+        </listitem>
+        <listitem>
+          <content>
+            <instruction>RCWCASL</instruction> and <instruction>RCWCASAL</instruction> store to memory with release semantics.</content>
+        </listitem>
+        <listitem>
+          <content>
+            <instruction>RCWCAS</instruction> has neither acquire nor release semantics.</content>
+        </listitem>
+      </list>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1, the timing of this instruction is insensitive to the value of the data being loaded or stored.</para>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="4" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="4"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_THE" name="ARMv8.9"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.rcwcomswap.RCWCAS_C64_rcwcomswap" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" name="S" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="29" width="6" settings="6">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="1" name="A" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="22" width="1" name="R" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Rs" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="6" settings="6">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="RCWCAS_C64_rcwcomswap" oneofinclass="4" oneof="4" label="RCWCAS" bitdiffs="A == 0 &amp;&amp; R == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="RCWCAS"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="1" name="A">
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>RCWCAS  </text><a hover="Is the 64-bit name of the general-purpose register to be compared and loaded, encoded in the &quot;Rs&quot; field." link="XsOrXZR__4">&lt;Xs&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose register to be conditionally stored, encoded in the &quot;Rt&quot; field." link="XtOrXZR__10">&lt;Xt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="RCWCASA_C64_rcwcomswap" oneofinclass="4" oneof="4" label="RCWCASA" bitdiffs="A == 1 &amp;&amp; R == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="RCWCASA"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="1" name="A">
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>RCWCASA  </text><a hover="Is the 64-bit name of the general-purpose register to be compared and loaded, encoded in the &quot;Rs&quot; field." link="XsOrXZR__4">&lt;Xs&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose register to be conditionally stored, encoded in the &quot;Rt&quot; field." link="XtOrXZR__10">&lt;Xt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="RCWCASAL_C64_rcwcomswap" oneofinclass="4" oneof="4" label="RCWCASAL" bitdiffs="A == 1 &amp;&amp; R == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="RCWCASAL"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="1" name="A">
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>RCWCASAL  </text><a hover="Is the 64-bit name of the general-purpose register to be compared and loaded, encoded in the &quot;Rs&quot; field." link="XsOrXZR__4">&lt;Xs&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose register to be conditionally stored, encoded in the &quot;Rt&quot; field." link="XtOrXZR__10">&lt;Xt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="RCWCASL_C64_rcwcomswap" oneofinclass="4" oneof="4" label="RCWCASL" bitdiffs="A == 0 &amp;&amp; R == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="RCWCASL"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="1" name="A">
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>RCWCASL  </text><a hover="Is the 64-bit name of the general-purpose register to be compared and loaded, encoded in the &quot;Rs&quot; field." link="XsOrXZR__4">&lt;Xs&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose register to be conditionally stored, encoded in the &quot;Rt&quot; field." link="XtOrXZR__10">&lt;Xt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.rcwcomswap.RCWCAS_C64_rcwcomswap" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_THE) then UNDEFINED;
+constant integer s = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rs);
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant boolean soft = FALSE;
+
+constant boolean acquire = A == '1';
+constant boolean release = R == '1';
+constant boolean tagchecked = n != 31;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="RCWCAS_C64_rcwcomswap, RCWCASA_C64_rcwcomswap, RCWCASAL_C64_rcwcomswap, RCWCASL_C64_rcwcomswap" symboldefcount="1">
+      <symbol link="XsOrXZR__4">&lt;Xs&gt;</symbol>
+      <account encodedin="Rs">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose register to be compared and loaded, encoded in the "Rs" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="RCWCAS_C64_rcwcomswap, RCWCASA_C64_rcwcomswap, RCWCASAL_C64_rcwcomswap, RCWCASL_C64_rcwcomswap" symboldefcount="1">
+      <symbol link="XtOrXZR__10">&lt;Xt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose register to be conditionally stored, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="RCWCAS_C64_rcwcomswap, RCWCASA_C64_rcwcomswap, RCWCASAL_C64_rcwcomswap, RCWCASL_C64_rcwcomswap" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.rcwcomswap.RCWCAS_C64_rcwcomswap" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">if <a link="impl-aarch64.IsD128Enabled.1" file="shared_pseudocode.xml" hover="function: boolean IsD128Enabled(bits(2) el)">IsD128Enabled</a>(PSTATE.EL) then UNDEFINED;
+bits(64) address;
+constant bits(64) newdata = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[t, 64];
+constant bits(64) compdata = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[s, 64];
+bits(64) readdata;
+bits(4) nzcv;
+
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = CreateAccDescRCW(<a link="MemAtomicOp_CAS" file="shared_pseudocode.xml" hover="enumeration MemAtomicOp { MemAtomicOp_GCSSS1, MemAtomicOp_ADD, MemAtomicOp_BIC, MemAtomicOp_EOR, MemAtomicOp_ORR, MemAtomicOp_SMAX, MemAtomicOp_SMIN, MemAtomicOp_UMAX, MemAtomicOp_UMIN, MemAtomicOp_SWP, MemAtomicOp_CAS }">MemAtomicOp_CAS</a>, soft, acquire, release,
+                                                     tagchecked);
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+(nzcv, readdata) = <a link="impl-aarch64.MemAtomicRCW.4" file="shared_pseudocode.xml" hover="function: (bits(4), bits(size)) MemAtomicRCW(bits(64) address, bits(size) cmpoperand, bits(size) operand, AccessDescriptor accdesc_in)">MemAtomicRCW</a>(address, compdata, newdata, accdesc);
+
+PSTATE.&lt;N,Z,C,V&gt; = nzcv;
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[s, 64] = readdata;   // Return the old value when s!=31</pstext></ps>
+  </ps_section>
+</instructionsection>

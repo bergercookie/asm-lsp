@@ -1,0 +1,212 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="SUB_addsub_imm" title="SUB (immediate) -- A64" type="instruction">
+  <docvars>
+    <docvar key="cond-setting" value="no-s"/>
+    <docvar key="immediate-type" value="imm12u"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="SUB"/>
+  </docvars>
+  <heading>SUB (immediate)</heading>
+  <desc>
+    <brief>
+      <para>Subtract (immediate)</para>
+    </brief>
+    <authored>
+      <para>This instruction subtracts an optionally-shifted immediate value
+from a register value, and writes the result to the destination
+register.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Not setting the condition flags" oneof="1" id="iclass_not_setting_the_condition_flags" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="cond-setting" value="no-s"/>
+        <docvar key="immediate-type" value="imm12u"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="SUB"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <regdiagram form="32" psname="A64.dpimm.addsub_imm.SUB_32_addsub_imm" tworows="1">
+        <box hibit="31" width="1" name="sf" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="30" name="op" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="6" settings="6">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="sh" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="21" width="12" name="imm12" usename="1">
+          <c colspan="12"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="SUB_32_addsub_imm" oneofinclass="2" oneof="2" label="32-bit" bitdiffs="sf == 0">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SUB"/>
+          <docvar key="cond-setting" value="no-s"/>
+          <docvar key="immediate-type" value="imm12u"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>SUB  </text><a hover="Is the 32-bit name of the destination general-purpose register or stack pointer, encoded in the &quot;Rd&quot; field." link="WdWSP_option">&lt;Wd|WSP&gt;</a><text>, </text><a hover="Is the 32-bit name of the source general-purpose register or stack pointer, encoded in the &quot;Rn&quot; field." link="WnWSP_option">&lt;Wn|WSP&gt;</a><text>, #</text><a hover="Is an unsigned immediate, in the range 0 to 4095, encoded in the &quot;imm12&quot; field." link="imm__17">&lt;imm&gt;</a><text>{, </text><a hover="Is the optional left shift to apply to the immediate, defaulting to LSL #0 and " link="shift_option">&lt;shift&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <encoding name="SUB_64_addsub_imm" oneofinclass="2" oneof="2" label="64-bit" bitdiffs="sf == 1">
+        <docvars>
+          <docvar key="datatype" value="64"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SUB"/>
+          <docvar key="cond-setting" value="no-s"/>
+          <docvar key="immediate-type" value="imm12u"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>SUB  </text><a hover="Is the 64-bit name of the destination general-purpose register or stack pointer, encoded in the &quot;Rd&quot; field." link="XdSP_option">&lt;Xd|SP&gt;</a><text>, </text><a hover="Is the 64-bit name of the source general-purpose register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option__3">&lt;Xn|SP&gt;</a><text>, #</text><a hover="Is an unsigned immediate, in the range 0 to 4095, encoded in the &quot;imm12&quot; field." link="imm__17">&lt;imm&gt;</a><text>{, </text><a hover="Is the optional left shift to apply to the immediate, defaulting to LSL #0 and " link="shift_option">&lt;shift&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpimm.addsub_imm.SUB_32_addsub_imm" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer datasize = 32 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(sf);
+
+constant bits(24) imm = if sh == '0' then <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(12):imm12 else imm12:<a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(12);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="SUB_32_addsub_imm" symboldefcount="1">
+      <symbol link="WdWSP_option">&lt;Wd|WSP&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 32-bit name of the destination general-purpose register or stack pointer, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SUB_32_addsub_imm" symboldefcount="1">
+      <symbol link="WnWSP_option">&lt;Wn|WSP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 32-bit name of the source general-purpose register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SUB_32_addsub_imm, SUB_64_addsub_imm" symboldefcount="1">
+      <symbol link="imm__17">&lt;imm&gt;</symbol>
+      <account encodedin="imm12">
+        <intro>
+          <para>Is an unsigned immediate, in the range 0 to 4095, encoded in the "imm12" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SUB_32_addsub_imm, SUB_64_addsub_imm" symboldefcount="1">
+      <symbol link="shift_option">&lt;shift&gt;</symbol>
+      <definition encodedin="sh">
+        <intro>Is the optional left shift to apply to the immediate, defaulting to LSL #0 and </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">sh</entry>
+                <entry class="symbol">&lt;shift&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">LSL #0</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">LSL #12</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="SUB_64_addsub_imm" symboldefcount="1">
+      <symbol link="XdSP_option">&lt;Xd|SP&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the destination general-purpose register or stack pointer, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SUB_64_addsub_imm" symboldefcount="1">
+      <symbol link="XnSP_option__3">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the source general-purpose register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.dpimm.addsub_imm.SUB_32_addsub_imm" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bits(datasize) operand1 = if n == 31 then <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[]&lt;datasize-1:0&gt; else <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, datasize];
+constant bits(datasize) operand2 = <a link="impl-shared.ZeroExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) ZeroExtend(bits(M) x, integer N)">ZeroExtend</a>(imm, datasize);
+bits(datasize) result;
+(result, -) = <a link="impl-shared.AddWithCarry.3" file="shared_pseudocode.xml" hover="function: (bits(N), bits(4)) AddWithCarry(bits(N) x, bits(N) y, bit carry_in)">AddWithCarry</a>(operand1, NOT(operand2), '1');
+
+if d == 31 then
+    <a link="impl-aarch64.SP.write.0" file="shared_pseudocode.xml" hover="accessor: SP[] = bits(64) value">SP</a>[] = <a link="impl-shared.ZeroExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) ZeroExtend(bits(M) x, integer N)">ZeroExtend</a>(result, 64);
+else
+    <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, datasize] = result;
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

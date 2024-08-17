@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="EON_eor_z_zi" title="EON" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="EON" />
+    <docvar key="instr-class" value="sve" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="EOR" />
+  </docvars>
+  <heading>EON</heading>
+  <desc>
+    <brief>Bitwise exclusive OR with inverted immediate (unpredicated)</brief>
+    <description>
+      <para>Bitwise exclusive OR an inverted immediate with each 64-bit element of the source vector, and destructively place the results in the corresponding elements of the source vector. The immediate is a 64-bit value consisting of a single run of ones or zeros repeating every 2, 4, 8, 16, 32 or 64 bits. This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <takes_movprfx>True</takes_movprfx>
+  </desc>
+  <aliasto refiform="eor_z_zi.xml" iformid="eor_z_zi">EOR (immediate)</aliasto>
+  <classes>
+    <iclass name="SVE" oneof="1" id="iclass_sve" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="EOR" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="EOR-Z.ZI-_">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" name="opc&lt;1&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="opc&lt;0&gt;" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" width="4" settings="4">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="17" width="13" name="imm13" usename="1">
+          <c colspan="13"></c>
+        </box>
+        <box hibit="4" width="5" name="Zdn" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="EON_eor_z_zi_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="alias_mnemonic" value="EON" />
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="EOR" />
+        </docvars>
+        <asmtemplate><text>EON     </text><a link="sa_zdn" hover="Source and destination scalable vector register (field &quot;Zdn&quot;)">&lt;Zdn&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;imm13&lt;12&gt;:imm13&lt;5:0&gt;&quot;) [B,D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_zdn" hover="Source and destination scalable vector register (field &quot;Zdn&quot;)">&lt;Zdn&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;imm13&lt;12&gt;:imm13&lt;5:0&gt;&quot;) [B,D,H,S]">&lt;T&gt;</a><text>, #</text><a link="sa_const" hover="64, 32, 16 or 8-bit bitmask consisting of replicated 2, 4, 8, 16, 32 or 64 bit fields, each field containing a rotated run of non-zero bits (field &quot;imm13&quot;)">&lt;const&gt;</a></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="eor_z_zi.xml#eor_z_zi_">EOR</a><text> </text><a link="sa_zdn" hover="Source and destination scalable vector register (field &quot;Zdn&quot;)">&lt;Zdn&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;imm13&lt;12&gt;:imm13&lt;5:0&gt;&quot;) [B,D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_zdn" hover="Source and destination scalable vector register (field &quot;Zdn&quot;)">&lt;Zdn&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;imm13&lt;12&gt;:imm13&lt;5:0&gt;&quot;) [B,D,H,S]">&lt;T&gt;</a><text>, #(-</text><a link="sa_const" hover="64, 32, 16 or 8-bit bitmask consisting of replicated 2, 4, 8, 16, 32 or 64 bit fields, each field containing a rotated run of non-zero bits (field &quot;imm13&quot;)">&lt;const&gt;</a><text> - 1)</text></asmtemplate>
+          <aliascond>Never</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="EON_eor_z_zi_" symboldefcount="1">
+      <symbol link="sa_zdn">&lt;Zdn&gt;</symbol>
+      <account encodedin="Zdn">
+        <intro>
+          <para>Is the name of the source and destination scalable vector register, encoded in the "Zdn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="EON_eor_z_zi_" symboldefcount="1">
+      <symbol link="sa_t">&lt;T&gt;</symbol>
+      <definition encodedin="imm13&lt;12&gt;:imm13&lt;5:0&gt;">
+        <intro>Is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="3">
+            <thead>
+              <row>
+                <entry class="bitfield">imm13&lt;12&gt;</entry>
+                <entry class="bitfield">imm13&lt;5:0&gt;</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">0xxxxx</entry>
+                <entry class="symbol">S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">10xxxx</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">110xxx</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">1110xx</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">11110x</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">111110</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">111111</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="bitfield">xxxxxx</entry>
+                <entry class="symbol">D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="EON_eor_z_zi_" symboldefcount="1">
+      <symbol link="sa_const">&lt;const&gt;</symbol>
+      <account encodedin="imm13">
+        <intro>
+          <para>Is a 64, 32, 16 or 8-bit bitmask consisting of replicated 2, 4, 8, 16, 32 or 64 bit fields, each field containing a rotated run of non-zero bits, encoded in the "imm13" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

@@ -1,0 +1,234 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="LDUMINB" title="LDUMINB, LDUMINAB, LDUMINALB, LDUMINLB -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+  </docvars>
+  <heading>LDUMINB, LDUMINAB, LDUMINALB, LDUMINLB</heading>
+  <desc>
+    <brief>
+      <para>Atomic unsigned minimum on byte in memory</para>
+    </brief>
+    <authored>
+      <para>This instruction
+atomically loads an 8-bit byte from memory,
+compares it against the value held in a register,
+and stores the smaller value back to memory,
+treating the values as unsigned numbers.
+The value initially loaded from memory is returned in the destination register.</para>
+      <list type="unordered">
+        <listitem>
+          <content>If the destination register is not <value>WZR</value>, <instruction>LDUMINAB</instruction> and
+  <instruction>LDUMINALB</instruction> load from memory with acquire semantics.</content>
+        </listitem>
+        <listitem>
+          <content>
+            <instruction>LDUMINLB</instruction> and <instruction>LDUMINALB</instruction> store to memory with release
+  semantics.</content>
+        </listitem>
+        <listitem>
+          <content>
+            <instruction>LDUMINB</instruction> has neither acquire nor release semantics.</content>
+        </listitem>
+      </list>
+      <para>For more information about memory ordering semantics, see
+<xref linkend="ARMARM_BEIHCHEF">Load-Acquire, Store-Release</xref>.</para>
+      <para>For information about addressing modes, see
+<xref linkend="ARMARM_CHDIIIBB">Load/Store addressing modes</xref>.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1, the timing of this instruction is insensitive to the value of the data being loaded or stored.</para>
+  </operationalnotes>
+  <alias_list howmany="1">
+    <alias_list_intro>This instruction is used by the alias </alias_list_intro>
+    <aliasref aliaspageid="STUMINB_LDUMINB" aliasfile="stuminb_lduminb.xml" hover="Atomic unsigned minimum on byte in memory, without return" punct=".">
+      <text>STUMINB, STUMINLB</text>
+      <aliaspref>A == '0' &amp;&amp; Rt == '11111'</aliaspref>
+    </aliasref>
+    <alias_list_outro>
+      <text>  See </text>
+      <aliastablelink/>
+      <text> below for details of when the alias is preferred.</text>
+    </alias_list_outro>
+  </alias_list>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="4" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="4"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_LSE" name="ARMv8.1"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.memop.LDUMINAB_32_memop" tworows="1">
+        <box hibit="31" width="2" name="size" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="VR" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="25" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="1" name="A" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="22" width="1" name="R" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Rs" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" name="o3" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="14" width="3" name="opc" usename="1" settings="3" psbits="xxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="LDUMINAB_32_memop" oneofinclass="4" oneof="4" label="Acquire" bitdiffs="A == 1 &amp;&amp; R == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDUMINAB"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="1" name="A">
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>LDUMINAB  </text><a hover="Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." link="WsOrWZR">&lt;Ws&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose register to be loaded, encoded in the &quot;Rt&quot; field." link="WtOrWZR__2">&lt;Wt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="LDUMINALB_32_memop" oneofinclass="4" oneof="4" label="Acquire-release" bitdiffs="A == 1 &amp;&amp; R == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDUMINALB"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="1" name="A">
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>LDUMINALB  </text><a hover="Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." link="WsOrWZR">&lt;Ws&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose register to be loaded, encoded in the &quot;Rt&quot; field." link="WtOrWZR__2">&lt;Wt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="LDUMINB_32_memop" oneofinclass="4" oneof="4" label="No memory ordering" bitdiffs="A == 0 &amp;&amp; R == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDUMINB"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="1" name="A">
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>LDUMINB  </text><a hover="Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." link="WsOrWZR">&lt;Ws&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose register to be loaded, encoded in the &quot;Rt&quot; field." link="WtOrWZR__2">&lt;Wt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="LDUMINLB_32_memop" oneofinclass="4" oneof="4" label="Release" bitdiffs="A == 0 &amp;&amp; R == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LDUMINLB"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="23" width="1" name="A">
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="R">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>LDUMINLB  </text><a hover="Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the &quot;Rs&quot; field." link="WsOrWZR">&lt;Ws&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose register to be loaded, encoded in the &quot;Rt&quot; field." link="WtOrWZR__2">&lt;Wt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.memop.LDUMINAB_32_memop" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_LSE) then UNDEFINED;
+constant integer s = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rs);
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+
+constant boolean acquire = A == '1' &amp;&amp; Rt != '11111';
+constant boolean release = R == '1';
+constant boolean tagchecked = n != 31;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="LDUMINAB_32_memop, LDUMINALB_32_memop, LDUMINB_32_memop, LDUMINLB_32_memop" symboldefcount="1">
+      <symbol link="WsOrWZR">&lt;Ws&gt;</symbol>
+      <account encodedin="Rs">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose register holding the data value to be operated on with the contents of the memory location, encoded in the "Rs" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDUMINAB_32_memop, LDUMINALB_32_memop, LDUMINB_32_memop, LDUMINLB_32_memop" symboldefcount="1">
+      <symbol link="WtOrWZR__2">&lt;Wt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose register to be loaded, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDUMINAB_32_memop, LDUMINALB_32_memop, LDUMINB_32_memop, LDUMINLB_32_memop" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <aliastablehook anchor="aliasconditions">Alias Conditions</aliastablehook>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.memop.LDUMINAB_32_memop" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">bits(64) address;
+
+constant boolean privileged = PSTATE.EL != <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>;
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = CreateAccDescAtomicOp(<a link="MemAtomicOp_UMIN" file="shared_pseudocode.xml" hover="enumeration MemAtomicOp { MemAtomicOp_GCSSS1, MemAtomicOp_ADD, MemAtomicOp_BIC, MemAtomicOp_EOR, MemAtomicOp_ORR, MemAtomicOp_SMAX, MemAtomicOp_SMIN, MemAtomicOp_UMAX, MemAtomicOp_UMIN, MemAtomicOp_SWP, MemAtomicOp_CAS }">MemAtomicOp_UMIN</a>, acquire, release,
+                                                          tagchecked, privileged);
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+constant bits(8) comparevalue = bits(8) UNKNOWN; // Irrelevant when not executing CAS
+constant bits(8) value = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[s, 8];
+constant bits(8) data = <a link="impl-aarch64.MemAtomic.4" file="shared_pseudocode.xml" hover="function: bits(size) MemAtomic(bits(64) address, bits(size) cmpoperand, bits(size) operand, AccessDescriptor accdesc_in)">MemAtomic</a>(address, comparevalue, value, accdesc);
+
+if t != 31 then
+    <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[t, 32] = <a link="impl-shared.ZeroExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) ZeroExtend(bits(M) x, integer N)">ZeroExtend</a>(data, 32);
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="zero_za4_ri" title="ZERO (quad-vector)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="ZERO" />
+  </docvars>
+  <heading>ZERO (quad-vector)</heading>
+  <desc>
+    <brief>Zero ZA quad-vector groups</brief>
+    <description>
+      <para>The instruction zeroes one, two, or four ZA quad-vector groups.</para>
+      <para>The quad-vector group within all of, each half of, or each quarter of the ZA array is selected by the sum of the vector select register and offset range, modulo all, half, or quarter the number of ZA array vectors.</para>
+      <para>The <arm-defined-word>vector group</arm-defined-word> symbol, <syntax>VGx2</syntax> or <syntax>VGx4</syntax>, indicates that the ZA operand consists of two or four ZA quad-vector groups respectively.</para>
+    </description>
+    <status>Green</status>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <sm_policy>SM_1_only</sm_policy>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <classesintro count="3">
+      <txt>It has encodings from 3 classes:</txt>
+      <a href="#iclass_sme_vgx1_quad">One ZA quad-vector</a>
+      <txt>, </txt>
+      <a href="#iclass_sme_vgx2_quad">Two ZA quad-vectors</a>
+      <txt> and </txt>
+      <a href="#iclass_sme_vgx4_quad">Four ZA quad-vectors</a>
+    </classesintro>
+    <iclass name="One ZA quad-vector" oneof="3" id="iclass_sme_vgx1_quad" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="ZERO" />
+        <docvar key="sme-multireg" value="sme-vgx1-quad" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2p1" feature="FEAT_SME2p1" />
+      </arch_variants>
+      <regdiagram form="32" psname="ZERO-ZA4.RI-1">
+        <box hibit="31" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="29" width="10" settings="10">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="19" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="17" width="2" name="opc&lt;2:1&gt;" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="15" name="opc&lt;0&gt;" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="14" width="2" name="Rv" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="6" settings="6">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="3" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="2" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="1" width="2" name="off2" usename="1">
+          <c colspan="2"></c>
+        </box>
+      </regdiagram>
+      <encoding name="zero_za4_ri_1" oneofinclass="1" oneof="3" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="ZERO" />
+          <docvar key="sme-multireg" value="sme-vgx1-quad" />
+        </docvars>
+        <asmtemplate><text>ZERO    ZA.D[</text><a link="sa_wv" hover="32-bit vector select register W8-W11 (field &quot;Rv&quot;)">&lt;Wv&gt;</a><text>, </text><a link="sa_offs1" hover="First vector select offset, encoded as &quot;off2&quot; field times 4 (field off2)">&lt;offs1&gt;</a><text>:</text><a link="sa_offs4" hover="Fourth vector select offset, encoded as &quot;off2&quot; field times 4 plus 3 (field off2)">&lt;offs4&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="ZERO-ZA4.RI-1" mylink="ZERO-ZA4.RI-1" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2p1) then UNDEFINED;
+constant integer v = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('010':Rv);
+constant integer offset = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(off2:'00');
+constant integer ngrp = 1;
+constant integer nvec = 4;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Two ZA quad-vectors" oneof="3" id="iclass_sme_vgx2_quad" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="ZERO" />
+        <docvar key="sme-multireg" value="sme-vgx2-quad" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2p1" feature="FEAT_SME2p1" />
+      </arch_variants>
+      <regdiagram form="32" psname="ZERO-ZA4.RI-2">
+        <box hibit="31" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="29" width="10" settings="10">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="19" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="17" width="2" name="opc&lt;2:1&gt;" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" name="opc&lt;0&gt;" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="14" width="2" name="Rv" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="6" settings="6">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="3" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="2" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="0" name="o1" usename="1">
+          <c></c>
+        </box>
+      </regdiagram>
+      <encoding name="zero_za4_ri_2" oneofinclass="1" oneof="3" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="ZERO" />
+          <docvar key="sme-multireg" value="sme-vgx2-quad" />
+        </docvars>
+        <asmtemplate><text>ZERO    ZA.D[</text><a link="sa_wv" hover="32-bit vector select register W8-W11 (field &quot;Rv&quot;)">&lt;Wv&gt;</a><text>, </text><a link="sa_offs1_1" hover="First vector select offset, encoded as &quot;o1&quot; field times 4 (field o1)">&lt;offs1&gt;</a><text>:</text><a link="sa_offs4_1" hover="Fourth vector select offset, encoded as &quot;o1&quot; field times 4 plus 3 (field o1)">&lt;offs4&gt;</a><text>, VGx2]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="ZERO-ZA4.RI-2" mylink="ZERO-ZA4.RI-2" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2p1) then UNDEFINED;
+constant integer v = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('010':Rv);
+constant integer offset = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(o1:'00');
+constant integer ngrp = 2;
+constant integer nvec = 4;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Four ZA quad-vectors" oneof="3" id="iclass_sme_vgx4_quad" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="ZERO" />
+        <docvar key="sme-multireg" value="sme-vgx4-quad" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2p1" feature="FEAT_SME2p1" />
+      </arch_variants>
+      <regdiagram form="32" psname="ZERO-ZA4.RI-4">
+        <box hibit="31" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="29" width="10" settings="10">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="19" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="17" width="2" name="opc&lt;2:1&gt;" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" name="opc&lt;0&gt;" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="14" width="2" name="Rv" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="6" settings="6">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="3" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="2" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="0" name="o1" usename="1">
+          <c></c>
+        </box>
+      </regdiagram>
+      <encoding name="zero_za4_ri_4" oneofinclass="1" oneof="3" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="ZERO" />
+          <docvar key="sme-multireg" value="sme-vgx4-quad" />
+        </docvars>
+        <asmtemplate><text>ZERO    ZA.D[</text><a link="sa_wv" hover="32-bit vector select register W8-W11 (field &quot;Rv&quot;)">&lt;Wv&gt;</a><text>, </text><a link="sa_offs1_1" hover="First vector select offset, encoded as &quot;o1&quot; field times 4 (field o1)">&lt;offs1&gt;</a><text>:</text><a link="sa_offs4_1" hover="Fourth vector select offset, encoded as &quot;o1&quot; field times 4 plus 3 (field o1)">&lt;offs4&gt;</a><text>, VGx4]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="ZERO-ZA4.RI-4" mylink="ZERO-ZA4.RI-4" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2p1) then UNDEFINED;
+constant integer v = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('010':Rv);
+constant integer offset = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(o1:'00');
+constant integer ngrp = 4;
+constant integer nvec = 4;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="zero_za4_ri_1, zero_za4_ri_2, zero_za4_ri_4" symboldefcount="1">
+      <symbol link="sa_wv">&lt;Wv&gt;</symbol>
+      <account encodedin="Rv">
+        <intro>
+          <para>Is the 32-bit name of the vector select register W8-W11, encoded in the "Rv" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="zero_za4_ri_1" symboldefcount="1">
+      <symbol link="sa_offs1">&lt;offs1&gt;</symbol>
+      <account encodedin="off2">
+        <docvars>
+          <docvar key="sme-multireg" value="sme-vgx1-quad" />
+        </docvars>
+        <intro>
+          <para>For the one ZA quad-vector variant: is the first vector select offset, encoded as "off2" field times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="zero_za4_ri_2, zero_za4_ri_4" symboldefcount="2">
+      <symbol link="sa_offs1_1">&lt;offs1&gt;</symbol>
+      <account encodedin="o1">
+        <intro>
+          <para>For the four ZA quad-vectors and two ZA quad-vectors variant: is the first vector select offset, encoded as "o1" field times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="zero_za4_ri_1" symboldefcount="1">
+      <symbol link="sa_offs4">&lt;offs4&gt;</symbol>
+      <account encodedin="off2">
+        <docvars>
+          <docvar key="sme-multireg" value="sme-vgx1-quad" />
+        </docvars>
+        <intro>
+          <para>For the one ZA quad-vector variant: is the fourth vector select offset, encoded as "off2" field times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="zero_za4_ri_2, zero_za4_ri_4" symboldefcount="2">
+      <symbol link="sa_offs4_1">&lt;offs4&gt;</symbol>
+      <account encodedin="o1">
+        <intro>
+          <para>For the four ZA quad-vectors and two ZA quad-vectors variant: is the fourth vector select offset, encoded as "o1" field times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="ZERO-ZA4.RI-1" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckStreamingSVEAndZAEnabled.0" file="shared_pseudocode.xml" hover="function: CheckStreamingSVEAndZAEnabled()">CheckStreamingSVEAndZAEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer vectors = VL DIV 8;
+constant integer vstride = vectors DIV ngrp;
+constant bits(32) vbase = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[v, 32];
+integer vec = (<a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(vbase) + offset) MOD vstride;
+vec = vec - (vec MOD nvec);
+
+for r = 0 to ngrp-1
+    for i = 0 to nvec-1
+        <a link="impl-aarch64.ZAvector.write.2" file="shared_pseudocode.xml" hover="accessor: ZAvector[integer index, integer width] = bits(width) value">ZAvector</a>[vec + i, VL] = <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(VL);
+    vec = vec + vstride;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

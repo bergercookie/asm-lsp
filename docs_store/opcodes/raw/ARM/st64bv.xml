@@ -1,0 +1,174 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="ST64BV" title="ST64BV -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="ST64BV"/>
+  </docvars>
+  <heading>ST64BV</heading>
+  <desc>
+    <brief>
+      <para>Single-copy atomic 64-byte store with status result</para>
+    </brief>
+    <authored>
+      <para>This instruction stores eight 64-bit doublewords from
+consecutive registers to a memory location, and writes the status result of the store to
+a register.
+The store starts at register <syntax>Xt</syntax>, with the data being formed as
+<syntax>Data&lt;511:0&gt; = X(t+7):X(t+6):X(t+5):X(t+4):X(t+3):X(t+2):X(t+1):Xt</syntax>.
+The data that is stored is atomic and is required to be 64-byte aligned.</para>
+      <para>It is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word> which memory locations support this instruction.
+A memory location that supports <instruction>ST64BV</instruction> also supports
+<instruction>ST64BV0</instruction>.
+For more information, including about the memory types accessible and how the accesses are
+performed, see <xref linkend="ARMARM_CJACAFAH">Single-copy atomic 64-byte load/store</xref>.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="ST64BV"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_LS64_V" name="ARMv8.7"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.memop.ST64BV_64_memop" tworows="1">
+        <box hibit="31" width="2" name="size" usename="1" settings="2" psbits="xx">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="VR" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="25" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="A" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="R" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Rs" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" name="o3" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="14" width="3" name="opc" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="ST64BV_64_memop" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="ST64BV"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <asmtemplate><text>ST64BV  </text><a hover="Is the 64-bit name of the general-purpose register into which the status result of this instruction is written, encoded in the &quot;Rs&quot; field.&#10;&#10;The value returned is:&#10;&#10;&#10;0xFFFFFFFF_FFFFFFFF&#10;: If the memory location accessed does not support this instruction. In this case, the value at the memory location is UNKNOWN.&#10;&#10;!= 0xFFFFFFFF_FFFFFFFF&#10;: If the memory location accessed does support this instruction. In this case, the peripheral that provides the response defines the returned value and provides information on the state of the memory update at the memory location.&#10;&#10;&#10;If XZR is used, then the return value is ignored." link="XsOrXZR__3">&lt;Xs&gt;</a><text>, </text><a hover="Is the 64-bit name of the first general-purpose register to be transferred, encoded in the &quot;Rt&quot; field." link="XtOrXZR__9">&lt;Xt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.memop.ST64BV_64_memop" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_LS64_V) then UNDEFINED;
+if Rt&lt;4:3&gt; == '11' || Rt&lt;0&gt; == '1' then UNDEFINED;
+
+constant integer s = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rs);
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant boolean tagchecked = n != 31;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="ST64BV_64_memop" symboldefcount="1">
+      <symbol link="XsOrXZR__3">&lt;Xs&gt;</symbol>
+      <account encodedin="Rs">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose register into which the status result of this instruction is written, encoded in the "Rs" field.</para>
+          <para>The value returned is:</para>
+          <list type="param">
+            <listitem>
+              <param>0xFFFFFFFF_FFFFFFFF</param>
+              <content>If the memory location accessed does not support this instruction. In this case, the value at the memory location is <arm-defined-word>UNKNOWN</arm-defined-word>.</content>
+            </listitem>
+            <listitem>
+              <param>!= 0xFFFFFFFF_FFFFFFFF</param>
+              <content>If the memory location accessed does support this instruction. In this case, the peripheral that provides the response defines the returned value and provides information on the state of the memory update at the memory location.</content>
+            </listitem>
+          </list>
+          <para>If XZR is used, then the return value is ignored.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="ST64BV_64_memop" symboldefcount="1">
+      <symbol link="XtOrXZR__9">&lt;Xt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the first general-purpose register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="ST64BV_64_memop" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.memop.ST64BV_64_memop" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckST64BVEnabled.0" file="shared_pseudocode.xml" hover="function: CheckST64BVEnabled()">CheckST64BVEnabled</a>();
+
+bits(512) data;
+bits(64) address;
+bits(64) value;
+
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = <a link="impl-shared.CreateAccDescLS64.2" file="shared_pseudocode.xml" hover="function: AccessDescriptor CreateAccDescLS64(MemOp memop, boolean tagchecked)">CreateAccDescLS64</a>(<a link="MemOp_STORE" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_STORE</a>, tagchecked);
+
+for i = 0 to 7
+    value = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[t+i, 64];
+    if <a link="impl-shared.BigEndian.1" file="shared_pseudocode.xml" hover="function: boolean BigEndian(AccessType acctype)">BigEndian</a>(accdesc.acctype) then value = <a link="impl-shared.BigEndianReverse.1" file="shared_pseudocode.xml" hover="function: bits(width) BigEndianReverse (bits(width) value)">BigEndianReverse</a>(value);
+    data&lt;63+64*i : 64*i&gt; = value;
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+constant bits(64) status = <a link="impl-aarch64.MemStore64BWithRet.3" file="shared_pseudocode.xml" hover="function: bits(64) MemStore64BWithRet(bits(64) address, bits(512) value, AccessDescriptor accdesc_in)">MemStore64BWithRet</a>(address, data, accdesc);
+
+if s != 31 then <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[s, 64] = status;
+</pstext></ps>
+  </ps_section>
+</instructionsection>

@@ -1,0 +1,289 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="RPRFM_reg" title="RPRFM -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="RPRFM"/>
+    <docvar key="offset-type" value="off-reg"/>
+  </docvars>
+  <heading>RPRFM</heading>
+  <desc>
+    <brief>
+      <para>Range prefetch memory</para>
+    </brief>
+    <authored>
+      <para>This instruction signals the memory system that
+data memory accesses from a specified range of addresses are likely to occur
+in the near future. The instruction may also signal the memory system about
+the likelihood of data reuse of the specified range of addresses.
+The memory system can respond by taking actions that are
+expected to speed up the memory accesses when they do occur,
+such as prefetching locations within the specified address ranges
+into one or more caches. The memory system may also exploit the data reuse
+hints to decide whether to retain the data in other caches upon eviction
+from the innermost caches or to discard it.</para>
+      <para>The effect of an <instruction>RPRFM</instruction> instruction is <arm-defined-word>IMPLEMENTATION DEFINED</arm-defined-word>.
+For more information, see <xref linkend="ARMARM_CEGGGIDE">Prefetch memory</xref>.</para>
+      <para>An <instruction>RPRFM</instruction> instruction specifies the type of accesses and range of addresses using
+the following parameters:</para>
+      <list type="unordered">
+        <listitem>
+          <content>'Type', in the <syntax>&lt;rprfop&gt;</syntax> operand opcode bits,
+specifies whether the prefetched data will be accessed by load or store instructions.</content>
+        </listitem>
+        <listitem>
+          <content>'Policy', in the <syntax>&lt;rprfop&gt;</syntax> operand opcode bits, specifies
+whether the data is likely to be reused or if it is
+a streaming, non-temporal prefetch. If a streaming prefetch is specified,
+then the 'ReuseDistance' parameter is ignored.</content>
+        </listitem>
+        <listitem>
+          <content>'BaseAddress', in the 64-bit base register, holds the initial block address
+for the accesses.</content>
+        </listitem>
+        <listitem>
+          <content>'ReuseDistance', in the metadata register bits[63:60], indicates the maximum
+number of bytes to be accessed by this PE before executing the next <instruction>RPRFM</instruction> instruction
+that specifies the same range. This includes the total number of bytes inside and
+outside of the range that will be accessed by the same PE. This parameter
+can be used to influence cache eviction and replacement policies,
+in order to retain the data in the most optimal levels of the memory hierarchy
+after each access. If software cannot easily determine the amount of other
+memory that will be accessed, these bits can be set to zero to indicate
+that 'ReuseDistance' is not known. Otherwise, these four bits encode decreasing
+powers of two in the range 512MiB (<binarynumber>0b0001</binarynumber>) to 32KiB (<binarynumber>0b1111</binarynumber>).</content>
+        </listitem>
+        <listitem>
+          <content>'Stride', in the metadata register bits[59:38], is a signed, two's complement
+integer encoding of the number of bytes to advance the block address after
+'Length' bytes have been accessed, in the range -2MiB to +2MiB-1B.
+A negative value indicates that the block address is advanced in a descending direction.</content>
+        </listitem>
+        <listitem>
+          <content>'Count', in the metadata register bits[37:22], is an unsigned integer encoding
+of the number of blocks of data to be accessed minus 1, representing the
+range 1 to 65536 blocks. If 'Count' is 0, then the 'Stride' parameter
+is ignored and only a single block of contiguous bytes from
+'BaseAddress' to ('BaseAddress' + 'Length' - 1) is described.</content>
+        </listitem>
+        <listitem>
+          <content>'Length', in the metadata register bits[21:0], is a signed, two's complement
+integer encoding of the number of contiguous bytes to be accessed starting
+from the current block address, without changing the block address,
+in the range -2MiB to +2MiB-1B. A negative value indicates that
+the bytes are accessed in a descending direction.</content>
+        </listitem>
+      </list>
+      <note>
+        <para>Software is expected to honor the parameters it provides to the <instruction>RPRFM</instruction> instruction,
+and the same PE should access all locations in the range, in the direction specified by the sign
+of the 'Length' and 'Stride' parameters. A range prefetch is considered active on a PE until all
+locations in the range have been accessed by the PE. A range prefetch might also be inactivated
+by the PE prior to completion, for example due to a software context switch or lack of hardware
+resources.</para>
+        <para>Software should not specify overlapping addresses in multiple active ranges. If a range is
+expected to be accessed by both load and store instructions (read-modify-write), then a single
+range with a 'Type' parameter of <syntax>PST</syntax> (prefetch for store) should be specified.</para>
+      </note>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="RPRFM"/>
+        <docvar key="offset-type" value="off-reg"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_RPRFM" name="ARMv8.9"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.ldst_regoff.RPRFM_R_ldst_regoff" tworows="1">
+        <box hibit="31" width="2" name="size" usename="1" settings="2" psbits="xx">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="VR" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="25" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="opc" usename="1" settings="2" psbits="xx">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Rm" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="3" name="option" usename="1" settings="1" psbits="xxx">
+          <c>x</c>
+          <c>1</c>
+          <c>x</c>
+        </box>
+        <box hibit="12" width="1" name="S" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1" settings="2" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>x</c>
+          <c>x</c>
+          <c>x</c>
+        </box>
+      </regdiagram>
+      <encoding name="RPRFM_R_ldst_regoff" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="RPRFM"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="offset-type" value="off-reg"/>
+        </docvars>
+        <asmtemplate><text>RPRFM  (</text><a hover="Is the range prefetch operation, defined as &lt;syntax&gt;&amp;lt;type&amp;gt;&amp;lt;policy&amp;gt;&lt;/syntax&gt;.&#10;&#10;&lt;syntax&gt;&amp;lt;type&amp;gt;&lt;/syntax&gt; is one of:&#10;&#10;&#10;PLD&#10;: Prefetch for load, encoded in the &quot;Rt&amp;lt;0&amp;gt;&quot; field as 0.&#10;&#10;PST&#10;: Prefetch for store, encoded in the &quot;Rt&amp;lt;0&amp;gt;&quot; field as 1.&#10;&#10;&#10;&lt;syntax&gt;&amp;lt;policy&amp;gt;&lt;/syntax&gt; is one of:&#10;&#10;&#10;KEEP&#10;: Retained or temporal prefetch, for data that is expected to be kept in caches to be accessed more than once, encoded in the &quot;option&amp;lt;2&amp;gt;:option&amp;lt;0&amp;gt;:S:Rt&amp;lt;2:1&amp;gt;&quot; fields as 0b00000.&#10;&#10;STRM&#10;: Streaming or non-temporal prefetch, for data that is expected to be accessed once and not reused, encoded in the &quot;option&amp;lt;2&amp;gt;:option&amp;lt;0&amp;gt;:S:Rt&amp;lt;2:1&amp;gt;&quot; fields as 0b00010.&#10;&#10;&#10;For other encodings of the &quot;option&amp;lt;2&amp;gt;:option&amp;lt;0&amp;gt;:S:Rt&amp;lt;2:0&amp;gt;&quot; fields, use &lt;syntax&gt;&amp;lt;imm6&amp;gt;&lt;/syntax&gt;." link="RtSoption_rprfop">&lt;rprfop&gt;</a><text>|#</text><a hover="Is the range prefetch operation encoding as an immediate, in the range 0 to 63, encoded in &quot;option&amp;lt;2&amp;gt;:option&amp;lt;0&amp;gt;:S:Rt&amp;lt;2:0&amp;gt;&quot;. This syntax is only for encodings that are not representable using &lt;syntax&gt;&amp;lt;rprfop&amp;gt;&lt;/syntax&gt;." link="RtSoption_imm6">&lt;imm6&gt;</a><text>), </text><a hover="Is the 64-bit name of the general-purpose register that holds an encoding of the metadata, encoded in the &quot;Rm&quot; field." link="XmOrXZR__3">&lt;Xm&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.ldst_regoff.RPRFM_R_ldst_regoff" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant bits(6) operation = option&lt;2&gt;:option&lt;0&gt;:S:Rt&lt;2:0&gt;;
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rm);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="RPRFM_R_ldst_regoff" symboldefcount="1">
+      <symbol link="RtSoption_rprfop">&lt;rprfop&gt;</symbol>
+      <definition encodedin="option&lt;2&gt;:option&lt;0&gt;:S:Rt&lt;2:0&gt;">
+        <intro>
+          <para>Is the range prefetch operation, defined as <syntax>&lt;type&gt;&lt;policy&gt;</syntax>.</para>
+          <para><syntax>&lt;type&gt;</syntax> is one of:</para>
+          <list type="param">
+            <listitem>
+              <param>PLD</param>
+              <content>Prefetch for load, encoded in the "Rt&lt;0&gt;" field as 0.</content>
+            </listitem>
+            <listitem>
+              <param>PST</param>
+              <content>Prefetch for store, encoded in the "Rt&lt;0&gt;" field as 1.</content>
+            </listitem>
+          </list>
+          <para><syntax>&lt;policy&gt;</syntax> is one of:</para>
+          <list type="param">
+            <listitem>
+              <param>KEEP</param>
+              <content>Retained or temporal prefetch, for data that is expected to be kept in caches to be accessed more than once, encoded in the "option&lt;2&gt;:option&lt;0&gt;:S:Rt&lt;2:1&gt;" fields as <binarynumber>0b00000</binarynumber>.</content>
+            </listitem>
+            <listitem>
+              <param>STRM</param>
+              <content>Streaming or non-temporal prefetch, for data that is expected to be accessed once and not reused, encoded in the "option&lt;2&gt;:option&lt;0&gt;:S:Rt&lt;2:1&gt;" fields as <binarynumber>0b00010</binarynumber>.</content>
+            </listitem>
+          </list>
+          <para>For other encodings of the "option&lt;2&gt;:option&lt;0&gt;:S:Rt&lt;2:0&gt;" fields, use <syntax>&lt;imm6&gt;</syntax>.</para>
+        </intro>
+        <table class="valuetable">
+          <tgroup cols="5">
+            <thead>
+              <row>
+                <entry class="bitfield">option&lt;2&gt;</entry>
+                <entry class="bitfield">option&lt;0&gt;</entry>
+                <entry class="bitfield">S</entry>
+                <entry class="bitfield">Rt&lt;2:0&gt;</entry>
+                <entry class="symbol">&lt;rprfop&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">000</entry>
+                <entry class="symbol">PLDKEEP</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="symbol">PSTKEEP</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">100</entry>
+                <entry class="symbol">PLDSTRM</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">101</entry>
+                <entry class="symbol">PSTSTRM</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="RPRFM_R_ldst_regoff" symboldefcount="1">
+      <symbol link="RtSoption_imm6">&lt;imm6&gt;</symbol>
+      <account encodedin="option&lt;2&gt;:option&lt;0&gt;:S:Rt&lt;2:0&gt;">
+        <intro>
+          <para>Is the range prefetch operation encoding as an immediate, in the range 0 to 63, encoded in "option&lt;2&gt;:option&lt;0&gt;:S:Rt&lt;2:0&gt;". This syntax is only for encodings that are not representable using <syntax>&lt;rprfop&gt;</syntax>.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="RPRFM_R_ldst_regoff" symboldefcount="1">
+      <symbol link="XmOrXZR__3">&lt;Xm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose register that holds an encoding of the metadata, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="RPRFM_R_ldst_regoff" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldst_regoff.RPRFM_R_ldst_regoff" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bits(64) address  = if n == 31 then <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[] else <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+constant bits(64) metadata = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[m, 64];
+constant integer stride = <a link="impl-shared.SInt.1" file="shared_pseudocode.xml" hover="function: integer SInt(bits(N) x)">SInt</a>(metadata&lt;59:38&gt;);
+constant integer count  = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(metadata&lt;37:22&gt;) + 1;
+constant integer length = <a link="impl-shared.SInt.1" file="shared_pseudocode.xml" hover="function: integer SInt(bits(N) x)">SInt</a>(metadata&lt;21:0&gt;);
+integer reuse;
+
+if metadata&lt;63:60&gt; == '0000' then
+    reuse = -1; // Not known
+else
+    reuse = 32768 &lt;&lt; (15 - <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(metadata&lt;63:60&gt;));
+
+<a link="impl-shared.Hint_RangePrefetch.6" file="shared_pseudocode.xml" hover="function: Hint_RangePrefetch(bits(64) address, integer length, integer stride, integer count, integer reuse, bits(6) operation)">Hint_RangePrefetch</a>(address, length, stride, count, reuse, operation);</pstext></ps>
+  </ps_section>
+</instructionsection>

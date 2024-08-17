@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="sqrshrn_z_mz2" title="SQRSHRN" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="SQRSHRN" />
+  </docvars>
+  <heading>SQRSHRN</heading>
+  <desc>
+    <brief>Signed saturating rounding shift right narrow by immediate and interleave</brief>
+    <description>
+      <para>Shift right by an immediate value, the signed integer value in each element of the group of two source vectors and place the two-way interleaved rounded results in the half-width destination elements. Each result element is saturated to the half-width N-bit element's signed integer range -2<sup>(N-1) </sup> to (2<sup>(N-1) </sup>)-1. The immediate shift amount is an unsigned value in the range 1 to 16.</para>
+      <para>This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SVE2" oneof="1" id="iclass_sve2" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="sve2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="SQRSHRN" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SVE2p1" feature="FEAT_SVE2p1" />
+      </arch_variants>
+      <regdiagram form="32" psname="SQRSHRN-Z.MZ2-_" tworows="1">
+        <box hibit="31" width="9" settings="9">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="22" name="tszh" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" name="tszl" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="19" width="4" name="imm4" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="13" name="op" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="12" name="U" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="11" name="R" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="10" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="9" width="4" name="Zn" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="5" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="sqrshrn_z_mz2_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="sve2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="SQRSHRN" />
+        </docvars>
+        <asmtemplate><text>SQRSHRN </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.H, </text><text>{</text><text> </text><a link="sa_zn1" hover="First scalable vector register of source multi-vector group (field Zn)">&lt;Zn1&gt;</a><text>.S-</text><a link="sa_zn2" hover="Second scalable vector register of source multi-vector group (field Zn)">&lt;Zn2&gt;</a><text>.S </text><text>}</text><text>, #</text><a link="sa_const" hover="Immediate shift amount [1-16] (field &quot;imm4&quot;)">&lt;const&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="SQRSHRN-Z.MZ2-_" mylink="SQRSHRN-Z.MZ2-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) &amp;&amp; !IsFeatureImplemented(FEAT_SVE2p1) then UNDEFINED;
+constant integer esize = 16;
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn:'0');
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd);
+constant integer shift = esize - <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(imm4);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="sqrshrn_z_mz2_" symboldefcount="1">
+      <symbol link="sa_zd">&lt;Zd&gt;</symbol>
+      <account encodedin="Zd">
+        <intro>
+          <para>Is the name of the destination scalable vector register, encoded in the "Zd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="sqrshrn_z_mz2_" symboldefcount="1">
+      <symbol link="sa_zn1">&lt;Zn1&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the first scalable vector register of the source multi-vector group, encoded as "Zn" times 2.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="sqrshrn_z_mz2_" symboldefcount="1">
+      <symbol link="sa_zn2">&lt;Zn2&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the second scalable vector register of the source multi-vector group, encoded as "Zn" times 2 plus 1.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="sqrshrn_z_mz2_" symboldefcount="1">
+      <symbol link="sa_const">&lt;const&gt;</symbol>
+      <account encodedin="imm4">
+        <intro>
+          <para>Is the immediate shift amount, in the range 1 to 16, encoded in the "imm4" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="SQRSHRN-Z.MZ2-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSVEEnabled()">CheckSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer PL = VL DIV 8;
+constant integer elements = VL DIV (2 * esize);
+bits(VL) result;
+
+for e = 0 to elements-1
+    for i = 0 to 1
+        constant bits(VL) operand = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[n+i, VL];
+        constant bits(2 * esize) element = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand, e, 2 * esize];
+        constant integer res = (<a link="impl-shared.SInt.1" file="shared_pseudocode.xml" hover="function: integer SInt(bits(N) x)">SInt</a>(element) + (1 &lt;&lt; (shift-1))) &gt;&gt; shift;
+        <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, 2*e + i, esize] = <a link="impl-aarch32.SignedSat.2" file="shared_pseudocode.xml" hover="function: bits(N) SignedSat(integer i, integer N)">SignedSat</a>(res, esize);
+
+<a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[d, VL] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

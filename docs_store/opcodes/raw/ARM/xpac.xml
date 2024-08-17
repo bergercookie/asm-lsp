@@ -1,0 +1,198 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="XPAC" title="XPACD, XPACI, XPACLRI -- A64" type="instruction">
+  <docvars>
+    <docvar key="isa" value="A64"/>
+  </docvars>
+  <heading>XPACD, XPACI, XPACLRI</heading>
+  <desc>
+    <brief>
+      <para>Strip Pointer Authentication Code</para>
+    </brief>
+    <authored>
+      <para>This instruction removes the Pointer Authentication Code from an
+address. The address is in the specified general-purpose register
+for <instruction>XPACI</instruction> and <instruction>XPACD</instruction>, and is in LR for <instruction>XPACLRI</instruction>.</para>
+      <para>The <instruction>XPACD</instruction> instruction is used for data addresses, and
+<instruction>XPACI</instruction> and <instruction>XPACLRI</instruction> are used for instruction addresses.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <classesintro count="2">
+      <txt>It has encodings from 2 classes:</txt>
+      <a href="#iclass_integer">Integer</a>
+      <txt> and </txt>
+      <a href="#iclass_system">System</a>
+    </classesintro>
+    <iclass name="Integer" oneof="2" id="iclass_integer" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_PAuth" name="ARMv8.3"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.dpreg.dp_1src.XPACD_64Z_dp_1src" tworows="1">
+        <box hibit="31" name="sf" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="30" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="opcode2" usename="1" settings="5" psbits="xxxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" width="5" settings="5">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="10" width="1" name="D" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="XPACD_64Z_dp_1src" oneofinclass="2" oneof="3" label="XPACD" bitdiffs="D == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="XPACD"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="10" width="1" name="D">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>XPACD  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="XdOrXZR__6">&lt;Xd&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="XPACI_64Z_dp_1src" oneofinclass="2" oneof="3" label="XPACI" bitdiffs="D == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="XPACI"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="10" width="1" name="D">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>XPACI  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="XdOrXZR__6">&lt;Xd&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpreg.dp_1src.XPACD_64Z_dp_1src" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_PAuth) then UNDEFINED;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant boolean data = (D == '1');</pstext></ps>
+      </ps_section>
+    </iclass>
+    <iclass name="System" oneof="2" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="XPACLRI"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_PAuth" name="ARMv8.3"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.control.hints.XPACLRI_HI_hints" tworows="1">
+        <box hibit="31" width="20" settings="20">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1" settings="3" psbits="xxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="4" width="5" settings="5">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="XPACLRI_HI_hints" oneofinclass="1" oneof="3" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="XPACLRI"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>XPACLRI</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.hints.XPACLRI_HI_hints" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_PAuth) then <a link="impl-shared.ExecuteAsNOP.0" file="shared_pseudocode.xml" hover="function: ExecuteAsNOP()">ExecuteAsNOP</a>();
+constant integer d = 30;
+constant boolean data = FALSE;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="XPACD_64Z_dp_1src, XPACI_64Z_dp_1src" symboldefcount="1">
+      <symbol link="XdOrXZR__6">&lt;Xd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.dpreg.dp_1src.XPACD_64Z_dp_1src" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, 64] = Strip(<a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[d, 64], data);</pstext></ps>
+  </ps_section>
+</instructionsection>

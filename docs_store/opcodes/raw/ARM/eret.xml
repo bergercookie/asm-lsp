@@ -1,0 +1,107 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="ERET" title="ERET -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="ERET"/>
+  </docvars>
+  <heading>ERET</heading>
+  <desc>
+    <brief>
+      <para>Exception return</para>
+    </brief>
+    <authored>
+      <para>This instruction restores <xref linkend="ARMARM_BEIDIGBH">PSTATE</xref> from the SPSR, and branches to
+the address held in the ELR.</para>
+      <para>The SPSR is checked for the current Exception level for an illegal return event.
+See <xref linkend="ARMARM_BEIEGDFD">Illegal return events from AArch64 state</xref>.</para>
+      <para><instruction>ERET</instruction> is <arm-defined-word>UNDEFINED</arm-defined-word> at EL0.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="ERET"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.control.branch_reg.ERET_64E_branch_reg" tworows="1">
+        <box hibit="31" width="7" settings="7">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="24" width="4" name="opc" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="op2" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" width="4" settings="4">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" name="A" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="10" name="M" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="4" width="5" name="op4" usename="1" settings="5" psbits="xxxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="ERET_64E_branch_reg" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="ERET"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>ERET</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.branch_reg.ERET_64E_branch_reg" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant boolean pac = FALSE;
+constant boolean use_key_a = TRUE;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all"/>
+  <ps_section howmany="1">
+    <ps name="A64.control.branch_reg.ERET_64E_branch_reg" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">if PSTATE.EL == <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a> then UNDEFINED;
+<a link="AArch64.CheckForERetTrap.2" file="shared_pseudocode.xml" hover="function: AArch64.CheckForERetTrap(boolean eret_with_pac, boolean pac_uses_key_a)">AArch64.CheckForERetTrap</a>(pac, use_key_a);
+constant bits(64) target = <a link="impl-aarch64.ELR_ELx.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) ELR_ELx[]">ELR_ELx</a>[];
+
+<a link="AArch64.ExceptionReturn.2" file="shared_pseudocode.xml" hover="function: AArch64.ExceptionReturn(bits(64) new_pc_in, bits(64) spsr)">AArch64.ExceptionReturn</a>(target, <a link="impl-shared.SPSR_ELx.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SPSR_ELx[]">SPSR_ELx</a>[]);</pstext></ps>
+  </ps_section>
+</instructionsection>

@@ -1,0 +1,466 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="MOVI_advsimd" title="MOVI -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="advsimd"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="MOVI"/>
+  </docvars>
+  <heading>MOVI</heading>
+  <desc>
+    <brief>
+      <para>Move immediate (vector)</para>
+    </brief>
+    <authored>
+      <para>This instruction places an immediate constant into every vector element of the destination
+SIMD&amp;FP register.</para>
+      <para>Depending on the settings in the <register_link id="AArch64-cpacr_el1.xml" state="AArch64">CPACR_EL1</register_link>,
+<register_link id="AArch64-cptr_el2.xml" state="AArch64">CPTR_EL2</register_link>, and <register_link id="AArch64-cptr_el3.xml" state="AArch64">CPTR_EL3</register_link> registers,
+and the current Security state and Exception level,
+an attempt to execute the instruction might be trapped.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Advanced SIMD" oneof="1" id="iclass_advanced_simd" no_encodings="6" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="MOVI"/>
+      </docvars>
+      <iclassintro count="6"/>
+      <regdiagram form="32" psname="A64.simd_dp.asimdimm.MOVI_asimdimm_N_b" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" width="1" name="Q" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="29" width="1" name="op" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="28" width="10" settings="10">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="18" width="1" name="a" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="17" width="1" name="b" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="16" width="1" name="c" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="15" width="4" name="cmode" usename="1">
+          <c colspan="4"/>
+        </box>
+        <box hibit="11" name="o2" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="10" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="1" name="d" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="8" width="1" name="e" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="7" width="1" name="f" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="6" width="1" name="g" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="5" width="1" name="h" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="MOVI_asimdimm_N_b" oneofinclass="6" oneof="6" label="8-bit" bitdiffs="op == 0 &amp;&amp; cmode == 1110">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="MOVI"/>
+          <docvar key="asimdimm-datatype" value="per-byte"/>
+          <docvar key="asimdimm-immtype" value="immediate"/>
+          <docvar key="asimdimm-mask" value="no-byte-mask"/>
+          <docvar key="asimdimm-type" value="per-byte-immediate"/>
+          <docvar key="instr-class" value="advsimd"/>
+        </docvars>
+        <box hibit="29" width="1" name="op">
+          <c>0</c>
+        </box>
+        <box hibit="15" width="4" name="cmode">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>MOVI  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.</text><a hover="For the 8-bit variant: is an arrangement specifier, " link="T_option__10">&lt;T&gt;</a><text>, #</text><a hover="Is an 8-bit immediate encoded in &quot;a:b:c:d:e:f:g:h&quot;." link="a_b_c_d_e_f_g_h">&lt;imm8&gt;</a><text>{, LSL #0}</text></asmtemplate>
+      </encoding>
+      <encoding name="MOVI_asimdimm_L_hl" oneofinclass="6" oneof="6" label="16-bit shifted immediate" bitdiffs="op == 0 &amp;&amp; cmode == 10x0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="MOVI"/>
+          <docvar key="asimdimm-datatype" value="per-halfword"/>
+          <docvar key="asimdimm-immtype" value="shifted-immediate"/>
+          <docvar key="asimdimm-type" value="per-halfword-shifted-immediate"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="asimdimm-mask" value="no-byte-mask"/>
+        </docvars>
+        <box hibit="29" width="1" name="op">
+          <c>0</c>
+        </box>
+        <box hibit="15" width="4" name="cmode">
+          <c>1</c>
+          <c>0</c>
+          <c>x</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>MOVI  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.</text><a hover="For the 16-bit variant: is an arrangement specifier, " link="T_option__9">&lt;T&gt;</a><text>, #</text><a hover="Is an 8-bit immediate encoded in &quot;a:b:c:d:e:f:g:h&quot;." link="a_b_c_d_e_f_g_h">&lt;imm8&gt;</a><text>{, LSL #</text><a hover="For the 16-bit shifted immediate variant: is the shift amount " link="amount_option__10">&lt;amount&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <encoding name="MOVI_asimdimm_L_sl" oneofinclass="6" oneof="6" label="32-bit shifted immediate" bitdiffs="op == 0 &amp;&amp; cmode == 0xx0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="MOVI"/>
+          <docvar key="asimdimm-datatype" value="per-word"/>
+          <docvar key="asimdimm-immtype" value="shifted-immediate"/>
+          <docvar key="asimdimm-type" value="per-word-shifted-immediate"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="asimdimm-mask" value="no-byte-mask"/>
+        </docvars>
+        <box hibit="29" width="1" name="op">
+          <c>0</c>
+        </box>
+        <box hibit="15" width="4" name="cmode">
+          <c>0</c>
+          <c>x</c>
+          <c>x</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>MOVI  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.</text><a hover="For the 32-bit variant: is an arrangement specifier, " link="T_option__8">&lt;T&gt;</a><text>, #</text><a hover="Is an 8-bit immediate encoded in &quot;a:b:c:d:e:f:g:h&quot;." link="a_b_c_d_e_f_g_h">&lt;imm8&gt;</a><text>{, LSL #</text><a hover="For the 32-bit shifted immediate variant: is the shift amount " link="amount_option__8">&lt;amount&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <encoding name="MOVI_asimdimm_M_sm" oneofinclass="6" oneof="6" label="32-bit shifting ones" bitdiffs="op == 0 &amp;&amp; cmode == 110x">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="MOVI"/>
+          <docvar key="asimdimm-datatype" value="per-word"/>
+          <docvar key="asimdimm-immtype" value="masked-immediate"/>
+          <docvar key="asimdimm-type" value="per-word-masked-immediate"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="asimdimm-mask" value="no-byte-mask"/>
+        </docvars>
+        <box hibit="29" width="1" name="op">
+          <c>0</c>
+        </box>
+        <box hibit="15" width="4" name="cmode">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>x</c>
+        </box>
+        <asmtemplate><text>MOVI  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.</text><a hover="For the 32-bit variant: is an arrangement specifier, " link="T_option__8">&lt;T&gt;</a><text>, #</text><a hover="Is an 8-bit immediate encoded in &quot;a:b:c:d:e:f:g:h&quot;." link="a_b_c_d_e_f_g_h">&lt;imm8&gt;</a><text>, MSL #</text><a hover="For the 32-bit shifting ones variant: is the shift amount " link="amount_option__12">&lt;amount&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="MOVI_asimdimm_D_ds" oneofinclass="6" oneof="6" label="64-bit scalar" bitdiffs="Q == 0 &amp;&amp; op == 1 &amp;&amp; cmode == 1110">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="MOVI"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="asimdimm-datatype" value="doubleword"/>
+          <docvar key="asimdimm-immtype" value="immediate"/>
+          <docvar key="asimdimm-mask" value="byte-mask"/>
+          <docvar key="asimdimm-type" value="doubleword-immediate"/>
+        </docvars>
+        <box hibit="30" width="1" name="Q">
+          <c>0</c>
+        </box>
+        <box hibit="29" width="1" name="op">
+          <c>1</c>
+        </box>
+        <box hibit="15" width="4" name="cmode">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>MOVI  </text><a hover="Is the 64-bit name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Dd">&lt;Dd&gt;</a><text>, #</text><a hover="Is a 64-bit immediate 'aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhh', encoded in &quot;a:b:c:d:e:f:g:h&quot;." link="a_b_c_d_e_f_g_h__3">&lt;imm&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="MOVI_asimdimm_D2_d" oneofinclass="6" oneof="6" label="64-bit vector" bitdiffs="Q == 1 &amp;&amp; op == 1 &amp;&amp; cmode == 1110">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="MOVI"/>
+          <docvar key="asimdimm-datatype" value="per-doubleword"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="asimdimm-immtype" value="immediate"/>
+          <docvar key="asimdimm-mask" value="byte-mask"/>
+          <docvar key="asimdimm-type" value="per-doubleword-immediate"/>
+        </docvars>
+        <box hibit="30" width="1" name="Q">
+          <c>1</c>
+        </box>
+        <box hibit="29" width="1" name="op">
+          <c>1</c>
+        </box>
+        <box hibit="15" width="4" name="cmode">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>MOVI  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.2D, #</text><a hover="Is a 64-bit immediate 'aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhh', encoded in &quot;a:b:c:d:e:f:g:h&quot;." link="a_b_c_d_e_f_g_h__3">&lt;imm&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.asimdimm.MOVI_asimdimm_N_b" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant integer rd = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer datasize = 64 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Q);
+constant bits(64) imm64 = <a link="impl-shared.AdvSIMDExpandImm.3" file="shared_pseudocode.xml" hover="function: bits(64) AdvSIMDExpandImm(bit op, bits(4) cmode, bits(8) imm8)">AdvSIMDExpandImm</a>(op, cmode, a:b:c:d:e:f:g:h);
+constant bits(datasize) imm = <a link="impl-shared.Replicate.2" file="shared_pseudocode.xml" hover="function: bits(M*N) Replicate(bits(M) x, integer N)">Replicate</a>(imm64, datasize DIV 64);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="MOVI_asimdimm_N_b, MOVI_asimdimm_L_hl, MOVI_asimdimm_L_sl, MOVI_asimdimm_M_sm, MOVI_asimdimm_D2_d" symboldefcount="1">
+      <symbol link="Vd">&lt;Vd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOVI_asimdimm_N_b" symboldefcount="1">
+      <symbol link="T_option__10">&lt;T&gt;</symbol>
+      <definition encodedin="Q">
+        <intro>For the 8-bit variant: is an arrangement specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">Q</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">8B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">16B</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="MOVI_asimdimm_L_hl" symboldefcount="2">
+      <symbol link="T_option__9">&lt;T&gt;</symbol>
+      <definition encodedin="Q">
+        <intro>For the 16-bit variant: is an arrangement specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">Q</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">4H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">8H</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="MOVI_asimdimm_L_sl, MOVI_asimdimm_M_sm" symboldefcount="3">
+      <symbol link="T_option__8">&lt;T&gt;</symbol>
+      <definition encodedin="Q">
+        <intro>For the 32-bit variant: is an arrangement specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">Q</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">2S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">4S</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="MOVI_asimdimm_N_b, MOVI_asimdimm_L_hl, MOVI_asimdimm_L_sl, MOVI_asimdimm_M_sm" symboldefcount="1">
+      <symbol link="a_b_c_d_e_f_g_h">&lt;imm8&gt;</symbol>
+      <account encodedin="a:b:c:d:e:f:g:h">
+        <intro>
+          <para>Is an 8-bit immediate encoded in "a:b:c:d:e:f:g:h".</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOVI_asimdimm_L_hl" symboldefcount="1">
+      <symbol link="amount_option__10">&lt;amount&gt;</symbol>
+      <definition encodedin="cmode&lt;1&gt;">
+        <intro>For the 16-bit shifted immediate variant: is the shift amount </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">cmode&lt;1&gt;</entry>
+                <entry class="symbol">&lt;amount&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">0</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">8</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+        <after>defaulting to 0 if LSL is omitted.</after>
+      </definition>
+    </explanation>
+    <explanation enclist="MOVI_asimdimm_L_sl" symboldefcount="2">
+      <symbol link="amount_option__8">&lt;amount&gt;</symbol>
+      <definition encodedin="cmode&lt;2:1&gt;">
+        <intro>For the 32-bit shifted immediate variant: is the shift amount </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">cmode&lt;2:1&gt;</entry>
+                <entry class="symbol">&lt;amount&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">0</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">8</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10</entry>
+                <entry class="symbol">16</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11</entry>
+                <entry class="symbol">24</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+        <after>defaulting to 0 if LSL is omitted.</after>
+      </definition>
+    </explanation>
+    <explanation enclist="MOVI_asimdimm_M_sm" symboldefcount="3">
+      <symbol link="amount_option__12">&lt;amount&gt;</symbol>
+      <definition encodedin="cmode&lt;0&gt;">
+        <intro>For the 32-bit shifting ones variant: is the shift amount </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">cmode&lt;0&gt;</entry>
+                <entry class="symbol">&lt;amount&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">8</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">16</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="MOVI_asimdimm_D_ds" symboldefcount="1">
+      <symbol link="Dd">&lt;Dd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the SIMD&amp;FP destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOVI_asimdimm_D_ds, MOVI_asimdimm_D2_d" symboldefcount="1">
+      <symbol link="a_b_c_d_e_f_g_h__3">&lt;imm&gt;</symbol>
+      <account encodedin="a:b:c:d:e:f:g:h">
+        <intro>
+          <para>Is a 64-bit immediate 'aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhh', encoded in "a:b:c:d:e:f:g:h".</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.simd_dp.asimdimm.MOVI_asimdimm_N_b" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckFPAdvSIMDEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPAdvSIMDEnabled64()">CheckFPAdvSIMDEnabled64</a>();
+<a link="impl-aarch64.V.write.2" file="shared_pseudocode.xml" hover="accessor: V[integer n, ESize width] = bits(width) value">V</a>[rd, datasize] = imm;</pstext></ps>
+  </ps_section>
+</instructionsection>

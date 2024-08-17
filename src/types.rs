@@ -16,6 +16,8 @@ pub struct Instruction {
     pub alt_names: Vec<String>,
     pub summary: String,
     pub forms: Vec<InstructionForm>,
+    pub asm_templates: Vec<String>,
+    pub aliases: Vec<InstructionAlias>,
     pub url: Option<String>,
     pub arch: Option<Arch>,
 }
@@ -29,6 +31,8 @@ impl Default for Instruction {
         let alt_names = vec![];
         let summary = String::new();
         let forms = vec![];
+        let asm_templates = vec![];
+        let aliases = vec![];
         let url = None;
         let arch = None;
 
@@ -37,6 +41,8 @@ impl Default for Instruction {
             alt_names,
             summary,
             forms,
+            asm_templates,
+            aliases,
             url,
             arch,
         }
@@ -53,12 +59,41 @@ impl std::fmt::Display for Instruction {
             header = self.name.clone();
         }
 
-        let mut v: Vec<&str> = vec![&header, &self.summary, "\n", "## Forms", "\n"];
+        //let mut v: Vec<&str> = vec![&header, &self.summary, "\n", "## Forms", "\n"];
+        let mut v: Vec<&str> = vec![&header, &self.summary, "\n"];
+
+        if !self.forms.is_empty() {
+            v.append(&mut vec!["## Forms", "\n"]);
+        }
 
         // instruction forms
         let instruction_form_strs: Vec<String> =
             self.forms.iter().map(|f| format!("{f}")).collect();
         for item in &instruction_form_strs {
+            v.push(item.as_str());
+        }
+
+        if !self.asm_templates.is_empty() {
+            v.append(&mut vec!["## Templates", "\n"]);
+        }
+        // instruction templates
+        let instruction_template_strs: Vec<String> = self
+            .asm_templates
+            .iter()
+            .map(|f| format!(" + `{}`", f.as_str()))
+            .collect();
+        for item in &instruction_template_strs {
+            v.push(item.as_str());
+        }
+
+        if !self.aliases.is_empty() {
+            v.append(&mut vec!["## Aliases", "\n"]);
+        }
+
+        // instruction aliases
+        let instruction_alias_strs: Vec<String> =
+            self.aliases.iter().map(|f| format!("{f}\n")).collect();
+        for item in &instruction_alias_strs {
             v.push(item.as_str());
         }
 
@@ -82,6 +117,11 @@ impl<'own> Instruction {
     /// Add a new form at the current instruction
     pub fn push_form(&mut self, form: InstructionForm) {
         self.forms.push(form);
+    }
+
+    /// Add a new alias at the current instruction
+    pub fn push_alias(&mut self, form: InstructionAlias) {
+        self.aliases.push(form);
     }
 
     /// Get the primary names
@@ -126,7 +166,6 @@ pub struct InstructionForm {
     pub cancelling_inputs: Option<bool>,
     pub nacl_version: Option<u8>,
     pub nacl_zero_extends_outputs: Option<bool>,
-    pub isa: Option<ISA>,
     pub operands: Vec<Operand>,
     // --- Z80-Specific Information ---
     pub z80_name: Option<String>,
@@ -134,6 +173,7 @@ pub struct InstructionForm {
     pub z80_opcode: Option<String>,
     pub z80_timing: Option<Z80Timing>,
     // --- Assembler/Architecture Agnostic Info ---
+    pub isa: Option<ISA>,
     pub urls: Vec<String>,
 }
 
@@ -209,6 +249,31 @@ impl std::fmt::Display for InstructionForm {
 
         for url in &self.urls {
             s += &format!("\n  + More info: {url}\n");
+        }
+
+        write!(f, "{s}")?;
+        Ok(())
+    }
+}
+
+// InstructionAlias --------------------------------------------------------------------------------
+#[derive(Default, Eq, PartialEq, Hash, Debug, Clone, Serialize, Deserialize)]
+pub struct InstructionAlias {
+    pub title: String,
+    pub summary: String,
+    pub asm_templates: Vec<String>,
+}
+
+impl std::fmt::Display for InstructionAlias {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut s = self.title.clone();
+
+        if !self.summary.is_empty() {
+            s += &format!("\n {}", self.summary);
+        }
+
+        for template in &self.asm_templates {
+            s += &format!("\n + `{template}`");
         }
 
         write!(f, "{s}")?;
@@ -618,6 +683,8 @@ pub enum Arch {
     X86,
     #[strum(serialize = "x86-64")]
     X86_64,
+    #[strum(serialize = "arm")]
+    ARM,
     #[strum(serialize = "z80")]
     Z80,
 }
@@ -629,6 +696,7 @@ impl std::fmt::Display for Arch {
         match self {
             Self::X86 => write!(f, "x86")?,
             Self::X86_64 => write!(f, "x86-64")?,
+            Self::ARM => write!(f, "arm")?,
             Self::Z80 => write!(f, "z80")?,
         }
         Ok(())
@@ -752,6 +820,7 @@ pub struct InstructionSets {
     pub x86: bool,
     pub x86_64: bool,
     pub z80: bool,
+    pub arm: bool,
 }
 
 impl Default for InstructionSets {
@@ -760,6 +829,7 @@ impl Default for InstructionSets {
             x86: true,
             x86_64: true,
             z80: false,
+            arm: false,
         }
     }
 }
@@ -782,7 +852,7 @@ impl Default for TargetConfig {
 }
 
 // Instruction Set Architecture -------------------------------------------------------------------
-#[derive(Debug, Clone, PartialEq, Eq, Hash, EnumString, AsRefStr, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, EnumString, AsRefStr, Serialize, Deserialize)]
 pub enum ISA {
     #[strum(serialize = "RAO-INT")]
     RAOINT,
@@ -902,6 +972,8 @@ pub enum ISA {
     AVXNECONVERT,
     #[strum(serialize = "AVX-IFMA")]
     AVXIFMA,
+    // ARM
+    A64,
 }
 
 // Operand ----------------------------------------------------------------------------------------

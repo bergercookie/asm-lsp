@@ -1,0 +1,139 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="STGM" title="STGM -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="STGM"/>
+  </docvars>
+  <heading>STGM</heading>
+  <desc>
+    <brief>
+      <para>Store Allocation Tag multiple</para>
+    </brief>
+    <authored>
+      <para>This instruction writes a naturally aligned block of N Allocation Tags,
+where the size of N is identified in <register_link id="AArch64-gmid_el1.xml" state="AArch64">GMID_EL1</register_link>.BS,
+and the Allocation Tag written to address A is taken from the
+source register at 4*A&lt;7:4&gt;+3:4*A&lt;7:4&gt;.</para>
+      <para>This instruction is <arm-defined-word>UNDEFINED</arm-defined-word> at EL0.</para>
+      <para>This instruction generates an Unchecked access.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="STGM"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_MTE2" name="ARMv8.5"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.ldsttags.STGM_64bulk_ldsttags" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="opc" usename="1" settings="2" psbits="xx">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="9" name="imm9" usename="1" settings="9" psbits="xxxxxxxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="op2" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Xn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Xt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="STGM_64bulk_ldsttags" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STGM"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <asmtemplate><text>STGM  </text><a hover="Is the 64-bit name of the general-purpose source register, encoded in the &quot;Xt&quot; field." link="XtOrXZR__12">&lt;Xt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Xn&quot; field." link="XnSP_option__2">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.ldsttags.STGM_64bulk_ldsttags" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_MTE2) then UNDEFINED;
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Xt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Xn);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="STGM_64bulk_ldsttags" symboldefcount="1">
+      <symbol link="XtOrXZR__12">&lt;Xt&gt;</symbol>
+      <account encodedin="Xt">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose source register, encoded in the "Xt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STGM_64bulk_ldsttags" symboldefcount="1">
+      <symbol link="XnSP_option__2">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Xn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Xn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldsttags.STGM_64bulk_ldsttags" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">if PSTATE.EL == <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a> then UNDEFINED;
+
+constant bits(64) data = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[t, 64];
+bits(64) address;
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+constant integer size = 4 * (2 ^ (<a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(GMID_EL1.BS)));
+address = <a link="impl-shared.Align.2" file="shared_pseudocode.xml" hover="function: integer Align(integer x, integer y)">Align</a>(address, size);
+constant integer count = size &gt;&gt; <a link="LOG2_TAG_GRANULE" file="shared_pseudocode.xml" hover="constant integer LOG2_TAG_GRANULE = 4">LOG2_TAG_GRANULE</a>;
+integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(address&lt;<a link="LOG2_TAG_GRANULE" file="shared_pseudocode.xml" hover="constant integer LOG2_TAG_GRANULE = 4">LOG2_TAG_GRANULE</a>+3:<a link="LOG2_TAG_GRANULE" file="shared_pseudocode.xml" hover="constant integer LOG2_TAG_GRANULE = 4">LOG2_TAG_GRANULE</a>&gt;);
+constant bits(64) curraddress = address;
+constant boolean devstoreunpred = FALSE;
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = <a link="impl-shared.CreateAccDescLDGSTG.2" file="shared_pseudocode.xml" hover="function: AccessDescriptor CreateAccDescLDGSTG(MemOp memop, boolean devstoreunpred)">CreateAccDescLDGSTG</a>(<a link="MemOp_STORE" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_STORE</a>, devstoreunpred);
+
+for i = 0 to count-1
+    constant bits(4) tag = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[data, index, 4];
+    <a link="AArch64.MemTag.write.2" file="shared_pseudocode.xml" hover="accessor: AArch64.MemTag[bits(64) address, AccessDescriptor accdesc_in] = bits(4) value">AArch64.MemTag</a>[address, accdesc] = tag;
+    address = <a link="impl-shared.AddressIncrement.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressIncrement(bits(64) base, integer increment, AccessDescriptor accdesc)">AddressIncrement</a>(address, <a link="TAG_GRANULE" file="shared_pseudocode.xml" hover="constant integer TAG_GRANULE = 1 &lt;&lt; LOG2_TAG_GRANULE">TAG_GRANULE</a>, accdesc);
+    index = index + 1;
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

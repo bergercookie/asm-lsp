@@ -1,0 +1,199 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="EOR_log_imm" title="EOR (immediate) -- A64" type="instruction">
+  <docvars>
+    <docvar key="cond-setting" value="no-s"/>
+    <docvar key="immediate-type" value="imm12-bitfield"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="EOR"/>
+  </docvars>
+  <heading>EOR (immediate)</heading>
+  <desc>
+    <brief>
+      <para>Bitwise exclusive-OR (immediate)</para>
+    </brief>
+    <authored>
+      <para>This instruction performs a bitwise exclusive-OR
+of a register value and an immediate value,
+and writes the result to the destination register.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Not setting the condition flags" oneof="1" id="iclass_not_setting_the_condition_flags" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="cond-setting" value="no-s"/>
+        <docvar key="immediate-type" value="imm12-bitfield"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="EOR"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <regdiagram form="32" psname="A64.dpimm.log_imm.EOR_32_log_imm" tworows="1">
+        <box hibit="31" width="1" name="sf" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="30" width="2" name="opc" usename="1" settings="2" psbits="xx">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="28" width="6" settings="6">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="N" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="21" width="6" name="immr" usename="1">
+          <c colspan="6"/>
+        </box>
+        <box hibit="15" width="6" name="imms" usename="1">
+          <c colspan="6"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="EOR_32_log_imm" oneofinclass="2" oneof="2" label="32-bit" bitdiffs="sf == 0 &amp;&amp; N == 0">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="EOR"/>
+          <docvar key="cond-setting" value="no-s"/>
+          <docvar key="immediate-type" value="imm12-bitfield"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="N">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>EOR  </text><a hover="Is the 32-bit name of the destination general-purpose register or stack pointer, encoded in the &quot;Rd&quot; field." link="WdWSP_option">&lt;Wd|WSP&gt;</a><text>, </text><a hover="Is the 32-bit name of the general-purpose source register, encoded in the &quot;Rn&quot; field." link="WnOrWZR">&lt;Wn&gt;</a><text>, #</text><a hover="For the 32-bit variant: is the bitmask immediate, encoded in &quot;imms:immr&quot;." link="immr_imms">&lt;imm&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="EOR_64_log_imm" oneofinclass="2" oneof="2" label="64-bit" bitdiffs="sf == 1">
+        <docvars>
+          <docvar key="datatype" value="64"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="EOR"/>
+          <docvar key="cond-setting" value="no-s"/>
+          <docvar key="immediate-type" value="imm12-bitfield"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>EOR  </text><a hover="Is the 64-bit name of the destination general-purpose register or stack pointer, encoded in the &quot;Rd&quot; field." link="XdSP_option">&lt;Xd|SP&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose source register, encoded in the &quot;Rn&quot; field." link="XnOrXZR__11">&lt;Xn&gt;</a><text>, #</text><a hover="For the 64-bit variant: is the bitmask immediate, encoded in &quot;N:imms:immr&quot;." link="N_immr_imms">&lt;imm&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpimm.log_imm.EOR_32_log_imm" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if sf == '0' &amp;&amp; N != '0' then UNDEFINED;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer datasize = 32 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(sf);
+bits(datasize) imm;
+(imm, -) = <a link="impl-aarch64.DecodeBitMasks.5" file="shared_pseudocode.xml" hover="function: (bits(M), bits(M)) DecodeBitMasks(bit immN, bits(6) imms, bits(6) immr, boolean immediate, integer M)">DecodeBitMasks</a>(N, imms, immr, TRUE, datasize);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="EOR_32_log_imm" symboldefcount="1">
+      <symbol link="WdWSP_option">&lt;Wd|WSP&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 32-bit name of the destination general-purpose register or stack pointer, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="EOR_32_log_imm" symboldefcount="1">
+      <symbol link="WnOrWZR">&lt;Wn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="EOR_32_log_imm" symboldefcount="1">
+      <symbol link="immr_imms">&lt;imm&gt;</symbol>
+      <account encodedin="immr:imms">
+        <intro>
+          <para>For the 32-bit variant: is the bitmask immediate, encoded in "imms:immr".</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="EOR_64_log_imm" symboldefcount="2">
+      <symbol link="N_immr_imms">&lt;imm&gt;</symbol>
+      <account encodedin="N:immr:imms">
+        <intro>
+          <para>For the 64-bit variant: is the bitmask immediate, encoded in "N:imms:immr".</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="EOR_64_log_imm" symboldefcount="1">
+      <symbol link="XdSP_option">&lt;Xd|SP&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the destination general-purpose register or stack pointer, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="EOR_64_log_imm" symboldefcount="1">
+      <symbol link="XnOrXZR__11">&lt;Xn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.dpimm.log_imm.EOR_32_log_imm" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bits(datasize) operand1 = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, datasize];
+constant bits(datasize) operand2 = imm;
+
+constant bits(datasize) result = operand1 EOR operand2;
+
+if d == 31 then
+    <a link="impl-aarch64.SP.write.0" file="shared_pseudocode.xml" hover="accessor: SP[] = bits(64) value">SP</a>[] = <a link="impl-shared.ZeroExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) ZeroExtend(bits(M) x, integer N)">ZeroExtend</a>(result, 64);
+else
+    <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, datasize] = result;
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

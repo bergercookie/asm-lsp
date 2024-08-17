@@ -1,0 +1,932 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="alphaindex.xsl" version="1.0"?>
+<!DOCTYPE alphaindex PUBLIC "-//ARM//DTD alphaindex //EN" "alphaindex.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<alphaindex>
+  <toptitle instructionset="A64" />
+  <iforms title="A64 -- SVE Instructions (alphabetic order)">
+    <iform iformfile="abs_z_p_z.xml" heading="ABS" id="abs_z_p_z">Absolute value (predicated).</iform>
+    <iform iformfile="adclb_z_zzz.xml" heading="ADCLB" id="adclb_z_zzz">Add with carry long (bottom).</iform>
+    <iform iformfile="adclt_z_zzz.xml" heading="ADCLT" id="adclt_z_zzz">Add with carry long (top).</iform>
+    <iform iformfile="add_z_zi.xml" heading="ADD (immediate)" id="add_z_zi">Add immediate (unpredicated).</iform>
+    <iform iformfile="add_z_p_zz.xml" heading="ADD (vectors, predicated)" id="add_z_p_zz">Add vectors (predicated).</iform>
+    <iform iformfile="add_z_zz.xml" heading="ADD (vectors, unpredicated)" id="add_z_zz">Add vectors (unpredicated).</iform>
+    <iform iformfile="addhnb_z_zz.xml" heading="ADDHNB" id="addhnb_z_zz">Add narrow high part (bottom).</iform>
+    <iform iformfile="addhnt_z_zz.xml" heading="ADDHNT" id="addhnt_z_zz">Add narrow high part (top).</iform>
+    <iform iformfile="addp_z_p_zz.xml" heading="ADDP" id="addp_z_p_zz">Add pairwise.</iform>
+    <iform iformfile="addpl_r_ri.xml" heading="ADDPL" id="addpl_r_ri">Add multiple of predicate register size to scalar register.</iform>
+    <iform iformfile="addpt_z_p_zz.xml" heading="ADDPT (predicated)" id="addpt_z_p_zz">Add checked pointer vectors (predicated).</iform>
+    <iform iformfile="addpt_z_zz.xml" heading="ADDPT (unpredicated)" id="addpt_z_zz">Add checked pointer vectors (unpredicated).</iform>
+    <iform iformfile="addqv_z_p_z.xml" heading="ADDQV" id="addqv_z_p_z">Unsigned add reduction of quadword vector segments.</iform>
+    <iform iformfile="addvl_r_ri.xml" heading="ADDVL" id="addvl_r_ri">Add multiple of vector register size to scalar register.</iform>
+    <iform iformfile="adr_z_az.xml" heading="ADR" id="adr_z_az">Compute vector address.</iform>
+    <iform iformfile="aesd_z_zz.xml" heading="AESD" id="aesd_z_zz">AES single round decryption.</iform>
+    <iform iformfile="aese_z_zz.xml" heading="AESE" id="aese_z_zz">AES single round encryption.</iform>
+    <iform iformfile="aesimc_z_z.xml" heading="AESIMC" id="aesimc_z_z">AES inverse mix columns.</iform>
+    <iform iformfile="aesmc_z_z.xml" heading="AESMC" id="aesmc_z_z">AES mix columns.</iform>
+    <iform iformfile="and_z_zi.xml" heading="AND (immediate)" id="and_z_zi">Bitwise AND with immediate (unpredicated).</iform>
+    <iform iformfile="and_p_p_pp.xml" heading="AND (predicates)" id="and_p_p_pp">Bitwise AND predicates.</iform>
+    <iform iformfile="and_z_p_zz.xml" heading="AND (vectors, predicated)" id="and_z_p_zz">Bitwise AND vectors (predicated).</iform>
+    <iform iformfile="and_z_zz.xml" heading="AND (vectors, unpredicated)" id="and_z_zz">Bitwise AND vectors (unpredicated).</iform>
+    <iform iformfile="andqv_z_p_z.xml" heading="ANDQV" id="andqv_z_p_z">Bitwise AND reduction of quadword vector segments.</iform>
+    <iform iformfile="ands_p_p_pp.xml" heading="ANDS" id="ands_p_p_pp">Bitwise AND predicates, setting the condition flags.</iform>
+    <iform iformfile="andv_r_p_z.xml" heading="ANDV" id="andv_r_p_z">Bitwise AND reduction to scalar.</iform>
+    <iform iformfile="asr_z_p_zi.xml" heading="ASR (immediate, predicated)" id="asr_z_p_zi">Arithmetic shift right by immediate (predicated).</iform>
+    <iform iformfile="asr_z_zi.xml" heading="ASR (immediate, unpredicated)" id="asr_z_zi">Arithmetic shift right by immediate (unpredicated).</iform>
+    <iform iformfile="asr_z_p_zz.xml" heading="ASR (vectors)" id="asr_z_p_zz">Arithmetic shift right by vector (predicated).</iform>
+    <iform iformfile="asr_z_p_zw.xml" heading="ASR (wide elements, predicated)" id="asr_z_p_zw">Arithmetic shift right by 64-bit wide elements (predicated).</iform>
+    <iform iformfile="asr_z_zw.xml" heading="ASR (wide elements, unpredicated)" id="asr_z_zw">Arithmetic shift right by 64-bit wide elements (unpredicated).</iform>
+    <iform iformfile="asrd_z_p_zi.xml" heading="ASRD" id="asrd_z_p_zi">Arithmetic shift right for divide by immediate (predicated).</iform>
+    <iform iformfile="asrr_z_p_zz.xml" heading="ASRR" id="asrr_z_p_zz">Reversed arithmetic shift right by vector (predicated).</iform>
+    <iform iformfile="bcax_z_zzz.xml" heading="BCAX" id="bcax_z_zzz">Bitwise clear and exclusive OR.</iform>
+    <iform iformfile="bdep_z_zz.xml" heading="BDEP" id="bdep_z_zz">Scatter lower bits into positions selected by bitmask.</iform>
+    <iform iformfile="bext_z_zz.xml" heading="BEXT" id="bext_z_zz">Gather lower bits from positions selected by bitmask.</iform>
+    <iform iformfile="bf1cvt_z_z8.xml" heading="BF1CVT, BF2CVT" id="bf1cvt_z_z8">8-bit floating-point convert to BFloat16.</iform>
+    <iform iformfile="bf1cvtlt_z_z8.xml" heading="BF1CVTLT, BF2CVTLT" id="bf1cvtlt_z_z8">8-bit floating-point convert to BFloat16 (top).</iform>
+    <iform iformfile="bfadd_z_p_zz.xml" heading="BFADD (predicated)" id="bfadd_z_p_zz">BFloat16 floating-point add vectors (predicated).</iform>
+    <iform iformfile="bfadd_z_zz.xml" heading="BFADD (unpredicated)" id="bfadd_z_zz">BFloat16 floating-point add vectors (unpredicated).</iform>
+    <iform iformfile="bfclamp_z_zz.xml" heading="BFCLAMP" id="bfclamp_z_zz">BFloat16 floating-point clamp to minimum/maximum number.</iform>
+    <iform iformfile="bfcvt_z_p_z.xml" heading="BFCVT" id="bfcvt_z_p_z">Floating-point down convert to BFloat16 format (predicated).</iform>
+    <iform iformfile="bfcvtn_z8_mz2.xml" heading="BFCVTN" id="bfcvtn_z8_mz2">BFloat16 convert, narrow and interleave to 8-bit floating-point.</iform>
+    <iform iformfile="bfcvtnt_z_p_z.xml" heading="BFCVTNT" id="bfcvtnt_z_p_z">Floating-point down convert and narrow to BFloat16 (top, predicated).</iform>
+    <iform iformfile="bfdot_z_zzzi.xml" heading="BFDOT (indexed)" id="bfdot_z_zzzi">BFloat16 floating-point indexed dot product.</iform>
+    <iform iformfile="bfdot_z_zzz.xml" heading="BFDOT (vectors)" id="bfdot_z_zzz">BFloat16 floating-point dot product.</iform>
+    <iform iformfile="bfmax_z_p_zz.xml" heading="BFMAX" id="bfmax_z_p_zz">BFloat16 floating-point maximum (predicated).</iform>
+    <iform iformfile="bfmaxnm_z_p_zz.xml" heading="BFMAXNM" id="bfmaxnm_z_p_zz">BFloat16 floating-point maximum number (predicated).</iform>
+    <iform iformfile="bfmin_z_p_zz.xml" heading="BFMIN" id="bfmin_z_p_zz">BFloat16 floating-point minimum (predicated).</iform>
+    <iform iformfile="bfminnm_z_p_zz.xml" heading="BFMINNM" id="bfminnm_z_p_zz">BFloat16 floating-point minimum number (predicated).</iform>
+    <iform iformfile="bfmla_z_zzzi.xml" heading="BFMLA (indexed)" id="bfmla_z_zzzi">BFloat16 floating-point fused multiply-add vectors by indexed elements.</iform>
+    <iform iformfile="bfmla_z_p_zzz.xml" heading="BFMLA (vectors)" id="bfmla_z_p_zzz">BFloat16 floating-point fused multiply-add vectors.</iform>
+    <iform iformfile="bfmlalb_z_zzzi.xml" heading="BFMLALB (indexed)" id="bfmlalb_z_zzzi">BFloat16 floating-point multiply-add long to single-precision (bottom, indexed).</iform>
+    <iform iformfile="bfmlalb_z_zzz.xml" heading="BFMLALB (vectors)" id="bfmlalb_z_zzz">BFloat16 floating-point multiply-add long to single-precision (bottom).</iform>
+    <iform iformfile="bfmlalt_z_zzzi.xml" heading="BFMLALT (indexed)" id="bfmlalt_z_zzzi">BFloat16 floating-point multiply-add long to single-precision (top, indexed).</iform>
+    <iform iformfile="bfmlalt_z_zzz.xml" heading="BFMLALT (vectors)" id="bfmlalt_z_zzz">BFloat16 floating-point multiply-add long to single-precision (top).</iform>
+    <iform iformfile="bfmls_z_zzzi.xml" heading="BFMLS (indexed)" id="bfmls_z_zzzi">BFloat16 floating-point fused multiply-subtract vectors by indexed elements.</iform>
+    <iform iformfile="bfmls_z_p_zzz.xml" heading="BFMLS (vectors)" id="bfmls_z_p_zzz">BFloat16 floating-point fused multiply-subtract vectors.</iform>
+    <iform iformfile="bfmlslb_z_zzzi.xml" heading="BFMLSLB (indexed)" id="bfmlslb_z_zzzi">BFloat16 floating-point multiply-subtract long from single-precision (bottom, indexed).</iform>
+    <iform iformfile="bfmlslb_z_zzz.xml" heading="BFMLSLB (vectors)" id="bfmlslb_z_zzz">BFloat16 floating-point multiply-subtract long from single-precision (bottom).</iform>
+    <iform iformfile="bfmlslt_z_zzzi.xml" heading="BFMLSLT (indexed)" id="bfmlslt_z_zzzi">BFloat16 floating-point multiply-subtract long from single-precision (top, indexed).</iform>
+    <iform iformfile="bfmlslt_z_zzz.xml" heading="BFMLSLT (vectors)" id="bfmlslt_z_zzz">BFloat16 floating-point multiply-subtract long from single-precision (top).</iform>
+    <iform iformfile="bfmmla_z_zzz.xml" heading="BFMMLA" id="bfmmla_z_zzz">BFloat16 floating-point matrix multiply-accumulate into 2×2 matrices.</iform>
+    <iform iformfile="bfmul_z_zzi.xml" heading="BFMUL (indexed)" id="bfmul_z_zzi">BFloat16 floating-point multiply vectors by indexed elements.</iform>
+    <iform iformfile="bfmul_z_p_zz.xml" heading="BFMUL (vectors, predicated)" id="bfmul_z_p_zz">BFloat16 floating-point multiply vectors (predicated).</iform>
+    <iform iformfile="bfmul_z_zz.xml" heading="BFMUL (vectors, unpredicated)" id="bfmul_z_zz">BFloat16 floating-point multiply vectors (unpredicated).</iform>
+    <iform iformfile="bfsub_z_p_zz.xml" heading="BFSUB (predicated)" id="bfsub_z_p_zz">BFloat16 floating-point subtract vectors (predicated).</iform>
+    <iform iformfile="bfsub_z_zz.xml" heading="BFSUB (unpredicated)" id="bfsub_z_zz">BFloat16 floating-point subtract vectors (unpredicated).</iform>
+    <iform iformfile="bgrp_z_zz.xml" heading="BGRP" id="bgrp_z_zz">Group bits to right or left as selected by bitmask.</iform>
+    <iform iformfile="bic_and_z_zi.xml" heading="BIC (immediate)" id="BIC_and_z_zi">Bitwise clear bits using immediate (unpredicated): an alias of AND (immediate).</iform>
+    <iform iformfile="bic_p_p_pp.xml" heading="BIC (predicates)" id="bic_p_p_pp">Bitwise clear predicates.</iform>
+    <iform iformfile="bic_z_p_zz.xml" heading="BIC (vectors, predicated)" id="bic_z_p_zz">Bitwise clear vectors (predicated).</iform>
+    <iform iformfile="bic_z_zz.xml" heading="BIC (vectors, unpredicated)" id="bic_z_zz">Bitwise clear vectors (unpredicated).</iform>
+    <iform iformfile="bics_p_p_pp.xml" heading="BICS" id="bics_p_p_pp">Bitwise clear predicates, setting the condition flags.</iform>
+    <iform iformfile="brka_p_p_p.xml" heading="BRKA" id="brka_p_p_p">Break after first true condition.</iform>
+    <iform iformfile="brkas_p_p_p.xml" heading="BRKAS" id="brkas_p_p_p">Break after first true condition, setting the condition flags.</iform>
+    <iform iformfile="brkb_p_p_p.xml" heading="BRKB" id="brkb_p_p_p">Break before first true condition.</iform>
+    <iform iformfile="brkbs_p_p_p.xml" heading="BRKBS" id="brkbs_p_p_p">Break before first true condition, setting the condition flags.</iform>
+    <iform iformfile="brkn_p_p_pp.xml" heading="BRKN" id="brkn_p_p_pp">Propagate break to next partition.</iform>
+    <iform iformfile="brkns_p_p_pp.xml" heading="BRKNS" id="brkns_p_p_pp">Propagate break to next partition, setting the condition flags.</iform>
+    <iform iformfile="brkpa_p_p_pp.xml" heading="BRKPA" id="brkpa_p_p_pp">Break after first true condition, propagating from previous partition.</iform>
+    <iform iformfile="brkpas_p_p_pp.xml" heading="BRKPAS" id="brkpas_p_p_pp">Break after first true condition, propagating from previous partition and setting the condition flags.</iform>
+    <iform iformfile="brkpb_p_p_pp.xml" heading="BRKPB" id="brkpb_p_p_pp">Break before first true condition, propagating from previous partition.</iform>
+    <iform iformfile="brkpbs_p_p_pp.xml" heading="BRKPBS" id="brkpbs_p_p_pp">Break before first true condition, propagating from previous partition and setting the condition flags.</iform>
+    <iform iformfile="bsl_z_zzz.xml" heading="BSL" id="bsl_z_zzz">Bitwise select.</iform>
+    <iform iformfile="bsl1n_z_zzz.xml" heading="BSL1N" id="bsl1n_z_zzz">Bitwise select with first input inverted.</iform>
+    <iform iformfile="bsl2n_z_zzz.xml" heading="BSL2N" id="bsl2n_z_zzz">Bitwise select with second input inverted.</iform>
+    <iform iformfile="cadd_z_zz.xml" heading="CADD" id="cadd_z_zz">Complex integer add with rotate.</iform>
+    <iform iformfile="cdot_z_zzzi.xml" heading="CDOT (indexed)" id="cdot_z_zzzi">Complex integer dot product (indexed).</iform>
+    <iform iformfile="cdot_z_zzz.xml" heading="CDOT (vectors)" id="cdot_z_zzz">Complex integer dot product.</iform>
+    <iform iformfile="clasta_r_p_z.xml" heading="CLASTA (scalar)" id="clasta_r_p_z">Conditionally extract element after last to general-purpose register.</iform>
+    <iform iformfile="clasta_v_p_z.xml" heading="CLASTA (SIMD&amp;FP scalar)" id="clasta_v_p_z">Conditionally extract element after last to SIMD&amp;FP scalar register.</iform>
+    <iform iformfile="clasta_z_p_zz.xml" heading="CLASTA (vectors)" id="clasta_z_p_zz">Conditionally extract element after last to vector register.</iform>
+    <iform iformfile="clastb_r_p_z.xml" heading="CLASTB (scalar)" id="clastb_r_p_z">Conditionally extract last element to general-purpose register.</iform>
+    <iform iformfile="clastb_v_p_z.xml" heading="CLASTB (SIMD&amp;FP scalar)" id="clastb_v_p_z">Conditionally extract last element to SIMD&amp;FP scalar register.</iform>
+    <iform iformfile="clastb_z_p_zz.xml" heading="CLASTB (vectors)" id="clastb_z_p_zz">Conditionally extract last element to vector register.</iform>
+    <iform iformfile="cls_z_p_z.xml" heading="CLS" id="cls_z_p_z">Count leading sign bits (predicated).</iform>
+    <iform iformfile="clz_z_p_z.xml" heading="CLZ" id="clz_z_p_z">Count leading zero bits (predicated).</iform>
+    <iform iformfile="cmla_z_zzzi.xml" heading="CMLA (indexed)" id="cmla_z_zzzi">Complex integer multiply-add with rotate (indexed).</iform>
+    <iform iformfile="cmla_z_zzz.xml" heading="CMLA (vectors)" id="cmla_z_zzz">Complex integer multiply-add with rotate.</iform>
+    <iform iformfile="cmpeq_p_p_zi.xml" heading="CMP&lt;cc&gt; (immediate)" id="cmpeq_p_p_zi">Compare vector to immediate.</iform>
+    <iform iformfile="cmpeq_p_p_zz.xml" heading="CMP&lt;cc&gt; (vectors)" id="cmpeq_p_p_zz">Compare vectors.</iform>
+    <iform iformfile="cmpeq_p_p_zw.xml" heading="CMP&lt;cc&gt; (wide elements)" id="cmpeq_p_p_zw">Compare vector to 64-bit wide elements.</iform>
+    <iform iformfile="cmple_cmpeq_p_p_zz.xml" heading="CMPLE (vectors)" id="CMPLE_cmpeq_p_p_zz">Compare signed less than or equal to vector, setting the condition flags: an alias of CMP&lt;cc&gt; (vectors).</iform>
+    <iform iformfile="cmplo_cmpeq_p_p_zz.xml" heading="CMPLO (vectors)" id="CMPLO_cmpeq_p_p_zz">Compare unsigned lower than vector, setting the condition flags: an alias of CMP&lt;cc&gt; (vectors).</iform>
+    <iform iformfile="cmpls_cmpeq_p_p_zz.xml" heading="CMPLS (vectors)" id="CMPLS_cmpeq_p_p_zz">Compare unsigned lower or same as vector, setting the condition flags: an alias of CMP&lt;cc&gt; (vectors).</iform>
+    <iform iformfile="cmplt_cmpeq_p_p_zz.xml" heading="CMPLT (vectors)" id="CMPLT_cmpeq_p_p_zz">Compare signed less than vector, setting the condition flags: an alias of CMP&lt;cc&gt; (vectors).</iform>
+    <iform iformfile="cnot_z_p_z.xml" heading="CNOT" id="cnot_z_p_z">Logically invert boolean condition in vector (predicated).</iform>
+    <iform iformfile="cnt_z_p_z.xml" heading="CNT" id="cnt_z_p_z">Count non-zero bits (predicated).</iform>
+    <iform iformfile="cntb_r_s.xml" heading="CNTB, CNTD, CNTH, CNTW" id="cntb_r_s">Set scalar to multiple of predicate constraint element count.</iform>
+    <iform iformfile="cntp_r_pn.xml" heading="CNTP (predicate as counter)" id="cntp_r_pn">Set scalar to count from predicate-as-counter.</iform>
+    <iform iformfile="cntp_r_p_p.xml" heading="CNTP (predicate)" id="cntp_r_p_p">Set scalar to count of true predicate elements.</iform>
+    <iform iformfile="compact_z_p_z.xml" heading="COMPACT" id="compact_z_p_z">Shuffle active elements of vector to the right and fill with zero.</iform>
+    <iform iformfile="cpy_z_p_i.xml" heading="CPY (immediate, merging)" id="cpy_z_p_i">Copy signed integer immediate to vector elements (merging).</iform>
+    <iform iformfile="cpy_z_o_i.xml" heading="CPY (immediate, zeroing)" id="cpy_z_o_i">Copy signed integer immediate to vector elements (zeroing).</iform>
+    <iform iformfile="cpy_z_p_r.xml" heading="CPY (scalar)" id="cpy_z_p_r">Copy general-purpose register to vector elements (predicated).</iform>
+    <iform iformfile="cpy_z_p_v.xml" heading="CPY (SIMD&amp;FP scalar)" id="cpy_z_p_v">Copy SIMD&amp;FP scalar register to vector elements (predicated).</iform>
+    <iform iformfile="ctermeq_rr.xml" heading="CTERMEQ, CTERMNE" id="ctermeq_rr">Compare and terminate loop.</iform>
+    <iform iformfile="decb_r_rs.xml" heading="DECB, DECD, DECH, DECW (scalar)" id="decb_r_rs">Decrement scalar by multiple of predicate constraint element count.</iform>
+    <iform iformfile="decd_z_zs.xml" heading="DECD, DECH, DECW (vector)" id="decd_z_zs">Decrement vector by multiple of predicate constraint element count.</iform>
+    <iform iformfile="decp_r_p_r.xml" heading="DECP (scalar)" id="decp_r_p_r">Decrement scalar by count of true predicate elements.</iform>
+    <iform iformfile="decp_z_p_z.xml" heading="DECP (vector)" id="decp_z_p_z">Decrement vector by count of true predicate elements.</iform>
+    <iform iformfile="dup_z_i.xml" heading="DUP (immediate)" id="dup_z_i">Broadcast signed immediate to vector elements (unpredicated).</iform>
+    <iform iformfile="dup_z_zi.xml" heading="DUP (indexed)" id="dup_z_zi">Broadcast indexed element to vector (unpredicated).</iform>
+    <iform iformfile="dup_z_r.xml" heading="DUP (scalar)" id="dup_z_r">Broadcast general-purpose register to vector elements (unpredicated).</iform>
+    <iform iformfile="dupm_z_i.xml" heading="DUPM" id="dupm_z_i">Broadcast logical bitmask immediate to vector (unpredicated).</iform>
+    <iform iformfile="dupq_z_zi.xml" heading="DUPQ" id="dupq_z_zi">Broadcast indexed element within each quadword vector segment (unpredicated).</iform>
+    <iform iformfile="eon_eor_z_zi.xml" heading="EON" id="EON_eor_z_zi">Bitwise exclusive OR with inverted immediate (unpredicated): an alias of EOR (immediate).</iform>
+    <iform iformfile="eor_z_zi.xml" heading="EOR (immediate)" id="eor_z_zi">Bitwise exclusive OR with immediate (unpredicated).</iform>
+    <iform iformfile="eor_p_p_pp.xml" heading="EOR (predicates)" id="eor_p_p_pp">Bitwise exclusive OR predicates.</iform>
+    <iform iformfile="eor_z_p_zz.xml" heading="EOR (vectors, predicated)" id="eor_z_p_zz">Bitwise exclusive OR vectors (predicated).</iform>
+    <iform iformfile="eor_z_zz.xml" heading="EOR (vectors, unpredicated)" id="eor_z_zz">Bitwise exclusive OR vectors (unpredicated).</iform>
+    <iform iformfile="eor3_z_zzz.xml" heading="EOR3" id="eor3_z_zzz">Bitwise exclusive OR of three vectors.</iform>
+    <iform iformfile="eorbt_z_zz.xml" heading="EORBT" id="eorbt_z_zz">Interleaving exclusive OR (bottom, top).</iform>
+    <iform iformfile="eorqv_z_p_z.xml" heading="EORQV" id="eorqv_z_p_z">Bitwise exclusive OR reduction of quadword vector segments.</iform>
+    <iform iformfile="eors_p_p_pp.xml" heading="EORS" id="eors_p_p_pp">Bitwise exclusive OR predicates, setting the condition flags.</iform>
+    <iform iformfile="eortb_z_zz.xml" heading="EORTB" id="eortb_z_zz">Interleaving exclusive OR (top, bottom).</iform>
+    <iform iformfile="eorv_r_p_z.xml" heading="EORV" id="eorv_r_p_z">Bitwise exclusive OR reduction to scalar.</iform>
+    <iform iformfile="ext_z_zi.xml" heading="EXT" id="ext_z_zi">Extract vector from pair of vectors.</iform>
+    <iform iformfile="extq_z_zi.xml" heading="EXTQ" id="extq_z_zi">Extract vector segment from each pair of quadword vector segments.</iform>
+    <iform iformfile="f1cvt_z_z8.xml" heading="F1CVT, F2CVT" id="f1cvt_z_z8">8-bit floating-point convert to half-precision.</iform>
+    <iform iformfile="f1cvtlt_z_z8.xml" heading="F1CVTLT, F2CVTLT" id="f1cvtlt_z_z8">8-bit floating-point convert to half-precision (top).</iform>
+    <iform iformfile="fabd_z_p_zz.xml" heading="FABD" id="fabd_z_p_zz">Floating-point absolute difference (predicated).</iform>
+    <iform iformfile="fabs_z_p_z.xml" heading="FABS" id="fabs_z_p_z">Floating-point absolute value (predicated).</iform>
+    <iform iformfile="facge_p_p_zz.xml" heading="FAC&lt;cc&gt;" id="facge_p_p_zz">Floating-point absolute compare vectors.</iform>
+    <iform iformfile="facle_facge_p_p_zz.xml" heading="FACLE" id="FACLE_facge_p_p_zz">Floating-point absolute compare less than or equal: an alias of FAC&lt;cc&gt;.</iform>
+    <iform iformfile="faclt_facge_p_p_zz.xml" heading="FACLT" id="FACLT_facge_p_p_zz">Floating-point absolute compare less than: an alias of FAC&lt;cc&gt;.</iform>
+    <iform iformfile="fadd_z_p_zs.xml" heading="FADD (immediate)" id="fadd_z_p_zs">Floating-point add immediate (predicated).</iform>
+    <iform iformfile="fadd_z_p_zz.xml" heading="FADD (vectors, predicated)" id="fadd_z_p_zz">Floating-point add vector (predicated).</iform>
+    <iform iformfile="fadd_z_zz.xml" heading="FADD (vectors, unpredicated)" id="fadd_z_zz">Floating-point add vector (unpredicated).</iform>
+    <iform iformfile="fadda_v_p_z.xml" heading="FADDA" id="fadda_v_p_z">Floating-point add strictly-ordered reduction, accumulating in scalar.</iform>
+    <iform iformfile="faddp_z_p_zz.xml" heading="FADDP" id="faddp_z_p_zz">Floating-point add pairwise.</iform>
+    <iform iformfile="faddqv_z_p_z.xml" heading="FADDQV" id="faddqv_z_p_z">Floating-point add recursive reduction of quadword vector segments.</iform>
+    <iform iformfile="faddv_v_p_z.xml" heading="FADDV" id="faddv_v_p_z">Floating-point add recursive reduction to scalar.</iform>
+    <iform iformfile="famax_z_p_zz.xml" heading="FAMAX" id="famax_z_p_zz">Floating-point absolute maximum (predicated).</iform>
+    <iform iformfile="famin_z_p_zz.xml" heading="FAMIN" id="famin_z_p_zz">Floating-point absolute minimum (predicated).</iform>
+    <iform iformfile="fcadd_z_p_zz.xml" heading="FCADD" id="fcadd_z_p_zz">Floating-point complex add with rotate (predicated).</iform>
+    <iform iformfile="fclamp_z_zz.xml" heading="FCLAMP" id="fclamp_z_zz">Floating-point clamp to minimum/maximum number.</iform>
+    <iform iformfile="fcmeq_p_p_zz.xml" heading="FCM&lt;cc&gt; (vectors)" id="fcmeq_p_p_zz">Floating-point compare vectors.</iform>
+    <iform iformfile="fcmeq_p_p_z0.xml" heading="FCM&lt;cc&gt; (zero)" id="fcmeq_p_p_z0">Floating-point compare vector with zero.</iform>
+    <iform iformfile="fcmla_z_zzzi.xml" heading="FCMLA (indexed)" id="fcmla_z_zzzi">Floating-point complex multiply-add by indexed values with rotate.</iform>
+    <iform iformfile="fcmla_z_p_zzz.xml" heading="FCMLA (vectors)" id="fcmla_z_p_zzz">Floating-point complex multiply-add with rotate (predicated).</iform>
+    <iform iformfile="fcmle_fcmeq_p_p_zz.xml" heading="FCMLE (vectors)" id="FCMLE_fcmeq_p_p_zz">Floating-point compare less than or equal to vector: an alias of FCM&lt;cc&gt; (vectors).</iform>
+    <iform iformfile="fcmlt_fcmeq_p_p_zz.xml" heading="FCMLT (vectors)" id="FCMLT_fcmeq_p_p_zz">Floating-point compare less than vector: an alias of FCM&lt;cc&gt; (vectors).</iform>
+    <iform iformfile="fcpy_z_p_i.xml" heading="FCPY" id="fcpy_z_p_i">Copy 8-bit floating-point immediate to vector elements (predicated).</iform>
+    <iform iformfile="fcvt_z_p_z.xml" heading="FCVT" id="fcvt_z_p_z">Floating-point convert precision (predicated).</iform>
+    <iform iformfile="fcvtlt_z_p_z.xml" heading="FCVTLT" id="fcvtlt_z_p_z">Floating-point up convert long (top, predicated).</iform>
+    <iform iformfile="fcvtn_z8_mz2.xml" heading="FCVTN" id="fcvtn_z8_mz2">Half-precision convert, narrow and interleave to 8-bit floating-point.</iform>
+    <iform iformfile="fcvtnb_z8_mz2.xml" heading="FCVTNB" id="fcvtnb_z8_mz2">Single-precision convert, narrow and interleave to 8-bit floating-point (bottom).</iform>
+    <iform iformfile="fcvtnt_z_p_z.xml" heading="FCVTNT (predicated)" id="fcvtnt_z_p_z">Floating-point down convert and narrow (top, predicated).</iform>
+    <iform iformfile="fcvtnt_z8_mz2.xml" heading="FCVTNT (unpredicated)" id="fcvtnt_z8_mz2">Single-precision convert, narrow and interleave to 8-bit floating-point (top).</iform>
+    <iform iformfile="fcvtx_z_p_z.xml" heading="FCVTX" id="fcvtx_z_p_z">Floating-point down convert, rounding to odd (predicated).</iform>
+    <iform iformfile="fcvtxnt_z_p_z.xml" heading="FCVTXNT" id="fcvtxnt_z_p_z">Floating-point down convert, rounding to odd (top, predicated).</iform>
+    <iform iformfile="fcvtzs_z_p_z.xml" heading="FCVTZS" id="fcvtzs_z_p_z">Floating-point convert to signed integer, rounding toward zero (predicated).</iform>
+    <iform iformfile="fcvtzu_z_p_z.xml" heading="FCVTZU" id="fcvtzu_z_p_z">Floating-point convert to unsigned integer, rounding toward zero (predicated).</iform>
+    <iform iformfile="fdiv_z_p_zz.xml" heading="FDIV" id="fdiv_z_p_zz">Floating-point divide by vector (predicated).</iform>
+    <iform iformfile="fdivr_z_p_zz.xml" heading="FDIVR" id="fdivr_z_p_zz">Floating-point reversed divide by vector (predicated).</iform>
+    <iform iformfile="fdot_z_zzzi.xml" heading="FDOT (2-way, indexed, FP16 to FP32)" id="fdot_z_zzzi">Half-precision floating-point indexed dot product.</iform>
+    <iform iformfile="fdot_z_zz8z8i.xml" heading="FDOT (2-way, indexed, FP8 to FP16)" id="fdot_z_zz8z8i">8-bit floating-point indexed dot product to half-precision.</iform>
+    <iform iformfile="fdot_z_zzz.xml" heading="FDOT (2-way, vectors, FP16 to FP32)" id="fdot_z_zzz">Half-precision floating-point dot product.</iform>
+    <iform iformfile="fdot_z_zz8z8.xml" heading="FDOT (2-way, vectors, FP8 to FP16)" id="fdot_z_zz8z8">8-bit floating-point dot product to half-precision.</iform>
+    <iform iformfile="fdot_z32_zz8z8i.xml" heading="FDOT (4-way, indexed)" id="fdot_z32_zz8z8i">8-bit floating-point indexed dot product to single-precision.</iform>
+    <iform iformfile="fdot_z32_zz8z8.xml" heading="FDOT (4-way, vectors)" id="fdot_z32_zz8z8">8-bit floating-point dot product to single-precision.</iform>
+    <iform iformfile="fdup_z_i.xml" heading="FDUP" id="fdup_z_i">Broadcast 8-bit floating-point immediate to vector elements (unpredicated).</iform>
+    <iform iformfile="fexpa_z_z.xml" heading="FEXPA" id="fexpa_z_z">Floating-point exponential accelerator.</iform>
+    <iform iformfile="flogb_z_p_z.xml" heading="FLOGB" id="flogb_z_p_z">Floating-point base 2 logarithm as integer.</iform>
+    <iform iformfile="fmad_z_p_zzz.xml" heading="FMAD" id="fmad_z_p_zzz">Floating-point fused multiply-add vectors (predicated), writing multiplicand [Zdn = Za + Zdn * Zm].</iform>
+    <iform iformfile="fmax_z_p_zs.xml" heading="FMAX (immediate)" id="fmax_z_p_zs">Floating-point maximum with immediate (predicated).</iform>
+    <iform iformfile="fmax_z_p_zz.xml" heading="FMAX (vectors)" id="fmax_z_p_zz">Floating-point maximum (predicated).</iform>
+    <iform iformfile="fmaxnm_z_p_zs.xml" heading="FMAXNM (immediate)" id="fmaxnm_z_p_zs">Floating-point maximum number with immediate (predicated).</iform>
+    <iform iformfile="fmaxnm_z_p_zz.xml" heading="FMAXNM (vectors)" id="fmaxnm_z_p_zz">Floating-point maximum number (predicated).</iform>
+    <iform iformfile="fmaxnmp_z_p_zz.xml" heading="FMAXNMP" id="fmaxnmp_z_p_zz">Floating-point maximum number pairwise.</iform>
+    <iform iformfile="fmaxnmqv_z_p_z.xml" heading="FMAXNMQV" id="fmaxnmqv_z_p_z">Floating-point maximum number recursive reduction of quadword vector segments.</iform>
+    <iform iformfile="fmaxnmv_v_p_z.xml" heading="FMAXNMV" id="fmaxnmv_v_p_z">Floating-point maximum number recursive reduction to scalar.</iform>
+    <iform iformfile="fmaxp_z_p_zz.xml" heading="FMAXP" id="fmaxp_z_p_zz">Floating-point maximum pairwise.</iform>
+    <iform iformfile="fmaxqv_z_p_z.xml" heading="FMAXQV" id="fmaxqv_z_p_z">Floating-point maximum reduction of quadword vector segments.</iform>
+    <iform iformfile="fmaxv_v_p_z.xml" heading="FMAXV" id="fmaxv_v_p_z">Floating-point maximum recursive reduction to scalar.</iform>
+    <iform iformfile="fmin_z_p_zs.xml" heading="FMIN (immediate)" id="fmin_z_p_zs">Floating-point minimum with immediate (predicated).</iform>
+    <iform iformfile="fmin_z_p_zz.xml" heading="FMIN (vectors)" id="fmin_z_p_zz">Floating-point minimum (predicated).</iform>
+    <iform iformfile="fminnm_z_p_zs.xml" heading="FMINNM (immediate)" id="fminnm_z_p_zs">Floating-point minimum number with immediate (predicated).</iform>
+    <iform iformfile="fminnm_z_p_zz.xml" heading="FMINNM (vectors)" id="fminnm_z_p_zz">Floating-point minimum number (predicated).</iform>
+    <iform iformfile="fminnmp_z_p_zz.xml" heading="FMINNMP" id="fminnmp_z_p_zz">Floating-point minimum number pairwise.</iform>
+    <iform iformfile="fminnmqv_z_p_z.xml" heading="FMINNMQV" id="fminnmqv_z_p_z">Floating-point minimum number recursive reduction of quadword vector segments.</iform>
+    <iform iformfile="fminnmv_v_p_z.xml" heading="FMINNMV" id="fminnmv_v_p_z">Floating-point minimum number recursive reduction to scalar.</iform>
+    <iform iformfile="fminp_z_p_zz.xml" heading="FMINP" id="fminp_z_p_zz">Floating-point minimum pairwise.</iform>
+    <iform iformfile="fminqv_z_p_z.xml" heading="FMINQV" id="fminqv_z_p_z">Floating-point minimum recursive reduction of quadword vector segments.</iform>
+    <iform iformfile="fminv_v_p_z.xml" heading="FMINV" id="fminv_v_p_z">Floating-point minimum recursive reduction to scalar.</iform>
+    <iform iformfile="fmla_z_zzzi.xml" heading="FMLA (indexed)" id="fmla_z_zzzi">Floating-point fused multiply-add by indexed elements (Zda = Zda + Zn * Zm[indexed]).</iform>
+    <iform iformfile="fmla_z_p_zzz.xml" heading="FMLA (vectors)" id="fmla_z_p_zzz">Floating-point fused multiply-add vectors (predicated), writing addend [Zda = Zda + Zn * Zm].</iform>
+    <iform iformfile="fmlalb_z_zzzi.xml" heading="FMLALB (indexed, FP16 to FP32)" id="fmlalb_z_zzzi">Half-precision floating-point multiply-add long to single-precision (bottom, indexed).</iform>
+    <iform iformfile="fmlalb_z_z8z8z8i.xml" heading="FMLALB (indexed, FP8 to FP16)" id="fmlalb_z_z8z8z8i">8-bit floating-point multiply-add long to half-precision (bottom, indexed).</iform>
+    <iform iformfile="fmlalb_z_zzz.xml" heading="FMLALB (vectors, FP16 to FP32)" id="fmlalb_z_zzz">Half-precision floating-point multiply-add long to single-precision (bottom).</iform>
+    <iform iformfile="fmlalb_z_z8z8z8.xml" heading="FMLALB (vectors, FP8 to FP16)" id="fmlalb_z_z8z8z8">8-bit floating-point multiply-add long to half-precision (bottom).</iform>
+    <iform iformfile="fmlallbb_z32_z8z8z8i.xml" heading="FMLALLBB (indexed)" id="fmlallbb_z32_z8z8z8i">8-bit floating-point multiply-add long long to single-precision (bottom bottom, indexed).</iform>
+    <iform iformfile="fmlallbb_z32_z8z8z8.xml" heading="FMLALLBB (vectors)" id="fmlallbb_z32_z8z8z8">8-bit floating-point multiply-add long long to single-precision (bottom bottom).</iform>
+    <iform iformfile="fmlallbt_z32_z8z8z8i.xml" heading="FMLALLBT (indexed)" id="fmlallbt_z32_z8z8z8i">8-bit floating-point multiply-add long long to single-precision (bottom top, indexed).</iform>
+    <iform iformfile="fmlallbt_z32_z8z8z8.xml" heading="FMLALLBT (vectors)" id="fmlallbt_z32_z8z8z8">8-bit floating-point multiply-add long long to single-precision (bottom top).</iform>
+    <iform iformfile="fmlalltb_z32_z8z8z8i.xml" heading="FMLALLTB (indexed)" id="fmlalltb_z32_z8z8z8i">8-bit floating-point multiply-add long long to single-precision (top bottom, indexed).</iform>
+    <iform iformfile="fmlalltb_z32_z8z8z8.xml" heading="FMLALLTB (vectors)" id="fmlalltb_z32_z8z8z8">8-bit floating-point multiply-add long long to single-precision (top bottom).</iform>
+    <iform iformfile="fmlalltt_z32_z8z8z8i.xml" heading="FMLALLTT (indexed)" id="fmlalltt_z32_z8z8z8i">8-bit floating-point multiply-add long long to single-precision (top top, indexed).</iform>
+    <iform iformfile="fmlalltt_z32_z8z8z8.xml" heading="FMLALLTT (vectors)" id="fmlalltt_z32_z8z8z8">8-bit floating-point multiply-add long long to single-precision (top top).</iform>
+    <iform iformfile="fmlalt_z_zzzi.xml" heading="FMLALT (indexed, FP16 to FP32)" id="fmlalt_z_zzzi">Half-precision floating-point multiply-add long to single-precision (top, indexed).</iform>
+    <iform iformfile="fmlalt_z_z8z8z8i.xml" heading="FMLALT (indexed, FP8 to FP16)" id="fmlalt_z_z8z8z8i">8-bit floating-point multiply-add long to half-precision (top, indexed).</iform>
+    <iform iformfile="fmlalt_z_zzz.xml" heading="FMLALT (vectors, FP16 to FP32)" id="fmlalt_z_zzz">Half-precision floating-point multiply-add long to single-precision (top).</iform>
+    <iform iformfile="fmlalt_z_z8z8z8.xml" heading="FMLALT (vectors, FP8 to FP16)" id="fmlalt_z_z8z8z8">8-bit floating-point multiply-add long to half-precision (top).</iform>
+    <iform iformfile="fmls_z_zzzi.xml" heading="FMLS (indexed)" id="fmls_z_zzzi">Floating-point fused multiply-subtract by indexed elements (Zda = Zda + -Zn * Zm[indexed]).</iform>
+    <iform iformfile="fmls_z_p_zzz.xml" heading="FMLS (vectors)" id="fmls_z_p_zzz">Floating-point fused multiply-subtract vectors (predicated), writing addend [Zda = Zda + -Zn * Zm].</iform>
+    <iform iformfile="fmlslb_z_zzzi.xml" heading="FMLSLB (indexed)" id="fmlslb_z_zzzi">Half-precision floating-point multiply-subtract long from single-precision (bottom, indexed).</iform>
+    <iform iformfile="fmlslb_z_zzz.xml" heading="FMLSLB (vectors)" id="fmlslb_z_zzz">Half-precision floating-point multiply-subtract long from single-precision (bottom).</iform>
+    <iform iformfile="fmlslt_z_zzzi.xml" heading="FMLSLT (indexed)" id="fmlslt_z_zzzi">Half-precision floating-point multiply-subtract long from single-precision (top, indexed).</iform>
+    <iform iformfile="fmlslt_z_zzz.xml" heading="FMLSLT (vectors)" id="fmlslt_z_zzz">Half-precision floating-point multiply-subtract long from single-precision (top).</iform>
+    <iform iformfile="fmmla_z_zzz.xml" heading="FMMLA" id="fmmla_z_zzz">Floating-point matrix multiply-accumulate.</iform>
+    <iform iformfile="fmov_fcpy_z_p_i.xml" heading="FMOV (immediate, predicated)" id="FMOV_fcpy_z_p_i">Move 8-bit floating-point immediate to vector elements (predicated): an alias of FCPY.</iform>
+    <iform iformfile="fmov_fdup_z_i.xml" heading="FMOV (immediate, unpredicated)" id="FMOV_fdup_z_i">Move 8-bit floating-point immediate to vector elements (unpredicated): an alias of FDUP.</iform>
+    <iform iformfile="fmov_cpy_z_p_i.xml" heading="FMOV (zero, predicated)" id="FMOV_cpy_z_p_i">Move floating-point +0.0 to vector elements (predicated): an alias of CPY (immediate, merging).</iform>
+    <iform iformfile="fmov_dup_z_i.xml" heading="FMOV (zero, unpredicated)" id="FMOV_dup_z_i">Move floating-point +0.0 to vector elements (unpredicated): an alias of DUP (immediate).</iform>
+    <iform iformfile="fmsb_z_p_zzz.xml" heading="FMSB" id="fmsb_z_p_zzz">Floating-point fused multiply-subtract vectors (predicated), writing multiplicand [Zdn = Za + -Zdn * Zm].</iform>
+    <iform iformfile="fmul_z_p_zs.xml" heading="FMUL (immediate)" id="fmul_z_p_zs">Floating-point multiply by immediate (predicated).</iform>
+    <iform iformfile="fmul_z_zzi.xml" heading="FMUL (indexed)" id="fmul_z_zzi">Floating-point multiply by indexed elements.</iform>
+    <iform iformfile="fmul_z_p_zz.xml" heading="FMUL (vectors, predicated)" id="fmul_z_p_zz">Floating-point multiply vectors (predicated).</iform>
+    <iform iformfile="fmul_z_zz.xml" heading="FMUL (vectors, unpredicated)" id="fmul_z_zz">Floating-point multiply vectors (unpredicated).</iform>
+    <iform iformfile="fmulx_z_p_zz.xml" heading="FMULX" id="fmulx_z_p_zz">Floating-point multiply-extended vectors (predicated).</iform>
+    <iform iformfile="fneg_z_p_z.xml" heading="FNEG" id="fneg_z_p_z">Floating-point negate (predicated).</iform>
+    <iform iformfile="fnmad_z_p_zzz.xml" heading="FNMAD" id="fnmad_z_p_zzz">Floating-point negated fused multiply-add vectors (predicated), writing multiplicand [Zdn = -Za + -Zdn * Zm].</iform>
+    <iform iformfile="fnmla_z_p_zzz.xml" heading="FNMLA" id="fnmla_z_p_zzz">Floating-point negated fused multiply-add vectors (predicated), writing addend [Zda = -Zda + -Zn * Zm].</iform>
+    <iform iformfile="fnmls_z_p_zzz.xml" heading="FNMLS" id="fnmls_z_p_zzz">Floating-point negated fused multiply-subtract vectors (predicated), writing addend [Zda = -Zda + Zn * Zm].</iform>
+    <iform iformfile="fnmsb_z_p_zzz.xml" heading="FNMSB" id="fnmsb_z_p_zzz">Floating-point negated fused multiply-subtract vectors (predicated), writing multiplicand [Zdn = -Za + Zdn * Zm].</iform>
+    <iform iformfile="frecpe_z_z.xml" heading="FRECPE" id="frecpe_z_z">Floating-point reciprocal estimate (unpredicated).</iform>
+    <iform iformfile="frecps_z_zz.xml" heading="FRECPS" id="frecps_z_zz">Floating-point reciprocal step (unpredicated).</iform>
+    <iform iformfile="frecpx_z_p_z.xml" heading="FRECPX" id="frecpx_z_p_z">Floating-point reciprocal exponent (predicated).</iform>
+    <iform iformfile="frinta_z_p_z.xml" heading="FRINT&lt;r&gt;" id="frinta_z_p_z">Floating-point round to integral value (predicated).</iform>
+    <iform iformfile="frsqrte_z_z.xml" heading="FRSQRTE" id="frsqrte_z_z">Floating-point reciprocal square root estimate (unpredicated).</iform>
+    <iform iformfile="frsqrts_z_zz.xml" heading="FRSQRTS" id="frsqrts_z_zz">Floating-point reciprocal square root step (unpredicated).</iform>
+    <iform iformfile="fscale_z_p_zz.xml" heading="FSCALE" id="fscale_z_p_zz">Floating-point adjust exponent by vector (predicated).</iform>
+    <iform iformfile="fsqrt_z_p_z.xml" heading="FSQRT" id="fsqrt_z_p_z">Floating-point square root (predicated).</iform>
+    <iform iformfile="fsub_z_p_zs.xml" heading="FSUB (immediate)" id="fsub_z_p_zs">Floating-point subtract immediate (predicated).</iform>
+    <iform iformfile="fsub_z_p_zz.xml" heading="FSUB (vectors, predicated)" id="fsub_z_p_zz">Floating-point subtract vectors (predicated).</iform>
+    <iform iformfile="fsub_z_zz.xml" heading="FSUB (vectors, unpredicated)" id="fsub_z_zz">Floating-point subtract vectors (unpredicated).</iform>
+    <iform iformfile="fsubr_z_p_zs.xml" heading="FSUBR (immediate)" id="fsubr_z_p_zs">Floating-point reversed subtract from immediate (predicated).</iform>
+    <iform iformfile="fsubr_z_p_zz.xml" heading="FSUBR (vectors)" id="fsubr_z_p_zz">Floating-point reversed subtract vectors (predicated).</iform>
+    <iform iformfile="ftmad_z_zzi.xml" heading="FTMAD" id="ftmad_z_zzi">Floating-point trigonometric multiply-add coefficient.</iform>
+    <iform iformfile="ftsmul_z_zz.xml" heading="FTSMUL" id="ftsmul_z_zz">Floating-point trigonometric starting value.</iform>
+    <iform iformfile="ftssel_z_zz.xml" heading="FTSSEL" id="ftssel_z_zz">Floating-point trigonometric select coefficient.</iform>
+    <iform iformfile="histcnt_z_p_zz.xml" heading="HISTCNT" id="histcnt_z_p_zz">Count matching elements in vector.</iform>
+    <iform iformfile="histseg_z_zz.xml" heading="HISTSEG" id="histseg_z_zz">Count matching elements in vector segments.</iform>
+    <iform iformfile="incb_r_rs.xml" heading="INCB, INCD, INCH, INCW (scalar)" id="incb_r_rs">Increment scalar by multiple of predicate constraint element count.</iform>
+    <iform iformfile="incd_z_zs.xml" heading="INCD, INCH, INCW (vector)" id="incd_z_zs">Increment vector by multiple of predicate constraint element count.</iform>
+    <iform iformfile="incp_r_p_r.xml" heading="INCP (scalar)" id="incp_r_p_r">Increment scalar by count of true predicate elements.</iform>
+    <iform iformfile="incp_z_p_z.xml" heading="INCP (vector)" id="incp_z_p_z">Increment vector by count of true predicate elements.</iform>
+    <iform iformfile="index_z_ir.xml" heading="INDEX (immediate, scalar)" id="index_z_ir">Create index starting from immediate and incremented by general-purpose register.</iform>
+    <iform iformfile="index_z_ii.xml" heading="INDEX (immediates)" id="index_z_ii">Create index starting from and incremented by immediate.</iform>
+    <iform iformfile="index_z_ri.xml" heading="INDEX (scalar, immediate)" id="index_z_ri">Create index starting from general-purpose register and incremented by immediate.</iform>
+    <iform iformfile="index_z_rr.xml" heading="INDEX (scalars)" id="index_z_rr">Create index starting from and incremented by general-purpose register.</iform>
+    <iform iformfile="insr_z_r.xml" heading="INSR (scalar)" id="insr_z_r">Insert general-purpose register in shifted vector.</iform>
+    <iform iformfile="insr_z_v.xml" heading="INSR (SIMD&amp;FP scalar)" id="insr_z_v">Insert SIMD&amp;FP scalar register in shifted vector.</iform>
+    <iform iformfile="lasta_r_p_z.xml" heading="LASTA (scalar)" id="lasta_r_p_z">Extract element after last to general-purpose register.</iform>
+    <iform iformfile="lasta_v_p_z.xml" heading="LASTA (SIMD&amp;FP scalar)" id="lasta_v_p_z">Extract element after last to SIMD&amp;FP scalar register.</iform>
+    <iform iformfile="lastb_r_p_z.xml" heading="LASTB (scalar)" id="lastb_r_p_z">Extract last element to general-purpose register.</iform>
+    <iform iformfile="lastb_v_p_z.xml" heading="LASTB (SIMD&amp;FP scalar)" id="lastb_v_p_z">Extract last element to SIMD&amp;FP scalar register.</iform>
+    <iform iformfile="ld1b_mz_p_bi.xml" heading="LD1B (scalar plus immediate, consecutive registers)" id="ld1b_mz_p_bi">Contiguous load of bytes to multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="ld1b_z_p_bi.xml" heading="LD1B (scalar plus immediate, single register)" id="ld1b_z_p_bi">Contiguous load unsigned bytes to vector (immediate index).</iform>
+    <iform iformfile="ld1b_mz_p_br.xml" heading="LD1B (scalar plus scalar, consecutive registers)" id="ld1b_mz_p_br">Contiguous load of bytes to multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="ld1b_z_p_br.xml" heading="LD1B (scalar plus scalar, single register)" id="ld1b_z_p_br">Contiguous load unsigned bytes to vector (scalar index).</iform>
+    <iform iformfile="ld1b_z_p_bz.xml" heading="LD1B (scalar plus vector)" id="ld1b_z_p_bz">Gather load unsigned bytes to vector (vector index).</iform>
+    <iform iformfile="ld1b_z_p_ai.xml" heading="LD1B (vector plus immediate)" id="ld1b_z_p_ai">Gather load unsigned bytes to vector (immediate index).</iform>
+    <iform iformfile="ld1d_mz_p_bi.xml" heading="LD1D (scalar plus immediate, consecutive registers)" id="ld1d_mz_p_bi">Contiguous load of doublewords to multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="ld1d_z_p_bi.xml" heading="LD1D (scalar plus immediate, single register)" id="ld1d_z_p_bi">Contiguous load unsigned doublewords to vector (immediate index).</iform>
+    <iform iformfile="ld1d_mz_p_br.xml" heading="LD1D (scalar plus scalar, consecutive registers)" id="ld1d_mz_p_br">Contiguous load of doublewords to multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="ld1d_z_p_br.xml" heading="LD1D (scalar plus scalar, single register)" id="ld1d_z_p_br">Contiguous load unsigned doublewords to vector (scalar index).</iform>
+    <iform iformfile="ld1d_z_p_bz.xml" heading="LD1D (scalar plus vector)" id="ld1d_z_p_bz">Gather load doublewords to vector (vector index).</iform>
+    <iform iformfile="ld1d_z_p_ai.xml" heading="LD1D (vector plus immediate)" id="ld1d_z_p_ai">Gather load doublewords to vector (immediate index).</iform>
+    <iform iformfile="ld1h_mz_p_bi.xml" heading="LD1H (scalar plus immediate, consecutive registers)" id="ld1h_mz_p_bi">Contiguous load of halfwords to multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="ld1h_z_p_bi.xml" heading="LD1H (scalar plus immediate, single register)" id="ld1h_z_p_bi">Contiguous load unsigned halfwords to vector (immediate index).</iform>
+    <iform iformfile="ld1h_mz_p_br.xml" heading="LD1H (scalar plus scalar, consecutive registers)" id="ld1h_mz_p_br">Contiguous load of halfwords to multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="ld1h_z_p_br.xml" heading="LD1H (scalar plus scalar, single register)" id="ld1h_z_p_br">Contiguous load unsigned halfwords to vector (scalar index).</iform>
+    <iform iformfile="ld1h_z_p_bz.xml" heading="LD1H (scalar plus vector)" id="ld1h_z_p_bz">Gather load unsigned halfwords to vector (vector index).</iform>
+    <iform iformfile="ld1h_z_p_ai.xml" heading="LD1H (vector plus immediate)" id="ld1h_z_p_ai">Gather load unsigned halfwords to vector (immediate index).</iform>
+    <iform iformfile="ld1q_z_p_ar.xml" heading="LD1Q" id="ld1q_z_p_ar">Gather load quadwords.</iform>
+    <iform iformfile="ld1rb_z_p_bi.xml" heading="LD1RB" id="ld1rb_z_p_bi">Load and broadcast unsigned byte to vector.</iform>
+    <iform iformfile="ld1rd_z_p_bi.xml" heading="LD1RD" id="ld1rd_z_p_bi">Load and broadcast doubleword to vector.</iform>
+    <iform iformfile="ld1rh_z_p_bi.xml" heading="LD1RH" id="ld1rh_z_p_bi">Load and broadcast unsigned halfword to vector.</iform>
+    <iform iformfile="ld1rob_z_p_bi.xml" heading="LD1ROB (scalar plus immediate)" id="ld1rob_z_p_bi">Contiguous load and replicate thirty-two bytes (immediate index).</iform>
+    <iform iformfile="ld1rob_z_p_br.xml" heading="LD1ROB (scalar plus scalar)" id="ld1rob_z_p_br">Contiguous load and replicate thirty-two bytes (scalar index).</iform>
+    <iform iformfile="ld1rod_z_p_bi.xml" heading="LD1ROD (scalar plus immediate)" id="ld1rod_z_p_bi">Contiguous load and replicate four doublewords (immediate index).</iform>
+    <iform iformfile="ld1rod_z_p_br.xml" heading="LD1ROD (scalar plus scalar)" id="ld1rod_z_p_br">Contiguous load and replicate four doublewords (scalar index).</iform>
+    <iform iformfile="ld1roh_z_p_bi.xml" heading="LD1ROH (scalar plus immediate)" id="ld1roh_z_p_bi">Contiguous load and replicate sixteen halfwords (immediate index).</iform>
+    <iform iformfile="ld1roh_z_p_br.xml" heading="LD1ROH (scalar plus scalar)" id="ld1roh_z_p_br">Contiguous load and replicate sixteen halfwords (scalar index).</iform>
+    <iform iformfile="ld1row_z_p_bi.xml" heading="LD1ROW (scalar plus immediate)" id="ld1row_z_p_bi">Contiguous load and replicate eight words (immediate index).</iform>
+    <iform iformfile="ld1row_z_p_br.xml" heading="LD1ROW (scalar plus scalar)" id="ld1row_z_p_br">Contiguous load and replicate eight words (scalar index).</iform>
+    <iform iformfile="ld1rqb_z_p_bi.xml" heading="LD1RQB (scalar plus immediate)" id="ld1rqb_z_p_bi">Contiguous load and replicate sixteen bytes (immediate index).</iform>
+    <iform iformfile="ld1rqb_z_p_br.xml" heading="LD1RQB (scalar plus scalar)" id="ld1rqb_z_p_br">Contiguous load and replicate sixteen bytes (scalar index).</iform>
+    <iform iformfile="ld1rqd_z_p_bi.xml" heading="LD1RQD (scalar plus immediate)" id="ld1rqd_z_p_bi">Contiguous load and replicate two doublewords (immediate index).</iform>
+    <iform iformfile="ld1rqd_z_p_br.xml" heading="LD1RQD (scalar plus scalar)" id="ld1rqd_z_p_br">Contiguous load and replicate two doublewords (scalar index).</iform>
+    <iform iformfile="ld1rqh_z_p_bi.xml" heading="LD1RQH (scalar plus immediate)" id="ld1rqh_z_p_bi">Contiguous load and replicate eight halfwords (immediate index).</iform>
+    <iform iformfile="ld1rqh_z_p_br.xml" heading="LD1RQH (scalar plus scalar)" id="ld1rqh_z_p_br">Contiguous load and replicate eight halfwords (scalar index).</iform>
+    <iform iformfile="ld1rqw_z_p_bi.xml" heading="LD1RQW (scalar plus immediate)" id="ld1rqw_z_p_bi">Contiguous load and replicate four words (immediate index).</iform>
+    <iform iformfile="ld1rqw_z_p_br.xml" heading="LD1RQW (scalar plus scalar)" id="ld1rqw_z_p_br">Contiguous load and replicate four words (scalar index).</iform>
+    <iform iformfile="ld1rsb_z_p_bi.xml" heading="LD1RSB" id="ld1rsb_z_p_bi">Load and broadcast signed byte to vector.</iform>
+    <iform iformfile="ld1rsh_z_p_bi.xml" heading="LD1RSH" id="ld1rsh_z_p_bi">Load and broadcast signed halfword to vector.</iform>
+    <iform iformfile="ld1rsw_z_p_bi.xml" heading="LD1RSW" id="ld1rsw_z_p_bi">Load and broadcast signed word to vector.</iform>
+    <iform iformfile="ld1rw_z_p_bi.xml" heading="LD1RW" id="ld1rw_z_p_bi">Load and broadcast unsigned word to vector.</iform>
+    <iform iformfile="ld1sb_z_p_bi.xml" heading="LD1SB (scalar plus immediate)" id="ld1sb_z_p_bi">Contiguous load signed bytes to vector (immediate index).</iform>
+    <iform iformfile="ld1sb_z_p_br.xml" heading="LD1SB (scalar plus scalar)" id="ld1sb_z_p_br">Contiguous load signed bytes to vector (scalar index).</iform>
+    <iform iformfile="ld1sb_z_p_bz.xml" heading="LD1SB (scalar plus vector)" id="ld1sb_z_p_bz">Gather load signed bytes to vector (vector index).</iform>
+    <iform iformfile="ld1sb_z_p_ai.xml" heading="LD1SB (vector plus immediate)" id="ld1sb_z_p_ai">Gather load signed bytes to vector (immediate index).</iform>
+    <iform iformfile="ld1sh_z_p_bi.xml" heading="LD1SH (scalar plus immediate)" id="ld1sh_z_p_bi">Contiguous load signed halfwords to vector (immediate index).</iform>
+    <iform iformfile="ld1sh_z_p_br.xml" heading="LD1SH (scalar plus scalar)" id="ld1sh_z_p_br">Contiguous load signed halfwords to vector (scalar index).</iform>
+    <iform iformfile="ld1sh_z_p_bz.xml" heading="LD1SH (scalar plus vector)" id="ld1sh_z_p_bz">Gather load signed halfwords to vector (vector index).</iform>
+    <iform iformfile="ld1sh_z_p_ai.xml" heading="LD1SH (vector plus immediate)" id="ld1sh_z_p_ai">Gather load signed halfwords to vector (immediate index).</iform>
+    <iform iformfile="ld1sw_z_p_bi.xml" heading="LD1SW (scalar plus immediate)" id="ld1sw_z_p_bi">Contiguous load signed words to vector (immediate index).</iform>
+    <iform iformfile="ld1sw_z_p_br.xml" heading="LD1SW (scalar plus scalar)" id="ld1sw_z_p_br">Contiguous load signed words to vector (scalar index).</iform>
+    <iform iformfile="ld1sw_z_p_bz.xml" heading="LD1SW (scalar plus vector)" id="ld1sw_z_p_bz">Gather load signed words to vector (vector index).</iform>
+    <iform iformfile="ld1sw_z_p_ai.xml" heading="LD1SW (vector plus immediate)" id="ld1sw_z_p_ai">Gather load signed words to vector (immediate index).</iform>
+    <iform iformfile="ld1w_mz_p_bi.xml" heading="LD1W (scalar plus immediate, consecutive registers)" id="ld1w_mz_p_bi">Contiguous load of words to multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="ld1w_z_p_bi.xml" heading="LD1W (scalar plus immediate, single register)" id="ld1w_z_p_bi">Contiguous load unsigned words to vector (immediate index).</iform>
+    <iform iformfile="ld1w_mz_p_br.xml" heading="LD1W (scalar plus scalar, consecutive registers)" id="ld1w_mz_p_br">Contiguous load of words to multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="ld1w_z_p_br.xml" heading="LD1W (scalar plus scalar, single register)" id="ld1w_z_p_br">Contiguous load unsigned words to vector (scalar index).</iform>
+    <iform iformfile="ld1w_z_p_bz.xml" heading="LD1W (scalar plus vector)" id="ld1w_z_p_bz">Gather load unsigned words to vector (vector index).</iform>
+    <iform iformfile="ld1w_z_p_ai.xml" heading="LD1W (vector plus immediate)" id="ld1w_z_p_ai">Gather load unsigned words to vector (immediate index).</iform>
+    <iform iformfile="ld2b_z_p_bi.xml" heading="LD2B (scalar plus immediate)" id="ld2b_z_p_bi">Contiguous load two-byte structures to two vectors (immediate index).</iform>
+    <iform iformfile="ld2b_z_p_br.xml" heading="LD2B (scalar plus scalar)" id="ld2b_z_p_br">Contiguous load two-byte structures to two vectors (scalar index).</iform>
+    <iform iformfile="ld2d_z_p_bi.xml" heading="LD2D (scalar plus immediate)" id="ld2d_z_p_bi">Contiguous load two-doubleword structures to two vectors (immediate index).</iform>
+    <iform iformfile="ld2d_z_p_br.xml" heading="LD2D (scalar plus scalar)" id="ld2d_z_p_br">Contiguous load two-doubleword structures to two vectors (scalar index).</iform>
+    <iform iformfile="ld2h_z_p_bi.xml" heading="LD2H (scalar plus immediate)" id="ld2h_z_p_bi">Contiguous load two-halfword structures to two vectors (immediate index).</iform>
+    <iform iformfile="ld2h_z_p_br.xml" heading="LD2H (scalar plus scalar)" id="ld2h_z_p_br">Contiguous load two-halfword structures to two vectors (scalar index).</iform>
+    <iform iformfile="ld2q_z_p_bi.xml" heading="LD2Q (scalar plus immediate)" id="ld2q_z_p_bi">Contiguous load two-quadword structures to two vectors (immediate index).</iform>
+    <iform iformfile="ld2q_z_p_br.xml" heading="LD2Q (scalar plus scalar)" id="ld2q_z_p_br">Contiguous load two-quadword structures to two vectors (scalar index).</iform>
+    <iform iformfile="ld2w_z_p_bi.xml" heading="LD2W (scalar plus immediate)" id="ld2w_z_p_bi">Contiguous load two-word structures to two vectors (immediate index).</iform>
+    <iform iformfile="ld2w_z_p_br.xml" heading="LD2W (scalar plus scalar)" id="ld2w_z_p_br">Contiguous load two-word structures to two vectors (scalar index).</iform>
+    <iform iformfile="ld3b_z_p_bi.xml" heading="LD3B (scalar plus immediate)" id="ld3b_z_p_bi">Contiguous load three-byte structures to three vectors (immediate index).</iform>
+    <iform iformfile="ld3b_z_p_br.xml" heading="LD3B (scalar plus scalar)" id="ld3b_z_p_br">Contiguous load three-byte structures to three vectors (scalar index).</iform>
+    <iform iformfile="ld3d_z_p_bi.xml" heading="LD3D (scalar plus immediate)" id="ld3d_z_p_bi">Contiguous load three-doubleword structures to three vectors (immediate index).</iform>
+    <iform iformfile="ld3d_z_p_br.xml" heading="LD3D (scalar plus scalar)" id="ld3d_z_p_br">Contiguous load three-doubleword structures to three vectors (scalar index).</iform>
+    <iform iformfile="ld3h_z_p_bi.xml" heading="LD3H (scalar plus immediate)" id="ld3h_z_p_bi">Contiguous load three-halfword structures to three vectors (immediate index).</iform>
+    <iform iformfile="ld3h_z_p_br.xml" heading="LD3H (scalar plus scalar)" id="ld3h_z_p_br">Contiguous load three-halfword structures to three vectors (scalar index).</iform>
+    <iform iformfile="ld3q_z_p_bi.xml" heading="LD3Q (scalar plus immediate)" id="ld3q_z_p_bi">Contiguous load three-quadword structures to three vectors (immediate index).</iform>
+    <iform iformfile="ld3q_z_p_br.xml" heading="LD3Q (scalar plus scalar)" id="ld3q_z_p_br">Contiguous load three-quadword structures to three vectors (scalar index).</iform>
+    <iform iformfile="ld3w_z_p_bi.xml" heading="LD3W (scalar plus immediate)" id="ld3w_z_p_bi">Contiguous load three-word structures to three vectors (immediate index).</iform>
+    <iform iformfile="ld3w_z_p_br.xml" heading="LD3W (scalar plus scalar)" id="ld3w_z_p_br">Contiguous load three-word structures to three vectors (scalar index).</iform>
+    <iform iformfile="ld4b_z_p_bi.xml" heading="LD4B (scalar plus immediate)" id="ld4b_z_p_bi">Contiguous load four-byte structures to four vectors (immediate index).</iform>
+    <iform iformfile="ld4b_z_p_br.xml" heading="LD4B (scalar plus scalar)" id="ld4b_z_p_br">Contiguous load four-byte structures to four vectors (scalar index).</iform>
+    <iform iformfile="ld4d_z_p_bi.xml" heading="LD4D (scalar plus immediate)" id="ld4d_z_p_bi">Contiguous load four-doubleword structures to four vectors (immediate index).</iform>
+    <iform iformfile="ld4d_z_p_br.xml" heading="LD4D (scalar plus scalar)" id="ld4d_z_p_br">Contiguous load four-doubleword structures to four vectors (scalar index).</iform>
+    <iform iformfile="ld4h_z_p_bi.xml" heading="LD4H (scalar plus immediate)" id="ld4h_z_p_bi">Contiguous load four-halfword structures to four vectors (immediate index).</iform>
+    <iform iformfile="ld4h_z_p_br.xml" heading="LD4H (scalar plus scalar)" id="ld4h_z_p_br">Contiguous load four-halfword structures to four vectors (scalar index).</iform>
+    <iform iformfile="ld4q_z_p_bi.xml" heading="LD4Q (scalar plus immediate)" id="ld4q_z_p_bi">Contiguous load four-quadword structures to four vectors (immediate index).</iform>
+    <iform iformfile="ld4q_z_p_br.xml" heading="LD4Q (scalar plus scalar)" id="ld4q_z_p_br">Contiguous load four-quadword structures to four vectors (scalar index).</iform>
+    <iform iformfile="ld4w_z_p_bi.xml" heading="LD4W (scalar plus immediate)" id="ld4w_z_p_bi">Contiguous load four-word structures to four vectors (immediate index).</iform>
+    <iform iformfile="ld4w_z_p_br.xml" heading="LD4W (scalar plus scalar)" id="ld4w_z_p_br">Contiguous load four-word structures to four vectors (scalar index).</iform>
+    <iform iformfile="ldff1b_z_p_br.xml" heading="LDFF1B (scalar plus scalar)" id="ldff1b_z_p_br">Contiguous load first-fault unsigned bytes to vector (scalar index).</iform>
+    <iform iformfile="ldff1b_z_p_bz.xml" heading="LDFF1B (scalar plus vector)" id="ldff1b_z_p_bz">Gather load first-fault unsigned bytes to vector (vector index).</iform>
+    <iform iformfile="ldff1b_z_p_ai.xml" heading="LDFF1B (vector plus immediate)" id="ldff1b_z_p_ai">Gather load first-fault unsigned bytes to vector (immediate index).</iform>
+    <iform iformfile="ldff1d_z_p_br.xml" heading="LDFF1D (scalar plus scalar)" id="ldff1d_z_p_br">Contiguous load first-fault doublewords to vector (scalar index).</iform>
+    <iform iformfile="ldff1d_z_p_bz.xml" heading="LDFF1D (scalar plus vector)" id="ldff1d_z_p_bz">Gather load first-fault doublewords to vector (vector index).</iform>
+    <iform iformfile="ldff1d_z_p_ai.xml" heading="LDFF1D (vector plus immediate)" id="ldff1d_z_p_ai">Gather load first-fault doublewords to vector (immediate index).</iform>
+    <iform iformfile="ldff1h_z_p_br.xml" heading="LDFF1H (scalar plus scalar)" id="ldff1h_z_p_br">Contiguous load first-fault unsigned halfwords to vector (scalar index).</iform>
+    <iform iformfile="ldff1h_z_p_bz.xml" heading="LDFF1H (scalar plus vector)" id="ldff1h_z_p_bz">Gather load first-fault unsigned halfwords to vector (vector index).</iform>
+    <iform iformfile="ldff1h_z_p_ai.xml" heading="LDFF1H (vector plus immediate)" id="ldff1h_z_p_ai">Gather load first-fault unsigned halfwords to vector (immediate index).</iform>
+    <iform iformfile="ldff1sb_z_p_br.xml" heading="LDFF1SB (scalar plus scalar)" id="ldff1sb_z_p_br">Contiguous load first-fault signed bytes to vector (scalar index).</iform>
+    <iform iformfile="ldff1sb_z_p_bz.xml" heading="LDFF1SB (scalar plus vector)" id="ldff1sb_z_p_bz">Gather load first-fault signed bytes to vector (vector index).</iform>
+    <iform iformfile="ldff1sb_z_p_ai.xml" heading="LDFF1SB (vector plus immediate)" id="ldff1sb_z_p_ai">Gather load first-fault signed bytes to vector (immediate index).</iform>
+    <iform iformfile="ldff1sh_z_p_br.xml" heading="LDFF1SH (scalar plus scalar)" id="ldff1sh_z_p_br">Contiguous load first-fault signed halfwords to vector (scalar index).</iform>
+    <iform iformfile="ldff1sh_z_p_bz.xml" heading="LDFF1SH (scalar plus vector)" id="ldff1sh_z_p_bz">Gather load first-fault signed halfwords to vector (vector index).</iform>
+    <iform iformfile="ldff1sh_z_p_ai.xml" heading="LDFF1SH (vector plus immediate)" id="ldff1sh_z_p_ai">Gather load first-fault signed halfwords to vector (immediate index).</iform>
+    <iform iformfile="ldff1sw_z_p_br.xml" heading="LDFF1SW (scalar plus scalar)" id="ldff1sw_z_p_br">Contiguous load first-fault signed words to vector (scalar index).</iform>
+    <iform iformfile="ldff1sw_z_p_bz.xml" heading="LDFF1SW (scalar plus vector)" id="ldff1sw_z_p_bz">Gather load first-fault signed words to vector (vector index).</iform>
+    <iform iformfile="ldff1sw_z_p_ai.xml" heading="LDFF1SW (vector plus immediate)" id="ldff1sw_z_p_ai">Gather load first-fault signed words to vector (immediate index).</iform>
+    <iform iformfile="ldff1w_z_p_br.xml" heading="LDFF1W (scalar plus scalar)" id="ldff1w_z_p_br">Contiguous load first-fault unsigned words to vector (scalar index).</iform>
+    <iform iformfile="ldff1w_z_p_bz.xml" heading="LDFF1W (scalar plus vector)" id="ldff1w_z_p_bz">Gather load first-fault unsigned words to vector (vector index).</iform>
+    <iform iformfile="ldff1w_z_p_ai.xml" heading="LDFF1W (vector plus immediate)" id="ldff1w_z_p_ai">Gather load first-fault unsigned words to vector (immediate index).</iform>
+    <iform iformfile="ldnf1b_z_p_bi.xml" heading="LDNF1B" id="ldnf1b_z_p_bi">Contiguous load non-fault unsigned bytes to vector (immediate index).</iform>
+    <iform iformfile="ldnf1d_z_p_bi.xml" heading="LDNF1D" id="ldnf1d_z_p_bi">Contiguous load non-fault doublewords to vector (immediate index).</iform>
+    <iform iformfile="ldnf1h_z_p_bi.xml" heading="LDNF1H" id="ldnf1h_z_p_bi">Contiguous load non-fault unsigned halfwords to vector (immediate index).</iform>
+    <iform iformfile="ldnf1sb_z_p_bi.xml" heading="LDNF1SB" id="ldnf1sb_z_p_bi">Contiguous load non-fault signed bytes to vector (immediate index).</iform>
+    <iform iformfile="ldnf1sh_z_p_bi.xml" heading="LDNF1SH" id="ldnf1sh_z_p_bi">Contiguous load non-fault signed halfwords to vector (immediate index).</iform>
+    <iform iformfile="ldnf1sw_z_p_bi.xml" heading="LDNF1SW" id="ldnf1sw_z_p_bi">Contiguous load non-fault signed words to vector (immediate index).</iform>
+    <iform iformfile="ldnf1w_z_p_bi.xml" heading="LDNF1W" id="ldnf1w_z_p_bi">Contiguous load non-fault unsigned words to vector (immediate index).</iform>
+    <iform iformfile="ldnt1b_mz_p_bi.xml" heading="LDNT1B (scalar plus immediate, consecutive registers)" id="ldnt1b_mz_p_bi">Contiguous load non-temporal of bytes to multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="ldnt1b_z_p_bi.xml" heading="LDNT1B (scalar plus immediate, single register)" id="ldnt1b_z_p_bi">Contiguous load non-temporal bytes to vector (immediate index).</iform>
+    <iform iformfile="ldnt1b_mz_p_br.xml" heading="LDNT1B (scalar plus scalar, consecutive registers)" id="ldnt1b_mz_p_br">Contiguous load non-temporal of bytes to multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="ldnt1b_z_p_br.xml" heading="LDNT1B (scalar plus scalar, single register)" id="ldnt1b_z_p_br">Contiguous load non-temporal bytes to vector (scalar index).</iform>
+    <iform iformfile="ldnt1b_z_p_ar.xml" heading="LDNT1B (vector plus scalar)" id="ldnt1b_z_p_ar">Gather load non-temporal unsigned bytes.</iform>
+    <iform iformfile="ldnt1d_mz_p_bi.xml" heading="LDNT1D (scalar plus immediate, consecutive registers)" id="ldnt1d_mz_p_bi">Contiguous load non-temporal of doublewords to multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="ldnt1d_z_p_bi.xml" heading="LDNT1D (scalar plus immediate, single register)" id="ldnt1d_z_p_bi">Contiguous load non-temporal doublewords to vector (immediate index).</iform>
+    <iform iformfile="ldnt1d_mz_p_br.xml" heading="LDNT1D (scalar plus scalar, consecutive registers)" id="ldnt1d_mz_p_br">Contiguous load non-temporal of doublewords to multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="ldnt1d_z_p_br.xml" heading="LDNT1D (scalar plus scalar, single register)" id="ldnt1d_z_p_br">Contiguous load non-temporal doublewords to vector (scalar index).</iform>
+    <iform iformfile="ldnt1d_z_p_ar.xml" heading="LDNT1D (vector plus scalar)" id="ldnt1d_z_p_ar">Gather load non-temporal unsigned doublewords.</iform>
+    <iform iformfile="ldnt1h_mz_p_bi.xml" heading="LDNT1H (scalar plus immediate, consecutive registers)" id="ldnt1h_mz_p_bi">Contiguous load non-temporal of halfwords to multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="ldnt1h_z_p_bi.xml" heading="LDNT1H (scalar plus immediate, single register)" id="ldnt1h_z_p_bi">Contiguous load non-temporal halfwords to vector (immediate index).</iform>
+    <iform iformfile="ldnt1h_mz_p_br.xml" heading="LDNT1H (scalar plus scalar, consecutive registers)" id="ldnt1h_mz_p_br">Contiguous load non-temporal of halfwords to multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="ldnt1h_z_p_br.xml" heading="LDNT1H (scalar plus scalar, single register)" id="ldnt1h_z_p_br">Contiguous load non-temporal halfwords to vector (scalar index).</iform>
+    <iform iformfile="ldnt1h_z_p_ar.xml" heading="LDNT1H (vector plus scalar)" id="ldnt1h_z_p_ar">Gather load non-temporal unsigned halfwords.</iform>
+    <iform iformfile="ldnt1sb_z_p_ar.xml" heading="LDNT1SB" id="ldnt1sb_z_p_ar">Gather load non-temporal signed bytes.</iform>
+    <iform iformfile="ldnt1sh_z_p_ar.xml" heading="LDNT1SH" id="ldnt1sh_z_p_ar">Gather load non-temporal signed halfwords.</iform>
+    <iform iformfile="ldnt1sw_z_p_ar.xml" heading="LDNT1SW" id="ldnt1sw_z_p_ar">Gather load non-temporal signed words.</iform>
+    <iform iformfile="ldnt1w_mz_p_bi.xml" heading="LDNT1W (scalar plus immediate, consecutive registers)" id="ldnt1w_mz_p_bi">Contiguous load non-temporal of words to multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="ldnt1w_z_p_bi.xml" heading="LDNT1W (scalar plus immediate, single register)" id="ldnt1w_z_p_bi">Contiguous load non-temporal words to vector (immediate index).</iform>
+    <iform iformfile="ldnt1w_mz_p_br.xml" heading="LDNT1W (scalar plus scalar, consecutive registers)" id="ldnt1w_mz_p_br">Contiguous load non-temporal of words to multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="ldnt1w_z_p_br.xml" heading="LDNT1W (scalar plus scalar, single register)" id="ldnt1w_z_p_br">Contiguous load non-temporal words to vector (scalar index).</iform>
+    <iform iformfile="ldnt1w_z_p_ar.xml" heading="LDNT1W (vector plus scalar)" id="ldnt1w_z_p_ar">Gather load non-temporal unsigned words.</iform>
+    <iform iformfile="ldr_p_bi.xml" heading="LDR (predicate)" id="ldr_p_bi">Load predicate register.</iform>
+    <iform iformfile="ldr_z_bi.xml" heading="LDR (vector)" id="ldr_z_bi">Load vector register.</iform>
+    <iform iformfile="lsl_z_p_zi.xml" heading="LSL (immediate, predicated)" id="lsl_z_p_zi">Logical shift left by immediate (predicated).</iform>
+    <iform iformfile="lsl_z_zi.xml" heading="LSL (immediate, unpredicated)" id="lsl_z_zi">Logical shift left by immediate (unpredicated).</iform>
+    <iform iformfile="lsl_z_p_zz.xml" heading="LSL (vectors)" id="lsl_z_p_zz">Logical shift left by vector (predicated).</iform>
+    <iform iformfile="lsl_z_p_zw.xml" heading="LSL (wide elements, predicated)" id="lsl_z_p_zw">Logical shift left by 64-bit wide elements (predicated).</iform>
+    <iform iformfile="lsl_z_zw.xml" heading="LSL (wide elements, unpredicated)" id="lsl_z_zw">Logical shift left by 64-bit wide elements (unpredicated).</iform>
+    <iform iformfile="lslr_z_p_zz.xml" heading="LSLR" id="lslr_z_p_zz">Reversed logical shift left by vector (predicated).</iform>
+    <iform iformfile="lsr_z_p_zi.xml" heading="LSR (immediate, predicated)" id="lsr_z_p_zi">Logical shift right by immediate (predicated).</iform>
+    <iform iformfile="lsr_z_zi.xml" heading="LSR (immediate, unpredicated)" id="lsr_z_zi">Logical shift right by immediate (unpredicated).</iform>
+    <iform iformfile="lsr_z_p_zz.xml" heading="LSR (vectors)" id="lsr_z_p_zz">Logical shift right by vector (predicated).</iform>
+    <iform iformfile="lsr_z_p_zw.xml" heading="LSR (wide elements, predicated)" id="lsr_z_p_zw">Logical shift right by 64-bit wide elements (predicated).</iform>
+    <iform iformfile="lsr_z_zw.xml" heading="LSR (wide elements, unpredicated)" id="lsr_z_zw">Logical shift right by 64-bit wide elements (unpredicated).</iform>
+    <iform iformfile="lsrr_z_p_zz.xml" heading="LSRR" id="lsrr_z_p_zz">Reversed logical shift right by vector (predicated).</iform>
+    <iform iformfile="luti2_z_zz.xml" heading="LUTI2" id="luti2_z_zz">Lookup table read with 2-bit indices.</iform>
+    <iform iformfile="luti4_z_zz.xml" heading="LUTI4" id="luti4_z_zz">Lookup table read with 4-bit indices.</iform>
+    <iform iformfile="mad_z_p_zzz.xml" heading="MAD" id="mad_z_p_zzz">Multiply-add vectors (predicated), writing multiplicand [Zdn = Za + Zdn * Zm].</iform>
+    <iform iformfile="madpt_z_zzz.xml" heading="MADPT" id="madpt_z_zzz">Multiply-add checked pointer vectors, writing multiplicand [Zdn = Za + Zdn * Zm].</iform>
+    <iform iformfile="match_p_p_zz.xml" heading="MATCH" id="match_p_p_zz">Detect any matching elements, setting the condition flags.</iform>
+    <iform iformfile="mla_z_zzzi.xml" heading="MLA (indexed)" id="mla_z_zzzi">Multiply-add to accumulator (indexed).</iform>
+    <iform iformfile="mla_z_p_zzz.xml" heading="MLA (vectors)" id="mla_z_p_zzz">Multiply-add vectors (predicated), writing addend [Zda = Zda + Zn * Zm].</iform>
+    <iform iformfile="mlapt_z_zzz.xml" heading="MLAPT" id="mlapt_z_zzz">Multiply-add checked pointer vectors, writing addend [Zda = Zda + Zn * Zm].</iform>
+    <iform iformfile="mls_z_zzzi.xml" heading="MLS (indexed)" id="mls_z_zzzi">Multiply-subtract from accumulator (indexed).</iform>
+    <iform iformfile="mls_z_p_zzz.xml" heading="MLS (vectors)" id="mls_z_p_zzz">Multiply-subtract vectors (predicated), writing addend [Zda = Zda - Zn * Zm].</iform>
+    <iform iformfile="mov_dupm_z_i.xml" heading="MOV" id="MOV_dupm_z_i">Move logical bitmask immediate to vector (unpredicated): an alias of DUPM.</iform>
+    <iform iformfile="mov_orr_p_p_pp.xml" heading="MOV" id="MOV_orr_p_p_pp">Move predicate (unpredicated): an alias of ORR (predicates).</iform>
+    <iform iformfile="mov_cpy_z_p_i.xml" heading="MOV (immediate, predicated, merging)" id="MOV_cpy_z_p_i">Move signed integer immediate to vector elements (merging): an alias of CPY (immediate, merging).</iform>
+    <iform iformfile="mov_cpy_z_o_i.xml" heading="MOV (immediate, predicated, zeroing)" id="MOV_cpy_z_o_i">Move signed integer immediate to vector elements (zeroing): an alias of CPY (immediate, zeroing).</iform>
+    <iform iformfile="mov_dup_z_i.xml" heading="MOV (immediate, unpredicated)" id="MOV_dup_z_i">Move signed immediate to vector elements (unpredicated): an alias of DUP (immediate).</iform>
+    <iform iformfile="mov_sel_p_p_pp.xml" heading="MOV (predicate, predicated, merging)" id="MOV_sel_p_p_pp">Move predicates (merging): an alias of SEL (predicates).</iform>
+    <iform iformfile="mov_and_p_p_pp.xml" heading="MOV (predicate, predicated, zeroing)" id="MOV_and_p_p_pp">Move predicates (zeroing): an alias of AND (predicates).</iform>
+    <iform iformfile="mov_cpy_z_p_r.xml" heading="MOV (scalar, predicated)" id="MOV_cpy_z_p_r">Move general-purpose register to vector elements (predicated): an alias of CPY (scalar).</iform>
+    <iform iformfile="mov_dup_z_r.xml" heading="MOV (scalar, unpredicated)" id="MOV_dup_z_r">Move general-purpose register to vector elements (unpredicated): an alias of DUP (scalar).</iform>
+    <iform iformfile="mov_cpy_z_p_v.xml" heading="MOV (SIMD&amp;FP scalar, predicated)" id="MOV_cpy_z_p_v">Move SIMD&amp;FP scalar register to vector elements (predicated): an alias of CPY (SIMD&amp;FP scalar).</iform>
+    <iform iformfile="mov_dup_z_zi.xml" heading="MOV (SIMD&amp;FP scalar, unpredicated)" id="MOV_dup_z_zi">Move indexed element or SIMD&amp;FP scalar to vector (unpredicated): an alias of DUP (indexed).</iform>
+    <iform iformfile="mov_sel_z_p_zz.xml" heading="MOV (vector, predicated)" id="MOV_sel_z_p_zz">Move vector elements (predicated): an alias of SEL (vectors).</iform>
+    <iform iformfile="mov_orr_z_zz.xml" heading="MOV (vector, unpredicated)" id="MOV_orr_z_zz">Move vector register (unpredicated): an alias of ORR (vectors, unpredicated).</iform>
+    <iform iformfile="movprfx_z_p_z.xml" heading="MOVPRFX (predicated)" id="movprfx_z_p_z">Move prefix (predicated).</iform>
+    <iform iformfile="movprfx_z_z.xml" heading="MOVPRFX (unpredicated)" id="movprfx_z_z">Move prefix (unpredicated).</iform>
+    <iform iformfile="movs_ands_p_p_pp.xml" heading="MOVS (predicated)" id="MOVS_ands_p_p_pp">Move predicates (zeroing), setting the condition flags: an alias of ANDS.</iform>
+    <iform iformfile="movs_orrs_p_p_pp.xml" heading="MOVS (unpredicated)" id="MOVS_orrs_p_p_pp">Move predicate (unpredicated), setting the condition flags: an alias of ORRS.</iform>
+    <iform iformfile="msb_z_p_zzz.xml" heading="MSB" id="msb_z_p_zzz">Multiply-subtract vectors (predicated), writing multiplicand [Zdn = Za - Zdn * Zm].</iform>
+    <iform iformfile="mul_z_zi.xml" heading="MUL (immediate)" id="mul_z_zi">Multiply by immediate (unpredicated).</iform>
+    <iform iformfile="mul_z_zzi.xml" heading="MUL (indexed)" id="mul_z_zzi">Multiply (indexed).</iform>
+    <iform iformfile="mul_z_p_zz.xml" heading="MUL (vectors, predicated)" id="mul_z_p_zz">Multiply vectors (predicated).</iform>
+    <iform iformfile="mul_z_zz.xml" heading="MUL (vectors, unpredicated)" id="mul_z_zz">Multiply vectors (unpredicated).</iform>
+    <iform iformfile="nand_p_p_pp.xml" heading="NAND" id="nand_p_p_pp">Bitwise NAND predicates.</iform>
+    <iform iformfile="nands_p_p_pp.xml" heading="NANDS" id="nands_p_p_pp">Bitwise NAND predicates, setting the condition flags.</iform>
+    <iform iformfile="nbsl_z_zzz.xml" heading="NBSL" id="nbsl_z_zzz">Bitwise inverted select.</iform>
+    <iform iformfile="neg_z_p_z.xml" heading="NEG" id="neg_z_p_z">Negate (predicated).</iform>
+    <iform iformfile="nmatch_p_p_zz.xml" heading="NMATCH" id="nmatch_p_p_zz">Detect no matching elements, setting the condition flags.</iform>
+    <iform iformfile="nor_p_p_pp.xml" heading="NOR" id="nor_p_p_pp">Bitwise NOR predicates.</iform>
+    <iform iformfile="nors_p_p_pp.xml" heading="NORS" id="nors_p_p_pp">Bitwise NOR predicates, setting the condition flags.</iform>
+    <iform iformfile="not_eor_p_p_pp.xml" heading="NOT (predicate)" id="NOT_eor_p_p_pp">Bitwise invert predicate: an alias of EOR (predicates).</iform>
+    <iform iformfile="not_z_p_z.xml" heading="NOT (vector)" id="not_z_p_z">Bitwise invert vector (predicated).</iform>
+    <iform iformfile="nots_eors_p_p_pp.xml" heading="NOTS" id="NOTS_eors_p_p_pp">Bitwise invert predicate, setting the condition flags: an alias of EORS.</iform>
+    <iform iformfile="orn_orr_z_zi.xml" heading="ORN (immediate)" id="ORN_orr_z_zi">Bitwise inclusive OR with inverted immediate (unpredicated): an alias of ORR (immediate).</iform>
+    <iform iformfile="orn_p_p_pp.xml" heading="ORN (predicates)" id="orn_p_p_pp">Bitwise inclusive OR inverted predicate.</iform>
+    <iform iformfile="orns_p_p_pp.xml" heading="ORNS" id="orns_p_p_pp">Bitwise inclusive OR inverted predicate, setting the condition flags.</iform>
+    <iform iformfile="orqv_z_p_z.xml" heading="ORQV" id="orqv_z_p_z">Bitwise inclusive OR reduction of quadword vector segments.</iform>
+    <iform iformfile="orr_z_zi.xml" heading="ORR (immediate)" id="orr_z_zi">Bitwise inclusive OR with immediate (unpredicated).</iform>
+    <iform iformfile="orr_p_p_pp.xml" heading="ORR (predicates)" id="orr_p_p_pp">Bitwise inclusive OR predicates.</iform>
+    <iform iformfile="orr_z_p_zz.xml" heading="ORR (vectors, predicated)" id="orr_z_p_zz">Bitwise inclusive OR vectors (predicated).</iform>
+    <iform iformfile="orr_z_zz.xml" heading="ORR (vectors, unpredicated)" id="orr_z_zz">Bitwise inclusive OR vectors (unpredicated).</iform>
+    <iform iformfile="orrs_p_p_pp.xml" heading="ORRS" id="orrs_p_p_pp">Bitwise inclusive OR predicates, setting the condition flags.</iform>
+    <iform iformfile="orv_r_p_z.xml" heading="ORV" id="orv_r_p_z">Bitwise inclusive OR reduction to scalar.</iform>
+    <iform iformfile="pext_pp_rr.xml" heading="PEXT (predicate pair)" id="pext_pp_rr">Predicate extract pair from predicate-as-counter.</iform>
+    <iform iformfile="pext_pn_rr.xml" heading="PEXT (predicate)" id="pext_pn_rr">Predicate extract from predicate-as-counter.</iform>
+    <iform iformfile="pfalse_p.xml" heading="PFALSE" id="pfalse_p">Set all predicate elements to false.</iform>
+    <iform iformfile="pfirst_p_p_p.xml" heading="PFIRST" id="pfirst_p_p_p">Set the first active predicate element to true.</iform>
+    <iform iformfile="pmov_p_zi.xml" heading="PMOV (to predicate)" id="pmov_p_zi">Move predicate from vector.</iform>
+    <iform iformfile="pmov_z_pi.xml" heading="PMOV (to vector)" id="pmov_z_pi">Move predicate to vector.</iform>
+    <iform iformfile="pmul_z_zz.xml" heading="PMUL" id="pmul_z_zz">Polynomial multiply vectors (unpredicated).</iform>
+    <iform iformfile="pmullb_z_zz.xml" heading="PMULLB" id="pmullb_z_zz">Polynomial multiply long (bottom).</iform>
+    <iform iformfile="pmullt_z_zz.xml" heading="PMULLT" id="pmullt_z_zz">Polynomial multiply long (top).</iform>
+    <iform iformfile="pnext_p_p_p.xml" heading="PNEXT" id="pnext_p_p_p">Find next active predicate.</iform>
+    <iform iformfile="prfb_i_p_bi.xml" heading="PRFB (scalar plus immediate)" id="prfb_i_p_bi">Contiguous prefetch bytes (immediate index).</iform>
+    <iform iformfile="prfb_i_p_br.xml" heading="PRFB (scalar plus scalar)" id="prfb_i_p_br">Contiguous prefetch bytes (scalar index).</iform>
+    <iform iformfile="prfb_i_p_bz.xml" heading="PRFB (scalar plus vector)" id="prfb_i_p_bz">Gather prefetch bytes (scalar plus vector).</iform>
+    <iform iformfile="prfb_i_p_ai.xml" heading="PRFB (vector plus immediate)" id="prfb_i_p_ai">Gather prefetch bytes (vector plus immediate).</iform>
+    <iform iformfile="prfd_i_p_bi.xml" heading="PRFD (scalar plus immediate)" id="prfd_i_p_bi">Contiguous prefetch doublewords (immediate index).</iform>
+    <iform iformfile="prfd_i_p_br.xml" heading="PRFD (scalar plus scalar)" id="prfd_i_p_br">Contiguous prefetch doublewords (scalar index).</iform>
+    <iform iformfile="prfd_i_p_bz.xml" heading="PRFD (scalar plus vector)" id="prfd_i_p_bz">Gather prefetch doublewords (scalar plus vector).</iform>
+    <iform iformfile="prfd_i_p_ai.xml" heading="PRFD (vector plus immediate)" id="prfd_i_p_ai">Gather prefetch doublewords (vector plus immediate).</iform>
+    <iform iformfile="prfh_i_p_bi.xml" heading="PRFH (scalar plus immediate)" id="prfh_i_p_bi">Contiguous prefetch halfwords (immediate index).</iform>
+    <iform iformfile="prfh_i_p_br.xml" heading="PRFH (scalar plus scalar)" id="prfh_i_p_br">Contiguous prefetch halfwords (scalar index).</iform>
+    <iform iformfile="prfh_i_p_bz.xml" heading="PRFH (scalar plus vector)" id="prfh_i_p_bz">Gather prefetch halfwords (scalar plus vector).</iform>
+    <iform iformfile="prfh_i_p_ai.xml" heading="PRFH (vector plus immediate)" id="prfh_i_p_ai">Gather prefetch halfwords (vector plus immediate).</iform>
+    <iform iformfile="prfw_i_p_bi.xml" heading="PRFW (scalar plus immediate)" id="prfw_i_p_bi">Contiguous prefetch words (immediate index).</iform>
+    <iform iformfile="prfw_i_p_br.xml" heading="PRFW (scalar plus scalar)" id="prfw_i_p_br">Contiguous prefetch words (scalar index).</iform>
+    <iform iformfile="prfw_i_p_bz.xml" heading="PRFW (scalar plus vector)" id="prfw_i_p_bz">Gather prefetch words (scalar plus vector).</iform>
+    <iform iformfile="prfw_i_p_ai.xml" heading="PRFW (vector plus immediate)" id="prfw_i_p_ai">Gather prefetch words (vector plus immediate).</iform>
+    <iform iformfile="psel_p_ppi.xml" heading="PSEL" id="psel_p_ppi">Predicate select between predicate register or all-false.</iform>
+    <iform iformfile="ptest_p_p.xml" heading="PTEST" id="ptest_p_p">Set condition flags for predicate.</iform>
+    <iform iformfile="ptrue_pn_i.xml" heading="PTRUE (predicate as counter)" id="ptrue_pn_i">Initialise predicate-as-counter to all active.</iform>
+    <iform iformfile="ptrue_p_s.xml" heading="PTRUE (predicate)" id="ptrue_p_s">Initialise predicate from named constraint.</iform>
+    <iform iformfile="ptrues_p_s.xml" heading="PTRUES" id="ptrues_p_s">Initialise predicate from named constraint and set the condition flags.</iform>
+    <iform iformfile="punpkhi_p_p.xml" heading="PUNPKHI, PUNPKLO" id="punpkhi_p_p">Unpack and widen half of predicate.</iform>
+    <iform iformfile="raddhnb_z_zz.xml" heading="RADDHNB" id="raddhnb_z_zz">Rounding add narrow high part (bottom).</iform>
+    <iform iformfile="raddhnt_z_zz.xml" heading="RADDHNT" id="raddhnt_z_zz">Rounding add narrow high part (top).</iform>
+    <iform iformfile="rax1_z_zz.xml" heading="RAX1" id="rax1_z_zz">Bitwise rotate left by 1 and exclusive OR.</iform>
+    <iform iformfile="rbit_z_p_z.xml" heading="RBIT" id="rbit_z_p_z">Reverse bits (predicated).</iform>
+    <iform iformfile="rdffr_p_p_f.xml" heading="RDFFR (predicated)" id="rdffr_p_p_f">Return predicate of succesfully loaded elements.</iform>
+    <iform iformfile="rdffr_p_f.xml" heading="RDFFR (unpredicated)" id="rdffr_p_f">Read the first-fault register.</iform>
+    <iform iformfile="rdffrs_p_p_f.xml" heading="RDFFRS" id="rdffrs_p_p_f">Return predicate of succesfully loaded elements, setting the condition flags.</iform>
+    <iform iformfile="rdvl_r_i.xml" heading="RDVL" id="rdvl_r_i">Read multiple of vector register size to scalar register.</iform>
+    <iform iformfile="rev_p_p.xml" heading="REV (predicate)" id="rev_p_p">Reverse all elements in a predicate.</iform>
+    <iform iformfile="rev_z_z.xml" heading="REV (vector)" id="rev_z_z">Reverse all elements in a vector (unpredicated).</iform>
+    <iform iformfile="revb_z_z.xml" heading="REVB, REVH, REVW" id="revb_z_z">Reverse bytes / halfwords / words within elements (predicated).</iform>
+    <iform iformfile="revd_z_p_z.xml" heading="REVD" id="revd_z_p_z">Reverse 64-bit doublewords in elements (predicated).</iform>
+    <iform iformfile="rshrnb_z_zi.xml" heading="RSHRNB" id="rshrnb_z_zi">Rounding shift right narrow by immediate (bottom).</iform>
+    <iform iformfile="rshrnt_z_zi.xml" heading="RSHRNT" id="rshrnt_z_zi">Rounding shift right narrow by immediate (top).</iform>
+    <iform iformfile="rsubhnb_z_zz.xml" heading="RSUBHNB" id="rsubhnb_z_zz">Rounding subtract narrow high part (bottom).</iform>
+    <iform iformfile="rsubhnt_z_zz.xml" heading="RSUBHNT" id="rsubhnt_z_zz">Rounding subtract narrow high part (top).</iform>
+    <iform iformfile="saba_z_zzz.xml" heading="SABA" id="saba_z_zzz">Signed absolute difference and accumulate.</iform>
+    <iform iformfile="sabalb_z_zzz.xml" heading="SABALB" id="sabalb_z_zzz">Signed absolute difference and accumulate long (bottom).</iform>
+    <iform iformfile="sabalt_z_zzz.xml" heading="SABALT" id="sabalt_z_zzz">Signed absolute difference and accumulate long (top).</iform>
+    <iform iformfile="sabd_z_p_zz.xml" heading="SABD" id="sabd_z_p_zz">Signed absolute difference (predicated).</iform>
+    <iform iformfile="sabdlb_z_zz.xml" heading="SABDLB" id="sabdlb_z_zz">Signed absolute difference long (bottom).</iform>
+    <iform iformfile="sabdlt_z_zz.xml" heading="SABDLT" id="sabdlt_z_zz">Signed absolute difference long (top).</iform>
+    <iform iformfile="sadalp_z_p_z.xml" heading="SADALP" id="sadalp_z_p_z">Signed add and accumulate long pairwise.</iform>
+    <iform iformfile="saddlb_z_zz.xml" heading="SADDLB" id="saddlb_z_zz">Signed add long (bottom).</iform>
+    <iform iformfile="saddlbt_z_zz.xml" heading="SADDLBT" id="saddlbt_z_zz">Signed add long (bottom + top).</iform>
+    <iform iformfile="saddlt_z_zz.xml" heading="SADDLT" id="saddlt_z_zz">Signed add long (top).</iform>
+    <iform iformfile="saddv_r_p_z.xml" heading="SADDV" id="saddv_r_p_z">Signed add reduction to scalar.</iform>
+    <iform iformfile="saddwb_z_zz.xml" heading="SADDWB" id="saddwb_z_zz">Signed add wide (bottom).</iform>
+    <iform iformfile="saddwt_z_zz.xml" heading="SADDWT" id="saddwt_z_zz">Signed add wide (top).</iform>
+    <iform iformfile="sbclb_z_zzz.xml" heading="SBCLB" id="sbclb_z_zzz">Subtract with carry long (bottom).</iform>
+    <iform iformfile="sbclt_z_zzz.xml" heading="SBCLT" id="sbclt_z_zzz">Subtract with carry long (top).</iform>
+    <iform iformfile="sclamp_z_zz.xml" heading="SCLAMP" id="sclamp_z_zz">Signed clamp to minimum/maximum vector.</iform>
+    <iform iformfile="scvtf_z_p_z.xml" heading="SCVTF" id="scvtf_z_p_z">Signed integer convert to floating-point (predicated).</iform>
+    <iform iformfile="sdiv_z_p_zz.xml" heading="SDIV" id="sdiv_z_p_zz">Signed divide (predicated).</iform>
+    <iform iformfile="sdivr_z_p_zz.xml" heading="SDIVR" id="sdivr_z_p_zz">Signed reversed divide (predicated).</iform>
+    <iform iformfile="sdot_z32_zzzi.xml" heading="SDOT (2-way, indexed)" id="sdot_z32_zzzi">Signed integer indexed dot product.</iform>
+    <iform iformfile="sdot_z32_zzz.xml" heading="SDOT (2-way, vectors)" id="sdot_z32_zzz">Signed integer dot product.</iform>
+    <iform iformfile="sdot_z_zzzi.xml" heading="SDOT (4-way, indexed)" id="sdot_z_zzzi">Signed integer indexed dot product.</iform>
+    <iform iformfile="sdot_z_zzz.xml" heading="SDOT (4-way, vectors)" id="sdot_z_zzz">Signed integer dot product.</iform>
+    <iform iformfile="sel_p_p_pp.xml" heading="SEL (predicates)" id="sel_p_p_pp">Conditionally select elements from two predicates.</iform>
+    <iform iformfile="sel_z_p_zz.xml" heading="SEL (vectors)" id="sel_z_p_zz">Conditionally select elements from two vectors.</iform>
+    <iform iformfile="setffr_f.xml" heading="SETFFR" id="setffr_f">Initialise the first-fault register to all true.</iform>
+    <iform iformfile="shadd_z_p_zz.xml" heading="SHADD" id="shadd_z_p_zz">Signed halving addition.</iform>
+    <iform iformfile="shrnb_z_zi.xml" heading="SHRNB" id="shrnb_z_zi">Shift right narrow by immediate (bottom).</iform>
+    <iform iformfile="shrnt_z_zi.xml" heading="SHRNT" id="shrnt_z_zi">Shift right narrow by immediate (top).</iform>
+    <iform iformfile="shsub_z_p_zz.xml" heading="SHSUB" id="shsub_z_p_zz">Signed halving subtract.</iform>
+    <iform iformfile="shsubr_z_p_zz.xml" heading="SHSUBR" id="shsubr_z_p_zz">Signed halving subtract reversed vectors.</iform>
+    <iform iformfile="sli_z_zzi.xml" heading="SLI" id="sli_z_zzi">Shift left and insert (immediate).</iform>
+    <iform iformfile="sm4e_z_zz.xml" heading="SM4E" id="sm4e_z_zz">SM4 encryption and decryption.</iform>
+    <iform iformfile="sm4ekey_z_zz.xml" heading="SM4EKEY" id="sm4ekey_z_zz">SM4 key updates.</iform>
+    <iform iformfile="smax_z_zi.xml" heading="SMAX (immediate)" id="smax_z_zi">Signed maximum with immediate (unpredicated).</iform>
+    <iform iformfile="smax_z_p_zz.xml" heading="SMAX (vectors)" id="smax_z_p_zz">Signed maximum vectors (predicated).</iform>
+    <iform iformfile="smaxp_z_p_zz.xml" heading="SMAXP" id="smaxp_z_p_zz">Signed maximum pairwise.</iform>
+    <iform iformfile="smaxqv_z_p_z.xml" heading="SMAXQV" id="smaxqv_z_p_z">Signed maximum reduction of quadword vector segments.</iform>
+    <iform iformfile="smaxv_r_p_z.xml" heading="SMAXV" id="smaxv_r_p_z">Signed maximum reduction to scalar.</iform>
+    <iform iformfile="smin_z_zi.xml" heading="SMIN (immediate)" id="smin_z_zi">Signed minimum with immediate (unpredicated).</iform>
+    <iform iformfile="smin_z_p_zz.xml" heading="SMIN (vectors)" id="smin_z_p_zz">Signed minimum vectors (predicated).</iform>
+    <iform iformfile="sminp_z_p_zz.xml" heading="SMINP" id="sminp_z_p_zz">Signed minimum pairwise.</iform>
+    <iform iformfile="sminqv_z_p_z.xml" heading="SMINQV" id="sminqv_z_p_z">Signed minimum reduction of quadword vector segments.</iform>
+    <iform iformfile="sminv_r_p_z.xml" heading="SMINV" id="sminv_r_p_z">Signed minimum reduction to scalar.</iform>
+    <iform iformfile="smlalb_z_zzzi.xml" heading="SMLALB (indexed)" id="smlalb_z_zzzi">Signed multiply-add long to accumulator (bottom, indexed).</iform>
+    <iform iformfile="smlalb_z_zzz.xml" heading="SMLALB (vectors)" id="smlalb_z_zzz">Signed multiply-add long to accumulator (bottom).</iform>
+    <iform iformfile="smlalt_z_zzzi.xml" heading="SMLALT (indexed)" id="smlalt_z_zzzi">Signed multiply-add long to accumulator (top, indexed).</iform>
+    <iform iformfile="smlalt_z_zzz.xml" heading="SMLALT (vectors)" id="smlalt_z_zzz">Signed multiply-add long to accumulator (top).</iform>
+    <iform iformfile="smlslb_z_zzzi.xml" heading="SMLSLB (indexed)" id="smlslb_z_zzzi">Signed multiply-subtract long from accumulator (bottom, indexed).</iform>
+    <iform iformfile="smlslb_z_zzz.xml" heading="SMLSLB (vectors)" id="smlslb_z_zzz">Signed multiply-subtract long from accumulator (bottom).</iform>
+    <iform iformfile="smlslt_z_zzzi.xml" heading="SMLSLT (indexed)" id="smlslt_z_zzzi">Signed multiply-subtract long from accumulator (top, indexed).</iform>
+    <iform iformfile="smlslt_z_zzz.xml" heading="SMLSLT (vectors)" id="smlslt_z_zzz">Signed multiply-subtract long from accumulator (top).</iform>
+    <iform iformfile="smmla_z_zzz.xml" heading="SMMLA" id="smmla_z_zzz">Signed integer matrix multiply-accumulate.</iform>
+    <iform iformfile="smulh_z_p_zz.xml" heading="SMULH (predicated)" id="smulh_z_p_zz">Signed multiply returning high half (predicated).</iform>
+    <iform iformfile="smulh_z_zz.xml" heading="SMULH (unpredicated)" id="smulh_z_zz">Signed multiply returning high half (unpredicated).</iform>
+    <iform iformfile="smullb_z_zzi.xml" heading="SMULLB (indexed)" id="smullb_z_zzi">Signed multiply long (bottom, indexed).</iform>
+    <iform iformfile="smullb_z_zz.xml" heading="SMULLB (vectors)" id="smullb_z_zz">Signed multiply long (bottom).</iform>
+    <iform iformfile="smullt_z_zzi.xml" heading="SMULLT (indexed)" id="smullt_z_zzi">Signed multiply long (top, indexed).</iform>
+    <iform iformfile="smullt_z_zz.xml" heading="SMULLT (vectors)" id="smullt_z_zz">Signed multiply long (top).</iform>
+    <iform iformfile="splice_z_p_zz.xml" heading="SPLICE" id="splice_z_p_zz">Splice two vectors under predicate control.</iform>
+    <iform iformfile="sqabs_z_p_z.xml" heading="SQABS" id="sqabs_z_p_z">Signed saturating absolute value.</iform>
+    <iform iformfile="sqadd_z_zi.xml" heading="SQADD (immediate)" id="sqadd_z_zi">Signed saturating add immediate (unpredicated).</iform>
+    <iform iformfile="sqadd_z_p_zz.xml" heading="SQADD (vectors, predicated)" id="sqadd_z_p_zz">Signed saturating addition (predicated).</iform>
+    <iform iformfile="sqadd_z_zz.xml" heading="SQADD (vectors, unpredicated)" id="sqadd_z_zz">Signed saturating add vectors (unpredicated).</iform>
+    <iform iformfile="sqcadd_z_zz.xml" heading="SQCADD" id="sqcadd_z_zz">Saturating complex integer add with rotate.</iform>
+    <iform iformfile="sqcvtn_z_mz2.xml" heading="SQCVTN" id="sqcvtn_z_mz2">Signed saturating extract narrow and interleave.</iform>
+    <iform iformfile="sqcvtun_z_mz2.xml" heading="SQCVTUN" id="sqcvtun_z_mz2">Signed saturating unsigned extract narrow and interleave.</iform>
+    <iform iformfile="sqdecb_r_rs.xml" heading="SQDECB" id="sqdecb_r_rs">Signed saturating decrement scalar by multiple of 8-bit predicate constraint element count.</iform>
+    <iform iformfile="sqdecd_r_rs.xml" heading="SQDECD (scalar)" id="sqdecd_r_rs">Signed saturating decrement scalar by multiple of 64-bit predicate constraint element count.</iform>
+    <iform iformfile="sqdecd_z_zs.xml" heading="SQDECD (vector)" id="sqdecd_z_zs">Signed saturating decrement vector by multiple of 64-bit predicate constraint element count.</iform>
+    <iform iformfile="sqdech_r_rs.xml" heading="SQDECH (scalar)" id="sqdech_r_rs">Signed saturating decrement scalar by multiple of 16-bit predicate constraint element count.</iform>
+    <iform iformfile="sqdech_z_zs.xml" heading="SQDECH (vector)" id="sqdech_z_zs">Signed saturating decrement vector by multiple of 16-bit predicate constraint element count.</iform>
+    <iform iformfile="sqdecp_r_p_r.xml" heading="SQDECP (scalar)" id="sqdecp_r_p_r">Signed saturating decrement scalar by count of true predicate elements.</iform>
+    <iform iformfile="sqdecp_z_p_z.xml" heading="SQDECP (vector)" id="sqdecp_z_p_z">Signed saturating decrement vector by count of true predicate elements.</iform>
+    <iform iformfile="sqdecw_r_rs.xml" heading="SQDECW (scalar)" id="sqdecw_r_rs">Signed saturating decrement scalar by multiple of 32-bit predicate constraint element count.</iform>
+    <iform iformfile="sqdecw_z_zs.xml" heading="SQDECW (vector)" id="sqdecw_z_zs">Signed saturating decrement vector by multiple of 32-bit predicate constraint element count.</iform>
+    <iform iformfile="sqdmlalb_z_zzzi.xml" heading="SQDMLALB (indexed)" id="sqdmlalb_z_zzzi">Signed saturating doubling multiply-add long to accumulator (bottom, indexed).</iform>
+    <iform iformfile="sqdmlalb_z_zzz.xml" heading="SQDMLALB (vectors)" id="sqdmlalb_z_zzz">Signed saturating doubling multiply-add long to accumulator (bottom).</iform>
+    <iform iformfile="sqdmlalbt_z_zzz.xml" heading="SQDMLALBT" id="sqdmlalbt_z_zzz">Signed saturating doubling multiply-add long to accumulator (bottom × top).</iform>
+    <iform iformfile="sqdmlalt_z_zzzi.xml" heading="SQDMLALT (indexed)" id="sqdmlalt_z_zzzi">Signed saturating doubling multiply-add long to accumulator (top, indexed).</iform>
+    <iform iformfile="sqdmlalt_z_zzz.xml" heading="SQDMLALT (vectors)" id="sqdmlalt_z_zzz">Signed saturating doubling multiply-add long to accumulator (top).</iform>
+    <iform iformfile="sqdmlslb_z_zzzi.xml" heading="SQDMLSLB (indexed)" id="sqdmlslb_z_zzzi">Signed saturating doubling multiply-subtract long from accumulator (bottom, indexed).</iform>
+    <iform iformfile="sqdmlslb_z_zzz.xml" heading="SQDMLSLB (vectors)" id="sqdmlslb_z_zzz">Signed saturating doubling multiply-subtract long from accumulator (bottom).</iform>
+    <iform iformfile="sqdmlslbt_z_zzz.xml" heading="SQDMLSLBT" id="sqdmlslbt_z_zzz">Signed saturating doubling multiply-subtract long from accumulator (bottom × top).</iform>
+    <iform iformfile="sqdmlslt_z_zzzi.xml" heading="SQDMLSLT (indexed)" id="sqdmlslt_z_zzzi">Signed saturating doubling multiply-subtract long from accumulator (top, indexed).</iform>
+    <iform iformfile="sqdmlslt_z_zzz.xml" heading="SQDMLSLT (vectors)" id="sqdmlslt_z_zzz">Signed saturating doubling multiply-subtract long from accumulator (top).</iform>
+    <iform iformfile="sqdmulh_z_zzi.xml" heading="SQDMULH (indexed)" id="sqdmulh_z_zzi">Signed saturating doubling multiply high (indexed).</iform>
+    <iform iformfile="sqdmulh_z_zz.xml" heading="SQDMULH (vectors)" id="sqdmulh_z_zz">Signed saturating doubling multiply high (unpredicated).</iform>
+    <iform iformfile="sqdmullb_z_zzi.xml" heading="SQDMULLB (indexed)" id="sqdmullb_z_zzi">Signed saturating doubling multiply long (bottom, indexed).</iform>
+    <iform iformfile="sqdmullb_z_zz.xml" heading="SQDMULLB (vectors)" id="sqdmullb_z_zz">Signed saturating doubling multiply long (bottom).</iform>
+    <iform iformfile="sqdmullt_z_zzi.xml" heading="SQDMULLT (indexed)" id="sqdmullt_z_zzi">Signed saturating doubling multiply long (top, indexed).</iform>
+    <iform iformfile="sqdmullt_z_zz.xml" heading="SQDMULLT (vectors)" id="sqdmullt_z_zz">Signed saturating doubling multiply long (top).</iform>
+    <iform iformfile="sqincb_r_rs.xml" heading="SQINCB" id="sqincb_r_rs">Signed saturating increment scalar by multiple of 8-bit predicate constraint element count.</iform>
+    <iform iformfile="sqincd_r_rs.xml" heading="SQINCD (scalar)" id="sqincd_r_rs">Signed saturating increment scalar by multiple of 64-bit predicate constraint element count.</iform>
+    <iform iformfile="sqincd_z_zs.xml" heading="SQINCD (vector)" id="sqincd_z_zs">Signed saturating increment vector by multiple of 64-bit predicate constraint element count.</iform>
+    <iform iformfile="sqinch_r_rs.xml" heading="SQINCH (scalar)" id="sqinch_r_rs">Signed saturating increment scalar by multiple of 16-bit predicate constraint element count.</iform>
+    <iform iformfile="sqinch_z_zs.xml" heading="SQINCH (vector)" id="sqinch_z_zs">Signed saturating increment vector by multiple of 16-bit predicate constraint element count.</iform>
+    <iform iformfile="sqincp_r_p_r.xml" heading="SQINCP (scalar)" id="sqincp_r_p_r">Signed saturating increment scalar by count of true predicate elements.</iform>
+    <iform iformfile="sqincp_z_p_z.xml" heading="SQINCP (vector)" id="sqincp_z_p_z">Signed saturating increment vector by count of true predicate elements.</iform>
+    <iform iformfile="sqincw_r_rs.xml" heading="SQINCW (scalar)" id="sqincw_r_rs">Signed saturating increment scalar by multiple of 32-bit predicate constraint element count.</iform>
+    <iform iformfile="sqincw_z_zs.xml" heading="SQINCW (vector)" id="sqincw_z_zs">Signed saturating increment vector by multiple of 32-bit predicate constraint element count.</iform>
+    <iform iformfile="sqneg_z_p_z.xml" heading="SQNEG" id="sqneg_z_p_z">Signed saturating negate.</iform>
+    <iform iformfile="sqrdcmlah_z_zzzi.xml" heading="SQRDCMLAH (indexed)" id="sqrdcmlah_z_zzzi">Saturating rounding doubling complex integer multiply-add high with rotate (indexed).</iform>
+    <iform iformfile="sqrdcmlah_z_zzz.xml" heading="SQRDCMLAH (vectors)" id="sqrdcmlah_z_zzz">Saturating rounding doubling complex integer multiply-add high with rotate.</iform>
+    <iform iformfile="sqrdmlah_z_zzzi.xml" heading="SQRDMLAH (indexed)" id="sqrdmlah_z_zzzi">Signed saturating rounding doubling multiply-add high to accumulator (indexed).</iform>
+    <iform iformfile="sqrdmlah_z_zzz.xml" heading="SQRDMLAH (vectors)" id="sqrdmlah_z_zzz">Signed saturating rounding doubling multiply-add high to accumulator (unpredicated).</iform>
+    <iform iformfile="sqrdmlsh_z_zzzi.xml" heading="SQRDMLSH (indexed)" id="sqrdmlsh_z_zzzi">Signed saturating rounding doubling multiply-subtract high from accumulator (indexed).</iform>
+    <iform iformfile="sqrdmlsh_z_zzz.xml" heading="SQRDMLSH (vectors)" id="sqrdmlsh_z_zzz">Signed saturating rounding doubling multiply-subtract high from accumulator (unpredicated).</iform>
+    <iform iformfile="sqrdmulh_z_zzi.xml" heading="SQRDMULH (indexed)" id="sqrdmulh_z_zzi">Signed saturating rounding doubling multiply high (indexed).</iform>
+    <iform iformfile="sqrdmulh_z_zz.xml" heading="SQRDMULH (vectors)" id="sqrdmulh_z_zz">Signed saturating rounding doubling multiply high (unpredicated).</iform>
+    <iform iformfile="sqrshl_z_p_zz.xml" heading="SQRSHL" id="sqrshl_z_p_zz">Signed saturating rounding shift left by vector (predicated).</iform>
+    <iform iformfile="sqrshlr_z_p_zz.xml" heading="SQRSHLR" id="sqrshlr_z_p_zz">Signed saturating rounding shift left reversed vectors (predicated).</iform>
+    <iform iformfile="sqrshrn_z_mz2.xml" heading="SQRSHRN" id="sqrshrn_z_mz2">Signed saturating rounding shift right narrow by immediate and interleave.</iform>
+    <iform iformfile="sqrshrnb_z_zi.xml" heading="SQRSHRNB" id="sqrshrnb_z_zi">Signed saturating rounding shift right narrow by immediate (bottom).</iform>
+    <iform iformfile="sqrshrnt_z_zi.xml" heading="SQRSHRNT" id="sqrshrnt_z_zi">Signed saturating rounding shift right narrow by immediate (top).</iform>
+    <iform iformfile="sqrshrun_z_mz2.xml" heading="SQRSHRUN" id="sqrshrun_z_mz2">Signed saturating rounding shift right unsigned narrow by immediate and interleave.</iform>
+    <iform iformfile="sqrshrunb_z_zi.xml" heading="SQRSHRUNB" id="sqrshrunb_z_zi">Signed saturating rounding shift right unsigned narrow by immediate (bottom).</iform>
+    <iform iformfile="sqrshrunt_z_zi.xml" heading="SQRSHRUNT" id="sqrshrunt_z_zi">Signed saturating rounding shift right unsigned narrow by immediate (top).</iform>
+    <iform iformfile="sqshl_z_p_zi.xml" heading="SQSHL (immediate)" id="sqshl_z_p_zi">Signed saturating shift left by immediate.</iform>
+    <iform iformfile="sqshl_z_p_zz.xml" heading="SQSHL (vectors)" id="sqshl_z_p_zz">Signed saturating shift left by vector (predicated).</iform>
+    <iform iformfile="sqshlr_z_p_zz.xml" heading="SQSHLR" id="sqshlr_z_p_zz">Signed saturating shift left reversed vectors (predicated).</iform>
+    <iform iformfile="sqshlu_z_p_zi.xml" heading="SQSHLU" id="sqshlu_z_p_zi">Signed saturating shift left unsigned by immediate.</iform>
+    <iform iformfile="sqshrnb_z_zi.xml" heading="SQSHRNB" id="sqshrnb_z_zi">Signed saturating shift right narrow by immediate (bottom).</iform>
+    <iform iformfile="sqshrnt_z_zi.xml" heading="SQSHRNT" id="sqshrnt_z_zi">Signed saturating shift right narrow by immediate (top).</iform>
+    <iform iformfile="sqshrunb_z_zi.xml" heading="SQSHRUNB" id="sqshrunb_z_zi">Signed saturating shift right unsigned narrow by immediate (bottom).</iform>
+    <iform iformfile="sqshrunt_z_zi.xml" heading="SQSHRUNT" id="sqshrunt_z_zi">Signed saturating shift right unsigned narrow by immediate (top).</iform>
+    <iform iformfile="sqsub_z_zi.xml" heading="SQSUB (immediate)" id="sqsub_z_zi">Signed saturating subtract immediate (unpredicated).</iform>
+    <iform iformfile="sqsub_z_p_zz.xml" heading="SQSUB (vectors, predicated)" id="sqsub_z_p_zz">Signed saturating subtraction (predicated).</iform>
+    <iform iformfile="sqsub_z_zz.xml" heading="SQSUB (vectors, unpredicated)" id="sqsub_z_zz">Signed saturating subtract vectors (unpredicated).</iform>
+    <iform iformfile="sqsubr_z_p_zz.xml" heading="SQSUBR" id="sqsubr_z_p_zz">Signed saturating subtraction reversed vectors (predicated).</iform>
+    <iform iformfile="sqxtnb_z_zz.xml" heading="SQXTNB" id="sqxtnb_z_zz">Signed saturating extract narrow (bottom).</iform>
+    <iform iformfile="sqxtnt_z_zz.xml" heading="SQXTNT" id="sqxtnt_z_zz">Signed saturating extract narrow (top).</iform>
+    <iform iformfile="sqxtunb_z_zz.xml" heading="SQXTUNB" id="sqxtunb_z_zz">Signed saturating unsigned extract narrow (bottom).</iform>
+    <iform iformfile="sqxtunt_z_zz.xml" heading="SQXTUNT" id="sqxtunt_z_zz">Signed saturating unsigned extract narrow (top).</iform>
+    <iform iformfile="srhadd_z_p_zz.xml" heading="SRHADD" id="srhadd_z_p_zz">Signed rounding halving addition.</iform>
+    <iform iformfile="sri_z_zzi.xml" heading="SRI" id="sri_z_zzi">Shift right and insert (immediate).</iform>
+    <iform iformfile="srshl_z_p_zz.xml" heading="SRSHL" id="srshl_z_p_zz">Signed rounding shift left by vector (predicated).</iform>
+    <iform iformfile="srshlr_z_p_zz.xml" heading="SRSHLR" id="srshlr_z_p_zz">Signed rounding shift left reversed vectors (predicated).</iform>
+    <iform iformfile="srshr_z_p_zi.xml" heading="SRSHR" id="srshr_z_p_zi">Signed rounding shift right by immediate.</iform>
+    <iform iformfile="srsra_z_zi.xml" heading="SRSRA" id="srsra_z_zi">Signed rounding shift right and accumulate (immediate).</iform>
+    <iform iformfile="sshllb_z_zi.xml" heading="SSHLLB" id="sshllb_z_zi">Signed shift left long by immediate (bottom).</iform>
+    <iform iformfile="sshllt_z_zi.xml" heading="SSHLLT" id="sshllt_z_zi">Signed shift left long by immediate (top).</iform>
+    <iform iformfile="ssra_z_zi.xml" heading="SSRA" id="ssra_z_zi">Signed shift right and accumulate (immediate).</iform>
+    <iform iformfile="ssublb_z_zz.xml" heading="SSUBLB" id="ssublb_z_zz">Signed subtract long (bottom).</iform>
+    <iform iformfile="ssublbt_z_zz.xml" heading="SSUBLBT" id="ssublbt_z_zz">Signed subtract long (bottom - top).</iform>
+    <iform iformfile="ssublt_z_zz.xml" heading="SSUBLT" id="ssublt_z_zz">Signed subtract long (top).</iform>
+    <iform iformfile="ssubltb_z_zz.xml" heading="SSUBLTB" id="ssubltb_z_zz">Signed subtract long (top - bottom).</iform>
+    <iform iformfile="ssubwb_z_zz.xml" heading="SSUBWB" id="ssubwb_z_zz">Signed subtract wide (bottom).</iform>
+    <iform iformfile="ssubwt_z_zz.xml" heading="SSUBWT" id="ssubwt_z_zz">Signed subtract wide (top).</iform>
+    <iform iformfile="st1b_mz_p_bi.xml" heading="ST1B (scalar plus immediate, consecutive registers)" id="st1b_mz_p_bi">Contiguous store of bytes from multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="st1b_z_p_bi.xml" heading="ST1B (scalar plus immediate, single register)" id="st1b_z_p_bi">Contiguous store bytes from vector (immediate index).</iform>
+    <iform iformfile="st1b_mz_p_br.xml" heading="ST1B (scalar plus scalar, consecutive registers)" id="st1b_mz_p_br">Contiguous store of bytes from multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="st1b_z_p_br.xml" heading="ST1B (scalar plus scalar, single register)" id="st1b_z_p_br">Contiguous store bytes from vector (scalar index).</iform>
+    <iform iformfile="st1b_z_p_bz.xml" heading="ST1B (scalar plus vector)" id="st1b_z_p_bz">Scatter store bytes from a vector (vector index).</iform>
+    <iform iformfile="st1b_z_p_ai.xml" heading="ST1B (vector plus immediate)" id="st1b_z_p_ai">Scatter store bytes from a vector (immediate index).</iform>
+    <iform iformfile="st1d_mz_p_bi.xml" heading="ST1D (scalar plus immediate, consecutive registers)" id="st1d_mz_p_bi">Contiguous store of doublewords from multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="st1d_z_p_bi.xml" heading="ST1D (scalar plus immediate, single register)" id="st1d_z_p_bi">Contiguous store doublewords from vector (immediate index).</iform>
+    <iform iformfile="st1d_mz_p_br.xml" heading="ST1D (scalar plus scalar, consecutive registers)" id="st1d_mz_p_br">Contiguous store of doublewords from multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="st1d_z_p_br.xml" heading="ST1D (scalar plus scalar, single register)" id="st1d_z_p_br">Contiguous store doublewords from vector (scalar index).</iform>
+    <iform iformfile="st1d_z_p_bz.xml" heading="ST1D (scalar plus vector)" id="st1d_z_p_bz">Scatter store doublewords from a vector (vector index).</iform>
+    <iform iformfile="st1d_z_p_ai.xml" heading="ST1D (vector plus immediate)" id="st1d_z_p_ai">Scatter store doublewords from a vector (immediate index).</iform>
+    <iform iformfile="st1h_mz_p_bi.xml" heading="ST1H (scalar plus immediate, consecutive registers)" id="st1h_mz_p_bi">Contiguous store of halfwords from multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="st1h_z_p_bi.xml" heading="ST1H (scalar plus immediate, single register)" id="st1h_z_p_bi">Contiguous store halfwords from vector (immediate index).</iform>
+    <iform iformfile="st1h_mz_p_br.xml" heading="ST1H (scalar plus scalar, consecutive registers)" id="st1h_mz_p_br">Contiguous store of halfwords from multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="st1h_z_p_br.xml" heading="ST1H (scalar plus scalar, single register)" id="st1h_z_p_br">Contiguous store halfwords from vector (scalar index).</iform>
+    <iform iformfile="st1h_z_p_bz.xml" heading="ST1H (scalar plus vector)" id="st1h_z_p_bz">Scatter store halfwords from a vector (vector index).</iform>
+    <iform iformfile="st1h_z_p_ai.xml" heading="ST1H (vector plus immediate)" id="st1h_z_p_ai">Scatter store halfwords from a vector (immediate index).</iform>
+    <iform iformfile="st1q_z_p_ar.xml" heading="ST1Q" id="st1q_z_p_ar">Scatter store quadwords.</iform>
+    <iform iformfile="st1w_mz_p_bi.xml" heading="ST1W (scalar plus immediate, consecutive registers)" id="st1w_mz_p_bi">Contiguous store of words from multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="st1w_z_p_bi.xml" heading="ST1W (scalar plus immediate, single register)" id="st1w_z_p_bi">Contiguous store words from vector (immediate index).</iform>
+    <iform iformfile="st1w_mz_p_br.xml" heading="ST1W (scalar plus scalar, consecutive registers)" id="st1w_mz_p_br">Contiguous store of words from multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="st1w_z_p_br.xml" heading="ST1W (scalar plus scalar, single register)" id="st1w_z_p_br">Contiguous store words from vector (scalar index).</iform>
+    <iform iformfile="st1w_z_p_bz.xml" heading="ST1W (scalar plus vector)" id="st1w_z_p_bz">Scatter store words from a vector (vector index).</iform>
+    <iform iformfile="st1w_z_p_ai.xml" heading="ST1W (vector plus immediate)" id="st1w_z_p_ai">Scatter store words from a vector (immediate index).</iform>
+    <iform iformfile="st2b_z_p_bi.xml" heading="ST2B (scalar plus immediate)" id="st2b_z_p_bi">Contiguous store two-byte structures from two vectors (immediate index).</iform>
+    <iform iformfile="st2b_z_p_br.xml" heading="ST2B (scalar plus scalar)" id="st2b_z_p_br">Contiguous store two-byte structures from two vectors (scalar index).</iform>
+    <iform iformfile="st2d_z_p_bi.xml" heading="ST2D (scalar plus immediate)" id="st2d_z_p_bi">Contiguous store two-doubleword structures from two vectors (immediate index).</iform>
+    <iform iformfile="st2d_z_p_br.xml" heading="ST2D (scalar plus scalar)" id="st2d_z_p_br">Contiguous store two-doubleword structures from two vectors (scalar index).</iform>
+    <iform iformfile="st2h_z_p_bi.xml" heading="ST2H (scalar plus immediate)" id="st2h_z_p_bi">Contiguous store two-halfword structures from two vectors (immediate index).</iform>
+    <iform iformfile="st2h_z_p_br.xml" heading="ST2H (scalar plus scalar)" id="st2h_z_p_br">Contiguous store two-halfword structures from two vectors (scalar index).</iform>
+    <iform iformfile="st2q_z_p_bi.xml" heading="ST2Q (scalar plus immediate)" id="st2q_z_p_bi">Contiguous store two-quadword structures from two vectors (immediate index).</iform>
+    <iform iformfile="st2q_z_p_br.xml" heading="ST2Q (scalar plus scalar)" id="st2q_z_p_br">Contiguous store two-quadword structures from two vectors (scalar index).</iform>
+    <iform iformfile="st2w_z_p_bi.xml" heading="ST2W (scalar plus immediate)" id="st2w_z_p_bi">Contiguous store two-word structures from two vectors (immediate index).</iform>
+    <iform iformfile="st2w_z_p_br.xml" heading="ST2W (scalar plus scalar)" id="st2w_z_p_br">Contiguous store two-word structures from two vectors (scalar index).</iform>
+    <iform iformfile="st3b_z_p_bi.xml" heading="ST3B (scalar plus immediate)" id="st3b_z_p_bi">Contiguous store three-byte structures from three vectors (immediate index).</iform>
+    <iform iformfile="st3b_z_p_br.xml" heading="ST3B (scalar plus scalar)" id="st3b_z_p_br">Contiguous store three-byte structures from three vectors (scalar index).</iform>
+    <iform iformfile="st3d_z_p_bi.xml" heading="ST3D (scalar plus immediate)" id="st3d_z_p_bi">Contiguous store three-doubleword structures from three vectors (immediate index).</iform>
+    <iform iformfile="st3d_z_p_br.xml" heading="ST3D (scalar plus scalar)" id="st3d_z_p_br">Contiguous store three-doubleword structures from three vectors (scalar index).</iform>
+    <iform iformfile="st3h_z_p_bi.xml" heading="ST3H (scalar plus immediate)" id="st3h_z_p_bi">Contiguous store three-halfword structures from three vectors (immediate index).</iform>
+    <iform iformfile="st3h_z_p_br.xml" heading="ST3H (scalar plus scalar)" id="st3h_z_p_br">Contiguous store three-halfword structures from three vectors (scalar index).</iform>
+    <iform iformfile="st3q_z_p_bi.xml" heading="ST3Q (scalar plus immediate)" id="st3q_z_p_bi">Contiguous store three-quadword structures from three vectors (immediate index).</iform>
+    <iform iformfile="st3q_z_p_br.xml" heading="ST3Q (scalar plus scalar)" id="st3q_z_p_br">Contiguous store three-quadword structures from three vectors (scalar index).</iform>
+    <iform iformfile="st3w_z_p_bi.xml" heading="ST3W (scalar plus immediate)" id="st3w_z_p_bi">Contiguous store three-word structures from three vectors (immediate index).</iform>
+    <iform iformfile="st3w_z_p_br.xml" heading="ST3W (scalar plus scalar)" id="st3w_z_p_br">Contiguous store three-word structures from three vectors (scalar index).</iform>
+    <iform iformfile="st4b_z_p_bi.xml" heading="ST4B (scalar plus immediate)" id="st4b_z_p_bi">Contiguous store four-byte structures from four vectors (immediate index).</iform>
+    <iform iformfile="st4b_z_p_br.xml" heading="ST4B (scalar plus scalar)" id="st4b_z_p_br">Contiguous store four-byte structures from four vectors (scalar index).</iform>
+    <iform iformfile="st4d_z_p_bi.xml" heading="ST4D (scalar plus immediate)" id="st4d_z_p_bi">Contiguous store four-doubleword structures from four vectors (immediate index).</iform>
+    <iform iformfile="st4d_z_p_br.xml" heading="ST4D (scalar plus scalar)" id="st4d_z_p_br">Contiguous store four-doubleword structures from four vectors (scalar index).</iform>
+    <iform iformfile="st4h_z_p_bi.xml" heading="ST4H (scalar plus immediate)" id="st4h_z_p_bi">Contiguous store four-halfword structures from four vectors (immediate index).</iform>
+    <iform iformfile="st4h_z_p_br.xml" heading="ST4H (scalar plus scalar)" id="st4h_z_p_br">Contiguous store four-halfword structures from four vectors (scalar index).</iform>
+    <iform iformfile="st4q_z_p_bi.xml" heading="ST4Q (scalar plus immediate)" id="st4q_z_p_bi">Contiguous store four-quadword structures from four vectors (immediate index).</iform>
+    <iform iformfile="st4q_z_p_br.xml" heading="ST4Q (scalar plus scalar)" id="st4q_z_p_br">Contiguous store four-quadword structures from four vectors (scalar index).</iform>
+    <iform iformfile="st4w_z_p_bi.xml" heading="ST4W (scalar plus immediate)" id="st4w_z_p_bi">Contiguous store four-word structures from four vectors (immediate index).</iform>
+    <iform iformfile="st4w_z_p_br.xml" heading="ST4W (scalar plus scalar)" id="st4w_z_p_br">Contiguous store four-word structures from four vectors (scalar index).</iform>
+    <iform iformfile="stnt1b_mz_p_bi.xml" heading="STNT1B (scalar plus immediate, consecutive registers)" id="stnt1b_mz_p_bi">Contiguous store non-temporal of bytes from multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="stnt1b_z_p_bi.xml" heading="STNT1B (scalar plus immediate, single register)" id="stnt1b_z_p_bi">Contiguous store non-temporal bytes from vector (immediate index).</iform>
+    <iform iformfile="stnt1b_mz_p_br.xml" heading="STNT1B (scalar plus scalar, consecutive registers)" id="stnt1b_mz_p_br">Contiguous store non-temporal of bytes from multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="stnt1b_z_p_br.xml" heading="STNT1B (scalar plus scalar, single register)" id="stnt1b_z_p_br">Contiguous store non-temporal bytes from vector (scalar index).</iform>
+    <iform iformfile="stnt1b_z_p_ar.xml" heading="STNT1B (vector plus scalar)" id="stnt1b_z_p_ar">Scatter store non-temporal bytes.</iform>
+    <iform iformfile="stnt1d_mz_p_bi.xml" heading="STNT1D (scalar plus immediate, consecutive registers)" id="stnt1d_mz_p_bi">Contiguous store non-temporal of doublewords from multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="stnt1d_z_p_bi.xml" heading="STNT1D (scalar plus immediate, single register)" id="stnt1d_z_p_bi">Contiguous store non-temporal doublewords from vector (immediate index).</iform>
+    <iform iformfile="stnt1d_mz_p_br.xml" heading="STNT1D (scalar plus scalar, consecutive registers)" id="stnt1d_mz_p_br">Contiguous store non-temporal of doublewords from multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="stnt1d_z_p_br.xml" heading="STNT1D (scalar plus scalar, single register)" id="stnt1d_z_p_br">Contiguous store non-temporal doublewords from vector (scalar index).</iform>
+    <iform iformfile="stnt1d_z_p_ar.xml" heading="STNT1D (vector plus scalar)" id="stnt1d_z_p_ar">Scatter store non-temporal doublewords.</iform>
+    <iform iformfile="stnt1h_mz_p_bi.xml" heading="STNT1H (scalar plus immediate, consecutive registers)" id="stnt1h_mz_p_bi">Contiguous store non-temporal of halfwords from multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="stnt1h_z_p_bi.xml" heading="STNT1H (scalar plus immediate, single register)" id="stnt1h_z_p_bi">Contiguous store non-temporal halfwords from vector (immediate index).</iform>
+    <iform iformfile="stnt1h_mz_p_br.xml" heading="STNT1H (scalar plus scalar, consecutive registers)" id="stnt1h_mz_p_br">Contiguous store non-temporal of halfwords from multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="stnt1h_z_p_br.xml" heading="STNT1H (scalar plus scalar, single register)" id="stnt1h_z_p_br">Contiguous store non-temporal halfwords from vector (scalar index).</iform>
+    <iform iformfile="stnt1h_z_p_ar.xml" heading="STNT1H (vector plus scalar)" id="stnt1h_z_p_ar">Scatter store non-temporal halfwords.</iform>
+    <iform iformfile="stnt1w_mz_p_bi.xml" heading="STNT1W (scalar plus immediate, consecutive registers)" id="stnt1w_mz_p_bi">Contiguous store non-temporal of words from multiple consecutive vectors (immediate index).</iform>
+    <iform iformfile="stnt1w_z_p_bi.xml" heading="STNT1W (scalar plus immediate, single register)" id="stnt1w_z_p_bi">Contiguous store non-temporal words from vector (immediate index).</iform>
+    <iform iformfile="stnt1w_mz_p_br.xml" heading="STNT1W (scalar plus scalar, consecutive registers)" id="stnt1w_mz_p_br">Contiguous store non-temporal of words from multiple consecutive vectors (scalar index).</iform>
+    <iform iformfile="stnt1w_z_p_br.xml" heading="STNT1W (scalar plus scalar, single register)" id="stnt1w_z_p_br">Contiguous store non-temporal words from vector (scalar index).</iform>
+    <iform iformfile="stnt1w_z_p_ar.xml" heading="STNT1W (vector plus scalar)" id="stnt1w_z_p_ar">Scatter store non-temporal words.</iform>
+    <iform iformfile="str_p_bi.xml" heading="STR (predicate)" id="str_p_bi">Store predicate register.</iform>
+    <iform iformfile="str_z_bi.xml" heading="STR (vector)" id="str_z_bi">Store vector register.</iform>
+    <iform iformfile="sub_z_zi.xml" heading="SUB (immediate)" id="sub_z_zi">Subtract immediate (unpredicated).</iform>
+    <iform iformfile="sub_z_p_zz.xml" heading="SUB (vectors, predicated)" id="sub_z_p_zz">Subtract vectors (predicated).</iform>
+    <iform iformfile="sub_z_zz.xml" heading="SUB (vectors, unpredicated)" id="sub_z_zz">Subtract vectors (unpredicated).</iform>
+    <iform iformfile="subhnb_z_zz.xml" heading="SUBHNB" id="subhnb_z_zz">Subtract narrow high part (bottom).</iform>
+    <iform iformfile="subhnt_z_zz.xml" heading="SUBHNT" id="subhnt_z_zz">Subtract narrow high part (top).</iform>
+    <iform iformfile="subpt_z_p_zz.xml" heading="SUBPT (predicated)" id="subpt_z_p_zz">Subtract checked pointer vectors (predicated).</iform>
+    <iform iformfile="subpt_z_zz.xml" heading="SUBPT (unpredicated)" id="subpt_z_zz">Subtract checked pointer vectors (unpredicated).</iform>
+    <iform iformfile="subr_z_zi.xml" heading="SUBR (immediate)" id="subr_z_zi">Reversed subtract from immediate (unpredicated).</iform>
+    <iform iformfile="subr_z_p_zz.xml" heading="SUBR (vectors)" id="subr_z_p_zz">Reversed subtract vectors (predicated).</iform>
+    <iform iformfile="sudot_z_zzzi.xml" heading="SUDOT" id="sudot_z_zzzi">Signed by unsigned integer indexed dot product.</iform>
+    <iform iformfile="sunpkhi_z_z.xml" heading="SUNPKHI, SUNPKLO" id="sunpkhi_z_z">Signed unpack and extend half of vector.</iform>
+    <iform iformfile="suqadd_z_p_zz.xml" heading="SUQADD" id="suqadd_z_p_zz">Signed saturating addition of unsigned value.</iform>
+    <iform iformfile="sxtb_z_p_z.xml" heading="SXTB, SXTH, SXTW" id="sxtb_z_p_z">Signed byte / halfword / word extend (predicated).</iform>
+    <iform iformfile="tbl_z_zz.xml" heading="TBL" id="tbl_z_zz">Programmable table lookup in one or two vector table (zeroing).</iform>
+    <iform iformfile="tblq_z_zz.xml" heading="TBLQ" id="tblq_z_zz">Programmable table lookup within each quadword vector segment (zeroing).</iform>
+    <iform iformfile="tbx_z_zz.xml" heading="TBX" id="tbx_z_zz">Programmable table lookup in single vector table (merging).</iform>
+    <iform iformfile="tbxq_z_zz.xml" heading="TBXQ" id="tbxq_z_zz">Programmable table lookup within each quadword vector segment (merging).</iform>
+    <iform iformfile="trn1_p_pp.xml" heading="TRN1, TRN2 (predicates)" id="trn1_p_pp">Interleave even or odd elements from two predicates.</iform>
+    <iform iformfile="trn1_z_zz.xml" heading="TRN1, TRN2 (vectors)" id="trn1_z_zz">Interleave even or odd elements from two vectors.</iform>
+    <iform iformfile="uaba_z_zzz.xml" heading="UABA" id="uaba_z_zzz">Unsigned absolute difference and accumulate.</iform>
+    <iform iformfile="uabalb_z_zzz.xml" heading="UABALB" id="uabalb_z_zzz">Unsigned absolute difference and accumulate long (bottom).</iform>
+    <iform iformfile="uabalt_z_zzz.xml" heading="UABALT" id="uabalt_z_zzz">Unsigned absolute difference and accumulate long (top).</iform>
+    <iform iformfile="uabd_z_p_zz.xml" heading="UABD" id="uabd_z_p_zz">Unsigned absolute difference (predicated).</iform>
+    <iform iformfile="uabdlb_z_zz.xml" heading="UABDLB" id="uabdlb_z_zz">Unsigned absolute difference long (bottom).</iform>
+    <iform iformfile="uabdlt_z_zz.xml" heading="UABDLT" id="uabdlt_z_zz">Unsigned absolute difference long (top).</iform>
+    <iform iformfile="uadalp_z_p_z.xml" heading="UADALP" id="uadalp_z_p_z">Unsigned add and accumulate long pairwise.</iform>
+    <iform iformfile="uaddlb_z_zz.xml" heading="UADDLB" id="uaddlb_z_zz">Unsigned add long (bottom).</iform>
+    <iform iformfile="uaddlt_z_zz.xml" heading="UADDLT" id="uaddlt_z_zz">Unsigned add long (top).</iform>
+    <iform iformfile="uaddv_r_p_z.xml" heading="UADDV" id="uaddv_r_p_z">Unsigned add reduction to scalar.</iform>
+    <iform iformfile="uaddwb_z_zz.xml" heading="UADDWB" id="uaddwb_z_zz">Unsigned add wide (bottom).</iform>
+    <iform iformfile="uaddwt_z_zz.xml" heading="UADDWT" id="uaddwt_z_zz">Unsigned add wide (top).</iform>
+    <iform iformfile="uclamp_z_zz.xml" heading="UCLAMP" id="uclamp_z_zz">Unsigned clamp to minimum/maximum vector.</iform>
+    <iform iformfile="ucvtf_z_p_z.xml" heading="UCVTF" id="ucvtf_z_p_z">Unsigned integer convert to floating-point (predicated).</iform>
+    <iform iformfile="udiv_z_p_zz.xml" heading="UDIV" id="udiv_z_p_zz">Unsigned divide (predicated).</iform>
+    <iform iformfile="udivr_z_p_zz.xml" heading="UDIVR" id="udivr_z_p_zz">Unsigned reversed divide (predicated).</iform>
+    <iform iformfile="udot_z32_zzzi.xml" heading="UDOT (2-way, indexed)" id="udot_z32_zzzi">Unsigned integer indexed dot product.</iform>
+    <iform iformfile="udot_z32_zzz.xml" heading="UDOT (2-way, vectors)" id="udot_z32_zzz">Unsigned integer dot product.</iform>
+    <iform iformfile="udot_z_zzzi.xml" heading="UDOT (4-way, indexed)" id="udot_z_zzzi">Unsigned integer indexed dot product.</iform>
+    <iform iformfile="udot_z_zzz.xml" heading="UDOT (4-way, vectors)" id="udot_z_zzz">Unsigned integer dot product.</iform>
+    <iform iformfile="uhadd_z_p_zz.xml" heading="UHADD" id="uhadd_z_p_zz">Unsigned halving addition.</iform>
+    <iform iformfile="uhsub_z_p_zz.xml" heading="UHSUB" id="uhsub_z_p_zz">Unsigned halving subtract.</iform>
+    <iform iformfile="uhsubr_z_p_zz.xml" heading="UHSUBR" id="uhsubr_z_p_zz">Unsigned halving subtract reversed vectors.</iform>
+    <iform iformfile="umax_z_zi.xml" heading="UMAX (immediate)" id="umax_z_zi">Unsigned maximum with immediate (unpredicated).</iform>
+    <iform iformfile="umax_z_p_zz.xml" heading="UMAX (vectors)" id="umax_z_p_zz">Unsigned maximum vectors (predicated).</iform>
+    <iform iformfile="umaxp_z_p_zz.xml" heading="UMAXP" id="umaxp_z_p_zz">Unsigned maximum pairwise.</iform>
+    <iform iformfile="umaxqv_z_p_z.xml" heading="UMAXQV" id="umaxqv_z_p_z">Unsigned maximum reduction of quadword vector segments.</iform>
+    <iform iformfile="umaxv_r_p_z.xml" heading="UMAXV" id="umaxv_r_p_z">Unsigned maximum reduction to scalar.</iform>
+    <iform iformfile="umin_z_zi.xml" heading="UMIN (immediate)" id="umin_z_zi">Unsigned minimum with immediate (unpredicated).</iform>
+    <iform iformfile="umin_z_p_zz.xml" heading="UMIN (vectors)" id="umin_z_p_zz">Unsigned minimum vectors (predicated).</iform>
+    <iform iformfile="uminp_z_p_zz.xml" heading="UMINP" id="uminp_z_p_zz">Unsigned minimum pairwise.</iform>
+    <iform iformfile="uminqv_z_p_z.xml" heading="UMINQV" id="uminqv_z_p_z">Unsigned minimum reduction of quadword vector segments.</iform>
+    <iform iformfile="uminv_r_p_z.xml" heading="UMINV" id="uminv_r_p_z">Unsigned minimum reduction to scalar.</iform>
+    <iform iformfile="umlalb_z_zzzi.xml" heading="UMLALB (indexed)" id="umlalb_z_zzzi">Unsigned multiply-add long to accumulator (bottom, indexed).</iform>
+    <iform iformfile="umlalb_z_zzz.xml" heading="UMLALB (vectors)" id="umlalb_z_zzz">Unsigned multiply-add long to accumulator (bottom).</iform>
+    <iform iformfile="umlalt_z_zzzi.xml" heading="UMLALT (indexed)" id="umlalt_z_zzzi">Unsigned multiply-add long to accumulator (top, indexed).</iform>
+    <iform iformfile="umlalt_z_zzz.xml" heading="UMLALT (vectors)" id="umlalt_z_zzz">Unsigned multiply-add long to accumulator (top).</iform>
+    <iform iformfile="umlslb_z_zzzi.xml" heading="UMLSLB (indexed)" id="umlslb_z_zzzi">Unsigned multiply-subtract long from accumulator (bottom, indexed).</iform>
+    <iform iformfile="umlslb_z_zzz.xml" heading="UMLSLB (vectors)" id="umlslb_z_zzz">Unsigned multiply-subtract long from accumulator (bottom).</iform>
+    <iform iformfile="umlslt_z_zzzi.xml" heading="UMLSLT (indexed)" id="umlslt_z_zzzi">Unsigned multiply-subtract long from accumulator (top, indexed).</iform>
+    <iform iformfile="umlslt_z_zzz.xml" heading="UMLSLT (vectors)" id="umlslt_z_zzz">Unsigned multiply-subtract long from accumulator (top).</iform>
+    <iform iformfile="ummla_z_zzz.xml" heading="UMMLA" id="ummla_z_zzz">Unsigned integer matrix multiply-accumulate.</iform>
+    <iform iformfile="umulh_z_p_zz.xml" heading="UMULH (predicated)" id="umulh_z_p_zz">Unsigned multiply returning high half (predicated).</iform>
+    <iform iformfile="umulh_z_zz.xml" heading="UMULH (unpredicated)" id="umulh_z_zz">Unsigned multiply returning high half (unpredicated).</iform>
+    <iform iformfile="umullb_z_zzi.xml" heading="UMULLB (indexed)" id="umullb_z_zzi">Unsigned multiply long (bottom, indexed).</iform>
+    <iform iformfile="umullb_z_zz.xml" heading="UMULLB (vectors)" id="umullb_z_zz">Unsigned multiply long (bottom).</iform>
+    <iform iformfile="umullt_z_zzi.xml" heading="UMULLT (indexed)" id="umullt_z_zzi">Unsigned multiply long (top, indexed).</iform>
+    <iform iformfile="umullt_z_zz.xml" heading="UMULLT (vectors)" id="umullt_z_zz">Unsigned multiply long (top).</iform>
+    <iform iformfile="uqadd_z_zi.xml" heading="UQADD (immediate)" id="uqadd_z_zi">Unsigned saturating add immediate (unpredicated).</iform>
+    <iform iformfile="uqadd_z_p_zz.xml" heading="UQADD (vectors, predicated)" id="uqadd_z_p_zz">Unsigned saturating addition (predicated).</iform>
+    <iform iformfile="uqadd_z_zz.xml" heading="UQADD (vectors, unpredicated)" id="uqadd_z_zz">Unsigned saturating add vectors (unpredicated).</iform>
+    <iform iformfile="uqcvtn_z_mz2.xml" heading="UQCVTN" id="uqcvtn_z_mz2">Unsigned saturating extract narrow and interleave.</iform>
+    <iform iformfile="uqdecb_r_rs.xml" heading="UQDECB" id="uqdecb_r_rs">Unsigned saturating decrement scalar by multiple of 8-bit predicate constraint element count.</iform>
+    <iform iformfile="uqdecd_r_rs.xml" heading="UQDECD (scalar)" id="uqdecd_r_rs">Unsigned saturating decrement scalar by multiple of 64-bit predicate constraint element count.</iform>
+    <iform iformfile="uqdecd_z_zs.xml" heading="UQDECD (vector)" id="uqdecd_z_zs">Unsigned saturating decrement vector by multiple of 64-bit predicate constraint element count.</iform>
+    <iform iformfile="uqdech_r_rs.xml" heading="UQDECH (scalar)" id="uqdech_r_rs">Unsigned saturating decrement scalar by multiple of 16-bit predicate constraint element count.</iform>
+    <iform iformfile="uqdech_z_zs.xml" heading="UQDECH (vector)" id="uqdech_z_zs">Unsigned saturating decrement vector by multiple of 16-bit predicate constraint element count.</iform>
+    <iform iformfile="uqdecp_r_p_r.xml" heading="UQDECP (scalar)" id="uqdecp_r_p_r">Unsigned saturating decrement scalar by count of true predicate elements.</iform>
+    <iform iformfile="uqdecp_z_p_z.xml" heading="UQDECP (vector)" id="uqdecp_z_p_z">Unsigned saturating decrement vector by count of true predicate elements.</iform>
+    <iform iformfile="uqdecw_r_rs.xml" heading="UQDECW (scalar)" id="uqdecw_r_rs">Unsigned saturating decrement scalar by multiple of 32-bit predicate constraint element count.</iform>
+    <iform iformfile="uqdecw_z_zs.xml" heading="UQDECW (vector)" id="uqdecw_z_zs">Unsigned saturating decrement vector by multiple of 32-bit predicate constraint element count.</iform>
+    <iform iformfile="uqincb_r_rs.xml" heading="UQINCB" id="uqincb_r_rs">Unsigned saturating increment scalar by multiple of 8-bit predicate constraint element count.</iform>
+    <iform iformfile="uqincd_r_rs.xml" heading="UQINCD (scalar)" id="uqincd_r_rs">Unsigned saturating increment scalar by multiple of 64-bit predicate constraint element count.</iform>
+    <iform iformfile="uqincd_z_zs.xml" heading="UQINCD (vector)" id="uqincd_z_zs">Unsigned saturating increment vector by multiple of 64-bit predicate constraint element count.</iform>
+    <iform iformfile="uqinch_r_rs.xml" heading="UQINCH (scalar)" id="uqinch_r_rs">Unsigned saturating increment scalar by multiple of 16-bit predicate constraint element count.</iform>
+    <iform iformfile="uqinch_z_zs.xml" heading="UQINCH (vector)" id="uqinch_z_zs">Unsigned saturating increment vector by multiple of 16-bit predicate constraint element count.</iform>
+    <iform iformfile="uqincp_r_p_r.xml" heading="UQINCP (scalar)" id="uqincp_r_p_r">Unsigned saturating increment scalar by count of true predicate elements.</iform>
+    <iform iformfile="uqincp_z_p_z.xml" heading="UQINCP (vector)" id="uqincp_z_p_z">Unsigned saturating increment vector by count of true predicate elements.</iform>
+    <iform iformfile="uqincw_r_rs.xml" heading="UQINCW (scalar)" id="uqincw_r_rs">Unsigned saturating increment scalar by multiple of 32-bit predicate constraint element count.</iform>
+    <iform iformfile="uqincw_z_zs.xml" heading="UQINCW (vector)" id="uqincw_z_zs">Unsigned saturating increment vector by multiple of 32-bit predicate constraint element count.</iform>
+    <iform iformfile="uqrshl_z_p_zz.xml" heading="UQRSHL" id="uqrshl_z_p_zz">Unsigned saturating rounding shift left by vector (predicated).</iform>
+    <iform iformfile="uqrshlr_z_p_zz.xml" heading="UQRSHLR" id="uqrshlr_z_p_zz">Unsigned saturating rounding shift left reversed vectors (predicated).</iform>
+    <iform iformfile="uqrshrn_z_mz2.xml" heading="UQRSHRN" id="uqrshrn_z_mz2">Unsigned saturating rounding shift right narrow by immediate and interleave.</iform>
+    <iform iformfile="uqrshrnb_z_zi.xml" heading="UQRSHRNB" id="uqrshrnb_z_zi">Unsigned saturating rounding shift right narrow by immediate (bottom).</iform>
+    <iform iformfile="uqrshrnt_z_zi.xml" heading="UQRSHRNT" id="uqrshrnt_z_zi">Unsigned saturating rounding shift right narrow by immediate (top).</iform>
+    <iform iformfile="uqshl_z_p_zi.xml" heading="UQSHL (immediate)" id="uqshl_z_p_zi">Unsigned saturating shift left by immediate.</iform>
+    <iform iformfile="uqshl_z_p_zz.xml" heading="UQSHL (vectors)" id="uqshl_z_p_zz">Unsigned saturating shift left by vector (predicated).</iform>
+    <iform iformfile="uqshlr_z_p_zz.xml" heading="UQSHLR" id="uqshlr_z_p_zz">Unsigned saturating shift left reversed vectors (predicated).</iform>
+    <iform iformfile="uqshrnb_z_zi.xml" heading="UQSHRNB" id="uqshrnb_z_zi">Unsigned saturating shift right narrow by immediate (bottom).</iform>
+    <iform iformfile="uqshrnt_z_zi.xml" heading="UQSHRNT" id="uqshrnt_z_zi">Unsigned saturating shift right narrow by immediate (top).</iform>
+    <iform iformfile="uqsub_z_zi.xml" heading="UQSUB (immediate)" id="uqsub_z_zi">Unsigned saturating subtract immediate (unpredicated).</iform>
+    <iform iformfile="uqsub_z_p_zz.xml" heading="UQSUB (vectors, predicated)" id="uqsub_z_p_zz">Unsigned saturating subtraction (predicated).</iform>
+    <iform iformfile="uqsub_z_zz.xml" heading="UQSUB (vectors, unpredicated)" id="uqsub_z_zz">Unsigned saturating subtract vectors (unpredicated).</iform>
+    <iform iformfile="uqsubr_z_p_zz.xml" heading="UQSUBR" id="uqsubr_z_p_zz">Unsigned saturating subtraction reversed vectors (predicated).</iform>
+    <iform iformfile="uqxtnb_z_zz.xml" heading="UQXTNB" id="uqxtnb_z_zz">Unsigned saturating extract narrow (bottom).</iform>
+    <iform iformfile="uqxtnt_z_zz.xml" heading="UQXTNT" id="uqxtnt_z_zz">Unsigned saturating extract narrow (top).</iform>
+    <iform iformfile="urecpe_z_p_z.xml" heading="URECPE" id="urecpe_z_p_z">Unsigned reciprocal estimate (predicated).</iform>
+    <iform iformfile="urhadd_z_p_zz.xml" heading="URHADD" id="urhadd_z_p_zz">Unsigned rounding halving addition.</iform>
+    <iform iformfile="urshl_z_p_zz.xml" heading="URSHL" id="urshl_z_p_zz">Unsigned rounding shift left by vector (predicated).</iform>
+    <iform iformfile="urshlr_z_p_zz.xml" heading="URSHLR" id="urshlr_z_p_zz">Unsigned rounding shift left reversed vectors (predicated).</iform>
+    <iform iformfile="urshr_z_p_zi.xml" heading="URSHR" id="urshr_z_p_zi">Unsigned rounding shift right by immediate.</iform>
+    <iform iformfile="ursqrte_z_p_z.xml" heading="URSQRTE" id="ursqrte_z_p_z">Unsigned reciprocal square root estimate (predicated).</iform>
+    <iform iformfile="ursra_z_zi.xml" heading="URSRA" id="ursra_z_zi">Unsigned rounding shift right and accumulate (immediate).</iform>
+    <iform iformfile="usdot_z_zzzi.xml" heading="USDOT (indexed)" id="usdot_z_zzzi">Unsigned by signed integer indexed dot product.</iform>
+    <iform iformfile="usdot_z_zzz.xml" heading="USDOT (vectors)" id="usdot_z_zzz">Unsigned by signed integer dot product.</iform>
+    <iform iformfile="ushllb_z_zi.xml" heading="USHLLB" id="ushllb_z_zi">Unsigned shift left long by immediate (bottom).</iform>
+    <iform iformfile="ushllt_z_zi.xml" heading="USHLLT" id="ushllt_z_zi">Unsigned shift left long by immediate (top).</iform>
+    <iform iformfile="usmmla_z_zzz.xml" heading="USMMLA" id="usmmla_z_zzz">Unsigned by signed integer matrix multiply-accumulate.</iform>
+    <iform iformfile="usqadd_z_p_zz.xml" heading="USQADD" id="usqadd_z_p_zz">Unsigned saturating addition of signed value.</iform>
+    <iform iformfile="usra_z_zi.xml" heading="USRA" id="usra_z_zi">Unsigned shift right and accumulate (immediate).</iform>
+    <iform iformfile="usublb_z_zz.xml" heading="USUBLB" id="usublb_z_zz">Unsigned subtract long (bottom).</iform>
+    <iform iformfile="usublt_z_zz.xml" heading="USUBLT" id="usublt_z_zz">Unsigned subtract long (top).</iform>
+    <iform iformfile="usubwb_z_zz.xml" heading="USUBWB" id="usubwb_z_zz">Unsigned subtract wide (bottom).</iform>
+    <iform iformfile="usubwt_z_zz.xml" heading="USUBWT" id="usubwt_z_zz">Unsigned subtract wide (top).</iform>
+    <iform iformfile="uunpkhi_z_z.xml" heading="UUNPKHI, UUNPKLO" id="uunpkhi_z_z">Unsigned unpack and extend half of vector.</iform>
+    <iform iformfile="uxtb_z_p_z.xml" heading="UXTB, UXTH, UXTW" id="uxtb_z_p_z">Unsigned byte / halfword / word extend (predicated).</iform>
+    <iform iformfile="uzp1_p_pp.xml" heading="UZP1, UZP2 (predicates)" id="uzp1_p_pp">Concatenate even or odd elements from two predicates.</iform>
+    <iform iformfile="uzp1_z_zz.xml" heading="UZP1, UZP2 (vectors)" id="uzp1_z_zz">Concatenate even or odd elements from two vectors.</iform>
+    <iform iformfile="uzpq1_z_zz.xml" heading="UZPQ1" id="uzpq1_z_zz">Concatenate even elements within each pair of quadword vector segments.</iform>
+    <iform iformfile="uzpq2_z_zz.xml" heading="UZPQ2" id="uzpq2_z_zz">Concatenate odd elements within each pair of quadword vector segments.</iform>
+    <iform iformfile="whilege_pn_rr.xml" heading="WHILEGE (predicate as counter)" id="whilege_pn_rr">While decrementing signed scalar greater than or equal to scalar (predicate-as-counter).</iform>
+    <iform iformfile="whilege_pp_rr.xml" heading="WHILEGE (predicate pair)" id="whilege_pp_rr">While decrementing signed scalar greater than or equal to scalar (pair of predicates).</iform>
+    <iform iformfile="whilege_p_p_rr.xml" heading="WHILEGE (predicate)" id="whilege_p_p_rr">While decrementing signed scalar greater than or equal to scalar.</iform>
+    <iform iformfile="whilegt_pn_rr.xml" heading="WHILEGT (predicate as counter)" id="whilegt_pn_rr">While decrementing signed scalar greater than scalar (predicate-as-counter).</iform>
+    <iform iformfile="whilegt_pp_rr.xml" heading="WHILEGT (predicate pair)" id="whilegt_pp_rr">While decrementing signed scalar greater than scalar (pair of predicates).</iform>
+    <iform iformfile="whilegt_p_p_rr.xml" heading="WHILEGT (predicate)" id="whilegt_p_p_rr">While decrementing signed scalar greater than scalar.</iform>
+    <iform iformfile="whilehi_pn_rr.xml" heading="WHILEHI (predicate as counter)" id="whilehi_pn_rr">While decrementing unsigned scalar higher than scalar (predicate-as-counter).</iform>
+    <iform iformfile="whilehi_pp_rr.xml" heading="WHILEHI (predicate pair)" id="whilehi_pp_rr">While decrementing unsigned scalar higher than scalar (pair of predicates).</iform>
+    <iform iformfile="whilehi_p_p_rr.xml" heading="WHILEHI (predicate)" id="whilehi_p_p_rr">While decrementing unsigned scalar higher than scalar.</iform>
+    <iform iformfile="whilehs_pn_rr.xml" heading="WHILEHS (predicate as counter)" id="whilehs_pn_rr">While decrementing unsigned scalar higher or same as scalar (predicate-as-counter).</iform>
+    <iform iformfile="whilehs_pp_rr.xml" heading="WHILEHS (predicate pair)" id="whilehs_pp_rr">While decrementing unsigned scalar higher or same as scalar (pair of predicates).</iform>
+    <iform iformfile="whilehs_p_p_rr.xml" heading="WHILEHS (predicate)" id="whilehs_p_p_rr">While decrementing unsigned scalar higher or same as scalar.</iform>
+    <iform iformfile="whilele_pn_rr.xml" heading="WHILELE (predicate as counter)" id="whilele_pn_rr">While incrementing signed scalar less than or equal to scalar (predicate-as-counter).</iform>
+    <iform iformfile="whilele_pp_rr.xml" heading="WHILELE (predicate pair)" id="whilele_pp_rr">While incrementing signed scalar less than or equal to scalar (pair of predicates).</iform>
+    <iform iformfile="whilele_p_p_rr.xml" heading="WHILELE (predicate)" id="whilele_p_p_rr">While incrementing signed scalar less than or equal to scalar.</iform>
+    <iform iformfile="whilelo_pn_rr.xml" heading="WHILELO (predicate as counter)" id="whilelo_pn_rr">While incrementing unsigned scalar lower than scalar (predicate-as-counter).</iform>
+    <iform iformfile="whilelo_pp_rr.xml" heading="WHILELO (predicate pair)" id="whilelo_pp_rr">While incrementing unsigned scalar lower than scalar (pair of predicates).</iform>
+    <iform iformfile="whilelo_p_p_rr.xml" heading="WHILELO (predicate)" id="whilelo_p_p_rr">While incrementing unsigned scalar lower than scalar.</iform>
+    <iform iformfile="whilels_pn_rr.xml" heading="WHILELS (predicate as counter)" id="whilels_pn_rr">While incrementing unsigned scalar lower or same as scalar (predicate-as-counter).</iform>
+    <iform iformfile="whilels_pp_rr.xml" heading="WHILELS (predicate pair)" id="whilels_pp_rr">While incrementing unsigned scalar lower or same as scalar (pair of predicates).</iform>
+    <iform iformfile="whilels_p_p_rr.xml" heading="WHILELS (predicate)" id="whilels_p_p_rr">While incrementing unsigned scalar lower or same as scalar.</iform>
+    <iform iformfile="whilelt_pn_rr.xml" heading="WHILELT (predicate as counter)" id="whilelt_pn_rr">While incrementing signed scalar less than scalar (predicate-as-counter).</iform>
+    <iform iformfile="whilelt_pp_rr.xml" heading="WHILELT (predicate pair)" id="whilelt_pp_rr">While incrementing signed scalar less than scalar (pair of predicates).</iform>
+    <iform iformfile="whilelt_p_p_rr.xml" heading="WHILELT (predicate)" id="whilelt_p_p_rr">While incrementing signed scalar less than scalar.</iform>
+    <iform iformfile="whilerw_p_rr.xml" heading="WHILERW" id="whilerw_p_rr">While free of read-after-write conflicts.</iform>
+    <iform iformfile="whilewr_p_rr.xml" heading="WHILEWR" id="whilewr_p_rr">While free of write-after-read/write conflicts.</iform>
+    <iform iformfile="wrffr_f_p.xml" heading="WRFFR" id="wrffr_f_p">Write the first-fault register.</iform>
+    <iform iformfile="xar_z_zzi.xml" heading="XAR" id="xar_z_zzi">Bitwise exclusive OR and rotate right by immediate.</iform>
+    <iform iformfile="zip1_p_pp.xml" heading="ZIP1, ZIP2 (predicates)" id="zip1_p_pp">Interleave elements from two half predicates.</iform>
+    <iform iformfile="zip1_z_zz.xml" heading="ZIP1, ZIP2 (vectors)" id="zip1_z_zz">Interleave elements from two half vectors.</iform>
+    <iform iformfile="zipq1_z_zz.xml" heading="ZIPQ1" id="zipq1_z_zz">Interleave elements from low halves of each pair of quadword vector segments.</iform>
+    <iform iformfile="zipq2_z_zz.xml" heading="ZIPQ2" id="zipq2_z_zz">Interleave elements from high halves of each pair of quadword vector segments.</iform>
+  </iforms>
+</alphaindex>

@@ -1,0 +1,436 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="DC_SYS" title="DC -- A64" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="DC"/>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="SYS"/>
+  </docvars>
+  <heading>DC</heading>
+  <desc>
+    <brief>
+      <para>Data cache operation</para>
+    </brief>
+    <authored>
+      <para>For more information, see
+<xref linkend="ARMARM_BABEJJJE">op0==0b01, cache maintenance, TLB maintenance, and address translation instructions</xref>.</para>
+    </authored>
+  </desc>
+  <aliasto refiform="sys.xml" iformid="SYS">SYS</aliasto>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="SYS"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.control.systeminstrs.SYS_CR_systeminstrs.DC" tworows="1">
+        <box hibit="31" width="10" settings="10">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="21" name="L" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="2" settings="2">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="18" width="3" name="op1" usename="1">
+          <c colspan="3"/>
+        </box>
+        <box hibit="15" width="4" name="CRn" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1">
+          <c colspan="4"/>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1">
+          <c colspan="3"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="DC_SYS_CR_systeminstrs" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SYS"/>
+          <docvar key="alias_mnemonic" value="DC"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>DC  </text><a hover="Is a DC operation name, as listed for the DC system instruction group, " link="dc_op_option">&lt;dc_op&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose source register, encoded in the &quot;Rt&quot; field." link="XtOrXZR__3">&lt;Xt&gt;</a></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="sys.xml#SYS_CR_systeminstrs">SYS</a><text>  #</text><a hover="Is a 3-bit unsigned immediate, in the range 0 to 7, encoded in the &quot;op1&quot; field." href="sys.xml#op1">&lt;op1&gt;</a><text>, C7, </text><a hover="Is a name 'Cm', with 'm' in the range 0 to 15, encoded in the &quot;CRm&quot; field." href="sys.xml#Cm">&lt;Cm&gt;</a><text>, #</text><a hover="Is a 3-bit unsigned immediate, in the range 0 to 7, encoded in the &quot;op2&quot; field." href="sys.xml#op2">&lt;op2&gt;</a><text>, </text><a hover="Is the 64-bit name of the first general-purpose register to be conditionally stored, encoded in the &quot;Rt&quot; field. &amp;lt;Xt&amp;gt; must be an even-numbered register." href="sys.xml#Xt">&lt;Xt&gt;</a></asmtemplate>
+          <aliascond><a link="impl-aarch64.SysOp.4" file="shared_pseudocode.xml" hover="function: SystemOp SysOp(bits(3) op1, bits(4) CRn, bits(4) CRm, bits(3) op2)">SysOp</a>(op1, '0111', CRm, op2) == <a link="Sys_DC" file="shared_pseudocode.xml" hover="enumeration SystemOp {Sys_AT, Sys_BRB, Sys_DC, Sys_IC, Sys_TLBI, Sys_SYS}">Sys_DC</a></aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="DC_SYS_CR_systeminstrs" symboldefcount="1">
+      <symbol link="dc_op_option">&lt;dc_op&gt;</symbol>
+      <definition encodedin="op1:CRm:op2">
+        <intro>Is a DC operation name, as listed for the DC system instruction group, </intro>
+        <table class="valuetable">
+          <tgroup cols="5">
+            <thead>
+              <row>
+                <entry class="bitfield">op1</entry>
+                <entry class="bitfield">CRm</entry>
+                <entry class="bitfield">op2</entry>
+                <entry class="symbol">&lt;dc_op&gt;</entry>
+                <entry class="symbol">Architectural Feature</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">0110</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="symbol">IVAC</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">0110</entry>
+                <entry class="bitfield">010</entry>
+                <entry class="symbol">ISW</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">0110</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">IGVAC</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE2"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">0110</entry>
+                <entry class="bitfield">100</entry>
+                <entry class="symbol">IGSW</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE2"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">0110</entry>
+                <entry class="bitfield">101</entry>
+                <entry class="symbol">IGDVAC</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE2"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">0110</entry>
+                <entry class="bitfield">110</entry>
+                <entry class="symbol">IGDSW</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE2"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">1010</entry>
+                <entry class="bitfield">010</entry>
+                <entry class="symbol">CSW</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">1010</entry>
+                <entry class="bitfield">100</entry>
+                <entry class="symbol">CGSW</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE2"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">1010</entry>
+                <entry class="bitfield">110</entry>
+                <entry class="symbol">CGDSW</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE2"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">1110</entry>
+                <entry class="bitfield">010</entry>
+                <entry class="symbol">CISW</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">1110</entry>
+                <entry class="bitfield">100</entry>
+                <entry class="symbol">CIGSW</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE2"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">1110</entry>
+                <entry class="bitfield">110</entry>
+                <entry class="symbol">CIGDSW</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE2"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">0100</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="symbol">ZVA</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">0100</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">GVA</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">0100</entry>
+                <entry class="bitfield">100</entry>
+                <entry class="symbol">GZVA</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">1010</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="symbol">CVAC</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">1010</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">CGVAC</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">1010</entry>
+                <entry class="bitfield">101</entry>
+                <entry class="symbol">CGDVAC</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">1011</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="symbol">CVAU</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">1100</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="symbol">CVAP</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_DPB"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">1100</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">CGVAP</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">1100</entry>
+                <entry class="bitfield">101</entry>
+                <entry class="symbol">CGDVAP</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">1101</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="symbol">CVADP</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_DPB2"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">1101</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">CGVADP</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">1101</entry>
+                <entry class="bitfield">101</entry>
+                <entry class="symbol">CGDVADP</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">1110</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="symbol">CIVAC</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">1110</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">CIGVAC</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">1110</entry>
+                <entry class="bitfield">101</entry>
+                <entry class="symbol">CIGDVAC</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">100</entry>
+                <entry class="bitfield">1110</entry>
+                <entry class="bitfield">000</entry>
+                <entry class="symbol">CIPAE</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MEC"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">100</entry>
+                <entry class="bitfield">1110</entry>
+                <entry class="bitfield">111</entry>
+                <entry class="symbol">CIGDPAE</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MEC &amp;&amp; FEAT_MTE2"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">110</entry>
+                <entry class="bitfield">1110</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="symbol">CIPAPA</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_RME"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">110</entry>
+                <entry class="bitfield">1110</entry>
+                <entry class="bitfield">101</entry>
+                <entry class="symbol">CIGDPAPA</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_RME &amp;&amp; FEAT_MTE2"/>
+                  </arch_variants>
+                </entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="DC_SYS_CR_systeminstrs" symboldefcount="1">
+      <symbol link="XtOrXZR__3">&lt;Xt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose source register, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

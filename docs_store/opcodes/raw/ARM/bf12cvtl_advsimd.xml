@@ -1,0 +1,214 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="BF12CVTL_advsimd" title="BF1CVTL, BF1CVTL2, BF2CVTL, BF2CVTL2 -- A64" type="instruction">
+  <docvars>
+    <docvar key="advsimd-only" value="simd-only"/>
+    <docvar key="advsimd-type" value="simd"/>
+    <docvar key="instr-class" value="advsimd"/>
+    <docvar key="isa" value="A64"/>
+  </docvars>
+  <heading>BF1CVTL, BF1CVTL2, BF2CVTL, BF2CVTL2</heading>
+  <desc>
+    <brief>
+      <para>8-bit floating-point convert to BFloat16 (vector)</para>
+    </brief>
+    <authored>
+      <para>This instruction converts each 8-bit floating-point element from the lower
+or upper half of the source vector to BFloat16 while downscaling the value,
+and places the results in the 16-bit elements of the destination vector.
+<instruction>BF1CVTL</instruction> and <instruction>BF2CVTL</instruction> convert the elements from the lower half
+of the source vector while scaling the values by 2<sup>-UInt(FPMR.LSCALE[5:0])</sup>
+and 2<sup>-UInt(FPMR.LSCALE2[5:0])</sup>, respectively.
+<instruction>BF1CVTL2</instruction> and <instruction>BF2CVTL2</instruction> convert the elements from the upper half
+of the source vector while scaling the values by 2<sup>-UInt(FPMR.LSCALE[5:0])</sup>
+and 2<sup>-UInt(FPMR.LSCALE2[5:0])</sup>, respectively.</para>
+      <para>The 8-bit floating-point encoding format for <instruction>BF1CVTL</instruction> and <instruction>BF1CVTL2</instruction>
+is selected by <register_link id="AArch64-fpmr.xml" state="AArch64">FPMR</register_link>.F8S1. The 8-bit floating-point
+encoding format for <instruction>BF2CVTL</instruction> and <instruction>BF2CVTL2</instruction> is selected by
+<register_link id="AArch64-fpmr.xml" state="AArch64">FPMR</register_link>.F8S2.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Advanced SIMD" oneof="1" id="iclass_advanced_simd" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="advsimd-only" value="simd-only"/>
+        <docvar key="advsimd-type" value="simd"/>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_FP8" name="ARMv9.5"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.simd_dp.asimdmisc.BF1CVTL_asimdmisc_V" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" width="1" name="Q" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="29" name="U" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="28" width="5" settings="5">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1" settings="1" psbits="xx">
+          <c>1</c>
+          <c>x</c>
+        </box>
+        <box hibit="21" width="5" settings="5">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="16" width="5" name="opcode" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="BF1CVTL_asimdmisc_V" oneofinclass="2" oneof="2" label="BF1CVTL{2}" bitdiffs="size == 10">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="BF1CVTL"/>
+          <docvar key="advsimd-only" value="simd-only"/>
+          <docvar key="advsimd-type" value="simd"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="simd-8bit-cvtl" value="fp8bf1"/>
+        </docvars>
+        <box hibit="23" width="2" name="size">
+          <c/>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>BF1CVTL{</text><a hover="Is the second and upper half specifier. If present it causes the operation to be performed on the upper 64 bits of the registers holding the narrower elements, and is " link="s_2_option">2</a><text>}  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.8H, </text><a hover="Is the name of the SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn">&lt;Vn&gt;</a><text>.</text><a hover="Is an arrangement specifier, " link="Ta_option__2">&lt;Ta&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="BF2CVTL_asimdmisc_V" oneofinclass="2" oneof="2" label="BF2CVTL{2}" bitdiffs="size == 11">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="BF2CVTL"/>
+          <docvar key="advsimd-only" value="simd-only"/>
+          <docvar key="advsimd-type" value="simd"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="simd-8bit-cvtl" value="fp8bf2"/>
+        </docvars>
+        <box hibit="23" width="2" name="size">
+          <c/>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>BF2CVTL{</text><a hover="Is the second and upper half specifier. If present it causes the operation to be performed on the upper 64 bits of the registers holding the narrower elements, and is " link="s_2_option">2</a><text>}  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.8H, </text><a hover="Is the name of the SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn">&lt;Vn&gt;</a><text>.</text><a hover="Is an arrangement specifier, " link="Ta_option__2">&lt;Ta&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.asimdmisc.BF1CVTL_asimdmisc_V" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_FP8) then UNDEFINED;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer part = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Q);
+constant integer elements = 64 DIV 8;
+constant boolean issrc2 = size == '11';</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="BF1CVTL_asimdmisc_V, BF2CVTL_asimdmisc_V" symboldefcount="1">
+      <symbol link="s_2_option">2</symbol>
+      <definition encodedin="Q">
+        <intro>Is the second and upper half specifier. If present it causes the operation to be performed on the upper 64 bits of the registers holding the narrower elements, and is </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">Q</entry>
+                <entry class="symbol">2</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">[absent]</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">[present]</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="BF1CVTL_asimdmisc_V, BF2CVTL_asimdmisc_V" symboldefcount="1">
+      <symbol link="Vd">&lt;Vd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="BF1CVTL_asimdmisc_V, BF2CVTL_asimdmisc_V" symboldefcount="1">
+      <symbol link="Vn">&lt;Vn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="BF1CVTL_asimdmisc_V, BF2CVTL_asimdmisc_V" symboldefcount="1">
+      <symbol link="Ta_option__2">&lt;Ta&gt;</symbol>
+      <definition encodedin="Q">
+        <intro>Is an arrangement specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">Q</entry>
+                <entry class="symbol">&lt;Ta&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">8B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">16B</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.simd_dp.asimdmisc.BF1CVTL_asimdmisc_V" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckFPMREnabled.0" file="shared_pseudocode.xml" hover="function: CheckFPMREnabled()">CheckFPMREnabled</a>(); <a link="impl-aarch64.CheckFPAdvSIMDEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPAdvSIMDEnabled64()">CheckFPAdvSIMDEnabled64</a>();
+constant bits(64) operand = <a link="impl-aarch64.Vpart.read.3" file="shared_pseudocode.xml" hover="accessor: bits(width) Vpart[integer n, integer part, ESize width]">Vpart</a>[n, part, 64];
+bits(128) result;
+
+for e = 0 to elements-1
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, 16] = FP8ConvertBF(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand, e, 8], issrc2, FPCR, FPMR);
+
+<a link="impl-aarch64.V.write.2" file="shared_pseudocode.xml" hover="accessor: V[integer n, ESize width] = bits(width) value">V</a>[d, 128] = result;</pstext></ps>
+  </ps_section>
+</instructionsection>

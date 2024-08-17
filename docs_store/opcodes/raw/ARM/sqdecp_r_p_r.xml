@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="sqdecp_r_p_r" title="SQDECP (scalar)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="SQDECP" />
+  </docvars>
+  <heading>SQDECP (scalar)</heading>
+  <desc>
+    <brief>Signed saturating decrement scalar by count of true predicate elements</brief>
+    <description>
+      <para>Counts the number of true elements in the source predicate and then uses the result to decrement the scalar destination. The result is saturated to the source general-purpose register's signed integer range. A 32-bit saturated result is then sign-extended to 64 bits.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <affected_by_sme output="general-purpose register" />
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <classesintro count="2">
+      <txt>It has encodings from 2 classes:</txt>
+      <a href="#iclass_32_fsreg">32-bit</a>
+      <txt> and </txt>
+      <a href="#iclass_64_fsreg">64-bit</a>
+    </classesintro>
+    <iclass name="32-bit" oneof="2" id="iclass_32_fsreg" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="atomic-ops" value="SQDECP-32-fsreg" />
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="SQDECP" />
+        <docvar key="reg-type" value="32-fsreg" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="SQDECP-R.P.R-SX" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" width="4" settings="4">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="17" name="D" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="16" name="U" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="15" width="5" settings="5">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="10" name="sf" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="9" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="8" width="4" name="Pm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="4" width="5" name="Rdn" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="sqdecp_r_p_r_sx" oneofinclass="1" oneof="2" label="">
+        <docvars>
+          <docvar key="atomic-ops" value="SQDECP-32-fsreg" />
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="SQDECP" />
+          <docvar key="reg-type" value="32-fsreg" />
+        </docvars>
+        <asmtemplate><text>SQDECP  </text><a link="sa_xdn" hover="64-bit source and destination general-purpose register (field &quot;Rdn&quot;)">&lt;Xdn&gt;</a><text>, </text><a link="sa_pm" hover="Source scalable predicate register (field &quot;Pm&quot;)">&lt;Pm&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>, </text><a link="sa_wdn" hover="32-bit source and destination general-purpose register (field &quot;Rdn&quot;)">&lt;Wdn&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="SQDECP-R.P.R-SX" mylink="SQDECP-R.P.R-SX" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pm);
+constant integer dn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rdn);
+constant boolean unsigned = FALSE;
+constant integer ssize = 32;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="64-bit" oneof="2" id="iclass_64_fsreg" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="atomic-ops" value="SQDECP-64-fsreg" />
+        <docvar key="instr-class" value="sve" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="SQDECP" />
+        <docvar key="reg-type" value="64-fsreg" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="SQDECP-R.P.R-X" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" width="4" settings="4">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="17" name="D" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="16" name="U" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="15" width="5" settings="5">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="10" name="sf" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="8" width="4" name="Pm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="4" width="5" name="Rdn" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="sqdecp_r_p_r_x" oneofinclass="1" oneof="2" label="">
+        <docvars>
+          <docvar key="atomic-ops" value="SQDECP-64-fsreg" />
+          <docvar key="instr-class" value="sve" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="SQDECP" />
+          <docvar key="reg-type" value="64-fsreg" />
+        </docvars>
+        <asmtemplate><text>SQDECP  </text><a link="sa_xdn" hover="64-bit source and destination general-purpose register (field &quot;Rdn&quot;)">&lt;Xdn&gt;</a><text>, </text><a link="sa_pm" hover="Source scalable predicate register (field &quot;Pm&quot;)">&lt;Pm&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="SQDECP-R.P.R-X" mylink="SQDECP-R.P.R-X" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Pm);
+constant integer dn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rdn);
+constant boolean unsigned = FALSE;
+constant integer ssize = 64;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="sqdecp_r_p_r_sx, sqdecp_r_p_r_x" symboldefcount="1">
+      <symbol link="sa_xdn">&lt;Xdn&gt;</symbol>
+      <account encodedin="Rdn">
+        <intro>
+          <para>Is the 64-bit name of the source and destination general-purpose register, encoded in the "Rdn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="sqdecp_r_p_r_sx, sqdecp_r_p_r_x" symboldefcount="1">
+      <symbol link="sa_pm">&lt;Pm&gt;</symbol>
+      <account encodedin="Pm">
+        <intro>
+          <para>Is the name of the source scalable predicate register, encoded in the "Pm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="sqdecp_r_p_r_sx, sqdecp_r_p_r_x" symboldefcount="1">
+      <symbol link="sa_t">&lt;T&gt;</symbol>
+      <definition encodedin="size">
+        <intro>Is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">size</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10</entry>
+                <entry class="symbol">S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11</entry>
+                <entry class="symbol">D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="sqdecp_r_p_r_sx" symboldefcount="1">
+      <symbol link="sa_wdn">&lt;Wdn&gt;</symbol>
+      <account encodedin="Rdn">
+        <intro>
+          <para>Is the 32-bit name of the source and destination general-purpose register, encoded in the "Rdn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="SQDECP-R.P.R-SX" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSVEEnabled()">CheckSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer PL = VL DIV 8;
+constant integer elements = VL DIV esize;
+constant bits(ssize) operand1 = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[dn, ssize];
+constant bits(PL) operand2 = <a link="impl-aarch64.P.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) P[integer n, integer width]">P</a>[m, PL];
+bits(ssize) result;
+integer count = 0;
+
+for e = 0 to elements-1
+    if <a link="impl-aarch64.ActivePredicateElement.3" file="shared_pseudocode.xml" hover="function: boolean ActivePredicateElement(bits(N) pred, integer e, integer esize)">ActivePredicateElement</a>(operand2, e, esize) then
+        count = count + 1;
+
+constant integer element = <a link="impl-shared.Int.2" file="shared_pseudocode.xml" hover="function: integer Int(bits(N) x, boolean unsigned)">Int</a>(operand1, unsigned);
+(result, -) = <a link="impl-shared.SatQ.3" file="shared_pseudocode.xml" hover="function: (bits(N), boolean) SatQ(integer i, integer N, boolean unsigned)">SatQ</a>(element - count, ssize, unsigned);
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[dn, 64] = <a link="impl-shared.Extend.3" file="shared_pseudocode.xml" hover="function: bits(N) Extend(bits(M) x, integer N, boolean unsigned)">Extend</a>(result, 64, unsigned);</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

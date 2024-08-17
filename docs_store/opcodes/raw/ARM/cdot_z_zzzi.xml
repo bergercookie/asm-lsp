@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="cdot_z_zzzi" title="CDOT (indexed)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="sve2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="CDOT" />
+  </docvars>
+  <heading>CDOT (indexed)</heading>
+  <desc>
+    <brief>Complex integer dot product (indexed)</brief>
+    <description>
+      <para>The complex integer dot product instructions delimit the source vectors into pairs of 8-bit or 16-bit signed integer complex numbers. Within each pair, the complex numbers in the first source vector are multiplied by the corresponding complex numbers in the second source vector and the resulting wide real or wide imaginary part of the product is accumulated into a 32-bit or 64-bit destination vector element which overlaps all four of the elements that comprise a pair of complex number values in the first source vector.</para>
+      <para>As a result each instruction implicitly deinterleaves the real and imaginary components of their complex number inputs, so that the destination vector accumulates 4×wide real sums or 4×wide imaginary sums.</para>
+      <para>The complex numbers in the second source vector are rotated by 0, 90, 180 or 270 degrees in the direction from the positive real axis towards the positive imaginary axis, when considered in polar representation, by performing the following transformations prior to the dot product operations:</para>
+      <list type="unordered">
+        <listitem>
+          <content>If the rotation is #0, the imaginary parts of the complex numbers in the second source vector are negated. The destination vector therefore accumulates the real parts of a complex dot product.</content>
+        </listitem>
+        <listitem>
+          <content>If the rotation is #90, the real and imaginary parts of the complex numbers the second source vector are swapped. The destination vector therefore accumulates the imaginary parts of a complex dot product.</content>
+        </listitem>
+        <listitem>
+          <content>If the rotation is #180, there is no transformation. The destination vector therefore accumulates the real parts of a complex conjugate dot product.</content>
+        </listitem>
+        <listitem>
+          <content>If the rotation is #270, the real parts of the complex numbers in the second source vector are negated and then swapped with the imaginary parts. The destination vector therefore accumulates the imaginary parts of a complex conjugate dot product.</content>
+        </listitem>
+      </list>
+      <para>The indexed form of these instructions select a single pair of complex numbers within each 128-bit segment of the second source vector as the multiplier for all pairs of complex numbers within the corresponding 128-bit segment of the first source vector. The complex number pairs within the second source vector are specified using an immediate index which selects the same complex number pair position within each 128-bit vector segment. The index range is from 0 to one less than the number of complex number pairs per 128-bit segment, encoded in 1 or 2 bits depending on the size of the complex number pair.</para>
+      <para>Each complex number is represented in a vector register as an even/odd pair of elements with the real part in the even-numbered element and the imaginary part in the odd-numbered element.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <takes_movprfx>True</takes_movprfx>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <classesintro count="2">
+      <txt>It has encodings from 2 classes:</txt>
+      <a href="#iclass_of_words">32-bit</a>
+      <txt> and </txt>
+      <a href="#iclass_of_doublewords">64-bit</a>
+    </classesintro>
+    <iclass name="32-bit" oneof="2" id="iclass_of_words" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="as-structure-org" value="of-words" />
+        <docvar key="instr-class" value="sve2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="CDOT" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="CDOT-Z.ZZZi-S" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="2" name="i2" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="18" width="3" name="Zm" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="15" width="4" settings="4">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="rot" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Zda" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="cdot_z_zzzi_s" oneofinclass="1" oneof="2" label="">
+        <docvars>
+          <docvar key="as-structure-org" value="of-words" />
+          <docvar key="instr-class" value="sve2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="CDOT" />
+        </docvars>
+        <asmtemplate><text>CDOT    </text><a link="sa_zda" hover="Third source and destination scalable vector register (field &quot;Zda&quot;)">&lt;Zda&gt;</a><text>.S, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.B, </text><a link="sa_zm_1" hover="Second source scalable vector register Z0-Z7 (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.B[</text><a link="sa_imm_1" hover="Immediate index of a 32-bit group of four 8-bit values within each 128-bit vector segment [0-3] (field &quot;i2&quot;)">&lt;imm&gt;</a><text>], </text><a link="sa_const" hover="Const specifier (field &quot;rot&quot;) [#0,#90,#180,#270]">&lt;const&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="CDOT-Z.ZZZi-S" mylink="CDOT-Z.ZZZi-S" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE2) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer esize = 32;
+constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i2);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer da = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zda);
+constant integer sel_a = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(rot&lt;0&gt;);
+constant integer sel_b = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(NOT(rot&lt;0&gt;));
+constant boolean sub_i = (rot&lt;0&gt; == rot&lt;1&gt;);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="64-bit" oneof="2" id="iclass_of_doublewords" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="as-structure-org" value="of-doublewords" />
+        <docvar key="instr-class" value="sve2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="CDOT" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="CDOT-Z.ZZZi-D" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" name="i1" usename="1">
+          <c></c>
+        </box>
+        <box hibit="19" width="4" name="Zm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" width="4" settings="4">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="rot" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="5" name="Zda" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="cdot_z_zzzi_d" oneofinclass="1" oneof="2" label="">
+        <docvars>
+          <docvar key="as-structure-org" value="of-doublewords" />
+          <docvar key="instr-class" value="sve2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="CDOT" />
+        </docvars>
+        <asmtemplate><text>CDOT    </text><a link="sa_zda" hover="Third source and destination scalable vector register (field &quot;Zda&quot;)">&lt;Zda&gt;</a><text>.D, </text><a link="sa_zn" hover="First source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.H, </text><a link="sa_zm" hover="Second source scalable vector register Z0-Z15 (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.H[</text><a link="sa_imm" hover="Immediate index of a 64-bit group of four 16-bit values within each 128-bit vector segment [0-1] (field &quot;i1&quot;)">&lt;imm&gt;</a><text>], </text><a link="sa_const" hover="Const specifier (field &quot;rot&quot;) [#0,#90,#180,#270]">&lt;const&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="CDOT-Z.ZZZi-D" mylink="CDOT-Z.ZZZi-D" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SVE2) &amp;&amp; !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer esize = 64;
+constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i1);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zm);
+constant integer da = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zda);
+constant integer sel_a = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(rot&lt;0&gt;);
+constant integer sel_b = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(NOT(rot&lt;0&gt;));
+constant boolean sub_i = (rot&lt;0&gt; == rot&lt;1&gt;);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="cdot_z_zzzi_d, cdot_z_zzzi_s" symboldefcount="1">
+      <symbol link="sa_zda">&lt;Zda&gt;</symbol>
+      <account encodedin="Zda">
+        <intro>
+          <para>Is the name of the third source and destination scalable vector register, encoded in the "Zda" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="cdot_z_zzzi_d, cdot_z_zzzi_s" symboldefcount="1">
+      <symbol link="sa_zn">&lt;Zn&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the first source scalable vector register, encoded in the "Zn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="cdot_z_zzzi_s" symboldefcount="1">
+      <symbol link="sa_zm_1">&lt;Zm&gt;</symbol>
+      <account encodedin="Zm">
+        <docvars>
+          <docvar key="as-structure-org" value="of-words" />
+        </docvars>
+        <intro>
+          <para>For the 32-bit variant: is the name of the second source scalable vector register Z0-Z7, encoded in the "Zm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="cdot_z_zzzi_d" symboldefcount="2">
+      <symbol link="sa_zm">&lt;Zm&gt;</symbol>
+      <account encodedin="Zm">
+        <docvars>
+          <docvar key="as-structure-org" value="of-doublewords" />
+        </docvars>
+        <intro>
+          <para>For the 64-bit variant: is the name of the second source scalable vector register Z0-Z15, encoded in the "Zm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="cdot_z_zzzi_s" symboldefcount="1">
+      <symbol link="sa_imm_1">&lt;imm&gt;</symbol>
+      <account encodedin="i2">
+        <docvars>
+          <docvar key="as-structure-org" value="of-words" />
+        </docvars>
+        <intro>
+          <para>For the 32-bit variant: is the immediate index of a 32-bit group of four 8-bit values within each 128-bit vector segment, in the range 0 to 3, encoded in the "i2" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="cdot_z_zzzi_d" symboldefcount="2">
+      <symbol link="sa_imm">&lt;imm&gt;</symbol>
+      <account encodedin="i1">
+        <docvars>
+          <docvar key="as-structure-org" value="of-doublewords" />
+        </docvars>
+        <intro>
+          <para>For the 64-bit variant: is the immediate index of a 64-bit group of four 16-bit values within each 128-bit vector segment, in the range 0 to 1, encoded in the "i1" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="cdot_z_zzzi_d, cdot_z_zzzi_s" symboldefcount="1">
+      <symbol link="sa_const">&lt;const&gt;</symbol>
+      <definition encodedin="rot">
+        <intro>Is the const specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">rot</entry>
+                <entry class="symbol">&lt;const&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">#0</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">#90</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10</entry>
+                <entry class="symbol">#180</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11</entry>
+                <entry class="symbol">#270</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="CDOT-Z.ZZZi-S" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSVEEnabled()">CheckSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer elements = VL DIV esize;
+constant integer eltspersegment = 128 DIV esize;
+constant bits(VL) operand1 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[n, VL];
+constant bits(VL) operand2 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[m, VL];
+constant bits(VL) operand3 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[da, VL];
+bits(VL) result;
+
+for e = 0 to elements-1
+    constant integer segmentbase = e - (e MOD eltspersegment);
+    constant integer s = segmentbase + index;
+    bits(esize) res = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand3, e, esize];
+    for i = 0 to 1
+        constant integer elt1_r = <a link="impl-shared.SInt.1" file="shared_pseudocode.xml" hover="function: integer SInt(bits(N) x)">SInt</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand1, 4 * e + 2 * i + 0, esize DIV 4]);
+        constant integer elt1_i = <a link="impl-shared.SInt.1" file="shared_pseudocode.xml" hover="function: integer SInt(bits(N) x)">SInt</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand1, 4 * e + 2 * i + 1, esize DIV 4]);
+        constant integer elt2_a = <a link="impl-shared.SInt.1" file="shared_pseudocode.xml" hover="function: integer SInt(bits(N) x)">SInt</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand2, 4 * s + 2 * i + sel_a, esize DIV 4]);
+        constant integer elt2_b = <a link="impl-shared.SInt.1" file="shared_pseudocode.xml" hover="function: integer SInt(bits(N) x)">SInt</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand2, 4 * s + 2 * i + sel_b, esize DIV 4]);
+        if sub_i then
+            res = (res + (elt1_r * elt2_a)) - (elt1_i * elt2_b);
+        else
+            res = res + (elt1_r * elt2_a) + (elt1_i * elt2_b);
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, esize] = res;
+
+<a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[da, VL] = result;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

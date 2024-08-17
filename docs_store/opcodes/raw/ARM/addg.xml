@@ -1,0 +1,147 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="ADDG" title="ADDG -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="ADDG"/>
+  </docvars>
+  <heading>ADDG</heading>
+  <desc>
+    <brief>
+      <para>Add with tag</para>
+    </brief>
+    <authored>
+      <para>This instruction adds an immediate value scaled by the Tag Granule to the address
+in the source register, modifies the Logical Address Tag of the address using
+an immediate value, and writes the result to the destination register. Tags
+specified in <register_link id="AArch64-gcr_el1.xml" state="AArch64">GCR_EL1</register_link>.Exclude are excluded from the possible outputs when
+modifying the Logical Address Tag.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="ADDG"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_MTE" name="ARMv8.5"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.dpimm.addsub_immtags.ADDG_64_addsub_immtags" tworows="1">
+        <box hibit="31" name="sf" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="30" name="op" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="7" settings="7">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="21" width="6" name="uimm6" usename="1">
+          <c colspan="6"/>
+        </box>
+        <box hibit="15" width="2" name="op3" usename="1" settings="2" psbits="xx">
+          <c>(0)</c>
+          <c>(0)</c>
+        </box>
+        <box hibit="13" width="4" name="uimm4" usename="1">
+          <c colspan="4"/>
+        </box>
+        <box hibit="9" width="5" name="Xn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Xd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="ADDG_64_addsub_immtags" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="ADDG"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <asmtemplate><text>ADDG  </text><a hover="Is the 64-bit name of the destination general-purpose register or stack pointer, encoded in the &quot;Xd&quot; field." link="XdSP_option__2">&lt;Xd|SP&gt;</a><text>, </text><a hover="Is the 64-bit name of the source general-purpose register or stack pointer, encoded in the &quot;Xn&quot; field." link="XnSP_option__4">&lt;Xn|SP&gt;</a><text>, #</text><a hover="Is an unsigned immediate, a multiple of 16 in the range 0 to 1008, encoded in the &quot;uimm6&quot; field." link="uimm6">&lt;uimm6&gt;</a><text>, #</text><a hover="Is an unsigned immediate, in the range 0 to 15, encoded in the &quot;uimm4&quot; field." link="uimm4">&lt;uimm4&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpimm.addsub_immtags.ADDG_64_addsub_immtags" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_MTE) then UNDEFINED;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Xd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Xn);
+constant bits(4) tag_offset = uimm4;
+constant bits(64) offset = <a link="impl-shared.LSL.2" file="shared_pseudocode.xml" hover="function: bits(N) LSL(bits(N) x, integer shift)">LSL</a>(<a link="impl-shared.ZeroExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) ZeroExtend(bits(M) x, integer N)">ZeroExtend</a>(uimm6, 64), <a link="LOG2_TAG_GRANULE" file="shared_pseudocode.xml" hover="constant integer LOG2_TAG_GRANULE = 4">LOG2_TAG_GRANULE</a>);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="ADDG_64_addsub_immtags" symboldefcount="1">
+      <symbol link="XdSP_option__2">&lt;Xd|SP&gt;</symbol>
+      <account encodedin="Xd">
+        <intro>
+          <para>Is the 64-bit name of the destination general-purpose register or stack pointer, encoded in the "Xd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="ADDG_64_addsub_immtags" symboldefcount="1">
+      <symbol link="XnSP_option__4">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Xn">
+        <intro>
+          <para>Is the 64-bit name of the source general-purpose register or stack pointer, encoded in the "Xn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="ADDG_64_addsub_immtags" symboldefcount="1">
+      <symbol link="uimm6">&lt;uimm6&gt;</symbol>
+      <account encodedin="uimm6">
+        <intro>
+          <para>Is an unsigned immediate, a multiple of 16 in the range 0 to 1008, encoded in the "uimm6" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="ADDG_64_addsub_immtags" symboldefcount="1">
+      <symbol link="uimm4">&lt;uimm4&gt;</symbol>
+      <account encodedin="uimm4">
+        <intro>
+          <para>Is an unsigned immediate, in the range 0 to 15, encoded in the "uimm4" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.dpimm.addsub_immtags.ADDG_64_addsub_immtags" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bits(64) operand1 = if n == 31 then <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[] else <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+constant bits(4) start_tag = <a link="AArch64.AllocationTagFromAddress.1" file="shared_pseudocode.xml" hover="function: bits(4) AArch64.AllocationTagFromAddress(bits(64) tagged_address)">AArch64.AllocationTagFromAddress</a>(operand1);
+constant bits(16) exclude = GCR_EL1.Exclude;
+bits(64) result;
+bits(4) rtag;
+
+if <a link="AArch64.AllocationTagAccessIsEnabled.1" file="shared_pseudocode.xml" hover="function: boolean AArch64.AllocationTagAccessIsEnabled(bits(2) el)">AArch64.AllocationTagAccessIsEnabled</a>(PSTATE.EL) then
+    rtag = <a link="AArch64.ChooseNonExcludedTag.3" file="shared_pseudocode.xml" hover="function: bits(4) AArch64.ChooseNonExcludedTag(bits(4) tag_in, bits(4) offset_in, bits(16) exclude)">AArch64.ChooseNonExcludedTag</a>(start_tag, tag_offset, exclude);
+else
+    rtag = '0000';
+
+(result, -) = <a link="impl-shared.AddWithCarry.3" file="shared_pseudocode.xml" hover="function: (bits(N), bits(4)) AddWithCarry(bits(N) x, bits(N) y, bit carry_in)">AddWithCarry</a>(operand1, offset, '0');
+
+result = <a link="AArch64.AddressWithAllocationTag.2" file="shared_pseudocode.xml" hover="function: bits(64) AArch64.AddressWithAllocationTag(bits(64) address, bits(4) allocation_tag)">AArch64.AddressWithAllocationTag</a>(result, rtag);
+
+if d == 31 then
+    <a link="impl-aarch64.SP.write.0" file="shared_pseudocode.xml" hover="accessor: SP[] = bits(64) value">SP</a>[] = result;
+else
+    <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, 64] = result;
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

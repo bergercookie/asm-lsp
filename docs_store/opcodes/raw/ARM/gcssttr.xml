@@ -1,0 +1,138 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="GCSSTTR" title="GCSSTTR -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="GCSSTTR"/>
+  </docvars>
+  <heading>GCSSTTR</heading>
+  <desc>
+    <brief>
+      <para>Guarded Control Stack unprivileged store</para>
+    </brief>
+    <authored>
+      <para>This instruction stores a
+doubleword from a register to memory. The address that
+is used for the store is calculated from a base register.</para>
+      <para>Explicit Memory  effects produced by the instruction behave as if the instruction was
+  executed at EL0 if the <xref linkend="ARMARM_CBAICCHA">Effective value</xref> of
+  PSTATE.UAO is 0 and either:</para>
+      <list type="unordered">
+        <listitem>
+          <content>The instruction is executed at EL1 and <register_link id="AArch64-hcr_el2.xml" state="AArch64">HCR_EL2</register_link>.{NV, NV1} is not {1, 1}.</content>
+        </listitem>
+        <listitem>
+          <content>The instruction is executed at EL2 when the <xref linkend="ARMARM_CBAICCHA">Effective value</xref>
+  of <register_link id="AArch64-hcr_el2.xml" state="AArch64">HCR_EL2</register_link>.{E2H, TGE} is {1, 1}.</content>
+        </listitem>
+      </list>
+      <para>Otherwise, the Explicit Memory  effects operate with the restrictions determined by
+  the Exception level at which the instruction is executed.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="GCSSTTR"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_GCS" name="ARMv9.4"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.ldst_gcs.GCSSTTR_64_ldst_gcs" tworows="1">
+        <box hibit="31" width="17" settings="17">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="14" width="3" name="opc" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="GCSSTTR_64_ldst_gcs" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="GCSSTTR"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <asmtemplate><text>GCSSTTR  </text><a hover="Is the 64-bit name of the general-purpose register to be transferred, encoded in the &quot;Rt&quot; field." link="XtOrXZR__11">&lt;Xt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.ldst_gcs.GCSSTTR_64_ldst_gcs" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_GCS) then UNDEFINED;
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="GCSSTTR_64_ldst_gcs" symboldefcount="1">
+      <symbol link="XtOrXZR__11">&lt;Xt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="GCSSTTR_64_ldst_gcs" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldst_gcs.GCSSTTR_64_ldst_gcs" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">bits(64) address;
+
+constant bits(2) effective_el = if <a link="AArch64.IsUnprivAccessPriv.0" file="shared_pseudocode.xml" hover="function: boolean AArch64.IsUnprivAccessPriv()">AArch64.IsUnprivAccessPriv</a>() then PSTATE.EL else <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>;
+
+if effective_el == PSTATE.EL then
+    <a link="impl-aarch64.CheckGCSSTREnabled.0" file="shared_pseudocode.xml" hover="function: CheckGCSSTREnabled()">CheckGCSSTREnabled</a>();
+
+constant boolean privileged = effective_el != <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>;
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = <a link="impl-shared.CreateAccDescGCS.2" file="shared_pseudocode.xml" hover="function: AccessDescriptor CreateAccDescGCS(MemOp memop, boolean privileged)">CreateAccDescGCS</a>(<a link="MemOp_STORE" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_STORE</a>, privileged);
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+<a link="impl-aarch64.Mem.write.3" file="shared_pseudocode.xml" hover="accessor: Mem[bits(64) address, integer size, AccessDescriptor accdesc_in] = bits(size*8) value_in">Mem</a>[address, 8, accdesc] = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[t, 64];</pstext></ps>
+  </ps_section>
+</instructionsection>

@@ -1,0 +1,222 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="BRA" title="BRAA, BRAAZ, BRAB, BRABZ -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+  </docvars>
+  <heading>BRAA, BRAAZ, BRAB, BRABZ</heading>
+  <desc>
+    <brief>
+      <para>Branch to register, with pointer authentication</para>
+    </brief>
+    <authored>
+      <para>This instruction authenticates the address in the general-purpose
+register that is specified by <syntax>&lt;Xn&gt;</syntax>, using a modifier and
+the specified key, and branches to the authenticated address.</para>
+      <para>The modifier is:</para>
+      <list type="unordered">
+        <listitem>
+          <content>In the general-purpose register or stack pointer that is specified
+  by <syntax>&lt;Xm|SP&gt;</syntax>, for <instruction>BRAA</instruction> and <instruction>BRAB</instruction>.</content>
+        </listitem>
+        <listitem>
+          <content>The value zero, for <instruction>BRAAZ</instruction> and <instruction>BRABZ</instruction>.</content>
+        </listitem>
+      </list>
+      <para>Key A is used for <instruction>BRAA</instruction> and <instruction>BRAAZ</instruction>. Key B is used for
+<instruction>BRAB</instruction> and <instruction>BRABZ</instruction>.</para>
+      <para>If the authentication passes, the PE continues execution at the
+target of the branch.
+For information on behavior if the authentication fails, see
+<xref linkend="ARMARM_MDSec.Faulting_on_pointer_authentication">Faulting on pointer authentication</xref>.</para>
+      <para>The authenticated address is not written back to the general-purpose
+register.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Integer" oneof="1" id="iclass_integer" no_encodings="4" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="4"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_PAuth" name="ARMv8.3"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.control.branch_reg.BRAAZ_64_branch_reg" tworows="1">
+        <box hibit="31" width="7" settings="7">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="24" width="1" name="Z" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="23" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" width="2" name="op" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="op2" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" width="4" settings="4">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" name="A" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="10" width="1" name="M" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rm" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="BRAAZ_64_branch_reg" oneofinclass="4" oneof="4" label="Key A, zero modifier" bitdiffs="Z == 0 &amp;&amp; M == 0 &amp;&amp; Rm == 11111">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="BRAAZ"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="loadstore-bra" value="key-a-zmod"/>
+        </docvars>
+        <box hibit="24" width="1" name="Z">
+          <c>0</c>
+        </box>
+        <box hibit="10" width="1" name="M">
+          <c>0</c>
+        </box>
+        <box hibit="4" width="5" name="Rm">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>BRAAZ  </text><a hover="Is the 64-bit name of the general-purpose register holding the address to be branched to, encoded in the &quot;Rn&quot; field." link="XnOrXZR">&lt;Xn&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="BRAA_64P_branch_reg" oneofinclass="4" oneof="4" label="Key A, register modifier" bitdiffs="Z == 1 &amp;&amp; M == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="BRAA"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="loadstore-bra" value="key-a-regmod"/>
+        </docvars>
+        <box hibit="24" width="1" name="Z">
+          <c>1</c>
+        </box>
+        <box hibit="10" width="1" name="M">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>BRAA  </text><a hover="Is the 64-bit name of the general-purpose register holding the address to be branched to, encoded in the &quot;Rn&quot; field." link="XnOrXZR">&lt;Xn&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose source register or stack pointer holding the modifier, encoded in the &quot;Rm&quot; field." link="XmSP_option">&lt;Xm|SP&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="BRABZ_64_branch_reg" oneofinclass="4" oneof="4" label="Key B, zero modifier" bitdiffs="Z == 0 &amp;&amp; M == 1 &amp;&amp; Rm == 11111">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="BRABZ"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="loadstore-bra" value="key-b-zmod"/>
+        </docvars>
+        <box hibit="24" width="1" name="Z">
+          <c>0</c>
+        </box>
+        <box hibit="10" width="1" name="M">
+          <c>1</c>
+        </box>
+        <box hibit="4" width="5" name="Rm">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>BRABZ  </text><a hover="Is the 64-bit name of the general-purpose register holding the address to be branched to, encoded in the &quot;Rn&quot; field." link="XnOrXZR">&lt;Xn&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="BRAB_64P_branch_reg" oneofinclass="4" oneof="4" label="Key B, register modifier" bitdiffs="Z == 1 &amp;&amp; M == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="BRAB"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="loadstore-bra" value="key-b-regmod"/>
+        </docvars>
+        <box hibit="24" width="1" name="Z">
+          <c>1</c>
+        </box>
+        <box hibit="10" width="1" name="M">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>BRAB  </text><a hover="Is the 64-bit name of the general-purpose register holding the address to be branched to, encoded in the &quot;Rn&quot; field." link="XnOrXZR">&lt;Xn&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose source register or stack pointer holding the modifier, encoded in the &quot;Rm&quot; field." link="XmSP_option">&lt;Xm|SP&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.branch_reg.BRAAZ_64_branch_reg" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_PAuth) then UNDEFINED;
+if Z == '0' &amp;&amp; Rm != '11111' then UNDEFINED;
+
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rm);
+constant boolean use_key_a = (M == '0');
+constant boolean source_is_sp = ((Z == '1') &amp;&amp; (m == 31));
+constant boolean auth_then_branch = TRUE;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="BRAAZ_64_branch_reg, BRAA_64P_branch_reg, BRABZ_64_branch_reg, BRAB_64P_branch_reg" symboldefcount="1">
+      <symbol link="XnOrXZR">&lt;Xn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose register holding the address to be branched to, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="BRAA_64P_branch_reg, BRAB_64P_branch_reg" symboldefcount="1">
+      <symbol link="XmSP_option">&lt;Xm|SP&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose source register or stack pointer holding the modifier, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.control.branch_reg.BRAAZ_64_branch_reg" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">bits(64) target = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+constant bits(64) modifier = if source_is_sp then <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[] else <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[m, 64];
+
+if use_key_a then
+    target = <a link="impl-aarch64.AuthIA.3" file="shared_pseudocode.xml" hover="function: bits(64) AuthIA(bits(64) x, bits(64) y, boolean is_combined)">AuthIA</a>(target, modifier, auth_then_branch);
+else
+    target = <a link="impl-aarch64.AuthIB.3" file="shared_pseudocode.xml" hover="function: bits(64) AuthIB(bits(64) x, bits(64) y, boolean is_combined)">AuthIB</a>(target, modifier, auth_then_branch);
+// Value in BTypeNext will be used to set PSTATE.BTYPE
+if InGuardedPage then
+    if n == 16 || n == 17 then
+        BTypeNext = '01';
+    else
+        BTypeNext = '11';
+else
+    BTypeNext = '01';
+
+constant boolean branch_conditional = FALSE;
+<a link="impl-shared.BranchTo.3" file="shared_pseudocode.xml" hover="function: BranchTo(bits(N) target, BranchType branch_type, boolean branch_conditional)">BranchTo</a>(target, <a link="BranchType_INDIR" file="shared_pseudocode.xml" hover="enumeration BranchType { BranchType_DIRCALL, BranchType_INDCALL, BranchType_ERET, BranchType_DBGEXIT, BranchType_RET, BranchType_DIR, BranchType_INDIR, BranchType_EXCEPTION, BranchType_TMFAIL, BranchType_RESET, BranchType_UNKNOWN}">BranchType_INDIR</a>, branch_conditional);</pstext></ps>
+  </ps_section>
+</instructionsection>

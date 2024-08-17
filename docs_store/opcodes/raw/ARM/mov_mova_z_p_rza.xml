@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="MOV_mova_z_p_rza" title="MOV (tile to vector, single)" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="MOV" />
+    <docvar key="instr-class" value="mortlach" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="MOVA" />
+  </docvars>
+  <heading>MOV (tile to vector, single)</heading>
+  <desc>
+    <brief>Move ZA tile slice to vector register</brief>
+    <description>
+      <para>The instruction operates on individual horizontal or vertical slices within a named ZA tile of the specified element size. The slice number within the tile is selected by the sum of the slice index register and immediate offset, modulo the number of such elements in a vector. The immediate offset is in the range 0 to the number of elements in a 128-bit vector segment minus 1.</para>
+      <para>Inactive elements in the destination vector remain unmodified.</para>
+    </description>
+    <status>Green</status>
+    <predicated>True</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <sm_policy>SM_1_only</sm_policy>
+  </desc>
+  <aliasto refiform="mova_z_p_rza.xml" iformid="mova_z_p_rza">MOVA (tile to vector, single)</aliasto>
+  <classes>
+    <classesintro count="5">
+      <txt>It has encodings from 5 classes:</txt>
+      <a href="#iclass_per_byte">8-bit</a>
+      <txt>, </txt>
+      <a href="#iclass_per_halfword">16-bit</a>
+      <txt>, </txt>
+      <a href="#iclass_per_word">32-bit</a>
+      <txt>, </txt>
+      <a href="#iclass_per_doubleword">64-bit</a>
+      <txt> and </txt>
+      <a href="#iclass_per_quadword">128-bit</a>
+    </classesintro>
+    <iclass name="8-bit" oneof="5" id="iclass_per_byte" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="asimdimm-datatype" value="per-byte" />
+        <docvar key="instr-class" value="mortlach" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="MOVA" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="MOVA-Z.P.RZA-B" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="5" settings="5">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="16" name="Q" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="15" name="V" usename="1">
+          <c></c>
+        </box>
+        <box hibit="14" width="2" name="Rs" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" name="Pg" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="8" width="4" name="off4" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="MOV_mova_z_p_rza_b" oneofinclass="1" oneof="5" label="">
+        <docvars>
+          <docvar key="alias_mnemonic" value="MOV" />
+          <docvar key="asimdimm-datatype" value="per-byte" />
+          <docvar key="instr-class" value="mortlach" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="MOVA" />
+        </docvars>
+        <asmtemplate><text>MOV     </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.B, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/M, ZA0</text><a link="sa_hv" hover="Horizontal or vertical slice indicator (field &quot;V&quot;) [H,V]">&lt;HV&gt;</a><text>.B[</text><a link="sa_ws" hover="32-bit slice index register W12-W15 (field &quot;Rs&quot;)">&lt;Ws&gt;</a><text>, </text><a link="sa_offs" hover="Slice index offset [0-15] (field &quot;off4&quot;)">&lt;offs&gt;</a><text>]</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="mova_z_p_rza.xml#mova_z_p_rza_b">MOVA</a><text>    </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.B, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/M, ZA0</text><a link="sa_hv" hover="Horizontal or vertical slice indicator (field &quot;V&quot;) [H,V]">&lt;HV&gt;</a><text>.B[</text><a link="sa_ws" hover="32-bit slice index register W12-W15 (field &quot;Rs&quot;)">&lt;Ws&gt;</a><text>, </text><a link="sa_offs" hover="Slice index offset [0-15] (field &quot;off4&quot;)">&lt;offs&gt;</a><text>]</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+    <iclass name="16-bit" oneof="5" id="iclass_per_halfword" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="asimdimm-datatype" value="per-halfword" />
+        <docvar key="instr-class" value="mortlach" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="MOVA" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="MOVA-Z.P.RZA-H" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" width="5" settings="5">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="16" name="Q" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="15" name="V" usename="1">
+          <c></c>
+        </box>
+        <box hibit="14" width="2" name="Rs" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" name="Pg" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="8" name="ZAn" usename="1">
+          <c></c>
+        </box>
+        <box hibit="7" width="3" name="off3" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="MOV_mova_z_p_rza_h" oneofinclass="1" oneof="5" label="">
+        <docvars>
+          <docvar key="alias_mnemonic" value="MOV" />
+          <docvar key="asimdimm-datatype" value="per-halfword" />
+          <docvar key="instr-class" value="mortlach" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="MOVA" />
+        </docvars>
+        <asmtemplate><text>MOV     </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.H, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/M, </text><a link="sa_zan_1" hover="ZA tile ZA0-ZA1 to be accessed (field &quot;ZAn&quot;)">&lt;ZAn&gt;</a><a link="sa_hv" hover="Horizontal or vertical slice indicator (field &quot;V&quot;) [H,V]">&lt;HV&gt;</a><text>.H[</text><a link="sa_ws" hover="32-bit slice index register W12-W15 (field &quot;Rs&quot;)">&lt;Ws&gt;</a><text>, </text><a link="sa_offs_2" hover="Slice index offset [0-7] (field &quot;off3&quot;)">&lt;offs&gt;</a><text>]</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="mova_z_p_rza.xml#mova_z_p_rza_h">MOVA</a><text>    </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.H, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/M, </text><a link="sa_zan_1" hover="ZA tile ZA0-ZA1 to be accessed (field &quot;ZAn&quot;)">&lt;ZAn&gt;</a><a link="sa_hv" hover="Horizontal or vertical slice indicator (field &quot;V&quot;) [H,V]">&lt;HV&gt;</a><text>.H[</text><a link="sa_ws" hover="32-bit slice index register W12-W15 (field &quot;Rs&quot;)">&lt;Ws&gt;</a><text>, </text><a link="sa_offs_2" hover="Slice index offset [0-7] (field &quot;off3&quot;)">&lt;offs&gt;</a><text>]</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+    <iclass name="32-bit" oneof="5" id="iclass_per_word" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="asimdimm-datatype" value="per-word" />
+        <docvar key="instr-class" value="mortlach" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="MOVA" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="MOVA-Z.P.RZA-W" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" width="5" settings="5">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="16" name="Q" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="15" name="V" usename="1">
+          <c></c>
+        </box>
+        <box hibit="14" width="2" name="Rs" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" name="Pg" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="8" width="2" name="ZAn" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="6" width="2" name="off2" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="MOV_mova_z_p_rza_w" oneofinclass="1" oneof="5" label="">
+        <docvars>
+          <docvar key="alias_mnemonic" value="MOV" />
+          <docvar key="asimdimm-datatype" value="per-word" />
+          <docvar key="instr-class" value="mortlach" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="MOVA" />
+        </docvars>
+        <asmtemplate><text>MOV     </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.S, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/M, </text><a link="sa_zan_3" hover="ZA tile ZA0-ZA3 to be accessed (field &quot;ZAn&quot;)">&lt;ZAn&gt;</a><a link="sa_hv" hover="Horizontal or vertical slice indicator (field &quot;V&quot;) [H,V]">&lt;HV&gt;</a><text>.S[</text><a link="sa_ws" hover="32-bit slice index register W12-W15 (field &quot;Rs&quot;)">&lt;Ws&gt;</a><text>, </text><a link="sa_offs_4" hover="Slice index offset [0-3] (field &quot;off2&quot;)">&lt;offs&gt;</a><text>]</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="mova_z_p_rza.xml#mova_z_p_rza_w">MOVA</a><text>    </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.S, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/M, </text><a link="sa_zan_3" hover="ZA tile ZA0-ZA3 to be accessed (field &quot;ZAn&quot;)">&lt;ZAn&gt;</a><a link="sa_hv" hover="Horizontal or vertical slice indicator (field &quot;V&quot;) [H,V]">&lt;HV&gt;</a><text>.S[</text><a link="sa_ws" hover="32-bit slice index register W12-W15 (field &quot;Rs&quot;)">&lt;Ws&gt;</a><text>, </text><a link="sa_offs_4" hover="Slice index offset [0-3] (field &quot;off2&quot;)">&lt;offs&gt;</a><text>]</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+    <iclass name="64-bit" oneof="5" id="iclass_per_doubleword" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="asimdimm-datatype" value="per-doubleword" />
+        <docvar key="instr-class" value="mortlach" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="MOVA" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="MOVA-Z.P.RZA-D" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" width="5" settings="5">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="16" name="Q" usename="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="15" name="V" usename="1">
+          <c></c>
+        </box>
+        <box hibit="14" width="2" name="Rs" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" name="Pg" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="8" width="3" name="ZAn" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="5" name="o1" usename="1">
+          <c></c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="MOV_mova_z_p_rza_d" oneofinclass="1" oneof="5" label="">
+        <docvars>
+          <docvar key="alias_mnemonic" value="MOV" />
+          <docvar key="asimdimm-datatype" value="per-doubleword" />
+          <docvar key="instr-class" value="mortlach" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="MOVA" />
+        </docvars>
+        <asmtemplate><text>MOV     </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.D, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/M, </text><a link="sa_zan" hover="ZA tile ZA0-ZA7 to be accessed (field &quot;ZAn&quot;)">&lt;ZAn&gt;</a><a link="sa_hv" hover="Horizontal or vertical slice indicator (field &quot;V&quot;) [H,V]">&lt;HV&gt;</a><text>.D[</text><a link="sa_ws" hover="32-bit slice index register W12-W15 (field &quot;Rs&quot;)">&lt;Ws&gt;</a><text>, </text><a link="sa_offs_1" hover="Slice index offset [0-1] (field &quot;o1&quot;)">&lt;offs&gt;</a><text>]</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="mova_z_p_rza.xml#mova_z_p_rza_d">MOVA</a><text>    </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.D, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/M, </text><a link="sa_zan" hover="ZA tile ZA0-ZA7 to be accessed (field &quot;ZAn&quot;)">&lt;ZAn&gt;</a><a link="sa_hv" hover="Horizontal or vertical slice indicator (field &quot;V&quot;) [H,V]">&lt;HV&gt;</a><text>.D[</text><a link="sa_ws" hover="32-bit slice index register W12-W15 (field &quot;Rs&quot;)">&lt;Ws&gt;</a><text>, </text><a link="sa_offs_1" hover="Slice index offset [0-1] (field &quot;o1&quot;)">&lt;offs&gt;</a><text>]</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+    <iclass name="128-bit" oneof="5" id="iclass_per_quadword" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="asimdimm-datatype" value="per-quadword" />
+        <docvar key="instr-class" value="mortlach" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="MOVA" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <regdiagram form="32" psname="MOVA-Z.P.RZA-Q" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="size&lt;1&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="22" name="size&lt;0&gt;" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="21" width="5" settings="5">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="16" name="Q" usename="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="15" name="V" usename="1">
+          <c></c>
+        </box>
+        <box hibit="14" width="2" name="Rs" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="12" width="3" name="Pg" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="9" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="8" width="4" name="ZAn" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="4" width="5" name="Zd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="MOV_mova_z_p_rza_q" oneofinclass="1" oneof="5" label="">
+        <docvars>
+          <docvar key="alias_mnemonic" value="MOV" />
+          <docvar key="asimdimm-datatype" value="per-quadword" />
+          <docvar key="instr-class" value="mortlach" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="MOVA" />
+        </docvars>
+        <asmtemplate><text>MOV     </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.Q, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/M, </text><a link="sa_zan_2" hover="ZA tile ZA0-ZA15 to be accessed (field &quot;ZAn&quot;)">&lt;ZAn&gt;</a><a link="sa_hv" hover="Horizontal or vertical slice indicator (field &quot;V&quot;) [H,V]">&lt;HV&gt;</a><text>.Q[</text><a link="sa_ws" hover="32-bit slice index register W12-W15 (field &quot;Rs&quot;)">&lt;Ws&gt;</a><text>, </text><a link="sa_offs_3" hover="Slice index offset, with implicit value 0">&lt;offs&gt;</a><text>]</text></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="mova_z_p_rza.xml#mova_z_p_rza_q">MOVA</a><text>    </text><a link="sa_zd" hover="Destination scalable vector register (field &quot;Zd&quot;)">&lt;Zd&gt;</a><text>.Q, </text><a link="sa_pg" hover="Governing scalable predicate register P0-P7 (field &quot;Pg&quot;)">&lt;Pg&gt;</a><text>/M, </text><a link="sa_zan_2" hover="ZA tile ZA0-ZA15 to be accessed (field &quot;ZAn&quot;)">&lt;ZAn&gt;</a><a link="sa_hv" hover="Horizontal or vertical slice indicator (field &quot;V&quot;) [H,V]">&lt;HV&gt;</a><text>.Q[</text><a link="sa_ws" hover="32-bit slice index register W12-W15 (field &quot;Rs&quot;)">&lt;Ws&gt;</a><text>, </text><a link="sa_offs_3" hover="Slice index offset, with implicit value 0">&lt;offs&gt;</a><text>]</text></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="MOV_mova_z_p_rza_b, MOV_mova_z_p_rza_d, MOV_mova_z_p_rza_h, MOV_mova_z_p_rza_q, MOV_mova_z_p_rza_w" symboldefcount="1">
+      <symbol link="sa_zd">&lt;Zd&gt;</symbol>
+      <account encodedin="Zd">
+        <intro>
+          <para>Is the name of the destination scalable vector register, encoded in the "Zd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_mova_z_p_rza_b, MOV_mova_z_p_rza_d, MOV_mova_z_p_rza_h, MOV_mova_z_p_rza_q, MOV_mova_z_p_rza_w" symboldefcount="1">
+      <symbol link="sa_pg">&lt;Pg&gt;</symbol>
+      <account encodedin="Pg">
+        <intro>
+          <para>Is the name of the governing scalable predicate register P0-P7, encoded in the "Pg" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_mova_z_p_rza_h" symboldefcount="1">
+      <symbol link="sa_zan_1">&lt;ZAn&gt;</symbol>
+      <account encodedin="ZAn">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-halfword" />
+        </docvars>
+        <intro>
+          <para>For the 16-bit variant: is the name of the ZA tile ZA0-ZA1 to be accessed, encoded in the "ZAn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_mova_z_p_rza_w" symboldefcount="2">
+      <symbol link="sa_zan_3">&lt;ZAn&gt;</symbol>
+      <account encodedin="ZAn">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-word" />
+        </docvars>
+        <intro>
+          <para>For the 32-bit variant: is the name of the ZA tile ZA0-ZA3 to be accessed, encoded in the "ZAn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_mova_z_p_rza_d" symboldefcount="3">
+      <symbol link="sa_zan">&lt;ZAn&gt;</symbol>
+      <account encodedin="ZAn">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-doubleword" />
+        </docvars>
+        <intro>
+          <para>For the 64-bit variant: is the name of the ZA tile ZA0-ZA7 to be accessed, encoded in the "ZAn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_mova_z_p_rza_q" symboldefcount="4">
+      <symbol link="sa_zan_2">&lt;ZAn&gt;</symbol>
+      <account encodedin="ZAn">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-quadword" />
+        </docvars>
+        <intro>
+          <para>For the 128-bit variant: is the name of the ZA tile ZA0-ZA15 to be accessed, encoded in the "ZAn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_mova_z_p_rza_b, MOV_mova_z_p_rza_d, MOV_mova_z_p_rza_h, MOV_mova_z_p_rza_q, MOV_mova_z_p_rza_w" symboldefcount="1">
+      <symbol link="sa_hv">&lt;HV&gt;</symbol>
+      <definition encodedin="V">
+        <intro>Is the horizontal or vertical slice indicator, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">V</entry>
+                <entry class="symbol">&lt;HV&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">V</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="MOV_mova_z_p_rza_b, MOV_mova_z_p_rza_d, MOV_mova_z_p_rza_h, MOV_mova_z_p_rza_q, MOV_mova_z_p_rza_w" symboldefcount="1">
+      <symbol link="sa_ws">&lt;Ws&gt;</symbol>
+      <account encodedin="Rs">
+        <intro>
+          <para>Is the 32-bit name of the slice index register W12-W15, encoded in the "Rs" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_mova_z_p_rza_b" symboldefcount="1">
+      <symbol link="sa_offs">&lt;offs&gt;</symbol>
+      <account encodedin="off4">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-byte" />
+        </docvars>
+        <intro>
+          <para>For the 8-bit variant: is the slice index offset, in the range 0 to 15, encoded in the "off4" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_mova_z_p_rza_h" symboldefcount="2">
+      <symbol link="sa_offs_2">&lt;offs&gt;</symbol>
+      <account encodedin="off3">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-halfword" />
+        </docvars>
+        <intro>
+          <para>For the 16-bit variant: is the slice index offset, in the range 0 to 7, encoded in the "off3" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_mova_z_p_rza_w" symboldefcount="3">
+      <symbol link="sa_offs_4">&lt;offs&gt;</symbol>
+      <account encodedin="off2">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-word" />
+        </docvars>
+        <intro>
+          <para>For the 32-bit variant: is the slice index offset, in the range 0 to 3, encoded in the "off2" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_mova_z_p_rza_d" symboldefcount="4">
+      <symbol link="sa_offs_1">&lt;offs&gt;</symbol>
+      <account encodedin="o1">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-doubleword" />
+        </docvars>
+        <intro>
+          <para>For the 64-bit variant: is the slice index offset, in the range 0 to 1, encoded in the "o1" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_mova_z_p_rza_q" symboldefcount="5">
+      <symbol link="sa_offs_3">&lt;offs&gt;</symbol>
+      <account encodedin="">
+        <docvars>
+          <docvar key="asimdimm-datatype" value="per-quadword" />
+        </docvars>
+        <intro>
+          <para>For the 128-bit variant: is the slice index offset, with implicit value 0.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

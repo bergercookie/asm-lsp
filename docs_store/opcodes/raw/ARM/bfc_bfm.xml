@@ -1,0 +1,194 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="BFC_BFM" title="BFC -- A64" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="BFC"/>
+    <docvar key="bitfield-fill" value="nofill"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="BFM"/>
+  </docvars>
+  <heading>BFC</heading>
+  <desc>
+    <brief>
+      <para>Bitfield clear</para>
+    </brief>
+    <authored>
+      <para>This instruction sets a bitfield of <syntax>&lt;width&gt;</syntax> bits at bit
+position <syntax>&lt;lsb&gt;</syntax> of the destination register to zero,
+leaving the other destination bits unchanged.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <aliasto refiform="bfm.xml" iformid="BFM">BFM</aliasto>
+  <classes>
+    <iclass name="Leaving other bits unchanged" oneof="1" id="iclass_leaving_other_bits_unchanged" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="bitfield-fill" value="nofill"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="BFM"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_ASMv8p2" name="ARMv8.2"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.dpimm.bitfield.BFM_32M_bitfield.BFC" tworows="1">
+        <box hibit="31" width="1" name="sf" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="30" width="2" name="opc" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="28" width="6" settings="6">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="N" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="21" width="6" name="immr" usename="1">
+          <c colspan="6"/>
+        </box>
+        <box hibit="15" width="6" name="imms" usename="1">
+          <c colspan="6"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="BFC_BFM_32M_bitfield" oneofinclass="2" oneof="2" label="32-bit" bitdiffs="sf == 0 &amp;&amp; N == 0">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="BFM"/>
+          <docvar key="alias_mnemonic" value="BFC"/>
+          <docvar key="bitfield-fill" value="nofill"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="N">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>BFC  </text><a hover="Is the 32-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="WdOrWZR">&lt;Wd&gt;</a><text>, #</text><a hover="For the 32-bit variant: is the bit number of the lsb of the destination bitfield, in the range 0 to 31." link="lsb">&lt;lsb&gt;</a><text>, #</text><a hover="For the 32-bit variant: is the width of the bitfield, in the range 1 to 32-&amp;lt;lsb&amp;gt;." link="width">&lt;width&gt;</a></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="bfm.xml#BFM_32M_bitfield">BFM</a><text>  </text><a hover="Is the 32-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." href="bfm.xml#WdOrWZR">&lt;Wd&gt;</a><text>, WZR, #(-</text><a hover="For the 32-bit variant: is the bit number of the lsb of the destination bitfield, in the range 0 to 31." href="bfm.xml#lsb">&lt;lsb&gt;</a><text>  MOD  32), #(</text><a hover="For the 32-bit variant: is the width of the bitfield, in the range 1 to 32-&amp;lt;lsb&amp;gt;." href="bfm.xml#width">&lt;width&gt;</a><text>-1)</text></asmtemplate>
+          <aliascond><a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(imms) &lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(immr)</aliascond>
+        </equivalent_to>
+      </encoding>
+      <encoding name="BFC_BFM_64M_bitfield" oneofinclass="2" oneof="2" label="64-bit" bitdiffs="sf == 1 &amp;&amp; N == 1">
+        <docvars>
+          <docvar key="datatype" value="64"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="BFM"/>
+          <docvar key="alias_mnemonic" value="BFC"/>
+          <docvar key="bitfield-fill" value="nofill"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="N">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>BFC  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="XdOrXZR__6">&lt;Xd&gt;</a><text>, #</text><a hover="For the 64-bit variant: is the bit number of the lsb of the destination bitfield, in the range 0 to 63." link="lsb__3">&lt;lsb&gt;</a><text>, #</text><a hover="For the 64-bit variant: is the width of the bitfield, in the range 1 to 64-&amp;lt;lsb&amp;gt;." link="width__2">&lt;width&gt;</a></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="bfm.xml#BFM_64M_bitfield">BFM</a><text>  </text><a hover="For the prologue variant: is the 64-bit name of the general-purpose register that holds the destination address and is updated by the instruction, encoded in the &quot;Rd&quot; field." href="bfm.xml#XdOrXZR">&lt;Xd&gt;</a><text>, XZR, #(-</text><a hover="For the 64-bit variant: is the bit number of the lsb of the destination bitfield, in the range 0 to 63." href="bfm.xml#lsb__3">&lt;lsb&gt;</a><text>  MOD  64), #(</text><a hover="For the 64-bit variant: is the width of the bitfield, in the range 1 to 64-&amp;lt;lsb&amp;gt;." href="bfm.xml#width__2">&lt;width&gt;</a><text>-1)</text></asmtemplate>
+          <aliascond><a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(imms) &lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(immr)</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="BFC_BFM_32M_bitfield" symboldefcount="1">
+      <symbol link="WdOrWZR">&lt;Wd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="BFC_BFM_32M_bitfield" symboldefcount="1">
+      <symbol link="lsb">&lt;lsb&gt;</symbol>
+      <account encodedin="immr">
+        <intro>
+          <para>For the 32-bit variant: is the bit number of the lsb of the destination bitfield, in the range 0 to 31.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="BFC_BFM_64M_bitfield" symboldefcount="2">
+      <symbol link="lsb__3">&lt;lsb&gt;</symbol>
+      <account encodedin="immr">
+        <intro>
+          <para>For the 64-bit variant: is the bit number of the lsb of the destination bitfield, in the range 0 to 63.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="BFC_BFM_32M_bitfield" symboldefcount="1">
+      <symbol link="width">&lt;width&gt;</symbol>
+      <account encodedin="imms:immr">
+        <intro>
+          <para>For the 32-bit variant: is the width of the bitfield, in the range 1 to 32-&lt;lsb&gt;.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="BFC_BFM_64M_bitfield" symboldefcount="2">
+      <symbol link="width__2">&lt;width&gt;</symbol>
+      <account encodedin="imms:immr">
+        <intro>
+          <para>For the 64-bit variant: is the width of the bitfield, in the range 1 to 64-&lt;lsb&gt;.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="BFC_BFM_64M_bitfield" symboldefcount="1">
+      <symbol link="XdOrXZR__6">&lt;Xd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

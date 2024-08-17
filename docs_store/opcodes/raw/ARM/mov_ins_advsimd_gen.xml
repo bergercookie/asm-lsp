@@ -1,0 +1,257 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="MOV_INS_advsimd_gen" title="MOV (from general) -- A64" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="MOV"/>
+    <docvar key="instr-class" value="advsimd"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="INS"/>
+    <docvar key="vector-xfer-type" value="vector-from-general"/>
+  </docvars>
+  <heading>MOV (from general)</heading>
+  <desc>
+    <brief>
+      <para>Move general-purpose register to a vector element</para>
+    </brief>
+    <authored>
+      <para>This instruction copies the contents of
+the source general-purpose register
+to the specified vector element in the destination SIMD&amp;FP register.</para>
+      <para>This instruction can insert data into individual elements within a SIMD&amp;FP
+register without clearing the remaining bits to zero.</para>
+      <para>Depending on the settings in the <register_link id="AArch64-cpacr_el1.xml" state="AArch64">CPACR_EL1</register_link>,
+<register_link id="AArch64-cptr_el2.xml" state="AArch64">CPTR_EL2</register_link>, and <register_link id="AArch64-cptr_el3.xml" state="AArch64">CPTR_EL3</register_link> registers,
+and the current Security state and Exception level,
+an attempt to execute the instruction might be trapped.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <aliasto refiform="ins_advsimd_gen.xml" iformid="INS_advsimd_gen">INS (general)</aliasto>
+  <classes>
+    <iclass name="Advanced SIMD" oneof="1" id="iclass_advanced_simd" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="INS"/>
+        <docvar key="vector-xfer-type" value="vector-from-general"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.simd_dp.asimdins.INS_asimdins_IR_r.MOV" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" name="Q" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="29" name="op" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="8" settings="8">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="imm5" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="14" width="4" name="imm4" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="10" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="MOV_INS_asimdins_IR_r" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="INS"/>
+          <docvar key="alias_mnemonic" value="MOV"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="vector-xfer-type" value="vector-from-general"/>
+        </docvars>
+        <asmtemplate><text>MOV  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.</text><a hover="Is an element size specifier, " link="Ts_option">&lt;Ts&gt;</a><text>[</text><a hover="Is the element index " link="imm5_index">&lt;index&gt;</a><text>], </text><a hover="Is the width specifier for the general-purpose source register, " link="R_option__5">&lt;R&gt;</a><a hover="Is the number [0-30] of the general-purpose source register or ZR (31), encoded in the &quot;Rn&quot; field." link="Rn_option__2">&lt;n&gt;</a></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="ins_advsimd_gen.xml#INS_asimdins_IR_r">INS</a><text>  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." href="ins_advsimd_gen.xml#Vd">&lt;Vd&gt;</a><text>.</text><a hover="Is an element size specifier, " href="ins_advsimd_gen.xml#Ts_option">&lt;Ts&gt;</a><text>[</text><a hover="Is the element index " href="ins_advsimd_gen.xml#imm5_index">&lt;index&gt;</a><text>], </text><a hover="Is the width specifier for the general-purpose source register, " href="ins_advsimd_gen.xml#R_option__4">&lt;R&gt;</a><a hover="Is the number [0-30] of the general-purpose source register or ZR (31), encoded in the &quot;Rn&quot; field." href="ins_advsimd_gen.xml#Rn_option__2">&lt;n&gt;</a></asmtemplate>
+          <aliascond>Unconditionally</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="MOV_INS_asimdins_IR_r" symboldefcount="1">
+      <symbol link="Vd">&lt;Vd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_INS_asimdins_IR_r" symboldefcount="1">
+      <symbol link="Ts_option">&lt;Ts&gt;</symbol>
+      <definition encodedin="imm5">
+        <intro>Is an element size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">imm5</entry>
+                <entry class="symbol">&lt;Ts&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">x0000</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxxx1</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxx10</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xx100</entry>
+                <entry class="symbol">S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">x1000</entry>
+                <entry class="symbol">D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="MOV_INS_asimdins_IR_r" symboldefcount="1">
+      <symbol link="imm5_index">&lt;index&gt;</symbol>
+      <definition encodedin="imm5">
+        <intro>Is the element index </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">imm5</entry>
+                <entry class="symbol">&lt;index&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">x0000</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxxx1</entry>
+                <entry class="symbol">UInt(imm5&lt;4:1&gt;)</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxx10</entry>
+                <entry class="symbol">UInt(imm5&lt;4:2&gt;)</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xx100</entry>
+                <entry class="symbol">UInt(imm5&lt;4:3&gt;)</entry>
+              </row>
+              <row>
+                <entry class="bitfield">x1000</entry>
+                <entry class="symbol">UInt(imm5&lt;4&gt;)</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="MOV_INS_asimdins_IR_r" symboldefcount="1">
+      <symbol link="R_option__5">&lt;R&gt;</symbol>
+      <definition encodedin="imm5">
+        <intro>Is the width specifier for the general-purpose source register, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">imm5</entry>
+                <entry class="symbol">&lt;R&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">x0000</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxxx1</entry>
+                <entry class="symbol">W</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxx10</entry>
+                <entry class="symbol">W</entry>
+              </row>
+              <row>
+                <entry class="bitfield">xx100</entry>
+                <entry class="symbol">W</entry>
+              </row>
+              <row>
+                <entry class="bitfield">x1000</entry>
+                <entry class="symbol">X</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="MOV_INS_asimdins_IR_r" symboldefcount="1">
+      <symbol link="Rn_option__2">&lt;n&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the number [0-30] of the general-purpose source register or ZR (31), encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

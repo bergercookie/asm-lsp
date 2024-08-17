@@ -1,0 +1,160 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="SYSP" title="SYSP -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="SYSP"/>
+  </docvars>
+  <heading>SYSP</heading>
+  <desc>
+    <brief>
+      <para>128-bit system instruction</para>
+    </brief>
+    <authored>
+      <para>128-bit system instruction.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="1">
+    <alias_list_intro>This instruction is used by the alias </alias_list_intro>
+    <aliasref aliaspageid="TLBIP_SYSP" aliasfile="tlbip_sysp.xml" hover="TLB invalidate pair operation" punct=".">
+      <text>TLBIP</text>
+      <aliaspref>CRn IN {'100x'} &amp;&amp; <a link="impl-aarch64.SysOp.4" file="shared_pseudocode.xml" hover="function: SystemOp SysOp(bits(3) op1, bits(4) CRn, bits(4) CRm, bits(3) op2)">SysOp</a>(op1, CRn, CRm, op2) == <a link="Sys_TLBIP" file="shared_pseudocode.xml" hover="enumeration SystemOp128 {Sys_TLBIP, Sys_SYSP}">Sys_TLBIP</a>
+      </aliaspref>
+    </aliasref>
+    <alias_list_outro>
+      <text>  See </text>
+      <aliastablelink/>
+      <text> below for details of when the alias is preferred.</text>
+    </alias_list_outro>
+  </alias_list>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="SYSP"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_SYSINSTR128" name="ARMv9.4"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.control.syspairinstrs.SYSP_CR_syspairinstrs" tworows="1">
+        <box hibit="31" width="10" settings="10">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="21" name="L" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="2" settings="2">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="18" width="3" name="op1" usename="1">
+          <c colspan="3"/>
+        </box>
+        <box hibit="15" width="4" name="CRn" usename="1">
+          <c colspan="4"/>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1">
+          <c colspan="4"/>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1">
+          <c colspan="3"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="SYSP_CR_syspairinstrs" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SYSP"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>SYSP  #</text><a hover="Is a 3-bit unsigned immediate, in the range 0 to 6, encoded in the &quot;op1&quot; field." link="op1__2">&lt;op1&gt;</a><text>, </text><a hover="Is a name 'Cn', with 'n' in the range 8 to 9, encoded in the &quot;CRn&quot; field." link="Cn__2">&lt;Cn&gt;</a><text>, </text><a hover="Is a name 'Cm', with 'm' in the range 0 to 7, encoded in the &quot;CRm&quot; field." link="Cm__2">&lt;Cm&gt;</a><text>, #</text><a hover="Is a 3-bit unsigned immediate, in the range 0 to 7, encoded in the &quot;op2&quot; field." link="op2">&lt;op2&gt;</a><text>{, </text><a hover="Is the 64-bit name of the first optional general-purpose source register, defaulting to '11111', encoded in the &quot;Rt&quot; field." link="Xt1_register">&lt;Xt1&gt;</a><text>, </text><a hover="Is the 64-bit name of the second optional general-purpose source register, defaulting to '11111', encoded as &quot;Rt&quot; +1. Defaults to '11111' if &quot;Rt&quot; = '11111'." link="Xt2">&lt;Xt2&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.syspairinstrs.SYSP_CR_syspairinstrs" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SYSINSTR128) then UNDEFINED;
+if Rt&lt;0&gt; == '1' &amp;&amp; Rt != '11111' then UNDEFINED;
+<a link="AArch64.CheckSystemAccess.7" file="shared_pseudocode.xml" hover="function: AArch64.CheckSystemAccess(bits(2) op0, bits(3) op1, bits(4) crn, bits(4) crm, bits(3) op2, bits(5) rt, bit read)">AArch64.CheckSystemAccess</a>('01', op1, CRn, CRm, op2, Rt, L);
+
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer t2 = if t == 31 then 31 else t + 1;
+
+constant integer sys_op0 = 1;
+constant integer sys_op1 = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(op1);
+constant integer sys_op2 = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(op2);
+constant integer sys_crn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(CRn);
+constant integer sys_crm = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(CRm);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="SYSP_CR_syspairinstrs" symboldefcount="1">
+      <symbol link="op1__2">&lt;op1&gt;</symbol>
+      <account encodedin="op1">
+        <intro>
+          <para>Is a 3-bit unsigned immediate, in the range 0 to 6, encoded in the "op1" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SYSP_CR_syspairinstrs" symboldefcount="1">
+      <symbol link="Cn__2">&lt;Cn&gt;</symbol>
+      <account encodedin="CRn">
+        <intro>
+          <para>Is a name 'Cn', with 'n' in the range 8 to 9, encoded in the "CRn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SYSP_CR_syspairinstrs" symboldefcount="1">
+      <symbol link="Cm__2">&lt;Cm&gt;</symbol>
+      <account encodedin="CRm">
+        <intro>
+          <para>Is a name 'Cm', with 'm' in the range 0 to 7, encoded in the "CRm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SYSP_CR_syspairinstrs" symboldefcount="1">
+      <symbol link="op2">&lt;op2&gt;</symbol>
+      <account encodedin="op2">
+        <intro>
+          <para>Is a 3-bit unsigned immediate, in the range 0 to 7, encoded in the "op2" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SYSP_CR_syspairinstrs" symboldefcount="1">
+      <symbol link="Xt1_register">&lt;Xt1&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the first optional general-purpose source register, defaulting to '11111', encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SYSP_CR_syspairinstrs" symboldefcount="1">
+      <symbol link="Xt2">&lt;Xt2&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the second optional general-purpose source register, defaulting to '11111', encoded as "Rt" +1. Defaults to '11111' if "Rt" = '11111'.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <aliastablehook anchor="aliasconditions">Alias Conditions</aliastablehook>
+  <ps_section howmany="1">
+    <ps name="A64.control.syspairinstrs.SYSP_CR_syspairinstrs" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="AArch64.SysInstr128.7" file="shared_pseudocode.xml" hover="function: AArch64.SysInstr128(integer op0, integer op1, integer crn, integer crm, integer op2, integer t, integer t2)">AArch64.SysInstr128</a>(sys_op0, sys_op1, sys_crn, sys_crm, sys_op2, t, t2);</pstext></ps>
+  </ps_section>
+</instructionsection>

@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="sunpk_mz_z" title="SUNPK" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="SUNPK" />
+  </docvars>
+  <heading>SUNPK</heading>
+  <desc>
+    <brief>Unpack and sign-extend multi-vector elements</brief>
+    <description>
+      <para>Unpack elements from one or two source vectors and then sign-extend them to place in elements of twice their size within the two or four destination vectors.</para>
+      <para>This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <sm_policy>SM_1_only</sm_policy>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <classesintro count="2">
+      <txt>It has encodings from 2 classes:</txt>
+      <a href="#iclass_to_2reg">Two registers</a>
+      <txt> and </txt>
+      <a href="#iclass_to_4reg">Four registers</a>
+    </classesintro>
+    <iclass name="Two registers" oneof="2" id="iclass_to_2reg" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="ldstruct-regcount" value="to-2reg" />
+        <docvar key="mnemonic" value="SUNPK" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="SUNPK-MZ.Z-2" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" width="12" settings="12">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="4" name="Zd" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="0" name="U" usename="1" settings="1">
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="sunpk_mz_z_2" oneofinclass="1" oneof="2" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="ldstruct-regcount" value="to-2reg" />
+          <docvar key="mnemonic" value="SUNPK" />
+        </docvars>
+        <asmtemplate><text>SUNPK   </text><text>{</text><text> </text><a link="sa_zd1" hover="First scalable vector register of destination multi-vector group (field Zd)">&lt;Zd1&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a><text>-</text><a link="sa_zd2" hover="Second scalable vector register of destination multi-vector group (field Zd)">&lt;Zd2&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a><text> </text><text>}</text><text>, </text><a link="sa_zn" hover="Source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>.</text><a link="sa_tb" hover="Size specifier (field &quot;size&quot;) [B,H,S]">&lt;Tb&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="SUNPK-MZ.Z-2" mylink="SUNPK-MZ.Z-2" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+if size == '00' then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd:'0');
+constant integer nreg = 2;
+constant boolean unsigned = FALSE;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Four registers" oneof="2" id="iclass_to_4reg" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="ldstruct-regcount" value="to-4reg" />
+        <docvar key="mnemonic" value="SUNPK" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="SUNPK-MZ.Z-4" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" width="12" settings="12">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="4" name="Zn" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="5" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="4" width="3" name="Zd" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="0" name="U" usename="1" settings="1">
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="sunpk_mz_z_4" oneofinclass="1" oneof="2" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="ldstruct-regcount" value="to-4reg" />
+          <docvar key="mnemonic" value="SUNPK" />
+        </docvars>
+        <asmtemplate><text>SUNPK   </text><text>{</text><text> </text><a link="sa_zd1_1" hover="First scalable vector register of destination multi-vector group (field Zd)">&lt;Zd1&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a><text>-</text><a link="sa_zd4" hover="Fourth scalable vector register of destination multi-vector group (field Zd)">&lt;Zd4&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [D,H,S]">&lt;T&gt;</a><text> </text><text>}</text><text>, </text><text>{</text><text> </text><a link="sa_zn1" hover="First scalable vector register of source multi-vector group (field Zn)">&lt;Zn1&gt;</a><text>.</text><a link="sa_tb" hover="Size specifier (field &quot;size&quot;) [B,H,S]">&lt;Tb&gt;</a><text>-</text><a link="sa_zn2" hover="Second scalable vector register of source multi-vector group (field Zn)">&lt;Zn2&gt;</a><text>.</text><a link="sa_tb" hover="Size specifier (field &quot;size&quot;) [B,H,S]">&lt;Tb&gt;</a><text> </text><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="SUNPK-MZ.Z-4" mylink="SUNPK-MZ.Z-4" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+if size == '00' then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn:'0');
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd:'00');
+constant integer nreg = 4;
+constant boolean unsigned = FALSE;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="sunpk_mz_z_2" symboldefcount="1">
+      <symbol link="sa_zd1">&lt;Zd1&gt;</symbol>
+      <account encodedin="Zd">
+        <docvars>
+          <docvar key="ldstruct-regcount" value="to-2reg" />
+        </docvars>
+        <intro>
+          <para>For the two registers variant: is the name of the first scalable vector register of the destination multi-vector group, encoded as "Zd" times 2.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="sunpk_mz_z_4" symboldefcount="2">
+      <symbol link="sa_zd1_1">&lt;Zd1&gt;</symbol>
+      <account encodedin="Zd">
+        <docvars>
+          <docvar key="ldstruct-regcount" value="to-4reg" />
+        </docvars>
+        <intro>
+          <para>For the four registers variant: is the name of the first scalable vector register of the destination multi-vector group, encoded as "Zd" times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="sunpk_mz_z_2, sunpk_mz_z_4" symboldefcount="1">
+      <symbol link="sa_t">&lt;T&gt;</symbol>
+      <definition encodedin="size">
+        <intro>Is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">size</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10</entry>
+                <entry class="symbol">S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11</entry>
+                <entry class="symbol">D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="sunpk_mz_z_4" symboldefcount="1">
+      <symbol link="sa_zd4">&lt;Zd4&gt;</symbol>
+      <account encodedin="Zd">
+        <intro>
+          <para>Is the name of the fourth scalable vector register of the destination multi-vector group, encoded as "Zd" times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="sunpk_mz_z_4" symboldefcount="1">
+      <symbol link="sa_zn1">&lt;Zn1&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the first scalable vector register of the source multi-vector group, encoded as "Zn" times 2.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="sunpk_mz_z_2" symboldefcount="1">
+      <symbol link="sa_zd2">&lt;Zd2&gt;</symbol>
+      <account encodedin="Zd">
+        <intro>
+          <para>Is the name of the second scalable vector register of the destination multi-vector group, encoded as "Zd" times 2 plus 1.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="sunpk_mz_z_2" symboldefcount="1">
+      <symbol link="sa_zn">&lt;Zn&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the source scalable vector register, encoded in the "Zn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="sunpk_mz_z_2, sunpk_mz_z_4" symboldefcount="1">
+      <symbol link="sa_tb">&lt;Tb&gt;</symbol>
+      <definition encodedin="size">
+        <intro>Is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">size</entry>
+                <entry class="symbol">&lt;Tb&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11</entry>
+                <entry class="symbol">S</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="sunpk_mz_z_4" symboldefcount="1">
+      <symbol link="sa_zn2">&lt;Zn2&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the second scalable vector register of the source multi-vector group, encoded as "Zn" times 2 plus 1.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="SUNPK-MZ.Z-2" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckStreamingSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckStreamingSVEEnabled()">CheckStreamingSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer elements = VL DIV esize;
+constant integer hsize = esize DIV 2;
+constant integer sreg = nreg DIV 2;
+array [0..3] of bits(VL) results;
+
+for r = 0 to sreg-1
+    constant bits(VL) operand = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[n+r, VL];
+    for i = 0 to 1
+        for e = 0 to elements-1
+            constant bits(hsize) element = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand, i*elements + e, hsize];
+            <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[results[2*r+i], e, esize] = <a link="impl-shared.Extend.3" file="shared_pseudocode.xml" hover="function: bits(N) Extend(bits(M) x, integer N, boolean unsigned)">Extend</a>(element, esize, unsigned);
+
+for r = 0 to nreg-1
+    <a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[d+r, VL] = results[r];</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

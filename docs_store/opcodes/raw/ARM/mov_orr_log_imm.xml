@@ -1,0 +1,175 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="MOV_ORR_log_imm" title="MOV (bitmask immediate) -- A64" type="alias">
+  <docvars>
+    <docvar key="alias_mnemonic" value="MOV"/>
+    <docvar key="cond-setting" value="no-s"/>
+    <docvar key="immediate-type" value="imm12-bitfield"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="ORR"/>
+  </docvars>
+  <heading>MOV (bitmask immediate)</heading>
+  <desc>
+    <brief>
+      <para>Move (bitmask immediate)</para>
+    </brief>
+    <authored>
+      <para>This instruction writes a bitmask immediate
+value to a register.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <aliasto refiform="orr_log_imm.xml" iformid="ORR_log_imm">ORR (immediate)</aliasto>
+  <classes>
+    <iclass name="Not setting the condition flags" oneof="1" id="iclass_not_setting_the_condition_flags" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="cond-setting" value="no-s"/>
+        <docvar key="immediate-type" value="imm12-bitfield"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="ORR"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <regdiagram form="32" psname="A64.dpimm.log_imm.ORR_32_log_imm.MOV" tworows="1">
+        <box hibit="31" width="1" name="sf" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="30" width="2" name="opc" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="28" width="6" settings="6">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="N" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="21" width="6" name="immr" usename="1">
+          <c colspan="6"/>
+        </box>
+        <box hibit="15" width="6" name="imms" usename="1">
+          <c colspan="6"/>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="MOV_ORR_32_log_imm" oneofinclass="2" oneof="2" label="32-bit" bitdiffs="sf == 0 &amp;&amp; N == 0">
+        <docvars>
+          <docvar key="datatype" value="32"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="ORR"/>
+          <docvar key="alias_mnemonic" value="MOV"/>
+          <docvar key="cond-setting" value="no-s"/>
+          <docvar key="immediate-type" value="imm12-bitfield"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>0</c>
+        </box>
+        <box hibit="22" width="1" name="N">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>MOV  </text><a hover="Is the 32-bit name of the destination general-purpose register or stack pointer, encoded in the &quot;Rd&quot; field." link="WdWSP_option">&lt;Wd|WSP&gt;</a><text>, #</text><a hover="For the 32-bit variant: is the bitmask immediate, encoded in &quot;imms:immr&quot;, but excluding values which could be encoded by MOVZ or MOVN." link="immr_imms__2">&lt;imm&gt;</a></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="orr_log_imm.xml#ORR_32_log_imm">ORR</a><text>  </text><a hover="Is the 32-bit name of the destination general-purpose register or stack pointer, encoded in the &quot;Rd&quot; field." href="orr_log_imm.xml#WdWSP_option">&lt;Wd|WSP&gt;</a><text>, WZR, #</text><a hover="For the 32-bit variant: is the bitmask immediate, encoded in &quot;imms:immr&quot;." href="orr_log_imm.xml#immr_imms">&lt;imm&gt;</a></asmtemplate>
+          <aliascond>!<a link="impl-aarch64.MoveWidePreferred.4" file="shared_pseudocode.xml" hover="function: boolean MoveWidePreferred(bit sf, bit immN, bits(6) imms, bits(6) immr)">MoveWidePreferred</a>(sf, N, imms, immr)</aliascond>
+        </equivalent_to>
+      </encoding>
+      <encoding name="MOV_ORR_64_log_imm" oneofinclass="2" oneof="2" label="64-bit" bitdiffs="sf == 1">
+        <docvars>
+          <docvar key="datatype" value="64"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="ORR"/>
+          <docvar key="alias_mnemonic" value="MOV"/>
+          <docvar key="cond-setting" value="no-s"/>
+          <docvar key="immediate-type" value="imm12-bitfield"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="31" width="1" name="sf">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>MOV  </text><a hover="Is the 64-bit name of the destination general-purpose register or stack pointer, encoded in the &quot;Rd&quot; field." link="XdSP_option">&lt;Xd|SP&gt;</a><text>, #</text><a hover="For the 64-bit variant: is the bitmask immediate, encoded in &quot;N:imms:immr&quot;, but excluding values which could be encoded by MOVZ or MOVN." link="N_immr_imms__2">&lt;imm&gt;</a></asmtemplate>
+        <equivalent_to>
+          <asmtemplate><a href="orr_log_imm.xml#ORR_64_log_imm">ORR</a><text>  </text><a hover="Is the 64-bit name of the destination general-purpose register or stack pointer, encoded in the &quot;Rd&quot; field." href="orr_log_imm.xml#XdSP_option">&lt;Xd|SP&gt;</a><text>, XZR, #</text><a hover="For the 64-bit variant: is the bitmask immediate, encoded in &quot;N:imms:immr&quot;." href="orr_log_imm.xml#N_immr_imms">&lt;imm&gt;</a></asmtemplate>
+          <aliascond>!<a link="impl-aarch64.MoveWidePreferred.4" file="shared_pseudocode.xml" hover="function: boolean MoveWidePreferred(bit sf, bit immN, bits(6) imms, bits(6) immr)">MoveWidePreferred</a>(sf, N, imms, immr)</aliascond>
+        </equivalent_to>
+      </encoding>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="MOV_ORR_32_log_imm" symboldefcount="1">
+      <symbol link="WdWSP_option">&lt;Wd|WSP&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 32-bit name of the destination general-purpose register or stack pointer, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_ORR_32_log_imm" symboldefcount="1">
+      <symbol link="immr_imms__2">&lt;imm&gt;</symbol>
+      <account encodedin="immr:imms">
+        <intro>
+          <para>For the 32-bit variant: is the bitmask immediate, encoded in "imms:immr", but excluding values which could be encoded by MOVZ or MOVN.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_ORR_64_log_imm" symboldefcount="2">
+      <symbol link="N_immr_imms__2">&lt;imm&gt;</symbol>
+      <account encodedin="N:immr:imms">
+        <intro>
+          <para>For the 64-bit variant: is the bitmask immediate, encoded in "N:imms:immr", but excluding values which could be encoded by MOVZ or MOVN.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="MOV_ORR_64_log_imm" symboldefcount="1">
+      <symbol link="XdSP_option">&lt;Xd|SP&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the destination general-purpose register or stack pointer, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+</instructionsection>

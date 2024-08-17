@@ -1,0 +1,102 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="SMC" title="SMC -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="SMC"/>
+  </docvars>
+  <heading>SMC</heading>
+  <desc>
+    <brief>
+      <para>Secure monitor call</para>
+    </brief>
+    <authored>
+      <para>This instruction causes an exception to EL3.</para>
+      <para><instruction>SMC</instruction> is available only for software executing at EL1 or
+higher. It is <arm-defined-word>UNDEFINED</arm-defined-word> in EL0.</para>
+      <para>If the values of <register_link id="AArch64-hcr_el2.xml" state="AArch64">HCR_EL2</register_link>.TSC and
+<register_link id="AArch64-scr_el3.xml" state="AArch64">SCR_EL3</register_link>.SMD are both 0, execution of an
+<instruction>SMC</instruction> instruction at EL1 or higher generates a Secure Monitor
+Call exception, recording it in
+<xref linkend="ARMARM_ESR_ELx">ESR_ELx</xref>, using the EC value
+<hexnumber>0x17</hexnumber>, that is taken to EL3.</para>
+      <para>If the value of <register_link id="AArch64-hcr_el2.xml" state="AArch64">HCR_EL2</register_link>.TSC is 1 and EL2 is enabled in the current Security state, execution
+of an <instruction>SMC</instruction> instruction at EL1 generates an
+exception that is taken to EL2, regardless of the value of
+<register_link id="AArch64-scr_el3.xml" state="AArch64">SCR_EL3</register_link>.SMD.</para>
+      <para>If the value of <register_link id="AArch64-hcr_el2.xml" state="AArch64">HCR_EL2</register_link>.TSC is 0 and the
+value of <register_link id="AArch64-scr_el3.xml" state="AArch64">SCR_EL3</register_link>.SMD is 1, the SMC instruction
+is <arm-defined-word>UNDEFINED</arm-defined-word>.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="SMC"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.control.exception.SMC_EX_exception" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="3" name="opc" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="16" name="imm16" usename="1">
+          <c colspan="16"/>
+        </box>
+        <box hibit="4" width="3" name="op2" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="1" width="2" name="LL" usename="1" settings="2" psbits="xx">
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="SMC_EX_exception" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SMC"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>SMC  #</text><a hover="Is a 16-bit unsigned immediate, in the range 0 to 65535, encoded in the &quot;imm16&quot; field." link="imm">&lt;imm&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.exception.SMC_EX_exception" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant bits(16) imm = imm16;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="SMC_EX_exception" symboldefcount="1">
+      <symbol link="imm">&lt;imm&gt;</symbol>
+      <account encodedin="imm16">
+        <intro>
+          <para>Is a 16-bit unsigned immediate, in the range 0 to 65535, encoded in the "imm16" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.control.exception.SMC_EX_exception" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="AArch64.CheckForSMCUndefOrTrap.1" file="shared_pseudocode.xml" hover="function: AArch64.CheckForSMCUndefOrTrap(bits(16) imm)">AArch64.CheckForSMCUndefOrTrap</a>(imm);
+<a link="AArch64.CallSecureMonitor.1" file="shared_pseudocode.xml" hover="function: AArch64.CallSecureMonitor(bits(16) immediate)">AArch64.CallSecureMonitor</a>(imm);</pstext></ps>
+  </ps_section>
+</instructionsection>

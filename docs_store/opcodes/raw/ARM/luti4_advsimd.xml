@@ -1,0 +1,231 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="LUTI4_advsimd" title="LUTI4 -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="advsimd"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="LUTI4"/>
+  </docvars>
+  <heading>LUTI4</heading>
+  <desc>
+    <brief>
+      <para>Lookup table read with 4-bit indices</para>
+    </brief>
+    <authored>
+      <para>This instruction copies indexed 8-bit or 16-bit elements from the one or two
+table vectors to the destination vector using packed 4-bit indices from
+a segment of the source vector. A segment corresponds to a portion
+of the source vector that is consumed in order to fill the destination
+vector. The segment is selected by the vector segment index.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Advanced SIMD" oneof="1" id="iclass_advanced_simd" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="LUTI4"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_LUT" name="ARMv9.5"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.simd_dp.asimdtbl.LUTI4_asimdtbl_L5" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" name="Q" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="29" width="6" settings="6">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="op2" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="Rm" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="14" width="2" name="len" usename="1">
+          <c colspan="2"/>
+        </box>
+        <box hibit="12" width="1" name="op" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="LUTI4_asimdtbl_L5" oneofinclass="2" oneof="2" label="Byte" bitdiffs="len == x1 &amp;&amp; op == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LUTI4"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="simd-luti" value="simd-byte"/>
+        </docvars>
+        <box hibit="14" width="2" name="len">
+          <c/>
+          <c>1</c>
+        </box>
+        <box hibit="12" width="1" name="op">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>LUTI4  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.16B, { </text><a hover="Is the name of the SIMD&amp;amp;FP table register, encoded in the &quot;Rn&quot; field." link="Vn__5">&lt;Vn&gt;</a><text>.16B }, </text><a hover="Is the name of the SIMD&amp;amp;FP source register, encoded in the &quot;Rm&quot; field." link="Vm__4">&lt;Vm&gt;</a><text>[</text><a hover="For the byte variant: is the vector segment index, in the range 0 to 1, encoded in the &quot;len&amp;lt;1&amp;gt;&quot; field." link="index__10">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <encoding name="LUTI4_asimdtbl_L7" oneofinclass="2" oneof="2" label="Halfword" bitdiffs="op == 1">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="LUTI4"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="simd-luti" value="simd-hword"/>
+        </docvars>
+        <box hibit="12" width="1" name="op">
+          <c>1</c>
+        </box>
+        <asmtemplate><text>LUTI4  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.8H, { </text><a hover="Is the name of the first SIMD&amp;amp;FP table register, encoded in the &quot;Rn&quot; field." link="Vn1">&lt;Vn1&gt;</a><text>.8H, </text><a hover="Is the name of the second SIMD&amp;amp;FP table register, encoded as &quot;Rn&quot; plus 1 modulo 32." link="Vn2">&lt;Vn2&gt;</a><text>.8H }, </text><a hover="Is the name of the SIMD&amp;amp;FP source register, encoded in the &quot;Rm&quot; field." link="Vm__4">&lt;Vm&gt;</a><text>[</text><a hover="For the halfword variant: is the vector segment index, in the range 0 to 3, encoded in the &quot;len&quot; field." link="index__9">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.asimdtbl.LUTI4_asimdtbl_L5" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_LUT) then UNDEFINED;
+if len&lt;0&gt; == '0' &amp;&amp; op == '0' then UNDEFINED;
+
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rm);
+constant integer isize = 4;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(op);
+constant integer ntblr = 1 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(op);
+constant integer part = if op == '0' then <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(len&lt;1&gt;) else <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(len);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="LUTI4_asimdtbl_L5, LUTI4_asimdtbl_L7" symboldefcount="1">
+      <symbol link="Vd">&lt;Vd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LUTI4_asimdtbl_L5" symboldefcount="1">
+      <symbol link="Vn__5">&lt;Vn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP table register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LUTI4_asimdtbl_L5, LUTI4_asimdtbl_L7" symboldefcount="1">
+      <symbol link="Vm__4">&lt;Vm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP source register, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LUTI4_asimdtbl_L5" symboldefcount="1">
+      <symbol link="index__10">&lt;index&gt;</symbol>
+      <account encodedin="len">
+        <intro>
+          <para>For the byte variant: is the vector segment index, in the range 0 to 1, encoded in the "len&lt;1&gt;" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LUTI4_asimdtbl_L7" symboldefcount="2">
+      <symbol link="index__9">&lt;index&gt;</symbol>
+      <account encodedin="len">
+        <intro>
+          <para>For the halfword variant: is the vector segment index, in the range 0 to 3, encoded in the "len" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LUTI4_asimdtbl_L7" symboldefcount="1">
+      <symbol link="Vn1">&lt;Vn1&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the name of the first SIMD&amp;FP table register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LUTI4_asimdtbl_L7" symboldefcount="1">
+      <symbol link="Vn2">&lt;Vn2&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the name of the second SIMD&amp;FP table register, encoded as "Rn" plus 1 modulo 32.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.simd_dp.asimdtbl.LUTI4_asimdtbl_L5" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckFPAdvSIMDEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPAdvSIMDEnabled64()">CheckFPAdvSIMDEnabled64</a>();
+constant integer elements = 128 DIV esize;
+constant integer ibase = elements * part;
+constant bits(128) indices = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[m, 128];
+constant bits(128) table1  = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[n+0, 128];
+constant bits(128) table2  = if ntblr == 2 then <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[(n+1) MOD 32, 128] else <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(128);
+bits(128) result;
+bits(esize) res;
+
+for e = 0 to elements-1
+    constant integer index = UInt(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[indices, ibase + e, isize]);
+    if index &lt; elements then
+        res = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[table1, index, esize];
+    else
+        assert ntblr == 2;
+        res = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[table2, index - elements, esize];
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, esize] = res;
+
+<a link="impl-aarch64.V.write.2" file="shared_pseudocode.xml" hover="accessor: V[integer n, ESize width] = bits(width) value">V</a>[d, 128] = result;</pstext></ps>
+  </ps_section>
+</instructionsection>

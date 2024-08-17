@@ -1,0 +1,113 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="WFET" title="WFET -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="WFET"/>
+  </docvars>
+  <heading>WFET</heading>
+  <desc>
+    <brief>
+      <para>Wait for event with timeout</para>
+    </brief>
+    <authored>
+      <para>This instruction is a hint instruction that indicates that the PE
+can enter a low-power state and remain there until either a local timeout event
+or a wakeup event occurs. Wakeup events include the event signaled as a result
+of executing the <instruction>SEV</instruction> instruction on any PE in the multiprocessor system.
+For more information, see <xref linkend="ARMARM_BEIJHBBD">Wait For Event
+mechanism and Send event</xref>.</para>
+      <para>As described in <xref linkend="ARMARM_BEIJHBBD">Wait For Event mechanism and Send event</xref>, the
+execution of a <instruction>WFET</instruction> instruction that would otherwise cause entry to a low-power
+state can be trapped to a higher Exception level.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="WFET"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_WFxT" name="ARMv8.7"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.control.systeminstrswithreg.WFET_only_systeminstrswithreg" tworows="1">
+        <box hibit="31" width="20" settings="20">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="WFET_only_systeminstrswithreg" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="WFET"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>WFET  </text><a hover="Is the 64-bit name of the general-purpose source register, encoded in the &quot;Rd&quot; field." link="XtOrXZR__5">&lt;Xt&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.systeminstrswithreg.WFET_only_systeminstrswithreg" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_WFxT) then UNDEFINED;
+
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="WFET_only_systeminstrswithreg" symboldefcount="1">
+      <symbol link="XtOrXZR__5">&lt;Xt&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose source register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.control.systeminstrswithreg.WFET_only_systeminstrswithreg" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant integer localtimeout = UInt(<a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[d, 64]);
+
+if <a link="impl-shared.Halted.0" file="shared_pseudocode.xml" hover="function: boolean Halted()">Halted</a>() &amp;&amp; <a link="impl-shared.ConstrainUnpredictableBool.1" file="shared_pseudocode.xml" hover="function: boolean ConstrainUnpredictableBool(Unpredictable which)">ConstrainUnpredictableBool</a>(<a link="Unpredictable_WFxTDEBUG" file="shared_pseudocode.xml" hover="enumeration Unpredictable {  Unpredictable_VMSR,  Unpredictable_WBOVERLAPLD,  Unpredictable_WBOVERLAPST,  Unpredictable_LDPOVERLAP,  Unpredictable_BASEOVERLAP,  Unpredictable_DATAOVERLAP,  Unpredictable_DEVPAGE2,  Unpredictable_INSTRDEVICE,  Unpredictable_RESCPACR,  Unpredictable_RESMAIR,  Unpredictable_S1CTAGGED,  Unpredictable_S2RESMEMATTR,  Unpredictable_RESTEXCB,  Unpredictable_RESPRRR,  Unpredictable_RESDACR,  Unpredictable_RESVTCRS,  Unpredictable_RESTnSZ,  Unpredictable_RESTCF,  Unpredictable_DEVICETAGSTORE,  Unpredictable_OORTnSZ,   Unpredictable_LARGEIPA,  Unpredictable_ESRCONDPASS,  Unpredictable_ILZEROIT,  Unpredictable_ILZEROT,  Unpredictable_BPVECTORCATCHPRI,  Unpredictable_VCMATCHHALF,   Unpredictable_VCMATCHDAPA,  Unpredictable_WPMASKANDBAS,  Unpredictable_WPBASCONTIGUOUS,  Unpredictable_RESWPMASK,  Unpredictable_WPMASKEDBITS,  Unpredictable_RESBPWPCTRL,  Unpredictable_BPNOTIMPL,  Unpredictable_RESBPTYPE,  Unpredictable_RESMDSELR,  Unpredictable_BPNOTCTXCMP,  Unpredictable_BPMATCHHALF,  Unpredictable_BPMISMATCHHALF,   Unpredictable_BPLINKINGDISABLED,  Unpredictable_RESBPMASK,   Unpredictable_BPMASK,  Unpredictable_BPMASKEDBITS,   Unpredictable_BPLINKEDADDRMATCH,  Unpredictable_RESTARTALIGNPC,  Unpredictable_RESTARTZEROUPPERPC,  Unpredictable_ZEROUPPER,   Unpredictable_ERETZEROUPPERPC,   Unpredictable_A32FORCEALIGNPC,  Unpredictable_SMD,  Unpredictable_NONFAULT,  Unpredictable_SVEZEROUPPER,  Unpredictable_SVELDNFDATA,  Unpredictable_SVELDNFZERO,  Unpredictable_CHECKSPNONEACTIVE,  Unpredictable_SMEZEROUPPER,   Unpredictable_16BYTEROUNDEDUPACCESS,   Unpredictable_16BYTEROUNDEDDOWNACCESS,  Unpredictable_NVNV1,  Unpredictable_Shareability,  Unpredictable_AFUPDATE,  Unpredictable_DBUPDATE,  Unpredictable_IESBinDebug,  Unpredictable_BADPMSFCR,  Unpredictable_ZEROBTYPE,  Unpredictable_EL2TIMESTAMP, Unpredictable_EL1TIMESTAMP,  Unpredictable_RESERVEDNSxB,  Unpredictable_WFxTDEBUG,  Unpredictable_LS64UNSUPPORTED,    Unpredictable_MISALIGNEDATOMIC,  Unpredictable_LSE128OVERLAP,  Unpredictable_CLEARERRITEZERO,   Unpredictable_ALUEXCEPTIONRETURN,  Unpredictable_IGNORETRAPINDEBUG,  Unpredictable_DBGxVR_RESS,  Unpredictable_PMUEVENTCOUNTER,  Unpredictable_PMSCR_PCT,   Unpredictable_RES_HPMN,  Unpredictable_BRBFILTRATE,  Unpredictable_PMUSNAPSHOTEVENT,  Unpredictable_RESEPMSSAD,  Unpredictable_RESPMSSE,  Unpredictable_RESPMEE,  Unpredictable_MOPSOVERLAP,   Unpredictable_MOPS_R31,  Unpredictable_STOREONLYTAGCHECKEDCAS,  Unpredictable_RES_ETBAD,  Unpredictable_RES_PMU_VS,   Unpredictable_CPACHECK,  Unpredictable_RESTC,    Unpredictable_NODTRTAGCHK,    Unpredictable_Atomic_SYNC_ABORT, Unpredictable_Atomic_SERROR, Unpredictable_Atomic_MMU_IMPDEF_FAULT, Unpredictable_Atomic_NOP,  Unpredictable_MRC_APSR_TARGET }">Unpredictable_WFxTDEBUG</a>) then
+    <a link="impl-shared.ExecuteAsNOP.0" file="shared_pseudocode.xml" hover="function: ExecuteAsNOP()">ExecuteAsNOP</a>();
+
+<a link="impl-shared.Hint_WFE.2" file="shared_pseudocode.xml" hover="function: Hint_WFE(integer localtimeout, WFxType wfxtype)">Hint_WFE</a>(localtimeout, <a link="WFxType_WFET" file="shared_pseudocode.xml" hover="enumeration WFxType {WFxType_WFE, WFxType_WFI, WFxType_WFET, WFxType_WFIT}">WFxType_WFET</a>);</pstext></ps>
+  </ps_section>
+</instructionsection>

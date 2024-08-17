@@ -1,0 +1,103 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="ESB" title="ESB -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="ESB"/>
+  </docvars>
+  <heading>ESB</heading>
+  <desc>
+    <brief>
+      <para>Error synchronization barrier</para>
+    </brief>
+    <authored>
+      <para>This instruction is an error synchronization event that might also update <register_link id="AArch64-disr_el1.xml" state="AArch64">DISR_EL1</register_link> and <register_link id="AArch64-vdisr_el2.xml" state="AArch64">VDISR_EL2</register_link>.</para>
+      <para>This instruction can be used at all Exception levels and in Debug state.</para>
+      <para>In Debug state, this instruction behaves as if SError interrupts are masked at all Exception levels.
+For more information, see <xref linkend="ARMARM_RAS_pe_architecture">RAS PE architecture</xref>
+and <xref linkend="ARMARM_RAS_system_architecture">RAS System architecture</xref>.</para>
+      <para>If <xref linkend="ARMARM_FEAT_RAS">FEAT_RAS</xref> is not implemented, this instruction executes as a <instruction>NOP</instruction>.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="ESB"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_RAS" name="ARMv8.2"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.control.hints.ESB_HI_hints" tworows="1">
+        <box hibit="31" width="20" settings="20">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1" settings="3" psbits="xxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="4" width="5" settings="5">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="ESB_HI_hints" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="ESB"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>ESB</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.hints.ESB_HI_hints" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_RAS) then <a link="impl-shared.ExecuteAsNOP.0" file="shared_pseudocode.xml" hover="function: ExecuteAsNOP()">ExecuteAsNOP</a>();    </pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all"/>
+  <ps_section howmany="1">
+    <ps name="A64.control.hints.ESB_HI_hints" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">if IsFeatureImplemented(FEAT_TME) &amp;&amp; TSTATE.depth &gt; 0 then
+    <a link="impl-aarch64.FailTransaction.2" file="shared_pseudocode.xml" hover="function: FailTransaction(TMFailure cause, boolean retry)">FailTransaction</a>(<a link="TMFailure_ERR" file="shared_pseudocode.xml" hover="enumeration TMFailure { TMFailure_CNCL, TMFailure_DBG, TMFailure_ERR, TMFailure_NEST, TMFailure_SIZE, TMFailure_MEM, TMFailure_TRIVIAL, TMFailure_IMP }">TMFailure_ERR</a>, FALSE);
+<a link="impl-shared.SynchronizeErrors.0" file="shared_pseudocode.xml" hover="function: SynchronizeErrors()">SynchronizeErrors</a>();
+<a link="AArch64.ESBOperation.0" file="shared_pseudocode.xml" hover="function: AArch64.ESBOperation()">AArch64.ESBOperation</a>();
+if PSTATE.EL IN {<a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>, <a link="EL1" file="shared_pseudocode.xml" hover="constant bits(2) EL1 = '01'">EL1</a>} &amp;&amp; <a link="impl-shared.EL2Enabled.0" file="shared_pseudocode.xml" hover="function: boolean EL2Enabled()">EL2Enabled</a>() then <a link="AArch64.vESBOperation.0" file="shared_pseudocode.xml" hover="function: AArch64.vESBOperation()">AArch64.vESBOperation</a>();
+<a link="impl-shared.TakeUnmaskedSErrorInterrupts.0" file="shared_pseudocode.xml" hover="function: TakeUnmaskedSErrorInterrupts()">TakeUnmaskedSErrorInterrupts</a>();</pstext></ps>
+  </ps_section>
+</instructionsection>

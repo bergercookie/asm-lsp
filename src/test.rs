@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use core::panic;
-    use std::{collections::HashMap, str::FromStr};
+    use std::{collections::HashMap, path::PathBuf, str::FromStr};
 
     use anyhow::Result;
     use lsp_textdocument::FullTextDocument;
@@ -15,9 +15,10 @@ mod tests {
 
     use crate::{
         get_comp_resp, get_completes, get_hover_resp, get_word_from_pos_params,
-        instr_filter_targets, populate_directives, populate_instructions,
-        populate_name_to_directive_map, populate_name_to_instruction_map,
-        populate_name_to_register_map, populate_registers, x86_parser::get_cache_dir, Arch,
+        instr_filter_targets,
+        parser::{get_cache_dir, populate_arm_instructions},
+        populate_directives, populate_instructions, populate_name_to_directive_map,
+        populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
         Assembler, Assemblers, Directive, Instruction, InstructionSets, NameToDirectiveMap,
         NameToInstructionMap, NameToRegisterMap, Register, TargetConfig, TreeEntry,
     };
@@ -28,6 +29,8 @@ mod tests {
         x86_64_instructions: Vec<Instruction>,
         x86_registers: Vec<Register>,
         x86_64_registers: Vec<Register>,
+        arm_instructions: Vec<Instruction>,
+        arm_registers: Vec<Register>,
         z80_instructions: Vec<Instruction>,
         z80_registers: Vec<Register>,
         gas_directives: Vec<Directive>,
@@ -50,6 +53,8 @@ mod tests {
                 x86_64_instructions: Vec::new(),
                 x86_registers: Vec::new(),
                 x86_64_registers: Vec::new(),
+                arm_instructions: Vec::new(),
+                arm_registers: Vec::new(),
                 z80_instructions: Vec::new(),
                 z80_registers: Vec::new(),
                 gas_directives: Vec::new(),
@@ -84,6 +89,7 @@ mod tests {
                 x86: true,
                 x86_64: true,
                 z80: true,
+                arm: true,
             },
         });
 
@@ -123,6 +129,11 @@ mod tests {
                 .collect()
         };
 
+        info.arm_instructions = {
+            let arm_instrs = include_bytes!("../docs_store/opcodes/serialized/arm");
+            bincode::deserialize::<Vec<Instruction>>(arm_instrs)?
+        };
+
         info.x86_registers = {
             let regs_x86 = include_bytes!("../docs_store/registers/serialized/x86");
             bincode::deserialize(regs_x86)?
@@ -136,6 +147,11 @@ mod tests {
         info.z80_registers = {
             let regs_z80 = include_bytes!("../docs_store/registers/serialized/z80");
             bincode::deserialize(regs_z80)?
+        };
+
+        info.arm_registers = {
+            let regs_arm = include_bytes!("../docs_store/registers/serialized/arm");
+            bincode::deserialize(regs_arm)?
         };
 
         info.gas_directives = {
@@ -168,6 +184,12 @@ mod tests {
         );
 
         populate_name_to_instruction_map(
+            Arch::ARM,
+            &info.arm_instructions,
+            &mut store.names_to_instructions,
+        );
+
+        populate_name_to_instruction_map(
             Arch::Z80,
             &info.z80_instructions,
             &mut store.names_to_instructions,
@@ -182,6 +204,12 @@ mod tests {
         populate_name_to_register_map(
             Arch::X86_64,
             &info.x86_64_registers,
+            &mut store.names_to_registers,
+        );
+
+        populate_name_to_register_map(
+            Arch::ARM,
+            &info.arm_registers,
             &mut store.names_to_registers,
         );
 
@@ -395,6 +423,20 @@ mod tests {
     ) {
         let expected_kind = CompletionItemKind::VARIABLE;
         test_autocomplete(source, expected_kind, trigger_kind, trigger_character);
+    }
+
+    #[test]
+    fn handle_autocomplete_arm_it_provides_reg_comps_in_existing_reg_arg() {
+        test_register_autocomplete(
+            "    mov  r<cursor>, #4",
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_autocomplete_arm_it_provides_instr_comps_one_character_start() {
+        test_instruction_autocomplete("m<cursor>", CompletionTriggerKind::INVOKED, None);
     }
 
     #[test]
@@ -1332,11 +1374,10 @@ Width: 16 bits",
     #[test]
     fn handle_hover_z80_it_provides_reg_info_prime() {
         test_hover(
-            "        LD B<cursor>', 132      ;MAXIMUM STRING LENGTH",
-            "B [z80]
-General purpose register.
+            "        LD A<cursor>', '$'      ;STRING DELIMITER CODE",
+            "A [z80]
+Accumulator.
 
-Type: General Purpose Register
 Width: 8 bits",
         );
     }
@@ -1384,6 +1425,41 @@ Width: 8 bits",
 
         let x86_64_regs_raw = include_str!("../docs_store/registers/raw/x86_64.xml");
         let mut raw_vec = populate_registers(x86_64_regs_raw).unwrap();
+
+        // HACK: Windows line endings...
+        for reg in raw_vec.iter_mut() {
+            if let Some(descr) = &reg.description {
+                reg.description = Some(descr.replace('\r', ""));
+            }
+        }
+
+        for reg in ser_vec {
+            *cmp_map.entry(reg.clone()).or_insert(0) += 1;
+        }
+        for reg in raw_vec {
+            let entry = cmp_map.get_mut(&reg).unwrap();
+            if *entry == 0 {
+                panic!(
+                    "Expected at least one more instruction entry for {:?}, but the count is 0",
+                    reg
+                );
+            }
+            *entry -= 1;
+        }
+        for (reg, count) in cmp_map.iter() {
+            if *count != 0 {
+                panic!("Expected count to be 0, found {count} for {:?}", reg);
+            }
+        }
+    }
+    #[test]
+    fn serialized_arm_registers_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let arm_regs_ser = include_bytes!("../docs_store/registers/serialized/arm");
+        let ser_vec = bincode::deserialize::<Vec<Register>>(arm_regs_ser).unwrap();
+
+        let arm_regs_raw = include_str!("../docs_store/registers/raw/arm.xml");
+        let mut raw_vec = populate_registers(arm_regs_raw).unwrap();
 
         // HACK: Windows line endings...
         for reg in raw_vec.iter_mut() {
@@ -1493,6 +1569,36 @@ Width: 8 bits",
         for instr in raw_vec.iter_mut() {
             instr.url = None;
         }
+
+        for instr in ser_vec {
+            *cmp_map.entry(instr.clone()).or_insert(0) += 1;
+        }
+        for instr in raw_vec {
+            let entry = cmp_map.get_mut(&instr).unwrap();
+            if *entry == 0 {
+                panic!(
+                    "Expected at least one more instruction entry for {:?}, but the count is 0",
+                    instr
+                );
+            }
+            *entry -= 1;
+        }
+        for (instr, count) in cmp_map.iter() {
+            if *count != 0 {
+                panic!("Expected count to be 0, found {count} for {:?}", instr);
+            }
+        }
+    }
+    #[test]
+    fn serialized_arm_instructions_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let arm_instrs_ser = include_bytes!("../docs_store/opcodes/serialized/arm");
+        let mut ser_vec = bincode::deserialize::<Vec<Instruction>>(arm_instrs_ser).unwrap();
+        ser_vec.sort_by(|a, b| a.name.cmp(&b.name));
+
+        let mut raw_vec =
+            populate_arm_instructions(&PathBuf::from("docs_store/opcodes/raw/ARM/")).unwrap();
+        raw_vec.sort_by(|a, b| a.name.cmp(&b.name));
 
         for instr in ser_vec {
             *cmp_map.entry(instr.clone()).or_insert(0) += 1;

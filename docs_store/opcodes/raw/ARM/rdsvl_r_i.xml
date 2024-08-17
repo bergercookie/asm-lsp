@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="rdsvl_r_i" title="RDSVL" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="RDSVL" />
+  </docvars>
+  <heading>RDSVL</heading>
+  <desc>
+    <brief>Read multiple of Streaming SVE vector register size to scalar register</brief>
+    <description>
+      <para>Multiply the Streaming SVE vector register size in bytes by an immediate in the range -32 to 31 and place the result in the 64-bit destination general-purpose register.</para>
+      <para>This instruction does not require the PE to be in Streaming SVE mode.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <iclass name="SME" oneof="1" id="iclass_mortlach" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="RDSVL" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME" feature="FEAT_SME" />
+      </arch_variants>
+      <regdiagram form="32" psname="RDSVL-R.I-_">
+        <box hibit="31" width="9" settings="9">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="22" name="op" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="21" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="4" name="opc2&lt;4:1&gt;" settings="4">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="16" name="opc2&lt;0&gt;" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="15" width="5" settings="5">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="10" width="6" name="imm6" usename="1">
+          <c colspan="6"></c>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"></c>
+        </box>
+      </regdiagram>
+      <encoding name="rdsvl_r_i_" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="RDSVL" />
+        </docvars>
+        <asmtemplate><text>RDSVL   </text><a link="sa_xd" hover="64-bit destination general-purpose register (field &quot;Rd&quot;)">&lt;Xd&gt;</a><text>, #</text><a link="sa_imm" hover="Signed immediate operand [-32-31] (field &quot;imm6&quot;)">&lt;imm&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="RDSVL-R.I-_" mylink="RDSVL-R.I-_" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer imm = <a link="impl-shared.SInt.1" file="shared_pseudocode.xml" hover="function: integer SInt(bits(N) x)">SInt</a>(imm6);</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="rdsvl_r_i_" symboldefcount="1">
+      <symbol link="sa_xd">&lt;Xd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the destination general-purpose register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="rdsvl_r_i_" symboldefcount="1">
+      <symbol link="sa_imm">&lt;imm&gt;</symbol>
+      <account encodedin="imm6">
+        <intro>
+          <para>Is the signed immediate operand, in the range -32 to 31, encoded in the "imm6" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="RDSVL-R.I-_" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckSMEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckSMEEnabled()">CheckSMEEnabled</a>();
+constant integer SVL = <a link="impl-aarch64.CurrentSVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentSVL">CurrentSVL</a>;
+constant integer len = imm * (SVL DIV 8);
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, 64] = len&lt;63:0&gt;;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="luti4_mz2_ztz" title="LUTI4 (two registers)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="LUTI4" />
+  </docvars>
+  <heading>LUTI4 (two registers)</heading>
+  <desc>
+    <brief>Lookup table read with 4-bit indexes</brief>
+    <description>
+      <para>Copy 8-bit, 16-bit or 32-bit elements from ZT0 to two destination vectors using packed 4-bit indices from a segment of the source vector register. A segment corresponds to a portion of the source vector that is consumed in order to fill the destination vector. The segment is selected by the vector segment index modulo the total number of segments.</para>
+      <para>This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <uses_dit condition="FEAT_SVE2 is implemented or FEAT_SME is implemented">True</uses_dit>
+    <sm_policy>SM_1_only</sm_policy>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <classesintro count="2">
+      <txt>It has encodings from 2 classes:</txt>
+      <a href="#iclass_consecutive">Consecutive</a>
+      <txt> and </txt>
+      <a href="#iclass_strided">Strided</a>
+    </classesintro>
+    <iclass name="Consecutive" oneof="2" id="iclass_consecutive" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="LUTI4" />
+        <docvar key="stride-type" value="consecutive" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="LUTI4-MZ2.ZTZ-1">
+        <box hibit="31" width="13" settings="13">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="18" width="2" settings="2">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="16" width="2" name="i2" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="14" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="13" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="11" width="2" name="opc2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" width="4" name="Zd" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="0" settings="1">
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="luti4_mz2_ztz_1" oneofinclass="1" oneof="2" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="LUTI4" />
+          <docvar key="stride-type" value="consecutive" />
+        </docvars>
+        <asmtemplate><text>LUTI4   </text><text>{</text><text> </text><a link="sa_zd1" hover="First scalable vector register of destination multi-vector group (field Zd)">&lt;Zd1&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,H,S]">&lt;T&gt;</a><text>-</text><a link="sa_zd2" hover="Second scalable vector register of destination multi-vector group (field Zd)">&lt;Zd2&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,H,S]">&lt;T&gt;</a><text> </text><text>}</text><text>, ZT0, </text><a link="sa_zn" hover="Source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>[</text><a link="sa_index" hover="Vector segment index [0-3] (field &quot;i2&quot;)">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="LUTI4-MZ2.ZTZ-1" mylink="LUTI4-MZ2.ZTZ-1" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+if size == '11' then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer isize = 4;
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer dstride = 1;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zd:'0');
+constant integer imm = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i2);
+constant integer nreg = 2;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Strided" oneof="2" id="iclass_strided" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="mnemonic" value="LUTI4" />
+        <docvar key="stride-type" value="strided" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2p1" feature="FEAT_SME2p1" />
+      </arch_variants>
+      <regdiagram form="32" psname="LUTI4-MZ2.ZTZ-8">
+        <box hibit="31" width="2" settings="2">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="29" width="11" settings="11">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="18" width="2" settings="2">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="16" width="2" name="i2" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="14" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="13" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="11" width="2" name="opc2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Zn" usename="1">
+          <c colspan="5"></c>
+        </box>
+        <box hibit="4" name="D" usename="1">
+          <c></c>
+        </box>
+        <box hibit="3" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="2" width="3" name="Zd" usename="1">
+          <c colspan="3"></c>
+        </box>
+      </regdiagram>
+      <encoding name="luti4_mz2_ztz_8" oneofinclass="1" oneof="2" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="mnemonic" value="LUTI4" />
+          <docvar key="stride-type" value="strided" />
+        </docvars>
+        <asmtemplate><text>LUTI4   </text><text>{</text><text> </text><a link="sa_zd1_1" hover="First scalable vector register Z0-Z7 or Z16-Z23 of destination multi-vector group (field D:'0':Zd)">&lt;Zd1&gt;</a><text>.</text><a link="sa_t_1" hover="Size specifier (field &quot;size&lt;0&gt;&quot;) [B,H]">&lt;T&gt;</a><text>, </text><a link="sa_zd2_1" hover="Second scalable vector register Z8-Z15 or Z24-Z31 of destination multi-vector group (field D:'1':Zd)">&lt;Zd2&gt;</a><text>.</text><a link="sa_t_1" hover="Size specifier (field &quot;size&lt;0&gt;&quot;) [B,H]">&lt;T&gt;</a><text> </text><text>}</text><text>, ZT0, </text><a link="sa_zn" hover="Source scalable vector register (field &quot;Zn&quot;)">&lt;Zn&gt;</a><text>[</text><a link="sa_index" hover="Vector segment index [0-3] (field &quot;i2&quot;)">&lt;index&gt;</a><text>]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="LUTI4-MZ2.ZTZ-8" mylink="LUTI4-MZ2.ZTZ-8" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2p1) then UNDEFINED;
+if size == '10' || size == '11' then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer isize = 4;
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zn);
+constant integer dstride = 8;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(D:'0':Zd);
+constant integer imm = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(i2);
+constant integer nreg = 2;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="luti4_mz2_ztz_1" symboldefcount="1">
+      <symbol link="sa_zd1">&lt;Zd1&gt;</symbol>
+      <account encodedin="Zd">
+        <docvars>
+          <docvar key="stride-type" value="consecutive" />
+        </docvars>
+        <intro>
+          <para>For the consecutive variant: is the name of the first scalable vector register of the destination multi-vector group, encoded as "Zd" times 2.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="luti4_mz2_ztz_8" symboldefcount="2">
+      <symbol link="sa_zd1_1">&lt;Zd1&gt;</symbol>
+      <account encodedin="0:D:Zd">
+        <docvars>
+          <docvar key="stride-type" value="strided" />
+        </docvars>
+        <intro>
+          <para>For the strided variant: is the name of the first scalable vector register Z0-Z7 or Z16-Z23 of the destination multi-vector group, encoded as "D:'0':Zd".</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="luti4_mz2_ztz_1" symboldefcount="1">
+      <symbol link="sa_t">&lt;T&gt;</symbol>
+      <definition encodedin="size">
+        <intro>For the consecutive variant: is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">size</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10</entry>
+                <entry class="symbol">S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="luti4_mz2_ztz_8" symboldefcount="2">
+      <symbol link="sa_t_1">&lt;T&gt;</symbol>
+      <definition encodedin="size&lt;0&gt;">
+        <intro>For the strided variant: is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">size&lt;0&gt;</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">H</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="luti4_mz2_ztz_1" symboldefcount="1">
+      <symbol link="sa_zd2">&lt;Zd2&gt;</symbol>
+      <account encodedin="Zd">
+        <docvars>
+          <docvar key="stride-type" value="consecutive" />
+        </docvars>
+        <intro>
+          <para>For the consecutive variant: is the name of the second scalable vector register of the destination multi-vector group, encoded as "Zd" times 2 plus 1.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="luti4_mz2_ztz_8" symboldefcount="2">
+      <symbol link="sa_zd2_1">&lt;Zd2&gt;</symbol>
+      <account encodedin="1:D:Zd">
+        <docvars>
+          <docvar key="stride-type" value="strided" />
+        </docvars>
+        <intro>
+          <para>For the strided variant: is the name of the second scalable vector register Z8-Z15 or Z24-Z31 of the destination multi-vector group, encoded as "D:'1':Zd".</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="luti4_mz2_ztz_1, luti4_mz2_ztz_8" symboldefcount="1">
+      <symbol link="sa_zn">&lt;Zn&gt;</symbol>
+      <account encodedin="Zn">
+        <intro>
+          <para>Is the name of the source scalable vector register, encoded in the "Zn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="luti4_mz2_ztz_1, luti4_mz2_ztz_8" symboldefcount="1">
+      <symbol link="sa_index">&lt;index&gt;</symbol>
+      <account encodedin="i2">
+        <intro>
+          <para>Is the vector segment index, in the range 0 to 3, encoded in the "i2" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="LUTI4-MZ2.ZTZ-1" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckStreamingSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckStreamingSVEEnabled()">CheckStreamingSVEEnabled</a>();
+<a link="impl-aarch64.CheckSMEZT0Enabled.0" file="shared_pseudocode.xml" hover="function: CheckSMEZT0Enabled()">CheckSMEZT0Enabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer elements = VL DIV esize;
+constant integer segments = esize DIV (isize * nreg);
+constant integer segment = imm MOD segments;
+constant bits(VL) indexes = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[n, VL];
+integer dst = d;
+constant bits(512) table = <a link="impl-aarch64.ZT0.read.1" file="shared_pseudocode.xml" hover="accessor: bits(width) ZT0[integer width]">ZT0</a>[512];
+
+for r = 0 to nreg-1
+    constant integer base = (segment * nreg + r) * elements;
+    bits(VL) result;
+    for e = 0 to elements-1
+        constant integer index = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[indexes, base+e, isize]);
+        <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, esize] = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[table, index, 32]&lt;esize-1:0&gt;;
+    <a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[dst, VL] = result;
+    dst = dst + dstride;</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

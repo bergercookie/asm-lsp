@@ -1,0 +1,277 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="STG" title="STG -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="STG"/>
+  </docvars>
+  <heading>STG</heading>
+  <desc>
+    <brief>
+      <para>Store Allocation Tag</para>
+    </brief>
+    <authored>
+      <para>This instruction stores an Allocation Tag to memory. The address used for
+the store is calculated from the base register and an immediate signed
+offset scaled by the Tag Granule. The Allocation Tag is calculated from the
+Logical Address Tag in the source register.</para>
+      <para>This instruction generates an Unchecked access.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <classesintro count="3">
+      <txt>It has encodings from 3 classes:</txt>
+      <a href="#iclass_post_index">Post-index</a>
+      <txt>, </txt>
+      <a href="#iclass_pre_index">Pre-index</a>
+      <txt> and </txt>
+      <a href="#iclass_signed_offset">Signed offset</a>
+    </classesintro>
+    <iclass name="Post-index" oneof="3" id="iclass_post_index" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="address-form" value="post-indexed"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="STG"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_MTE" name="ARMv8.5"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.ldsttags.STG_64Spost_ldsttags" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="opc" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="9" name="imm9" usename="1">
+          <c colspan="9"/>
+        </box>
+        <box hibit="11" width="2" name="op2" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Xn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Xt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="STG_64Spost_ldsttags" oneofinclass="1" oneof="3" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STG"/>
+          <docvar key="address-form" value="post-indexed"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <asmtemplate><text>STG  </text><a hover="Is the 64-bit name of the general-purpose source register or stack pointer, encoded in the &quot;Xt&quot; field." link="XtSP_option">&lt;Xt|SP&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Xn&quot; field." link="XnSP_option__2">&lt;Xn|SP&gt;</a><text>], #</text><a hover="Is the optional signed immediate offset, a multiple of 16 in the range -4096 to 4080, defaulting to 0 and encoded in the &quot;imm9&quot; field." link="simm__2">&lt;simm&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.ldsttags.STG_64Spost_ldsttags" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_MTE) then UNDEFINED;
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Xt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Xn);
+constant bits(64) offset = <a link="impl-shared.LSL.2" file="shared_pseudocode.xml" hover="function: bits(N) LSL(bits(N) x, integer shift)">LSL</a>(<a link="impl-shared.SignExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) SignExtend(bits(M) x, integer N)">SignExtend</a>(imm9, 64), <a link="LOG2_TAG_GRANULE" file="shared_pseudocode.xml" hover="constant integer LOG2_TAG_GRANULE = 4">LOG2_TAG_GRANULE</a>);
+constant boolean writeback = TRUE;
+constant boolean postindex = TRUE;</pstext></ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Pre-index" oneof="3" id="iclass_pre_index" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="address-form" value="pre-indexed"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="STG"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_MTE" name="ARMv8.5"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.ldsttags.STG_64Spre_ldsttags" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="opc" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="9" name="imm9" usename="1">
+          <c colspan="9"/>
+        </box>
+        <box hibit="11" width="2" name="op2" usename="1" settings="2" psbits="xx">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Xn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Xt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="STG_64Spre_ldsttags" oneofinclass="1" oneof="3" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STG"/>
+          <docvar key="address-form" value="pre-indexed"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <asmtemplate><text>STG  </text><a hover="Is the 64-bit name of the general-purpose source register or stack pointer, encoded in the &quot;Xt&quot; field." link="XtSP_option">&lt;Xt|SP&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Xn&quot; field." link="XnSP_option__2">&lt;Xn|SP&gt;</a><text>, #</text><a hover="Is the optional signed immediate offset, a multiple of 16 in the range -4096 to 4080, defaulting to 0 and encoded in the &quot;imm9&quot; field." link="simm__2">&lt;simm&gt;</a><text>]!</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.ldsttags.STG_64Spre_ldsttags" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_MTE) then UNDEFINED;
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Xt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Xn);
+constant bits(64) offset = <a link="impl-shared.LSL.2" file="shared_pseudocode.xml" hover="function: bits(N) LSL(bits(N) x, integer shift)">LSL</a>(<a link="impl-shared.SignExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) SignExtend(bits(M) x, integer N)">SignExtend</a>(imm9, 64), <a link="LOG2_TAG_GRANULE" file="shared_pseudocode.xml" hover="constant integer LOG2_TAG_GRANULE = 4">LOG2_TAG_GRANULE</a>);
+constant boolean writeback = TRUE;
+constant boolean postindex = FALSE;</pstext></ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Signed offset" oneof="3" id="iclass_signed_offset" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="address-form" value="signed-scaled-offset"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="STG"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_MTE" name="ARMv8.5"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.ldst.ldsttags.STG_64Soffset_ldsttags" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="opc" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="9" name="imm9" usename="1">
+          <c colspan="9"/>
+        </box>
+        <box hibit="11" width="2" name="op2" usename="1" settings="2" psbits="xx">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Xn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Xt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="STG_64Soffset_ldsttags" oneofinclass="1" oneof="3" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="STG"/>
+          <docvar key="address-form" value="signed-scaled-offset"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <asmtemplate><text>STG  </text><a hover="Is the 64-bit name of the general-purpose source register or stack pointer, encoded in the &quot;Xt&quot; field." link="XtSP_option">&lt;Xt|SP&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Xn&quot; field." link="XnSP_option__2">&lt;Xn|SP&gt;</a><text>{, #</text><a hover="Is the optional signed immediate offset, a multiple of 16 in the range -4096 to 4080, defaulting to 0 and encoded in the &quot;imm9&quot; field." link="simm__2">&lt;simm&gt;</a><text>}]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.ldsttags.STG_64Soffset_ldsttags" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_MTE) then UNDEFINED;
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Xt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Xn);
+constant bits(64) offset = <a link="impl-shared.LSL.2" file="shared_pseudocode.xml" hover="function: bits(N) LSL(bits(N) x, integer shift)">LSL</a>(<a link="impl-shared.SignExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) SignExtend(bits(M) x, integer N)">SignExtend</a>(imm9, 64), <a link="LOG2_TAG_GRANULE" file="shared_pseudocode.xml" hover="constant integer LOG2_TAG_GRANULE = 4">LOG2_TAG_GRANULE</a>);
+constant boolean writeback = FALSE;
+constant boolean postindex = FALSE;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="STG_64Spost_ldsttags, STG_64Spre_ldsttags, STG_64Soffset_ldsttags" symboldefcount="1">
+      <symbol link="XtSP_option">&lt;Xt|SP&gt;</symbol>
+      <account encodedin="Xt">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose source register or stack pointer, encoded in the "Xt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STG_64Spost_ldsttags, STG_64Spre_ldsttags, STG_64Soffset_ldsttags" symboldefcount="1">
+      <symbol link="XnSP_option__2">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Xn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Xn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="STG_64Spost_ldsttags, STG_64Spre_ldsttags, STG_64Soffset_ldsttags" symboldefcount="1">
+      <symbol link="simm__2">&lt;simm&gt;</symbol>
+      <account encodedin="imm9">
+        <intro>
+          <para>Is the optional signed immediate offset, a multiple of 16 in the range -4096 to 4080, defaulting to 0 and encoded in the "imm9" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldsttags.STG_64Spost_ldsttags" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">bits(64) address;
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+constant boolean devstoreunpred = FALSE;
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = <a link="impl-shared.CreateAccDescLDGSTG.2" file="shared_pseudocode.xml" hover="function: AccessDescriptor CreateAccDescLDGSTG(MemOp memop, boolean devstoreunpred)">CreateAccDescLDGSTG</a>(<a link="MemOp_STORE" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_STORE</a>, devstoreunpred);
+
+if !postindex then
+    address = <a link="impl-shared.AddressAdd.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressAdd(bits(64) base, integer offset, AccessDescriptor accdesc)">AddressAdd</a>(address, offset, accdesc);
+
+constant bits(64) data = if t == 31 then <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[] else <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[t, 64];
+constant bits(4) tag = <a link="AArch64.AllocationTagFromAddress.1" file="shared_pseudocode.xml" hover="function: bits(4) AArch64.AllocationTagFromAddress(bits(64) tagged_address)">AArch64.AllocationTagFromAddress</a>(data);
+<a link="AArch64.MemTag.write.2" file="shared_pseudocode.xml" hover="accessor: AArch64.MemTag[bits(64) address, AccessDescriptor accdesc_in] = bits(4) value">AArch64.MemTag</a>[address, accdesc] = tag;
+
+if writeback then
+    if postindex then
+        address = <a link="impl-shared.AddressAdd.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressAdd(bits(64) base, integer offset, AccessDescriptor accdesc)">AddressAdd</a>(address, offset, accdesc);
+
+    if n == 31 then
+        <a link="impl-aarch64.SP.write.0" file="shared_pseudocode.xml" hover="accessor: SP[] = bits(64) value">SP</a>[] = address;
+    else
+        <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[n, 64] = address;
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

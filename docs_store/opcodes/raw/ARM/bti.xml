@@ -1,0 +1,142 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="BTI" title="BTI -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="BTI"/>
+  </docvars>
+  <heading>BTI</heading>
+  <desc>
+    <brief>
+      <para>Branch target identification</para>
+    </brief>
+    <authored>
+      <para>This instruction is used to guard against
+the execution of instructions that are not the intended target of a branch.</para>
+      <para>Outside of a guarded memory region, a <instruction>BTI</instruction> instruction executes as a
+<instruction>NOP</instruction>. Within a guarded memory region, while
+<xref linkend="ARMARM_BEIDIGBH">PSTATE</xref>.BTYPE != <binarynumber>0b00</binarynumber>, a <instruction>BTI</instruction>
+instruction compatible with the current value of PSTATE.BTYPE
+will not generate a Branch Target Exception and will allow execution of
+subsequent instructions within the memory region. For more information,
+see <xref linkend="ARMARM_MDSec.PSTATE_BTYPE">PSTATE.BTYPE</xref>.</para>
+      <para>The operand <syntax>&lt;targets&gt;</syntax> passed to a <instruction>BTI</instruction> instruction determines
+the values of <xref linkend="ARMARM_BEIDIGBH">PSTATE</xref>.BTYPE that the <instruction>BTI</instruction>
+instruction is compatible with.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="BTI"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_BTI" name="ARMv8.5"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.control.hints.BTI_HB_hints" tworows="1">
+        <box hibit="31" width="20" settings="20">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1" settings="4" psbits="xxxx">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1" settings="1" psbits="xxx">
+          <c>x</c>
+          <c>x</c>
+          <c>0</c>
+        </box>
+        <box hibit="4" width="5" settings="5">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="BTI_HB_hints" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="BTI"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>BTI  {</text><a hover="Is the type of indirection, " link="targets_option">&lt;targets&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.hints.BTI_HB_hints" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_BTI) then <a link="impl-shared.ExecuteAsNOP.0" file="shared_pseudocode.xml" hover="function: ExecuteAsNOP()">ExecuteAsNOP</a>();
+
+// Check branch target compatibility between BTI instruction and PSTATE.BTYPE
+<a link="impl-aarch64.SetBTypeCompatible.1" file="shared_pseudocode.xml" hover="function: SetBTypeCompatible(boolean x)">SetBTypeCompatible</a>(<a link="impl-aarch64.BTypeCompatible_BTI.1" file="shared_pseudocode.xml" hover="function: boolean BTypeCompatible_BTI(bits(2) hintcode)">BTypeCompatible_BTI</a>(op2&lt;2:1&gt;));</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="BTI_HB_hints" symboldefcount="1">
+      <symbol link="targets_option">&lt;targets&gt;</symbol>
+      <definition encodedin="op2&lt;2:1&gt;">
+        <intro>Is the type of indirection, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">op2&lt;2:1&gt;</entry>
+                <entry class="symbol">&lt;targets&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">[absent]</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">c</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10</entry>
+                <entry class="symbol">j</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11</entry>
+                <entry class="symbol">jc</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.control.hints.BTI_HB_hints" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.SetBTypeNext.1" file="shared_pseudocode.xml" hover="function: SetBTypeNext(bits(2) x)">SetBTypeNext</a>('00');</pstext></ps>
+  </ps_section>
+</instructionsection>

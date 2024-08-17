@@ -1,0 +1,348 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="PACIA" title="PACIA, PACIA1716, PACIASP, PACIAZ, PACIZA -- A64" type="instruction">
+  <docvars>
+    <docvar key="isa" value="A64"/>
+  </docvars>
+  <heading>PACIA, PACIA1716, PACIASP, PACIAZ, PACIZA</heading>
+  <desc>
+    <brief>
+      <para>Pointer Authentication Code for instruction address, using key A</para>
+    </brief>
+    <authored>
+      <para>This instruction computes and inserts a Pointer Authentication Code
+for an instruction address, using a modifier and key A.</para>
+      <para>The address is:</para>
+      <list type="unordered">
+        <listitem>
+          <content>In the general-purpose register that is specified by
+  <syntax>&lt;Xd&gt;</syntax> for <instruction>PACIA</instruction> and <instruction>PACIZA</instruction>.</content>
+        </listitem>
+        <listitem>
+          <content>In X17, for <instruction>PACIA1716</instruction>.</content>
+        </listitem>
+        <listitem>
+          <content>In X30, for <instruction>PACIASP</instruction> and <instruction>PACIAZ</instruction>.</content>
+        </listitem>
+      </list>
+      <para>The modifier is:</para>
+      <list type="unordered">
+        <listitem>
+          <content>In the general-purpose register or stack pointer that is specified
+  by <syntax>&lt;Xn|SP&gt;</syntax> for <instruction>PACIA</instruction>.</content>
+        </listitem>
+        <listitem>
+          <content>The value zero, for <instruction>PACIZA</instruction> and <instruction>PACIAZ</instruction>.</content>
+        </listitem>
+        <listitem>
+          <content>In X16, for <instruction>PACIA1716</instruction>.</content>
+        </listitem>
+        <listitem>
+          <content>In SP, for <instruction>PACIASP</instruction>.</content>
+        </listitem>
+      </list>
+      <para>If <xref linkend="ARMARM_FEAT_PAuth_LR">FEAT_PAuth_LR</xref> is implemented and PSTATE.PACM is 1, then
+<instruction>PACIA1716</instruction> and <instruction>PACIASP</instruction> include a second modifier that is:</para>
+      <list type="unordered">
+        <listitem>
+          <content>In X15, for <instruction>PACIA1716</instruction>.</content>
+        </listitem>
+        <listitem>
+          <content>The value of PC, for <instruction>PACIASP</instruction>.</content>
+        </listitem>
+      </list>
+      <para>A <instruction>PACIASP</instruction> instruction has an implicit <instruction>BTI</instruction> instruction. The
+implicit <instruction>BTI</instruction> instruction of a <instruction>PACIASP</instruction> instruction is always
+compatible with <xref linkend="ARMARM_BEIDIGBH">PSTATE</xref>.BTYPE == <binarynumber>0b01</binarynumber>
+and <xref linkend="ARMARM_BEIDIGBH">PSTATE</xref>.BTYPE == <binarynumber>0b10</binarynumber>.
+Controls in <xref linkend="ARMARM_BABBCBCH">SCTLR_ELx</xref> configure whether the
+implicit <instruction>BTI</instruction> instruction of a <instruction>PACIASP</instruction> instruction is compatible with
+<xref linkend="ARMARM_BEIDIGBH">PSTATE</xref>.BTYPE == <binarynumber>0b11</binarynumber>.
+For more information, see <xref linkend="ARMARM_MDSec.PSTATE_BTYPE">PSTATE.BTYPE</xref>.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <classesintro count="2">
+      <txt>It has encodings from 2 classes:</txt>
+      <a href="#iclass_integer">Integer</a>
+      <txt> and </txt>
+      <a href="#iclass_system">System</a>
+    </classesintro>
+    <iclass name="Integer" oneof="2" id="iclass_integer" no_encodings="2" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="2"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_PAuth" name="ARMv8.3"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.dpreg.dp_1src.PACIA_64P_dp_1src" tworows="1">
+        <box hibit="31" name="sf" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="30" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="20" width="5" name="opcode2" usename="1" settings="5" psbits="xxxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="15" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="13" width="1" name="Z" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="12" width="3" settings="3">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="PACIA_64P_dp_1src" oneofinclass="2" oneof="5" label="PACIA" bitdiffs="Z == 0">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="PACIA"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="13" width="1" name="Z">
+          <c>0</c>
+        </box>
+        <asmtemplate><text>PACIA  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="XdOrXZR__6">&lt;Xd&gt;</a><text>, </text><a hover="Is the 64-bit name of the general-purpose source register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option__7">&lt;Xn|SP&gt;</a></asmtemplate>
+      </encoding>
+      <encoding name="PACIZA_64Z_dp_1src" oneofinclass="2" oneof="5" label="PACIZA" bitdiffs="Z == 1 &amp;&amp; Rn == 11111">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="PACIZA"/>
+          <docvar key="instr-class" value="general"/>
+        </docvars>
+        <box hibit="13" width="1" name="Z">
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Rn">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>PACIZA  </text><a hover="Is the 64-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="XdOrXZR__6">&lt;Xd&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.dpreg.dp_1src.PACIA_64P_dp_1src" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_PAuth) then UNDEFINED;
+boolean source_is_sp = FALSE;
+constant boolean pacia1716 = FALSE;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+
+if Z == '0' then // PACIA
+    if n == 31 then source_is_sp = TRUE;
+else // PACIZA
+    if n != 31 then UNDEFINED;
+   </pstext></ps>
+      </ps_section>
+    </iclass>
+    <iclass name="System" oneof="2" id="iclass_system" no_encodings="3" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+      </docvars>
+      <iclassintro count="3"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_PAuth" name="ARMv8.3"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.control.hints.PACIA1716_HI_hints" tworows="1">
+        <box hibit="31" width="20" settings="20">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1" settings="3" psbits="xxxx">
+          <c>0</c>
+          <c>0</c>
+          <c>x</c>
+          <c>1</c>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1" settings="2" psbits="xxx">
+          <c>0</c>
+          <c>0</c>
+          <c>x</c>
+        </box>
+        <box hibit="4" width="5" settings="5">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="PACIA1716_HI_hints" oneofinclass="3" oneof="5" label="PACIA1716" bitdiffs="CRm == 0001 &amp;&amp; op2 == 000">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="PACIA1716"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <box hibit="11" width="4" name="CRm">
+          <c/>
+          <c/>
+          <c>0</c>
+          <c/>
+        </box>
+        <box hibit="7" width="3" name="op2">
+          <c/>
+          <c/>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>PACIA1716</text></asmtemplate>
+      </encoding>
+      <encoding name="PACIASP_HI_hints" oneofinclass="3" oneof="5" label="PACIASP" bitdiffs="CRm == 0011 &amp;&amp; op2 == 001">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="PACIASP"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <box hibit="11" width="4" name="CRm">
+          <c/>
+          <c/>
+          <c>1</c>
+          <c/>
+        </box>
+        <box hibit="7" width="3" name="op2">
+          <c/>
+          <c/>
+          <c>1</c>
+        </box>
+        <asmtemplate><text>PACIASP</text></asmtemplate>
+      </encoding>
+      <encoding name="PACIAZ_HI_hints" oneofinclass="3" oneof="5" label="PACIAZ" bitdiffs="CRm == 0011 &amp;&amp; op2 == 000">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="PACIAZ"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <box hibit="11" width="4" name="CRm">
+          <c/>
+          <c/>
+          <c>1</c>
+          <c/>
+        </box>
+        <box hibit="7" width="3" name="op2">
+          <c/>
+          <c/>
+          <c>0</c>
+        </box>
+        <asmtemplate><text>PACIAZ</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.hints.PACIA1716_HI_hints" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_PAuth) then <a link="impl-shared.ExecuteAsNOP.0" file="shared_pseudocode.xml" hover="function: ExecuteAsNOP()">ExecuteAsNOP</a>();
+integer d;
+integer n;
+boolean source_is_sp = FALSE;
+boolean pacia1716 = FALSE;
+
+case CRm:op2 of
+    when '0011 000' // PACIAZ
+        d = 30;
+        n = 31;
+    when '0011 001' // PACIASP
+        d = 30;
+        source_is_sp = TRUE;
+        if IsFeatureImplemented(FEAT_BTI) then
+            // Check for branch target compatibility between PSTATE.BTYPE
+            // and implicit branch target of PACIASP instruction.
+            <a link="impl-aarch64.SetBTypeCompatible.1" file="shared_pseudocode.xml" hover="function: SetBTypeCompatible(boolean x)">SetBTypeCompatible</a>(<a link="impl-aarch64.BTypeCompatible_PACIXSP.0" file="shared_pseudocode.xml" hover="function: boolean BTypeCompatible_PACIXSP()">BTypeCompatible_PACIXSP</a>());
+    when '0001 000' // PACIA1716
+        d = 17;
+        n = 16;
+        pacia1716 = TRUE;
+    when '0001 010' SEE "PACIB";
+    when '0001 100' SEE "AUTIA";
+    when '0001 110' SEE "AUTIB";
+    when '0011 01x' SEE "PACIB";
+    when '0011 10x' SEE "AUTIA";
+    when '0011 11x' SEE "AUTIB";
+    when '0000 111' SEE "XPACLRI";
+    otherwise       SEE "HINT";
+   </pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="PACIA_64P_dp_1src, PACIZA_64Z_dp_1src" symboldefcount="1">
+      <symbol link="XdOrXZR__6">&lt;Xd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="PACIA_64P_dp_1src" symboldefcount="1">
+      <symbol link="XnSP_option__7">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose source register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.dpreg.dp_1src.PACIA_64P_dp_1src" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">if source_is_sp then
+    if IsFeatureImplemented(FEAT_PAuth_LR) &amp;&amp; PSTATE.PACM == '1' then
+        <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, 64] = AddPACIA2(<a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[d, 64], <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[], PC64);
+    else
+        <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, 64] = AddPACIA(<a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[d, 64], <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[]);
+else
+    if IsFeatureImplemented(FEAT_PAuth_LR) &amp;&amp; PSTATE.PACM == '1' &amp;&amp; pacia1716 then
+        <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, 64] = AddPACIA2(<a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[d, 64], <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64], <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[15, 64]);
+    else
+        <a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, 64] = AddPACIA(<a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[d, 64], <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64]);
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

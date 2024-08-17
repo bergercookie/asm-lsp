@@ -1,0 +1,77 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="B_uncond" title="B -- A64" type="instruction">
+  <docvars>
+    <docvar key="branch-offset" value="br26"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="B"/>
+  </docvars>
+  <heading>B</heading>
+  <desc>
+    <brief>
+      <para>Branch</para>
+    </brief>
+    <authored>
+      <para>This instruction branches unconditionally to a label at a PC-relative offset,
+with a hint that this is not a subroutine call or return.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="26-bit signed PC-relative branch offset" oneof="1" id="iclass_26_bit_signed_pc_relative_branch_offset" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="branch-offset" value="br26"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="B"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.control.branch_imm.B_only_branch_imm" tworows="1">
+        <box hibit="31" name="op" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="30" width="5" settings="5">
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="25" width="26" name="imm26" usename="1">
+          <c colspan="26"/>
+        </box>
+      </regdiagram>
+      <encoding name="B_only_branch_imm" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="B"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="branch-offset" value="br26"/>
+        </docvars>
+        <asmtemplate><text>B  </text><a hover="Is the program label to be unconditionally branched to. Its offset from the address of this instruction, in the range +/-128MB, is encoded as &quot;imm26&quot; times 4." link="imm26_offset">&lt;label&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.branch_imm.B_only_branch_imm" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant bits(64) offset = <a link="impl-shared.SignExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) SignExtend(bits(M) x, integer N)">SignExtend</a>(imm26:'00', 64);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="B_only_branch_imm" symboldefcount="1">
+      <symbol link="imm26_offset">&lt;label&gt;</symbol>
+      <account encodedin="imm26">
+        <intro>
+          <para>Is the program label to be unconditionally branched to. Its offset from the address of this instruction, in the range +/-128MB, is encoded as "imm26" times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.control.branch_imm.B_only_branch_imm" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant boolean branch_conditional = FALSE;
+<a link="impl-shared.BranchTo.3" file="shared_pseudocode.xml" hover="function: BranchTo(bits(N) target, BranchType branch_type, boolean branch_conditional)">BranchTo</a>(PC64 + offset, <a link="BranchType_DIR" file="shared_pseudocode.xml" hover="enumeration BranchType { BranchType_DIRCALL, BranchType_INDCALL, BranchType_ERET, BranchType_DBGEXIT, BranchType_RET, BranchType_DIR, BranchType_INDIR, BranchType_EXCEPTION, BranchType_TMFAIL, BranchType_RESET, BranchType_UNKNOWN}">BranchType_DIR</a>, branch_conditional);</pstext></ps>
+  </ps_section>
+</instructionsection>

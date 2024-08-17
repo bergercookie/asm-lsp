@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2024 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+
+<instructionsection id="srshl_mz_zzv" title="SRSHL (multiple and single vector)" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="mortlach2" />
+    <docvar key="isa" value="A64" />
+    <docvar key="mnemonic" value="SRSHL" />
+  </docvars>
+  <heading>SRSHL (multiple and single vector)</heading>
+  <desc>
+    <brief>Multi-vector signed rounding shift left by vector</brief>
+    <description>
+      <para>Shift the signed elements of the two or four first source vectors by corresponding elements of the second source vector and destructively place the rounded results in the corresponding elements of the two or four first source vectors. A positive shift amount performs a left shift, otherwise a right shift by the negated shift amount is performed.</para>
+      <para>This instruction is unpredicated.</para>
+    </description>
+    <status>Green</status>
+    <predicated>False</predicated>
+    <sm_policy>SM_1_only</sm_policy>
+  </desc>
+  <alias_list howmany="0"></alias_list>
+  <classes>
+    <classesintro count="2">
+      <txt>It has encodings from 2 classes:</txt>
+      <a href="#iclass_to_2reg">Two registers</a>
+      <txt> and </txt>
+      <a href="#iclass_to_4reg">Four registers</a>
+    </classesintro>
+    <iclass name="Two registers" oneof="2" id="iclass_to_2reg" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="ldstruct-regcount" value="to-2reg" />
+        <docvar key="mnemonic" value="SRSHL" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="SRSHL-MZ.ZZV-2x1" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="19" width="4" name="Zm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" width="6" settings="6">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="2" name="opc&lt;2:1&gt;" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="5" name="opc&lt;0&gt;" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="4" width="4" name="Zdn" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="0" name="U" usename="1" settings="1">
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="srshl_mz_zzv_2x1" oneofinclass="1" oneof="2" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="ldstruct-regcount" value="to-2reg" />
+          <docvar key="mnemonic" value="SRSHL" />
+        </docvars>
+        <asmtemplate><text>SRSHL   </text><text>{</text><text> </text><a link="sa_zdn1" hover="First scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn1&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>-</text><a link="sa_zdn2" hover="Second scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn2&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text> </text><text>}</text><text>, </text><text>{</text><text> </text><a link="sa_zdn1" hover="First scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn1&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>-</text><a link="sa_zdn2" hover="Second scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn2&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text> </text><text>}</text><text>, </text><a link="sa_zm" hover="Second source scalable vector register Z0-Z15 (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="SRSHL-MZ.ZZV-2x1" mylink="SRSHL-MZ.ZZV-2x1" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer dn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zdn:'0');
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('0':Zm);
+constant integer nreg = 2;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Four registers" oneof="2" id="iclass_to_4reg" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="mortlach2" />
+        <docvar key="isa" value="A64" />
+        <docvar key="ldstruct-regcount" value="to-4reg" />
+        <docvar key="mnemonic" value="SRSHL" />
+      </docvars>
+      <iclassintro count="1"></iclassintro>
+      <arch_variants>
+        <arch_variant name="FEAT_SME2" feature="FEAT_SME2" />
+      </arch_variants>
+      <regdiagram form="32" psname="SRSHL-MZ.ZZV-4x1" tworows="1">
+        <box hibit="31" width="8" settings="8">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="23" width="2" name="size" usename="1">
+          <c colspan="2"></c>
+        </box>
+        <box hibit="21" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="19" width="4" name="Zm" usename="1">
+          <c colspan="4"></c>
+        </box>
+        <box hibit="15" width="6" settings="6">
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="7" width="2" name="opc&lt;2:1&gt;" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="5" name="opc&lt;0&gt;" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="4" width="3" name="Zdn" usename="1">
+          <c colspan="3"></c>
+        </box>
+        <box hibit="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="0" name="U" usename="1" settings="1">
+          <c>0</c>
+        </box>
+      </regdiagram>
+      <encoding name="srshl_mz_zzv_4x1" oneofinclass="1" oneof="2" label="">
+        <docvars>
+          <docvar key="instr-class" value="mortlach2" />
+          <docvar key="isa" value="A64" />
+          <docvar key="ldstruct-regcount" value="to-4reg" />
+          <docvar key="mnemonic" value="SRSHL" />
+        </docvars>
+        <asmtemplate><text>SRSHL   </text><text>{</text><text> </text><a link="sa_zdn1_1" hover="First scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn1&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>-</text><a link="sa_zdn4" hover="Fourth scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn4&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text> </text><text>}</text><text>, </text><text>{</text><text> </text><a link="sa_zdn1_1" hover="First scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn1&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text>-</text><a link="sa_zdn4" hover="Fourth scalable vector register of destination and first source multi-vector group (field Zdn)">&lt;Zdn4&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a><text> </text><text>}</text><text>, </text><a link="sa_zm" hover="Second source scalable vector register Z0-Z15 (field &quot;Zm&quot;)">&lt;Zm&gt;</a><text>.</text><a link="sa_t" hover="Size specifier (field &quot;size&quot;) [B,D,H,S]">&lt;T&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="SRSHL-MZ.ZZV-4x1" mylink="SRSHL-MZ.ZZV-4x1" enclabels="" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SME2) then UNDEFINED;
+constant integer esize = 8 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(size);
+constant integer dn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Zdn:'00');
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>('0':Zm);
+constant integer nreg = 4;</pstext>
+        </ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="srshl_mz_zzv_2x1" symboldefcount="1">
+      <symbol link="sa_zdn1">&lt;Zdn1&gt;</symbol>
+      <account encodedin="Zdn">
+        <docvars>
+          <docvar key="ldstruct-regcount" value="to-2reg" />
+        </docvars>
+        <intro>
+          <para>For the two registers variant: is the name of the first scalable vector register of the destination and first source multi-vector group, encoded as "Zdn" times 2.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="srshl_mz_zzv_4x1" symboldefcount="2">
+      <symbol link="sa_zdn1_1">&lt;Zdn1&gt;</symbol>
+      <account encodedin="Zdn">
+        <docvars>
+          <docvar key="ldstruct-regcount" value="to-4reg" />
+        </docvars>
+        <intro>
+          <para>For the four registers variant: is the name of the first scalable vector register of the destination and first source multi-vector group, encoded as "Zdn" times 4.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="srshl_mz_zzv_2x1, srshl_mz_zzv_4x1" symboldefcount="1">
+      <symbol link="sa_t">&lt;T&gt;</symbol>
+      <definition encodedin="size">
+        <intro>Is the size specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">size</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">00</entry>
+                <entry class="symbol">B</entry>
+              </row>
+              <row>
+                <entry class="bitfield">01</entry>
+                <entry class="symbol">H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">10</entry>
+                <entry class="symbol">S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">11</entry>
+                <entry class="symbol">D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="srshl_mz_zzv_4x1" symboldefcount="1">
+      <symbol link="sa_zdn4">&lt;Zdn4&gt;</symbol>
+      <account encodedin="Zdn">
+        <intro>
+          <para>Is the name of the fourth scalable vector register of the destination and first source multi-vector group, encoded as "Zdn" times 4 plus 3.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="srshl_mz_zzv_2x1" symboldefcount="1">
+      <symbol link="sa_zdn2">&lt;Zdn2&gt;</symbol>
+      <account encodedin="Zdn">
+        <intro>
+          <para>Is the name of the second scalable vector register of the destination and first source multi-vector group, encoded as "Zdn" times 2 plus 1.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="srshl_mz_zzv_2x1, srshl_mz_zzv_4x1" symboldefcount="1">
+      <symbol link="sa_zm">&lt;Zm&gt;</symbol>
+      <account encodedin="Zm">
+        <intro>
+          <para>Is the name of the second source scalable vector register Z0-Z15, encoded in the "Zm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="SRSHL-MZ.ZZV-2x1" mylink="execute" enclabels="" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckStreamingSVEEnabled.0" file="shared_pseudocode.xml" hover="function: CheckStreamingSVEEnabled()">CheckStreamingSVEEnabled</a>();
+constant integer VL = <a link="impl-aarch64.CurrentVL.read.none" file="shared_pseudocode.xml" hover="accessor: VecLen CurrentVL">CurrentVL</a>;
+constant integer elements = VL DIV esize;
+array [0..3] of bits(VL) results;
+
+for r = 0 to nreg-1
+    constant bits(VL) operand1 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[dn+r, VL];
+    constant bits(VL) operand2 = <a link="impl-aarch64.Z.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) Z[integer n, integer width]">Z</a>[m, VL];
+    for e = 0 to elements-1
+        constant integer element =  <a link="impl-shared.SInt.1" file="shared_pseudocode.xml" hover="function: integer SInt(bits(N) x)">SInt</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand1, e, esize]);
+        integer shift = <a link="impl-aarch64.ShiftSat.2" file="shared_pseudocode.xml" hover="function: integer ShiftSat(integer shift, integer esize)">ShiftSat</a>(<a link="impl-shared.SInt.1" file="shared_pseudocode.xml" hover="function: integer SInt(bits(N) x)">SInt</a>(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand2, e, esize]), esize);
+        integer res;
+        if shift &gt;= 0 then
+            res = element &lt;&lt; shift;
+        else
+            shift = -shift;
+            res = (element + (1 &lt;&lt; (shift - 1))) &gt;&gt; shift;
+        <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[results[r], e, esize] = res&lt;esize-1:0&gt;;
+
+for r = 0 to nreg-1
+    <a link="impl-aarch64.Z.write.2" file="shared_pseudocode.xml" hover="accessor: Z[integer n, integer width] = bits(width) value">Z</a>[dn+r, VL] = results[r];</pstext>
+    </ps>
+  </ps_section>
+</instructionsection>

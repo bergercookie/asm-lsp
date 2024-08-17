@@ -1,0 +1,159 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="SM4E_advsimd" title="SM4E -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="advsimd"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="SM4E"/>
+  </docvars>
+  <heading>SM4E</heading>
+  <desc>
+    <brief>
+      <para>SM4 encode</para>
+    </brief>
+    <authored>
+      <para>This instruction takes input data as a 128-bit vector from the first source SIMD&amp;FP
+register, and four iterations of the round key held as the elements of the 128-bit
+vector in the second source SIMD&amp;FP register. It encrypts the data by four rounds,
+in accordance with the SM4 standard, returning the 128-bit result to the destination
+SIMD&amp;FP register.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1:</para>
+    <list type="unordered">
+      <listitem>
+        <content>The execution time of this instruction is independent of:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+      <listitem>
+        <content>The response of this instruction to asynchronous exceptions does not vary based on:<list type="unordered">
+            <listitem>
+              <content>The values of the data supplied in any of its registers.</content>
+            </listitem>
+            <listitem>
+              <content>The values of the NZCV flags.</content>
+            </listitem>
+          </list>
+        </content>
+      </listitem>
+    </list>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Advanced SIMD" oneof="1" id="iclass_advanced_simd" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="SM4E"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_SM4" name="ARMv8.2"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.simd_dp.cryptosha512_2.SM4E_VV4_cryptosha512_2" tworows="1">
+        <box hibit="31" width="20" settings="20">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" name="opcode" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="SM4E_VV4_cryptosha512_2" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SM4E"/>
+          <docvar key="instr-class" value="advsimd"/>
+        </docvars>
+        <asmtemplate><text>SM4E  </text><a hover="Is the name of the SIMD&amp;amp;FP source and destination register, encoded in the &quot;Rd&quot; field." link="Vd__4">&lt;Vd&gt;</a><text>.4S, </text><a hover="Is the name of the second SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn__6">&lt;Vn&gt;</a><text>.4S</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.cryptosha512_2.SM4E_VV4_cryptosha512_2" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_SM4) then UNDEFINED;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="SM4E_VV4_cryptosha512_2" symboldefcount="1">
+      <symbol link="Vd__4">&lt;Vd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP source and destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SM4E_VV4_cryptosha512_2" symboldefcount="1">
+      <symbol link="Vn__6">&lt;Vn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the name of the second SIMD&amp;FP source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.simd_dp.cryptosha512_2.SM4E_VV4_cryptosha512_2" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="AArch64.CheckFPAdvSIMDEnabled.0" file="shared_pseudocode.xml" hover="function: AArch64.CheckFPAdvSIMDEnabled()">AArch64.CheckFPAdvSIMDEnabled</a>();
+
+constant bits(128) Vn = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[n, 128];
+bits(32) intval;
+bits(128) roundresult;
+bits(32) roundkey;
+
+roundresult = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[d, 128];
+for index = 0 to 3
+    roundkey = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[Vn, index, 32];
+
+    intval = roundresult&lt;127:96&gt; EOR roundresult&lt;95:64&gt; EOR roundresult&lt;63:32&gt; EOR roundkey;
+
+    for i = 0 to 3
+        <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[intval, i, 8]  = Sbox(<a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[intval, i, 8]);
+
+    intval = intval EOR <a link="impl-shared.ROL.2" file="shared_pseudocode.xml" hover="function: bits(N) ROL(bits(N) x, integer shift)">ROL</a>(intval, 2) EOR <a link="impl-shared.ROL.2" file="shared_pseudocode.xml" hover="function: bits(N) ROL(bits(N) x, integer shift)">ROL</a>(intval, 10) EOR <a link="impl-shared.ROL.2" file="shared_pseudocode.xml" hover="function: bits(N) ROL(bits(N) x, integer shift)">ROL</a>(intval, 18) EOR <a link="impl-shared.ROL.2" file="shared_pseudocode.xml" hover="function: bits(N) ROL(bits(N) x, integer shift)">ROL</a>(intval, 24);
+    intval = intval EOR roundresult&lt;31:0&gt;;
+
+    roundresult&lt;31:0&gt;   = roundresult&lt;63:32&gt;;
+    roundresult&lt;63:32&gt;  = roundresult&lt;95:64&gt;;
+    roundresult&lt;95:64&gt;  = roundresult&lt;127:96&gt;;
+    roundresult&lt;127:96&gt; = intval;
+
+<a link="impl-aarch64.V.write.2" file="shared_pseudocode.xml" hover="accessor: V[integer n, ESize width] = bits(width) value">V</a>[d, 128] = roundresult;</pstext></ps>
+  </ps_section>
+</instructionsection>

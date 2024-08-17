@@ -1,0 +1,500 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="MSR_imm" title="MSR (immediate) -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="MSR"/>
+    <docvar key="msr-sysreg-target" value="whole-register"/>
+  </docvars>
+  <heading>MSR (immediate)</heading>
+  <desc>
+    <brief>
+      <para>Move immediate value to special register</para>
+    </brief>
+    <authored>
+      <para>This instruction moves an immediate value to
+selected bits of the PSTATE. For more information, see
+<xref linkend="ARMARM_BEIDIGBH">Process state, PSTATE</xref>.</para>
+      <para>The bits that can be written by this instruction are:</para>
+      <list type="unordered">
+        <listitem>
+          <content>PSTATE.D, PSTATE.A, PSTATE.I, PSTATE.F, and PSTATE.SP.</content>
+        </listitem>
+        <listitem>
+          <content>If <xref linkend="ARMARM_v8.0.SSBS">FEAT_SSBS</xref> is implemented, PSTATE.SSBS.</content>
+        </listitem>
+        <listitem>
+          <content>If <xref linkend="ARMARM_v8.1.PAN">FEAT_PAN</xref> is implemented, PSTATE.PAN.</content>
+        </listitem>
+        <listitem>
+          <content>If <xref linkend="ARMARM_v8.2.UAO">FEAT_UAO</xref> is implemented, PSTATE.UAO.</content>
+        </listitem>
+        <listitem>
+          <content>If <xref linkend="ARMARM_v8.4.DIT">FEAT_DIT</xref> is implemented, PSTATE.DIT.</content>
+        </listitem>
+        <listitem>
+          <content>If <xref linkend="ARMARM_v8.5.MemTag">FEAT_MTE</xref> is implemented, PSTATE.TCO.</content>
+        </listitem>
+        <listitem>
+          <content>If <xref linkend="ARMARM_FEAT_NMI">FEAT_NMI</xref> is implemented, PSTATE.ALLINT.</content>
+        </listitem>
+        <listitem>
+          <content>If <xref linkend="ARMARM_FEAT_SME">FEAT_SME</xref> is implemented, PSTATE.SM and PSTATE.ZA.</content>
+        </listitem>
+        <listitem>
+          <content>If FEAT_EBEP is implemented, PSTATE.PM.</content>
+        </listitem>
+      </list>
+    </authored>
+  </desc>
+  <alias_list howmany="2">
+    <alias_list_intro>This instruction is used by the aliases </alias_list_intro>
+    <aliasref aliaspageid="SMSTART_MSR_imm" aliasfile="smstart_msr_imm.xml" hover="Enables access to Streaming SVE mode and SME architectural state" punct=" and ">
+      <text>SMSTART</text>
+      <aliaspref>op1 == '011' &amp;&amp; CRm IN {'0xx1'} &amp;&amp; op2 == '011'</aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="SMSTOP_MSR_imm" aliasfile="smstop_msr_imm.xml" hover="Disables access to Streaming SVE mode and SME architectural state" punct=".">
+      <text>SMSTOP</text>
+      <aliaspref>op1 == '011' &amp;&amp; CRm IN {'0xx0'} &amp;&amp; op2 == '011'</aliaspref>
+    </aliasref>
+    <alias_list_outro>
+      <text>  See </text>
+      <aliastablelink/>
+      <text> below for details of when each alias is preferred.</text>
+    </alias_list_outro>
+  </alias_list>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="MSR"/>
+        <docvar key="msr-sysreg-target" value="whole-register"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.control.pstate.MSR_SI_pstate" tworows="1">
+        <box hibit="31" width="13" settings="13">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="18" width="3" name="op1" usename="1">
+          <c colspan="3"/>
+        </box>
+        <box hibit="15" width="4" settings="4">
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1">
+          <c colspan="4"/>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1">
+          <c colspan="3"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1" settings="5" psbits="xxxxx">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+      </regdiagram>
+      <encoding name="MSR_SI_pstate" oneofinclass="1" oneof="1" label="" bitdiffs="!(op1 == '000' &amp;&amp; op2 IN {'00x', '010'})">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="MSR"/>
+          <docvar key="instr-class" value="system"/>
+          <docvar key="msr-sysreg-target" value="whole-register"/>
+        </docvars>
+        <asmtemplate><text>MSR  </text><a hover="Is a PSTATE field name. For the MSR instruction, this is " link="pstatefield_option">&lt;pstatefield&gt;</a><text>, #</text><a hover="Is a 4-bit unsigned immediate, in the range 0 to 15, encoded in the &quot;CRm&quot; field. Restricted to the range 0 to 1, encoded in &quot;CRm&amp;lt;0&amp;gt;&quot;, when &amp;lt;pstatefield&amp;gt; is ALLINT, PM, SVCRSM, SVCRSMZA, or SVCRZA." link="msr_imm">&lt;imm&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.pstate.MSR_SI_pstate" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if op1 == '000' &amp;&amp; op2 == '000' then SEE "CFINV";
+if op1 == '000' &amp;&amp; op2 == '001' then SEE "XAFLAG";
+if op1 == '000' &amp;&amp; op2 == '010' then SEE "AXFLAG";
+
+<a link="AArch64.CheckSystemAccess.7" file="shared_pseudocode.xml" hover="function: AArch64.CheckSystemAccess(bits(2) op0, bits(3) op1, bits(4) crn, bits(4) crm, bits(3) op2, bits(5) rt, bit read)">AArch64.CheckSystemAccess</a>('00', op1, '0100', CRm, op2, '11111', '0');
+bits(2) min_EL;
+boolean need_secure = FALSE;
+
+case op1 of
+    when '00x'
+        min_EL = <a link="EL1" file="shared_pseudocode.xml" hover="constant bits(2) EL1 = '01'">EL1</a>;
+    when '010'
+        min_EL = <a link="EL1" file="shared_pseudocode.xml" hover="constant bits(2) EL1 = '01'">EL1</a>;
+    when '011'
+        min_EL = <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>;
+    when '100'
+        min_EL = <a link="EL2" file="shared_pseudocode.xml" hover="constant bits(2) EL2 = '10'">EL2</a>;
+    when '101'
+        if !IsFeatureImplemented(FEAT_VHE) then UNDEFINED;
+        min_EL = <a link="EL2" file="shared_pseudocode.xml" hover="constant bits(2) EL2 = '10'">EL2</a>;
+    when '110'
+        min_EL = <a link="EL3" file="shared_pseudocode.xml" hover="constant bits(2) EL3 = '11'">EL3</a>;
+    when '111'
+        min_EL = <a link="EL1" file="shared_pseudocode.xml" hover="constant bits(2) EL1 = '01'">EL1</a>;
+        need_secure = TRUE;
+
+if (<a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(PSTATE.EL) &lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(min_EL) || (need_secure &amp;&amp; <a link="impl-shared.CurrentSecurityState.0" file="shared_pseudocode.xml" hover="function: SecurityState CurrentSecurityState()">CurrentSecurityState</a>() != <a link="SS_Secure" file="shared_pseudocode.xml" hover="enumeration SecurityState { SS_NonSecure, SS_Root, SS_Realm, SS_Secure }">SS_Secure</a>)) then
+    UNDEFINED;
+
+constant bits(4) operand = CRm;
+<a link="PSTATEField" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField</a> field;
+case op1:op2 of
+    when '000 011'
+        if !IsFeatureImplemented(FEAT_UAO) then UNDEFINED;
+        field = <a link="PSTATEField_UAO" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_UAO</a>;
+    when '000 100'
+        if !IsFeatureImplemented(FEAT_PAN) then UNDEFINED;
+        field = <a link="PSTATEField_PAN" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_PAN</a>;
+    when '000 101' field = <a link="PSTATEField_SP" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_SP</a>;
+    when '001 000'
+        case CRm of
+            when '000x'
+                if !IsFeatureImplemented(FEAT_NMI) then UNDEFINED;
+                field = <a link="PSTATEField_ALLINT" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_ALLINT</a>;
+            when '001x'
+                if !IsFeatureImplemented(FEAT_EBEP) then UNDEFINED;
+                field = <a link="PSTATEField_PM" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_PM</a>;
+            otherwise
+                UNDEFINED;
+    when '011 010'
+        if !IsFeatureImplemented(FEAT_DIT) then UNDEFINED;
+        field = <a link="PSTATEField_DIT" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_DIT</a>;
+    when '011 011'
+        case CRm of
+            when '001x'
+                if !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+                field = <a link="PSTATEField_SVCRSM" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_SVCRSM</a>;
+            when '010x'
+                if !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+                field = <a link="PSTATEField_SVCRZA" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_SVCRZA</a>;
+            when '011x'
+                if !IsFeatureImplemented(FEAT_SME) then UNDEFINED;
+                field = <a link="PSTATEField_SVCRSMZA" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_SVCRSMZA</a>;
+            otherwise
+                UNDEFINED;
+    when '011 100'
+        if !IsFeatureImplemented(FEAT_MTE) then UNDEFINED;
+        field = <a link="PSTATEField_TCO" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_TCO</a>;
+    when '011 110' field = <a link="PSTATEField_DAIFSet" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_DAIFSet</a>;
+    when '011 111' field = <a link="PSTATEField_DAIFClr" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_DAIFClr</a>;
+    when '011 001'
+        if !IsFeatureImplemented(FEAT_SSBS) then UNDEFINED;
+        field = <a link="PSTATEField_SSBS" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_SSBS</a>;
+    otherwise      UNDEFINED;
+   </pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="MSR_SI_pstate" symboldefcount="1">
+      <symbol link="pstatefield_option">&lt;pstatefield&gt;</symbol>
+      <definition encodedin="CRm&lt;3:1&gt;:op1:op2">
+        <intro>Is a PSTATE field name. For the MSR instruction, this is </intro>
+        <table class="valuetable">
+          <tgroup cols="5">
+            <thead>
+              <row>
+                <entry class="bitfield">CRm&lt;3:1&gt;</entry>
+                <entry class="bitfield">op1</entry>
+                <entry class="bitfield">op2</entry>
+                <entry class="symbol">&lt;pstatefield&gt;</entry>
+                <entry class="symbol">Architectural Feature</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">UAO</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_UAO"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">100</entry>
+                <entry class="symbol">PAN</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_PAN"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">101</entry>
+                <entry class="symbol">SPSel</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">11x</entry>
+                <entry class="symbol">RESERVED</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="bitfield">000</entry>
+                <entry class="symbol">ALLINT</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_NMI"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="symbol">RESERVED</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="bitfield">01x</entry>
+                <entry class="symbol">RESERVED</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="bitfield">1xx</entry>
+                <entry class="symbol">RESERVED</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">010</entry>
+                <entry class="bitfield">xxx</entry>
+                <entry class="symbol">RESERVED</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">000</entry>
+                <entry class="symbol">RESERVED</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="symbol">SSBS</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_SSBS"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">010</entry>
+                <entry class="symbol">DIT</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_DIT"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">000</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">RESERVED</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">100</entry>
+                <entry class="symbol">TCO</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_MTE"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">101</entry>
+                <entry class="symbol">RESERVED</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">110</entry>
+                <entry class="symbol">DAIFSet</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">111</entry>
+                <entry class="symbol">DAIFClr</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">xxx</entry>
+                <entry class="bitfield">1xx</entry>
+                <entry class="bitfield">xxx</entry>
+                <entry class="symbol">RESERVED</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">001</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="bitfield">000</entry>
+                <entry class="symbol">PM</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_EBEP"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">001</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">SVCRSM</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_SME"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">01x</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="bitfield">000</entry>
+                <entry class="symbol">RESERVED</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">010</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">SVCRZA</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_SME"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">SVCRSMZA</entry>
+                <entry class="feature">
+                  <arch_variants>
+                    <arch_variant feature="FEAT_SME"/>
+                  </arch_variants>
+                </entry>
+              </row>
+              <row>
+                <entry class="bitfield">1xx</entry>
+                <entry class="bitfield">001</entry>
+                <entry class="bitfield">000</entry>
+                <entry class="symbol">RESERVED</entry>
+                <entry class="feature"/>
+              </row>
+              <row>
+                <entry class="bitfield">1xx</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">RESERVED</entry>
+                <entry class="feature"/>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+        <after>For the SMSTART and SMSTOP aliases, this is encoded in "CRm&lt;2:1&gt;", where <binarynumber>0b01</binarynumber> specifies SVCRSM, <binarynumber>0b10</binarynumber> specifies SVCRZA, and <binarynumber>0b11</binarynumber> specifies SVCRSMZA.</after>
+      </definition>
+    </explanation>
+    <explanation enclist="MSR_SI_pstate" symboldefcount="1">
+      <symbol link="msr_imm">&lt;imm&gt;</symbol>
+      <account encodedin="CRm:op1:op2">
+        <intro>
+          <para>Is a 4-bit unsigned immediate, in the range 0 to 15, encoded in the "CRm" field. Restricted to the range 0 to 1, encoded in "CRm&lt;0&gt;", when &lt;pstatefield&gt; is ALLINT, PM, SVCRSM, SVCRSMZA, or SVCRZA.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <aliastablehook anchor="aliasconditions">Alias Conditions</aliastablehook>
+  <ps_section howmany="1">
+    <ps name="A64.control.pstate.MSR_SI_pstate" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">case field of
+    when <a link="PSTATEField_SSBS" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_SSBS</a>
+        PSTATE.SSBS = operand&lt;0&gt;;
+    when <a link="PSTATEField_SP" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_SP</a>
+        PSTATE.SP = operand&lt;0&gt;;
+    when <a link="PSTATEField_DAIFSet" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_DAIFSet</a>
+        <a link="AArch64.CheckDAIFAccess.1" file="shared_pseudocode.xml" hover="function: AArch64.CheckDAIFAccess(PSTATEField field)">AArch64.CheckDAIFAccess</a>(<a link="PSTATEField_DAIFSet" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_DAIFSet</a>);
+        PSTATE.D = PSTATE.D OR operand&lt;3&gt;;
+        PSTATE.A = PSTATE.A OR operand&lt;2&gt;;
+        PSTATE.I = PSTATE.I OR operand&lt;1&gt;;
+        PSTATE.F = PSTATE.F OR operand&lt;0&gt;;
+    when <a link="PSTATEField_DAIFClr" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_DAIFClr</a>
+        <a link="AArch64.CheckDAIFAccess.1" file="shared_pseudocode.xml" hover="function: AArch64.CheckDAIFAccess(PSTATEField field)">AArch64.CheckDAIFAccess</a>(<a link="PSTATEField_DAIFClr" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_DAIFClr</a>);
+        PSTATE.D = PSTATE.D AND NOT(operand&lt;3&gt;);
+        PSTATE.A = PSTATE.A AND NOT(operand&lt;2&gt;);
+        PSTATE.I = PSTATE.I AND NOT(operand&lt;1&gt;);
+        PSTATE.F = PSTATE.F AND NOT(operand&lt;0&gt;);
+    when <a link="PSTATEField_PAN" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_PAN</a>
+        PSTATE.PAN = operand&lt;0&gt;;
+    when <a link="PSTATEField_UAO" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_UAO</a>
+        PSTATE.UAO = operand&lt;0&gt;;
+    when <a link="PSTATEField_DIT" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_DIT</a>
+        PSTATE.DIT = operand&lt;0&gt;;
+    when <a link="PSTATEField_TCO" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_TCO</a>
+        PSTATE.TCO = operand&lt;0&gt;;
+    when <a link="PSTATEField_ALLINT" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_ALLINT</a>
+        if (PSTATE.EL == <a link="EL1" file="shared_pseudocode.xml" hover="constant bits(2) EL1 = '01'">EL1</a> &amp;&amp; <a link="impl-aarch64.IsHCRXEL2Enabled.0" file="shared_pseudocode.xml" hover="function: boolean IsHCRXEL2Enabled()">IsHCRXEL2Enabled</a>() &amp;&amp;
+              HCRX_EL2.TALLINT == '1' &amp;&amp; operand&lt;0&gt; == '1') then
+            <a link="AArch64.SystemAccessTrap.2" file="shared_pseudocode.xml" hover="function: AArch64.SystemAccessTrap(bits(2) target_el, integer ec)">AArch64.SystemAccessTrap</a>(<a link="EL2" file="shared_pseudocode.xml" hover="constant bits(2) EL2 = '10'">EL2</a>, 0x18);
+        PSTATE.ALLINT = operand&lt;0&gt;;
+    when <a link="PSTATEField_SVCRSM" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_SVCRSM</a>
+        <a link="impl-aarch64.CheckSMEAccess.0" file="shared_pseudocode.xml" hover="function: CheckSMEAccess()">CheckSMEAccess</a>();
+        <a link="impl-aarch64.SetPSTATE_SM.1" file="shared_pseudocode.xml" hover="function: SetPSTATE_SM(bit value)">SetPSTATE_SM</a>(operand&lt;0&gt;);
+    when <a link="PSTATEField_SVCRZA" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_SVCRZA</a>
+        <a link="impl-aarch64.CheckSMEAccess.0" file="shared_pseudocode.xml" hover="function: CheckSMEAccess()">CheckSMEAccess</a>();
+        <a link="impl-aarch64.SetPSTATE_ZA.1" file="shared_pseudocode.xml" hover="function: SetPSTATE_ZA(bit value)">SetPSTATE_ZA</a>(operand&lt;0&gt;);
+    when <a link="PSTATEField_SVCRSMZA" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_SVCRSMZA</a>
+        <a link="impl-aarch64.CheckSMEAccess.0" file="shared_pseudocode.xml" hover="function: CheckSMEAccess()">CheckSMEAccess</a>();
+        <a link="impl-aarch64.SetPSTATE_SM.1" file="shared_pseudocode.xml" hover="function: SetPSTATE_SM(bit value)">SetPSTATE_SM</a>(operand&lt;0&gt;);
+        <a link="impl-aarch64.SetPSTATE_ZA.1" file="shared_pseudocode.xml" hover="function: SetPSTATE_ZA(bit value)">SetPSTATE_ZA</a>(operand&lt;0&gt;);
+    when <a link="PSTATEField_PM" file="shared_pseudocode.xml" hover="enumeration PSTATEField {PSTATEField_DAIFSet, PSTATEField_DAIFClr, PSTATEField_PAN, PSTATEField_UAO, PSTATEField_DIT, PSTATEField_SSBS, PSTATEField_TCO, PSTATEField_SVCRSM, PSTATEField_SVCRZA, PSTATEField_SVCRSMZA, PSTATEField_ALLINT, PSTATEField_PM, PSTATEField_SP }">PSTATEField_PM</a>
+        PSTATE.PM = operand&lt;0&gt;;
+   </pstext></ps>
+  </ps_section>
+</instructionsection>

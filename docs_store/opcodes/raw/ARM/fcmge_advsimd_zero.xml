@@ -1,0 +1,519 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="FCMGE_advsimd_zero" title="FCMGE (zero) -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="advsimd"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="FCMGE"/>
+  </docvars>
+  <heading>FCMGE (zero)</heading>
+  <desc>
+    <brief>
+      <para>Floating-point compare greater than or equal to zero (vector)</para>
+    </brief>
+    <authored>
+      <para>This instruction reads each floating-point value
+in the source SIMD&amp;FP register
+and if the value is greater than or equal to zero
+sets every bit of the corresponding vector element
+in the destination SIMD&amp;FP register to one,
+otherwise sets every bit of the corresponding vector element
+in the destination SIMD&amp;FP register to zero.</para>
+      <para>This instruction can generate a floating-point exception.
+Depending on the settings in <register_link id="AArch64-fpcr.xml" state="AArch64">FPCR</register_link>,
+the exception results in either a flag being set in <register_link id="AArch64-fpsr.xml" state="AArch64">FPSR</register_link>,
+or a synchronous exception being generated.
+For more information, see
+<xref linkend="ARMARM_BEIJDDAG">Floating-point exception traps</xref>.</para>
+      <para>Depending on the settings in the <register_link id="AArch64-cpacr_el1.xml" state="AArch64">CPACR_EL1</register_link>,
+<register_link id="AArch64-cptr_el2.xml" state="AArch64">CPTR_EL2</register_link>, and <register_link id="AArch64-cptr_el3.xml" state="AArch64">CPTR_EL3</register_link> registers,
+and the current Security state and Exception level,
+an attempt to execute the instruction might be trapped.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <classesintro count="4">
+      <txt>It has encodings from 4 classes:</txt>
+      <a href="#iclass_scalar_half_precision">Scalar half precision</a>
+      <txt>, </txt>
+      <a href="#iclass_scalar_single_precision_and_double_precision">Scalar single-precision and double-precision</a>
+      <txt>, </txt>
+      <a href="#iclass_vector_half_precision">Vector half precision</a>
+      <txt> and </txt>
+      <a href="#iclass_vector_single_precision_and_double_precision">Vector single-precision and double-precision</a>
+    </classesintro>
+    <iclass name="Scalar half precision" oneof="4" id="iclass_scalar_half_precision" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="advsimd-datatype" value="sisd-half"/>
+        <docvar key="advsimd-type" value="sisd"/>
+        <docvar key="datatype" value="half"/>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="FCMGE"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_FP16" name="ARMv8.2"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.simd_dp.asisdmiscfp16.FCMGE_asisdmiscfp16_FZ" tworows="1">
+        <box hibit="31" width="2" settings="2">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="29" name="U" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="28" width="5" settings="5">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="a" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="22" width="10" settings="10">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="12" name="op" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="FCMGE_asisdmiscfp16_FZ" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="datatype" value="half"/>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="FCMGE"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="advsimd-datatype" value="sisd-half"/>
+          <docvar key="advsimd-type" value="sisd"/>
+        </docvars>
+        <asmtemplate><text>FCMGE  </text><a hover="Is the 16-bit name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Hd">&lt;Hd&gt;</a><text>, </text><a hover="Is the 16-bit name of the SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Hn__2">&lt;Hn&gt;</a><text>, #0.0</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.asisdmiscfp16.FCMGE_asisdmiscfp16_FZ" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_FP16) then UNDEFINED;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+
+constant integer esize = 16;
+constant integer datasize = esize;
+constant integer elements = 1;</pstext></ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Scalar single-precision and double-precision" oneof="4" id="iclass_scalar_single_precision_and_double_precision" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="advsimd-datatype" value="sisd-single-and-double"/>
+        <docvar key="advsimd-type" value="sisd"/>
+        <docvar key="datatype" value="single-and-double"/>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="FCMGE"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.simd_dp.asisdmisc.FCMGE_asisdmisc_FZ" tworows="1">
+        <box hibit="31" width="2" settings="2">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="29" name="U" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="28" width="6" settings="6">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="sz" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="21" width="9" settings="9">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="12" name="op" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="FCMGE_asisdmisc_FZ" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="datatype" value="single-and-double"/>
+          <docvar key="mnemonic" value="FCMGE"/>
+          <docvar key="advsimd-type" value="sisd"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="advsimd-datatype" value="sisd-single-and-double"/>
+        </docvars>
+        <asmtemplate><text>FCMGE  </text><a hover="Is a width specifier, " link="V_option__9">&lt;V&gt;</a><a hover="Is the number of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="d">&lt;d&gt;</a><text>, </text><a hover="Is a width specifier, " link="V_option__9">&lt;V&gt;</a><a hover="Is the number of the SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="n__3">&lt;n&gt;</a><text>, #0.0</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.asisdmisc.FCMGE_asisdmisc_FZ" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+
+constant integer esize = 32 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(sz);
+constant integer datasize = esize;
+constant integer elements = 1;</pstext></ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Vector half precision" oneof="4" id="iclass_vector_half_precision" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="advsimd-datatype" value="simd-half"/>
+        <docvar key="advsimd-type" value="simd"/>
+        <docvar key="datatype" value="half"/>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="FCMGE"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_FP16" name="ARMv8.2"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.simd_dp.asimdmiscfp16.FCMGE_asimdmiscfp16_FZ" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" width="1" name="Q" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="29" name="U" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="28" width="5" settings="5">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" name="a" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="22" width="10" settings="10">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="12" name="op" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="FCMGE_asimdmiscfp16_FZ" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="datatype" value="half"/>
+          <docvar key="mnemonic" value="FCMGE"/>
+          <docvar key="advsimd-type" value="simd"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="advsimd-datatype" value="simd-half"/>
+        </docvars>
+        <asmtemplate><text>FCMGE  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.</text><a hover="For the half-precision variant: is an arrangement specifier, " link="T_option__4">&lt;T&gt;</a><text>, </text><a hover="Is the name of the SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn">&lt;Vn&gt;</a><text>.</text><a hover="For the half-precision variant: is an arrangement specifier, " link="T_option__4">&lt;T&gt;</a><text>, #0.0</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.asimdmiscfp16.FCMGE_asimdmiscfp16_FZ" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_FP16) then UNDEFINED;
+
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer esize = 16;
+constant integer datasize = 64 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Q);
+constant integer elements = datasize DIV esize;</pstext></ps>
+      </ps_section>
+    </iclass>
+    <iclass name="Vector single-precision and double-precision" oneof="4" id="iclass_vector_single_precision_and_double_precision" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="advsimd-datatype" value="simd-single-and-double"/>
+        <docvar key="advsimd-type" value="simd"/>
+        <docvar key="datatype" value="single-and-double"/>
+        <docvar key="instr-class" value="advsimd"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="FCMGE"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.simd_dp.asimdmisc.FCMGE_asimdmisc_FZ" tworows="1">
+        <box hibit="31" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="30" width="1" name="Q" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="29" name="U" usename="1" settings="1" psbits="x">
+          <c>1</c>
+        </box>
+        <box hibit="28" width="6" settings="6">
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="22" width="1" name="sz" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="21" width="9" settings="9">
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="12" name="op" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="FCMGE_asimdmisc_FZ" oneofinclass="1" oneof="4" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="datatype" value="single-and-double"/>
+          <docvar key="mnemonic" value="FCMGE"/>
+          <docvar key="advsimd-type" value="simd"/>
+          <docvar key="instr-class" value="advsimd"/>
+          <docvar key="advsimd-datatype" value="simd-single-and-double"/>
+        </docvars>
+        <asmtemplate><text>FCMGE  </text><a hover="Is the name of the SIMD&amp;amp;FP destination register, encoded in the &quot;Rd&quot; field." link="Vd">&lt;Vd&gt;</a><text>.</text><a hover="For the single-precision and double-precision variant: is an arrangement specifier, " link="T_option__19">&lt;T&gt;</a><text>, </text><a hover="Is the name of the SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Vn">&lt;Vn&gt;</a><text>.</text><a hover="For the single-precision and double-precision variant: is an arrangement specifier, " link="T_option__19">&lt;T&gt;</a><text>, #0.0</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.asimdmisc.FCMGE_asimdmisc_FZ" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if sz:Q == '10' then UNDEFINED;
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+
+constant integer esize = 32 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(sz);
+constant integer datasize = 64 &lt;&lt; <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Q);
+constant integer elements = datasize DIV esize;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="FCMGE_asisdmiscfp16_FZ" symboldefcount="1">
+      <symbol link="Hd">&lt;Hd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 16-bit name of the SIMD&amp;FP destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="FCMGE_asisdmiscfp16_FZ" symboldefcount="1">
+      <symbol link="Hn__2">&lt;Hn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 16-bit name of the SIMD&amp;FP source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="FCMGE_asisdmisc_FZ" symboldefcount="1">
+      <symbol link="V_option__9">&lt;V&gt;</symbol>
+      <definition encodedin="sz">
+        <intro>Is a width specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">sz</entry>
+                <entry class="symbol">&lt;V&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="FCMGE_asisdmisc_FZ" symboldefcount="1">
+      <symbol link="d">&lt;d&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the number of the SIMD&amp;FP destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="FCMGE_asisdmisc_FZ" symboldefcount="1">
+      <symbol link="n__3">&lt;n&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the number of the SIMD&amp;FP source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="FCMGE_asimdmiscfp16_FZ, FCMGE_asimdmisc_FZ" symboldefcount="1">
+      <symbol link="Vd">&lt;Vd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="FCMGE_asimdmiscfp16_FZ" symboldefcount="1">
+      <symbol link="T_option__4">&lt;T&gt;</symbol>
+      <definition encodedin="Q">
+        <intro>For the half-precision variant: is an arrangement specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">Q</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">4H</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">8H</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="FCMGE_asimdmisc_FZ" symboldefcount="2">
+      <symbol link="T_option__19">&lt;T&gt;</symbol>
+      <definition encodedin="sz:Q">
+        <intro>For the single-precision and double-precision variant: is an arrangement specifier, </intro>
+        <table class="valuetable">
+          <tgroup cols="3">
+            <thead>
+              <row>
+                <entry class="bitfield">sz</entry>
+                <entry class="bitfield">Q</entry>
+                <entry class="symbol">&lt;T&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">2S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">4S</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">RESERVED</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">2D</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="FCMGE_asimdmiscfp16_FZ, FCMGE_asimdmisc_FZ" symboldefcount="1">
+      <symbol link="Vn">&lt;Vn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the name of the SIMD&amp;FP source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.simd_dp.asisdmiscfp16.FCMGE_asisdmiscfp16_FZ" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckFPAdvSIMDEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPAdvSIMDEnabled64()">CheckFPAdvSIMDEnabled64</a>();
+constant bits(datasize) operand = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[n, datasize];
+bits(datasize) result;
+constant bits(esize) zero = <a link="impl-shared.FPZero.2" file="shared_pseudocode.xml" hover="function: bits(N) FPZero(bit sign, integer N)">FPZero</a>('0', esize);
+bits(esize) element;
+boolean test_passed;
+
+for e = 0 to elements-1
+    element = <a link="impl-shared.Elem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size) Elem[bits(N) vector, integer e, integer size]">Elem</a>[operand, e, esize];
+    test_passed = <a link="impl-shared.FPCompareGE.3" file="shared_pseudocode.xml" hover="function: boolean FPCompareGE(bits(N) op1, bits(N) op2, FPCR_Type fpcr)">FPCompareGE</a>(element, zero, FPCR);
+    <a link="impl-shared.Elem.write.3" file="shared_pseudocode.xml" hover="accessor: Elem[bits(N) &amp;vector, integer e, integer size] = bits(size) value">Elem</a>[result, e, esize] = if test_passed then <a link="impl-shared.Ones.1" file="shared_pseudocode.xml" hover="function: bits(N) Ones(integer N)">Ones</a>(esize) else <a link="impl-shared.Zeros.1" file="shared_pseudocode.xml" hover="function: bits(N) Zeros(integer N)">Zeros</a>(esize);
+
+<a link="impl-aarch64.V.write.2" file="shared_pseudocode.xml" hover="accessor: V[integer n, ESize width] = bits(width) value">V</a>[d, datasize] = result;</pstext></ps>
+  </ps_section>
+</instructionsection>

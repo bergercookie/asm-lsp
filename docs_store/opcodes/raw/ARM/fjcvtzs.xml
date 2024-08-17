@@ -1,0 +1,149 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="FJCVTZS" title="FJCVTZS -- A64" type="instruction">
+  <docvars>
+    <docvar key="convert-type" value="double-to-32"/>
+    <docvar key="instr-class" value="float"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="FJCVTZS"/>
+  </docvars>
+  <heading>FJCVTZS</heading>
+  <desc>
+    <brief>
+      <para>Floating-point Javascript convert to signed fixed-point, rounding toward zero</para>
+    </brief>
+    <authored>
+      <para>This instruction converts the double-precision floating-point value
+in the SIMD&amp;FP source register to a 32-bit signed integer using
+the Round towards Zero rounding mode, and writes the result to the
+general-purpose destination register.
+If the result is too large to be represented as a signed 32-bit
+integer, then the result is the integer modulo 2<sup>32</sup>, as held in
+a 32-bit signed integer.</para>
+      <para>This instruction can generate a floating-point exception.
+Depending on the settings in <register_link id="AArch64-fpcr.xml" state="AArch64">FPCR</register_link>,
+the exception results in either a flag being set in <register_link id="AArch64-fpsr.xml" state="AArch64">FPSR</register_link>
+or a synchronous exception being generated.
+For more information, see
+<xref linkend="ARMARM_BEIJDDAG">Floating-point exception traps</xref>.</para>
+      <para>Depending on the settings in the <register_link id="AArch64-cpacr_el1.xml" state="AArch64">CPACR_EL1</register_link>,
+<register_link id="AArch64-cptr_el2.xml" state="AArch64">CPTR_EL2</register_link>, and <register_link id="AArch64-cptr_el3.xml" state="AArch64">CPTR_EL3</register_link> registers,
+and the current Security state and Exception level,
+an attempt to execute the instruction might be trapped.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="Double-precision to 32-bit" oneof="1" id="iclass_double_precision_to_32_bit" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="convert-type" value="double-to-32"/>
+        <docvar key="instr-class" value="float"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="FJCVTZS"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <arch_variants>
+        <arch_variant feature="FEAT_JSCVT" name="ARMv8.3"/>
+      </arch_variants>
+      <regdiagram form="32" psname="A64.simd_dp.float2int.FJCVTZS_32D_float2int" tworows="1">
+        <box hibit="31" name="sf" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="30" width="1" settings="1">
+          <c>0</c>
+        </box>
+        <box hibit="29" name="S" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="28" width="5" settings="5">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="ftype" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="2" name="rmode" usename="1" settings="2" psbits="xx">
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="18" width="3" name="opcode" usename="1" settings="3" psbits="xxx">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="15" width="6" settings="6">
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rd" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="FJCVTZS_32D_float2int" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="FJCVTZS"/>
+          <docvar key="convert-type" value="double-to-32"/>
+          <docvar key="instr-class" value="float"/>
+        </docvars>
+        <asmtemplate><text>FJCVTZS  </text><a hover="Is the 32-bit name of the general-purpose destination register, encoded in the &quot;Rd&quot; field." link="WdOrWZR">&lt;Wd&gt;</a><text>, </text><a hover="Is the 64-bit name of the SIMD&amp;amp;FP source register, encoded in the &quot;Rn&quot; field." link="Dn">&lt;Dn&gt;</a></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.simd_dp.float2int.FJCVTZS_32D_float2int" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if !IsFeatureImplemented(FEAT_JSCVT) then UNDEFINED;
+
+constant integer d = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rd);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+
+constant integer intsize = 32;
+constant integer fltsize = 64;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="FJCVTZS_32D_float2int" symboldefcount="1">
+      <symbol link="WdOrWZR">&lt;Wd&gt;</symbol>
+      <account encodedin="Rd">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose destination register, encoded in the "Rd" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="FJCVTZS_32D_float2int" symboldefcount="1">
+      <symbol link="Dn">&lt;Dn&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the SIMD&amp;FP source register, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.simd_dp.float2int.FJCVTZS_32D_float2int" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="impl-aarch64.CheckFPAdvSIMDEnabled64.0" file="shared_pseudocode.xml" hover="function: CheckFPAdvSIMDEnabled64()">CheckFPAdvSIMDEnabled64</a>();
+constant bits(fltsize) fltval = <a link="impl-aarch64.V.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) V[integer n, ESize width]">V</a>[n, fltsize];
+
+bits(intsize) intval;
+bit z;
+(intval, z) = <a link="impl-shared.FPToFixedJS.3" file="shared_pseudocode.xml" hover="function: (bits(N), bit) FPToFixedJS(bits(M) op, FPCR_Type fpcr, integer N)">FPToFixedJS</a>(fltval, FPCR, intsize);
+
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[d, intsize] = intval;
+PSTATE.&lt;N,Z,C,V&gt; = '0':z:'00';</pstext></ps>
+  </ps_section>
+</instructionsection>

@@ -1,0 +1,208 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="SYS" title="SYS -- A64" type="instruction">
+  <docvars>
+    <docvar key="instr-class" value="system"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="SYS"/>
+  </docvars>
+  <heading>SYS</heading>
+  <desc>
+    <brief>
+      <para>System instruction</para>
+    </brief>
+    <authored>
+      <para>For more information, see
+<xref linkend="ARMARM_BABEJJJE">Op0 equals 0b01, cache maintenance, TLB maintenance, and address translation instructions</xref>
+for the encodings of System instructions.</para>
+    </authored>
+  </desc>
+  <alias_list howmany="15">
+    <alias_list_intro>This instruction is used by the aliases </alias_list_intro>
+    <aliasref aliaspageid="AT_SYS" aliasfile="at_sys.xml" hover="Address translate" punct=", ">
+      <text>AT</text>
+      <aliaspref>CRn == '0111' &amp;&amp; CRm IN {'100x'} &amp;&amp; <a link="impl-aarch64.SysOp.4" file="shared_pseudocode.xml" hover="function: SystemOp SysOp(bits(3) op1, bits(4) CRn, bits(4) CRm, bits(3) op2)">SysOp</a>(op1, '0111', CRm, op2) == <a link="Sys_AT" file="shared_pseudocode.xml" hover="enumeration SystemOp {Sys_AT, Sys_BRB, Sys_DC, Sys_IC, Sys_TLBI, Sys_SYS}">Sys_AT</a>
+      </aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="BRB_SYS" aliasfile="brb_sys.xml" hover="Branch record buffer" punct=", ">
+      <text>BRB</text>
+      <aliaspref>op1 == '001' &amp;&amp; CRn == '0111' &amp;&amp; CRm == '0010' &amp;&amp; <a link="impl-aarch64.SysOp.4" file="shared_pseudocode.xml" hover="function: SystemOp SysOp(bits(3) op1, bits(4) CRn, bits(4) CRm, bits(3) op2)">SysOp</a>('001', '0111', '0010', op2) == <a link="Sys_BRB" file="shared_pseudocode.xml" hover="enumeration SystemOp {Sys_AT, Sys_BRB, Sys_DC, Sys_IC, Sys_TLBI, Sys_SYS}">Sys_BRB</a>
+      </aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="CFP_SYS" aliasfile="cfp_sys.xml" hover="Control flow prediction restriction by context" punct=", ">
+      <text>CFP</text>
+      <aliaspref>op1 == '011' &amp;&amp; CRn == '0111' &amp;&amp; CRm == '0011' &amp;&amp; op2 == '100'</aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="COSP_SYS" aliasfile="cosp_sys.xml" hover="Clear other speculative prediction restriction by context" punct=", ">
+      <text>COSP</text>
+      <aliaspref>op1 == '011' &amp;&amp; CRn == '0111' &amp;&amp; CRm == '0011' &amp;&amp; op2 == '110'</aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="CPP_SYS" aliasfile="cpp_sys.xml" hover="Cache prefetch prediction restriction by context" punct=", ">
+      <text>CPP</text>
+      <aliaspref>op1 == '011' &amp;&amp; CRn == '0111' &amp;&amp; CRm == '0011' &amp;&amp; op2 == '111'</aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="DC_SYS" aliasfile="dc_sys.xml" hover="Data cache operation" punct=", ">
+      <text>DC</text>
+      <aliaspref>CRn == '0111' &amp;&amp; <a link="impl-aarch64.SysOp.4" file="shared_pseudocode.xml" hover="function: SystemOp SysOp(bits(3) op1, bits(4) CRn, bits(4) CRm, bits(3) op2)">SysOp</a>(op1, '0111', CRm, op2) == <a link="Sys_DC" file="shared_pseudocode.xml" hover="enumeration SystemOp {Sys_AT, Sys_BRB, Sys_DC, Sys_IC, Sys_TLBI, Sys_SYS}">Sys_DC</a>
+      </aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="DVP_SYS" aliasfile="dvp_sys.xml" hover="Data value prediction restriction by context" punct=", ">
+      <text>DVP</text>
+      <aliaspref>op1 == '011' &amp;&amp; CRn == '0111' &amp;&amp; CRm == '0011' &amp;&amp; op2 == '101'</aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="GCSPOPCX_SYS" aliasfile="gcspopcx_sys.xml" hover="Guarded Control Stack pop and compare exception return record" punct=", ">
+      <text>GCSPOPCX</text>
+      <aliaspref>op1 == '000' &amp;&amp; CRn == '0111' &amp;&amp; CRm == '0111' &amp;&amp; op2 == '101'</aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="GCSPOPX_SYS" aliasfile="gcspopx_sys.xml" hover="Guarded Control Stack pop exception return record" punct=", ">
+      <text>GCSPOPX</text>
+      <aliaspref>op1 == '000' &amp;&amp; CRn == '0111' &amp;&amp; CRm == '0111' &amp;&amp; op2 == '110'</aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="GCSPUSHM_SYS" aliasfile="gcspushm_sys.xml" hover="Guarded Control Stack push" punct=", ">
+      <text>GCSPUSHM</text>
+      <aliaspref>op1 == '011' &amp;&amp; CRn == '0111' &amp;&amp; CRm == '0111' &amp;&amp; op2 == '000'</aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="GCSPUSHX_SYS" aliasfile="gcspushx_sys.xml" hover="Guarded Control Stack push exception return record" punct=", ">
+      <text>GCSPUSHX</text>
+      <aliaspref>op1 == '000' &amp;&amp; CRn == '0111' &amp;&amp; CRm == '0111' &amp;&amp; op2 == '100'</aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="GCSSS1_SYS" aliasfile="gcsss1_sys.xml" hover="Guarded Control Stack switch stack 1" punct=", ">
+      <text>GCSSS1</text>
+      <aliaspref>op1 == '011' &amp;&amp; CRn == '0111' &amp;&amp; CRm == '0111' &amp;&amp; op2 == '010'</aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="IC_SYS" aliasfile="ic_sys.xml" hover="Instruction cache operation" punct=", ">
+      <text>IC</text>
+      <aliaspref>CRn == '0111' &amp;&amp; <a link="impl-aarch64.SysOp.4" file="shared_pseudocode.xml" hover="function: SystemOp SysOp(bits(3) op1, bits(4) CRn, bits(4) CRm, bits(3) op2)">SysOp</a>(op1, '0111', CRm, op2) == <a link="Sys_IC" file="shared_pseudocode.xml" hover="enumeration SystemOp {Sys_AT, Sys_BRB, Sys_DC, Sys_IC, Sys_TLBI, Sys_SYS}">Sys_IC</a>
+      </aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="TLBI_SYS" aliasfile="tlbi_sys.xml" hover="TLB invalidate operation" punct=" and ">
+      <text>TLBI</text>
+      <aliaspref>CRn IN {'100x'} &amp;&amp; <a link="impl-aarch64.SysOp.4" file="shared_pseudocode.xml" hover="function: SystemOp SysOp(bits(3) op1, bits(4) CRn, bits(4) CRm, bits(3) op2)">SysOp</a>(op1, CRn, CRm, op2) == <a link="Sys_TLBI" file="shared_pseudocode.xml" hover="enumeration SystemOp {Sys_AT, Sys_BRB, Sys_DC, Sys_IC, Sys_TLBI, Sys_SYS}">Sys_TLBI</a>
+      </aliaspref>
+    </aliasref>
+    <aliasref aliaspageid="TRCIT_SYS" aliasfile="trcit_sys.xml" hover="Trace instrumentation" punct=".">
+      <text>TRCIT</text>
+      <aliaspref>op1 == '011' &amp;&amp; CRn == '0111' &amp;&amp; CRm == '0010' &amp;&amp; op2 == '111'</aliaspref>
+    </aliasref>
+    <alias_list_outro>
+      <text>  See </text>
+      <aliastablelink/>
+      <text> below for details of when each alias is preferred.</text>
+    </alias_list_outro>
+  </alias_list>
+  <classes>
+    <iclass name="System" oneof="1" id="iclass_system" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="instr-class" value="system"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="SYS"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.control.systeminstrs.SYS_CR_systeminstrs" tworows="1">
+        <box hibit="31" width="10" settings="10">
+          <c>1</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>1</c>
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="21" name="L" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="20" width="2" settings="2">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="18" width="3" name="op1" usename="1">
+          <c colspan="3"/>
+        </box>
+        <box hibit="15" width="4" name="CRn" usename="1">
+          <c colspan="4"/>
+        </box>
+        <box hibit="11" width="4" name="CRm" usename="1">
+          <c colspan="4"/>
+        </box>
+        <box hibit="7" width="3" name="op2" usename="1">
+          <c colspan="3"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="SYS_CR_systeminstrs" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="mnemonic" value="SYS"/>
+          <docvar key="instr-class" value="system"/>
+        </docvars>
+        <asmtemplate><text>SYS  #</text><a hover="Is a 3-bit unsigned immediate, in the range 0 to 7, encoded in the &quot;op1&quot; field." link="op1">&lt;op1&gt;</a><text>, </text><a hover="Is a name 'Cn', with 'n' in the range 0 to 15, encoded in the &quot;CRn&quot; field." link="Cn">&lt;Cn&gt;</a><text>, </text><a hover="Is a name 'Cm', with 'm' in the range 0 to 15, encoded in the &quot;CRm&quot; field." link="Cm">&lt;Cm&gt;</a><text>, #</text><a hover="Is a 3-bit unsigned immediate, in the range 0 to 7, encoded in the &quot;op2&quot; field." link="op2">&lt;op2&gt;</a><text>{, </text><a hover="Is the 64-bit name of the optional general-purpose source register, defaulting to '11111', encoded in the &quot;Rt&quot; field." link="XtOrXZR__2">&lt;Xt&gt;</a><text>}</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.control.systeminstrs.SYS_CR_systeminstrs" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode"><a link="AArch64.CheckSystemAccess.7" file="shared_pseudocode.xml" hover="function: AArch64.CheckSystemAccess(bits(2) op0, bits(3) op1, bits(4) crn, bits(4) crm, bits(3) op2, bits(5) rt, bit read)">AArch64.CheckSystemAccess</a>('01', op1, CRn, CRm, op2, Rt, L);
+
+constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+
+constant integer sys_op0 = 1;
+constant integer sys_op1 = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(op1);
+constant integer sys_op2 = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(op2);
+constant integer sys_crn = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(CRn);
+constant integer sys_crm = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(CRm);</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="SYS_CR_systeminstrs" symboldefcount="1">
+      <symbol link="op1">&lt;op1&gt;</symbol>
+      <account encodedin="op1">
+        <intro>
+          <para>Is a 3-bit unsigned immediate, in the range 0 to 7, encoded in the "op1" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SYS_CR_systeminstrs" symboldefcount="1">
+      <symbol link="Cn">&lt;Cn&gt;</symbol>
+      <account encodedin="CRn">
+        <intro>
+          <para>Is a name 'Cn', with 'n' in the range 0 to 15, encoded in the "CRn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SYS_CR_systeminstrs" symboldefcount="1">
+      <symbol link="Cm">&lt;Cm&gt;</symbol>
+      <account encodedin="CRm">
+        <intro>
+          <para>Is a name 'Cm', with 'm' in the range 0 to 15, encoded in the "CRm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SYS_CR_systeminstrs" symboldefcount="1">
+      <symbol link="op2">&lt;op2&gt;</symbol>
+      <account encodedin="op2">
+        <intro>
+          <para>Is a 3-bit unsigned immediate, in the range 0 to 7, encoded in the "op2" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="SYS_CR_systeminstrs" symboldefcount="1">
+      <symbol link="XtOrXZR__2">&lt;Xt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 64-bit name of the optional general-purpose source register, defaulting to '11111', encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+  </explanations>
+  <aliastablehook anchor="aliasconditions">Alias Conditions</aliastablehook>
+  <ps_section howmany="1">
+    <ps name="A64.control.systeminstrs.SYS_CR_systeminstrs" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute"><a link="AArch64.SysInstr.6" file="shared_pseudocode.xml" hover="function: AArch64.SysInstr(integer op0, integer op1, integer crn, integer crm, integer op2, integer t)">AArch64.SysInstr</a>(sys_op0, sys_op1, sys_crn, sys_crm, sys_op2, t);</pstext></ps>
+  </ps_section>
+</instructionsection>

@@ -1,0 +1,224 @@
+<?xml-stylesheet type="text/xsl" encoding="UTF-8" href="iform.xsl" version="1.0"?>
+<!DOCTYPE instructionsection PUBLIC "-//ARM//DTD instructionsection //EN" "iform-p.dtd">
+<!-- Copyright (c) 2010-2023 Arm Limited or its affiliates. All rights reserved. -->
+<!-- This document is Non-Confidential. This document may only be used and distributed in accordance with the terms of the agreement entered into by Arm and the party that Arm delivered this document to. -->
+<instructionsection id="LDRH_reg" title="LDRH (register) -- A64" type="instruction">
+  <docvars>
+    <docvar key="datatype" value="32"/>
+    <docvar key="instr-class" value="general"/>
+    <docvar key="isa" value="A64"/>
+    <docvar key="mnemonic" value="LDRH"/>
+    <docvar key="offset-type" value="off-reg"/>
+  </docvars>
+  <heading>LDRH (register)</heading>
+  <desc>
+    <brief>
+      <para>Load register halfword (register)</para>
+    </brief>
+    <authored>
+      <para>This instruction calculates an address from a base
+register value and an offset register value, loads a halfword from
+memory, zero-extends it, and writes it to a
+register. For information about addressing modes, see
+<xref linkend="ARMARM_CHDIIIBB">Load/Store addressing modes</xref>.</para>
+    </authored>
+  </desc>
+  <operationalnotes>
+    <para>If PSTATE.DIT is 1, the timing of this instruction is insensitive to the value of the data being loaded or stored.</para>
+  </operationalnotes>
+  <alias_list howmany="0"/>
+  <classes>
+    <iclass name="32-bit" oneof="1" id="iclass_32_bit" no_encodings="1" isa="A64">
+      <docvars>
+        <docvar key="datatype" value="32"/>
+        <docvar key="instr-class" value="general"/>
+        <docvar key="isa" value="A64"/>
+        <docvar key="mnemonic" value="LDRH"/>
+        <docvar key="offset-type" value="off-reg"/>
+      </docvars>
+      <iclassintro count="1"/>
+      <regdiagram form="32" psname="A64.ldst.ldst_regoff.LDRH_32_ldst_regoff" tworows="1">
+        <box hibit="31" width="2" name="size" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="29" width="3" settings="3">
+          <c>1</c>
+          <c>1</c>
+          <c>1</c>
+        </box>
+        <box hibit="26" name="VR" usename="1" settings="1" psbits="x">
+          <c>0</c>
+        </box>
+        <box hibit="25" width="2" settings="2">
+          <c>0</c>
+          <c>0</c>
+        </box>
+        <box hibit="23" width="2" name="opc" usename="1" settings="2" psbits="xx">
+          <c>0</c>
+          <c>1</c>
+        </box>
+        <box hibit="21" width="1" settings="1">
+          <c>1</c>
+        </box>
+        <box hibit="20" width="5" name="Rm" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="15" width="3" name="option" usename="1">
+          <c colspan="3"/>
+        </box>
+        <box hibit="12" width="1" name="S" usename="1">
+          <c colspan="1"/>
+        </box>
+        <box hibit="11" width="2" settings="2">
+          <c>1</c>
+          <c>0</c>
+        </box>
+        <box hibit="9" width="5" name="Rn" usename="1">
+          <c colspan="5"/>
+        </box>
+        <box hibit="4" width="5" name="Rt" usename="1">
+          <c colspan="5"/>
+        </box>
+      </regdiagram>
+      <encoding name="LDRH_32_ldst_regoff" oneofinclass="1" oneof="1" label="">
+        <docvars>
+          <docvar key="isa" value="A64"/>
+          <docvar key="datatype" value="32"/>
+          <docvar key="mnemonic" value="LDRH"/>
+          <docvar key="instr-class" value="general"/>
+          <docvar key="offset-type" value="off-reg"/>
+        </docvars>
+        <asmtemplate><text>LDRH  </text><a hover="Is the 32-bit name of the general-purpose register to be transferred, encoded in the &quot;Rt&quot; field." link="WtOrWZR__4">&lt;Wt&gt;</a><text>, [</text><a hover="Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the &quot;Rn&quot; field." link="XnSP_option">&lt;Xn|SP&gt;</a><text>, (</text><a hover="When &lt;field&gt;option&amp;lt;0&amp;gt;&lt;/field&gt; is set to 0, is the 32-bit name of the general-purpose index register, encoded in the &quot;Rm&quot; field." link="WmOrWZR">&lt;Wm&gt;</a><text>|</text><a hover="When &lt;field&gt;option&amp;lt;0&amp;gt;&lt;/field&gt; is set to 1, is the 64-bit name of the general-purpose index register, encoded in the &quot;Rm&quot; field." link="XmOrXZR__2">&lt;Xm&gt;</a><text>){, </text><a hover="Is the index extend/shift specifier, defaulting to LSL, and which must be omitted for the LSL option when &amp;lt;amount&amp;gt; is omitted. " link="extend_option__4">&lt;extend&gt;</a><text> {</text><a hover="Is the index shift amount, optional only when &amp;lt;extend&amp;gt; is not LSL. Where it is permitted to be optional, it defaults to #0. It is " link="amount_option__2">&lt;amount&gt;</a><text>}}]</text></asmtemplate>
+      </encoding>
+      <ps_section howmany="1">
+        <ps name="A64.ldst.ldst_regoff.LDRH_32_ldst_regoff" sections="1" secttype="noheading">
+          <pstext mayhavelinks="1" section="Decode" rep_section="decode">if option&lt;1&gt; == '0' then UNDEFINED;             // sub-word index
+constant <a link="ExtendType" file="shared_pseudocode.xml" hover="enumeration ExtendType  {ExtendType_SXTB, ExtendType_SXTH, ExtendType_SXTW, ExtendType_SXTX, ExtendType_UXTB, ExtendType_UXTH, ExtendType_UXTW, ExtendType_UXTX}">ExtendType</a> extend_type = <a link="impl-aarch64.DecodeRegExtend.1" file="shared_pseudocode.xml" hover="function: ExtendType DecodeRegExtend(bits(3) op)">DecodeRegExtend</a>(option);
+constant integer shift = if S == '1' then 1 else 0;</pstext></ps>
+      </ps_section>
+    </iclass>
+  </classes>
+  <explanations scope="all">
+    <explanation enclist="LDRH_32_ldst_regoff" symboldefcount="1">
+      <symbol link="WtOrWZR__4">&lt;Wt&gt;</symbol>
+      <account encodedin="Rt">
+        <intro>
+          <para>Is the 32-bit name of the general-purpose register to be transferred, encoded in the "Rt" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDRH_32_ldst_regoff" symboldefcount="1">
+      <symbol link="XnSP_option">&lt;Xn|SP&gt;</symbol>
+      <account encodedin="Rn">
+        <intro>
+          <para>Is the 64-bit name of the general-purpose base register or stack pointer, encoded in the "Rn" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDRH_32_ldst_regoff" symboldefcount="1">
+      <symbol link="WmOrWZR">&lt;Wm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>When <field>option&lt;0&gt;</field> is set to 0, is the 32-bit name of the general-purpose index register, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDRH_32_ldst_regoff" symboldefcount="1">
+      <symbol link="XmOrXZR__2">&lt;Xm&gt;</symbol>
+      <account encodedin="Rm">
+        <intro>
+          <para>When <field>option&lt;0&gt;</field> is set to 1, is the 64-bit name of the general-purpose index register, encoded in the "Rm" field.</para>
+        </intro>
+      </account>
+    </explanation>
+    <explanation enclist="LDRH_32_ldst_regoff" symboldefcount="1">
+      <symbol link="extend_option__4">&lt;extend&gt;</symbol>
+      <definition encodedin="option">
+        <intro>Is the index extend/shift specifier, defaulting to LSL, and which must be omitted for the LSL option when &lt;amount&gt; is omitted. </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">option</entry>
+                <entry class="symbol">&lt;extend&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">010</entry>
+                <entry class="symbol">UXTW</entry>
+              </row>
+              <row>
+                <entry class="bitfield">011</entry>
+                <entry class="symbol">LSL</entry>
+              </row>
+              <row>
+                <entry class="bitfield">110</entry>
+                <entry class="symbol">SXTW</entry>
+              </row>
+              <row>
+                <entry class="bitfield">111</entry>
+                <entry class="symbol">SXTX</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+    <explanation enclist="LDRH_32_ldst_regoff" symboldefcount="1">
+      <symbol link="amount_option__2">&lt;amount&gt;</symbol>
+      <definition encodedin="S">
+        <intro>Is the index shift amount, optional only when &lt;extend&gt; is not LSL. Where it is permitted to be optional, it defaults to #0. It is </intro>
+        <table class="valuetable">
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry class="bitfield">S</entry>
+                <entry class="symbol">&lt;amount&gt;</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry class="bitfield">0</entry>
+                <entry class="symbol">#0</entry>
+              </row>
+              <row>
+                <entry class="bitfield">1</entry>
+                <entry class="symbol">#1</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </definition>
+    </explanation>
+  </explanations>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldst_regoff.LDRH_32_ldst_regoff" sections="1" secttype="Shared Decode">
+      <pstext mayhavelinks="1" section="Postdecode" rep_section="postdecode">constant integer t = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rt);
+constant integer n = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rn);
+constant integer m = <a link="impl-shared.UInt.1" file="shared_pseudocode.xml" hover="function: integer UInt(bits(N) x)">UInt</a>(Rm);
+constant boolean nontemporal = FALSE;
+constant boolean tagchecked = TRUE;</pstext></ps>
+  </ps_section>
+  <ps_section howmany="1">
+    <ps name="A64.ldst.ldst_regoff.LDRH_32_ldst_regoff" sections="1" secttype="Operation">
+      <pstext mayhavelinks="1" section="Execute" rep_section="execute">constant bits(64) offset = <a link="impl-aarch64.ExtendReg.4" file="shared_pseudocode.xml" hover="function: bits(N) ExtendReg(integer reg, ExtendType exttype, integer shift, integer N)">ExtendReg</a>(m, extend_type, shift, 64);
+bits(64) address;
+
+constant boolean privileged = PSTATE.EL != <a link="EL0" file="shared_pseudocode.xml" hover="constant bits(2) EL0 = '00'">EL0</a>;
+constant <a link="AccessDescriptor" file="shared_pseudocode.xml" hover="type AccessDescriptor is ( AccessType acctype, bits(2) el, SecurityState ss, boolean acqsc, boolean acqpc, boolean relsc, boolean limitedordered, boolean exclusive, boolean atomicop, MemAtomicOp modop, boolean nontemporal, boolean read, boolean write, CacheOp cacheop, CacheOpScope opscope, CacheType cachetype, boolean pan, boolean transactional, boolean nonfault, boolean firstfault, boolean first, boolean contiguous, boolean streamingsve, boolean ls64, boolean mops, boolean rcw, boolean rcws, boolean toplevel, VARange varange, boolean a32lsmd, boolean tagchecked, boolean tagaccess, boolean devstoreunpred, boolean ispair, boolean highestaddressfirst, MPAMinfo mpam )">AccessDescriptor</a> accdesc = CreateAccDescGPR(<a link="MemOp_LOAD" file="shared_pseudocode.xml" hover="enumeration MemOp {MemOp_LOAD, MemOp_STORE, MemOp_PREFETCH}">MemOp_LOAD</a>, nontemporal, privileged,
+                                                     tagchecked);
+
+if n == 31 then
+    <a link="impl-aarch64.CheckSPAlignment.0" file="shared_pseudocode.xml" hover="function: CheckSPAlignment()">CheckSPAlignment</a>();
+    address = <a link="impl-aarch64.SP.read.0" file="shared_pseudocode.xml" hover="accessor: bits(64) SP[]">SP</a>[];
+else
+    address = <a link="impl-aarch64.X.read.2" file="shared_pseudocode.xml" hover="accessor: bits(width) X[integer n, integer width]">X</a>[n, 64];
+
+address = <a link="impl-shared.AddressAdd.3" file="shared_pseudocode.xml" hover="function: bits(64) AddressAdd(bits(64) base, integer offset, AccessDescriptor accdesc)">AddressAdd</a>(address, offset, accdesc);
+
+constant bits(16) data = <a link="impl-aarch64.Mem.read.3" file="shared_pseudocode.xml" hover="accessor: bits(size*8) Mem[bits(64) address, integer size, AccessDescriptor accdesc_in]">Mem</a>[address, 2, accdesc];
+<a link="impl-aarch64.X.write.2" file="shared_pseudocode.xml" hover="accessor: X[integer n, integer width] = bits(width) value">X</a>[t, 32] = <a link="impl-shared.ZeroExtend.2" file="shared_pseudocode.xml" hover="function: bits(N) ZeroExtend(bits(M) x, integer N)">ZeroExtend</a>(data, 32);</pstext></ps>
+  </ps_section>
+</instructionsection>
