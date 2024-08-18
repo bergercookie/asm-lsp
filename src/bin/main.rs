@@ -348,6 +348,7 @@ fn main_loop(
                         id,
                         &params,
                         &text_store,
+                        &mut tree_store,
                         names_to_info,
                         include_dirs,
                     )?;

@@ -10,7 +10,7 @@ use anyhow::{anyhow, Result};
 use compile_commands::{CompilationDatabase, CompileCommand, SourceFile};
 use dirs::config_dir;
 use log::{error, info, log, log_enabled, warn};
-use lsp_textdocument::FullTextDocument;
+use lsp_textdocument::{FullTextDocument, TextDocuments};
 use lsp_types::{
     CompletionItem, CompletionItemKind, CompletionList, CompletionParams, CompletionTriggerKind,
     Diagnostic, DocumentSymbol, DocumentSymbolParams, Documentation, GotoDefinitionParams,
@@ -28,7 +28,7 @@ use tree_sitter::InputEdit;
 use crate::types::Column;
 use crate::{
     Arch, ArchOrAssembler, Assembler, Completable, Hoverable, Instruction, NameToInstructionMap,
-    TargetConfig, TreeEntry,
+    TargetConfig, TreeEntry, TreeStore,
 };
 
 /// Find the start and end indices of a word inside the given line
@@ -467,11 +467,14 @@ pub fn get_completes<T: Completable, U: ArchOrAssembler>(
         .collect()
 }
 
+#[allow(clippy::too_many_arguments)]
 #[must_use]
 pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
     params: &HoverParams,
     word: &str,
     file_word: &str,
+    text_store: &TextDocuments,
+    tree_store: &mut TreeStore,
     instruction_map: &HashMap<(Arch, &str), T>,
     register_map: &HashMap<(Arch, &str), U>,
     directive_map: &HashMap<(Assembler, &str), V>,
@@ -490,6 +493,16 @@ pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
     let reg_lookup = lookup_hover_resp_by_arch(word, register_map);
     if reg_lookup.is_some() {
         return reg_lookup;
+    }
+
+    let label_data = get_label_resp(
+        word,
+        &params.text_document_position_params.text_document.uri,
+        text_store,
+        tree_store,
+    );
+    if label_data.is_some() {
+        return label_data;
     }
 
     let demang = get_demangle_resp(word);
@@ -586,6 +599,70 @@ fn lookup_hover_resp_by_assembler<T: Hoverable>(
             None
         }
     }
+}
+
+/// Returns the data associated with a given label `word`
+fn get_label_resp(
+    word: &str,
+    uri: &Uri,
+    text_store: &TextDocuments,
+    tree_store: &mut TreeStore,
+) -> Option<Hover> {
+    if let Some(doc) = text_store.get_document(uri) {
+        let curr_doc = doc.get_content(None).as_bytes();
+        if let Some(ref mut tree_entry) = tree_store.get_mut(uri) {
+            tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
+            if let Some(ref tree) = tree_entry.tree {
+                let mut cursor = tree_sitter::QueryCursor::new();
+
+                static QUERY_LABEL_DATA: Lazy<tree_sitter::Query> = Lazy::new(|| {
+                    tree_sitter::Query::new(
+                        &tree_sitter_asm::language(),
+                        "(
+                            (label (ident) @label)
+                            .
+                            (meta
+	                            (
+                                    [
+                                        (int)
+                                        (string)
+                                        (float)
+                                    ]
+                                )
+                            ) @data
+                        )",
+                    )
+                    .unwrap()
+                });
+                let matches_iter = cursor.matches(&QUERY_LABEL_DATA, tree.root_node(), curr_doc);
+
+                for match_ in matches_iter {
+                    let caps = match_.captures;
+                    if caps.len() != 2 {
+                        continue;
+                    }
+                    let label_text = caps[0].node.utf8_text(curr_doc);
+                    let label_data = caps[1].node.utf8_text(curr_doc);
+                    match (label_text, label_data) {
+                        (Ok(label), Ok(data))
+                            // Some labels have a preceding '.' that we need to account for
+                            if label.eq(word) || label.trim_start_matches('.').eq(word) =>
+                        {
+                            return Some(Hover {
+                                contents: HoverContents::Markup(MarkupContent {
+                                    kind: MarkupKind::Markdown,
+                                    value: format!("`{data}`"),
+                                }),
+                                range: None,
+                            });
+                        }
+                        _ => {}
+                    }
+                }
+            }
+        }
+    }
+    None
 }
 
 fn get_demangle_resp(word: &str) -> Option<Hover> {

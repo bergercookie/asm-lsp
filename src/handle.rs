@@ -36,6 +36,7 @@ pub fn handle_hover_request(
     id: RequestId,
     params: &HoverParams,
     text_store: &TextDocuments,
+    tree_store: &mut TreeStore,
     names_to_info: &NameToInfoMaps,
     include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
 ) -> Result<()> {
@@ -64,6 +65,8 @@ pub fn handle_hover_request(
         params,
         word,
         file_word,
+        text_store,
+        tree_store,
         &names_to_info.instructions,
         &names_to_info.registers,
         &names_to_info.directives,

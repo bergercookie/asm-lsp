@@ -33,6 +33,10 @@ use url_escape::encode_www_form_urlencoded;
 ///
 /// This function will return `Err` if an xml file within `docs_path` cannot be parsed,
 /// or if `docs_path` cannot be read
+///
+/// # Panics
+///
+/// Will panic the parser fails to extract an instruction name from a given file
 pub fn populate_arm_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>> {
     let mut instructions_map = HashMap::<String, Instruction>::new();
     let mut alias_map = HashMap::<String, Vec<InstructionAlias>>::new();
@@ -146,7 +150,7 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
                         curr_template = Some(cleaned);
                     }
                 } else if in_desc && in_para && alias.summary.is_empty() {
-                    alias.summary = str::from_utf8(txt)?.to_owned();
+                    str::from_utf8(txt)?.clone_into(&mut alias.summary);
                 }
             }
             Ok(Event::Empty(ref e)) => {
@@ -268,7 +272,7 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
                         }
                     }
                 } else if in_desc && in_para && instruction.summary.is_empty() {
-                    instruction.summary = str::from_utf8(txt)?.to_owned();
+                    str::from_utf8(txt)?.clone_into(&mut instruction.summary);
                 }
             }
             // end event --------------------------------------------------------------------------
