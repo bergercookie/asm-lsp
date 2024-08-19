@@ -4,12 +4,12 @@ mod tests {
     use std::{collections::HashMap, path::PathBuf, str::FromStr};
 
     use anyhow::Result;
-    use lsp_textdocument::FullTextDocument;
+    use lsp_textdocument::{FullTextDocument, TextDocuments};
     use lsp_types::{
         CompletionContext, CompletionItem, CompletionItemKind, CompletionParams,
-        CompletionTriggerKind, HoverContents, HoverParams, MarkupContent, MarkupKind,
-        PartialResultParams, Position, TextDocumentIdentifier, TextDocumentPositionParams, Uri,
-        WorkDoneProgressParams,
+        CompletionTriggerKind, DidOpenTextDocumentParams, HoverContents, HoverParams,
+        MarkupContent, MarkupKind, PartialResultParams, Position, TextDocumentIdentifier,
+        TextDocumentItem, TextDocumentPositionParams, Uri, WorkDoneProgressParams,
     };
     use tree_sitter::Parser;
 
@@ -20,7 +20,7 @@ mod tests {
         populate_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
         Assembler, Assemblers, Directive, Instruction, InstructionSets, NameToDirectiveMap,
-        NameToInstructionMap, NameToRegisterMap, Register, TargetConfig, TreeEntry,
+        NameToInstructionMap, NameToRegisterMap, Register, TargetConfig, TreeEntry, TreeStore,
     };
 
     #[derive(Debug)]
@@ -247,13 +247,6 @@ mod tests {
         let info = init_global_info(None).expect("Failed to load info");
         let globals = init_test_store(&info).expect("Failed to initialize test store");
 
-        let source_code = source.replace("<cursor>", "");
-        let curr_doc = Some(FullTextDocument::new(
-            "asm".to_string(),
-            1,
-            source_code.clone(),
-        ));
-
         let mut position: Option<Position> = None;
         for (line_num, line) in source.lines().enumerate() {
             if let Some((idx, _)) = line.match_indices("<cursor>").next() {
@@ -265,12 +258,39 @@ mod tests {
             }
         }
 
-        let pos_params = TextDocumentPositionParams {
-            text_document: TextDocumentIdentifier {
-                uri: Uri::from_str("file://").unwrap(),
+        let source_code = source.replace("<cursor>", "");
+        let curr_doc = Some(FullTextDocument::new(
+            "asm".to_string(),
+            0,
+            source_code.clone(),
+        ));
+        let uri: Uri = Uri::from_str("file://").unwrap();
+
+        let mut text_store = TextDocuments::new();
+        // mock the didOpen notification to insert a new document
+        let method = "textDocument/didOpen";
+        let did_open_params = DidOpenTextDocumentParams {
+            text_document: TextDocumentItem {
+                uri: uri.clone(),
+                language_id: "asm".to_string(),
+                version: 0,
+                text: source_code.to_string(),
             },
+        };
+        let params = serde_json::to_value(did_open_params).unwrap();
+        text_store.listen(method, &params);
+
+        let pos_params = TextDocumentPositionParams {
+            text_document: TextDocumentIdentifier { uri: uri.clone() },
             position: position.expect("No <cursor> marker found"),
         };
+
+        let mut parser = Parser::new();
+        parser.set_language(&tree_sitter_asm::language()).unwrap();
+        let tree = parser.parse(&source_code, None);
+        let mut tree_store = TreeStore::new();
+        let tree_entry = TreeEntry { tree, parser };
+        tree_store.insert(uri.clone(), tree_entry);
 
         let hover_params = HoverParams {
             text_document_position_params: pos_params.clone(),
@@ -294,6 +314,8 @@ mod tests {
             &hover_params,
             &word,
             &file_word,
+            &text_store,
+            &mut tree_store,
             &globals.names_to_instructions,
             &globals.names_to_registers,
             &globals.names_to_directives,
@@ -755,6 +777,34 @@ Width: 64 bits",
             CompletionTriggerKind::TRIGGER_CHARACTER,
             Some(".".to_string()),
         );
+    }
+
+    #[test]
+    fn handle_hover_gas_it_provides_label_data_1() {
+        test_hover(
+            r#".LC<cursor>O:
+    .string "(a & 0x0F): "
+            "#,
+            r#"`.string "(a & 0x0F): "`"#,
+        )
+    }
+    #[test]
+    fn handle_hover_gas_it_provides_label_data_2() {
+        test_hover(
+            r#"data_ite<cursor>ms:
+	.long 1, 2, 3
+            "#,
+            r#"`.long 1, 2, 3`"#,
+        )
+    }
+    #[test]
+    fn handle_hover_gas_it_provides_label_data_3() {
+        test_hover(
+            r#"data_ite<cursor>ms:
+	.float 1.1, 2.2, 3.3
+            "#,
+            r#"`.float 1.1, 2.2, 3.3`"#,
+        )
     }
 
     #[test]
