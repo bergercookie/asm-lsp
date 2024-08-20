@@ -31,6 +31,8 @@ mod tests {
         x86_64_registers: Vec<Register>,
         arm_instructions: Vec<Instruction>,
         arm_registers: Vec<Register>,
+        riscv_instructions: Vec<Instruction>,
+        riscv_registers: Vec<Register>,
         z80_instructions: Vec<Instruction>,
         z80_registers: Vec<Register>,
         gas_directives: Vec<Directive>,
@@ -55,6 +57,8 @@ mod tests {
                 x86_64_registers: Vec::new(),
                 arm_instructions: Vec::new(),
                 arm_registers: Vec::new(),
+                riscv_instructions: Vec::new(),
+                riscv_registers: Vec::new(),
                 z80_instructions: Vec::new(),
                 z80_registers: Vec::new(),
                 gas_directives: Vec::new(),
@@ -90,6 +94,7 @@ mod tests {
                 x86_64: true,
                 z80: true,
                 arm: true,
+                riscv: true,
             },
         });
 
@@ -134,6 +139,11 @@ mod tests {
             bincode::deserialize::<Vec<Instruction>>(arm_instrs)?
         };
 
+        info.riscv_instructions = {
+            let riscv_instrs = include_bytes!("../docs_store/opcodes/serialized/riscv");
+            bincode::deserialize::<Vec<Instruction>>(riscv_instrs)?
+        };
+
         info.x86_registers = {
             let regs_x86 = include_bytes!("../docs_store/registers/serialized/x86");
             bincode::deserialize(regs_x86)?
@@ -152,6 +162,11 @@ mod tests {
         info.arm_registers = {
             let regs_arm = include_bytes!("../docs_store/registers/serialized/arm");
             bincode::deserialize(regs_arm)?
+        };
+
+        info.riscv_registers = {
+            let regs_riscv = include_bytes!("../docs_store/registers/serialized/riscv");
+            bincode::deserialize(regs_riscv)?
         };
 
         info.gas_directives = {
@@ -190,6 +205,12 @@ mod tests {
         );
 
         populate_name_to_instruction_map(
+            Arch::RISCV,
+            &info.riscv_instructions,
+            &mut store.names_to_instructions,
+        );
+
+        populate_name_to_instruction_map(
             Arch::Z80,
             &info.z80_instructions,
             &mut store.names_to_instructions,
@@ -210,6 +231,12 @@ mod tests {
         populate_name_to_register_map(
             Arch::ARM,
             &info.arm_registers,
+            &mut store.names_to_registers,
+        );
+
+        populate_name_to_register_map(
+            Arch::RISCV,
+            &info.riscv_registers,
             &mut store.names_to_registers,
         );
 
@@ -299,13 +326,8 @@ mod tests {
             },
         };
 
-        let (word, file_word) = if let Some(ref doc) = curr_doc {
-            (
-                // get the word under the cursor
-                get_word_from_pos_params(doc, &pos_params, ""),
-                // treat the word under the cursor as a filename and grab it as well
-                get_word_from_pos_params(doc, &pos_params, "."),
-            )
+        let word = if let Some(ref doc) = curr_doc {
+            get_word_from_pos_params(doc, &pos_params)
         } else {
             panic!("No document");
         };
@@ -313,7 +335,6 @@ mod tests {
         let resp = get_hover_resp(
             &hover_params,
             &word,
-            &file_word,
             &text_store,
             &mut tree_store,
             &globals.names_to_instructions,
@@ -448,6 +469,20 @@ mod tests {
     }
 
     #[test]
+    fn handle_autocomplete_riscv_it_provides_reg_comps_in_existing_reg_arg() {
+        test_register_autocomplete(
+            "addi a0, x<cursor>, 1",
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_autocomplete_riscv_it_provides_instr_comps_one_character_start() {
+        test_instruction_autocomplete("a<cursor>", CompletionTriggerKind::INVOKED, None);
+    }
+
+    #[test]
     fn handle_autocomplete_arm_it_provides_reg_comps_in_existing_reg_arg() {
         test_register_autocomplete(
             "    mov  r<cursor>, #4",
@@ -523,6 +558,29 @@ bar:
             "	leaq	_ZSt4cout(%ri<cursor>), %rdi",
             CompletionTriggerKind::INVOKED,
             None,
+        );
+    }
+
+    #[test]
+    fn handle_hover_riscv_it_provides_instr_info_args() {
+        test_hover("<cursor>addi a0, x0, 1", "addi [riscv]
+add immediate
+
+Adds the sign-extended 12-bit immediate to register rs1. Arithmetic overflow is ignored and the result is simply the low XLEN bits of the result. ADDI rd, rs1, 0 is used to implement the MV rd, rs1 assembler pseudo-instruction.
+
+## Templates
+
+ + `addi       rd,rs1,imm`");
+    }
+
+    #[test]
+    fn handle_hover_riscv_it_provides_reg_info() {
+        test_hover(
+            "addi a0, x<cursor>0, 1",
+            "X0 [riscv]
+Hard-wired zero
+
+Type: General Purpose Register",
         );
     }
 

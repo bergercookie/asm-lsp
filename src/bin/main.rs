@@ -183,6 +183,21 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
+    let riscv_instructions = if target_config.instruction_sets.riscv {
+        let start = std::time::Instant::now();
+        let riscv_instrs = include_bytes!("../../docs_store/opcodes/serialized/riscv");
+        // NOTE: No need to filter these instructions by assembler like we do for
+        // x86/x86_64, as our RISCV docs don't contain any assembler-specific information (yet)
+        let instrs = bincode::deserialize::<Vec<Instruction>>(riscv_instrs)?;
+        info!(
+            "riscv instruction set loaded in {}ms",
+            start.elapsed().as_millis()
+        );
+        instrs
+    } else {
+        Vec::new()
+    };
+
     populate_name_to_instruction_map(
         Arch::X86,
         &x86_instructions,
@@ -201,6 +216,11 @@ pub fn main() -> Result<()> {
     populate_name_to_instruction_map(
         Arch::ARM,
         &arm_instructions,
+        &mut names_to_info.instructions,
+    );
+    populate_name_to_instruction_map(
+        Arch::RISCV,
+        &riscv_instructions,
         &mut names_to_info.instructions,
     );
 
@@ -259,6 +279,19 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
+    let riscv_registers = if target_config.instruction_sets.riscv {
+        let start = std::time::Instant::now();
+        let regs_riscv = include_bytes!("../../docs_store/registers/serialized/riscv");
+        let regs = bincode::deserialize(regs_riscv)?;
+        info!(
+            "riscv register set loaded in {}ms",
+            start.elapsed().as_millis()
+        );
+        regs
+    } else {
+        Vec::new()
+    };
+
     populate_name_to_register_map(Arch::X86, &x86_registers, &mut names_to_info.registers);
     populate_name_to_register_map(
         Arch::X86_64,
@@ -267,6 +300,7 @@ pub fn main() -> Result<()> {
     );
     populate_name_to_register_map(Arch::Z80, &z80_registers, &mut names_to_info.registers);
     populate_name_to_register_map(Arch::ARM, &arm_registers, &mut names_to_info.registers);
+    populate_name_to_register_map(Arch::RISCV, &riscv_registers, &mut names_to_info.registers);
 
     let gas_directives = if target_config.assemblers.gas {
         let start = std::time::Instant::now();

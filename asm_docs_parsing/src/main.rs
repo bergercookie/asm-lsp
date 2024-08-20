@@ -1,9 +1,10 @@
 use std::path::PathBuf;
 
-use ::asm_lsp::parser::{populate_instructions, populate_registers};
-use asm_lsp::{
-    parser::populate_arm_instructions, populate_directives, Arch, Directive, Instruction, Register,
+use ::asm_lsp::parser::{
+    populate_arm_instructions, populate_directives, populate_instructions, populate_registers,
+    populate_riscv_instructions, populate_riscv_registers,
 };
+use asm_lsp::{Arch, Directive, Instruction, Register};
 
 use anyhow::{anyhow, Result};
 use clap::{Parser, Subcommand};
@@ -55,6 +56,8 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                 (true, Some(arch)) => {
                     if arch == Arch::ARM {
                         instrs = populate_arm_instructions(&opts.input_path)?;
+                    } else if arch == Arch::RISCV {
+                        instrs = populate_riscv_instructions(&opts.input_path)?;
                     } else {
                         return Err(anyhow!(
                             "Directory parsing for {arch} instructions is not supported"
@@ -87,11 +90,17 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                 (true, _) => {
                     return Err(anyhow!("Directory parsing is not supported for registers"));
                 }
-                (false, arch_in) => {
-                    if arch_in.is_some() {
-                        println!("WARNING: `Arch` argument is ignored when `input_path` isn't a directory");
+                (false, None) => {
+                    return Err(anyhow!(
+                        "`arch` argument is requred when parsing register documentation"
+                    ));
+                }
+                (false, Some(arch_in)) => {
+                    if arch_in == Arch::RISCV {
+                        populate_riscv_registers(&conts)
+                    } else {
+                        populate_registers(&conts)?
                     }
-                    populate_registers(&conts)?
                 }
             };
             if regs.is_empty() {

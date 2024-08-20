@@ -7,7 +7,7 @@
 
 Provide hovering, autocompletion, signature help, go to definition, and view
 references for assembly files written in the GAS/NASM or GO assembly flavors. It
-supports assembly files for the x86, x86_64, ARM, and z80 instruction sets.
+supports assembly files for the x86, x86_64, ARM, RISCV, and z80 instruction sets.
 
 This tool can serve as reference when reading the assembly output of a program.
 This way you can query what each command exactly does and deliberate about
@@ -58,6 +58,7 @@ x86 = false
 x86_64 = true
 z80 = false
 arm = false
+riscv = false
 ```
 
 ### [OPTIONAL] Extend functionality via `compile_commands.json`/`compile_flags.txt`
@@ -125,3 +126,5 @@ git repository.
 - GAS directives sourced from SourceWare's [pseudo-ops page](https://sourceware.org/binutils/docs-2.41/as/Pseudo-Ops.html)
 
 - ARM instruction documentation builds on top of ARM's official [Exploration tools documentation](https://developer.arm.com/Architectures/A-Profile%20Architecture#Software-Download)
+
+- RISCV instruction and register documentation builds on top of the [riscv-isadoc project](https://github.com/msyksphinz-self/riscv-isadoc?tab=CC-BY-4.0-1-ov-file)

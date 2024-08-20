@@ -1,9 +1,11 @@
+use core::panic;
 use std::collections::HashMap;
 use std::env::args;
 use std::fs;
 use std::io::Write;
+use std::iter::Peekable;
 use std::path::PathBuf;
-use std::str::{self, FromStr};
+use std::str::{self, FromStr, Lines};
 
 use crate::types::{
     Arch, Assembler, Directive, Instruction, InstructionForm, MMXMode, NameToDirectiveMap,
@@ -22,6 +24,350 @@ use quick_xml::Reader;
 use regex::Regex;
 use reqwest;
 use url_escape::encode_www_form_urlencoded;
+
+/// Parse all of the register information witin the documentation file
+///
+/// Current function assumes that the RST file is already read and that it's been given a reference
+/// to its contents (`&str`).
+///
+/// # Panics
+///
+/// This function is highly specialized to parse a specific file and will panic
+/// for most mal-formed/unexpected inputs
+pub fn populate_riscv_registers(rst_contents: &str) -> Vec<Register> {
+    enum ParseState {
+        FileStart,
+        SectionStart,
+        TableStart,
+        TableSeparator,
+        TableEntry,
+        TableEnd,
+        FileEnd,
+    }
+    let mut parse_state = ParseState::FileStart;
+    let mut registers = Vec::new();
+    let mut curr_reg_type: Option<RegisterType> = None;
+    let mut lines = rst_contents.lines().peekable();
+
+    loop {
+        match parse_state {
+            ParseState::FileStart => {
+                let file_header = lines.next().unwrap();
+                assert!(file_header.eq("Register Definitions"));
+                let separator = lines.next().unwrap();
+                assert!(separator.starts_with('='));
+                consume_empty_lines(&mut lines);
+                parse_state = ParseState::SectionStart;
+            }
+            ParseState::SectionStart => {
+                let section_header = lines.next().unwrap();
+                if section_header.contains("Integer") {
+                    curr_reg_type = Some(RegisterType::GeneralPurpose);
+                } else if section_header.contains("Floating Point") {
+                    curr_reg_type = Some(RegisterType::FloatingPoint);
+                } else {
+                    panic!("Unexpected section header: {}", section_header);
+                }
+                let separator = lines.next().unwrap();
+                assert!(separator.starts_with('-'));
+                consume_empty_lines(&mut lines);
+                parse_state = ParseState::TableStart;
+            }
+            ParseState::TableStart => {
+                let top = lines.next().unwrap();
+                assert!(top.starts_with('+'));
+                let column_headers = lines.next().unwrap();
+                assert!(column_headers
+                    .eq("|Register | ABI Name | Description                       | Saver  |"));
+                parse_state = ParseState::TableSeparator;
+            }
+            ParseState::TableSeparator => {
+                let separator = lines.next().unwrap();
+                assert!(separator.starts_with('+'));
+                match lines.peek() {
+                    Some(next) => {
+                        if next.is_empty() {
+                            parse_state = ParseState::TableEnd;
+                        } else {
+                            parse_state = ParseState::TableEntry;
+                        }
+                    }
+                    None => parse_state = ParseState::TableEnd,
+                }
+            }
+            ParseState::TableEntry => {
+                let entries: Vec<&str> = lines
+                    .next()
+                    .unwrap()
+                    .trim_start_matches('|')
+                    .trim_end_matches('|')
+                    .split('|')
+                    .collect();
+                assert!(entries.len() == 4);
+                let reg_name = entries[0].trim();
+                let saved_info = if entries[3].trim().is_empty() {
+                    "".to_string()
+                } else {
+                    format!("\n{} saved", entries[3].trim())
+                };
+                let description = format!("{}{}", entries[2].trim(), saved_info);
+                let mut curr_register = Register {
+                    name: reg_name.to_owned(),
+                    description: Some(description),
+                    reg_type: curr_reg_type,
+                    arch: Some(Arch::RISCV),
+                    ..Default::default()
+                };
+                curr_register.alt_names.push(reg_name.to_lowercase());
+                curr_register.alt_names.push(reg_name.to_uppercase());
+                let abi_names = entries[1].trim().split('/');
+                for name in abi_names {
+                    curr_register.alt_names.push(name.to_lowercase());
+                    curr_register.alt_names.push(name.to_uppercase());
+                }
+
+                registers.push(curr_register);
+                parse_state = ParseState::TableSeparator;
+            }
+            ParseState::TableEnd => {
+                consume_empty_lines(&mut lines);
+                if lines.peek().is_some() {
+                    parse_state = ParseState::SectionStart;
+                } else {
+                    parse_state = ParseState::FileEnd;
+                }
+            }
+            ParseState::FileEnd => break,
+        }
+    }
+
+    registers
+}
+
+/// Parse all of the RISCV instruction rst files inside of `docs_dir`
+/// Each file is expected to correspond to part of an `Instruction` object
+///
+/// Current function assumes that the RST file is already read and that it's been given a reference
+/// to its contents (`&str`).
+///
+/// # Errors
+///
+/// This function will return `Err` if an rst file within `docs_path` cannot be parsed,
+/// or if `docs_path` cannot be read
+///
+/// # Panics
+///
+/// Will panic the parser fails to extract an instruction name from a given file
+pub fn populate_riscv_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>> {
+    let mut instructions_map = HashMap::<String, Instruction>::new();
+
+    // ensure we iterate through all files in a deterministic order
+    let mut entries: Vec<PathBuf> = std::fs::read_dir(docs_path)?
+        .map(|res| res.map(|e| e.path()))
+        .collect::<Result<Vec<_>, std::io::Error>>()?;
+    entries.sort();
+
+    // parse all instruction docs
+    for path in entries {
+        if let Ok(docs) = std::fs::read_to_string(&path) {
+            for instr in parse_riscv_instructions(&docs) {
+                assert!(!instructions_map.contains_key(&instr.name));
+                instructions_map.insert(instr.name.clone(), instr);
+            }
+        }
+    }
+
+    Ok(instructions_map.into_values().collect())
+}
+
+/// Parse an rst file containing the documentation for several RISCV instructions
+///
+/// # Errors
+///
+/// This function is highly specialized to parse a handful of files and will panic or return
+/// `Err` for most mal-formed inputs
+///
+/// # Panics
+///
+/// This function is highly specialized to parse a handful of files and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+fn parse_riscv_instructions(rst_contents: &str) -> Vec<Instruction> {
+    // We could pull in an actual rst parser to do this, but the files' contents
+    // are straightforward/structured enough that this should be fairly trivial
+    enum ParseState {
+        FileStart,
+        InstructionStart,
+        InstructionTableInfo,
+        InstructionFormat,
+        InstructionDescription,
+        InstructionImplementation,
+        InstructionExpansion,
+        FileEnd,
+    }
+    let mut parse_state = ParseState::FileStart;
+    let mut instructions = Vec::new();
+    let mut curr_instruction = Instruction {
+        arch: Some(Arch::RISCV),
+        ..Default::default()
+    };
+    let mut lines = rst_contents.lines().peekable();
+
+    loop {
+        match parse_state {
+            ParseState::FileStart => {
+                let _header = lines.next().unwrap();
+                let separator = lines.next().unwrap();
+                assert!(separator.trim().starts_with('='));
+                consume_empty_lines(&mut lines);
+                parse_state = ParseState::InstructionStart;
+            }
+            ParseState::InstructionStart => {
+                curr_instruction.name = lines.next().unwrap().trim().to_string();
+                let separator = lines.next().unwrap();
+                // e.g. ----------
+                assert!(separator.trim().starts_with('-'));
+                consume_empty_lines(&mut lines);
+
+                // some forms have an explanation for the mnemonic before the table section
+                if !lines.peek().unwrap().starts_with("..") {
+                    curr_instruction.summary = format!("{}\n\n", lines.next().unwrap().trim());
+                    consume_empty_lines(&mut lines);
+                }
+                parse_state = ParseState::InstructionTableInfo;
+            }
+            ParseState::InstructionTableInfo => {
+                // e.g. .. tabularcolumns:: |c|c|c|c|c|c|c|c|
+                let table_info_1 = lines.next().unwrap();
+                assert!(table_info_1.trim().starts_with(".."));
+                // e.g. .. table::
+                let table_info_2 = lines.next().unwrap();
+                assert!(table_info_2.trim().starts_with(".."));
+
+                consume_empty_lines(&mut lines);
+
+                /* e.g.
+                  +-----+--+--+-----+-----+-----+-----+-----+---+
+                  |31-27|26|25|24-20|19-15|14-12|11-7 |6-2  |1-0|
+                  +-----+--+--+-----+-----+-----+-----+-----+---+
+                  |11100|aq|rl|rs2  |rs1  |011  |rd   |01011|11 |
+                  +-----+--+--+-----+-----+-----+-----+-----+---+
+                */
+                let top = lines.next().unwrap();
+                assert!(top.trim().starts_with('+'));
+                let first_row = lines.next().unwrap();
+                assert!(first_row.trim().starts_with('|'));
+                let middle = lines.next().unwrap();
+                assert!(middle.trim().starts_with('+'));
+                let second_row = lines.next().unwrap();
+                assert!(second_row.trim().starts_with('|'));
+                let bottom = lines.next().unwrap();
+                assert!(bottom.trim().starts_with('+'));
+                consume_empty_lines(&mut lines);
+                parse_state = ParseState::InstructionFormat;
+            }
+            ParseState::InstructionFormat => {
+                let header = lines.next().unwrap();
+                assert!(header.eq(":Format:"));
+                curr_instruction.asm_templates.push(
+                    lines
+                        .next()
+                        .unwrap()
+                        .trim()
+                        .trim_start_matches('|')
+                        .trim()
+                        .to_string(),
+                );
+                consume_empty_lines(&mut lines);
+                parse_state = ParseState::InstructionDescription;
+            }
+            ParseState::InstructionDescription => {
+                let header = lines.next().unwrap();
+                assert!(header.eq(":Description:"));
+                while let Some(next) = lines.peek() {
+                    if next.contains('|') {
+                        curr_instruction.summary +=
+                            lines.next().unwrap().trim().trim_start_matches('|').trim();
+                    } else {
+                        break;
+                    }
+                }
+                consume_empty_lines(&mut lines);
+                parse_state = ParseState::InstructionImplementation;
+            }
+            ParseState::InstructionImplementation => {
+                let header = lines.next().unwrap();
+                assert!(header.eq(":Implementation:"));
+                let _impl_body = lines.next(); // e.g. x[rd] = AMO64(M[x[rs1]] MAXU x[rs2])
+                consume_empty_lines(&mut lines);
+                parse_state = ParseState::InstructionExpansion;
+            }
+            // NOTE: This field isn't present in most files
+            ParseState::InstructionExpansion => {
+                match lines.peek() {
+                    Some(&":Expansion:") => {
+                        let header = lines.next().unwrap();
+                        assert!(header.eq(":Expansion:"));
+                        let _exp_body = lines.next(); // e.g. lw rd\',offset[6:2](rs1\')
+                        consume_empty_lines(&mut lines);
+                        if lines.peek().is_some() {
+                            parse_state = ParseState::InstructionStart;
+                        } else {
+                            parse_state = ParseState::FileEnd;
+                        }
+                    }
+                    Some(other) => {
+                        if other.eq(&".. [classify table]") {
+                            consume_classify_table(&mut lines);
+                        }
+                        if lines.peek().is_some() {
+                            parse_state = ParseState::InstructionStart;
+                        } else {
+                            parse_state = ParseState::FileEnd;
+                        }
+                    }
+                    None => parse_state = ParseState::FileEnd,
+                }
+
+                instructions.push(curr_instruction);
+                curr_instruction = Instruction {
+                    arch: Some(Arch::RISCV),
+                    ..Default::default()
+                };
+            }
+            ParseState::FileEnd => break,
+        }
+    }
+
+    instructions
+}
+
+fn consume_empty_lines(line_iter: &mut Peekable<Lines>) {
+    while let Some(next) = line_iter.peek() {
+        if next.is_empty() {
+            _ = line_iter.next();
+        } else {
+            break;
+        }
+    }
+}
+
+fn consume_classify_table(line_iter: &mut Peekable<Lines>) {
+    let info_1 = line_iter.next().unwrap();
+    assert!(info_1.eq(".. [classify table]"));
+    let info_2 = line_iter.next().unwrap();
+    assert!(info_2.eq(".. table::"));
+    let info_3 = line_iter.next().unwrap();
+    assert!(info_3.trim().eq("Classify Table:"));
+    let empty = line_iter.next().unwrap();
+    assert!(empty.is_empty());
+    while let Some(next) = line_iter.peek() {
+        if !next.is_empty() {
+            _ = line_iter.next();
+        } else {
+            break;
+        }
+    }
+}
 
 /// Parse all of the ARM instruction xml files inside of `docs_dir`
 /// Each file is expected to correspond to part of an `Instruction` object
