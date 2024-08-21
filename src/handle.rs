@@ -46,15 +46,10 @@ pub fn handle_hover_request(
         error: None,
     };
 
-    let (word, file_word) = if let Some(doc) =
+    let word = if let Some(doc) =
         text_store.get_document(&params.text_document_position_params.text_document.uri)
     {
-        (
-            // get the word under the cursor
-            get_word_from_pos_params(doc, &params.text_document_position_params, ""),
-            // treat the word under the cursor as a filename and grab it as well
-            get_word_from_pos_params(doc, &params.text_document_position_params, "."),
-        )
+        get_word_from_pos_params(doc, &params.text_document_position_params)
     } else {
         return Ok(connection
             .sender
@@ -64,7 +59,6 @@ pub fn handle_hover_request(
     if let Some(hover_resp) = get_hover_resp(
         params,
         word,
-        file_word,
         text_store,
         tree_store,
         &names_to_info.instructions,

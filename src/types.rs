@@ -685,6 +685,8 @@ pub enum Arch {
     X86_64,
     #[strum(serialize = "arm")]
     ARM,
+    #[strum(serialize = "riscv")]
+    RISCV,
     #[strum(serialize = "z80")]
     Z80,
 }
@@ -698,6 +700,7 @@ impl std::fmt::Display for Arch {
             Self::X86_64 => write!(f, "x86-64")?,
             Self::ARM => write!(f, "arm")?,
             Self::Z80 => write!(f, "z80")?,
+            Self::RISCV => write!(f, "riscv")?,
         }
         Ok(())
     }
@@ -739,6 +742,8 @@ pub enum RegisterType {
     Test,
     #[strum(serialize = "Protected Mode Register")]
     ProtectedMode,
+    #[strum(serialize = "Floating Point Register")]
+    FloatingPoint,
 }
 
 #[derive(
@@ -821,6 +826,7 @@ pub struct InstructionSets {
     pub x86_64: bool,
     pub z80: bool,
     pub arm: bool,
+    pub riscv: bool,
 }
 
 impl Default for InstructionSets {
@@ -830,6 +836,7 @@ impl Default for InstructionSets {
             x86_64: true,
             z80: false,
             arm: false,
+            riscv: false,
         }
     }
 }

@@ -33,14 +33,11 @@ use crate::{
 
 /// Find the start and end indices of a word inside the given line
 /// Borrowed from RLS
-/// `additional_chars` parameter allows specifying additional legal "word"
 /// characters besides the default alphanumeric and '_'
 #[must_use]
-pub fn find_word_at_pos(line: &str, col: Column, additional_chars: &str) -> (Column, Column) {
+pub fn find_word_at_pos(line: &str, col: Column) -> (Column, Column) {
     let line_ = format!("{line} ");
-    let is_ident_char = |c: char| {
-        c.is_alphanumeric() || c == '_' || additional_chars.chars().any(|word_char| word_char == c)
-    };
+    let is_ident_char = |c: char| c.is_alphanumeric() || c == '_' || c == '.';
 
     let start = line_
         .chars()
@@ -71,10 +68,7 @@ pub fn find_word_at_pos(line: &str, col: Column, additional_chars: &str) -> (Col
 ///
 /// Will panic if the position parameters specify a line past the end of the file's
 /// contents
-pub fn get_word_from_file_params(
-    pos_params: &TextDocumentPositionParams,
-    extra_chars: &str,
-) -> Result<String> {
+pub fn get_word_from_file_params(pos_params: &TextDocumentPositionParams) -> Result<String> {
     let uri = &pos_params.text_document.uri;
     let line = pos_params.position.line as usize;
     let col = pos_params.position.character as usize;
@@ -89,7 +83,7 @@ pub fn get_word_from_file_params(
             let buf_reader = std::io::BufReader::new(file);
 
             let line_conts = buf_reader.lines().nth(line).unwrap().unwrap();
-            let (start, end) = find_word_at_pos(&line_conts, col, extra_chars);
+            let (start, end) = find_word_at_pos(&line_conts, col);
             Ok(String::from(&line_conts[start..end]))
         }
         Err(e) => Err(anyhow!("Filepath get error -- Error: {e}")),
@@ -99,14 +93,11 @@ pub fn get_word_from_file_params(
 /// Returns a string slice to the word in doc specified by the position params
 ///
 /// The `extra_chars` param allows specifying extra chars to be considered as
-/// valid word chars, in addition to the default alphanumeric and '_' chars
-// extra_chars is used when grabbing filenames from a document, as '.' isn't
-// normally considered a valid "word" char
+/// valid word chars, in addition to the default alphanumeric, '_', and '.' chars
 #[must_use]
 pub fn get_word_from_pos_params<'a>(
     doc: &'a FullTextDocument,
     pos_params: &TextDocumentPositionParams,
-    extra_chars: &str,
 ) -> &'a str {
     let line_contents = doc.get_content(Some(Range {
         start: Position {
@@ -119,11 +110,8 @@ pub fn get_word_from_pos_params<'a>(
         },
     }));
 
-    let (word_start, word_end) = find_word_at_pos(
-        line_contents,
-        pos_params.position.character as usize,
-        extra_chars,
-    );
+    let (word_start, word_end) =
+        find_word_at_pos(line_contents, pos_params.position.character as usize);
     &line_contents[word_start..word_end]
 }
 
@@ -472,7 +460,6 @@ pub fn get_completes<T: Completable, U: ArchOrAssembler>(
 pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
     params: &HoverParams,
     word: &str,
-    file_word: &str,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
     instruction_map: &HashMap<(Arch, &str), T>,
@@ -485,7 +472,8 @@ pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
         return instr_lookup;
     }
 
-    let directive_lookup = lookup_hover_resp_by_assembler(word, directive_map);
+    let directive_lookup =
+        lookup_hover_resp_by_assembler(word.trim_start_matches('.'), directive_map);
     if directive_lookup.is_some() {
         return directive_lookup;
     }
@@ -512,7 +500,7 @@ pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
 
     let include_path = get_include_resp(
         &params.text_document_position_params.text_document.uri,
-        file_word,
+        word,
         include_dirs,
     );
     if include_path.is_some() {
@@ -527,14 +515,20 @@ fn lookup_hover_resp_by_arch<T: Hoverable>(
     map: &HashMap<(Arch, &str), T>,
 ) -> Option<Hover> {
     // switch over to vec?
-    let (x86_resp, x86_64_resp, z80_resp, arm_resp) = search_for_hoverable_by_arch(word, map);
+    let (x86_resp, x86_64_resp, z80_resp, arm_resp, riscv_resp) =
+        search_for_hoverable_by_arch(word, map);
     match (
         x86_resp.is_some(),
         x86_64_resp.is_some(),
         z80_resp.is_some(),
         arm_resp.is_some(),
+        riscv_resp.is_some(),
     ) {
-        (true, _, _, _) | (_, true, _, _) | (_, _, true, _) | (_, _, _, true) => {
+        (true, _, _, _, _)
+        | (_, true, _, _, _)
+        | (_, _, true, _, _)
+        | (_, _, _, true, _)
+        | (_, _, _, _, true) => {
             let mut value = String::new();
             if let Some(x86_resp) = x86_resp {
                 value += &format!("{x86_resp}");
@@ -551,6 +545,13 @@ fn lookup_hover_resp_by_arch<T: Hoverable>(
             }
             if let Some(arm_resp) = arm_resp {
                 value += &format!("{}{}", if value.is_empty() { "" } else { "\n\n" }, arm_resp);
+            }
+            if let Some(riscv_resp) = riscv_resp {
+                value += &format!(
+                    "{}{}",
+                    if value.is_empty() { "" } else { "\n\n" },
+                    riscv_resp
+                );
             }
             Some(Hover {
                 contents: HoverContents::Markup(MarkupContent {
@@ -637,6 +638,7 @@ fn get_label_resp(
                 let matches_iter = cursor.matches(&QUERY_LABEL_DATA, tree.root_node(), curr_doc);
 
                 for match_ in matches_iter {
+                    info!("BOFFA: {:#?}", match_);
                     let caps = match_.captures;
                     if caps.len() != 2 {
                         continue;
@@ -1078,7 +1080,7 @@ pub fn get_sig_help_resp(
                     let mut has_x86_64 = false;
                     let mut has_z80 = false;
                     let mut has_arm = false;
-                    let (x86_info, x86_64_info, z80_info, arm_info) =
+                    let (x86_info, x86_64_info, z80_info, arm_info, riscv_info) =
                         search_for_hoverable_by_arch(instr_name, instr_info);
                     if let Some(sig) = x86_info {
                         for form in &sig.forms {
@@ -1144,6 +1146,15 @@ pub fn get_sig_help_resp(
                             value += &format!("{form}\n");
                         }
                     }
+                    if let Some(sig) = riscv_info {
+                        for form in &sig.asm_templates {
+                            if !has_arm {
+                                value += "**riscv**\n";
+                                has_arm = true;
+                            }
+                            value += &format!("{form}\n");
+                        }
+                    }
                     if !value.is_empty() {
                         return Some(SignatureHelp {
                             signatures: vec![SignatureInformation {
@@ -1184,7 +1195,7 @@ pub fn get_goto_def_resp(
         let mut cursor = tree_sitter::QueryCursor::new();
         let matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc.as_bytes());
 
-        let word = get_word_from_pos_params(curr_doc, &params.text_document_position_params, "");
+        let word = get_word_from_pos_params(curr_doc, &params.text_document_position_params);
 
         for match_ in matches {
             for cap in match_.captures {
@@ -1240,7 +1251,7 @@ pub fn get_ref_resp(
         });
 
         let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
-        let word = get_word_from_pos_params(curr_doc, &params.text_document_position, "");
+        let word = get_word_from_pos_params(curr_doc, &params.text_document_position);
         let uri = &params.text_document_position.text_document.uri;
 
         let mut cursor = tree_sitter::QueryCursor::new();
@@ -1305,16 +1316,24 @@ pub fn get_ref_resp(
 // If issue is resolved, can add a separate lifetime "'b" to "word"
 // parameter such that 'a: 'b
 // For now, using 'a for both isn't strictly necessary, but fits our use case
+#[allow(clippy::type_complexity)]
 fn search_for_hoverable_by_arch<'a, T: Hoverable>(
     word: &'a str,
     map: &'a HashMap<(Arch, &str), T>,
-) -> (Option<&'a T>, Option<&'a T>, Option<&'a T>, Option<&'a T>) {
+) -> (
+    Option<&'a T>,
+    Option<&'a T>,
+    Option<&'a T>,
+    Option<&'a T>,
+    Option<&'a T>,
+) {
     let x86_resp = map.get(&(Arch::X86, word));
     let x86_64_resp = map.get(&(Arch::X86_64, word));
     let z80_resp = map.get(&(Arch::Z80, word));
     let arm_resp = map.get(&(Arch::ARM, word));
+    let riscv_resp = map.get(&(Arch::RISCV, word));
 
-    (x86_resp, x86_64_resp, z80_resp, arm_resp)
+    (x86_resp, x86_64_resp, z80_resp, arm_resp, riscv_resp)
 }
 
 fn search_for_hoverable_by_assembler<'a, T: Hoverable>(
