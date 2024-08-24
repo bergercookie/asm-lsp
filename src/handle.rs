@@ -19,7 +19,7 @@ use tree_sitter::Parser;
 use crate::{
     apply_compile_cmd, get_comp_resp, get_document_symbols, get_goto_def_resp, get_hover_resp,
     get_ref_resp, get_sig_help_resp, get_word_from_pos_params, text_doc_change_to_ts_edit,
-    NameToInfoMaps, NameToInstructionMap, TreeEntry, TreeStore,
+    NameToInfoMaps, NameToInstructionMap, TargetConfig, TreeEntry, TreeStore,
 };
 
 /// Handles hover requests
@@ -31,9 +31,11 @@ use crate::{
 /// # Panics
 ///
 /// Panics if JSON encoding of a response fails
+#[allow(clippy::too_many_arguments)]
 pub fn handle_hover_request(
     connection: &Connection,
     id: RequestId,
+    config: &TargetConfig,
     params: &HoverParams,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
@@ -58,6 +60,7 @@ pub fn handle_hover_request(
 
     if let Some(hover_resp) = get_hover_resp(
         params,
+        config,
         word,
         text_store,
         tree_store,
@@ -92,6 +95,7 @@ pub fn handle_completion_request(
     connection: &Connection,
     id: RequestId,
     params: &CompletionParams,
+    config: &TargetConfig,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
     instruction_completion_items: &[CompletionItem],
@@ -105,6 +109,7 @@ pub fn handle_completion_request(
                 doc.get_content(None),
                 tree_entry,
                 params,
+                config,
                 instruction_completion_items,
                 directive_completion_items,
                 register_completion_items,

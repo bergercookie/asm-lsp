@@ -10,7 +10,8 @@ use asm_lsp::handle::{
 use asm_lsp::{
     get_compile_cmds, get_completes, get_include_dirs, get_target_config, instr_filter_targets,
     populate_name_to_directive_map, populate_name_to_instruction_map,
-    populate_name_to_register_map, Arch, Assembler, Instruction, NameToInfoMaps, TreeStore,
+    populate_name_to_register_map, Arch, Assembler, Instruction, NameToInfoMaps, TargetConfig,
+    TreeStore,
 };
 
 use compile_commands::{CompilationDatabase, SourceFile};
@@ -316,9 +317,45 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
+    let masm_directives = if target_config.assemblers.masm {
+        let start = std::time::Instant::now();
+        let masm_dirs = include_bytes!("../../docs_store/directives/serialized/masm");
+        let dirs = bincode::deserialize(masm_dirs)?;
+        info!(
+            "MASM directive set loaded in {}ms",
+            start.elapsed().as_millis()
+        );
+        dirs
+    } else {
+        Vec::new()
+    };
+
+    let nasm_directives = if target_config.assemblers.nasm {
+        let start = std::time::Instant::now();
+        let nasm_dirs = include_bytes!("../../docs_store/directives/serialized/nasm");
+        let dirs = bincode::deserialize(nasm_dirs)?;
+        info!(
+            "Nasm directive set loaded in {}ms",
+            start.elapsed().as_millis()
+        );
+        dirs
+    } else {
+        Vec::new()
+    };
+
     populate_name_to_directive_map(
         Assembler::Gas,
         &gas_directives,
+        &mut names_to_info.directives,
+    );
+    populate_name_to_directive_map(
+        Assembler::Masm,
+        &masm_directives,
+        &mut names_to_info.directives,
+    );
+    populate_name_to_directive_map(
+        Assembler::Nasm,
+        &nasm_directives,
         &mut names_to_info.directives,
     );
 
@@ -339,6 +376,7 @@ pub fn main() -> Result<()> {
 
     main_loop(
         &connection,
+        &target_config,
         &names_to_info,
         &instr_completion_items,
         &directive_completion_items,
@@ -359,6 +397,7 @@ pub fn main() -> Result<()> {
 #[allow(clippy::too_many_arguments)]
 fn main_loop(
     connection: &Connection,
+    config: &TargetConfig,
     names_to_info: &NameToInfoMaps,
     instruction_completion_items: &[CompletionItem],
     directive_completion_items: &[CompletionItem],
@@ -381,6 +420,7 @@ fn main_loop(
                     handle_hover_request(
                         connection,
                         id,
+                        config,
                         &params,
                         &text_store,
                         &mut tree_store,
@@ -396,6 +436,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
+                        config,
                         &text_store,
                         &mut tree_store,
                         instruction_completion_items,

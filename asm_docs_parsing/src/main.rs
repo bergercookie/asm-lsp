@@ -1,10 +1,11 @@
 use std::path::PathBuf;
 
 use ::asm_lsp::parser::{
-    populate_arm_instructions, populate_directives, populate_instructions, populate_registers,
-    populate_riscv_instructions, populate_riscv_registers,
+    populate_arm_instructions, populate_gas_directives, populate_instructions,
+    populate_masm_nasm_directives, populate_registers, populate_riscv_instructions,
+    populate_riscv_registers,
 };
-use asm_lsp::{Arch, Directive, Instruction, Register};
+use asm_lsp::{Arch, Assembler, Directive, Instruction, Register};
 
 use anyhow::{anyhow, Result};
 use clap::{Parser, Subcommand};
@@ -35,10 +36,14 @@ struct SerializeDocs {
     doc_type: DocType,
     #[arg(
         long,
-        short,
-        help = "Architecture. Must be specified if `input_path` is a directory, ignored otherwise"
+        help = "Architecture. Must be specified if `input_path` is a directory of opcode information, or register documentation. Ignored otherwise"
     )]
     arch: Option<Arch>,
+    #[arg(
+        long,
+        help = "Assembler. Must be specified if parsing directive documentation, ignored otherwise"
+    )]
+    assembler: Option<Assembler>,
 }
 
 #[derive(Subcommand)]
@@ -112,15 +117,25 @@ fn run(opts: &SerializeDocs) -> Result<()> {
         DocType::Directive => {
             let path = opts.input_path.canonicalize()?;
             let conts = std::fs::read_to_string(&path)?;
-            let directives: Vec<Directive> = match (path.is_dir(), opts.arch) {
+            let directives: Vec<Directive> = match (path.is_dir(), opts.assembler) {
                 (true, _) => {
                     return Err(anyhow!("Directory parsing is not supported for directives"));
                 }
-                (false, arch_in) => {
-                    if arch_in.is_some() {
-                        println!("WARNING: `Arch` argument is ignored when `input_path` isn't a directory");
+                (false, None) => {
+                    return Err(anyhow!(
+                        "`assembler` argument is requred when parsing directive documentation"
+                    ));
+                }
+                (false, Some(assembler_in)) => {
+                    if assembler_in == Assembler::Gas || assembler_in == Assembler::Go {
+                        populate_gas_directives(&conts)?
+                    } else if assembler_in == Assembler::Masm || assembler_in == Assembler::Nasm {
+                        populate_masm_nasm_directives(&conts)?
+                    } else {
+                        return Err(anyhow!(
+                            "Directives documentation parsing isn't support for `{assembler_in}`"
+                        ));
                     }
-                    populate_directives(&conts)?
                 }
             };
             if directives.is_empty() {

@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<directives>
+	<directive name="DB" tool="nasm">
+		<description>Pseudo-Instruction declaring initialized data. Byte (1 byte, 8 bit). DB is a synonym of BYTE</description>
+	</directive>
+	<directive name="DW" tool="nasm">
+		<description>Pseudo-Instruction declaring initialized data. Word, Half Precision (2 bytes, 16 bit). DW is a synonym of WORD.</description>
+	</directive>
+	<directive name="DD" tool="nasm">
+		<description>Pseudo-Instruction declaring initialized data. Double Word, Single Precision (4 bytes, 32 bit). DD is a synonym of DWORD.</description>
+	</directive>
+	<directive name="DQ" tool="nasm">
+		<description>Pseudo-Instruction declaring initialized data. Quad word, Double Precision (8 bytes, 64 bit). DQ is a synonym of QWORD.</description>
+	</directive>
+	<directive name="DT" tool="nasm">
+		<description>Pseudo-Instruction declaring initialized data. Extended (Double) Precision (10 bytes, 80 bit). DT is a synonym of TBYTE.</description>
+	</directive>
+	<directive name="DO" tool="nasm">
+		<description>Pseudo-Instruction declaring initialized data. IEEE 754-2008 Quad Precision (16 bytes, 128 bit), DO is a synonym of OWORD.</description>
+	</directive>
+	<directive name="DY" tool="nasm">
+		<description>Pseudo-Instruction declaring initialized data. (32 bytes, 256 bit). DY is a synonym of YWORD.</description>
+	</directive>
+	<directive name="DZ" tool="nasm">
+		<description>Pseudo-Instruction declaring initialized data. (64 bytes, 512 bit). DZ is a synonym of ZWORD.</description>
+	</directive>
+	<directive name="RESB" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. Byte (1 byte, 8 bit). RESB is a synonym of BYTE</description>
+	</directive>
+	<directive name="RESW" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. Word, Half Precision (2 bytes, 16 bit). RESW is a synonym of WORD.</description>
+	</directive>
+	<directive name="RESD" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. Double Word, Single Precision (4 bytes, 32 bit). RESD is a synonym of DWORD.</description>
+	</directive>
+	<directive name="RESQ" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. Quad word, Double Precision (8 bytes, 64 bit). RESQ is a synonym of QWORD.</description>
+	</directive>
+	<directive name="REST" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. Extended (Double) Precision (10 bytes, 80 bit). REST is a synonym of TBYTE.</description>
+	</directive>
+	<directive name="RESO" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. IEEE 754-2008 Quad Precision (16 bytes, 128 bit), RESO is a synonym of OWORD.</description>
+	</directive>
+	<directive name="RESY" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. (32 bytes, 256 bit). RESY is a synonym of YWORD.</description>
+	</directive>
+	<directive name="RESZ" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. (64 bytes, 512 bit). RESZ is a synonym of ZWORD.</description>
+	</directive>
+	<directive name="BYTE" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. Byte (1 byte, 8 bit)</description>
+	</directive>
+	<directive name="SBYTE" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. Signed Byte (1 byte, 8 bit)</description>
+	</directive>
+	<directive name="WORD" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. Word, Half Precision (2 bytes, 16 bit)</description>
+	</directive>
+	<directive name="SWORD" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. Signed Word, Half Precision (2 bytes, 16 bit)</description>
+	</directive>
+	<directive name="DWORD" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. Double Word, Single Precision (4 bytes, 32 bit)</description>
+	</directive>
+	<directive name="SDWORD" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. Signed Double Word, Single Precision (4 bytes, 32 bit)</description>
+	</directive>
+	<directive name="QWORD" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. Quad word, Double Precision (8 bytes, 64 bit)</description>
+	</directive>
+	<directive name="MMWORD" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. Quad word, Double Precision (8 bytes, 64 bit)</description>
+	</directive>
+	<directive name="TWORD" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. Extended (Double) Precision (10 bytes, 80 bit)</description>
+	</directive>
+	<directive name="XMMWORD" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. (16 bytes, 128 bit)</description>
+	</directive>
+	<directive name="OWORD" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. IEEE 754-2008 Quad Precision (16 bytes, 128 bit)</description>
+	</directive>
+	<directive name="YMMWORD" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. (32 bytes, 256 bit)</description>
+	</directive>
+	<directive name="YWORD" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. (32 bytes, 256 bit)</description>
+	</directive>
+	<directive name="ZMMWORD" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. (64 bytes, 512 bit)</description>
+	</directive>
+	<directive name="ZWORD" tool="nasm">
+		<description>Pseudo-Instruction declaring uninitialized data. (64 bytes, 512 bit)</description>
+	</directive>
+	<directive name="EQU" tool="nasm">
+		<description>EQU defines a symbol to a given constant value: when EQU is used, the source line must contain a label. The action of EQU is to define the given label name to the value of its (only) operand. This definition is absolute, and cannot change later.</description>
+	</directive>
+	<directive name="INCLUDE" tool="nasm">
+		<description>Inserts source code from the source file given by filename into the current source file during assembly.</description>
+	</directive>
+	<directive name="BITS" tool="nasm">
+		<description>The BITS directive specifies whether NASM should generate code designed to run on a processor operating in 16-bit mode, 32-bit mode or 64-bit mode. The syntax is BITS XX, where XX is 16, 32 or 64.</description>
+	</directive>
+	<directive name="%DEFINE" tool="nasm">
+		<description>Define Single-line macros that is resolved at the time the embedded macro is expanded.</description>
+	</directive>
+	<directive name="%XDEFINE" tool="nasm">
+		<description>Define Single-line macros that is resolved at the time the embedded macro is defined.</description>
+	</directive>
+	<directive name="%IXDEFINE" tool="nasm">
+		<description>Define case-insensitive single-line macros that is resolved at the time the embedded macro is defined.</description>
+	</directive>
+	<directive name="%UNDEF" tool="nasm">
+		<description>Define Single-line macros can be removed with the %undef directive.</description>
+	</directive>
+	<directive name="%UNDEF" tool="nasm">
+		<description>Single-line macros can be removed with the %undef directive.</description>
+	</directive>
+	<directive name="%ASSIGN" tool="nasm">
+		<description>Define single-line macros.</description>
+	</directive>
+	<directive name="%IASSIGN" tool="nasm">
+		<description>Define case-insensitive single-line macros.</description>
+	</directive>
+	<directive name="%DEFSTR" tool="nasm">
+		<description>%defstr, and its case-insensitive counterpart %idefstr, define or redefine a single-line macro without parameters but converts the entire right-hand side, after macro expansion, to a quoted string before definition.</description>
+	</directive>
+	<directive name="%IDEFSTR" tool="nasm">
+		<description>%defstr, and its case-insensitive counterpart %idefstr, define or redefine a single-line macro without parameters but converts the entire right-hand side, after macro expansion, to a quoted string before definition.</description>
+	</directive>
+	<directive name="%DEFTOK" tool="nasm">
+		<description>%deftok, and its case-insensitive counterpart %ideftok, define or redefine a single-line macro without parameters but converts the second parameter, after string conversion, to a sequence of tokens.</description>
+	</directive>
+	<directive name="%IDEFTOK" tool="nasm">
+		<description>%deftok, and its case-insensitive counterpart %ideftok, define or redefine a single-line macro without parameters but converts the second parameter, after string conversion, to a sequence of tokens.</description>
+	</directive>
+	<directive name="%STRCAT" tool="nasm">
+		<description>The %strcat operator concatenates quoted strings and assign them to a single-line macro.</description>
+	</directive>
+	<directive name="%STRLEN" tool="nasm">
+		<description>The %strlen operator assigns the length of a string to a macro.</description>
+	</directive>
+	<directive name="%SUBSTR" tool="nasm">
+		<description>Individual letters or substrings in strings can be extracted using the %substr operator.</description>
+	</directive>
+	<directive name="%MACRO" tool="nasm">
+		<description>Start a multiline macro</description>
+	</directive>
+	<directive name="%ENDMACRO" tool="nasm">
+		<description>End a multiline macro, started with %macro.</description>
+	</directive>
+	<directive name="%UNMACRO" tool="nasm">
+		<description>Multi-line macros can be removed with the %unmacro directive. Unlike the %undef directive, however, %unmacro takes an argument specification, and will only remove exact matches with that argument specification.</description>
+	</directive>
+	<directive name="%IF" tool="nasm">
+		<description>Conditional Assembly.</description>
+	</directive>
+	<directive name="%ELIF" tool="nasm">
+		<description>Conditional Assembly.</description>
+	</directive>
+	<directive name="%ELSE" tool="nasm">
+		<description>Conditional Assembly.</description>
+	</directive>
+	<directive name="%ENDIF" tool="nasm">
+		<description>Conditional Assembly.</description>
+	</directive>
+	<directive name="%IFDEF" tool="nasm">
+		<description>Testing Single-Line Macro Existence.</description>
+	</directive>
+	<directive name="%IFMACRO" tool="nasm">
+		<description>Testing Multi-Line Macro Existence. The %ifmacro directive operates in the same way as the %ifdef directive, except that it checks for the existence of a multi-line macro.</description>
+	</directive>
+	<directive name="%IFCTX" tool="nasm">
+		<description>Testing the Context Stack. The %ifmacro directive operates in the same way as the %ifdef directive, except that it checks for the existence of a multi-line macro.</description>
+	</directive>
+	<directive name="%IFIDN" tool="nasm">
+		<description>Testing Exact Text Identity. The construct %ifidn text1,text2 will cause the subsequent code to be assembled if and only if text1 and text2, after expanding single-line macros, are identical pieces of text. Differences in white space are not counted.</description>
+	</directive>
+	<directive name="%IFIDNI" tool="nasm">
+		<description>Testing Exact Text Identity. The construct %ifidni text1,text2 will cause the subsequent code to be assembled if and only if text1 and text2, after expanding single-line macros, are identical pieces of text (case-insensitive). Differences in white space are not counted.</description>
+	</directive>
+	<directive name="%IFID" tool="nasm">
+		<description>Testing Token Types. The conditional assembly construct %ifid, taking one parameter (which may be blank), assembles the subsequent code if and only if the first token in the parameter exists and is an identifier.</description>
+	</directive>
+	<directive name="%IFNUM" tool="nasm">
+		<description>Testing Token Types. The conditional assembly construct %ifnum, taking one parameter (which may be blank), assembles the subsequent code if and only if the first token in the parameter exists and is a number.</description>
+	</directive>
+	<directive name="%IFSTR" tool="nasm">
+		<description>Testing Token Types. The conditional assembly construct %ifstr, taking one parameter (which may be blank), assembles the subsequent code if and only if the first token in the parameter exists and is a string.</description>
+	</directive>
+	<directive name="%IFTOKEN" tool="nasm">
+		<description>Test for a Single Token. The conditional assembly construct %iftoken assembles the subsequent code if and only if the expanded parameters consist of exactly one token, possibly surrounded by whitespace.</description>
+	</directive>
+	<directive name="%IFEMPTY" tool="nasm">
+		<description>Test for Empty Expansion. The conditional assembly construct %ifempty assembles the subsequent code if and only if the expanded parameters do not contain any tokens at all, whitespace excepted.</description>
+	</directive>
+	<directive name="%IFENV" tool="nasm">
+		<description>Test If Environment Variable Exists. The conditional assembly construct %ifenv assembles the subsequent code if and only if the environment variable referenced by the %!env directive exists.</description>
+	</directive>
+	<directive name="%REP" tool="nasm">
+		<description>The directives %rep and %endrep (%rep takes a numeric argument, which can be an expression; %endrep takes no arguments) can be used to enclose a chunk of code, which is then replicated as many times as specified by the preprocessor.</description>
+	</directive>
+	<directive name="%INCLUDE" tool="nasm">
+		<description>Inserts source code from the source file given by filename into the current source file during assembly.</description>
+	</directive>
+	<directive name="%PATHSEARCH" tool="nasm">
+		<description>Search the Include Path.</description>
+	</directive>
+	<directive name="%DEPEND" tool="nasm">
+		<description>Add Dependent Files.</description>
+	</directive>
+	<directive name="%USE" tool="nasm">
+		<description>Include Standard Macro Package.</description>
+	</directive>
+	<directive name="%PUSH" tool="nasm">
+		<description>Creating and Removing Contexts.</description>
+	</directive>
+	<directive name="%POP" tool="nasm">
+		<description>Creating and Removing Contexts.</description>
+	</directive>
+	<directive name="%REPL" tool="nasm">
+		<description>Renaming a Context.</description>
+	</directive>
+	<directive name="%ARG" tool="nasm">
+		<description>The %arg directive is used to simplify the handling of parameters passed on the stack.</description>
+	</directive>
+	<directive name="%STACKSIZE" tool="nasm">
+		<description>The %STACKSIZE directive is used in conjunction with the %arg and the %local directives. It tells NASM the default size to use for subsequent %arg and %local directives. The %stacksize directive takes one required argument which is one of flat, flat64, large or small.</description>
+	</directive>
+	<directive name="%LOCAL" tool="nasm">
+		<description>The %LOCAL directive is used to simplify the use of local temporary stack variables allocated in a stack frame. Automatic local variables in C are an example of this kind of variable.</description>
+	</directive>
+	<directive name="%ERROR" tool="nasm">
+		<description>The preprocessor directive %error will cause NASM to report an error if it occurs in assembled code.</description>
+	</directive>
+	<directive name="%WARNING" tool="nasm">
+		<description>The preprocessor directive %warning will cause NASM to report an warning (but allows assembly to continue) if it occurs in assembled code.</description>
+	</directive>
+	<directive name="%FATAL" tool="nasm">
+		<description>The preprocessor directive %warning will cause NASM to terminate immediately, regardless of pass.</description>
+	</directive>
+	<directive name="%LINE" tool="nasm">
+		<description>The %line directive is used to notify NASM that the input line corresponds to a specific line number in another file.</description>
+	</directive>
+	<directive name="__NASM_MAJOR__" tool="nasm">
+		<description>Expands to the major level part of th version number of NASM being used.</description>
+	</directive>
+	<directive name="__NASM_MINOR__" tool="nasm">
+		<description>Expands to the minor level part of th version number of NASM being used.</description>
+	</directive>
+	<directive name="__NASM_SUBMINOR__" tool="nasm">
+		<description>Expands to the subminor level part of th version number of NASM being used.</description>
+	</directive>
+	<directive name="___NASM_PATCHLEVEL__" tool="nasm">
+		<description>Expands to the patch level part of th version number of NASM being used.</description>
+	</directive>
+	<directive name="__NASM_VERSION_ID__" tool="nasm">
+		<description>Expands to a dword integer representing the full version number of the version of nasm being used. The value is the equivalent to __NASM_MAJOR__, __NASM_MINOR__, __NASM_SUBMINOR__ and ___NASM_PATCHLEVEL__ concatenated to produce a single doubleword.</description>
+	</directive>
+	<directive name="__NASM_VER__" tool="nasm">
+		<description>Expands to a string which defines the version number of nasm being used.</description>
+	</directive>
+	<directive name="__FILE__" tool="nasm">
+		<description>Expands to a string constant giving the name of the current input file (which may change through the course of assembly if %include directives are used)</description>
+	</directive>
+	<directive name="__LINE__" tool="nasm">
+		<description>Expands to a numeric constant giving the current line number in the input file.</description>
+	</directive>
+	<directive name="__BITS__" tool="nasm">
+		<description>The __BITS__ standard macro is updated every time that the BITS mode is set using the BITS XX or [BITS XX] directive, where XX is a valid mode number of 16, 32 or 64.</description>
+	</directive>
+	<directive name="__OUTPUT_FORMAT__" tool="nasm">
+		<description>The __OUTPUT_FORMAT__ standard macro holds the current Output Format, as given by the -f option or NASM's default.</description>
+	</directive>
+	<directive name="__DATE__" tool="nasm">
+		<description>Gives the assembly date as a string in ISO 8601 format ("YYYY-MM-DD").</description>
+	</directive>
+	<directive name="__TIME__" tool="nasm">
+		<description>Gives the assembly time as a string in ISO 8601 format ("HH:MM:SS").</description>
+	</directive>
+	<directive name="__DATE_NUM__" tool="nasm">
+		<description>Gives the assembly date in numeric form (YYYYMMDD).</description>
+	</directive>
+	<directive name="__TIME_NUM__" tool="nasm">
+		<description>Gives the assembly time in numeric form (HHMMSS).</description>
+	</directive>
+	<directive name="__UTC_DATE__" tool="nasm">
+		<description>Gives the assembly date in universal time (UTC) as a string in ISO 8601 format ("YYYY-MM-DD"). If the host platform doesn't provide UTC time, this macro is undefined.</description>
+	</directive>
+	<directive name="__UTC_TIME__" tool="nasm">
+		<description>Gives the assembly time in universal time (UTC) as a string in ISO 8601 format ("HH:MM:SS"). If the host platform doesn't provide UTC time, this macro is undefined.</description>
+	</directive>
+	<directive name="__UTC_DATE_NUM__" tool="nasm">
+		<description>Gives the assembly date in universal time (UTC) in numeric form (YYYYMMDD). If the host platform doesn't provide UTC time, this macro is undefined.</description>
+	</directive>
+	<directive name="__UTC_TIME_NUM__" tool="nasm">
+		<description>Gives the assembly time in universal time (UTC) in numeric form (HHMMSS). If the host platform doesn't provide UTC time, this macro is undefined.</description>
+	</directive>
+	<directive name="__POSIX_TIME__" tool="nasm">
+		<description>Expands to a number containing the number of seconds since the POSIX epoch, 1 January 1970 00:00:00 UTC; excluding any leap seconds. This is computed using UTC time if available on the host platform, otherwise it is computed using the local time as if it was UTC.</description>
+	</directive>
+	<directive name="STRUC" tool="nasm">
+		<description>Used to define a structure data type. STRUC takes one or two parameters. The first parameter is the name of the data type. The second, optional parameter is the base offset of the structure.</description>
+	</directive>
+	<directive name="ENDSTRUC" tool="nasm">
+		<description>Used along with STRUC to define a structure data type.</description>
+	</directive>
+	<directive name="ISTRUC" tool="nasm">
+		<description>Used to declare instances of a structure type.</description>
+	</directive>
+	<directive name="IEND" tool="nasm">
+		<description>Used along with ISTRUC to declare instances of a structure type.</description>
+	</directive>
+	<directive name="ALIGN" tool="nasm">
+		<description>The ALIGN and ALIGNB macros provides a convenient way to align code or data on a word, longword, paragraph or other boundary. Normally, you can just use ALIGN in code and data sections and ALIGNB in BSS sections, and never need the second argument except for special purposes.</description>
+	</directive>
+	<directive name="ALIGNB" tool="nasm">
+		<description>The ALIGN and ALIGNB macros provides a convenient way to align code or data on a word, longword, paragraph or other boundary. Normally, you can just use ALIGN in code and data sections and ALIGNB in BSS sections, and never need the second argument except for special purposes.</description>
+	</directive>
+	<directive name="SECTALIGN" tool="nasm">
+		<description>The SECTALIGN macros provides a way to modify alignment attribute of output file section.</description>
+	</directive>
+	<directive name="INCBIN" tool="nasm">
+		<description>Includes a binary file verbatim into the output file.</description>
+	</directive>
+	<directive name="TIMES" tool="nasm">
+		<description>The TIMES prefix causes the instruction to be assembled multiple times.</description>
+	</directive>
+	<directive name="AT" tool="nasm">
+		<description>Used along with ISTRUC to declare instances of a structure type. The function of the AT macro is to make use of the TIMES prefix to advance the assembly position to the correct point for the specified structure field, and then to declare the specified data.</description>
+	</directive>
+	<directive name=".INTEL_SYNTAX" tool="nasm">
+		<description>switch to INTEL syntax</description>
+	</directive>
+	<directive name=".ATT_SYNTAX" tool="nasm">
+		<description>switch to AT&amp;T syntax</description>
+	</directive>
+    <!-- NOTE: Wasn't able to find any reference to .TEXT, .GLOBAL, .ALIGN, or
+    .NOPREFIX as a NASM directive online, commenting these out for now -->
+	<!-- <directive name=".TEXT" tool="nasm"> -->
+	<!-- 	<description>TODO</description> -->
+	<!-- </directive> -->
+	<!-- <directive name=".GLOBAL" tool="nasm"> -->
+	<!-- 	<description>TODO</description> -->
+	<!-- </directive> -->
+	<!-- <directive name=".ALIGN" tool="nasm"> -->
+	<!-- 	<description>TODO</description> -->
+	<!-- </directive> -->
+	<!-- <directive name=".NOPREFIX" tool="nasm"> -->
+	<!-- 	<description>TODO</description> -->
+	<!-- </directive> -->
+</directives>

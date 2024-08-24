@@ -19,4 +19,6 @@ cargo run -- ../docs_store/registers/raw/riscv.rst.txt -o ../docs_store/register
 cargo run -- ../docs_store/registers/raw/z80.xml -o ../docs_store/registers/serialized/z80 --doc-type register --arch z80
 
 # directive binaries
-cargo run -- ../docs_store/directives/raw/gas.xml -o ../docs_store/directives/serialized/gas --doc-type directive
+cargo run -- ../docs_store/directives/raw/gas.xml -o ../docs_store/directives/serialized/gas --doc-type directive --assembler gas
+cargo run -- ../docs_store/directives/raw/masm.xml -o ../docs_store/directives/serialized/masm --doc-type directive --assembler masm
+cargo run -- ../docs_store/directives/raw/nasm.xml -o ../docs_store/directives/serialized/nasm --doc-type directive --assembler nasm

@@ -1,850 +1,850 @@
 <?xml version='1.0' encoding='utf-8'?>
-<Assembler name="Gas">
-    <Directive name="abort" url_fragment="Abort" deprecated="true" md_description="This directive stops the assembly immediately.">
+<Assembler name="gas">
+    <Directive name=".abort" url_fragment="Abort" deprecated="true" md_description="This directive stops the assembly immediately.">
         <Signatures>
             <Signature sig=".abort"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="abort (coff)" url_fragment="ABORT-_0028COFF_0029" md_description="When producing COFF output, `as` accepts this directive as a synonym for '`.abort`'.">
+    <Directive name=".abort (coff)" url_fragment="ABORT-_0028COFF_0029" md_description="When producing COFF output, `as` accepts this directive as a synonym for '`.abort`'.">
         <Signatures>
             <Signature sig=".ABORT (COFF)"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="align" url_fragment="Align" md_description="Pad the location counter (in the current subsection) to a particular storage boundary.">
+    <Directive name=".align" url_fragment="Align" md_description="Pad the location counter (in the current subsection) to a particular storage boundary.">
         <Signatures>
             <Signature sig=".align *[abs-expr[, abs-expr[, abs-expr]]]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="altmacro" url_fragment="Altmacro" md_description="Enable alternate macro mode.">
+    <Directive name=".altmacro" url_fragment="Altmacro" md_description="Enable alternate macro mode.">
         <Signatures>
             <Signature sig=".altmacro"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ascii" url_fragment="Ascii" md_description="`.ascii` expects zero or more string literals (see Strings) separated by commas. It assembles each string (with no automatic trailing zero byte) into consecutive addresses.">
+    <Directive name=".ascii" url_fragment="Ascii" md_description="`.ascii` expects zero or more string literals (see Strings) separated by commas. It assembles each string (with no automatic trailing zero byte) into consecutive addresses.">
         <Signatures>
             <Signature sig=".ascii &quot;*string*&quot;..."></Signature>
         </Signatures>
     </Directive>
-    <Directive name="asciz" url_fragment="Asciz" md_description="`.asciz` is just like `.ascii`, but each string is followed by a zero byte. The &quot;z&quot; in '`.asciz`' stands for &quot;zero&quot;.">
+    <Directive name=".asciz" url_fragment="Asciz" md_description="`.asciz` is just like `.ascii`, but each string is followed by a zero byte. The &quot;z&quot; in '`.asciz`' stands for &quot;zero&quot;.">
         <Signatures>
             <Signature sig=".asciz &quot;*string*&quot;..."></Signature>
         </Signatures>
     </Directive>
-    <Directive name="attach_to_group" url_fragment="Attach_005fto_005fgroup" md_description="Attaches the current section to the named group.">
+    <Directive name=".attach_to_group" url_fragment="Attach_005fto_005fgroup" md_description="Attaches the current section to the named group.">
         <Signatures>
             <Signature sig=".attach_to_group *name*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="balign" url_fragment="Balign" md_description="Pad the location counter (in the current subsection) to a particular storage boundary.">
+    <Directive name=".balign" url_fragment="Balign" md_description="Pad the location counter (in the current subsection) to a particular storage boundary.">
         <Signatures>
             <Signature sig=".balign*[wl] [abs-expr[, abs-expr[, abs-expr]]]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="bss" url_fragment="Bss" md_description="`.bss` tells `as` to assemble the following statements onto the end of the bss section.">
+    <Directive name=".bss" url_fragment="Bss" md_description="`.bss` tells `as` to assemble the following statements onto the end of the bss section.">
         <Signatures>
             <Signature sig=".bss *subsection*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="bundle_align_mode" url_fragment="Bundle-directives" md_description="`.bundle_align_mode` enables or disables *aligned instruction bundle* mode. In this mode, sequences of adjacent instructions are grouped into fixed-sized *bundles*.">
+    <Directive name=".bundle_align_mode" url_fragment="Bundle-directives" md_description="`.bundle_align_mode` enables or disables *aligned instruction bundle* mode. In this mode, sequences of adjacent instructions are grouped into fixed-sized *bundles*.">
         <Signatures>
             <Signature sig=".bundle_align_mode *abs-expr*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="bundle_lock" url_fragment="Bundle-directives" md_description="The `.bundle_lock` and directive `.bundle_unlock` directives allow explicit control over instruction bundle padding.">
+    <Directive name=".bundle_lock" url_fragment="Bundle-directives" md_description="The `.bundle_lock` and directive `.bundle_unlock` directives allow explicit control over instruction bundle padding.">
         <Signatures>
             <Signature sig=".bundle_lock"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="bundle_unlock" url_fragment="Bundle-directives" md_description="The `.bundle_lock` and directive `.bundle_unlock` directives allow explicit control over instruction bundle padding.">
+    <Directive name=".bundle_unlock" url_fragment="Bundle-directives" md_description="The `.bundle_lock` and directive `.bundle_unlock` directives allow explicit control over instruction bundle padding.">
         <Signatures>
             <Signature sig=".bundle_unlock"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="byte" url_fragment="Byte" md_description="`.byte` expects zero or more expressions, separated by commas. Each expression is assembled into the next byte.">
+    <Directive name=".byte" url_fragment="Byte" md_description="`.byte` expects zero or more expressions, separated by commas. Each expression is assembled into the next byte.">
         <Signatures>
             <Signature sig=".byte *expressions*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_sections" url_fragment="CFI-directives" md_description="`.cfi_sections` may be used to specify whether CFI directives should emit `.eh_frame` section, `.debug_frame` section and/or `.sframe` section.">
+    <Directive name=".cfi_sections" url_fragment="CFI-directives" md_description="`.cfi_sections` may be used to specify whether CFI directives should emit `.eh_frame` section, `.debug_frame` section and/or `.sframe` section.">
         <Signatures>
             <Signature sig=".cfi_sections *list*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_startproc" url_fragment="CFI-directives" md_description="`.cfi_startproc` is used at the beginning of each function that should have an entry in `.eh_frame`. It initializes some internal data structures. Don't forget to close the function by `.cfi_endproc`.">
+    <Directive name=".cfi_startproc" url_fragment="CFI-directives" md_description="`.cfi_startproc` is used at the beginning of each function that should have an entry in `.eh_frame`. It initializes some internal data structures. Don't forget to close the function by `.cfi_endproc`.">
         <Signatures>
             <Signature sig=".cfi_startproc [simple]"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_endproc" url_fragment="CFI-directives" md_description="`.cfi_endproc` is used at the end of a function where it closes its unwind entry previously opened by `.cfi_startproc`, and emits it to `.eh_frame`.">
+    <Directive name=".cfi_endproc" url_fragment="CFI-directives" md_description="`.cfi_endproc` is used at the end of a function where it closes its unwind entry previously opened by `.cfi_startproc`, and emits it to `.eh_frame`.">
         <Signatures>
             <Signature sig=".cfi_endproc"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_personality" url_fragment="CFI-directives" md_description="`.cfi_personality` defines personality routine and its encoding.">
+    <Directive name=".cfi_personality" url_fragment="CFI-directives" md_description="`.cfi_personality` defines personality routine and its encoding.">
         <Signatures>
             <Signature sig=".cfi_personality *encoding [, exp]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_personality_id" url_fragment="CFI-directives" md_description="`.cfi_personality_id` defines a personality routine by its index as defined in a compact unwinding format.">
+    <Directive name=".cfi_personality_id" url_fragment="CFI-directives" md_description="`.cfi_personality_id` defines a personality routine by its index as defined in a compact unwinding format.">
         <Signatures>
             <Signature sig=".cfi_personality_id *id*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_fde_data" url_fragment="CFI-directives" md_description="`.cfi_fde_data` is used to describe the compact unwind opcodes to be used for the current function.">
+    <Directive name=".cfi_fde_data" url_fragment="CFI-directives" md_description="`.cfi_fde_data` is used to describe the compact unwind opcodes to be used for the current function.">
         <Signatures>
             <Signature sig=".cfi_fde_data *[opcode1 [, ...]]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_lsda" url_fragment="CFI-directives" md_description="`.cfi_lsda` defines LSDA and its encoding.">
+    <Directive name=".cfi_lsda" url_fragment="CFI-directives" md_description="`.cfi_lsda` defines LSDA and its encoding.">
         <Signatures>
             <Signature sig=".cfi_lsda *encoding [, exp]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_inline_lsda" url_fragment="CFI-directives" md_description="`.cfi_inline_lsda` marks the start of a LSDA data section and switches to the corresponding `.gnu.extab` section.">
+    <Directive name=".cfi_inline_lsda" url_fragment="CFI-directives" md_description="`.cfi_inline_lsda` marks the start of a LSDA data section and switches to the corresponding `.gnu.extab` section.">
         <Signatures>
             <Signature sig=".cfi_inline_lsda *[align]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_def_cfa" url_fragment="CFI-directives" md_description="`.cfi_def_cfa` defines a rule for computing CFA as: *take address from register and add offset to it*.">
+    <Directive name=".cfi_def_cfa" url_fragment="CFI-directives" md_description="`.cfi_def_cfa` defines a rule for computing CFA as: *take address from register and add offset to it*.">
         <Signatures>
             <Signature sig=".cfi_def_cfa *register, offset*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_def_cfa_register" url_fragment="CFI-directives" md_description="`.cfi_def_cfa_register` modifies a rule for computing CFA. From now on register will be used instead of the old one. Offset remains the same.">
+    <Directive name=".cfi_def_cfa_register" url_fragment="CFI-directives" md_description="`.cfi_def_cfa_register` modifies a rule for computing CFA. From now on register will be used instead of the old one. Offset remains the same.">
         <Signatures>
             <Signature sig=".cfi_def_cfa_register *register*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_def_cfa_offset" url_fragment="CFI-directives" md_description="`.cfi_def_cfa_offset` modifies a rule for computing CFA. Register remains the same, but offset is new.">
+    <Directive name=".cfi_def_cfa_offset" url_fragment="CFI-directives" md_description="`.cfi_def_cfa_offset` modifies a rule for computing CFA. Register remains the same, but offset is new.">
         <Signatures>
             <Signature sig=".cfi_def_cfa_offset *offset*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_adjust_cfa_offset" url_fragment="CFI-directives" md_description="Same as `.cfi_def_cfa_offset` but *offset* is a relative value that is added/subtracted from the previous offset.">
+    <Directive name=".cfi_adjust_cfa_offset" url_fragment="CFI-directives" md_description="Same as `.cfi_def_cfa_offset` but *offset* is a relative value that is added/subtracted from the previous offset.">
         <Signatures>
             <Signature sig=".cfi_adjust_cfa_offset"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_offset" url_fragment="CFI-directives" md_description="Previous value of *register* is saved at offset *offset* from CFA.">
+    <Directive name=".cfi_offset" url_fragment="CFI-directives" md_description="Previous value of *register* is saved at offset *offset* from CFA.">
         <Signatures>
             <Signature sig=".cfi_offset *offset, register*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_val_offset" url_fragment="CFI-directives" md_description="Previous value of register is CFA + *offset*.">
+    <Directive name=".cfi_val_offset" url_fragment="CFI-directives" md_description="Previous value of register is CFA + *offset*.">
         <Signatures>
             <Signature sig=".cfi_val_offset *register, offset*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_rel_offset" url_fragment="CFI-directives" md_description="Previous value of *register* is saved at offset *offset* from the current CFA register.">
+    <Directive name=".cfi_rel_offset" url_fragment="CFI-directives" md_description="Previous value of *register* is saved at offset *offset* from the current CFA register.">
         <Signatures>
             <Signature sig=".cfi_rel_offset *register, offset*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_register" url_fragment="CFI-directives" md_description="Previous value of *register1* is saved in register *register2*.">
+    <Directive name=".cfi_register" url_fragment="CFI-directives" md_description="Previous value of *register1* is saved in register *register2*.">
         <Signatures>
             <Signature sig=".cfi_register *register1, register2*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_restore" url_fragment="CFI-directives" md_description="`.cfi_restore` says that the rule for *register* is now the same as it was at the beginning of the function, after all initial instruction added by `.cfi_startproc` were executed.">
+    <Directive name=".cfi_restore" url_fragment="CFI-directives" md_description="`.cfi_restore` says that the rule for *register* is now the same as it was at the beginning of the function, after all initial instruction added by `.cfi_startproc` were executed.">
         <Signatures>
             <Signature sig=".cfi_restore *register*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_undefined" url_fragment="CFI-directives" md_description="From now on the previous value of *register* can't be restored anymore.">
+    <Directive name=".cfi_undefined" url_fragment="CFI-directives" md_description="From now on the previous value of *register* can't be restored anymore.">
         <Signatures>
             <Signature sig=".cfi_undefined *register*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_same_value" url_fragment="CFI-directives" md_description="Current value of *register* is the same like in the previous frame, i.e. no restoration needed.">
+    <Directive name=".cfi_same_value" url_fragment="CFI-directives" md_description="Current value of *register* is the same like in the previous frame, i.e. no restoration needed.">
         <Signatures>
             <Signature sig=".cfi_same_value *register*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_remember_state" url_fragment="CFI-directives" md_description="`.cfi_remember_state` pushes the set of rules for every register onto an implicit stack.">
+    <Directive name=".cfi_remember_state" url_fragment="CFI-directives" md_description="`.cfi_remember_state` pushes the set of rules for every register onto an implicit stack.">
         <Signatures>
             <Signature sig=".cfi_remember_state"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_restore_state" url_fragment="CFI-directives" md_description="`.cfi_restore_state` pops the set of rules for every register off the stack and places them in the current row.">
+    <Directive name=".cfi_restore_state" url_fragment="CFI-directives" md_description="`.cfi_restore_state` pops the set of rules for every register off the stack and places them in the current row.">
         <Signatures>
             <Signature sig=".cfi_restore_state"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_return_column" url_fragment="CFI-directives" md_description="Change return column *register*, i.e. the return address is either directly in *register* or can be accessed by rules for *register*.">
+    <Directive name=".cfi_return_column" url_fragment="CFI-directives" md_description="Change return column *register*, i.e. the return address is either directly in *register* or can be accessed by rules for *register*.">
         <Signatures>
             <Signature sig=".cfi_return_column *register*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_signal_frame" url_fragment="CFI-directives" md_description="Mark current function as signal trampoline.">
+    <Directive name=".cfi_signal_frame" url_fragment="CFI-directives" md_description="Mark current function as signal trampoline.">
         <Signatures>
             <Signature sig=".cfi_signal_frame"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_window_save" url_fragment="CFI-directives" md_description="SPARC register window has been saved.">
+    <Directive name=".cfi_window_save" url_fragment="CFI-directives" md_description="SPARC register window has been saved.">
         <Signatures>
             <Signature sig=".cfi_window_save"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_escape" url_fragment="CFI-directives" md_description="Allows the user to add arbitrary bytes to the unwind info. One might use this to add OS-specific CFI opcodes, or generic CFI opcodes that GAS does not yet support.">
+    <Directive name=".cfi_escape" url_fragment="CFI-directives" md_description="Allows the user to add arbitrary bytes to the unwind info. One might use this to add OS-specific CFI opcodes, or generic CFI opcodes that GAS does not yet support.">
         <Signatures>
             <Signature sig=".cfi_escape *expression[, ...]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="cfi_val_encoded_addr" url_fragment="CFI-directives" md_description="The current value of *register* is *label*. The value of *label* will be encoded in the output file according to *encoding*; see the description of `.cfi_personality` for details on this encoding.">
+    <Directive name=".cfi_val_encoded_addr" url_fragment="CFI-directives" md_description="The current value of *register* is *label*. The value of *label* will be encoded in the output file according to *encoding*; see the description of `.cfi_personality` for details on this encoding.">
         <Signatures>
             <Signature sig=".cfi_val_encoded_addr *register, encoding, label*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="comm" url_fragment="Comm" md_description="`.comm` declares a common symbol named *symbol*. When linking, a common symbol in one object file may be merged with a defined or common symbol of the same name in another object file.">
+    <Directive name=".comm" url_fragment="Comm" md_description="`.comm` declares a common symbol named *symbol*. When linking, a common symbol in one object file may be merged with a defined or common symbol of the same name in another object file.">
         <Signatures>
             <Signature sig=".comm *symbol , length*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="data" url_fragment="Data" md_description="`.data` tells as to assemble the following statements onto the end of the data subsection numbered *subsection* (which is an absolute expression). If *subsection* is omitted, it defaults to zero.">
+    <Directive name=".data" url_fragment="Data" md_description="`.data` tells as to assemble the following statements onto the end of the data subsection numbered *subsection* (which is an absolute expression). If *subsection* is omitted, it defaults to zero.">
         <Signatures>
             <Signature sig=".data *subsection*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="dc" url_fragment="Dc" md_description="The `.dc` directive expects zero or more expressions separated by commas. These expressions are evaluated and their values inserted into the current section.">
+    <Directive name=".dc" url_fragment="Dc" md_description="The `.dc` directive expects zero or more expressions separated by commas. These expressions are evaluated and their values inserted into the current section.">
         <Signatures>
             <Signature sig=".dc*[size] expressions*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="dcb" url_fragment="Dcb" md_description="This directive emits number copies of *fill*, each of size bytes.">
+    <Directive name=".dcb" url_fragment="Dcb" md_description="This directive emits number copies of *fill*, each of size bytes.">
         <Signatures>
             <Signature sig=".dcb*[size] number [,fill]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ds" url_fragment="Ds" md_description="This directive emits *number* copies of *fill*, each of *size* bytes.">
+    <Directive name=".ds" url_fragment="Ds" md_description="This directive emits *number* copies of *fill*, each of *size* bytes.">
         <Signatures>
             <Signature sig=".ds*[size] number [,fill]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="def" url_fragment="Def" md_description="Begin defining debugging information for a symbol *name*; the definition extends until the *.endef* directive is encountered.">
+    <Directive name=".def" url_fragment="Def" md_description="Begin defining debugging information for a symbol *name*; the definition extends until the *.endef* directive is encountered.">
         <Signatures>
             <Signature sig=".def *name*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="desc" url_fragment="Desc" md_description="This directive sets the descriptor of the symbol (see Symbol Attributes) to the low 16 bits of an absolute expression.">
+    <Directive name=".desc" url_fragment="Desc" md_description="This directive sets the descriptor of the symbol (see Symbol Attributes) to the low 16 bits of an absolute expression.">
         <Signatures>
             <Signature sig=".desc *symbol, abs-expression*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="dim" url_fragment="Dim" md_description="This directive is generated by compilers to include auxiliary debugging information in the symbol table. It is only permitted inside `.def/.endef` pairs.">
+    <Directive name=".dim" url_fragment="Dim" md_description="This directive is generated by compilers to include auxiliary debugging information in the symbol table. It is only permitted inside `.def/.endef` pairs.">
         <Signatures>
             <Signature sig=".dim"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="double" url_fragment="Double" md_description="`.double` expects zero or more *flonums*, separated by commas. It assembles floating point numbers.">
+    <Directive name=".double" url_fragment="Double" md_description="`.double` expects zero or more *flonums*, separated by commas. It assembles floating point numbers.">
         <Signatures>
             <Signature sig=".double *flonums*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="eject" url_fragment="Eject" md_description="Force a page break at this point, when generating assembly listings.">
+    <Directive name=".eject" url_fragment="Eject" md_description="Force a page break at this point, when generating assembly listings.">
         <Signatures>
             <Signature sig=".eject"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="else" url_fragment="Else" md_description="`.else` is part of the as support for conditional assembly; see `.if`. It marks the beginning of a section of code to be assembled if the condition for the preceding `.if` was false.">
+    <Directive name=".else" url_fragment="Else" md_description="`.else` is part of the as support for conditional assembly; see `.if`. It marks the beginning of a section of code to be assembled if the condition for the preceding `.if` was false.">
         <Signatures>
             <Signature sig=".else"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="elseif" url_fragment="Elseif" md_description="`.elseif` is part of the as support for conditional assembly; see `.if`. It is shorthand for beginning a new `.if` block that would otherwise fill the entire `.else` section.">
+    <Directive name=".elseif" url_fragment="Elseif" md_description="`.elseif` is part of the as support for conditional assembly; see `.if`. It is shorthand for beginning a new `.if` block that would otherwise fill the entire `.else` section.">
         <Signatures>
             <Signature sig=".elseif"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="end" url_fragment="End" md_description="`.end` marks the end of the assembly file. `as` does not process anything in the file past the `.end` directive.">
+    <Directive name=".end" url_fragment="End" md_description="`.end` marks the end of the assembly file. `as` does not process anything in the file past the `.end` directive.">
         <Signatures>
             <Signature sig=".end"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="endef" url_fragment="Endef" md_description="This directive flags the end of a symbol definition begun with `.def`.">
+    <Directive name=".endef" url_fragment="Endef" md_description="This directive flags the end of a symbol definition begun with `.def`.">
         <Signatures>
             <Signature sig=".endef"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="endfunc" url_fragment="Endfunc" md_description="`.endfunc` marks the end of a function specified with `.func`.">
+    <Directive name=".endfunc" url_fragment="Endfunc" md_description="`.endfunc` marks the end of a function specified with `.func`.">
         <Signatures>
             <Signature sig=".endfunc"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="endif" url_fragment="Endif" md_description="`.endif` is part of the as support for conditional assembly; it marks the end of a block of code that is only assembled conditionally. See `.if`.">
+    <Directive name=".endif" url_fragment="Endif" md_description="`.endif` is part of the as support for conditional assembly; it marks the end of a block of code that is only assembled conditionally. See `.if`.">
         <Signatures>
             <Signature sig=".endif"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="equ" url_fragment="Equ" md_description="This directive sets the value of symbol to expression. It is synonymous with '`.set`'; see `.set`.">
+    <Directive name=".equ" url_fragment="Equ" md_description="This directive sets the value of symbol to expression. It is synonymous with '`.set`'; see `.set`.">
         <Signatures>
             <Signature sig=".equ *symbol, expression*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="equiv" url_fragment="Equiv" md_description="The `.equiv` directive is like `.equ` and `.set`, except that the assembler will signal an error if symbol is already defined.">
+    <Directive name=".equiv" url_fragment="Equiv" md_description="The `.equiv` directive is like `.equ` and `.set`, except that the assembler will signal an error if symbol is already defined.">
         <Signatures>
             <Signature sig=".equiv *symbol, expression*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="eqv" url_fragment="Eqv" md_description="The `.eqv` directive is like `.equiv`, but no attempt is made to evaluate the expression or any part of it immediately. Instead each time the resulting symbol is used in an expression, a snapshot of its current value is taken.">
+    <Directive name=".eqv" url_fragment="Eqv" md_description="The `.eqv` directive is like `.equiv`, but no attempt is made to evaluate the expression or any part of it immediately. Instead each time the resulting symbol is used in an expression, a snapshot of its current value is taken.">
         <Signatures>
             <Signature sig=".eqv *symbol, epxression"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="err" url_fragment="Err" md_description="If `as` assembles a `.err` directive, it will print an error message and, unless the `-Z` option was used, it will not generate an object file.">
+    <Directive name=".err" url_fragment="Err" md_description="If `as` assembles a `.err` directive, it will print an error message and, unless the `-Z` option was used, it will not generate an object file.">
         <Signatures>
             <Signature sig=".err"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="error" url_fragment="Error" md_description="Similarly to `.err`, this directive emits an error, but you can specify a string that will be emitted as the error message.">
+    <Directive name=".error" url_fragment="Error" md_description="Similarly to `.err`, this directive emits an error, but you can specify a string that will be emitted as the error message.">
         <Signatures>
             <Signature sig=".error *&quot;string&quot;"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="exitm" url_fragment="Exitm" md_description="Exit early from the current macro definition. See `.macro`.">
+    <Directive name=".exitm" url_fragment="Exitm" md_description="Exit early from the current macro definition. See `.macro`.">
         <Signatures>
             <Signature sig=".exitm"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="extern" url_fragment="Extern" md_description="`.extern` is accepted in the source program—for compatibility with other assemblers—but it is ignored.">
+    <Directive name=".extern" url_fragment="Extern" md_description="`.extern` is accepted in the source program—for compatibility with other assemblers—but it is ignored.">
         <Signatures>
             <Signature sig=".extern"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="fail" url_fragment="Fail" md_description="Generates an error or a warning. If the value of the expression is 500 or more, `as` will print a warning message. If the value is less than 500, `as` will print an error message.">
+    <Directive name=".fail" url_fragment="Fail" md_description="Generates an error or a warning. If the value of the expression is 500 or more, `as` will print a warning message. If the value is less than 500, `as` will print an error message.">
         <Signatures>
             <Signature sig=".fail *expression*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="file" url_fragment="File" md_description="This version of the `.file` directive tells `as` that we are about to start a new logical file. When emitting DWARF2 line number information, `.file` assigns filenames to the `.debug_line` file name table.">
+    <Directive name=".file" url_fragment="File" md_description="This version of the `.file` directive tells `as` that we are about to start a new logical file. When emitting DWARF2 line number information, `.file` assigns filenames to the `.debug_line` file name table.">
         <Signatures>
             <Signature sig=".file *string*"></Signature>
                 <Signature sig=".file *fileno filename*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="fill" url_fragment="Fill" md_description="`repeat`, `size` and `value` are absolute expressions. This emits `repeat` copies of `size` bytes. `Repeat` may be zero or more. `Size` may be zero or more, but if it is more than 8, then it is deemed to have the value 8, compatible with other people's assemblers.">
+    <Directive name=".fill" url_fragment="Fill" md_description="`repeat`, `size` and `value` are absolute expressions. This emits `repeat` copies of `size` bytes. `Repeat` may be zero or more. `Size` may be zero or more, but if it is more than 8, then it is deemed to have the value 8, compatible with other people's assemblers.">
         <Signatures>
             <Signature sig=".fill *repeat, size, value*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="float" url_fragment="Float" md_description="This directive assembles zero or more flonums, separated by commas.">
+    <Directive name=".float" url_fragment="Float" md_description="This directive assembles zero or more flonums, separated by commas.">
         <Signatures>
             <Signature sig=".float *flonums*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="func" url_fragment="Func" md_description="`.func` emits debugging information to denote function name, and is ignored unless the file is assembled with debugging enabled.">
+    <Directive name=".func" url_fragment="Func" md_description="`.func` emits debugging information to denote function name, and is ignored unless the file is assembled with debugging enabled.">
         <Signatures>
             <Signature sig=".func *name[, label]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="global" url_fragment="Global" md_description="`.global` makes the symbol visible to `ld`. If you define symbol in your partial program, its value is made available to other partial programs that are linked with it.">
+    <Directive name=".global" url_fragment="Global" md_description="`.global` makes the symbol visible to `ld`. If you define symbol in your partial program, its value is made available to other partial programs that are linked with it.">
         <Signatures>
             <Signature sig=".global *symbol*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="globl" url_fragment="Global" md_description="`.globl` makes the symbol visible to `ld`. If you define symbol in your partial program, its value is made available to other partial programs that are linked with it.">
+    <Directive name=".globl" url_fragment="Global" md_description="`.globl` makes the symbol visible to `ld`. If you define symbol in your partial program, its value is made available to other partial programs that are linked with it.">
         <Signatures>
             <Signature sig=".globl *symbol*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="gnu_attribute" url_fragment="Gnu_005fattribute" md_description="Record a GNU object attribute for this file. See Object Attributes.">
+    <Directive name=".gnu_attribute" url_fragment="Gnu_005fattribute" md_description="Record a GNU object attribute for this file. See Object Attributes.">
         <Signatures>
             <Signature sig=".gnu_attribute *tag, value*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="hidden" url_fragment="Hidden" md_description="This is an ELF visibility directive that overrides the named symbols default visibility (which is set by their binding: local, global or weak). The directive sets the visibility to hidden which means that the symbols are not visible to other components">
+    <Directive name=".hidden" url_fragment="Hidden" md_description="This is an ELF visibility directive that overrides the named symbols default visibility (which is set by their binding: local, global or weak). The directive sets the visibility to hidden which means that the symbols are not visible to other components">
         <Signatures>
             <Signature sig=".hidden *names*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="hword" url_fragment="hword" md_description="This directive is a synonym for '`.short`'; depending on the target architecture, it may also be a synonym for '`.word`'. It expects zero or more expressions, and emits a 16 bit number for each.">
+    <Directive name=".hword" url_fragment="hword" md_description="This directive is a synonym for '`.short`'; depending on the target architecture, it may also be a synonym for '`.word`'. It expects zero or more expressions, and emits a 16 bit number for each.">
         <Signatures>
             <Signature sig=".hword *expressions*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ident" url_fragment="Ident" md_description="This directive is used by some assemblers to place tags in object files.">
+    <Directive name=".ident" url_fragment="Ident" md_description="This directive is used by some assemblers to place tags in object files.">
         <Signatures>
             <Signature sig=".ident"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="if" url_fragment="If" md_description="`.if` marks the beginning of a section of code which is only considered part of the source program being assembled if the argument (which must be an absolute expression) is non-zero.">
+    <Directive name=".if" url_fragment="If" md_description="`.if` marks the beginning of a section of code which is only considered part of the source program being assembled if the argument (which must be an absolute expression) is non-zero.">
         <Signatures>
             <Signature sig=".if *absolute expreession*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ifdef" url_fragment="If" md_description="Assembles the following section of code if the specified symbol has been defined.">
+    <Directive name=".ifdef" url_fragment="If" md_description="Assembles the following section of code if the specified symbol has been defined.">
         <Signatures>
             <Signature sig=".ifdef *symbol*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ifb" url_fragment="If" md_description="Assembles the following section of code if the operand is blank (empty).">
+    <Directive name=".ifb" url_fragment="If" md_description="Assembles the following section of code if the operand is blank (empty).">
         <Signatures>
             <Signature sig=".ifb *text*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ifc" url_fragment="If" md_description="Assembles the following section of code if the two strings are the same">
+    <Directive name=".ifc" url_fragment="If" md_description="Assembles the following section of code if the two strings are the same">
         <Signatures>
             <Signature sig=".ifc *string1,string2*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ifeq" url_fragment="If" md_description="Assembles the following section of code if the argument is zero.">
+    <Directive name=".ifeq" url_fragment="If" md_description="Assembles the following section of code if the argument is zero.">
         <Signatures>
             <Signature sig=".ifeq *absolute expression*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ifeqs" url_fragment="If" md_description="Another form of `.ifc`. The strings must be quoted using double quotes.">
+    <Directive name=".ifeqs" url_fragment="If" md_description="Another form of `.ifc`. The strings must be quoted using double quotes.">
         <Signatures>
             <Signature sig=".ifeqs *string1, string2*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ifge" url_fragment="If" md_description="Assembles the following section of code if the argument is greater than or equal to zero.">
+    <Directive name=".ifge" url_fragment="If" md_description="Assembles the following section of code if the argument is greater than or equal to zero.">
         <Signatures>
             <Signature sig=".ifge *absolute expression*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ifgt" url_fragment="If" md_description="Assembles the following section of code if the argument is greater than zero.">
+    <Directive name=".ifgt" url_fragment="If" md_description="Assembles the following section of code if the argument is greater than zero.">
         <Signatures>
             <Signature sig=".ifgt *absolute expression*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ifle" url_fragment="If" md_description="Assembles the following section of code if the argument is less than or equal to zero.">
+    <Directive name=".ifle" url_fragment="If" md_description="Assembles the following section of code if the argument is less than or equal to zero.">
         <Signatures>
             <Signature sig=".ifle *absolute expression*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="iflt" url_fragment="If" md_description="Assembles the following section of code if the argument is less than zero.">
+    <Directive name=".iflt" url_fragment="If" md_description="Assembles the following section of code if the argument is less than zero.">
         <Signatures>
             <Signature sig=".iflt *absolute expression*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ifnb" url_fragment="If" md_description="Assembles the following section of code if the operand is non-blank (non-empty).">
+    <Directive name=".ifnb" url_fragment="If" md_description="Assembles the following section of code if the operand is non-blank (non-empty).">
         <Signatures>
             <Signature sig=".ifnb *text*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ifnc" url_fragment="If" md_description="Assembles the following section of code if the two strings are not the same.">
+    <Directive name=".ifnc" url_fragment="If" md_description="Assembles the following section of code if the two strings are not the same.">
         <Signatures>
             <Signature sig=".ifnc *string1,string2*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ifndef" url_fragment="If" md_description="Assembles the following section of code if the specified symbol has not been defined.">
+    <Directive name=".ifndef" url_fragment="If" md_description="Assembles the following section of code if the specified symbol has not been defined.">
         <Signatures>
             <Signature sig=".ifndef *symbol"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ifnotdef" url_fragment="If" md_description="Assembles the following section of code if the specified symbol has not been defined.">
+    <Directive name=".ifnotdef" url_fragment="If" md_description="Assembles the following section of code if the specified symbol has not been defined.">
         <Signatures>
             <Signature sig=".ifnotdef *symbol"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ifne" url_fragment="If" md_description="Assembles the following section of code if the argument is not equal to zero (in other words, this is equivalent to `.if`).">
+    <Directive name=".ifne" url_fragment="If" md_description="Assembles the following section of code if the argument is not equal to zero (in other words, this is equivalent to `.if`).">
         <Signatures>
             <Signature sig=".ifne *absolute expression*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ifnes" url_fragment="If" md_description="Assembles the following section of code if the two strings are not the same.">
+    <Directive name=".ifnes" url_fragment="If" md_description="Assembles the following section of code if the two strings are not the same.">
         <Signatures>
             <Signature sig=".ifnes *string1,string2*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="incbin" url_fragment="Incbin" md_description="The `.incbin` directive includes `file` verbatim at the current location.">
+    <Directive name=".incbin" url_fragment="Incbin" md_description="The `.incbin` directive includes `file` verbatim at the current location.">
         <Signatures>
             <Signature sig=".incbin *&quot;file&quot;[,skip[,count]]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="include" url_fragment="Include" md_description="This directive provides a way to include supporting files at specified points in your source program.">
+    <Directive name=".include" url_fragment="Include" md_description="This directive provides a way to include supporting files at specified points in your source program.">
         <Signatures>
             <Signature sig=".include &quot;*file*&quot;"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="int" url_fragment="Int" md_description="Expect zero or more expressions, of any section, separated by commas. For each expression, emit a number that, at run time, is the value of that expression.">
+    <Directive name=".int" url_fragment="Int" md_description="Expect zero or more expressions, of any section, separated by commas. For each expression, emit a number that, at run time, is the value of that expression.">
         <Signatures>
             <Signature sig=".int *expressions*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="internal" url_fragment="Internal" md_description="This is an ELF visibility directive that overrides the named symbols default visibility (which is set by their binding: local, global or weak). The directive sets the visibility to internal which means that the symbols are considered to be hidden (i.e., not visible to other components), and that some extra, processor specific processing must also be performed upon the symbols as well.">
+    <Directive name=".internal" url_fragment="Internal" md_description="This is an ELF visibility directive that overrides the named symbols default visibility (which is set by their binding: local, global or weak). The directive sets the visibility to internal which means that the symbols are considered to be hidden (i.e., not visible to other components), and that some extra, processor specific processing must also be performed upon the symbols as well.">
         <Signatures>
             <Signature sig=".internal *names*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="irp" url_fragment="Irp" md_description="Evaluate a sequence of statements assigning different values to *symbol*. The sequence of statements starts at the `.irp` directive, and is terminated by an `.endr` directive. For each value, *symbol* is set to *value*, and the sequence of statements is assembled.">
+    <Directive name=".irp" url_fragment="Irp" md_description="Evaluate a sequence of statements assigning different values to *symbol*. The sequence of statements starts at the `.irp` directive, and is terminated by an `.endr` directive. For each value, *symbol* is set to *value*, and the sequence of statements is assembled.">
         <Signatures>
             <Signature sig=".irp *symbol,values...*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="irpc" url_fragment="Irpc" md_description="Evaluate a sequence of statements assigning different values to *symbol*. The sequence of statements starts at the `.irpc` directive, and is terminated by an `.endr` directive. For each character in *value, symbol* is set to the character, and the sequence of statements is assembled.">
+    <Directive name=".irpc" url_fragment="Irpc" md_description="Evaluate a sequence of statements assigning different values to *symbol*. The sequence of statements starts at the `.irpc` directive, and is terminated by an `.endr` directive. For each character in *value, symbol* is set to the character, and the sequence of statements is assembled.">
         <Signatures>
             <Signature sig=".irpc *symbol,values...*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="lcomm" url_fragment="Lcomm" md_description="Reserve *length* (an absolute expression) bytes for a local common denoted by *symbol*. The section and value of *symbol* are those of the new local common.">
+    <Directive name=".lcomm" url_fragment="Lcomm" md_description="Reserve *length* (an absolute expression) bytes for a local common denoted by *symbol*. The section and value of *symbol* are those of the new local common.">
         <Signatures>
             <Signature sig=".lcomm *symbol , length*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="lflags" url_fragment="Lflags" md_description="`as` accepts this directive for compatibility with other assemblers, but ignores it.">
+    <Directive name=".lflags" url_fragment="Lflags" md_description="`as` accepts this directive for compatibility with other assemblers, but ignores it.">
         <Signatures>
             <Signature sig=".lflags"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="line" url_fragment="Line" deprecated="true" md_description="Change the logical line number. *line-number* must be an absolute expression. The next line has that logical line number. Therefore any other statements on the current line (after a statement separator character) are reported as on logical line number *line-number* - 1.">
+    <Directive name=".line" url_fragment="Line" deprecated="true" md_description="Change the logical line number. *line-number* must be an absolute expression. The next line has that logical line number. Therefore any other statements on the current line (after a statement separator character) are reported as on logical line number *line-number* - 1.">
         <Signatures>
             <Signature sig=".line *line-number*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="linkonce" url_fragment="Linkonce" md_description="ark the current section so that the linker only includes a single copy of it. This may be used to include the same section in several different object files, but ensure that the linker will only include it once in the final output file.">
+    <Directive name=".linkonce" url_fragment="Linkonce" md_description="ark the current section so that the linker only includes a single copy of it. This may be used to include the same section in several different object files, but ensure that the linker will only include it once in the final output file.">
         <Signatures>
             <Signature sig=".linkonce *[type]"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="list" url_fragment="List" md_description="Control (in conjunction with the `.nolist` directive) whether or not assembly listings are generated. These two directives maintain an internal counter (which is zero initially). `.list` increments the counter, and `.nolist` decrements it. Assembly listings are generated whenever the counter is greater than zero.">
+    <Directive name=".list" url_fragment="List" md_description="Control (in conjunction with the `.nolist` directive) whether or not assembly listings are generated. These two directives maintain an internal counter (which is zero initially). `.list` increments the counter, and `.nolist` decrements it. Assembly listings are generated whenever the counter is greater than zero.">
         <Signatures>
             <Signature sig=".list"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="ln" url_fragment="Ln" md_description="Change the logical line number. *line-number* must be an absolute expression. The next line has that logical line number. Therefore any other statements on the current line (after a statement separator character) are reported as on logical line number *line-number* - 1.">
+    <Directive name=".ln" url_fragment="Ln" md_description="Change the logical line number. *line-number* must be an absolute expression. The next line has that logical line number. Therefore any other statements on the current line (after a statement separator character) are reported as on logical line number *line-number* - 1.">
         <Signatures>
             <Signature sig=".ln *line-number*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="loc" url_fragment="Loc" md_description="When emitting DWARF2 line number information, the `.loc` directive will add a row to the `.debug_line` line number matrix corresponding to the immediately following assembly instruction.">
+    <Directive name=".loc" url_fragment="Loc" md_description="When emitting DWARF2 line number information, the `.loc` directive will add a row to the `.debug_line` line number matrix corresponding to the immediately following assembly instruction.">
         <Signatures>
             <Signature sig=".loc *fileno lineno [column] [options]"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="loc_mark_labels" url_fragment="Loc_005fmark_005flabels" md_description="When emitting DWARF2 line number information, the `.loc_mark_labels` directive makes the assembler emit an entry to the `.debug_line` line number matrix with the `basic_block` register in the state machine set whenever a code label is seen.">
+    <Directive name=".loc_mark_labels" url_fragment="Loc_005fmark_005flabels" md_description="When emitting DWARF2 line number information, the `.loc_mark_labels` directive makes the assembler emit an entry to the `.debug_line` line number matrix with the `basic_block` register in the state machine set whenever a code label is seen.">
         <Signatures>
             <Signature sig=".loc_mark_labels *enable*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="local" url_fragment="Local" md_description="This directive, which is available for ELF targets, marks each symbol in the comma-separated list of *names* as a local symbol so that it will not be externally visible. If the symbols do not already exist, they will be created.">
+    <Directive name=".local" url_fragment="Local" md_description="This directive, which is available for ELF targets, marks each symbol in the comma-separated list of *names* as a local symbol so that it will not be externally visible. If the symbols do not already exist, they will be created.">
         <Signatures>
             <Signature sig=".local *names*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="long" url_fragment="Long" md_description="Expect zero or more expressions, of any section, separated by commas. For each expression, emit a number that, at run time, is the value of that expression. `.long` is the same as '`.int`'.">
+    <Directive name=".long" url_fragment="Long" md_description="Expect zero or more expressions, of any section, separated by commas. For each expression, emit a number that, at run time, is the value of that expression. `.long` is the same as '`.int`'.">
         <Signatures>
             <Signature sig=".long *expressions*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="macro" url_fragment="Macro" md_description="The commands `.macro` and `.endm` allow you to define macros that generate assembly output.">
+    <Directive name=".macro" url_fragment="Macro" md_description="The commands `.macro` and `.endm` allow you to define macros that generate assembly output.">
         <Signatures>
             <Signature sig=".macro*"></Signature>
             <Signature sig=".macro *macname*"></Signature>
             <Signature sig=".macro *macname macargs ...*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="endm" url_fragment="Macro" md_description="Mark the end of a macro definition.">
+    <Directive name=".endm" url_fragment="Macro" md_description="Mark the end of a macro definition.">
         <Signatures>
             <Signature sig=".endm"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="exitm" url_fragment="Macro" md_description="Exit early from the current macro definition.">
+    <Directive name=".exitm" url_fragment="Macro" md_description="Exit early from the current macro definition.">
         <Signatures>
             <Signature sig=".exitm"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="\@" url_fragment="Macro" md_description="`as` maintains a counter of how many macros it has executed in this pseudo-variable; you can copy that number to your output with '`\@`', but only within a macro definition.">
+    <Directive name=".\@" url_fragment="Macro" md_description="`as` maintains a counter of how many macros it has executed in this pseudo-variable; you can copy that number to your output with '`\@`', but only within a macro definition.">
         <Signatures>
             <Signature sig=".\@"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="LOCAL" url_fragment="Macro" md_description="Warning: `LOCAL` is only available if you select &quot;alternate macro syntax&quot; with '`--alternate'` or .altmacro. See `.altmacro`.">
+    <Directive name=".LOCAL" url_fragment="Macro" md_description="Warning: `LOCAL` is only available if you select &quot;alternate macro syntax&quot; with '`--alternate'` or .altmacro. See `.altmacro`.">
         <Signatures>
             <Signature sig=".LOCAL *name [ , ... ]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="mri" url_fragment="MRI" md_description="If *val* is non-zero, this tells as to enter MRI mode. If *val* is zero, this tells as to exit MRI mode. This change affects code assembled until the next `.mri` directive, or until the end of the file.">
+    <Directive name=".mri" url_fragment="MRI" md_description="If *val* is non-zero, this tells as to enter MRI mode. If *val* is zero, this tells as to exit MRI mode. This change affects code assembled until the next `.mri` directive, or until the end of the file.">
         <Signatures>
             <Signature sig=".mri *val*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="noaltmacro" url_fragment="Noaltmacro" md_description="Disable alternate macro mode. See `.altmacro`.">
+    <Directive name=".noaltmacro" url_fragment="Noaltmacro" md_description="Disable alternate macro mode. See `.altmacro`.">
         <Signatures>
             <Signature sig=".noaltmacro"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="nolist" url_fragment="Nolist" md_description="Control (in conjunction with the `.list` directive) whether or not assembly listings are generated. These two directives maintain an internal counter (which is zero initially). `.list` increments the counter, and `.nolist` decrements it. Assembly listings are generated whenever the counter is greater than zero.">
+    <Directive name=".nolist" url_fragment="Nolist" md_description="Control (in conjunction with the `.list` directive) whether or not assembly listings are generated. These two directives maintain an internal counter (which is zero initially). `.list` increments the counter, and `.nolist` decrements it. Assembly listings are generated whenever the counter is greater than zero.">
         <Signatures>
             <Signature sig=".nolist"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="nop" url_fragment="Nop" md_description="This directive emits no-op instructions.">
+    <Directive name=".nop" url_fragment="Nop" md_description="This directive emits no-op instructions.">
         <Signatures>
             <Signature sig=".nop *[size]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="nops" url_fragment="Nops" md_description="This directive emits no-op instructions. It is specific to the Intel 80386 and AMD x86-64 targets. It takes a *size* argument and generates *size* bytes of no-op instructions. *size* must be absolute and positive.">
+    <Directive name=".nops" url_fragment="Nops" md_description="This directive emits no-op instructions. It is specific to the Intel 80386 and AMD x86-64 targets. It takes a *size* argument and generates *size* bytes of no-op instructions. *size* must be absolute and positive.">
         <Signatures>
             <Signature sig=".nops *size[, control]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="octa" url_fragment="Octa" md_description="This directive expects zero or more bignums, separated by commas. For each bignum, it emits a 16-byte integer.">
+    <Directive name=".octa" url_fragment="Octa" md_description="This directive expects zero or more bignums, separated by commas. For each bignum, it emits a 16-byte integer.">
         <Signatures>
             <Signature sig=".octa *bignums*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="offset" url_fragment="Offset" md_description="Set the location counter to *loc* in the absolute section. *loc* must be an absolute expression.">
+    <Directive name=".offset" url_fragment="Offset" md_description="Set the location counter to *loc* in the absolute section. *loc* must be an absolute expression.">
         <Signatures>
             <Signature sig=".offset *loc*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="org" url_fragment="Org" md_description="Advance the location counter of the current section to *new-lc*. *new-lc* is either an absolute expression or an expression with the same section as the current subsection.">
+    <Directive name=".org" url_fragment="Org" md_description="Advance the location counter of the current section to *new-lc*. *new-lc* is either an absolute expression or an expression with the same section as the current subsection.">
         <Signatures>
             <Signature sig=".org *new-lc , fill*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="p2align" url_fragment="P2align" md_description="Pad the location counter (in the current subsection) to a particular storage boundary.">
+    <Directive name=".p2align" url_fragment="P2align" md_description="Pad the location counter (in the current subsection) to a particular storage boundary.">
         <Signatures>
             <Signature sig=".p2align*[w1] [abs-expr[, abs-expr[, abs-expr]]]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="popsection" url_fragment="PopSection" md_description="This ELF section stack manipulation directive replaces the current section (and subsection) with the top section (and subsection) on the section stack. This section is popped off the stack.">
+    <Directive name=".popsection" url_fragment="PopSection" md_description="This ELF section stack manipulation directive replaces the current section (and subsection) with the top section (and subsection) on the section stack. This section is popped off the stack.">
         <Signatures>
             <Signature sig=".popsection"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="previous" url_fragment="Previous" md_description="This ELF section stack manipulation directive swaps the current section (and subsection) with most recently referenced section/subsection pair prior to this one. Multiple .previous directives in a row will flip between two sections (and their subsections).">
+    <Directive name=".previous" url_fragment="Previous" md_description="This ELF section stack manipulation directive swaps the current section (and subsection) with most recently referenced section/subsection pair prior to this one. Multiple .previous directives in a row will flip between two sections (and their subsections).">
         <Signatures>
             <Signature sig=".previous"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="print" url_fragment="Print" md_description="`as` will print *string* on the standard output during assembly. You must put string in double quotes.">
+    <Directive name=".print" url_fragment="Print" md_description="`as` will print *string* on the standard output during assembly. You must put string in double quotes.">
         <Signatures>
             <Signature sig=".print *string*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="protected" url_fragment="Protected" md_description="This ELF visibility directive overrides the named symbols default visibility (which is set by their binding: local, global or weak). The directive sets the visibility to protected which means that any references to the symbols from within the components that defines them must be resolved to the definition in that component, even if a definition in another component would normally preempt this.">
+    <Directive name=".protected" url_fragment="Protected" md_description="This ELF visibility directive overrides the named symbols default visibility (which is set by their binding: local, global or weak). The directive sets the visibility to protected which means that any references to the symbols from within the components that defines them must be resolved to the definition in that component, even if a definition in another component would normally preempt this.">
         <Signatures>
             <Signature sig=".protected *names*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="psize" url_fragment="Psize" md_description="Use this directive to declare the number of lines—and, optionally, the number of columns—to use for each page, when generating listings.">
+    <Directive name=".psize" url_fragment="Psize" md_description="Use this directive to declare the number of lines—and, optionally, the number of columns—to use for each page, when generating listings.">
         <Signatures>
             <Signature sig=".psize *lines , columns*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="purgem" url_fragment="Purgem" md_description="Undefine the macro *name*, so that later uses of the string will not be expanded. See `.macro`.">
+    <Directive name=".purgem" url_fragment="Purgem" md_description="Undefine the macro *name*, so that later uses of the string will not be expanded. See `.macro`.">
         <Signatures>
             <Signature sig=".purgem *name*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="pushsection" url_fragment="PushSection" md_description="This ELF section stack manipulation directive pushes the current section (and subsection) onto the top of the section stack, and then replaces the current section and subsection with *name* and *subsection*.">
+    <Directive name=".pushsection" url_fragment="PushSection" md_description="This ELF section stack manipulation directive pushes the current section (and subsection) onto the top of the section stack, and then replaces the current section and subsection with *name* and *subsection*.">
         <Signatures>
             <Signature sig=".pushsection *name [, subsection] [, &quot;flags&quot;[, @type[,arguments]]]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="quad" url_fragment="Quad" md_description="For 64-bit architectures, or more generally with any GAS configured to support 64-bit target virtual addresses, this is like '`.int`', but emitting 64-bit quantities. Otherwise `.quad` expects zero or more bignums, separated by commas.">
+    <Directive name=".quad" url_fragment="Quad" md_description="For 64-bit architectures, or more generally with any GAS configured to support 64-bit target virtual addresses, this is like '`.int`', but emitting 64-bit quantities. Otherwise `.quad` expects zero or more bignums, separated by commas.">
         <Signatures>
             <Signature sig=".quad *expressions*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="reloc" url_fragment="Reloc" md_description="Generate a relocation at *offset* of type *reloc_name* with value *expression*.">
+    <Directive name=".reloc" url_fragment="Reloc" md_description="Generate a relocation at *offset* of type *reloc_name* with value *expression*.">
         <Signatures>
             <Signature sig=".reloc *offset, reloc_name[, expression]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="rept" url_fragment="Rept" md_description="Repeat the sequence of lines between the `.rept` directive and the next `.endr` directive *count* times.">
+    <Directive name=".rept" url_fragment="Rept" md_description="Repeat the sequence of lines between the `.rept` directive and the next `.endr` directive *count* times.">
         <Signatures>
             <Signature sig=".rept *count*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="sbttl" url_fragment="Sbttl" md_description="Use *subheading* as the title (third line, immediately after the title line) when generating assembly listings.">
+    <Directive name=".sbttl" url_fragment="Sbttl" md_description="Use *subheading* as the title (third line, immediately after the title line) when generating assembly listings.">
         <Signatures>
             <Signature sig=".sbttl *&quot;subheading&quot;*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="scl" url_fragment="Scl" md_description="Set the storage-class value for a symbol. This directive may only be used inside a `.def`/`.endef` pair.">
+    <Directive name=".scl" url_fragment="Scl" md_description="Set the storage-class value for a symbol. This directive may only be used inside a `.def`/`.endef` pair.">
         <Signatures>
             <Signature sig=".scl *class*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="section" url_fragment="Section" md_description="Use the `.section` directive to assemble the following code into a section named *name*.">
+    <Directive name=".section" url_fragment="Section" md_description="Use the `.section` directive to assemble the following code into a section named *name*.">
         <Signatures>
             <Signature sig=".section *name*"></Signature>
             <Signature sig=".section *name[, &quot;flags&quot;]*"></Signature>
             <Signature sig=".section *name[, subsection]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="set" url_fragment="Set" md_description="Set the value of *symbol* to *expression*. This changes *symbol*'s value and type to conform to *expression*.">
+    <Directive name=".set" url_fragment="Set" md_description="Set the value of *symbol* to *expression*. This changes *symbol*'s value and type to conform to *expression*.">
         <Signatures>
             <Signature sig=".set *symbol, expression*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="short" url_fragment="Short" md_description="`.short` is normally the same as '`.word`'. See `.word`. In some configurations, however, `.short` and `.word` generate numbers of different lengths.">
+    <Directive name=".short" url_fragment="Short" md_description="`.short` is normally the same as '`.word`'. See `.word`. In some configurations, however, `.short` and `.word` generate numbers of different lengths.">
         <Signatures>
             <Signature sig=".short *expressions*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="single" url_fragment="Single" md_description="This directive assembles zero or more flonums, separated by commas. It has the same effect as `.float`.">
+    <Directive name=".single" url_fragment="Single" md_description="This directive assembles zero or more flonums, separated by commas. It has the same effect as `.float`.">
         <Signatures>
             <Signature sig=".single *filename*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="size" url_fragment="Size" md_description="This directive is used to set the size associated with a symbol. For ELF targets, the `.size` directive accepts two arguments. For COFF targets, the .size directive is only permitted inside `.def`/`.endef` pairs and only accepts one argument.">
+    <Directive name=".size" url_fragment="Size" md_description="This directive is used to set the size associated with a symbol. For ELF targets, the `.size` directive accepts two arguments. For COFF targets, the .size directive is only permitted inside `.def`/`.endef` pairs and only accepts one argument.">
         <Signatures>
             <Signature sig=".size *name, expression*"></Signature>
             <Signature sig=".size  *expression*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="skip" url_fragment="Skip" md_description="This directive emits *size* bytes, each of value *fill*. Both *size* and *fill* are absolute expressions. If the comma and *fill* are omitted, *fill* is assumed to be zero. This is the same as '`.space`'.">
+    <Directive name=".skip" url_fragment="Skip" md_description="This directive emits *size* bytes, each of value *fill*. Both *size* and *fill* are absolute expressions. If the comma and *fill* are omitted, *fill* is assumed to be zero. This is the same as '`.space`'.">
         <Signatures>
             <Signature sig=".skip *size [,fill]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="sleb128" url_fragment="Sleb128" md_description="*sleb128* stands for &quot;signed little endian base 128.&quot; This is a compact, variable length representation of numbers used by the DWARF symbolic debugging format.">
+    <Directive name=".sleb128" url_fragment="Sleb128" md_description="*sleb128* stands for &quot;signed little endian base 128.&quot; This is a compact, variable length representation of numbers used by the DWARF symbolic debugging format.">
         <Signatures>
             <Signature sig=".sleb128 *expressions*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="space" url_fragment="Space" md_description="This directive emits *size* bytes, each of value *fill*. Both *size* and *fill* are absolute expressions. If the comma and *fill* are omitted, *fill* is assumed to be zero. This is the same as '`.skip`'.">
+    <Directive name=".space" url_fragment="Space" md_description="This directive emits *size* bytes, each of value *fill*. Both *size* and *fill* are absolute expressions. If the comma and *fill* are omitted, *fill* is assumed to be zero. This is the same as '`.skip`'.">
         <Signatures>
             <Signature sig=".space *size [,fill]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="stabd" url_fragment="Stab" md_description="Emits symbols for use by symbolic debuggers. The &quot;name&quot; of the symbol generated is not even an empty string. It is a null pointer, for compatibility.">
+    <Directive name=".stabd" url_fragment="Stab" md_description="Emits symbols for use by symbolic debuggers. The &quot;name&quot; of the symbol generated is not even an empty string. It is a null pointer, for compatibility.">
         <Signatures>
             <Signature sig=".stabd *type , other , desc*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="stabn" url_fragment="Stab" md_description="Emits symbols for use by symbolic debuggers. The name of the symbol is set to the empty string &quot;&quot;.">
+    <Directive name=".stabn" url_fragment="Stab" md_description="Emits symbols for use by symbolic debuggers. The name of the symbol is set to the empty string &quot;&quot;.">
         <Signatures>
             <Signature sig=".stabn *type , other , desc , value*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="stabs" url_fragment="Stab" md_description="Emits symbols for use by symbolic debuggers. All five fields are specified.">
+    <Directive name=".stabs" url_fragment="Stab" md_description="Emits symbols for use by symbolic debuggers. All five fields are specified.">
         <Signatures>
             <Signature sig=".stabs *string, type , other , desc , value*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="string" url_fragment="String" md_description="Copy the characters in *str* to the object file.">
+    <Directive name=".string" url_fragment="String" md_description="Copy the characters in *str* to the object file.">
         <Signatures>
             <Signature sig=".string *&quot;str&quot;"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="string8" url_fragment="String" md_description="Copy the characters in *str* to the object file.">
+    <Directive name=".string8" url_fragment="String" md_description="Copy the characters in *str* to the object file.">
         <Signatures>
             <Signature sig=".string8* *&quot;str&quot;"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="string16" url_fragment="String" md_description="Copy the characters in *str* to the object file. Each 8-bit character from str is copied and expanded to 16 bits.">
+    <Directive name=".string16" url_fragment="String" md_description="Copy the characters in *str* to the object file. Each 8-bit character from str is copied and expanded to 16 bits.">
         <Signatures>
             <Signature sig=".string16* *&quot;str&quot;"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="string32" url_fragment="String" md_description="Copy the characters in *str* to the object file. Each 8-bit character from str is copied and expanded to 32 bits.">
+    <Directive name=".string32" url_fragment="String" md_description="Copy the characters in *str* to the object file. Each 8-bit character from str is copied and expanded to 32 bits.">
         <Signatures>
             <Signature sig=".string32* *&quot;str&quot;"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="string64" url_fragment="String" md_description="Copy the characters in *str* to the object file. Each 8-bit character from str is copied and expanded to 64 bits.">
+    <Directive name=".string64" url_fragment="String" md_description="Copy the characters in *str* to the object file. Each 8-bit character from str is copied and expanded to 64 bits.">
         <Signatures>
             <Signature sig=".string64* *&quot;str&quot;"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="struct" url_fragment="Struct" md_description="Provides a means to associate symvolic names for offsetes. Switch to the absolute section, and set the section offset to expression, which must be an absolute expression.">
+    <Directive name=".struct" url_fragment="Struct" md_description="Provides a means to associate symvolic names for offsetes. Switch to the absolute section, and set the section offset to expression, which must be an absolute expression.">
         <Signatures>
             <Signature sig=".struct *expression*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="subsection" url_fragment="SubSection" md_description="This ELF section stack manipulation directive replaces the current subsection with *name*. The current section is not changed. The replaced subsection is put onto the section stack in place of the then current top of stack subsection.">
+    <Directive name=".subsection" url_fragment="SubSection" md_description="This ELF section stack manipulation directive replaces the current subsection with *name*. The current section is not changed. The replaced subsection is put onto the section stack in place of the then current top of stack subsection.">
         <Signatures>
             <Signature sig=".subsection *name*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="symver" url_fragment="Symver" md_description="Use the `.symver` directive to bind symbols to specific version nodes within a source file. This is only supported on ELF platforms, and is typically used when assembling files to be linked into a shared library.">
+    <Directive name=".symver" url_fragment="Symver" md_description="Use the `.symver` directive to bind symbols to specific version nodes within a source file. This is only supported on ELF platforms, and is typically used when assembling files to be linked into a shared library.">
         <Signatures>
             <Signature sig=".symver *name, name2@nodename[ ,visibility]*"></Signature>
             <Signature sig=".symver *name, name2@nodename*"></Signature>
             <Signature sig=".symver *name, name2@@@nodename*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="tag" url_fragment="Tag" md_description="This directive is generated by compilers to include auxiliary debugging information in the symbol table. It is only permitted inside `.def`/`.endef` pairs. Tags are used to link structure definitions in the symbol table with instances of those structures.">
+    <Directive name=".tag" url_fragment="Tag" md_description="This directive is generated by compilers to include auxiliary debugging information in the symbol table. It is only permitted inside `.def`/`.endef` pairs. Tags are used to link structure definitions in the symbol table with instances of those structures.">
         <Signatures>
             <Signature sig=".tag *structname*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="text" url_fragment="Text" md_description="Tells *as* to assemble the following statements onto the end of the text subsection numbered *subsection*, which is an absolute expression. If *subsection* is omitted, subsection number zero is used.">
+    <Directive name=".text" url_fragment="Text" md_description="Tells *as* to assemble the following statements onto the end of the text subsection numbered *subsection*, which is an absolute expression. If *subsection* is omitted, subsection number zero is used.">
         <Signatures>
             <Signature sig=".text *subsection*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="title" url_fragment="Title" md_description="Use *heading* as the title (second line, immediately after the source file name and pagenumber) when generating assembly listings.">
+    <Directive name=".title" url_fragment="Title" md_description="Use *heading* as the title (second line, immediately after the source file name and pagenumber) when generating assembly listings.">
         <Signatures>
             <Signature sig=".title *&quot;heading&quot;*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="tls_common" url_fragment="Tls_005fcommon" md_description="This directive behaves in the same way as the `.comm` directive (see `.comm symbol , length`) except that symbol has type of STT_TLS instead of STT_OBJECT.">
+    <Directive name=".tls_common" url_fragment="Tls_005fcommon" md_description="This directive behaves in the same way as the `.comm` directive (see `.comm symbol , length`) except that symbol has type of STT_TLS instead of STT_OBJECT.">
         <Signatures>
             <Signature sig=".tls_common *symbol, length[, alignment]*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="type" url_fragment="Type" md_description="This directive is used to set the type of a symbol.">
+    <Directive name=".type" url_fragment="Type" md_description="This directive is used to set the type of a symbol.">
         <Signatures>
             <Signature sig=".type *int*"></Signature>
             <Signature sig=".type *name , type_description*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="uleb128" url_fragment="Uleb128" md_description="*uleb128* stands for &quot;unsigned little endian base 128.&quot; This is a compact, variable length representation of numbers used by the DWARF symbolic debugging format. See `.sleb128`.">
+    <Directive name=".uleb128" url_fragment="Uleb128" md_description="*uleb128* stands for &quot;unsigned little endian base 128.&quot; This is a compact, variable length representation of numbers used by the DWARF symbolic debugging format. See `.sleb128`.">
         <Signatures>
             <Signature sig=".uleb128 *expressions*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="val" url_fragment="Val" md_description="This directive, permitted only within `.def`/`.endef` pairs, records the address addr as the value attribute of a symbol table entry.">
+    <Directive name=".val" url_fragment="Val" md_description="This directive, permitted only within `.def`/`.endef` pairs, records the address addr as the value attribute of a symbol table entry.">
         <Signatures>
             <Signature sig=".val *addr*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="version" url_fragment="Version" md_description="This directive creates a `.note` section and places into it an ELF formatted note of type NT_VERSION. The note’s name is set to string.">
+    <Directive name=".version" url_fragment="Version" md_description="This directive creates a `.note` section and places into it an ELF formatted note of type NT_VERSION. The note’s name is set to string.">
         <Signatures>
             <Signature sig=".version *&quot;string&quot;*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="vtable_entry" url_fragment="VTableEntry" md_description="This directive finds or creates a symbol table and creates a `VTABLE_ENTRY` relocation for it with an addend of `offset`.">
+    <Directive name=".vtable_entry" url_fragment="VTableEntry" md_description="This directive finds or creates a symbol table and creates a `VTABLE_ENTRY` relocation for it with an addend of `offset`.">
         <Signatures>
             <Signature sig=".vtable_entry *table, offset*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="vtable_inherit" url_fragment="VTableInherit" md_description="his directive finds the symbol `child` and finds or creates the symbol `parent` and then creates a `VTABLE_INHERIT` relocation for the parent whose addend is the value of the child symbol. As a special case the parent name of `0` is treated as referring to the \*ABS\* section.">
+    <Directive name=".vtable_inherit" url_fragment="VTableInherit" md_description="his directive finds the symbol `child` and finds or creates the symbol `parent` and then creates a `VTABLE_INHERIT` relocation for the parent whose addend is the value of the child symbol. As a special case the parent name of `0` is treated as referring to the \*ABS\* section.">
         <Signatures>
             <Signature sig=".vtable_inherit *child, parent*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="warning" url_fragment="Warning" md_description="This directive emits a warning, but you can specify a string that will be emitted as the warning message. If you don’t specify the message, it defaults to &quot;`.warning` directive invoked in source file&quot;.">
+    <Directive name=".warning" url_fragment="Warning" md_description="This directive emits a warning, but you can specify a string that will be emitted as the warning message. If you don’t specify the message, it defaults to &quot;`.warning` directive invoked in source file&quot;.">
         <Signatures>
             <Signature sig=".warning *&quot;string&quot;*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="weak" url_fragment="Weak" md_description="This directive sets the weak attribute on the comma separated list of symbol *names*. If the symbols do not already exist, they will be created.">
+    <Directive name=".weak" url_fragment="Weak" md_description="This directive sets the weak attribute on the comma separated list of symbol *names*. If the symbols do not already exist, they will be created.">
         <Signatures>
             <Signature sig=".weak *names*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="weakref" url_fragment="Weakref" md_description="This directive creates an alias to the target symbol that enables the symbol to be referenced with weak-symbol semantics, but without actually making it weak.">
+    <Directive name=".weakref" url_fragment="Weakref" md_description="This directive creates an alias to the target symbol that enables the symbol to be referenced with weak-symbol semantics, but without actually making it weak.">
         <Signatures>
             <Signature sig=".weakref *alias, target*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="word" url_fragment="Word" md_description="This directive expects zero or more expressions, of any section, separated by commas.">
+    <Directive name=".word" url_fragment="Word" md_description="This directive expects zero or more expressions, of any section, separated by commas.">
         <Signatures>
             <Signature sig=".word *expression*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="zero" url_fragment="Zero" md_description="This directive emits *size* 0-valued bytes. *size* must be an absolute expression. This directive is actually an alias for the '`.skip`' directive so it can take an optional second argument of the value to store in the bytes instead of zero.">
+    <Directive name=".zero" url_fragment="Zero" md_description="This directive emits *size* 0-valued bytes. *size* must be an absolute expression. This directive is actually an alias for the '`.skip`' directive so it can take an optional second argument of the value to store in the bytes instead of zero.">
         <Signatures>
             <Signature sig=".zero *size*"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="2byte" url_fragment="2byte" md_description="Each expression is evaluated in turn and placed in the next two bytes of the current output section, using the endian model of the target. If an expression will not fit in two bytes, a warning message is displayed and the least significant two bytes of the expression’s value are used.">
+    <Directive name=".2byte" url_fragment="2byte" md_description="Each expression is evaluated in turn and placed in the next two bytes of the current output section, using the endian model of the target. If an expression will not fit in two bytes, a warning message is displayed and the least significant two bytes of the expression’s value are used.">
         <Signatures>
             <Signature sig=".2byte *expression [, expression]\**"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="4byte" url_fragment="4byte" md_description="Each expression is evaluated in turn and placed in the next four bytes of the current output section, using the endian model of the target. If an expression will not fit in four bytes, a warning message is displayed and the least significant two bytes of the expression’s value are used.">
+    <Directive name=".4byte" url_fragment="4byte" md_description="Each expression is evaluated in turn and placed in the next four bytes of the current output section, using the endian model of the target. If an expression will not fit in four bytes, a warning message is displayed and the least significant two bytes of the expression’s value are used.">
         <Signatures>
             <Signature sig=".4byte *expression [, expression]\**"></Signature>
         </Signatures>
     </Directive>
-    <Directive name="8byte" url_fragment="8byte" md_description="Each expression is evaluated in turn and placed in the next eight bytes of the current output section, using the endian model of the target. If an expression will not fit in eight bytes, a warning message is displayed and the least significant two bytes of the expression’s value are used.">
+    <Directive name=".8byte" url_fragment="8byte" md_description="Each expression is evaluated in turn and placed in the next eight bytes of the current output section, using the endian model of the target. If an expression will not fit in eight bytes, a warning message is displayed and the least significant two bytes of the expression’s value are used.">
         <Signatures>
             <Signature sig=".8byte *expression [, expression]\**"></Signature>
         </Signatures>

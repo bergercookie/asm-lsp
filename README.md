@@ -125,6 +125,10 @@ git repository.
 
 - GAS directives sourced from SourceWare's [pseudo-ops page](https://sourceware.org/binutils/docs-2.41/as/Pseudo-Ops.html)
 
+- MASM and NASM directives sourced from the [asm-dude](https://github.com/HJLebbink/asm-dude)
+    Visual Studio extension project. Additions sourced from [Microsoft](https://learn.microsoft.com/en-us/cpp/assembler/masm/directives-reference?view=msvc-170)
+    and [NASM](https://www.nasm.us/xdoc/2.13.03/html/nasmdoc0.html) documentation.
+
 - ARM instruction documentation builds on top of ARM's official [Exploration tools documentation](https://developer.arm.com/Architectures/A-Profile%20Architecture#Software-Download)
 
 - RISCV instruction and register documentation builds on top of the [riscv-isadoc project](https://github.com/msyksphinz-self/riscv-isadoc?tab=CC-BY-4.0-1-ov-file)

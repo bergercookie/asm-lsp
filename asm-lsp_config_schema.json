@@ -24,9 +24,17 @@
                 "z80": {
                     "description": "Flag to turn features related to the z80 Assembler on/off.",
                     "type": "boolean"
+                },
+                "masm": {
+                    "description": "Flag to turn features related to the MASM Assembler on/off.",
+                    "type": "boolean"
+                },
+                "nasm": {
+                    "description": "Flag to turn features related to the NASM Assembler on/off.",
+                    "type": "boolean"
                 }
             },
-            "required": [ "gas", "go", "z80" ]
+            "required": [ "gas", "go", "z80", "masm", "nasm" ]
         },
         "instruction_sets": {
             "description": "Options to manage instruction set-dependent features.",
