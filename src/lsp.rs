@@ -1233,7 +1233,7 @@ pub fn get_ref_resp(
     curr_doc: &FullTextDocument,
     tree_entry: &mut TreeEntry,
 ) -> Vec<Location> {
-    let mut refs: Vec<Location> = Vec::new();
+    let mut refs: HashSet<Location> = HashSet::new();
     let doc = curr_doc.get_content(None);
     tree_entry.tree = tree_entry.parser.parse(doc, tree_entry.tree.as_ref());
 
@@ -1275,14 +1275,10 @@ pub fn get_ref_resp(
                     if word.eq(text) {
                         let start = lsp_pos_of_point(cap.node.start_position());
                         let end = lsp_pos_of_point(cap.node.end_position());
-                        // TODO: Use a Hashset here once lsptextdocument bumps its
-                        // dependency on lsp_types
-                        if !refs.iter().any(|loc| loc.range.start == start) {
-                            refs.push(Location {
-                                uri: uri.clone(),
-                                range: Range { start, end },
-                            });
-                        }
+                        refs.insert(Location {
+                            uri: uri.clone(),
+                            range: Range { start, end },
+                        });
                     }
                 }
             }
@@ -1307,20 +1303,16 @@ pub fn get_ref_resp(
                 if word.eq(text) {
                     let start = lsp_pos_of_point(cap.node.start_position());
                     let end = lsp_pos_of_point(cap.node.end_position());
-                    // TODO: Use a Hashset here once lsptextdocument bumps its
-                    // dependency on lsp_types
-                    if !refs.iter().any(|loc| loc.range.start == start) {
-                        refs.push(Location {
-                            uri: uri.clone(),
-                            range: Range { start, end },
-                        });
-                    }
+                    refs.insert(Location {
+                        uri: uri.clone(),
+                        range: Range { start, end },
+                    });
                 }
             }
         }
     }
 
-    refs
+    refs.into_iter().collect()
 }
 
 // Note: Some issues here regarding entangled lifetimes
