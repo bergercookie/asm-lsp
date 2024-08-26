@@ -1259,6 +1259,12 @@ pub fn get_ref_resp(
             let label_matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc.as_bytes());
             for match_ in label_matches {
                 for cap in match_.captures {
+                    // HACK: Temporary solution for what I believe is a bug in tree-sitter core
+                    if cap.node.start_byte() >= doc.as_bytes().len()
+                        || cap.node.end_byte() >= doc.as_bytes().len()
+                    {
+                        continue;
+                    }
                     let text = cap
                         .node
                         .utf8_text(doc.as_bytes())
@@ -1285,6 +1291,12 @@ pub fn get_ref_resp(
         let word_matches = cursor.matches(&QUERY_WORD, tree.root_node(), doc.as_bytes());
         for match_ in word_matches {
             for cap in match_.captures {
+                // HACK: Temporary solution for what I believe is a bug in tree-sitter core
+                if cap.node.start_byte() >= doc.as_bytes().len()
+                    || cap.node.end_byte() >= doc.as_bytes().len()
+                {
+                    continue;
+                }
                 let text = cap
                     .node
                     .utf8_text(doc.as_bytes())
