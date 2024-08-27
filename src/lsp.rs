@@ -1406,6 +1406,7 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
         for folder in folders {
             if let Ok(parsed) = PathBuf::from_str(folder.uri.path().as_str()) {
                 if let Ok(parsed_path) = parsed.canonicalize() {
+                    info!("Detected project root: {}", parsed_path.display());
                     return Some(parsed_path);
                 }
             }
@@ -1417,11 +1418,13 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
     if let Some(root_uri) = &params.root_uri {
         if let Ok(parsed) = PathBuf::from_str(root_uri.path().as_str()) {
             if let Ok(parsed_path) = parsed.canonicalize() {
+                info!("Detected project root: {}", parsed_path.display());
                 return Some(parsed_path);
             }
         }
     }
 
+    warn!("Failed to detect project root");
     None
 }
 
@@ -1429,16 +1432,21 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
 fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
     if let Some(mut path) = get_project_root(params) {
         path.push(".asm-lsp.toml");
-        if let Ok(config) = std::fs::read_to_string(&path) {
-            let path_s = path.display();
-            match toml::from_str::<TargetConfig>(&config) {
-                Ok(config) => {
-                    info!("Parsing asm-lsp project config from file -> {path_s}\n");
-                    return Some(config);
+        match std::fs::read_to_string(&path) {
+            Ok(config) => {
+                let path_s = path.display();
+                match toml::from_str::<TargetConfig>(&config) {
+                    Ok(config) => {
+                        info!("Parsing asm-lsp project config from file -> {path_s}");
+                        return Some(config);
+                    }
+                    Err(e) => {
+                        error!("Failed to parse project config file {path_s} - Error: {e}");
+                    } // if there's an error we fall through to check for a global config in the caller
                 }
-                Err(e) => {
-                    error!("Failed to parse project config file {path_s} - Error: {e}\n");
-                } // if there's an error we fall through to check for a global config in the caller
+            }
+            Err(e) => {
+                error!("Failed to read config file {} - Error: {e}", path.display());
             }
         }
     }
