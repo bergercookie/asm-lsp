@@ -102,6 +102,7 @@ pub fn main() -> Result<()> {
 
     let mut names_to_info = NameToInfoMaps::default();
     let params: InitializeParams = serde_json::from_value(initialization_params.clone()).unwrap();
+    info!("Client initialization params: {:?}", params);
     let target_config = get_target_config(&params);
     info!("Server Configuration: {:?}", target_config);
 

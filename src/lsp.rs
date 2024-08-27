@@ -1399,6 +1399,8 @@ fn get_global_config() -> Option<TargetConfig> {
 //    the root path
 // 2. If we don't have worksace folders or none of them is a valid path, check the (deprecated)
 //    root_uri field
+// 3. If both workspace folders and root_uri didn't provide a path, check the (deprecated)
+//    root_path field
 fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
     // first check workspace folders
     if let Some(folders) = &params.workspace_folders {
@@ -1419,6 +1421,16 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
         if let Ok(parsed) = PathBuf::from_str(root_uri.path().as_str()) {
             if let Ok(parsed_path) = parsed.canonicalize() {
                 info!("Detected project root: {}", parsed_path.display());
+                return Some(parsed_path);
+            }
+        }
+    }
+
+    // if both `workspace_folders` and `root_uri` weren't set or came up empty, we check the root_path
+    #[allow(deprecated)]
+    if let Some(root_path) = &params.root_path {
+        if let Ok(parsed) = PathBuf::from_str(root_path.as_str()) {
+            if let Ok(parsed_path) = parsed.canonicalize() {
                 return Some(parsed_path);
             }
         }
