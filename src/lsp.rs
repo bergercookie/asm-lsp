@@ -1363,13 +1363,22 @@ pub fn get_target_config(params: &InitializeParams) -> TargetConfig {
 
 /// Checks ~/.config/asm-lsp for a config file, creating directories along the way as necessary
 fn get_global_config() -> Option<TargetConfig> {
-    if let Some(mut cfg_path) = config_dir() {
+    let mut paths = if cfg!(target_os = "macos") {
+        // `$HOME`/Library/Application Support/ and `$HOME`/.config/
+        vec![config_dir(), alt_mac_config_dir()]
+    } else {
+        vec![config_dir()]
+    };
+
+    for cfg_path in paths.iter_mut().flatten() {
         cfg_path.push("asm-lsp");
         let cfg_path_s = cfg_path.display();
         info!("Creating directories along {} as necessary...", cfg_path_s);
+        #[allow(clippy::needless_borrows_for_generic_args)]
         match create_dir_all(&cfg_path) {
             Ok(()) => {
                 cfg_path.push(".asm-lsp.toml");
+                #[allow(clippy::needless_borrows_for_generic_args)]
                 if let Ok(config) = std::fs::read_to_string(&cfg_path) {
                     let cfg_path_s = cfg_path.display();
                     match toml::from_str::<TargetConfig>(&config) {
@@ -1392,6 +1401,15 @@ fn get_global_config() -> Option<TargetConfig> {
     }
 
     None
+}
+
+fn alt_mac_config_dir() -> Option<PathBuf> {
+    if let Some(mut path) = home::home_dir() {
+        path.push(".config");
+        Some(path)
+    } else {
+        None
+    }
 }
 
 /// Attempts to find the project's root directory given its `InitializeParams`
