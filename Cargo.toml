@@ -4,7 +4,7 @@ version = "0.7.4"
 authors = ["Nikos Koukis <nickkouk@gmail.com>"]
 edition = "2018"
 
-description = "Language Server for x86/x86_64 and z80 Assembly Code"
+description = "Language Server for x86/x86_64, ARM, RISCV, and z80 Assembly Code"
 
 documentation = "https://docs.rs/asm-lsp/latest/asm_lsp/"
 homepage = "https://github.com/bergercookie/asm-lsp"
