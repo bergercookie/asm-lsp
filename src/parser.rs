@@ -34,6 +34,7 @@ use url_escape::encode_www_form_urlencoded;
 ///
 /// This function is highly specialized to parse a specific file and will panic
 /// for most mal-formed/unexpected inputs
+#[must_use]
 pub fn populate_riscv_registers(rst_contents: &str) -> Vec<Register> {
     enum ParseState {
         FileStart,
@@ -106,7 +107,7 @@ pub fn populate_riscv_registers(rst_contents: &str) -> Vec<Register> {
                 assert!(entries.len() == 4);
                 let reg_name = entries[0].trim();
                 let saved_info = if entries[3].trim().is_empty() {
-                    "".to_string()
+                    String::new()
                 } else {
                     format!("\n{} saved", entries[3].trim())
                 };
@@ -1272,7 +1273,96 @@ pub fn populate_name_to_register_map<'register>(
 ///
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
-pub fn populate_directives(xml_contents: &str) -> Result<Vec<Directive>> {
+pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive>> {
+    let mut directives_map = HashMap::<String, Directive>::new();
+
+    // iterate through the XML --------------------------------------------------------------------
+    let mut reader = Reader::from_str(xml_contents);
+
+    // ref to the assembler directive that's currently under construction
+    let mut curr_directive = Directive::default();
+    let mut in_desc = false;
+
+    debug!("Parsing directive XML contents...");
+    loop {
+        match reader.read_event() {
+            // start event ------------------------------------------------------------------------
+            Ok(Event::Start(ref e)) => {
+                match e.name() {
+                    QName(b"directive") => {
+                        // start of a new directive
+                        curr_directive = Directive::default();
+
+                        // iterate over the attributes
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            match str::from_utf8(key.into_inner()).unwrap() {
+                                "name" => {
+                                    let name =
+                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                    curr_directive.alt_names.push(name.to_uppercase());
+                                    curr_directive.alt_names.push(name.to_lowercase());
+                                    curr_directive.name = name;
+                                }
+                                "tool" => {
+                                    let assembler = Assembler::from_str(unsafe {
+                                        str::from_utf8_unchecked(&value)
+                                    })?;
+                                    curr_directive.assembler = Some(assembler);
+                                }
+                                _ => {}
+                            }
+                        }
+                    }
+                    QName(b"description") => {
+                        in_desc = true;
+                    }
+                    _ => {} // unknown event
+                }
+            }
+            Ok(Event::Text(ref txt)) => {
+                if in_desc {
+                    curr_directive.description = str::from_utf8(txt)?.trim().to_string();
+                }
+            }
+            // end event --------------------------------------------------------------------------
+            Ok(Event::End(ref e)) => {
+                if let QName(b"directive") = e.name() {
+                    directives_map.insert(curr_directive.name.clone(), curr_directive.clone());
+                } else if let QName(b"description") = e.name() {
+                    in_desc = false;
+                }
+            }
+            Ok(Event::Eof) => break,
+            Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
+            _ => {} // rest of events that we don't consider
+        }
+    }
+
+    // Since directive entries have their assembler labeled on a per-instance basis,
+    // we check to make sure all of them have been assigned correctly
+    for directive in directives_map.values() {
+        assert!(directive.assembler.is_some());
+    }
+
+    Ok(directives_map.into_values().collect())
+}
+/// Parse the provided XML contents and return a vector of all the directives based on that.
+/// If parsing fails, the appropriate error will be returned instead.
+///
+/// Current function assumes that the XML file is already read and that it's been given a reference
+/// to its contents (`&str`).
+///
+/// # Errors
+///
+/// This function is highly specialized to parse a handful of files and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+///
+/// # Panics
+///
+/// This function is highly specialized to parse a handful of files and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     let mut directives_map = HashMap::<String, Directive>::new();
 
     // iterate through the XML --------------------------------------------------------------------
@@ -1372,9 +1462,9 @@ pub fn populate_name_to_directive_map<'directive>(
     directives: &'directive Vec<Directive>,
     names_to_directives: &mut NameToDirectiveMap<'directive>,
 ) {
-    for register in directives {
-        for name in &register.get_associated_names() {
-            names_to_directives.insert((assem, name), register);
+    for directive in directives {
+        for name in &directive.get_associated_names() {
+            names_to_directives.insert((assem, name), directive);
         }
     }
 }

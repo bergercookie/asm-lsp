@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="utf-8"?>
+<directives>
+	<directive name="ADDR" tool="masm">
+		<description>Operator used exclusively with INVOKE to pass the address of a variable to a procedure.</description>
+	</directive>
+	<directive name="OFFSET" tool="masm">
+		<description>Returns the address of a variable.</description>
+	</directive>
+	<directive name="PTR" tool="masm">
+		<description>Specifies a type for a memory address.</description>
+	</directive>
+	<directive name="DB" tool="masm">
+		<description>Pseudo-Instruction declaring initialized data. Byte (1 byte, 8 bit). DB is a synonym of BYTE</description>
+	</directive>
+	<directive name="DW" tool="masm">
+		<description>Pseudo-Instruction declaring initialized data. Word, Half Precision (2 bytes, 16 bit). DW is a synonym of WORD.</description>
+	</directive>
+	<directive name="DD" tool="masm">
+		<description>Pseudo-Instruction declaring initialized data. Double Word, Single Precision (4 bytes, 32 bit). DD is a synonym of DWORD.</description>
+	</directive>
+	<directive name="DF" tool="masm">
+		<description>Pseudo-Instruction declaring initialized data. (6 bytes, 48 bit). DF is a synonym of FWORD.</description>
+	</directive>
+	<directive name="DQ" tool="masm">
+		<description>Pseudo-Instruction declaring initialized data. Quad word, Double Precision (8 bytes, 64 bit). DQ is a synonym of QWORD.</description>
+	</directive>
+	<directive name="DT" tool="masm">
+		<description>Pseudo-Instruction declaring initialized data. Extended (Double) Precision (10 bytes, 80 bit). DT is a synonym of TBYTE.</description>
+	</directive>
+	<directive name="DO" tool="masm">
+		<description>Pseudo-Instruction declaring initialized data. IEEE 754-2008 Quad Precision (16 bytes, 128 bit), DO is a synonym of OWORD.</description>
+	</directive>
+	<directive name="DY" tool="masm">
+		<description>Pseudo-Instruction declaring initialized data. (32 bytes, 256 bit). DY is a synonym of YWORD.</description>
+	</directive>
+	<directive name="DZ" tool="masm">
+		<description>Pseudo-Instruction declaring initialized data. (64 bytes, 512 bit). DZ is a synonym of ZWORD.</description>
+	</directive>
+	<directive name="RESB" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. Byte (1 byte, 8 bit). RESB is a synonym of BYTE</description>
+	</directive>
+	<directive name="RESW" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. Word, Half Precision (2 bytes, 16 bit). RESW is a synonym of WORD.</description>
+	</directive>
+	<directive name="RESD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. Double Word, Single Precision (4 bytes, 32 bit). RESD is a synonym of DWORD.</description>
+	</directive>
+	<directive name="RESQ" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. Quad word, Double Precision (8 bytes, 64 bit). RESQ is a synonym of QWORD.</description>
+	</directive>
+	<directive name="REST" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. Extended (Double) Precision (10 bytes, 80 bit). REST is a synonym of TBYTE.</description>
+	</directive>
+	<directive name="RESO" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. IEEE 754-2008 Quad Precision (16 bytes, 128 bit), RESO is a synonym of OWORD.</description>
+	</directive>
+	<directive name="RESY" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. (32 bytes, 256 bit). RESY is a synonym of YWORD.</description>
+	</directive>
+	<directive name="RESZ" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. (64 bytes, 512 bit). RESZ is a synonym of ZWORD.</description>
+	</directive>
+	<directive name="BOOLEAN" tool="masm">
+		<description>Boolean</description>
+	</directive>
+	<directive name="HWND" tool="masm">
+		<description>A handle to a window</description>
+	</directive>
+	<directive name="BYTE" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. Byte (1 byte, 8 bit)</description>
+	</directive>
+	<directive name="SBYTE" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. Signed Byte (1 byte, 8 bit)</description>
+	</directive>
+	<directive name="WORD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. Word, Half Precision (2 bytes, 16 bit)</description>
+	</directive>
+	<directive name="SWORD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. Signed Word, Half Precision (2 bytes, 16 bit)</description>
+	</directive>
+	<directive name="DWORD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. Double Word, Single Precision (4 bytes, 32 bit)</description>
+	</directive>
+	<directive name="SDWORD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. Signed Double Word, Single Precision (4 bytes, 32 bit)</description>
+	</directive>
+	<directive name="FWORD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. (6 bytes, 48 bit).</description>
+	</directive>
+	<directive name="QWORD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. Quad word, Double Precision (8 bytes, 64 bit)</description>
+	</directive>
+	<directive name="MMWORD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. Quad word, Double Precision (8 bytes, 64 bit)</description>
+	</directive>
+	<directive name="TWORD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. Extended (Double) Precision (10 bytes, 80 bit)</description>
+	</directive>
+	<directive name="XMMWORD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. (16 bytes, 128 bit)</description>
+	</directive>
+	<directive name="OWORD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. IEEE 754-2008 Quad Precision (16 bytes, 128 bit)</description>
+	</directive>
+	<directive name="YMMWORD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. (32 bytes, 256 bit)</description>
+	</directive>
+	<directive name="YWORD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. (32 bytes, 256 bit)</description>
+	</directive>
+	<directive name="ZMMWORD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. (64 bytes, 512 bit)</description>
+	</directive>
+	<directive name="ZWORD" tool="masm">
+		<description>Pseudo-Instruction declaring uninitialized data. (64 bytes, 512 bit)</description>
+	</directive>
+	<directive name="REAL4" tool="masm">
+		<description>Allocates and optionally initializes a single-precision (4-byte) floating-point number for each initializer.</description>
+	</directive>
+	<directive name="REAL8" tool="masm">
+		<description>Allocates and optionally initializes a double-precision (8-byte) floating-point number for each initializer.</description>
+	</directive>
+	<directive name="REAL10" tool="masm">
+		<description>Allocates and optionally initializes a 10-byte floating-point number for each initializer.</description>
+	</directive>
+	<directive name="TBYTE" tool="masm">
+		<description>Allocates and optionally initializes 10 bytes of storage for each initializer. Can also be used as a type specifier anywhere a type is legal.</description>
+	</directive>
+    <!-- NOTE: Wasn't able to find any reference to STRICT as a MASM directive online, commenting out for now -->
+	<!-- <directive name="STRICT" tool="masm"> -->
+	<!-- 	<description>TODO.</description> -->
+	<!-- </directive> -->
+	<directive name=".ALLOCSTACK" tool="masm">
+		<description>MASM64: Generates a UWOP_ALLOC_SMALL or a UWOP_ALLOC_LARGE with the specified size for the current offset in the prologue.</description>
+	</directive>
+	<directive name=".ENDPROLOG" tool="masm">
+		<description>MASM64: Signals the end of the prologue declarations.</description>
+	</directive>
+	<directive name=".PUSHFRAME" tool="masm">
+		<description>MASM64: Generates a UWOP_PUSH_MACHFRAME unwind code entry. If the optional code is specified, the unwind code entry is given a modifier of 1. Otherwise the modifier is 0.</description>
+	</directive>
+	<directive name=".PUSHREG" tool="masm">
+		<description>MASM64: Generates a UWOP_PUSH_NONVOL unwind code entry for the specified register number using the current offset in the prologue.</description>
+	</directive>
+	<directive name=".SAVEREG" tool="masm">
+		<description>MASM64: Generates either a UWOP_SAVE_NONVOL or a UWOP_SAVE_NONVOL_FAR unwind code entry for the specified register (reg) and offset (offset) using the current prologue offset. MASM will choose the most efficient encoding.</description>
+	</directive>
+	<directive name=".SAVEXMM128" tool="masm">
+		<description>MASM64: Generates either a UWOP_SAVE_XMM128 or a UWOP_SAVE_XMM128_FAR unwind code entry for the specified XMM register and offset using the current prologue offset. MASM will choose the most efficient encoding.</description>
+	</directive>
+	<directive name=".SETFRAME" tool="masm">
+		<description>MASM64: Fills in the frame register field and offset in the unwind information using the specified register (reg) and offset (offset). The offset must be a multiple of 16 and less than or equal to 240. This directive also generates a UWOP_SET_FPREG unwind code entry for the specified register using the current prologue offset.</description>
+	</directive>
+	<directive name="ALIGN" tool="masm">
+		<description>Aligns the next variable or instruction on a byte that is a multiple of number.</description>
+	</directive>
+	<directive name="EVEN" tool="masm">
+		<description>Aligns the next variable or instruction on an even byte.</description>
+	</directive>
+	<directive name="LABEL" tool="masm">
+		<description>Creates a new label by assigning the current location-counter value and the given type to name.</description>
+	</directive>
+	<directive name="ORG" tool="masm">
+		<description>Sets the location counter to expression.</description>
+	</directive>
+	<directive name="ELSE" tool="masm">
+		<description>Marks the beginning of an alternate block within a conditional block.</description>
+	</directive>
+	<directive name="ELSEIF" tool="masm">
+		<description>Combines ELSE and IF into one statement.</description>
+	</directive>
+	<directive name="ELSEIF2" tool="masm">
+		<description>ELSEIF block evaluated on every assembly pass if OPTION:SETIF2 is TRUE.</description>
+	</directive>
+	<directive name="IF" tool="masm">
+		<description>Grants assembly of ifstatements if expression1 is true (nonzero) or elseifstatements if expression1 is false (0) and expression2 is true.</description>
+	</directive>
+	<directive name="IF2" tool="masm">
+		<description>IF block is evaluated on every assembly pass if OPTION:SETIF2 is TRUE.</description>
+	</directive>
+	<directive name="IFNB" tool="masm">
+		<description>Grants assembly if textitem is not blank.</description>
+	</directive>
+	<directive name="IFB" tool="masm">
+		<description>Grants assembly if textitem is blank.</description>
+	</directive>
+	<directive name="IFDEF" tool="masm">
+		<description>Grants assembly if name is a previously defined label, variable, or symbol.</description>
+	</directive>
+	<directive name="IFNDEF" tool="masm">
+		<description>Grants assembly if name has not been defined.</description>
+	</directive>
+	<directive name="IFDIF" tool="masm">
+		<description>Grants assembly if the text items are different.</description>
+	</directive>
+	<directive name="IFE" tool="masm">
+		<description>Grants assembly if expression is false (0).</description>
+	</directive>
+	<directive name="IFIDN" tool="masm">
+		<description>Grants assembly if the text items are identical.</description>
+	</directive>
+	<directive name="ENDIF" tool="masm">
+		<description>32-bit MASM only.</description>
+	</directive>
+	<directive name="ALIAS" tool="masm">
+		<description>The ALIAS directive creates an alternate name for a function.</description>
+	</directive>
+	<directive name=".BREAK" tool="masm">
+		<description>Generates code to terminate a .WHILE or .REPEAT block if condition is true.</description>
+	</directive>
+	<directive name=".CONTINUE" tool="masm">
+		<description>Generates code to jump to the top of a .WHILE or .REPEAT block if condition is true.</description>
+	</directive>
+	<directive name=".ELSE" tool="masm">
+		<description>Generates code to jump to the top of a .WHILE or .REPEAT block if condition is false.</description>
+	</directive>
+	<directive name=".ELSIF" tool="masm">
+		<description>Generates code that tests condition1 (for example, AX > 7) and executes the statements if that condition is true.</description>
+	</directive>
+	<directive name=".ELSEIF" tool="masm">
+		<description>Generates code that tests condition1 (for example, AX > 7) and executes the statements if that condition is true.</description>
+	</directive>
+	<directive name=".ENDIF" tool="masm">
+		<description>32-bit MASM only.</description>
+	</directive>
+	<directive name=".ENDW" tool="masm">
+		<description>32-bit MASM only.</description>
+	</directive>
+	<directive name=".IF" tool="masm">
+		<description>Generates code that tests condition1 (for example, AX > 7) and executes the statements if that condition is true. (32 bit MASM only)</description>
+	</directive>
+	<directive name=".REPEAT" tool="masm">
+		<description>Generates code that repeats execution of the block of statements until condition becomes true. .UNTILCXZ, which becomes true when CX is zero, may be substituted for .UNTIL. The condition is optional with .UNTILCXZ.</description>
+	</directive>
+	<directive name=".UNTIL" tool="masm">
+		<description>Generates code that repeats execution of the block of statements until condition becomes true. .UNTILCXZ, which becomes true when CX is zero, may be substituted for .UNTIL. The condition is optional with .UNTILCXZ.</description>
+	</directive>
+	<directive name=".UNTILCXZ" tool="masm">
+		<description>Generates code that repeats execution of the block of statements until condition becomes true. .UNTILCXZ, which becomes true when CX is zero, may be substituted for .UNTIL. The condition is optional with .UNTILCXZ.</description>
+	</directive>
+	<directive name=".WHILE" tool="masm">
+		<description>Generates code that executes the block of statements while condition remains true.</description>
+	</directive>
+	<directive name=".ERR" tool="masm">
+		<description>Generates an error.</description>
+	</directive>
+	<directive name=".ERR2" tool="masm">
+		<description>.ERR block evaluated on every assembly pass if OPTION:SETIF2 is TRUE.</description>
+	</directive>
+	<directive name=".ERRB" tool="masm">
+		<description>Generates an error if textitem is blank.</description>
+	</directive>
+	<directive name=".ERRDEF" tool="masm">
+		<description>Generates an error if name is a previously defined label, variable, or symbol.</description>
+	</directive>
+	<directive name=".ERRDIF" tool="masm">
+		<description>Generates an error if the text items are different.</description>
+	</directive>
+	<directive name=".ERRE" tool="masm">
+		<description>Generates an error if expression is false (0).</description>
+	</directive>
+	<directive name=".ERRIDN" tool="masm">
+		<description>Generates an error if the text items are identical.</description>
+	</directive>
+	<directive name=".ERRNB" tool="masm">
+		<description>Generates an error if textitem is not blank.</description>
+	</directive>
+	<directive name=".ERRNDEF" tool="masm">
+		<description>Generates an error if name has not been defined.</description>
+	</directive>
+	<directive name=".ERRNZ" tool="masm">
+		<description>Generates an error if expression is true (nonzero).</description>
+	</directive>
+	<directive name="EQU" tool="masm">
+		<description>EQU defines a symbol to a given constant value: when EQU is used, the source line must contain a label. The action of EQU is to define the given label name to the value of its (only) operand. This definition is absolute, and cannot change later.</description>
+	</directive>
+	<directive name="TEXTEQU" tool="masm">
+		<description>Assigns textitem to name. The textitem can be a literal string, a constant preceded by a %, or the string returned by a macro function.</description>
+	</directive>
+	<directive name=".CREF" tool="masm">
+		<description>Enables listing of symbols in the symbol portion of the symbol table and browser file.</description>
+	</directive>
+	<directive name=".LIST" tool="masm">
+		<description>Starts listing of statements.</description>
+	</directive>
+	<directive name=".LISTALL" tool="masm">
+		<description>Starts listing of all statements.</description>
+	</directive>
+	<directive name=".LISTIF" tool="masm">
+		<description>Starts listing of statements in false conditional blocks.</description>
+	</directive>
+	<directive name=".LISTMACRO" tool="masm">
+		<description>Starts listing of macro expansion statements that generate code or data.</description>
+	</directive>
+	<directive name=".LISTMACROALL" tool="masm">
+		<description>Starts listing of all statements in macros.</description>
+	</directive>
+	<directive name=".NOCREF" tool="masm">
+		<description>Suppresses listing of symbols in the symbol table and browser file.</description>
+	</directive>
+	<directive name="PAGE" tool="masm">
+		<description>The first directive sets line length and character width of the program listing. If no arguments are given, generates a page break. The second directive increments the section number and resets the page number to 1.</description>
+	</directive>
+	<directive name="SUBTITLE" tool="masm">
+		<description>Defines the listing subtitle. Same as SUBTTL.</description>
+	</directive>
+	<directive name=".TFCOND" tool="masm">
+		<description>Toggles listing of false conditional blocks.</description>
+	</directive>
+	<directive name="TITLE" tool="masm">
+		<description>Defines the program listing title.</description>
+	</directive>
+	<directive name="ENDM" tool="masm">
+		<description>Terminates a macro or repeat block.</description>
+	</directive>
+	<directive name="EXITM" tool="masm">
+		<description>Terminates expansion of the current repeat or macro block and begins assembly of the next statement outside the block.</description>
+	</directive>
+	<directive name="GOTO" tool="masm">
+		<description>Transfers assembly to the line marked :macrolabel.</description>
+	</directive>
+	<directive name="LOCAL" tool="masm">
+		<description>In the first directive, within a macro, LOCAL defines labels that are unique to each instance of the macro.</description>
+	</directive>
+	<directive name="MACRO" tool="masm">
+		<description>Marks a macro block called name and establishes parameter placeholders for arguments passed when the macro is called.</description>
+	</directive>
+	<directive name="PURGE" tool="masm">
+		<description>Deletes the specified macros from memory.</description>
+	</directive>
+	<directive name="ASSUME" tool="masm">
+		<description>Enables error checking for register values.</description>
+	</directive>
+	<directive name="COMMENT" tool="masm">
+		<description>Treats all text between or on the same line as the delimiters as a comment.</description>
+	</directive>
+	<directive name="ECHO" tool="masm">
+		<description>Displays message to the standard output device (by default, the screen).</description>
+	</directive>
+	<directive name="END" tool="masm">
+		<description>Marks the end of a module and, optionally, sets the program entry point to address.</description>
+	</directive>
+	<directive name=".FPO" tool="masm">
+		<description>The .FPO directive controls the emission of debug records to the .debug$F segment or section.</description>
+	</directive>
+	<directive name="INCLUDE" tool="masm">
+		<description>Inserts source code from the source file given by filename into the current source file during assembly.</description>
+	</directive>
+	<directive name="INCLUDELIB" tool="masm">
+		<description>Informs the linker that the current module should be linked with libraryname.</description>
+	</directive>
+	<directive name="OPTION" tool="masm">
+		<description>Enables and disables features of the assembler.</description>
+	</directive>
+	<directive name="POPCONTEXT" tool="masm">
+		<description>Restores part or all of the current context (saved by the PUSHCONTEXT directive). The context can be ASSUMES, RADIX, LISTING, CPU, or ALL.</description>
+	</directive>
+	<directive name="PUSHCONTEXT" tool="masm">
+		<description>Saves part or all of the current context: segment register assumes, radix value, listing and cref flags, or processor/coprocessor values. The context can be ASSUMES, RADIX, LISTING, CPU, or ALL.</description>
+	</directive>
+	<directive name=".RADIX" tool="masm">
+		<description>Sets the default radix, in the range 2 to 16, to the value of expression.</description>
+	</directive>
+	<directive name=".SAFESEH" tool="masm">
+		<description>Registers a function as a structured exception handler.</description>
+	</directive>
+	<directive name="ENDP" tool="masm">
+		<description>Marks the end of procedure name previously begun with PROC.</description>
+	</directive>
+	<directive name="INVOKE" tool="masm">
+		<description>Calls the procedure at the address given by expression, passing the arguments on the stack or in registers according to the standard calling conventions of the language type.</description>
+	</directive>
+	<directive name="PROC" tool="masm">
+		<description>Marks start and end of a procedure block called label. The statements in the block can be called with the CALL instruction or INVOKE directive.</description>
+	</directive>
+	<directive name="PROTO" tool="masm">
+		<description>Prototypes a function.</description>
+	</directive>
+	<directive name=".386" tool="masm">
+		<description>Enables assembly of nonprivileged instructions for the 80386 processor; disables assembly of instructions introduced with later processors.</description>
+	</directive>
+	<directive name=".386P" tool="masm">
+		<description>Enables assembly of all instructions (including privileged) for the 80386 processor; disables assembly of instructions introduced with later processors.</description>
+	</directive>
+	<directive name=".387" tool="masm">
+		<description>Enables assembly of instructions for the 80387 coprocessor.</description>
+	</directive>
+	<directive name=".486" tool="masm">
+		<description>Enables assembly of nonprivileged instructions for the 80486 processor.</description>
+	</directive>
+	<directive name=".486P" tool="masm">
+		<description>Enables assembly of all instructions (including privileged) for the 80486 processor.</description>
+	</directive>
+	<directive name=".586" tool="masm">
+		<description>Enables assembly of nonprivileged instructions for the Pentium processor.</description>
+	</directive>
+	<directive name=".586P" tool="masm">
+		<description>Enables assembly of all instructions (including privileged) for the Pentium processor.</description>
+	</directive>
+	<directive name=".686" tool="masm">
+		<description>Enables assembly of nonprivileged instructions for the Pentium Pro processor.</description>
+	</directive>
+	<directive name=".686P" tool="masm">
+		<description>Enables assembly of all instructions (including privileged) for the Pentium Pro processor.</description>
+	</directive>
+	<directive name=".K3D" tool="masm">
+		<description>Enables assembly of K3D instructions.</description>
+	</directive>
+	<directive name=".MMX" tool="masm">
+		<description>Enables assembly of MMX or single-instruction, multiple data (SIMD) instructions.</description>
+	</directive>
+	<directive name=".XMM" tool="masm">
+		<description>Enables assembly of Internet Streaming SIMD Extension instructions.</description>
+	</directive>
+	<directive name="FOR" tool="masm">
+		<description>Marks a block that will be repeated once for each argument, with the current argument replacing parameter on each repetition.</description>
+	</directive>
+	<directive name="FORC" tool="masm">
+		<description>Marks a block that will be repeated once for each character in string, with the current character replacing parameter on each repetition.</description>
+	</directive>
+	<directive name="COMM" tool="masm">
+		<description>Creates a communal variable with the attributes specified in definition.</description>
+	</directive>
+	<directive name="EXTRN" tool="masm">
+		<description>Defines one or more external variables, labels, or symbols called name whose type is type.</description>
+	</directive>
+	<directive name="EXTERN" tool="masm">
+		<description>Defines one or more external variables, labels, or symbols called name whose type is type.</description>
+	</directive>
+	<directive name="EXTERNDEF" tool="masm">
+		<description>Defines one or more external variables, labels, or symbols called name whose type is type.</description>
+	</directive>
+	<directive name="PUBLIC" tool="masm">
+		<description>Makes each variable, label, or absolute symbol specified as name available to all other modules in the program.</description>
+	</directive>
+	<directive name=".ALPHA" tool="masm">
+		<description>Orders segments alphabetically.</description>
+	</directive>
+	<directive name=".DOSSEG" tool="masm">
+		<description>Orders the segments according to the MS-DOS segment convention: CODE first, then segments not in DGROUP, and then segments in DGROUP.</description>
+	</directive>
+	<directive name="ENDS" tool="masm">
+		<description>Marks the end of segment, structure, or union name previously begun with SEGMENT, STRUCT, UNION, or a simplified segment directive.</description>
+	</directive>
+	<directive name="GROUP" tool="masm">
+		<description>Add the specified segments to the group called name.</description>
+	</directive>
+	<directive name="SEGMENT" tool="masm">
+		<description>Defines a program segment called name having segment attributes</description>
+	</directive>
+	<directive name=".SEQ" tool="masm">
+		<description>Orders segments sequentially (the default order).</description>
+	</directive>
+	<directive name=".CODE" tool="masm">
+		<description>When used with .MODEL, indicates the start of a code segment.</description>
+	</directive>
+	<directive name=".CONST" tool="masm">
+		<description>When used with .MODEL, starts a constant data segment (with segment name CONST).</description>
+	</directive>
+	<directive name=".DATA" tool="masm">
+		<description>When used with .MODEL, starts a near data segment for initialized data (segment name _DATA).</description>
+	</directive>
+	<directive name=".DATA?" tool="masm">
+		<description>When used with .MODEL, starts a near data segment for uninitialized data (segment name _BSS).</description>
+	</directive>
+	<directive name=".EXIT" tool="masm">
+		<description>Generates termination code.</description>
+	</directive>
+	<directive name=".FARDATA" tool="masm">
+		<description>When used with .MODEL, starts a far data segment for initialized data (segment name FAR_DATA or name).</description>
+	</directive>
+	<directive name=".FARDATA?" tool="masm">
+		<description>When used with .MODEL, starts a far data segment for uninitialized data (segment name FAR_BSS or name).</description>
+	</directive>
+	<directive name=".MODEL" tool="masm">
+		<description>Initializes the program memory model.</description>
+	</directive>
+	<directive name=".STACK" tool="masm">
+		<description>When used with .MODEL, defines a stack segment (with segment name STACK). The optional size specifies the number of bytes for the stack (default 1,024). The .STACK directive automatically closes the stack statement.</description>
+	</directive>
+	<directive name=".STARTUP" tool="masm">
+		<description>Generates program start-up code.</description>
+	</directive>
+	<directive name="CATSTR" tool="masm">
+		<description>Concatenates text items.</description>
+	</directive>
+	<directive name="INSTR" tool="masm">
+		<description>Finds the first occurrence of textitem2 in textitem1.</description>
+	</directive>
+	<directive name="SIZESTR" tool="masm">
+		<description>Finds the size of a text item.</description>
+	</directive>
+	<directive name="SUBSTR" tool="masm">
+		<description>Returns a substring of textitem, starting at position. The textitem can be a literal string, a constant preceded by a %, or the string returned by a macro function.</description>
+	</directive>
+	<directive name="RECORD" tool="masm">
+		<description>Declares a record type consisting of the specified fields. fieldname names the field, width specifies the number of bits, and expression gives its initial value.</description>
+	</directive>
+	<directive name="STRUCT" tool="masm">
+		<description>Declares a structure type having the specified fielddeclarations. Each field must be a valid data definition. Same as STRUC.</description>
+	</directive>
+	<directive name="TYPEDEF" tool="masm">
+		<description>Defines a new type called name, which is equivalent to type.</description>
+	</directive>
+	<directive name="UNION" tool="masm">
+		<description>Declares a union of one or more data types. The fielddeclarations must be valid data definitions. Omit the ENDS name label on nested UNION definitions.</description>
+	</directive>
+	<directive name=".LALL" tool="masm">
+		<description>Starts listing of all statements in macros. Same as .LISTMACROALL.</description>
+	</directive>
+	<directive name=".LFCOND" tool="masm">
+		<description>Starts listing of statements in false conditional blocks. Same as .LISTIF.</description>
+	</directive>
+	<directive name=".NOLIST" tool="masm">
+		<description>Suppresses program listing. Same as .XLIST</description>
+	</directive>
+	<directive name=".SALL" tool="masm">
+		<description>Suppresses listing of macro expansions.</description>
+	</directive>
+	<directive name=".SFCOND" tool="masm">
+		<description>Suppresses listing of conditional blocks whose condition evaluates to false (0).</description>
+	</directive>
+	<directive name=".XALL" tool="masm">
+		<description>Starts listing of macro expansion statements that generate code or data.</description>
+	</directive>
+	<directive name=".XCREF" tool="masm">
+		<description>Suppresses listing of symbols in the symbol table and browser file.</description>
+	</directive>
+	<directive name=".XLIST" tool="masm">
+		<description>Suppresses program listing. Same as .NOLIST</description>
+	</directive>
+	<directive name="TIMES" tool="masm">
+		<description>The TIMES prefix causes the instruction to be assembled multiple times.</description>
+	</directive>
+</directives>

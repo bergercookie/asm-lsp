@@ -459,6 +459,7 @@ pub fn get_completes<T: Completable, U: ArchOrAssembler>(
 #[must_use]
 pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
     params: &HoverParams,
+    config: &TargetConfig,
     word: &str,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
@@ -472,10 +473,27 @@ pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
         return instr_lookup;
     }
 
-    let directive_lookup =
-        lookup_hover_resp_by_assembler(word.trim_start_matches('.'), directive_map);
-    if directive_lookup.is_some() {
-        return directive_lookup;
+    // directive lookup
+    {
+        if config.assemblers.gas || config.assemblers.masm {
+            // all gas directives have a '.' prefix, some masm directives do
+            let directive_lookup = lookup_hover_resp_by_assembler(word, directive_map);
+            if directive_lookup.is_some() {
+                return directive_lookup;
+            }
+        } else if config.assemblers.nasm {
+            // most nasm directives have no prefix, 2 have a '.' prefix
+            let directive_lookup = lookup_hover_resp_by_assembler(word, directive_map);
+            if directive_lookup.is_some() {
+                return directive_lookup;
+            }
+            // Some nasm directives have a % prefix
+            let prefixed = format!("%{word}");
+            let directive_lookup = lookup_hover_resp_by_assembler(&prefixed, directive_map);
+            if directive_lookup.is_some() {
+                return directive_lookup;
+            }
+        }
     }
 
     let reg_lookup = lookup_hover_resp_by_arch(word, register_map);
@@ -572,10 +590,15 @@ fn lookup_hover_resp_by_assembler<T: Hoverable>(
     word: &str,
     map: &HashMap<(Assembler, &str), T>,
 ) -> Option<Hover> {
-    let (gas_resp, go_resp) = search_for_hoverable_by_assembler(word, map);
+    let (gas_resp, go_resp, masm_resp, nasm_resp) = search_for_hoverable_by_assembler(word, map);
 
-    match (gas_resp.is_some(), go_resp.is_some()) {
-        (true, _) | (_, true) => {
+    match (
+        gas_resp.is_some(),
+        go_resp.is_some(),
+        masm_resp.is_some(),
+        nasm_resp.is_some(),
+    ) {
+        (true, _, _, _) | (_, true, _, _) | (_, _, true, _) | (_, _, _, true) => {
             let mut value = String::new();
             if let Some(gas_resp) = gas_resp {
                 value += &format!("{gas_resp}");
@@ -585,6 +608,20 @@ fn lookup_hover_resp_by_assembler<T: Hoverable>(
                     "{}{}",
                     if gas_resp.is_some() { "\n\n" } else { "" },
                     go_resp
+                );
+            }
+            if let Some(masm_resp) = masm_resp {
+                value += &format!(
+                    "{}{}",
+                    if !value.is_empty() { "\n\n" } else { "" },
+                    masm_resp
+                );
+            }
+            if let Some(nasm_resp) = nasm_resp {
+                value += &format!(
+                    "{}{}",
+                    if !value.is_empty() { "\n\n" } else { "" },
+                    nasm_resp
                 );
             }
             Some(Hover {
@@ -762,6 +799,29 @@ fn filtered_comp_list(comps: &[CompletionItem]) -> Vec<CompletionItem> {
         .collect()
 }
 
+/// 'prefix' allows the caller to optionally require completion items to start with
+/// a given character
+/// This is kept separate from `filtered_comp_list` for performance reasons
+fn filtered_comp_list_prefix(comps: &[CompletionItem], prefix: char) -> Vec<CompletionItem> {
+    let mut seen = HashSet::new();
+
+    comps
+        .iter()
+        .filter(|comp_item| {
+            if !comp_item.label.starts_with(prefix) {
+                return false;
+            }
+            if seen.contains(&comp_item.label) {
+                false
+            } else {
+                seen.insert(&comp_item.label);
+                true
+            }
+        })
+        .cloned()
+        .collect()
+}
+
 macro_rules! cursor_matches {
     ($cursor_line:expr,$cursor_char:expr,$query_start:expr,$query_end:expr) => {{
         $query_start.row == $cursor_line
@@ -775,6 +835,7 @@ pub fn get_comp_resp(
     curr_doc: &str,
     tree_entry: &mut TreeEntry,
     params: &CompletionParams,
+    config: &TargetConfig,
     instr_comps: &[CompletionItem],
     dir_comps: &[CompletionItem],
     reg_comps: &[CompletionItem],
@@ -789,19 +850,31 @@ pub fn get_comp_resp(
                 .as_ref()
                 .map(std::convert::AsRef::as_ref)
             {
-                // prepend GAS registers with "%"
+                // prepend GAS registers, some NASM directives with "%"
                 Some("%") => {
-                    return Some(CompletionList {
-                        is_incomplete: true,
-                        items: filtered_comp_list(reg_comps),
-                    });
+                    let mut items = Vec::new();
+                    if config.instruction_sets.x86 || config.instruction_sets.x86_64 {
+                        items.append(&mut filtered_comp_list(reg_comps));
+                    }
+                    if config.assemblers.nasm {
+                        items.append(&mut filtered_comp_list_prefix(dir_comps, '%'));
+                    }
+
+                    if !items.is_empty() {
+                        return Some(CompletionList {
+                            is_incomplete: true,
+                            items,
+                        });
+                    }
                 }
-                // prepend GAS directives with "."
+                // prepend all GAS, some MASM, some NASM directives with "."
                 Some(".") => {
-                    return Some(CompletionList {
-                        is_incomplete: true,
-                        items: filtered_comp_list(dir_comps),
-                    });
+                    if config.assemblers.gas || config.assemblers.masm || config.assemblers.nasm {
+                        return Some(CompletionList {
+                            is_incomplete: true,
+                            items: filtered_comp_list_prefix(dir_comps, '.'),
+                        });
+                    }
                 }
                 _ => {}
             }
@@ -918,7 +991,11 @@ pub fn get_comp_resp(
                     let is_instr = cap_num == 0;
                     let mut items =
                         filtered_comp_list(if is_instr { instr_comps } else { reg_comps });
-                    if !is_instr {
+                    if is_instr {
+                        // Sometimes tree-sitter-asm parses a directive as an instruction, so we'll
+                        // suggest both in this case
+                        items.append(&mut filtered_comp_list(dir_comps));
+                    } else {
                         items.append(
                             &mut labels
                                 .iter()
@@ -1343,11 +1420,13 @@ fn search_for_hoverable_by_arch<'a, T: Hoverable>(
 fn search_for_hoverable_by_assembler<'a, T: Hoverable>(
     word: &'a str,
     map: &'a HashMap<(Assembler, &str), T>,
-) -> (Option<&'a T>, Option<&'a T>) {
+) -> (Option<&'a T>, Option<&'a T>, Option<&'a T>, Option<&'a T>) {
     let gas_resp = map.get(&(Assembler::Gas, word));
     let go_resp = map.get(&(Assembler::Go, word));
+    let masm_resp = map.get(&(Assembler::Masm, word));
+    let nasm_resp = map.get(&(Assembler::Nasm, word));
 
-    (gas_resp, go_resp)
+    (gas_resp, go_resp, masm_resp, nasm_resp)
 }
 
 /// Searches for global config in ~/.config/asm-lsp, then the project's directory

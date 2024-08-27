@@ -440,7 +440,7 @@ impl std::fmt::Display for Directive {
         let header: String;
         if let Some(assembler) = &self.assembler {
             header = format!(
-                ".{} [{}]{}",
+                "{} [{}]{}",
                 &self.name,
                 assembler.as_ref(),
                 if self.deprecated {
@@ -473,7 +473,7 @@ impl std::fmt::Display for Directive {
         }
 
         let s = v.join("\n");
-        write!(f, "{s}")?;
+        write!(f, "{}", s.trim())?;
         Ok(())
     }
 }
@@ -710,8 +710,14 @@ impl std::fmt::Display for Arch {
     Debug, Display, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Serialize, Deserialize,
 )]
 pub enum Assembler {
+    #[strum(serialize = "gas")]
     Gas,
+    #[strum(serialize = "go")]
     Go,
+    #[strum(serialize = "masm")]
+    Masm,
+    #[strum(serialize = "nasm")]
+    Nasm,
 }
 
 impl ArchOrAssembler for Assembler {}
@@ -806,6 +812,8 @@ impl std::fmt::Display for RegisterBitInfo {
 pub struct Assemblers {
     pub gas: bool,
     pub go: bool,
+    pub masm: bool,
+    pub nasm: bool,
     pub z80: bool,
 }
 
@@ -814,6 +822,8 @@ impl Default for Assemblers {
         Assemblers {
             gas: true,
             go: true,
+            masm: false,
+            nasm: false,
             z80: false,
         }
     }

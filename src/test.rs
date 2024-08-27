@@ -16,12 +16,172 @@ mod tests {
     use crate::{
         get_comp_resp, get_completes, get_hover_resp, get_word_from_pos_params,
         instr_filter_targets,
-        parser::{get_cache_dir, populate_arm_instructions},
-        populate_directives, populate_instructions, populate_name_to_directive_map,
+        parser::{get_cache_dir, populate_arm_instructions, populate_masm_nasm_directives},
+        populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
         Assembler, Assemblers, Directive, Instruction, InstructionSets, NameToDirectiveMap,
         NameToInstructionMap, NameToRegisterMap, Register, TargetConfig, TreeEntry, TreeStore,
     };
+
+    fn empty_test_config() -> TargetConfig {
+        TargetConfig {
+            version: "0.1".to_string(),
+            assemblers: Assemblers {
+                gas: false,
+                go: false,
+                masm: false,
+                nasm: false,
+                z80: false,
+            },
+            instruction_sets: InstructionSets {
+                x86: false,
+                x86_64: false,
+                z80: false,
+                arm: false,
+                riscv: false,
+            },
+        }
+    }
+
+    fn z80_test_config() -> TargetConfig {
+        TargetConfig {
+            version: "0.1".to_string(),
+            assemblers: Assemblers {
+                gas: false,
+                go: false,
+                masm: false,
+                nasm: false,
+                z80: false,
+            },
+            instruction_sets: InstructionSets {
+                x86: false,
+                x86_64: false,
+                z80: true,
+                arm: false,
+                riscv: false,
+            },
+        }
+    }
+
+    fn arm_test_config() -> TargetConfig {
+        TargetConfig {
+            version: "0.1".to_string(),
+            assemblers: Assemblers {
+                gas: false,
+                go: false,
+                masm: false,
+                nasm: false,
+                z80: false,
+            },
+            instruction_sets: InstructionSets {
+                x86: false,
+                x86_64: false,
+                z80: false,
+                arm: true,
+                riscv: false,
+            },
+        }
+    }
+
+    fn riscv_test_config() -> TargetConfig {
+        TargetConfig {
+            version: "0.1".to_string(),
+            assemblers: Assemblers {
+                gas: false,
+                go: false,
+                masm: false,
+                nasm: false,
+                z80: false,
+            },
+            instruction_sets: InstructionSets {
+                x86: false,
+                x86_64: false,
+                z80: false,
+                arm: false,
+                riscv: true,
+            },
+        }
+    }
+
+    fn x86_x86_64_test_config() -> TargetConfig {
+        TargetConfig {
+            version: "0.1".to_string(),
+            assemblers: Assemblers {
+                gas: true,
+                go: true,
+                masm: false,
+                nasm: false,
+                z80: false,
+            },
+            instruction_sets: InstructionSets {
+                x86: true,
+                x86_64: true,
+                z80: false,
+                arm: false,
+                riscv: false,
+            },
+        }
+    }
+
+    fn gas_test_config() -> TargetConfig {
+        TargetConfig {
+            version: "0.1".to_string(),
+            assemblers: Assemblers {
+                gas: true,
+                go: false,
+                masm: false,
+                nasm: false,
+                z80: false,
+            },
+            instruction_sets: InstructionSets {
+                x86: false,
+                x86_64: false,
+                z80: false,
+                arm: false,
+                riscv: false,
+            },
+        }
+    }
+
+    fn masm_test_config() -> TargetConfig {
+        TargetConfig {
+            version: "0.1".to_string(),
+            assemblers: Assemblers {
+                gas: false,
+                go: false,
+                masm: true,
+                nasm: false,
+                z80: false,
+            },
+            instruction_sets: InstructionSets {
+                x86: false,
+                x86_64: false,
+                z80: false,
+                arm: false,
+                riscv: false,
+            },
+        }
+    }
+
+    fn nasm_test_config() -> TargetConfig {
+        TargetConfig {
+            version: "0.1".to_string(),
+            assemblers: Assemblers {
+                gas: false,
+                go: false,
+                masm: false,
+                nasm: true,
+                z80: false,
+            },
+            instruction_sets: InstructionSets {
+                x86: false,
+                x86_64: false,
+                z80: false,
+                arm: false,
+                riscv: false,
+            },
+        }
+    }
 
     #[derive(Debug)]
     struct GlobalInfo {
@@ -36,6 +196,8 @@ mod tests {
         z80_instructions: Vec<Instruction>,
         z80_registers: Vec<Register>,
         gas_directives: Vec<Directive>,
+        masm_directives: Vec<Directive>,
+        nasm_directives: Vec<Directive>,
     }
 
     #[derive(Debug)]
@@ -62,6 +224,8 @@ mod tests {
                 z80_instructions: Vec::new(),
                 z80_registers: Vec::new(),
                 gas_directives: Vec::new(),
+                masm_directives: Vec::new(),
+                nasm_directives: Vec::new(),
             }
         }
     }
@@ -79,99 +243,119 @@ mod tests {
         }
     }
 
-    fn init_global_info(config: Option<TargetConfig>) -> Result<GlobalInfo> {
+    fn init_global_info(config: &TargetConfig) -> Result<GlobalInfo> {
         let mut info = GlobalInfo::new();
 
-        let target_config = config.unwrap_or(TargetConfig {
-            version: "0.1".to_string(),
-            assemblers: Assemblers {
-                gas: true,
-                go: true,
-                z80: true,
-            },
-            instruction_sets: InstructionSets {
-                x86: true,
-                x86_64: true,
-                z80: true,
-                arm: true,
-                riscv: true,
-            },
-        });
-
-        info.x86_instructions = {
+        info.x86_instructions = if config.instruction_sets.x86 {
             let x86_instrs = include_bytes!("../docs_store/opcodes/serialized/x86");
             bincode::deserialize::<Vec<Instruction>>(x86_instrs)?
                 .into_iter()
                 .map(|instruction| {
                     // filter out assemblers by user config
-                    instr_filter_targets(&instruction, &target_config)
+                    instr_filter_targets(&instruction, config)
                 })
                 .filter(|instruction| !instruction.forms.is_empty())
                 .collect()
+        } else {
+            Vec::new()
         };
 
-        info.x86_64_instructions = {
+        info.x86_64_instructions = if config.instruction_sets.x86_64 {
             let x86_64_instrs = include_bytes!("../docs_store/opcodes/serialized/x86_64");
             bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)?
                 .into_iter()
                 .map(|instruction| {
                     // filter out assemblers by user config
-                    instr_filter_targets(&instruction, &target_config)
+                    instr_filter_targets(&instruction, config)
                 })
                 .filter(|instruction| !instruction.forms.is_empty())
                 .collect()
+        } else {
+            Vec::new()
         };
 
-        info.z80_instructions = {
+        info.z80_instructions = if config.instruction_sets.z80 {
             let z80_instrs = include_bytes!("../docs_store/opcodes/serialized/z80");
             bincode::deserialize::<Vec<Instruction>>(z80_instrs)?
                 .into_iter()
                 .map(|instruction| {
                     // filter out assemblers by user config
-                    instr_filter_targets(&instruction, &target_config)
+                    instr_filter_targets(&instruction, config)
                 })
                 .filter(|instruction| !instruction.forms.is_empty())
                 .collect()
+        } else {
+            Vec::new()
         };
 
-        info.arm_instructions = {
+        info.arm_instructions = if config.instruction_sets.arm {
             let arm_instrs = include_bytes!("../docs_store/opcodes/serialized/arm");
             bincode::deserialize::<Vec<Instruction>>(arm_instrs)?
+        } else {
+            Vec::new()
         };
 
-        info.riscv_instructions = {
+        info.riscv_instructions = if config.instruction_sets.riscv {
             let riscv_instrs = include_bytes!("../docs_store/opcodes/serialized/riscv");
             bincode::deserialize::<Vec<Instruction>>(riscv_instrs)?
+        } else {
+            Vec::new()
         };
 
-        info.x86_registers = {
+        info.x86_registers = if config.instruction_sets.x86 {
             let regs_x86 = include_bytes!("../docs_store/registers/serialized/x86");
             bincode::deserialize(regs_x86)?
+        } else {
+            Vec::new()
         };
 
-        info.x86_64_registers = {
+        info.x86_64_registers = if config.instruction_sets.x86_64 {
             let regs_x86_64 = include_bytes!("../docs_store/registers/serialized/x86_64");
             bincode::deserialize(regs_x86_64)?
+        } else {
+            Vec::new()
         };
 
-        info.z80_registers = {
+        info.z80_registers = if config.instruction_sets.z80 {
             let regs_z80 = include_bytes!("../docs_store/registers/serialized/z80");
             bincode::deserialize(regs_z80)?
+        } else {
+            Vec::new()
         };
 
-        info.arm_registers = {
+        info.arm_registers = if config.instruction_sets.arm {
             let regs_arm = include_bytes!("../docs_store/registers/serialized/arm");
             bincode::deserialize(regs_arm)?
+        } else {
+            Vec::new()
         };
 
-        info.riscv_registers = {
+        info.riscv_registers = if config.instruction_sets.riscv {
             let regs_riscv = include_bytes!("../docs_store/registers/serialized/riscv");
             bincode::deserialize(regs_riscv)?
+        } else {
+            Vec::new()
         };
 
-        info.gas_directives = {
+        info.gas_directives = if config.assemblers.gas {
             let gas_dirs = include_bytes!("../docs_store/directives/serialized/gas");
             bincode::deserialize(gas_dirs)?
+        } else {
+            Vec::new()
+        };
+
+        info.masm_directives = if config.assemblers.masm {
+            let masm_dirs = include_bytes!("../docs_store/directives/serialized/masm");
+            bincode::deserialize(masm_dirs)?
+        } else {
+            Vec::new()
+        };
+
+        info.nasm_directives = if config.assemblers.nasm {
+            let nasm_dirs = include_bytes!("../docs_store/directives/serialized/nasm");
+            bincode::deserialize(nasm_dirs)?
+        } else {
+            Vec::new()
         };
 
         return Ok(info);
@@ -252,6 +436,18 @@ mod tests {
             &mut store.names_to_directives,
         );
 
+        populate_name_to_directive_map(
+            Assembler::Masm,
+            &info.masm_directives,
+            &mut store.names_to_directives,
+        );
+
+        populate_name_to_directive_map(
+            Assembler::Nasm,
+            &info.nasm_directives,
+            &mut store.names_to_directives,
+        );
+
         store.instr_completion_items = get_completes(
             &store.names_to_instructions,
             Some(CompletionItemKind::OPERATOR),
@@ -270,8 +466,8 @@ mod tests {
         return Ok(store);
     }
 
-    fn test_hover(source: &str, expected: &str) {
-        let info = init_global_info(None).expect("Failed to load info");
+    fn test_hover(source: &str, expected: &str, config: &TargetConfig) {
+        let info = init_global_info(config).expect("Failed to load info");
         let globals = init_test_store(&info).expect("Failed to initialize test store");
 
         let mut position: Option<Position> = None;
@@ -334,6 +530,7 @@ mod tests {
 
         let resp = get_hover_resp(
             &hover_params,
+            config,
             &word,
             &text_store,
             &mut tree_store,
@@ -358,11 +555,12 @@ mod tests {
 
     fn test_autocomplete(
         source: &str,
+        config: &TargetConfig,
         expected_kind: CompletionItemKind,
         trigger_kind: CompletionTriggerKind,
         trigger_character: Option<String>,
     ) {
-        let info = init_global_info(None).expect("Failed to load info");
+        let info = init_global_info(config).expect("Failed to load info");
         let globals = init_test_store(&info).expect("Failed to initialize test store");
 
         let source_code = source.replace("<cursor>", "");
@@ -410,6 +608,7 @@ mod tests {
             &source_code,
             &mut tree_entry,
             &params,
+            config,
             &globals.instr_completion_items,
             &globals.directive_completion_items,
             &globals.reg_completion_items,
@@ -434,29 +633,50 @@ mod tests {
 
     fn test_register_autocomplete(
         source: &str,
+        config: &TargetConfig,
         trigger_kind: CompletionTriggerKind,
         trigger_character: Option<String>,
     ) {
         let expected_kind = CompletionItemKind::VARIABLE;
-        test_autocomplete(source, expected_kind, trigger_kind, trigger_character);
+        test_autocomplete(
+            source,
+            config,
+            expected_kind,
+            trigger_kind,
+            trigger_character,
+        );
     }
 
     fn test_instruction_autocomplete(
         source: &str,
+        config: &TargetConfig,
         trigger_kind: CompletionTriggerKind,
         trigger_character: Option<String>,
     ) {
         let expected_kind = CompletionItemKind::OPERATOR;
-        test_autocomplete(source, expected_kind, trigger_kind, trigger_character);
+        test_autocomplete(
+            source,
+            config,
+            expected_kind,
+            trigger_kind,
+            trigger_character,
+        );
     }
 
     fn test_directive_autocomplete(
         source: &str,
+        config: &TargetConfig,
         trigger_kind: CompletionTriggerKind,
         trigger_character: Option<String>,
     ) {
         let expected_kind = CompletionItemKind::OPERATOR;
-        test_autocomplete(source, expected_kind, trigger_kind, trigger_character);
+        test_autocomplete(
+            source,
+            config,
+            expected_kind,
+            trigger_kind,
+            trigger_character,
+        );
     }
 
     fn test_label_autocomplete(
@@ -465,13 +685,23 @@ mod tests {
         trigger_character: Option<String>,
     ) {
         let expected_kind = CompletionItemKind::VARIABLE;
-        test_autocomplete(source, expected_kind, trigger_kind, trigger_character);
+        test_autocomplete(
+            source,
+            &empty_test_config(),
+            expected_kind,
+            trigger_kind,
+            trigger_character,
+        );
     }
 
+    /**************************************************************************
+     * RISCV Tests
+     *************************************************************************/
     #[test]
     fn handle_autocomplete_riscv_it_provides_reg_comps_in_existing_reg_arg() {
         test_register_autocomplete(
             "addi a0, x<cursor>, 1",
+            &riscv_test_config(),
             CompletionTriggerKind::INVOKED,
             None,
         );
@@ -479,13 +709,48 @@ mod tests {
 
     #[test]
     fn handle_autocomplete_riscv_it_provides_instr_comps_one_character_start() {
-        test_instruction_autocomplete("a<cursor>", CompletionTriggerKind::INVOKED, None);
+        test_instruction_autocomplete(
+            "a<cursor>",
+            &riscv_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
     }
 
+    #[test]
+    fn handle_hover_riscv_it_provides_instr_info_args() {
+        test_hover("<cursor>addi a0, x0, 1", "addi [riscv]
+add immediate
+
+Adds the sign-extended 12-bit immediate to register rs1. Arithmetic overflow is ignored and the result is simply the low XLEN bits of the result. ADDI rd, rs1, 0 is used to implement the MV rd, rs1 assembler pseudo-instruction.
+
+## Templates
+
+ + `addi       rd,rs1,imm`",
+ &riscv_test_config(),
+ );
+    }
+
+    #[test]
+    fn handle_hover_riscv_it_provides_reg_info() {
+        test_hover(
+            "addi a0, x<cursor>0, 1",
+            "X0 [riscv]
+Hard-wired zero
+
+Type: General Purpose Register",
+            &riscv_test_config(),
+        );
+    }
+
+    /**************************************************************************
+     * ARM Tests
+     *************************************************************************/
     #[test]
     fn handle_autocomplete_arm_it_provides_reg_comps_in_existing_reg_arg() {
         test_register_autocomplete(
             "    mov  r<cursor>, #4",
+            &arm_test_config(),
             CompletionTriggerKind::INVOKED,
             None,
         );
@@ -493,9 +758,18 @@ mod tests {
 
     #[test]
     fn handle_autocomplete_arm_it_provides_instr_comps_one_character_start() {
-        test_instruction_autocomplete("m<cursor>", CompletionTriggerKind::INVOKED, None);
+        test_instruction_autocomplete(
+            "m<cursor>",
+            &arm_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
     }
 
+    /**************************************************************************
+     * Misc Tests
+     *************************************************************************/
+    // Labels
     #[test]
     fn handle_autocomplete_it_provides_label_comps_as_instruction_arg() {
         test_label_autocomplete(
@@ -512,26 +786,96 @@ bar:
     }
 
     #[test]
+    fn handle_hover_gas_it_provides_label_data_1() {
+        test_hover(
+            r#".LC<cursor>O:
+    .string "(a & 0x0F): "
+            "#,
+            r#"`.string "(a & 0x0F): "`"#,
+            &gas_test_config(),
+        )
+    }
+    #[test]
+    fn handle_hover_gas_it_provides_label_data_2() {
+        test_hover(
+            r#"data_ite<cursor>ms:
+	.long 1, 2, 3
+            "#,
+            r#"`.long 1, 2, 3`"#,
+            &gas_test_config(),
+        )
+    }
+    #[test]
+    fn handle_hover_gas_it_provides_label_data_3() {
+        test_hover(
+            r#"data_ite<cursor>ms:
+	.float 1.1, 2.2, 3.3
+            "#,
+            r#"`.float 1.1, 2.2, 3.3`"#,
+            &gas_test_config(),
+        )
+    }
+
+    // Demangling
+    #[test]
+    fn handle_hover_it_demangles_cpp_1() {
+        test_hover("	call	<cursor>_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@PLT",
+            "std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)",
+            &empty_test_config(),
+            );
+    }
+    #[test]
+    fn handle_hover_it_demangles_cpp_2() {
+        test_hover(
+            "	leaq	_ZSt4c<cursor>out(%rip), %rdi",
+            "std::cout",
+            &empty_test_config(),
+        );
+    }
+    #[test]
+    fn handle_hover_it_demangles_cpp_3() {
+        test_hover("	movq	_ZSt4endlIcSt<cursor>11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@GOTPCREL(%rip), %rax",
+        "std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)",
+            &empty_test_config(),
+            );
+    }
+
+    /**************************************************************************
+     * x86/x86-64 Tests
+     *************************************************************************/
+    #[test]
     fn handle_autocomplete_x86_x86_64_it_provides_instr_comps_one_character_start() {
-        test_instruction_autocomplete("s<cursor>", CompletionTriggerKind::INVOKED, None);
+        test_instruction_autocomplete(
+            "s<cursor>",
+            &x86_x86_64_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
     }
 
     #[test]
     fn handle_autocomplete_x86_x86_64_it_provides_reg_comps_after_percent_symbol() {
         test_register_autocomplete(
             "pushq %<cursor>",
+            &x86_x86_64_test_config(),
             CompletionTriggerKind::TRIGGER_CHARACTER,
             Some("%".to_string()),
         );
     }
     #[test]
     fn handle_autocomplete_x86_x86_64_it_provides_reg_comps_in_existing_reg_arg_1() {
-        test_register_autocomplete("pushq %rb<cursor>", CompletionTriggerKind::INVOKED, None);
+        test_register_autocomplete(
+            "pushq %rb<cursor>",
+            &x86_x86_64_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
     }
     #[test]
     fn handle_autocomplete_x86_x86_64_it_provides_reg_comps_in_existing_reg_arg_2() {
         test_register_autocomplete(
             "	movq	%rs<cursor>, %rbp",
+            &x86_x86_64_test_config(),
             CompletionTriggerKind::INVOKED,
             None,
         );
@@ -540,6 +884,7 @@ bar:
     fn handle_autocomplete_x86_x86_64_it_provides_reg_comps_in_existing_reg_arg_3() {
         test_register_autocomplete(
             "	movq	%rsp, %rb<cursor>",
+            &x86_x86_64_test_config(),
             CompletionTriggerKind::INVOKED,
             None,
         );
@@ -548,6 +893,7 @@ bar:
     fn handle_autocomplete_x86_x86_64_it_provides_reg_comps_in_existing_offset_arg() {
         test_register_autocomplete(
             "	movl	%edi, -20(%r<cursor>)",
+            &x86_x86_64_test_config(),
             CompletionTriggerKind::INVOKED,
             None,
         );
@@ -556,31 +902,9 @@ bar:
     fn handle_autocomplete_x86_x86_64_it_provides_reg_comps_in_existing_relative_addressing_arg() {
         test_register_autocomplete(
             "	leaq	_ZSt4cout(%ri<cursor>), %rdi",
+            &x86_x86_64_test_config(),
             CompletionTriggerKind::INVOKED,
             None,
-        );
-    }
-
-    #[test]
-    fn handle_hover_riscv_it_provides_instr_info_args() {
-        test_hover("<cursor>addi a0, x0, 1", "addi [riscv]
-add immediate
-
-Adds the sign-extended 12-bit immediate to register rs1. Arithmetic overflow is ignored and the result is simply the low XLEN bits of the result. ADDI rd, rs1, 0 is used to implement the MV rd, rs1 assembler pseudo-instruction.
-
-## Templates
-
- + `addi       rd,rs1,imm`");
-    }
-
-    #[test]
-    fn handle_hover_riscv_it_provides_reg_info() {
-        test_hover(
-            "addi a0, x<cursor>0, 1",
-            "X0 [riscv]
-Hard-wired zero
-
-Type: General Purpose Register",
         );
     }
 
@@ -619,6 +943,7 @@ Move Low Packed Single-Precision Floating-Point Values
   + [xmm]    input = true   output = false
 
 More info: https://www.felixcloutier.com/x86/movlps",
+            &x86_x86_64_test_config(),
         );
     }
     #[test]
@@ -676,6 +1001,7 @@ Push Value Onto the Stack
   + [m64]    input = true   output = false
 
 More info: https://www.felixcloutier.com/x86/push",
+            &x86_x86_64_test_config(),
         );
     }
     #[test]
@@ -761,6 +1087,7 @@ Move Quadword
   + [xmm]    input = true   output = false
 
 More info: https://www.felixcloutier.com/x86/movq",
+            &x86_x86_64_test_config(),
         );
     }
 
@@ -779,6 +1106,7 @@ Base Pointer (meant for stack frames)
 
 Type: General Purpose Register
 Width: 64 bits",
+            &x86_x86_64_test_config(),
         );
     }
     #[test]
@@ -796,6 +1124,7 @@ Base Pointer (meant for stack frames)
 
 Type: General Purpose Register
 Width: 64 bits",
+            &x86_x86_64_test_config(),
         );
     }
     #[test]
@@ -813,17 +1142,27 @@ Instruction Pointer. Can only be used in RIP-relative addressing.
 
 Type: Pointer Register
 Width: 64 bits",
+            &x86_x86_64_test_config(),
         );
     }
 
+    /**************************************************************************
+     * GAS Tests
+     *************************************************************************/
     #[test]
     fn handle_autocomplete_gas_it_provides_directive_completes_1() {
-        test_directive_autocomplete("	.fi<cursor>", CompletionTriggerKind::INVOKED, None);
+        test_directive_autocomplete(
+            "	.fi<cursor>",
+            &gas_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
     }
     #[test]
     fn handle_autocomplete_gas_it_provides_directive_completes_2() {
         test_directive_autocomplete(
             r#"	.fil<cursor>	"a.cpp""#,
+            &gas_test_config(),
             CompletionTriggerKind::INVOKED,
             None,
         );
@@ -832,109 +1171,192 @@ Width: 64 bits",
     fn handle_autocomplete_gas_it_provides_directive_completes_3() {
         test_directive_autocomplete(
             ".<cursor>",
+            &gas_test_config(),
             CompletionTriggerKind::TRIGGER_CHARACTER,
             Some(".".to_string()),
         );
     }
 
     #[test]
-    fn handle_hover_gas_it_provides_label_data_1() {
-        test_hover(
-            r#".LC<cursor>O:
-    .string "(a & 0x0F): "
-            "#,
-            r#"`.string "(a & 0x0F): "`"#,
-        )
-    }
-    #[test]
-    fn handle_hover_gas_it_provides_label_data_2() {
-        test_hover(
-            r#"data_ite<cursor>ms:
-	.long 1, 2, 3
-            "#,
-            r#"`.long 1, 2, 3`"#,
-        )
-    }
-    #[test]
-    fn handle_hover_gas_it_provides_label_data_3() {
-        test_hover(
-            r#"data_ite<cursor>ms:
-	.float 1.1, 2.2, 3.3
-            "#,
-            r#"`.float 1.1, 2.2, 3.3`"#,
-        )
-    }
-
-    #[test]
     fn handle_hover_gas_it_provides_directive_info_1() {
-        test_hover(r#"	.f<cursor>ile	"a.cpp"#, ".file [Gas]
+        test_hover(r#"	.f<cursor>ile	"a.cpp"#, ".file [gas]
 This version of the `.file` directive tells `as` that we are about to start a new logical file. When emitting DWARF2 line number information, `.file` assigns filenames to the `.debug_line` file name table.
 
 - .file *string*
 - .file *fileno filename*
 
 More info: https://sourceware.org/binutils/docs-2.41/as/File.html",
+            &gas_test_config(),
             );
     }
     #[test]
     fn handle_hover_gas_it_provides_directive_info_2() {
-        test_hover(".<cursor>text", ".text [Gas]
+        test_hover(".<cursor>text", ".text [gas]
 Tells *as* to assemble the following statements onto the end of the text subsection numbered *subsection*, which is an absolute expression. If *subsection* is omitted, subsection number zero is used.
 
 - .text *subsection*
 
 More info: https://sourceware.org/binutils/docs-2.41/as/Text.html",
+            &gas_test_config(),
             );
     }
     #[test]
     fn handle_hover_gas_it_provides_directive_info_3() {
-        test_hover("	.glob<cursor>l	main", ".globl [Gas]
+        test_hover("	.glob<cursor>l	main", ".globl [gas]
 `.globl` makes the symbol visible to `ld`. If you define symbol in your partial program, its value is made available to other partial programs that are linked with it.
 
 - .globl *symbol*
 
 More info: https://sourceware.org/binutils/docs-2.41/as/Global.html",
+            &gas_test_config(),
             );
     }
 
+    /**************************************************************************
+     * MASM Tests
+     *************************************************************************/
     #[test]
-    fn handle_hover_it_demangles_cpp_1() {
-        test_hover("	call	<cursor>_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@PLT",
-            "std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)",
-            );
+    fn handle_autocomplete_masm_it_provides_directive_completes_1() {
+        test_directive_autocomplete(
+            r#"	ADD<cursor>"#,
+            &masm_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
     }
     #[test]
-    fn handle_hover_it_demangles_cpp_2() {
-        test_hover("	leaq	_ZSt4c<cursor>out(%rip), %rdi", "std::cout");
+    fn handle_autocomplete_masm_it_provides_directive_completes_2() {
+        test_directive_autocomplete(
+            ".ALLOC<cursor>",
+            &masm_test_config(),
+            CompletionTriggerKind::TRIGGER_CHARACTER,
+            Some(".".to_string()),
+        );
     }
     #[test]
-    fn handle_hover_it_demangles_cpp_3() {
-        test_hover("	movq	_ZSt4endlIcSt<cursor>11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@GOTPCREL(%rip), %rax",
-        "std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)",
-            );
+    fn handle_autocomplete_masm_it_provides_directive_completes_3() {
+        test_directive_autocomplete(
+            ".<cursor>",
+            &masm_test_config(),
+            CompletionTriggerKind::TRIGGER_CHARACTER,
+            Some(".".to_string()),
+        );
     }
 
     #[test]
-    fn handle_autocomplete_z80_it_provides_instr_comps_one_character_start() {
-        test_instruction_autocomplete("L<cursor>", CompletionTriggerKind::INVOKED, None);
+    fn handle_hover_masm_it_provides_directive_info_1() {
+        test_hover(
+            "ADD<cursor>R",
+            "ADDR [masm]
+Operator used exclusively with INVOKE to pass the address of a variable to a procedure.",
+            &masm_test_config(),
+        );
+    }
+    #[test]
+    fn handle_hover_masm_it_provides_directive_info_2() {
+        test_hover(
+            "add<cursor>r",
+            "ADDR [masm]
+Operator used exclusively with INVOKE to pass the address of a variable to a procedure.",
+            &masm_test_config(),
+        );
+    }
+    #[test]
+    fn handle_hover_masm_it_provides_directive_info_3() {
+        test_hover(
+            ".ALLOC<cursor>STACK",
+            ".ALLOCSTACK [masm]
+MASM64: Generates a UWOP_ALLOC_SMALL or a UWOP_ALLOC_LARGE with the specified size for the current offset in the prologue.",
+            &masm_test_config(),
+        );
     }
 
+    /**************************************************************************
+     * NASM Tests
+     *************************************************************************/
     #[test]
-    fn handle_autocomplete_z80_it_provides_reg_comps_after_one_character() {
-        test_register_autocomplete(
-            "pushq %<cursor>",
+    fn handle_autocomplete_nasm_it_provides_directive_completes_1() {
+        test_directive_autocomplete(
+            r#"	EQ<cursor>"#,
+            &nasm_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_nasm_it_provides_directive_completes_2() {
+        test_directive_autocomplete(
+            "%DEF<cursor>",
+            &nasm_test_config(),
             CompletionTriggerKind::TRIGGER_CHARACTER,
             Some("%".to_string()),
         );
     }
     #[test]
+    fn handle_autocomplete_nasm_it_provides_directive_completes_3() {
+        test_directive_autocomplete(
+            "%<cursor>",
+            &nasm_test_config(),
+            CompletionTriggerKind::TRIGGER_CHARACTER,
+            Some("%".to_string()),
+        );
+    }
+
+    #[test]
+    fn handle_hover_nasm_it_provides_directive_info_1() {
+        test_hover(
+            "EQ<cursor>U",
+            "EQU [nasm]
+EQU defines a symbol to a given constant value: when EQU is used, the source line must contain a label. The action of EQU is to define the given label name to the value of its (only) operand. This definition is absolute, and cannot change later.",
+            &nasm_test_config(),
+        );
+    }
+    #[test]
+    fn handle_hover_nasm_it_provides_directive_info_2() {
+        test_hover(
+            "%def<cursor>ine",
+            "%DEFINE [nasm]
+Define Single-line macros that is resolved at the time the embedded macro is expanded.",
+            &nasm_test_config(),
+        );
+    }
+    #[test]
+    fn handle_hover_nasm_it_provides_directive_info_3() {
+        test_hover(
+            ".ATT_<cursor>SYNTAX",
+            ".ATT_SYNTAX [nasm]
+switch to AT&amp;T syntax",
+            &nasm_test_config(),
+        );
+    }
+
+    /**************************************************************************
+     * z80 Tests
+     *************************************************************************/
+    #[test]
+    fn handle_autocomplete_z80_it_provides_instr_comps_one_character_start() {
+        test_instruction_autocomplete(
+            "L<cursor>",
+            &z80_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
     fn handle_autocomplete_z80_it_provides_reg_comps_in_existing_reg_arg_1() {
-        test_register_autocomplete("LD A<cursor>", CompletionTriggerKind::INVOKED, None);
+        test_register_autocomplete(
+            "LD A<cursor>",
+            &z80_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
     }
     #[test]
     fn handle_autocomplete_z80_it_provides_reg_comps_in_existing_reg_arg_2() {
         test_register_autocomplete(
             "        LD H<cursor>, DATA     ;STARTING ADDRESS OF DATA STRING",
+            &z80_test_config(),
             CompletionTriggerKind::INVOKED,
             None,
         );
@@ -943,6 +1365,7 @@ More info: https://sourceware.org/binutils/docs-2.41/as/Global.html",
     fn handle_autocomplete_z80_it_provides_reg_comps_in_existing_reg_arg_3() {
         test_register_autocomplete(
             "        CP (H<cursor>)         ;COMPARE MEMORY CONTENTS WITH",
+            &z80_test_config(),
             CompletionTriggerKind::INVOKED,
             None,
         );
@@ -961,6 +1384,7 @@ LoaD and Increment. Copies the byte pointed to by HL to the address pointed to b
   + Z80: 16, Z80 + M1: 18, R800: 4, R800 + Wait: 18
   + More info: https://www.zilog.com/docs/z80/z80cpu_um.pdf#LDI
 ",
+&z80_test_config(),
             );
     }
     #[test]
@@ -1006,6 +1430,7 @@ ComPare. Sets the flags as if a SUB was performed but does not perform it. Legal
   + Z80: 8, Z80 + M1: 10, R800: 2, R800 + Wait: 10
   + More info: https://www.zilog.com/docs/z80/z80cpu_um.pdf#CP%20IYq
 ",
+&z80_test_config(),
             );
     }
     #[test]
@@ -1465,7 +1890,9 @@ LoaD. The basic data load/transfer instruction. Transfers data from the location
 
   + Z80: 10, Z80 + M1: 11, R800: 3, R800 + Wait: 11
   + More info: https://www.zilog.com/docs/z80/z80cpu_um.pdf#LD%20SP%2C%20nn
-"
+",
+
+&z80_test_config(),
             );
     }
 
@@ -1477,6 +1904,7 @@ LoaD. The basic data load/transfer instruction. Transfers data from the location
 16-bit accumulator/address register or two 8-bit registers.
 
 Width: 16 bits",
+            &z80_test_config(),
         );
     }
     #[test]
@@ -1487,9 +1915,13 @@ Width: 16 bits",
 Accumulator.
 
 Width: 8 bits",
+            &z80_test_config(),
         );
     }
 
+    /**************************************************************************
+     * Serialization Tests
+     *************************************************************************/
     #[test]
     fn serialized_x86_registers_are_up_to_date() {
         let mut cmp_map = HashMap::new();
@@ -1762,7 +2194,63 @@ Width: 8 bits",
         let ser_vec = bincode::deserialize::<Vec<Directive>>(gas_dirs_ser).unwrap();
 
         let gas_dirs_raw = include_str!("../docs_store/directives/raw/gas.xml");
-        let raw_vec = populate_directives(gas_dirs_raw).unwrap();
+        let raw_vec = populate_gas_directives(gas_dirs_raw).unwrap();
+
+        for dir in ser_vec {
+            *cmp_map.entry(dir.clone()).or_insert(0) += 1;
+        }
+        for dir in raw_vec {
+            let entry = cmp_map.get_mut(&dir).unwrap();
+            if *entry == 0 {
+                panic!(
+                    "Expected at least one more instruction entry for {:?}, but the count is 0",
+                    dir
+                );
+            }
+            *entry -= 1;
+        }
+        for (dir, count) in cmp_map.iter() {
+            if *count != 0 {
+                panic!("Expected count to be 0, found {count} for {:?}", dir);
+            }
+        }
+    }
+    #[test]
+    fn serialized_masm_directives_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let masm_dirs_ser = include_bytes!("../docs_store/directives/serialized/masm");
+        let ser_vec = bincode::deserialize::<Vec<Directive>>(masm_dirs_ser).unwrap();
+
+        let masm_dirs_raw = include_str!("../docs_store/directives/raw/masm.xml");
+        let raw_vec = populate_masm_nasm_directives(masm_dirs_raw).unwrap();
+
+        for dir in ser_vec {
+            *cmp_map.entry(dir.clone()).or_insert(0) += 1;
+        }
+        for dir in raw_vec {
+            let entry = cmp_map.get_mut(&dir).unwrap();
+            if *entry == 0 {
+                panic!(
+                    "Expected at least one more instruction entry for {:?}, but the count is 0",
+                    dir
+                );
+            }
+            *entry -= 1;
+        }
+        for (dir, count) in cmp_map.iter() {
+            if *count != 0 {
+                panic!("Expected count to be 0, found {count} for {:?}", dir);
+            }
+        }
+    }
+    #[test]
+    fn serialized_nasm_directives_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let nasm_dirs_ser = include_bytes!("../docs_store/directives/serialized/nasm");
+        let ser_vec = bincode::deserialize::<Vec<Directive>>(nasm_dirs_ser).unwrap();
+
+        let nasm_dirs_raw = include_str!("../docs_store/directives/raw/nasm.xml");
+        let raw_vec = populate_masm_nasm_directives(nasm_dirs_raw).unwrap();
 
         for dir in ser_vec {
             *cmp_map.entry(dir.clone()).or_insert(0) += 1;
