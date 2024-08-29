@@ -810,21 +810,21 @@ impl std::fmt::Display for RegisterBitInfo {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Assemblers {
-    pub gas: bool,
-    pub go: bool,
-    pub masm: bool,
-    pub nasm: bool,
-    pub z80: bool,
+    pub gas: Option<bool>,
+    pub go: Option<bool>,
+    pub masm: Option<bool>,
+    pub nasm: Option<bool>,
+    pub z80: Option<bool>,
 }
 
 impl Default for Assemblers {
     fn default() -> Self {
         Assemblers {
-            gas: true,
-            go: true,
-            masm: false,
-            nasm: false,
-            z80: false,
+            gas: Some(true),
+            go: Some(true),
+            masm: Some(false),
+            nasm: Some(false),
+            z80: Some(false),
         }
     }
 }
@@ -832,21 +832,21 @@ impl Default for Assemblers {
 #[allow(non_snake_case)]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct InstructionSets {
-    pub x86: bool,
-    pub x86_64: bool,
-    pub z80: bool,
-    pub arm: bool,
-    pub riscv: bool,
+    pub x86: Option<bool>,
+    pub x86_64: Option<bool>,
+    pub z80: Option<bool>,
+    pub arm: Option<bool>,
+    pub riscv: Option<bool>,
 }
 
 impl Default for InstructionSets {
     fn default() -> Self {
         InstructionSets {
-            x86: true,
-            x86_64: true,
-            z80: false,
-            arm: false,
-            riscv: false,
+            x86: Some(true),
+            x86_64: Some(true),
+            z80: Some(false),
+            arm: Some(false),
+            riscv: Some(false),
         }
     }
 }

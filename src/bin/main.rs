@@ -110,7 +110,7 @@ pub fn main() -> Result<()> {
     // create a map of &Instruction_name -> &Instruction - Use that in user queries
     // The Instruction(s) themselves are stored in a vector and we only keep references to the
     // former map
-    let x86_instructions = if target_config.instruction_sets.x86 {
+    let x86_instructions = if target_config.instruction_sets.x86.unwrap_or(false) {
         let start = std::time::Instant::now();
         let x86_instrs = include_bytes!("../../docs_store/opcodes/serialized/x86");
         let instrs = bincode::deserialize::<Vec<Instruction>>(x86_instrs)?
@@ -130,7 +130,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let x86_64_instructions = if target_config.instruction_sets.x86_64 {
+    let x86_64_instructions = if target_config.instruction_sets.x86_64.unwrap_or(false) {
         let start = std::time::Instant::now();
         let x86_64_instrs = include_bytes!("../../docs_store/opcodes/serialized/x86_64");
         let instrs = bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)?
@@ -150,7 +150,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let z80_instructions = if target_config.instruction_sets.z80 {
+    let z80_instructions = if target_config.instruction_sets.z80.unwrap_or(false) {
         let start = std::time::Instant::now();
         let z80_instrs = include_bytes!("../../docs_store/opcodes/serialized/z80");
         let instrs = bincode::deserialize::<Vec<Instruction>>(z80_instrs)?
@@ -170,7 +170,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let arm_instructions = if target_config.instruction_sets.arm {
+    let arm_instructions = if target_config.instruction_sets.arm.unwrap_or(false) {
         let start = std::time::Instant::now();
         let arm_instrs = include_bytes!("../../docs_store/opcodes/serialized/arm");
         // NOTE: No need to filter these instructions by assembler like we do for
@@ -185,7 +185,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let riscv_instructions = if target_config.instruction_sets.riscv {
+    let riscv_instructions = if target_config.instruction_sets.riscv.unwrap_or(false) {
         let start = std::time::Instant::now();
         let riscv_instrs = include_bytes!("../../docs_store/opcodes/serialized/riscv");
         // NOTE: No need to filter these instructions by assembler like we do for
@@ -229,7 +229,7 @@ pub fn main() -> Result<()> {
     // create a map of &Register_name -> &Register - Use that in user queries
     // The Register(s) themselves are stored in a vector and we only keep references to the
     // former map
-    let x86_registers = if target_config.instruction_sets.x86 {
+    let x86_registers = if target_config.instruction_sets.x86.unwrap_or(false) {
         let start = std::time::Instant::now();
         let regs_x86 = include_bytes!("../../docs_store/registers/serialized/x86");
         let regs = bincode::deserialize(regs_x86)?;
@@ -242,7 +242,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let x86_64_registers = if target_config.instruction_sets.x86_64 {
+    let x86_64_registers = if target_config.instruction_sets.x86_64.unwrap_or(false) {
         let start = std::time::Instant::now();
         let regs_x86_64 = include_bytes!("../../docs_store/registers/serialized/x86_64");
         let regs = bincode::deserialize(regs_x86_64)?;
@@ -255,7 +255,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let z80_registers = if target_config.instruction_sets.z80 {
+    let z80_registers = if target_config.instruction_sets.z80.unwrap_or(false) {
         let start = std::time::Instant::now();
         let regs_z80 = include_bytes!("../../docs_store/registers/serialized/z80");
         let regs = bincode::deserialize(regs_z80)?;
@@ -268,7 +268,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let arm_registers = if target_config.instruction_sets.arm {
+    let arm_registers = if target_config.instruction_sets.arm.unwrap_or(false) {
         let start = std::time::Instant::now();
         let regs_arm = include_bytes!("../../docs_store/registers/serialized/arm");
         let regs = bincode::deserialize(regs_arm)?;
@@ -281,7 +281,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let riscv_registers = if target_config.instruction_sets.riscv {
+    let riscv_registers = if target_config.instruction_sets.riscv.unwrap_or(false) {
         let start = std::time::Instant::now();
         let regs_riscv = include_bytes!("../../docs_store/registers/serialized/riscv");
         let regs = bincode::deserialize(regs_riscv)?;
@@ -304,7 +304,7 @@ pub fn main() -> Result<()> {
     populate_name_to_register_map(Arch::ARM, &arm_registers, &mut names_to_info.registers);
     populate_name_to_register_map(Arch::RISCV, &riscv_registers, &mut names_to_info.registers);
 
-    let gas_directives = if target_config.assemblers.gas {
+    let gas_directives = if target_config.assemblers.gas.unwrap_or(false) {
         let start = std::time::Instant::now();
         let gas_dirs = include_bytes!("../../docs_store/directives/serialized/gas");
         let dirs = bincode::deserialize(gas_dirs)?;
@@ -317,7 +317,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let masm_directives = if target_config.assemblers.masm {
+    let masm_directives = if target_config.assemblers.masm.unwrap_or(false) {
         let start = std::time::Instant::now();
         let masm_dirs = include_bytes!("../../docs_store/directives/serialized/masm");
         let dirs = bincode::deserialize(masm_dirs)?;
@@ -330,7 +330,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let nasm_directives = if target_config.assemblers.nasm {
+    let nasm_directives = if target_config.assemblers.nasm.unwrap_or(false) {
         let start = std::time::Instant::now();
         let nasm_dirs = include_bytes!("../../docs_store/directives/serialized/nasm");
         let dirs = bincode::deserialize(nasm_dirs)?;

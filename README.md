@@ -43,7 +43,8 @@ Add a section like the following in your `settings.json` file:
 
 Add a `.asm-lsp.toml` file like the following to your project's root directory
 and/or `~/.config/asm-lsp/` (project configs will override global configs) to
-selectively target specific assemblers and/or instruction sets.
+selectively target specific assemblers and/or instruction sets. Omitting an item
+from the configuration file is equivalent to setting it to `false`.
 
 ```toml
 version = "0.1"
