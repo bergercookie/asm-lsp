@@ -27,18 +27,18 @@ mod tests {
         TargetConfig {
             version: "0.1".to_string(),
             assemblers: Assemblers {
-                gas: false,
-                go: false,
-                masm: false,
-                nasm: false,
-                z80: false,
+                gas: Some(false),
+                go: Some(false),
+                masm: Some(false),
+                nasm: Some(false),
+                z80: Some(false),
             },
             instruction_sets: InstructionSets {
-                x86: false,
-                x86_64: false,
-                z80: false,
-                arm: false,
-                riscv: false,
+                x86: Some(false),
+                x86_64: Some(false),
+                z80: Some(false),
+                arm: Some(false),
+                riscv: Some(false),
             },
         }
     }
@@ -47,18 +47,18 @@ mod tests {
         TargetConfig {
             version: "0.1".to_string(),
             assemblers: Assemblers {
-                gas: false,
-                go: false,
-                masm: false,
-                nasm: false,
-                z80: false,
+                gas: Some(false),
+                go: Some(false),
+                masm: Some(false),
+                nasm: Some(false),
+                z80: Some(false),
             },
             instruction_sets: InstructionSets {
-                x86: false,
-                x86_64: false,
-                z80: true,
-                arm: false,
-                riscv: false,
+                x86: Some(false),
+                x86_64: Some(false),
+                z80: Some(true),
+                arm: Some(false),
+                riscv: Some(false),
             },
         }
     }
@@ -67,18 +67,18 @@ mod tests {
         TargetConfig {
             version: "0.1".to_string(),
             assemblers: Assemblers {
-                gas: false,
-                go: false,
-                masm: false,
-                nasm: false,
-                z80: false,
+                gas: Some(false),
+                go: Some(false),
+                masm: Some(false),
+                nasm: Some(false),
+                z80: Some(false),
             },
             instruction_sets: InstructionSets {
-                x86: false,
-                x86_64: false,
-                z80: false,
-                arm: true,
-                riscv: false,
+                x86: Some(false),
+                x86_64: Some(false),
+                z80: Some(false),
+                arm: Some(true),
+                riscv: Some(false),
             },
         }
     }
@@ -87,18 +87,18 @@ mod tests {
         TargetConfig {
             version: "0.1".to_string(),
             assemblers: Assemblers {
-                gas: false,
-                go: false,
-                masm: false,
-                nasm: false,
-                z80: false,
+                gas: Some(false),
+                go: Some(false),
+                masm: Some(false),
+                nasm: Some(false),
+                z80: Some(false),
             },
             instruction_sets: InstructionSets {
-                x86: false,
-                x86_64: false,
-                z80: false,
-                arm: false,
-                riscv: true,
+                x86: Some(false),
+                x86_64: Some(false),
+                z80: Some(false),
+                arm: Some(false),
+                riscv: Some(true),
             },
         }
     }
@@ -107,18 +107,18 @@ mod tests {
         TargetConfig {
             version: "0.1".to_string(),
             assemblers: Assemblers {
-                gas: true,
-                go: true,
-                masm: false,
-                nasm: false,
-                z80: false,
+                gas: Some(true),
+                go: Some(true),
+                masm: Some(false),
+                nasm: Some(false),
+                z80: Some(false),
             },
             instruction_sets: InstructionSets {
-                x86: true,
-                x86_64: true,
-                z80: false,
-                arm: false,
-                riscv: false,
+                x86: Some(true),
+                x86_64: Some(true),
+                z80: Some(false),
+                arm: Some(false),
+                riscv: Some(false),
             },
         }
     }
@@ -127,18 +127,18 @@ mod tests {
         TargetConfig {
             version: "0.1".to_string(),
             assemblers: Assemblers {
-                gas: true,
-                go: false,
-                masm: false,
-                nasm: false,
-                z80: false,
+                gas: Some(true),
+                go: Some(false),
+                masm: Some(false),
+                nasm: Some(false),
+                z80: Some(false),
             },
             instruction_sets: InstructionSets {
-                x86: false,
-                x86_64: false,
-                z80: false,
-                arm: false,
-                riscv: false,
+                x86: Some(false),
+                x86_64: Some(false),
+                z80: Some(false),
+                arm: Some(false),
+                riscv: Some(false),
             },
         }
     }
@@ -147,18 +147,18 @@ mod tests {
         TargetConfig {
             version: "0.1".to_string(),
             assemblers: Assemblers {
-                gas: false,
-                go: false,
-                masm: true,
-                nasm: false,
-                z80: false,
+                gas: Some(false),
+                go: Some(false),
+                masm: Some(true),
+                nasm: Some(false),
+                z80: Some(false),
             },
             instruction_sets: InstructionSets {
-                x86: false,
-                x86_64: false,
-                z80: false,
-                arm: false,
-                riscv: false,
+                x86: Some(false),
+                x86_64: Some(false),
+                z80: Some(false),
+                arm: Some(false),
+                riscv: Some(false),
             },
         }
     }
@@ -167,18 +167,18 @@ mod tests {
         TargetConfig {
             version: "0.1".to_string(),
             assemblers: Assemblers {
-                gas: false,
-                go: false,
-                masm: false,
-                nasm: true,
-                z80: false,
+                gas: Some(false),
+                go: Some(false),
+                masm: Some(false),
+                nasm: Some(true),
+                z80: Some(false),
             },
             instruction_sets: InstructionSets {
-                x86: false,
-                x86_64: false,
-                z80: false,
-                arm: false,
-                riscv: false,
+                x86: Some(false),
+                x86_64: Some(false),
+                z80: Some(false),
+                arm: Some(false),
+                riscv: Some(false),
             },
         }
     }
@@ -246,7 +246,7 @@ mod tests {
     fn init_global_info(config: &TargetConfig) -> Result<GlobalInfo> {
         let mut info = GlobalInfo::new();
 
-        info.x86_instructions = if config.instruction_sets.x86 {
+        info.x86_instructions = if config.instruction_sets.x86.unwrap_or(false) {
             let x86_instrs = include_bytes!("../docs_store/opcodes/serialized/x86");
             bincode::deserialize::<Vec<Instruction>>(x86_instrs)?
                 .into_iter()
@@ -260,7 +260,7 @@ mod tests {
             Vec::new()
         };
 
-        info.x86_64_instructions = if config.instruction_sets.x86_64 {
+        info.x86_64_instructions = if config.instruction_sets.x86_64.unwrap_or(false) {
             let x86_64_instrs = include_bytes!("../docs_store/opcodes/serialized/x86_64");
             bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)?
                 .into_iter()
@@ -274,7 +274,7 @@ mod tests {
             Vec::new()
         };
 
-        info.z80_instructions = if config.instruction_sets.z80 {
+        info.z80_instructions = if config.instruction_sets.z80.unwrap_or(false) {
             let z80_instrs = include_bytes!("../docs_store/opcodes/serialized/z80");
             bincode::deserialize::<Vec<Instruction>>(z80_instrs)?
                 .into_iter()
@@ -288,70 +288,70 @@ mod tests {
             Vec::new()
         };
 
-        info.arm_instructions = if config.instruction_sets.arm {
+        info.arm_instructions = if config.instruction_sets.arm.unwrap_or(false) {
             let arm_instrs = include_bytes!("../docs_store/opcodes/serialized/arm");
             bincode::deserialize::<Vec<Instruction>>(arm_instrs)?
         } else {
             Vec::new()
         };
 
-        info.riscv_instructions = if config.instruction_sets.riscv {
+        info.riscv_instructions = if config.instruction_sets.riscv.unwrap_or(false) {
             let riscv_instrs = include_bytes!("../docs_store/opcodes/serialized/riscv");
             bincode::deserialize::<Vec<Instruction>>(riscv_instrs)?
         } else {
             Vec::new()
         };
 
-        info.x86_registers = if config.instruction_sets.x86 {
+        info.x86_registers = if config.instruction_sets.x86.unwrap_or(false) {
             let regs_x86 = include_bytes!("../docs_store/registers/serialized/x86");
             bincode::deserialize(regs_x86)?
         } else {
             Vec::new()
         };
 
-        info.x86_64_registers = if config.instruction_sets.x86_64 {
+        info.x86_64_registers = if config.instruction_sets.x86_64.unwrap_or(false) {
             let regs_x86_64 = include_bytes!("../docs_store/registers/serialized/x86_64");
             bincode::deserialize(regs_x86_64)?
         } else {
             Vec::new()
         };
 
-        info.z80_registers = if config.instruction_sets.z80 {
+        info.z80_registers = if config.instruction_sets.z80.unwrap_or(false) {
             let regs_z80 = include_bytes!("../docs_store/registers/serialized/z80");
             bincode::deserialize(regs_z80)?
         } else {
             Vec::new()
         };
 
-        info.arm_registers = if config.instruction_sets.arm {
+        info.arm_registers = if config.instruction_sets.arm.unwrap_or(false) {
             let regs_arm = include_bytes!("../docs_store/registers/serialized/arm");
             bincode::deserialize(regs_arm)?
         } else {
             Vec::new()
         };
 
-        info.riscv_registers = if config.instruction_sets.riscv {
+        info.riscv_registers = if config.instruction_sets.riscv.unwrap_or(false) {
             let regs_riscv = include_bytes!("../docs_store/registers/serialized/riscv");
             bincode::deserialize(regs_riscv)?
         } else {
             Vec::new()
         };
 
-        info.gas_directives = if config.assemblers.gas {
+        info.gas_directives = if config.assemblers.gas.unwrap_or(false) {
             let gas_dirs = include_bytes!("../docs_store/directives/serialized/gas");
             bincode::deserialize(gas_dirs)?
         } else {
             Vec::new()
         };
 
-        info.masm_directives = if config.assemblers.masm {
+        info.masm_directives = if config.assemblers.masm.unwrap_or(false) {
             let masm_dirs = include_bytes!("../docs_store/directives/serialized/masm");
             bincode::deserialize(masm_dirs)?
         } else {
             Vec::new()
         };
 
-        info.nasm_directives = if config.assemblers.nasm {
+        info.nasm_directives = if config.assemblers.nasm.unwrap_or(false) {
             let nasm_dirs = include_bytes!("../docs_store/directives/serialized/nasm");
             bincode::deserialize(nasm_dirs)?
         } else {

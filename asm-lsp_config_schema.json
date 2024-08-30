@@ -34,7 +34,7 @@
                     "type": "boolean"
                 }
             },
-            "required": [ "gas", "go", "z80", "masm", "nasm" ]
+            "required": []
         },
         "instruction_sets": {
             "description": "Options to manage instruction set-dependent features.",
@@ -55,9 +55,13 @@
                 "arm": {
                     "description": "Flag to turn features related to the arm instruction set on/off.",
                     "type": "boolean"
+                },
+                "riscv": {
+                    "description": "Flag to turn features related to the riscv instruction set on/off.",
+                    "type": "boolean"
                 }
             },
-            "required": [ "x86", "x86_64", "z80", "arm" ]
+            "required": []
         }
     },
     "required": [ "version", "assemblers", "instruction_sets" ]

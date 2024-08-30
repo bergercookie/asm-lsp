@@ -475,13 +475,13 @@ pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
 
     // directive lookup
     {
-        if config.assemblers.gas || config.assemblers.masm {
+        if config.assemblers.gas.unwrap_or(false) || config.assemblers.masm.unwrap_or(false) {
             // all gas directives have a '.' prefix, some masm directives do
             let directive_lookup = lookup_hover_resp_by_assembler(word, directive_map);
             if directive_lookup.is_some() {
                 return directive_lookup;
             }
-        } else if config.assemblers.nasm {
+        } else if config.assemblers.nasm.unwrap_or(false) {
             // most nasm directives have no prefix, 2 have a '.' prefix
             let directive_lookup = lookup_hover_resp_by_assembler(word, directive_map);
             if directive_lookup.is_some() {
@@ -853,10 +853,12 @@ pub fn get_comp_resp(
                 // prepend GAS registers, some NASM directives with "%"
                 Some("%") => {
                     let mut items = Vec::new();
-                    if config.instruction_sets.x86 || config.instruction_sets.x86_64 {
+                    if config.instruction_sets.x86.unwrap_or(false)
+                        || config.instruction_sets.x86_64.unwrap_or(false)
+                    {
                         items.append(&mut filtered_comp_list(reg_comps));
                     }
-                    if config.assemblers.nasm {
+                    if config.assemblers.nasm.unwrap_or(false) {
                         items.append(&mut filtered_comp_list_prefix(dir_comps, '%'));
                     }
 
@@ -869,7 +871,10 @@ pub fn get_comp_resp(
                 }
                 // prepend all GAS, some MASM, some NASM directives with "."
                 Some(".") => {
-                    if config.assemblers.gas || config.assemblers.masm || config.assemblers.nasm {
+                    if config.assemblers.gas.unwrap_or(false)
+                        || config.assemblers.masm.unwrap_or(false)
+                        || config.assemblers.nasm.unwrap_or(false)
+                    {
                         return Some(CompletionList {
                             is_incomplete: true,
                             items: filtered_comp_list_prefix(dir_comps, '.'),
@@ -1571,20 +1576,20 @@ pub fn instr_filter_targets(instr: &Instruction, config: &TargetConfig) -> Instr
         .forms
         .iter()
         .filter(|form| {
-            (form.gas_name.is_some() && config.assemblers.gas)
-                || (form.go_name.is_some() && config.assemblers.go)
-                || (form.z80_name.is_some() && config.instruction_sets.z80)
+            (form.gas_name.is_some() && config.assemblers.gas.unwrap_or(false))
+                || (form.go_name.is_some() && config.assemblers.go.unwrap_or(false))
+                || (form.z80_name.is_some() && config.instruction_sets.z80.unwrap_or(false))
         })
         .map(|form| {
             let mut filtered = form.clone();
             // handle cases where gas and go both have names on the same form
-            if !config.assemblers.gas {
+            if !config.assemblers.gas.unwrap_or(false) {
                 filtered.gas_name = None;
             }
-            if !config.assemblers.go {
+            if !config.assemblers.go.unwrap_or(false) {
                 filtered.go_name = None;
             }
-            if !config.assemblers.z80 {
+            if !config.assemblers.z80.unwrap_or(false) {
                 filtered.z80_name = None;
             }
             filtered
