@@ -53,6 +53,8 @@ version = "0.1"
 gas = true
 go = false
 z80 = false
+masm = false
+nasm = false
 
 [instruction_sets]
 x86 = false
