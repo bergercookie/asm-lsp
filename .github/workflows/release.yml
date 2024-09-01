@@ -30,15 +30,22 @@ jobs:
             os: macos-latest
           - target: aarch64-apple-darwin
             os: macos-latest
-          - target: x86_64-pc-windows-msvc
-            os: windows-latest
+          # - target: x86_64-pc-windows-msvc
+          #   os: windows-latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+
+      # Install dependencies on Linux
+      - name: Install dependencies on Linux
+        if: startsWith(matrix.target, 'x86_64-unknown-linux') || startsWith(matrix.target, 'aarch64-unknown-linux')
+        run: sudo apt-get update && sudo apt-get install -y make
+
+      # Upload Rust binaries
       - uses: taiki-e/upload-rust-binary-action@v1
         with:
           bin: asm-lsp
           target: ${{ matrix.target }}
           tar: unix
-          zip: windows
+          # zip: windows
           token: ${{ secrets.GITHUB_TOKEN }}
