@@ -43,7 +43,7 @@ Add a section like the following in your `settings.json` file:
 
 Add a `.asm-lsp.toml` file like the following to your project's root directory
 and/or `~/.config/asm-lsp/` (project configs will override global configs). This
-file will cause to selectively target specific assemblers and instruction sets, 
+file will cause to selectively target specific assemblers and instruction sets,
 and/or alter the way it issues diagnostics. Omitting an item from the `assemblers`
 or `instruction_sets` section is equivalent to setting it to `false`.
 
