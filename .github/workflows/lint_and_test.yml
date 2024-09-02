@@ -60,7 +60,9 @@ jobs:
         uses: msys2/setup-msys2@v2
         with:
           update: true
-          install: mingw-w64-x86_64-toolchain
+          install: >
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-gcc
           msys2-path-type: inherit
 
       - name: Set MinGW environment for OpenSSL build
