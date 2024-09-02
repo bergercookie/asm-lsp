@@ -851,19 +851,38 @@ impl Default for InstructionSets {
     }
 }
 
+#[derive(Default, Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum DiagnosticTrigger {
+    Off,
+    OnRequest,
+    #[default]
+    OnSave,
+    OnChange,
+}
+
+pub const DIAGNOSTIC_DEBOUNCE_MS: u64 = 500;
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct Options {
+    pub diagnostic_trigger: Option<DiagnosticTrigger>,
+    pub diagnostic_debounce: Option<u64>,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TargetConfig {
+pub struct Config {
     pub version: String,
     pub assemblers: Assemblers,
     pub instruction_sets: InstructionSets,
+    pub opts: Options,
 }
 
-impl Default for TargetConfig {
+impl Default for Config {
     fn default() -> Self {
-        TargetConfig {
+        Config {
             version: String::from("0.1"),
             assemblers: Assemblers::default(),
             instruction_sets: InstructionSets::default(),
+            opts: Options::default(),
         }
     }
 }

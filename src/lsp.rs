@@ -27,8 +27,8 @@ use tree_sitter::InputEdit;
 
 use crate::types::Column;
 use crate::{
-    Arch, ArchOrAssembler, Assembler, Completable, Hoverable, Instruction, NameToInstructionMap,
-    TargetConfig, TreeEntry, TreeStore,
+    Arch, ArchOrAssembler, Assembler, Completable, Config, Hoverable, Instruction,
+    NameToInstructionMap, TreeEntry, TreeStore,
 };
 
 /// Find the start and end indices of a word inside the given line
@@ -459,7 +459,7 @@ pub fn get_completes<T: Completable, U: ArchOrAssembler>(
 #[must_use]
 pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
     params: &HoverParams,
-    config: &TargetConfig,
+    config: &Config,
     word: &str,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
@@ -835,7 +835,7 @@ pub fn get_comp_resp(
     curr_doc: &str,
     tree_entry: &mut TreeEntry,
     params: &CompletionParams,
-    config: &TargetConfig,
+    config: &Config,
     instr_comps: &[CompletionItem],
     dir_comps: &[CompletionItem],
     reg_comps: &[CompletionItem],
@@ -1437,16 +1437,16 @@ fn search_for_hoverable_by_assembler<'a, T: Hoverable>(
 /// Searches for global config in ~/.config/asm-lsp, then the project's directory
 /// Project specific configs will override global configs
 #[must_use]
-pub fn get_target_config(params: &InitializeParams) -> TargetConfig {
+pub fn get_target_config(params: &InitializeParams) -> Config {
     match (get_global_config(), get_project_config(params)) {
         (_, Some(proj_cfg)) => proj_cfg,
         (Some(global_cfg), None) => global_cfg,
-        (None, None) => TargetConfig::default(), // default is to turn every non-z80 feature on
+        (None, None) => Config::default(), // default is to turn every non-z80 feature on
     }
 }
 
 /// Checks ~/.config/asm-lsp for a config file, creating directories along the way as necessary
-fn get_global_config() -> Option<TargetConfig> {
+fn get_global_config() -> Option<Config> {
     let mut paths = if cfg!(target_os = "macos") {
         // `$HOME`/Library/Application Support/ and `$HOME`/.config/
         vec![config_dir(), alt_mac_config_dir()]
@@ -1465,7 +1465,7 @@ fn get_global_config() -> Option<TargetConfig> {
                 #[allow(clippy::needless_borrows_for_generic_args)]
                 if let Ok(config) = std::fs::read_to_string(&cfg_path) {
                     let cfg_path_s = cfg_path.display();
-                    match toml::from_str::<TargetConfig>(&config) {
+                    match toml::from_str::<Config>(&config) {
                         Ok(config) => {
                             info!("Parsing global asm-lsp config from file -> {cfg_path_s}\n");
                             return Some(config);
@@ -1543,13 +1543,13 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
 }
 
 /// checks for a config specific to the project's root directory
-fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
+fn get_project_config(params: &InitializeParams) -> Option<Config> {
     if let Some(mut path) = get_project_root(params) {
         path.push(".asm-lsp.toml");
         match std::fs::read_to_string(&path) {
             Ok(config) => {
                 let path_s = path.display();
-                match toml::from_str::<TargetConfig>(&config) {
+                match toml::from_str::<Config>(&config) {
                     Ok(config) => {
                         info!("Parsing asm-lsp project config from file -> {path_s}");
                         return Some(config);
@@ -1569,7 +1569,7 @@ fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
 }
 
 #[must_use]
-pub fn instr_filter_targets(instr: &Instruction, config: &TargetConfig) -> Instruction {
+pub fn instr_filter_targets(instr: &Instruction, config: &Config) -> Instruction {
     let mut instr = instr.clone();
 
     let forms = instr

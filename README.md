@@ -42,9 +42,10 @@ Add a section like the following in your `settings.json` file:
 ### [OPTIONAL] Configure via `.asm-lsp.toml`
 
 Add a `.asm-lsp.toml` file like the following to your project's root directory
-and/or `~/.config/asm-lsp/` (project configs will override global configs) to
-selectively target specific assemblers and/or instruction sets. Omitting an item
-from the configuration file is equivalent to setting it to `false`.
+and/or `~/.config/asm-lsp/` (project configs will override global configs). This
+file will cause to selectively target specific assemblers and instruction sets, 
+and/or alter the way it issues diagnostics. Omitting an item from the `assemblers`
+or `instruction_sets` section is equivalent to setting it to `false`.
 
 ```toml
 version = "0.1"
@@ -62,6 +63,10 @@ x86_64 = true
 z80 = false
 arm = false
 riscv = false
+
+[opts]
+diagnostic_trigger = "OnSave" # Off, OnRequest, OnSave, OnChange
+diagnostic_debounce = 500
 ```
 
 ### [OPTIONAL] Extend functionality via `compile_commands.json`/`compile_flags.txt`

@@ -18,8 +18,8 @@ use tree_sitter::Parser;
 
 use crate::{
     apply_compile_cmd, get_comp_resp, get_document_symbols, get_goto_def_resp, get_hover_resp,
-    get_ref_resp, get_sig_help_resp, get_word_from_pos_params, text_doc_change_to_ts_edit,
-    NameToInfoMaps, NameToInstructionMap, TargetConfig, TreeEntry, TreeStore,
+    get_ref_resp, get_sig_help_resp, get_word_from_pos_params, text_doc_change_to_ts_edit, Config,
+    NameToInfoMaps, NameToInstructionMap, TreeEntry, TreeStore,
 };
 
 /// Handles hover requests
@@ -35,7 +35,7 @@ use crate::{
 pub fn handle_hover_request(
     connection: &Connection,
     id: RequestId,
-    config: &TargetConfig,
+    config: &Config,
     params: &HoverParams,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
@@ -95,7 +95,7 @@ pub fn handle_completion_request(
     connection: &Connection,
     id: RequestId,
     params: &CompletionParams,
-    config: &TargetConfig,
+    config: &Config,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
     instruction_completion_items: &[CompletionItem],

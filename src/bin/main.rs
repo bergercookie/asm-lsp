@@ -10,8 +10,8 @@ use asm_lsp::handle::{
 use asm_lsp::{
     get_compile_cmds, get_completes, get_include_dirs, get_target_config, instr_filter_targets,
     populate_name_to_directive_map, populate_name_to_instruction_map,
-    populate_name_to_register_map, Arch, Assembler, Instruction, NameToInfoMaps, TargetConfig,
-    TreeStore,
+    populate_name_to_register_map, Arch, Assembler, Config, DiagnosticTrigger, Instruction,
+    NameToInfoMaps, TreeStore, DIAGNOSTIC_DEBOUNCE_MS,
 };
 
 use compile_commands::{CompilationDatabase, SourceFile};
@@ -104,20 +104,20 @@ pub fn main() -> Result<()> {
     let mut names_to_info = NameToInfoMaps::default();
     let params: InitializeParams = serde_json::from_value(initialization_params.clone()).unwrap();
     info!("Client initialization params: {:?}", params);
-    let target_config = get_target_config(&params);
-    info!("Server Configuration: {:?}", target_config);
+    let config = get_target_config(&params);
+    info!("Server Configuration: {:?}", config);
 
     // create a map of &Instruction_name -> &Instruction - Use that in user queries
     // The Instruction(s) themselves are stored in a vector and we only keep references to the
     // former map
-    let x86_instructions = if target_config.instruction_sets.x86.unwrap_or(false) {
+    let x86_instructions = if config.instruction_sets.x86.unwrap_or(false) {
         let start = std::time::Instant::now();
         let x86_instrs = include_bytes!("../../docs_store/opcodes/serialized/x86");
         let instrs = bincode::deserialize::<Vec<Instruction>>(x86_instrs)?
             .into_iter()
             .map(|instruction| {
                 // filter out assemblers by user config
-                instr_filter_targets(&instruction, &target_config)
+                instr_filter_targets(&instruction, &config)
             })
             .filter(|instruction| !instruction.forms.is_empty())
             .collect();
@@ -130,14 +130,14 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let x86_64_instructions = if target_config.instruction_sets.x86_64.unwrap_or(false) {
+    let x86_64_instructions = if config.instruction_sets.x86_64.unwrap_or(false) {
         let start = std::time::Instant::now();
         let x86_64_instrs = include_bytes!("../../docs_store/opcodes/serialized/x86_64");
         let instrs = bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)?
             .into_iter()
             .map(|instruction| {
                 // filter out assemblers by user config
-                instr_filter_targets(&instruction, &target_config)
+                instr_filter_targets(&instruction, &config)
             })
             .filter(|instruction| !instruction.forms.is_empty())
             .collect();
@@ -150,14 +150,14 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let z80_instructions = if target_config.instruction_sets.z80.unwrap_or(false) {
+    let z80_instructions = if config.instruction_sets.z80.unwrap_or(false) {
         let start = std::time::Instant::now();
         let z80_instrs = include_bytes!("../../docs_store/opcodes/serialized/z80");
         let instrs = bincode::deserialize::<Vec<Instruction>>(z80_instrs)?
             .into_iter()
             .map(|instruction| {
                 // filter out assemblers by user config
-                instr_filter_targets(&instruction, &target_config)
+                instr_filter_targets(&instruction, &config)
             })
             .filter(|instruction| !instruction.forms.is_empty())
             .collect();
@@ -170,7 +170,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let arm_instructions = if target_config.instruction_sets.arm.unwrap_or(false) {
+    let arm_instructions = if config.instruction_sets.arm.unwrap_or(false) {
         let start = std::time::Instant::now();
         let arm_instrs = include_bytes!("../../docs_store/opcodes/serialized/arm");
         // NOTE: No need to filter these instructions by assembler like we do for
@@ -185,7 +185,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let riscv_instructions = if target_config.instruction_sets.riscv.unwrap_or(false) {
+    let riscv_instructions = if config.instruction_sets.riscv.unwrap_or(false) {
         let start = std::time::Instant::now();
         let riscv_instrs = include_bytes!("../../docs_store/opcodes/serialized/riscv");
         // NOTE: No need to filter these instructions by assembler like we do for
@@ -229,7 +229,7 @@ pub fn main() -> Result<()> {
     // create a map of &Register_name -> &Register - Use that in user queries
     // The Register(s) themselves are stored in a vector and we only keep references to the
     // former map
-    let x86_registers = if target_config.instruction_sets.x86.unwrap_or(false) {
+    let x86_registers = if config.instruction_sets.x86.unwrap_or(false) {
         let start = std::time::Instant::now();
         let regs_x86 = include_bytes!("../../docs_store/registers/serialized/x86");
         let regs = bincode::deserialize(regs_x86)?;
@@ -242,7 +242,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let x86_64_registers = if target_config.instruction_sets.x86_64.unwrap_or(false) {
+    let x86_64_registers = if config.instruction_sets.x86_64.unwrap_or(false) {
         let start = std::time::Instant::now();
         let regs_x86_64 = include_bytes!("../../docs_store/registers/serialized/x86_64");
         let regs = bincode::deserialize(regs_x86_64)?;
@@ -255,7 +255,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let z80_registers = if target_config.instruction_sets.z80.unwrap_or(false) {
+    let z80_registers = if config.instruction_sets.z80.unwrap_or(false) {
         let start = std::time::Instant::now();
         let regs_z80 = include_bytes!("../../docs_store/registers/serialized/z80");
         let regs = bincode::deserialize(regs_z80)?;
@@ -268,7 +268,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let arm_registers = if target_config.instruction_sets.arm.unwrap_or(false) {
+    let arm_registers = if config.instruction_sets.arm.unwrap_or(false) {
         let start = std::time::Instant::now();
         let regs_arm = include_bytes!("../../docs_store/registers/serialized/arm");
         let regs = bincode::deserialize(regs_arm)?;
@@ -281,7 +281,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let riscv_registers = if target_config.instruction_sets.riscv.unwrap_or(false) {
+    let riscv_registers = if config.instruction_sets.riscv.unwrap_or(false) {
         let start = std::time::Instant::now();
         let regs_riscv = include_bytes!("../../docs_store/registers/serialized/riscv");
         let regs = bincode::deserialize(regs_riscv)?;
@@ -304,7 +304,7 @@ pub fn main() -> Result<()> {
     populate_name_to_register_map(Arch::ARM, &arm_registers, &mut names_to_info.registers);
     populate_name_to_register_map(Arch::RISCV, &riscv_registers, &mut names_to_info.registers);
 
-    let gas_directives = if target_config.assemblers.gas.unwrap_or(false) {
+    let gas_directives = if config.assemblers.gas.unwrap_or(false) {
         let start = std::time::Instant::now();
         let gas_dirs = include_bytes!("../../docs_store/directives/serialized/gas");
         let dirs = bincode::deserialize(gas_dirs)?;
@@ -317,7 +317,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let masm_directives = if target_config.assemblers.masm.unwrap_or(false) {
+    let masm_directives = if config.assemblers.masm.unwrap_or(false) {
         let start = std::time::Instant::now();
         let masm_dirs = include_bytes!("../../docs_store/directives/serialized/masm");
         let dirs = bincode::deserialize(masm_dirs)?;
@@ -330,7 +330,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let nasm_directives = if target_config.assemblers.nasm.unwrap_or(false) {
+    let nasm_directives = if config.assemblers.nasm.unwrap_or(false) {
         let start = std::time::Instant::now();
         let nasm_dirs = include_bytes!("../../docs_store/directives/serialized/nasm");
         let dirs = bincode::deserialize(nasm_dirs)?;
@@ -376,7 +376,7 @@ pub fn main() -> Result<()> {
 
     main_loop(
         &connection,
-        &target_config,
+        &config,
         &names_to_info,
         &instr_completion_items,
         &directive_completion_items,
@@ -397,7 +397,7 @@ pub fn main() -> Result<()> {
 #[allow(clippy::too_many_arguments)]
 fn main_loop(
     connection: &Connection,
-    config: &TargetConfig,
+    config: &Config,
     names_to_info: &NameToInfoMaps,
     instruction_completion_items: &[CompletionItem],
     directive_completion_items: &[CompletionItem],
@@ -407,6 +407,7 @@ fn main_loop(
 ) -> Result<()> {
     let mut text_store = TextDocuments::new();
     let mut tree_store = TreeStore::new();
+    let mut last_diagnostic = std::time::Instant::now();
 
     info!("Starting asm_lsp loop...");
     for msg in &connection.receiver {
@@ -492,11 +493,14 @@ fn main_loop(
                     );
                 } else if let Ok((_id, params)) = cast_req::<DocumentDiagnosticRequest>(req.clone())
                 {
-                    handle_diagnostics(connection, &params.text_document.uri, compile_cmds)?;
-                    info!(
-                        "Diagnostics request serviced in {}ms",
-                        start.elapsed().as_millis()
-                    );
+                    if config.opts.diagnostic_trigger.unwrap_or_default() != DiagnosticTrigger::Off
+                    {
+                        handle_diagnostics(connection, &params.text_document.uri, compile_cmds)?;
+                        info!(
+                            "Diagnostics request serviced in {}ms",
+                            start.elapsed().as_millis()
+                        );
+                    }
                 } else {
                     error!("Invalid request format -> {:#?}", req);
                 }
@@ -522,6 +526,23 @@ fn main_loop(
                         "Did change text document notification serviced in {}ms",
                         start.elapsed().as_millis()
                     );
+                    if config.opts.diagnostic_trigger.unwrap_or_default()
+                        == DiagnosticTrigger::OnChange
+                        && last_diagnostic.elapsed().as_millis()
+                            > config
+                                .opts
+                                .diagnostic_debounce
+                                .unwrap_or(DIAGNOSTIC_DEBOUNCE_MS)
+                                .into()
+                    {
+                        let start = std::time::Instant::now();
+                        handle_diagnostics(connection, &params.text_document.uri, compile_cmds)?;
+                        last_diagnostic = std::time::Instant::now();
+                        info!(
+                            "Published diagnostics on change in {}ms",
+                            start.elapsed().as_millis()
+                        );
+                    }
                 } else if let Ok(params) = cast_notif::<DidCloseTextDocument>(notif.clone()) {
                     handle_did_close_text_document_notification(
                         &params,
@@ -533,11 +554,20 @@ fn main_loop(
                         start.elapsed().as_millis()
                     );
                 } else if let Ok(params) = cast_notif::<DidSaveTextDocument>(notif.clone()) {
-                    handle_diagnostics(connection, &params.text_document.uri, compile_cmds)?;
-                    info!(
-                        "Published diagnostics on save in {}ms",
-                        start.elapsed().as_millis()
-                    );
+                    match config.opts.diagnostic_trigger.unwrap_or_default() {
+                        DiagnosticTrigger::Off | DiagnosticTrigger::OnRequest => {}
+                        _ => {
+                            handle_diagnostics(
+                                connection,
+                                &params.text_document.uri,
+                                compile_cmds,
+                            )?;
+                            info!(
+                                "Published diagnostics on save in {}ms",
+                                start.elapsed().as_millis()
+                            );
+                        }
+                    }
                 }
             }
             Message::Response(_resp) => {}

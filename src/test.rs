@@ -19,12 +19,12 @@ mod tests {
         parser::{get_cache_dir, populate_arm_instructions, populate_masm_nasm_directives},
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
-        Assembler, Assemblers, Directive, Instruction, InstructionSets, NameToDirectiveMap,
-        NameToInstructionMap, NameToRegisterMap, Register, TargetConfig, TreeEntry, TreeStore,
+        Assembler, Assemblers, Config, Directive, Instruction, InstructionSets, NameToDirectiveMap,
+        NameToInstructionMap, NameToRegisterMap, Options, Register, TreeEntry, TreeStore,
     };
 
-    fn empty_test_config() -> TargetConfig {
-        TargetConfig {
+    fn empty_test_config() -> Config {
+        Config {
             version: "0.1".to_string(),
             assemblers: Assemblers {
                 gas: Some(false),
@@ -40,11 +40,12 @@ mod tests {
                 arm: Some(false),
                 riscv: Some(false),
             },
+            opts: Options::default(),
         }
     }
 
-    fn z80_test_config() -> TargetConfig {
-        TargetConfig {
+    fn z80_test_config() -> Config {
+        Config {
             version: "0.1".to_string(),
             assemblers: Assemblers {
                 gas: Some(false),
@@ -60,11 +61,12 @@ mod tests {
                 arm: Some(false),
                 riscv: Some(false),
             },
+            opts: Options::default(),
         }
     }
 
-    fn arm_test_config() -> TargetConfig {
-        TargetConfig {
+    fn arm_test_config() -> Config {
+        Config {
             version: "0.1".to_string(),
             assemblers: Assemblers {
                 gas: Some(false),
@@ -80,11 +82,12 @@ mod tests {
                 arm: Some(true),
                 riscv: Some(false),
             },
+            opts: Options::default(),
         }
     }
 
-    fn riscv_test_config() -> TargetConfig {
-        TargetConfig {
+    fn riscv_test_config() -> Config {
+        Config {
             version: "0.1".to_string(),
             assemblers: Assemblers {
                 gas: Some(false),
@@ -100,11 +103,12 @@ mod tests {
                 arm: Some(false),
                 riscv: Some(true),
             },
+            opts: Options::default(),
         }
     }
 
-    fn x86_x86_64_test_config() -> TargetConfig {
-        TargetConfig {
+    fn x86_x86_64_test_config() -> Config {
+        Config {
             version: "0.1".to_string(),
             assemblers: Assemblers {
                 gas: Some(true),
@@ -120,11 +124,12 @@ mod tests {
                 arm: Some(false),
                 riscv: Some(false),
             },
+            opts: Options::default(),
         }
     }
 
-    fn gas_test_config() -> TargetConfig {
-        TargetConfig {
+    fn gas_test_config() -> Config {
+        Config {
             version: "0.1".to_string(),
             assemblers: Assemblers {
                 gas: Some(true),
@@ -140,11 +145,12 @@ mod tests {
                 arm: Some(false),
                 riscv: Some(false),
             },
+            opts: Options::default(),
         }
     }
 
-    fn masm_test_config() -> TargetConfig {
-        TargetConfig {
+    fn masm_test_config() -> Config {
+        Config {
             version: "0.1".to_string(),
             assemblers: Assemblers {
                 gas: Some(false),
@@ -160,11 +166,12 @@ mod tests {
                 arm: Some(false),
                 riscv: Some(false),
             },
+            opts: Options::default(),
         }
     }
 
-    fn nasm_test_config() -> TargetConfig {
-        TargetConfig {
+    fn nasm_test_config() -> Config {
+        Config {
             version: "0.1".to_string(),
             assemblers: Assemblers {
                 gas: Some(false),
@@ -180,6 +187,7 @@ mod tests {
                 arm: Some(false),
                 riscv: Some(false),
             },
+            opts: Options::default(),
         }
     }
 
@@ -243,7 +251,7 @@ mod tests {
         }
     }
 
-    fn init_global_info(config: &TargetConfig) -> Result<GlobalInfo> {
+    fn init_global_info(config: &Config) -> Result<GlobalInfo> {
         let mut info = GlobalInfo::new();
 
         info.x86_instructions = if config.instruction_sets.x86.unwrap_or(false) {
@@ -466,7 +474,7 @@ mod tests {
         return Ok(store);
     }
 
-    fn test_hover(source: &str, expected: &str, config: &TargetConfig) {
+    fn test_hover(source: &str, expected: &str, config: &Config) {
         let info = init_global_info(config).expect("Failed to load info");
         let globals = init_test_store(&info).expect("Failed to initialize test store");
 
@@ -555,7 +563,7 @@ mod tests {
 
     fn test_autocomplete(
         source: &str,
-        config: &TargetConfig,
+        config: &Config,
         expected_kind: CompletionItemKind,
         trigger_kind: CompletionTriggerKind,
         trigger_character: Option<String>,
@@ -633,7 +641,7 @@ mod tests {
 
     fn test_register_autocomplete(
         source: &str,
-        config: &TargetConfig,
+        config: &Config,
         trigger_kind: CompletionTriggerKind,
         trigger_character: Option<String>,
     ) {
@@ -649,7 +657,7 @@ mod tests {
 
     fn test_instruction_autocomplete(
         source: &str,
-        config: &TargetConfig,
+        config: &Config,
         trigger_kind: CompletionTriggerKind,
         trigger_character: Option<String>,
     ) {
@@ -665,7 +673,7 @@ mod tests {
 
     fn test_directive_autocomplete(
         source: &str,
-        config: &TargetConfig,
+        config: &Config,
         trigger_kind: CompletionTriggerKind,
         trigger_character: Option<String>,
     ) {
