@@ -65,7 +65,7 @@ jobs:
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-openssl
             base-devel
-          msys2-path-type: inherit
+          path-type: inherit
 
       - name: Set MinGW environment for OpenSSL build
         if: runner.os == 'Windows'
