@@ -1,3 +1,21 @@
+name: Lint Code / Run Tests
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches: ["master"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
 jobs:
   tests:
     name: Run Unit Tests
