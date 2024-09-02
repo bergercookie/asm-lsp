@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 use std::convert::TryFrom;
 use std::fs::{create_dir_all, File};
 use std::io::BufRead;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::str::FromStr;
 
@@ -276,28 +276,42 @@ fn get_additional_include_dirs(compile_cmds: &CompilationDatabase) -> Vec<(Sourc
 }
 
 /// Attempts to find either the `compile_commands.json` or `compile_flags.txt`
-/// file in the project's build directory, returning either as a `CompilationDatabase`
-/// object
+/// file in the project's root or build directories, returning either file as a
+/// `CompilationDatabase` object
 ///
 /// If both are present, `compile_commands.json` will override `compile_flags.txt`
 pub fn get_compile_cmds(params: &InitializeParams) -> Option<CompilationDatabase> {
     if let Some(mut path) = get_project_root(params) {
+        // Check the project root directory first
+        let db = get_compilation_db_files(&path);
+        if db.is_some() {
+            return db;
+        }
+
         // "The convention is to name the file compile_commands.json and put it at the top of the
         // build directory."
         path.push("build");
+        let db = get_compilation_db_files(&path);
+        if db.is_some() {
+            return db;
+        }
+    }
 
-        // first check for compile_commands.json
-        let cmp_cmd_path = path.join("compile_commands.json");
-        if let Ok(conts) = std::fs::read_to_string(cmp_cmd_path) {
-            if let Ok(cmds) = serde_json::from_str(&conts) {
-                return Some(cmds);
-            }
+    None
+}
+
+fn get_compilation_db_files(path: &Path) -> Option<CompilationDatabase> {
+    // first check for compile_commands.json
+    let cmp_cmd_path = path.join("compile_commands.json");
+    if let Ok(conts) = std::fs::read_to_string(cmp_cmd_path) {
+        if let Ok(cmds) = serde_json::from_str(&conts) {
+            return Some(cmds);
         }
-        // then check for compile_flags.txt
-        let cmp_flag_path = path.join("compile_flags.txt");
-        if let Ok(conts) = std::fs::read_to_string(cmp_flag_path) {
-            return Some(compile_commands::from_compile_flags_txt(&path, &conts));
-        }
+    }
+    // then check for compile_flags.txt
+    let cmp_flag_path = path.join("compile_flags.txt");
+    if let Ok(conts) = std::fs::read_to_string(cmp_flag_path) {
+        return Some(compile_commands::from_compile_flags_txt(path, &conts));
     }
 
     None
