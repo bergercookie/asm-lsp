@@ -55,6 +55,9 @@ lsp-textdocument = "0.4.0"
 compile_commands = "0.2.0"
 tree-sitter = "0.22.6"
 tree-sitter-asm = "0.22.6"
+# This needs to be vendored in order for the crate to build in our release workflow
+openssl = { version = "0.10.66", features = ["vendored"] }
+
 
 [dev-dependencies]
 mockito = "1.2.0"

@@ -24,14 +24,14 @@ jobs:
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
-          - target: aarch64-unknown-linux-gnu
-            os: ubuntu-latest
+          # - target: aarch64-unknown-linux-gnu
+          #   os: ubuntu-latest
           - target: x86_64-apple-darwin
             os: macos-latest
           - target: aarch64-apple-darwin
             os: macos-latest
-          # - target: x86_64-pc-windows-msvc
-          #   os: windows-latest
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -39,7 +39,18 @@ jobs:
       # Install dependencies on Linux
       - name: Install dependencies on Linux
         if: startsWith(matrix.target, 'x86_64-unknown-linux') || startsWith(matrix.target, 'aarch64-unknown-linux')
-        run: sudo apt-get update && sudo apt-get install -y make
+        run: sudo apt-get update && sudo apt-get install -y make openssl libssl-dev
+
+      # Windows
+      - run: echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
+        if: runner.os == 'Windows'
+      - run: vcpkg install openssl:x64-windows-static-md
+        if: runner.os == 'Windows'
+      - name: Set Perl environment variables
+        if: runner.os == 'Windows'
+        run: |
+          echo "PERL=$((where.exe perl)[0])" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          echo "OPENSSL_SRC_PERL=$((where.exe perl)[0])" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
       # Upload Rust binaries
       - uses: taiki-e/upload-rust-binary-action@v1
@@ -47,5 +58,5 @@ jobs:
           bin: asm-lsp
           target: ${{ matrix.target }}
           tar: unix
-          # zip: windows
+          zip: windows
           token: ${{ secrets.GITHUB_TOKEN }}
