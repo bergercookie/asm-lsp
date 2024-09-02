@@ -7,7 +7,7 @@ use std::process::Command;
 use std::str::FromStr;
 
 use anyhow::{anyhow, Result};
-use compile_commands::{CompilationDatabase, CompileCommand, SourceFile};
+use compile_commands::{CompilationDatabase, CompileArgs, CompileCommand, SourceFile};
 use dirs::config_dir;
 use log::{error, info, log, log_enabled, warn};
 use lsp_textdocument::{FullTextDocument, TextDocuments};
@@ -27,8 +27,8 @@ use tree_sitter::InputEdit;
 
 use crate::types::Column;
 use crate::{
-    Arch, ArchOrAssembler, Assembler, Completable, Hoverable, Instruction, NameToInstructionMap,
-    TargetConfig, TreeEntry, TreeStore,
+    Arch, ArchOrAssembler, Assembler, Completable, Config, Hoverable, Instruction,
+    NameToInstructionMap, TreeEntry, TreeStore,
 };
 
 /// Find the start and end indices of a word inside the given line
@@ -221,34 +221,40 @@ fn get_additional_include_dirs(compile_cmds: &CompilationDatabase) -> Vec<(Sourc
             // We will try to canonicalize non-absolute paths as relative to `file`,
             // but this isn't possible if we have a SourceFile::All. Just don't
             // add the include directory and issue a warning in this case
-            for arg in args.iter().map(|arg| arg.trim()) {
-                if check_dir {
-                    // current arg is preceeded by lone '-I'
-                    let dir = PathBuf::from(arg);
-                    if dir.is_absolute() {
-                        additional_dirs.push((source_file.clone(), dir));
-                    } else if let SourceFile::File(ref source_path) = source_file {
-                        if let Ok(full_include_path) = source_path.join(dir).canonicalize() {
-                            additional_dirs.push((source_file.clone(), full_include_path));
+            match args {
+                CompileArgs::Flags(args) | CompileArgs::Arguments(args) => {
+                    for arg in args.iter().map(|arg| arg.trim()) {
+                        if check_dir {
+                            // current arg is preceeded by lone '-I'
+                            let dir = PathBuf::from(arg);
+                            if dir.is_absolute() {
+                                additional_dirs.push((source_file.clone(), dir));
+                            } else if let SourceFile::File(ref source_path) = source_file {
+                                if let Ok(full_include_path) = source_path.join(dir).canonicalize()
+                                {
+                                    additional_dirs.push((source_file.clone(), full_include_path));
+                                }
+                            } else {
+                                warn!("Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'");
+                            }
+                            check_dir = false;
+                        } else if arg.eq("-I") {
+                            // -Irelative is stored as two separate args if parsed from `compile_flags.txt`
+                            check_dir = true;
+                        } else if arg.len() > 2 && arg.starts_with("-I") {
+                            // '-Irelative'
+                            let dir = PathBuf::from(&arg[2..]);
+                            if dir.is_absolute() {
+                                additional_dirs.push((source_file.clone(), dir));
+                            } else if let SourceFile::File(ref source_path) = source_file {
+                                if let Ok(full_include_path) = source_path.join(dir).canonicalize()
+                                {
+                                    additional_dirs.push((source_file.clone(), full_include_path));
+                                }
+                            } else {
+                                warn!("Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'");
+                            }
                         }
-                    } else {
-                        warn!("Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'");
-                    }
-                    check_dir = false;
-                } else if arg.eq("-I") {
-                    // -Irelative is stored as two separate args if parsed from `compile_flags.txt`
-                    check_dir = true;
-                } else if arg.len() > 2 && arg.starts_with("-I") {
-                    // '-Irelative'
-                    let dir = PathBuf::from(&arg[2..]);
-                    if dir.is_absolute() {
-                        additional_dirs.push((source_file.clone(), dir));
-                    } else if let SourceFile::File(ref source_path) = source_file {
-                        if let Ok(full_include_path) = source_path.join(dir).canonicalize() {
-                            additional_dirs.push((source_file.clone(), full_include_path));
-                        }
-                    } else {
-                        warn!("Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'");
                     }
                 }
             }
@@ -320,22 +326,57 @@ fn get_compilation_db_files(path: &Path) -> Option<CompilationDatabase> {
 /// Attempts to run the given compile command and parses the resulting output. Any
 /// relevant output will be translated into a `Diagnostic` object and pushed into
 /// `diagnostics`
-pub fn apply_compile_cmd(diagnostics: &mut Vec<Diagnostic>, compile_cmd: &CompileCommand) {
+pub fn apply_compile_cmd(
+    cfg: &Config,
+    diagnostics: &mut Vec<Diagnostic>,
+    compile_cmd: &CompileCommand,
+) {
     // TODO: Consolidate this logic, a little tricky because we need to capture
     // compile_cmd.arguments by reference, but we get an owned Vec out of args_from_cmd()...
     if let Some(ref args) = compile_cmd.arguments {
-        if args.len() < 2 {
-            return;
-        }
-        let output = match Command::new(&args[0]).args(&args[1..]).output() {
-            Ok(result) => result,
-            Err(e) => {
-                error!("Failed to launch compile command process -- Error: {e}");
-                return;
+        match args {
+            CompileArgs::Flags(flags) => {
+                if flags.is_empty() {
+                    return;
+                }
+
+                let compilers = if let Some(ref compiler) = cfg.opts.compiler {
+                    // If the user specified a compiler in their config, use it
+                    vec![compiler.as_str()]
+                } else {
+                    // Otherwise go with these defaults
+                    vec!["gcc", "clang"]
+                };
+
+                for compiler in compilers {
+                    match Command::new(compiler).args(flags).output() {
+                        Ok(result) => {
+                            if let Ok(output_str) = String::from_utf8(result.stderr) {
+                                get_diagnostics(diagnostics, &output_str);
+                                return;
+                            }
+                        }
+                        Err(e) => {
+                            warn!("Failed to launch compile command process with {compiler} -- Error: {e}");
+                        }
+                    };
+                }
             }
-        };
-        if let Ok(output_str) = String::from_utf8(output.stderr) {
-            get_diagnostics(diagnostics, &output_str);
+            CompileArgs::Arguments(arguments) => {
+                if arguments.len() < 2 {
+                    return;
+                }
+                let output = match Command::new(&arguments[0]).args(&arguments[1..]).output() {
+                    Ok(result) => result,
+                    Err(e) => {
+                        error!("Failed to launch compile command process -- Error: {e}");
+                        return;
+                    }
+                };
+                if let Ok(output_str) = String::from_utf8(output.stderr) {
+                    get_diagnostics(diagnostics, &output_str);
+                }
+            }
         }
     } else if let Some(args) = compile_cmd.args_from_cmd() {
         if args.len() < 2 {
@@ -473,7 +514,7 @@ pub fn get_completes<T: Completable, U: ArchOrAssembler>(
 #[must_use]
 pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
     params: &HoverParams,
-    config: &TargetConfig,
+    config: &Config,
     word: &str,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
@@ -849,7 +890,7 @@ pub fn get_comp_resp(
     curr_doc: &str,
     tree_entry: &mut TreeEntry,
     params: &CompletionParams,
-    config: &TargetConfig,
+    config: &Config,
     instr_comps: &[CompletionItem],
     dir_comps: &[CompletionItem],
     reg_comps: &[CompletionItem],
@@ -1451,16 +1492,16 @@ fn search_for_hoverable_by_assembler<'a, T: Hoverable>(
 /// Searches for global config in ~/.config/asm-lsp, then the project's directory
 /// Project specific configs will override global configs
 #[must_use]
-pub fn get_target_config(params: &InitializeParams) -> TargetConfig {
+pub fn get_target_config(params: &InitializeParams) -> Config {
     match (get_global_config(), get_project_config(params)) {
         (_, Some(proj_cfg)) => proj_cfg,
         (Some(global_cfg), None) => global_cfg,
-        (None, None) => TargetConfig::default(), // default is to turn every non-z80 feature on
+        (None, None) => Config::default(), // default is to turn every non-z80 feature on
     }
 }
 
 /// Checks ~/.config/asm-lsp for a config file, creating directories along the way as necessary
-fn get_global_config() -> Option<TargetConfig> {
+fn get_global_config() -> Option<Config> {
     let mut paths = if cfg!(target_os = "macos") {
         // `$HOME`/Library/Application Support/ and `$HOME`/.config/
         vec![config_dir(), alt_mac_config_dir()]
@@ -1479,7 +1520,7 @@ fn get_global_config() -> Option<TargetConfig> {
                 #[allow(clippy::needless_borrows_for_generic_args)]
                 if let Ok(config) = std::fs::read_to_string(&cfg_path) {
                     let cfg_path_s = cfg_path.display();
-                    match toml::from_str::<TargetConfig>(&config) {
+                    match toml::from_str::<Config>(&config) {
                         Ok(config) => {
                             info!("Parsing global asm-lsp config from file -> {cfg_path_s}\n");
                             return Some(config);
@@ -1557,13 +1598,13 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
 }
 
 /// checks for a config specific to the project's root directory
-fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
+fn get_project_config(params: &InitializeParams) -> Option<Config> {
     if let Some(mut path) = get_project_root(params) {
         path.push(".asm-lsp.toml");
         match std::fs::read_to_string(&path) {
             Ok(config) => {
                 let path_s = path.display();
-                match toml::from_str::<TargetConfig>(&config) {
+                match toml::from_str::<Config>(&config) {
                     Ok(config) => {
                         info!("Parsing asm-lsp project config from file -> {path_s}");
                         return Some(config);
@@ -1583,7 +1624,7 @@ fn get_project_config(params: &InitializeParams) -> Option<TargetConfig> {
 }
 
 #[must_use]
-pub fn instr_filter_targets(instr: &Instruction, config: &TargetConfig) -> Instruction {
+pub fn instr_filter_targets(instr: &Instruction, config: &Config) -> Instruction {
     let mut instr = instr.clone();
 
     let forms = instr

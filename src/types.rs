@@ -851,19 +851,26 @@ impl Default for InstructionSets {
     }
 }
 
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct ConfigOptions {
+    pub compiler: Option<String>,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TargetConfig {
+pub struct Config {
     pub version: String,
     pub assemblers: Assemblers,
     pub instruction_sets: InstructionSets,
+    pub opts: ConfigOptions,
 }
 
-impl Default for TargetConfig {
+impl Default for Config {
     fn default() -> Self {
-        TargetConfig {
+        Config {
             version: String::from("0.1"),
             assemblers: Assemblers::default(),
             instruction_sets: InstructionSets::default(),
+            opts: ConfigOptions::default(),
         }
     }
 }

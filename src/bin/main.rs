@@ -10,8 +10,7 @@ use asm_lsp::handle::{
 use asm_lsp::{
     get_compile_cmds, get_completes, get_include_dirs, get_target_config, instr_filter_targets,
     populate_name_to_directive_map, populate_name_to_instruction_map,
-    populate_name_to_register_map, Arch, Assembler, Instruction, NameToInfoMaps, TargetConfig,
-    TreeStore,
+    populate_name_to_register_map, Arch, Assembler, Config, Instruction, NameToInfoMaps, TreeStore,
 };
 
 use compile_commands::{CompilationDatabase, SourceFile};
@@ -397,7 +396,7 @@ pub fn main() -> Result<()> {
 #[allow(clippy::too_many_arguments)]
 fn main_loop(
     connection: &Connection,
-    config: &TargetConfig,
+    config: &Config,
     names_to_info: &NameToInfoMaps,
     instruction_completion_items: &[CompletionItem],
     directive_completion_items: &[CompletionItem],
@@ -492,7 +491,12 @@ fn main_loop(
                     );
                 } else if let Ok((_id, params)) = cast_req::<DocumentDiagnosticRequest>(req.clone())
                 {
-                    handle_diagnostics(connection, &params.text_document.uri, compile_cmds)?;
+                    handle_diagnostics(
+                        connection,
+                        &params.text_document.uri,
+                        config,
+                        compile_cmds,
+                    )?;
                     info!(
                         "Diagnostics request serviced in {}ms",
                         start.elapsed().as_millis()
@@ -533,7 +537,12 @@ fn main_loop(
                         start.elapsed().as_millis()
                     );
                 } else if let Ok(params) = cast_notif::<DidSaveTextDocument>(notif.clone()) {
-                    handle_diagnostics(connection, &params.text_document.uri, compile_cmds)?;
+                    handle_diagnostics(
+                        connection,
+                        &params.text_document.uri,
+                        config,
+                        compile_cmds,
+                    )?;
                     info!(
                         "Published diagnostics on save in {}ms",
                         start.elapsed().as_millis()

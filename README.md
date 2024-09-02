@@ -44,7 +44,10 @@ Add a section like the following in your `settings.json` file:
 Add a `.asm-lsp.toml` file like the following to your project's root directory
 and/or `~/.config/asm-lsp/` (project configs will override global configs) to
 selectively target specific assemblers and/or instruction sets. Omitting an item
-from the configuration file is equivalent to setting it to `false`.
+from the `assemblers` or `instruction_sets` sections is equivalent to setting it
+to `false`. Be default, the server attempts to invoke `gcc` (and then `clang`)
+to generate diagnostics. If `compiler` config field is specified, the server will
+attempt to use the specified path to generate diagnostics.
 
 ```toml
 version = "0.1"
@@ -62,14 +65,18 @@ x86_64 = true
 z80 = false
 arm = false
 riscv = false
+
+[opts]
+#compiler = "gcc"
 ```
 
 ### [OPTIONAL] Extend functionality via `compile_commands.json`/`compile_flags.txt`
 
 Add a [`compile_commands.json`](https://clang.llvm.org/docs/JSONCompilationDatabase.html#format)
 or [`compile_flags.txt`](https://clang.llvm.org/docs/JSONCompilationDatabase.html#alternatives)
-file to your project's `build` directory to enable inline diagnostic features, as
-well as to specify additional include directories for use in hover features.
+file to your project's root or root `build` directory to enable inline diagnostic
+features, as well as to specify additional include directories for use in hover
+features.
 
 ### VSCode Support
 
