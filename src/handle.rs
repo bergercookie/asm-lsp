@@ -2,6 +2,7 @@ use std::{collections::HashMap, path::PathBuf};
 
 use anyhow::{anyhow, Result};
 use compile_commands::{CompilationDatabase, SourceFile};
+use log::info;
 use lsp_server::{Connection, Message, RequestId, Response};
 use lsp_textdocument::TextDocuments;
 use lsp_types::{
@@ -17,9 +18,9 @@ use lsp_types::{
 use tree_sitter::Parser;
 
 use crate::{
-    apply_compile_cmd, get_comp_resp, get_document_symbols, get_goto_def_resp, get_hover_resp,
-    get_ref_resp, get_sig_help_resp, get_word_from_pos_params, text_doc_change_to_ts_edit, Config,
-    NameToInfoMaps, NameToInstructionMap, TreeEntry, TreeStore,
+    apply_compile_cmd, get_comp_resp, get_default_compile_cmd, get_document_symbols,
+    get_goto_def_resp, get_hover_resp, get_ref_resp, get_sig_help_resp, get_word_from_pos_params,
+    text_doc_change_to_ts_edit, Config, NameToInfoMaps, NameToInstructionMap, TreeEntry, TreeStore,
 };
 
 /// Handles hover requests
@@ -339,9 +340,22 @@ pub fn handle_diagnostics(
         SourceFile::All => true,
     });
 
+    let mut has_entries = false;
     let mut diagnostics: Vec<Diagnostic> = Vec::new();
     for entry in source_entries {
+        has_entries = true;
         apply_compile_cmd(cfg, &mut diagnostics, entry);
+    }
+
+    // If no user-provided entries corresponded to the file, just try out
+    // invoking the user-provided compiler (if they gave one), or alternatively
+    // gcc (and clang if that fails) with the source file path as the only argument
+    if !has_entries {
+        info!(
+            "No applicable user-provided commands for {}. Applying default compile command",
+            uri.path().as_str()
+        );
+        apply_compile_cmd(cfg, &mut diagnostics, &get_default_compile_cmd(uri, cfg));
     }
 
     let params = PublishDiagnosticsParams {

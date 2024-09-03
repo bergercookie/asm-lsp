@@ -41,7 +41,11 @@ mod tests {
                 arm: Some(false),
                 riscv: Some(false),
             },
-            opts: ConfigOptions { compiler: None },
+            opts: ConfigOptions {
+                compiler: None,
+                diagnostics: None,
+                default_diagnostics: None,
+            },
         }
     }
 
@@ -62,7 +66,11 @@ mod tests {
                 arm: Some(false),
                 riscv: Some(false),
             },
-            opts: ConfigOptions { compiler: None },
+            opts: ConfigOptions {
+                compiler: None,
+                diagnostics: None,
+                default_diagnostics: None,
+            },
         }
     }
 
@@ -83,7 +91,11 @@ mod tests {
                 arm: Some(true),
                 riscv: Some(false),
             },
-            opts: ConfigOptions { compiler: None },
+            opts: ConfigOptions {
+                compiler: None,
+                diagnostics: None,
+                default_diagnostics: None,
+            },
         }
     }
 
@@ -104,7 +116,11 @@ mod tests {
                 arm: Some(false),
                 riscv: Some(true),
             },
-            opts: ConfigOptions { compiler: None },
+            opts: ConfigOptions {
+                compiler: None,
+                diagnostics: None,
+                default_diagnostics: None,
+            },
         }
     }
 
@@ -125,7 +141,11 @@ mod tests {
                 arm: Some(false),
                 riscv: Some(false),
             },
-            opts: ConfigOptions { compiler: None },
+            opts: ConfigOptions {
+                compiler: None,
+                diagnostics: None,
+                default_diagnostics: None,
+            },
         }
     }
 
@@ -146,7 +166,11 @@ mod tests {
                 arm: Some(false),
                 riscv: Some(false),
             },
-            opts: ConfigOptions { compiler: None },
+            opts: ConfigOptions {
+                compiler: None,
+                diagnostics: None,
+                default_diagnostics: None,
+            },
         }
     }
 
@@ -167,7 +191,11 @@ mod tests {
                 arm: Some(false),
                 riscv: Some(false),
             },
-            opts: ConfigOptions { compiler: None },
+            opts: ConfigOptions {
+                compiler: None,
+                diagnostics: None,
+                default_diagnostics: None,
+            },
         }
     }
 
@@ -188,7 +216,11 @@ mod tests {
                 arm: Some(false),
                 riscv: Some(false),
             },
-            opts: ConfigOptions { compiler: None },
+            opts: ConfigOptions {
+                compiler: None,
+                diagnostics: None,
+                default_diagnostics: None,
+            },
         }
     }
 

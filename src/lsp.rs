@@ -323,6 +323,35 @@ fn get_compilation_db_files(path: &Path) -> Option<CompilationDatabase> {
     None
 }
 
+/// Returns a default `CompileCommand` for the provided `uri`. If the user specified
+/// a compiler in their config, it will be used. Otherwise, the command will be constructed
+/// with a single flag consisting of the provided `uri`
+/// NOTE: Several fields within the returned `CompileCommand` are intentionally left
+/// uninitialized to avoid unnecessary allocations. If you're using this function
+/// in a new place, please reconsider this assumption
+pub fn get_default_compile_cmd(uri: &Uri, cfg: &Config) -> CompileCommand {
+    if let Some(ref compiler) = cfg.opts.compiler {
+        CompileCommand {
+            file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
+            directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
+            arguments: Some(CompileArgs::Arguments(vec![
+                compiler.to_string(),
+                uri.path().to_string(),
+            ])),
+            command: None,
+            output: None,
+        }
+    } else {
+        CompileCommand {
+            file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
+            directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
+            arguments: Some(CompileArgs::Flags(vec![uri.path().to_string()])),
+            command: None,
+            output: None,
+        }
+    }
+}
+
 /// Attempts to run the given compile command and parses the resulting output. Any
 /// relevant output will be translated into a `Diagnostic` object and pushed into
 /// `diagnostics`
@@ -1492,12 +1521,24 @@ fn search_for_hoverable_by_assembler<'a, T: Hoverable>(
 /// Searches for global config in ~/.config/asm-lsp, then the project's directory
 /// Project specific configs will override global configs
 #[must_use]
-pub fn get_target_config(params: &InitializeParams) -> Config {
-    match (get_global_config(), get_project_config(params)) {
+pub fn get_config(params: &InitializeParams) -> Config {
+    let mut config = match (get_global_config(), get_project_config(params)) {
         (_, Some(proj_cfg)) => proj_cfg,
         (Some(global_cfg), None) => global_cfg,
-        (None, None) => Config::default(), // default is to turn every non-z80 feature on
+        (None, None) => Config::default(),
+    };
+
+    // Want diagnostics enabled by default
+    if config.opts.diagnostics.is_none() {
+        config.opts.diagnostics = Some(true);
     }
+
+    // Want default diagnostics enabled by default
+    if config.opts.default_diagnostics.is_none() {
+        config.opts.default_diagnostics = Some(true);
+    }
+
+    config
 }
 
 /// Checks ~/.config/asm-lsp for a config file, creating directories along the way as necessary

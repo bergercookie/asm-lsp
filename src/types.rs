@@ -851,9 +851,21 @@ impl Default for InstructionSets {
     }
 }
 
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ConfigOptions {
     pub compiler: Option<String>,
+    pub diagnostics: Option<bool>,
+    pub default_diagnostics: Option<bool>,
+}
+
+impl Default for ConfigOptions {
+    fn default() -> Self {
+        Self {
+            compiler: None,
+            diagnostics: Some(true),
+            default_diagnostics: Some(true),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
