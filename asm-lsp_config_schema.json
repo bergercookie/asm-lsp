@@ -62,7 +62,30 @@
                 }
             },
             "required": []
-        }
+        },
+        "opts": {
+            "description": "Options to modify the server's behavior.",
+            "type": "object",
+            "properties": {
+                "compiler": {
+                    "description": "Compiler to use to invoke provided or default compile commands.",
+                    "type": "string"
+                },
+                "diagnostics": {
+                    "description": "Flag to enable or disable the server's diagnostics feature.",
+                    "type": "boolean"
+                },
+                "default_diagnostics": {
+                    "description": "Flag to enable or disable the server's default diagnostics feature.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "required": []
     },
-    "required": [ "version", "assemblers", "instruction_sets" ]
+    "required": [
+        "version",
+        "assemblers",
+        "instruction_sets"
+    ]
 }
