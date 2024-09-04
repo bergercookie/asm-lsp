@@ -350,7 +350,7 @@ pub fn handle_diagnostics(
     // If no user-provided entries corresponded to the file, just try out
     // invoking the user-provided compiler (if they gave one), or alternatively
     // gcc (and clang if that fails) with the source file path as the only argument
-    if !has_entries {
+    if !has_entries && cfg.opts.default_diagnostics.unwrap_or(false) {
         info!(
             "No applicable user-provided commands for {}. Applying default compile command",
             uri.path().as_str()
