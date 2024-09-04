@@ -76,7 +76,7 @@ checksum = "96d30a06541fbafbc7f82ed10c06164cfbd2c401138f6addd8404629c4b16711"
 
 [[package]]
 name = "asm-lsp"
-version = "0.8.0"
+version = "0.9.0"
 dependencies = [
  "anyhow",
  "bincode",
@@ -243,8 +243,9 @@ dependencies = [
 
 [[package]]
 name = "compile_commands"
-version = "0.2.0"
-source = "git+https://github.com/WillLillis/compile_commands?rev=ccf28aef46207c810c0c1f2e264f92c66c0d2000#ccf28aef46207c810c0c1f2e264f92c66c0d2000"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "802c1c5ee2445c187dec61c82ec05735c4adc266c3ac29670a9fb5ad162282c4"
 dependencies = [
  "serde",
  "serde_json",

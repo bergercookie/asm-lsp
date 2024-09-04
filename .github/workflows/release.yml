@@ -24,8 +24,8 @@ jobs:
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
-          - target: aarch64-unknown-linux-gnu
-            os: ubuntu-latest
+          # - target: aarch64-unknown-linux-gnu
+          #   os: ubuntu-latest
           - target: x86_64-apple-darwin
             os: macos-latest
           - target: aarch64-apple-darwin
@@ -39,7 +39,7 @@ jobs:
       # Install dependencies on Linux
       - name: Install dependencies on Linux
         if: startsWith(matrix.target, 'x86_64-unknown-linux') || startsWith(matrix.target, 'aarch64-unknown-linux')
-        run: sudo apt-get update && sudo apt-get install -y make
+        run: sudo apt-get update && sudo apt-get install -y make openssl libssl-dev
 
       # Upload Rust binaries
       - uses: taiki-e/upload-rust-binary-action@v1
