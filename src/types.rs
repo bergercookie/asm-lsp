@@ -852,18 +852,37 @@ impl Default for InstructionSets {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TargetConfig {
+pub struct ConfigOptions {
+    pub compiler: Option<String>,
+    pub diagnostics: Option<bool>,
+    pub default_diagnostics: Option<bool>,
+}
+
+impl Default for ConfigOptions {
+    fn default() -> Self {
+        Self {
+            compiler: None,
+            diagnostics: Some(true),
+            default_diagnostics: Some(true),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Config {
     pub version: String,
     pub assemblers: Assemblers,
     pub instruction_sets: InstructionSets,
+    pub opts: ConfigOptions,
 }
 
-impl Default for TargetConfig {
+impl Default for Config {
     fn default() -> Self {
-        TargetConfig {
+        Config {
             version: String::from("0.1"),
             assemblers: Assemblers::default(),
             instruction_sets: InstructionSets::default(),
+            opts: ConfigOptions::default(),
         }
     }
 }

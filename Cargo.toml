@@ -52,7 +52,8 @@ url-escape = "0.1.1"
 quick-xml = "0.35.0"
 bincode = "1.3.3"
 lsp-textdocument = "0.4.0"
-compile_commands = "0.2.0"
+# compile_commands = "0.2.0"
+compile_commands = { git = "https://github.com/WillLillis/compile_commands", rev = "ccf28aef46207c810c0c1f2e264f92c66c0d2000" }
 tree-sitter = "0.22.6"
 tree-sitter-asm = "0.22.6"
 

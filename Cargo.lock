@@ -244,8 +244,7 @@ dependencies = [
 [[package]]
 name = "compile_commands"
 version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2d05c707e1d0f610edfb30523e2d654d1779b58db656191630026ddaca2a6dd3"
+source = "git+https://github.com/WillLillis/compile_commands?rev=ccf28aef46207c810c0c1f2e264f92c66c0d2000#ccf28aef46207c810c0c1f2e264f92c66c0d2000"
 dependencies = [
  "serde",
  "serde_json",
