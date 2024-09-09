@@ -26,6 +26,11 @@ cargo install asm-lsp
 cargo install --git https://github.com/bergercookie/asm-lsp
 ```
 
+### Precompiled Binaries
+
+Download an uncompress the appropriate precompiled binaries from the project's
+[releases page](https://github.com/bergercookie/asm-lsp/releases).
+
 ## Set up as a language server
 
 Add a section like the following in your `settings.json` file:
