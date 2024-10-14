@@ -99,12 +99,9 @@ impl std::fmt::Display for Instruction {
 
         // url
         let more_info: String;
-        match &self.url {
-            Some(url) => {
-                more_info = format!("\nMore info: {url}");
-                v.push(&more_info);
-            }
-            None => {}
+        if let Some(url) = &self.url {
+            more_info = format!("\nMore info: {url}");
+            v.push(&more_info);
         }
 
         let s = v.join("\n");
@@ -307,10 +304,10 @@ impl FromStr for Z80TimingValue {
     type Err = std::num::ParseIntError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         if s.eq("?") {
-            Ok(Z80TimingValue::Unknown)
+            Ok(Self::Unknown)
         } else {
             match s.parse::<u8>() {
-                Ok(val) => Ok(Z80TimingValue::Val(val)),
+                Ok(val) => Ok(Self::Val(val)),
                 Err(e) => Err(e),
             }
         }
@@ -333,13 +330,13 @@ impl Default for Z80TimingInfo {
 impl Display for Z80TimingInfo {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Z80TimingInfo::OneNum(num) => {
+            Self::OneNum(num) => {
                 write!(f, "{num}")?;
             }
-            Z80TimingInfo::TwoNum((num1, num2)) => {
+            Self::TwoNum((num1, num2)) => {
                 write!(f, "{num1}/{num2}")?;
             }
-            Z80TimingInfo::ThreeNum((num1, num2, num3)) => {
+            Self::ThreeNum((num1, num2, num3)) => {
                 write!(f, "{num1}/{num2}/{num3}")?;
             }
         }
@@ -350,27 +347,24 @@ impl Display for Z80TimingInfo {
 impl FromStr for Z80TimingInfo {
     type Err = String;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if let Some('/') = s.chars().next() {
-            return Err(String::from("Cannot have an empty num value"));
-        } else if let Some('/') = s.chars().next_back() {
+        if s.starts_with('/') || s.ends_with('/') {
             return Err(String::from("Cannot have an empty num value"));
         }
+
         let pieces: Vec<Result<Z80TimingValue, std::num::ParseIntError>> =
             s.split('/').map(str::parse).collect();
 
         match pieces.len() {
-            1 => match pieces[0] {
-                Ok(num) => Ok(Z80TimingInfo::OneNum(num)),
+            1 => match &pieces[0] {
+                Ok(num) => Ok(Self::OneNum(*num)),
                 Err(_) => Err(String::from("Failed to parse one timing value")),
             },
             2 => match (&pieces[0], &pieces[1]) {
-                (Ok(num1), Ok(num2)) => Ok(Z80TimingInfo::TwoNum((*num1, *num2))),
+                (Ok(num1), Ok(num2)) => Ok(Self::TwoNum((*num1, *num2))),
                 _ => Err(String::from("Failed to parse one or more timing values")),
             },
             3 => match (&pieces[0], &pieces[1], &pieces[2]) {
-                (Ok(num1), Ok(num2), Ok(num3)) => {
-                    Ok(Z80TimingInfo::ThreeNum((*num1, *num2, *num3)))
-                }
+                (Ok(num1), Ok(num2), Ok(num3)) => Ok(Self::ThreeNum((*num1, *num2, *num3))),
                 _ => Err(String::from("Failed to parse one or more timing values")),
             },
             n => Err(format!("Expected 1-3 timing values, got {n}")),
@@ -819,7 +813,7 @@ pub struct Assemblers {
 
 impl Default for Assemblers {
     fn default() -> Self {
-        Assemblers {
+        Self {
             gas: Some(true),
             go: Some(true),
             masm: Some(false),
@@ -841,7 +835,7 @@ pub struct InstructionSets {
 
 impl Default for InstructionSets {
     fn default() -> Self {
-        InstructionSets {
+        Self {
             x86: Some(true),
             x86_64: Some(true),
             z80: Some(false),
@@ -879,7 +873,7 @@ pub struct Config {
 
 impl Default for Config {
     fn default() -> Self {
-        Config {
+        Self {
             version: String::from("0.1"),
             assemblers: Assemblers::default(),
             instruction_sets: InstructionSets::default(),

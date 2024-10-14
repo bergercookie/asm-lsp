@@ -342,9 +342,12 @@ fn get_compilation_db_files(path: &Path) -> Option<CompilationDatabase> {
     None
 }
 
-/// Returns a default `CompileCommand` for the provided `uri`. If the user specified
-/// a compiler in their config, it will be used. Otherwise, the command will be constructed
-/// with a single flag consisting of the provided `uri`
+/// Returns a default `CompileCommand` for the provided `uri`.
+///
+/// - If the user specified a compiler in their config, it will be used.
+/// - Otherwise, the command will be constructed with a single flag consisting of
+///   the provided `uri`
+///
 /// NOTE: Several fields within the returned `CompileCommand` are intentionally left
 /// uninitialized to avoid unnecessary allocations. If you're using this function
 /// in a new place, please reconsider this assumption
@@ -522,6 +525,7 @@ fn get_diagnostics(diagnostics: &mut Vec<Diagnostic>, tool_output: &str) {
 }
 
 /// Function allowing us to connect tree sitter's logging with the log crate
+#[allow(clippy::needless_pass_by_value)]
 pub fn tree_sitter_logger(log_type: tree_sitter::LogType, message: &str) {
     // map tree-sitter log types to log levels, for now set everything to Trace
     let log_level = match log_type {
@@ -972,6 +976,7 @@ macro_rules! cursor_matches {
     }};
 }
 
+#[allow(clippy::too_many_lines)]
 pub fn get_comp_resp(
     curr_doc: &str,
     tree_entry: &mut TreeEntry,
@@ -1165,7 +1170,7 @@ pub fn get_comp_resp(
     None
 }
 
-fn lsp_pos_of_point(pos: tree_sitter::Point) -> lsp_types::Position {
+const fn lsp_pos_of_point(pos: tree_sitter::Point) -> lsp_types::Position {
     Position {
         line: pos.row as u32,
         character: pos.column as u32,
