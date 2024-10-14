@@ -358,6 +358,7 @@ pub fn get_default_compile_cmd(uri: &Uri, cfg: &Config) -> CompileCommand {
 pub fn apply_compile_cmd(
     cfg: &Config,
     diagnostics: &mut Vec<Diagnostic>,
+    uri: &Uri,
     compile_cmd: &CompileCommand,
 ) {
     // TODO: Consolidate this logic, a little tricky because we need to capture
@@ -378,7 +379,11 @@ pub fn apply_compile_cmd(
                 };
 
                 for compiler in compilers {
-                    match Command::new(compiler).args(flags).output() {
+                    match Command::new(compiler) // default or user-supplied compiler
+                        .args(flags) // user supplied args
+                        .arg(uri.path().as_str()) // the source file in question
+                        .output()
+                    {
                         Ok(result) => {
                             if let Ok(output_str) = String::from_utf8(result.stderr) {
                                 get_diagnostics(diagnostics, &output_str);
@@ -435,12 +440,49 @@ pub fn apply_compile_cmd(
 ///
 /// # Panics
 fn get_diagnostics(diagnostics: &mut Vec<Diagnostic>, tool_output: &str) {
-    static DIAG_REG: Lazy<Regex> = Lazy::new(|| Regex::new(r"^.*:(\d+):\s+(.*)$").unwrap());
+    static DIAG_REG_LINE_COLUMN: Lazy<Regex> =
+        Lazy::new(|| Regex::new(r"^.*:(\d+):(\d+):\s+(.*)$").unwrap());
+    static DIAG_REG_LINE_ONLY: Lazy<Regex> =
+        Lazy::new(|| Regex::new(r"^.*:(\d+):\s+(.*)$").unwrap());
 
+    // TODO: Consolidate/ clean this up...regexes are hard
     for line in tool_output.lines() {
-        if let Some(caps) = DIAG_REG.captures(line) {
+        // first check if we have an error message of the form:
+        // :<line>:<column>: <error message here>
+        if let Some(caps) = DIAG_REG_LINE_COLUMN.captures(line) {
+            // the entire capture is always at the 0th index,
+            // then we have 3 more explicit capture groups
+            if caps.len() == 4 {
+                let Ok(line_number) = caps[1].parse::<u32>() else {
+                    continue;
+                };
+                let Ok(column_number) = caps[2].parse::<u32>() else {
+                    continue;
+                };
+                let err_msg = &caps[3];
+                diagnostics.push(Diagnostic::new_simple(
+                    Range {
+                        start: Position {
+                            line: line_number - 1,
+                            character: column_number,
+                        },
+                        end: Position {
+                            line: line_number - 1,
+                            character: column_number,
+                        },
+                    },
+                    String::from(err_msg),
+                ));
+                continue;
+            }
+        }
+        // if the above check for lines *and* columns didn't match, see if we
+        // have an error message of the form:
+        // :<line>: <error message here>
+        if let Some(caps) = DIAG_REG_LINE_ONLY.captures(line) {
             if caps.len() < 3 {
-                // the entire capture is always at the 0th index
+                // the entire capture is always at the 0th index,
+                // then we have 2 more explicit capture groups
                 continue;
             }
             let Ok(line_number) = caps[1].parse::<u32>() else {
