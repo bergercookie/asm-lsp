@@ -366,10 +366,6 @@ pub fn apply_compile_cmd(
     if let Some(ref args) = compile_cmd.arguments {
         match args {
             CompileArgs::Flags(flags) => {
-                if flags.is_empty() {
-                    return;
-                }
-
                 let compilers = if let Some(ref compiler) = cfg.opts.compiler {
                     // If the user specified a compiler in their config, use it
                     vec![compiler.as_str()]
