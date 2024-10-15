@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.86"
-asm-lsp = {path = "../" }
-bincode = "1.3.3"
+bincode.workspace = true
+anyhow.workspace = true
+serde.workspace = true
+asm-lsp = { path = "../asm-lsp" }
 clap = { version = "4.5.8", features = ["derive"] }
-serde = { version = "1.0.204", features = ["derive"] }
