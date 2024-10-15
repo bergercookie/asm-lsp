@@ -72,7 +72,7 @@ arm = false
 riscv = false
 
 [opts]
-#compiler = "gcc"
+compiler = "zig" # need "cc" as the first argument in `compile_flags.txt`
 diagnostics = true
 default_diagnostics = true
 ```
