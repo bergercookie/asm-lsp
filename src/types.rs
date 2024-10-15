@@ -874,6 +874,7 @@ pub struct Config {
     pub assemblers: Assemblers,
     pub instruction_sets: InstructionSets,
     pub opts: ConfigOptions,
+    pub client: Option<LspClient>,
 }
 
 impl Default for Config {
@@ -883,8 +884,14 @@ impl Default for Config {
             assemblers: Assemblers::default(),
             instruction_sets: InstructionSets::default(),
             opts: ConfigOptions::default(),
+            client: None,
         }
     }
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum LspClient {
+    Helix,
 }
 
 // Instruction Set Architecture -------------------------------------------------------------------

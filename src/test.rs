@@ -46,6 +46,7 @@ mod tests {
                 diagnostics: None,
                 default_diagnostics: None,
             },
+            client: None,
         }
     }
 
@@ -71,6 +72,7 @@ mod tests {
                 diagnostics: None,
                 default_diagnostics: None,
             },
+            client: None,
         }
     }
 
@@ -96,6 +98,7 @@ mod tests {
                 diagnostics: None,
                 default_diagnostics: None,
             },
+            client: None,
         }
     }
 
@@ -121,6 +124,7 @@ mod tests {
                 diagnostics: None,
                 default_diagnostics: None,
             },
+            client: None,
         }
     }
 
@@ -146,6 +150,7 @@ mod tests {
                 diagnostics: None,
                 default_diagnostics: None,
             },
+            client: None,
         }
     }
 
@@ -171,6 +176,7 @@ mod tests {
                 diagnostics: None,
                 default_diagnostics: None,
             },
+            client: None,
         }
     }
 
@@ -196,6 +202,7 @@ mod tests {
                 diagnostics: None,
                 default_diagnostics: None,
             },
+            client: None,
         }
     }
 
@@ -221,6 +228,7 @@ mod tests {
                 diagnostics: None,
                 default_diagnostics: None,
             },
+            client: None,
         }
     }
 

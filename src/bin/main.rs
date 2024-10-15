@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 use std::path::PathBuf;
 
+use asm_lsp::types::LspClient;
+
 use asm_lsp::handle::{
     handle_completion_request, handle_diagnostics, handle_did_change_text_document_notification,
     handle_did_close_text_document_notification, handle_did_open_text_document_notification,
@@ -100,12 +102,18 @@ pub fn main() -> Result<()> {
     let server_capabilities = serde_json::to_value(capabilities).unwrap();
     let initialization_params = connection.initialize(server_capabilities)?;
 
-    let mut names_to_info = NameToInfoMaps::default();
     let params: InitializeParams = serde_json::from_value(initialization_params.clone()).unwrap();
     info!("Client initialization params: {:?}", params);
-    let config = get_config(&params);
+    let mut config = get_config(&params);
     info!("Server Configuration: {:?}", config);
+    if let Some(ref client_info) = params.client_info {
+        if client_info.name.eq("helix") {
+            info!("Helix LSP client detected");
+            config.client = Some(LspClient::Helix);
+        }
+    }
 
+    let mut names_to_info = NameToInfoMaps::default();
     // create a map of &Instruction_name -> &Instruction - Use that in user queries
     // The Instruction(s) themselves are stored in a vector and we only keep references to the
     // former map
@@ -447,7 +455,14 @@ fn main_loop(
                         start.elapsed().as_millis()
                     );
                 } else if let Ok((id, params)) = cast_req::<GotoDefinition>(req.clone()) {
-                    handle_goto_def_request(connection, id, &params, &text_store, &mut tree_store)?;
+                    handle_goto_def_request(
+                        connection,
+                        id,
+                        &params,
+                        config,
+                        &text_store,
+                        &mut tree_store,
+                    )?;
                     info!(
                         "Goto definition request serviced in {}ms",
                         start.elapsed().as_millis()
@@ -457,6 +472,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
+                        config,
                         &text_store,
                         &mut tree_store,
                     )?;
@@ -469,6 +485,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
+                        config,
                         &text_store,
                         &mut tree_store,
                         &names_to_info.instructions,
@@ -482,6 +499,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
+                        config,
                         &text_store,
                         &mut tree_store,
                     )?;

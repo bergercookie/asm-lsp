@@ -20,7 +20,8 @@ use tree_sitter::Parser;
 use crate::{
     apply_compile_cmd, get_comp_resp, get_default_compile_cmd, get_document_symbols,
     get_goto_def_resp, get_hover_resp, get_ref_resp, get_sig_help_resp, get_word_from_pos_params,
-    text_doc_change_to_ts_edit, Config, NameToInfoMaps, NameToInstructionMap, TreeEntry, TreeStore,
+    send_empty_resp, text_doc_change_to_ts_edit, Config, NameToInfoMaps, NameToInstructionMap,
+    TreeEntry, TreeStore,
 };
 
 /// Handles hover requests
@@ -43,20 +44,12 @@ pub fn handle_hover_request(
     names_to_info: &NameToInfoMaps,
     include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
 ) -> Result<()> {
-    let empty_resp = Response {
-        id: id.clone(),
-        result: None,
-        error: None,
-    };
-
     let word = if let Some(doc) =
         text_store.get_document(&params.text_document_position_params.text_document.uri)
     {
         get_word_from_pos_params(doc, &params.text_document_position_params)
     } else {
-        return Ok(connection
-            .sender
-            .send(Message::Response(empty_resp.clone()))?);
+        return send_empty_resp(connection, id, config);
     };
 
     if let Some(hover_resp) = get_hover_resp(
@@ -79,7 +72,7 @@ pub fn handle_hover_request(
         return Ok(connection.sender.send(Message::Response(result))?);
     }
 
-    Ok(connection.sender.send(Message::Response(empty_resp))?)
+    send_empty_resp(connection, id, config)
 }
 
 /// Handles completion requests
@@ -126,13 +119,7 @@ pub fn handle_completion_request(
         }
     }
 
-    let empty_resp = Response {
-        id,
-        result: None,
-        error: None,
-    };
-
-    Ok(connection.sender.send(Message::Response(empty_resp))?)
+    send_empty_resp(connection, id, config)
 }
 
 /// Handles go to definition requests
@@ -148,6 +135,7 @@ pub fn handle_goto_def_request(
     connection: &Connection,
     id: RequestId,
     params: &GotoDefinitionParams,
+    config: &Config,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
 ) -> Result<()> {
@@ -167,13 +155,7 @@ pub fn handle_goto_def_request(
         }
     }
 
-    let empty_resp = Response {
-        id,
-        result: None,
-        error: None,
-    };
-
-    Ok(connection.sender.send(Message::Response(empty_resp))?)
+    send_empty_resp(connection, id, config)
 }
 
 /// Handles document symbols requests
@@ -189,6 +171,7 @@ pub fn handle_document_symbols_request(
     connection: &Connection,
     id: RequestId,
     params: &DocumentSymbolParams,
+    config: &Config,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
 ) -> Result<()> {
@@ -208,13 +191,7 @@ pub fn handle_document_symbols_request(
         }
     }
 
-    let empty_resp = Response {
-        id,
-        result: None,
-        error: None,
-    };
-
-    Ok(connection.sender.send(Message::Response(empty_resp))?)
+    send_empty_resp(connection, id, config)
 }
 
 /// Handles signature help requests
@@ -230,6 +207,7 @@ pub fn handle_signature_help_request(
     connection: &Connection,
     id: RequestId,
     params: &SignatureHelpParams,
+    config: &Config,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
     names_to_instructions: &NameToInstructionMap,
@@ -257,13 +235,7 @@ pub fn handle_signature_help_request(
         }
     }
 
-    let empty_resp = Response {
-        id,
-        result: None,
-        error: None,
-    };
-
-    Ok(connection.sender.send(Message::Response(empty_resp))?)
+    send_empty_resp(connection, id, config)
 }
 
 /// Handles reference requests
@@ -279,6 +251,7 @@ pub fn handle_references_request(
     connection: &Connection,
     id: RequestId,
     params: &ReferenceParams,
+    config: &Config,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
 ) -> Result<()> {
@@ -299,13 +272,7 @@ pub fn handle_references_request(
         }
     }
 
-    let empty_resp = Response {
-        id,
-        result: None,
-        error: None,
-    };
-
-    Ok(connection.sender.send(Message::Response(empty_resp))?)
+    send_empty_resp(connection, id, config)
 }
 
 /// Produces diagnostics and sends a `PublishDiagnostics` notification to the client

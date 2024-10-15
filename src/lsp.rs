@@ -10,6 +10,7 @@ use anyhow::{anyhow, Result};
 use compile_commands::{CompilationDatabase, CompileArgs, CompileCommand, SourceFile};
 use dirs::config_dir;
 use log::{error, info, log, log_enabled, warn};
+use lsp_server::{Connection, Message, RequestId, Response};
 use lsp_textdocument::{FullTextDocument, TextDocuments};
 use lsp_types::{
     CompletionItem, CompletionItemKind, CompletionList, CompletionParams, CompletionTriggerKind,
@@ -27,9 +28,30 @@ use tree_sitter::InputEdit;
 
 use crate::types::Column;
 use crate::{
-    Arch, ArchOrAssembler, Assembler, Completable, Config, Hoverable, Instruction,
+    Arch, ArchOrAssembler, Assembler, Completable, Config, Hoverable, Instruction, LspClient,
     NameToInstructionMap, TreeEntry, TreeStore,
 };
+
+/// Sends an empty, non-error response to the lsp client via `connection`
+///
+/// # Errors
+///
+/// Returns `Err` if the response fails to send via `connection`
+pub fn send_empty_resp(connection: &Connection, id: RequestId, config: &Config) -> Result<()> {
+    let empty_resp = Response {
+        id,
+        result: None,
+        error: None,
+    };
+
+    // Helix shuts the server down when the above empty response is sent,
+    // so send nothing in its case
+    if config.client == Some(LspClient::Helix) {
+        Ok(())
+    } else {
+        Ok(connection.sender.send(Message::Response(empty_resp))?)
+    }
+}
 
 /// Find the start and end indices of a word inside the given line
 /// Borrowed from RLS
@@ -91,9 +113,6 @@ pub fn get_word_from_file_params(pos_params: &TextDocumentPositionParams) -> Res
 }
 
 /// Returns a string slice to the word in doc specified by the position params
-///
-/// The `extra_chars` param allows specifying extra chars to be considered as
-/// valid word chars, in addition to the default alphanumeric, '_', and '.' chars
 #[must_use]
 pub fn get_word_from_pos_params<'a>(
     doc: &'a FullTextDocument,
