@@ -344,7 +344,7 @@ pub fn handle_diagnostics(
     let mut diagnostics: Vec<Diagnostic> = Vec::new();
     for entry in source_entries {
         has_entries = true;
-        apply_compile_cmd(cfg, &mut diagnostics, entry);
+        apply_compile_cmd(cfg, &mut diagnostics, uri, entry);
     }
 
     // If no user-provided entries corresponded to the file, just try out
@@ -355,7 +355,12 @@ pub fn handle_diagnostics(
             "No applicable user-provided commands for {}. Applying default compile command",
             uri.path().as_str()
         );
-        apply_compile_cmd(cfg, &mut diagnostics, &get_default_compile_cmd(uri, cfg));
+        apply_compile_cmd(
+            cfg,
+            &mut diagnostics,
+            uri,
+            &get_default_compile_cmd(uri, cfg),
+        );
     }
 
     let params = PublishDiagnosticsParams {
