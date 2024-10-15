@@ -14,7 +14,6 @@ repository = "https://github.com/bergercookie/asm-lsp"
 readme = "README.md"
 keywords = ["assembly", "language-server", "lsp", "tooling", "x86"]
 categories = ["command-line-utilities", "development-tools"]
-publish = true
 exclude = ["samples/*", "demo/*"]
 license = "BSD-2-Clause"
 
