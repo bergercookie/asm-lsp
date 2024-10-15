@@ -477,7 +477,7 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
                 QName(b"instructionsection") => {
                     for attr in e.attributes() {
                         let Attribute { key, value } = attr.unwrap();
-                        if let Ok("title") = str::from_utf8(key.into_inner()) {
+                        if Ok("title") == str::from_utf8(key.into_inner()) {
                             alias.title = (unsafe { str::from_utf8_unchecked(&value) }).to_string();
                         }
                     }
@@ -501,20 +501,18 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
                 }
             }
             Ok(Event::Empty(ref e)) => {
-                if let QName(b"docvar") = e.name() {
+                if QName(b"docvar") == e.name() {
                     let mut alias_next = false;
                     for attr in e.attributes() {
                         let Attribute { key, value } = attr.unwrap();
-                        if alias_next {
-                            if let Ok("value") = str::from_utf8(key.into_inner()) {
-                                aliased_instr = Some(str::from_utf8(&value)?.to_owned());
-                                break;
-                            }
+                        if alias_next && Ok("value") == str::from_utf8(key.into_inner()) {
+                            aliased_instr = Some(str::from_utf8(&value)?.to_owned());
+                            break;
                         }
-                        if let Ok("key") = str::from_utf8(key.into_inner()) {
-                            if let Ok("alias_mnemonic") = str::from_utf8(&value) {
-                                alias_next = true;
-                            }
+                        if Ok("key") == str::from_utf8(key.into_inner())
+                            && Ok("alias_mnemonic") == str::from_utf8(&value)
+                        {
+                            alias_next = true;
                         }
                     }
                 }
@@ -584,7 +582,7 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
             },
             Ok(Event::Empty(ref e)) => {
                 // e.g. <docvar key="mnemonic" value="ABS"/>
-                if let QName(b"docvar") = e.name() {
+                if QName(b"docvar") == e.name() {
                     // There are multiple entries like this in each opcode file, but
                     // *all* of them are the same within each file, so it doesn't matter which
                     // one we use
@@ -592,7 +590,7 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
                         let mut mnemonic_next = false;
                         for attr in e.attributes() {
                             let Attribute { key: _, value } = attr.unwrap();
-                            if let Ok("mnemonic") = str::from_utf8(&value) {
+                            if Ok("mnemonic") == str::from_utf8(&value) {
                                 mnemonic_next = true;
                             } else if mnemonic_next {
                                 let name =
@@ -662,6 +660,7 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
 ///
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
+#[allow(clippy::too_many_lines)]
 pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
     // initialise the instruction set
     let mut instructions_map = HashMap::<String, Instruction>::new();
@@ -683,7 +682,7 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                     QName(b"InstructionSet") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if let Ok("name") = str::from_utf8(key.into_inner()) {
+                            if Ok("name") == str::from_utf8(key.into_inner()) {
                                 arch = Arch::from_str(unsafe { str::from_utf8_unchecked(&value) })
                                     .ok();
                             } else {
@@ -1053,50 +1052,6 @@ pub fn populate_name_to_instruction_map<'instruction>(
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use mockito::ServerOpts;
-
-    use crate::parser::{get_cache_dir, populate_instructions};
-    #[test]
-    fn test_populate_instructions() {
-        let mut server = mockito::Server::new_with_opts(ServerOpts {
-            port: 8080,
-            ..Default::default()
-        });
-
-        let _ = server
-            .mock("GET", "/x86/")
-            .with_status(200)
-            .with_header("content-type", "text/html")
-            .with_body(include_str!(
-                "../docs_store/instr_info_cache/x86_instr_docs.html"
-            ))
-            .create();
-
-        // Need to clear the cache file (if there is one)
-        // to ensure a request is made for each test call
-        let mut x86_cache_path = get_cache_dir().unwrap();
-        x86_cache_path.push("x86_instr_docs.html");
-        if x86_cache_path.is_file() {
-            std::fs::remove_file(&x86_cache_path).unwrap();
-        }
-        let xml_conts_x86 = include_str!("../docs_store/opcodes/raw/x86.xml");
-        assert!(populate_instructions(xml_conts_x86).is_ok());
-
-        if x86_cache_path.is_file() {
-            std::fs::remove_file(&x86_cache_path).unwrap();
-        }
-        let xml_conts_x86_64 = include_str!("../docs_store/opcodes/raw/x86_64.xml");
-        assert!(populate_instructions(xml_conts_x86_64).is_ok());
-
-        // Clean things up so we don't have an empty cache file
-        if x86_cache_path.is_file() {
-            std::fs::remove_file(&x86_cache_path).unwrap();
-        }
-    }
-}
-
 /// Parse the provided XML contents and return a vector of all the registers based on that.
 /// If parsing fails, the appropriate error will be returned instead.
 ///
@@ -1112,6 +1067,7 @@ mod tests {
 ///
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
+#[allow(clippy::too_many_lines)]
 pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
     let mut registers_map = HashMap::<String, Register>::new();
 
@@ -1132,7 +1088,7 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
                     QName(b"InstructionSet") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if let Ok("name") = str::from_utf8(key.into_inner()) {
+                            if Ok("name") == str::from_utf8(key.into_inner()) {
                                 arch = Arch::from_str(unsafe { str::from_utf8_unchecked(&value) })
                                     .ok();
                             }
@@ -1184,7 +1140,6 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
                             }
                         }
                     }
-                    QName(b"Flags") => {} // it's just a wrapper...
                     // Actual flag bit info
                     QName(b"Flag") => {
                         curr_bit_flag = RegisterBitInfo::default();
@@ -1327,9 +1282,9 @@ pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive
             }
             // end event --------------------------------------------------------------------------
             Ok(Event::End(ref e)) => {
-                if let QName(b"directive") = e.name() {
+                if QName(b"directive") == e.name() {
                     directives_map.insert(curr_directive.name.clone(), curr_directive.clone());
-                } else if let QName(b"description") = e.name() {
+                } else if QName(b"description") == e.name() {
                     in_desc = false;
                 }
             }
@@ -1381,7 +1336,7 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
                     QName(b"Assembler") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if let Ok("name") = str::from_utf8(key.into_inner()) {
+                            if Ok("name") == str::from_utf8(key.into_inner()) {
                                 assembler = Assembler::from_str(unsafe {
                                     str::from_utf8_unchecked(&value)
                                 })
@@ -1426,11 +1381,10 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
                             }
                         }
                     }
-                    QName(b"Signatures") => {} // it's just a wrapper...
                     QName(b"Signature") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if let Ok("sig") = str::from_utf8(key.into_inner()) {
+                            if Ok("sig") == str::from_utf8(key.into_inner()) {
                                 let sig = String::from(unsafe { str::from_utf8_unchecked(&value) });
                                 curr_directive
                                     .signatures
@@ -1443,7 +1397,7 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
             }
             // end event --------------------------------------------------------------------------
             Ok(Event::End(ref e)) => {
-                if let QName(b"Directive") = e.name() {
+                if QName(b"Directive") == e.name() {
                     // finish directive
                     directives_map.insert(curr_directive.name.clone(), curr_directive.clone());
                 }
@@ -1546,9 +1500,11 @@ fn get_docs_body(x86_online_docs: &str) -> Option<String> {
     Some(body)
 }
 
-/// Searches for the asm-lsp cache directory. First checks for the  `ASM_LSP_CACHE_DIR`
-/// environment variable. If this variable is present and points to a valid directory,
-/// this path is returned. Otherwise, the function returns `~/.config/asm-lsp/`
+/// Searches for the asm-lsp cache directory.
+///
+/// - First checks for the `ASM_LSP_CACHE_DIR` environment variable. If this variable
+///   is present and points to a valid directory, this path is returned.
+/// - Otherwise, the function returns `~/.config/asm-lsp/`
 ///
 /// # Errors
 ///
@@ -1623,6 +1579,50 @@ fn set_x86_docs_cache(contents: &str, x86_cache_path: &PathBuf) {
                 "Failed to create the cache file {} - Error: {e}.",
                 x86_cache_path.display()
             );
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use mockito::ServerOpts;
+
+    use crate::parser::{get_cache_dir, populate_instructions};
+    #[test]
+    fn test_populate_instructions() {
+        let mut server = mockito::Server::new_with_opts(ServerOpts {
+            port: 8080,
+            ..Default::default()
+        });
+
+        let _ = server
+            .mock("GET", "/x86/")
+            .with_status(200)
+            .with_header("content-type", "text/html")
+            .with_body(include_str!(
+                "../docs_store/instr_info_cache/x86_instr_docs.html"
+            ))
+            .create();
+
+        // Need to clear the cache file (if there is one)
+        // to ensure a request is made for each test call
+        let mut x86_cache_path = get_cache_dir().unwrap();
+        x86_cache_path.push("x86_instr_docs.html");
+        if x86_cache_path.is_file() {
+            std::fs::remove_file(&x86_cache_path).unwrap();
+        }
+        let xml_conts_x86 = include_str!("../docs_store/opcodes/raw/x86.xml");
+        assert!(populate_instructions(xml_conts_x86).is_ok());
+
+        if x86_cache_path.is_file() {
+            std::fs::remove_file(&x86_cache_path).unwrap();
+        }
+        let xml_conts_x86_64 = include_str!("../docs_store/opcodes/raw/x86_64.xml");
+        assert!(populate_instructions(xml_conts_x86_64).is_ok());
+
+        // Clean things up so we don't have an empty cache file
+        if x86_cache_path.is_file() {
+            std::fs::remove_file(&x86_cache_path).unwrap();
         }
     }
 }

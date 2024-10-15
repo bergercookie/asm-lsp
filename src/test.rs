@@ -260,7 +260,7 @@ mod tests {
     }
 
     impl GlobalInfo {
-        fn new() -> Self {
+        const fn new() -> Self {
             Self {
                 x86_instructions: Vec::new(),
                 x86_64_instructions: Vec::new(),
@@ -407,10 +407,10 @@ mod tests {
             Vec::new()
         };
 
-        return Ok(info);
+        Ok(info)
     }
 
-    fn init_test_store<'a>(info: &'a GlobalInfo) -> Result<GlobalVars<'a>> {
+    fn init_test_store(info: &GlobalInfo) -> GlobalVars<'_> {
         let mut store = GlobalVars::new();
 
         let mut x86_cache_path = get_cache_dir().unwrap();
@@ -512,12 +512,12 @@ mod tests {
             Some(CompletionItemKind::OPERATOR),
         );
 
-        return Ok(store);
+        store
     }
 
     fn test_hover(source: &str, expected: &str, config: &Config) {
         let info = init_global_info(config).expect("Failed to load info");
-        let globals = init_test_store(&info).expect("Failed to initialize test store");
+        let globals = init_test_store(&info);
 
         let mut position: Option<Position> = None;
         for (line_num, line) in source.lines().enumerate() {
@@ -580,7 +580,7 @@ mod tests {
         let resp = get_hover_resp(
             &hover_params,
             config,
-            &word,
+            word,
             &text_store,
             &mut tree_store,
             &globals.names_to_instructions,
@@ -610,7 +610,7 @@ mod tests {
         trigger_character: Option<String>,
     ) {
         let info = init_global_info(config).expect("Failed to load info");
-        let globals = init_test_store(&info).expect("Failed to initialize test store");
+        let globals = init_test_store(&info);
 
         let source_code = source.replace("<cursor>", "");
 
@@ -822,13 +822,13 @@ Type: General Purpose Register",
     #[test]
     fn handle_autocomplete_it_provides_label_comps_as_instruction_arg() {
         test_label_autocomplete(
-            r#"
+            r"
 foo:
         mov eax, 0
 
 bar:
         call f<cursor>
-            "#,
+            ",
             CompletionTriggerKind::INVOKED,
             None,
         );
@@ -842,27 +842,27 @@ bar:
             "#,
             r#"`.string "(a & 0x0F): "`"#,
             &gas_test_config(),
-        )
+        );
     }
     #[test]
     fn handle_hover_gas_it_provides_label_data_2() {
         test_hover(
-            r#"data_ite<cursor>ms:
+            r"data_ite<cursor>ms:
 	.long 1, 2, 3
-            "#,
-            r#"`.long 1, 2, 3`"#,
+            ",
+            r"`.long 1, 2, 3`",
             &gas_test_config(),
-        )
+        );
     }
     #[test]
     fn handle_hover_gas_it_provides_label_data_3() {
         test_hover(
-            r#"data_ite<cursor>ms:
+            r"data_ite<cursor>ms:
 	.float 1.1, 2.2, 3.3
-            "#,
-            r#"`.float 1.1, 2.2, 3.3`"#,
+            ",
+            r"`.float 1.1, 2.2, 3.3`",
             &gas_test_config(),
-        )
+        );
     }
 
     // Demangling
@@ -1267,7 +1267,7 @@ More info: https://sourceware.org/binutils/docs-2.41/as/Global.html",
     #[test]
     fn handle_autocomplete_masm_it_provides_directive_completes_1() {
         test_directive_autocomplete(
-            r#"	ADD<cursor>"#,
+            r"	ADD<cursor>",
             &masm_test_config(),
             CompletionTriggerKind::INVOKED,
             None,
@@ -1326,7 +1326,7 @@ MASM64: Generates a UWOP_ALLOC_SMALL or a UWOP_ALLOC_LARGE with the specified si
     #[test]
     fn handle_autocomplete_nasm_it_provides_directive_completes_1() {
         test_directive_autocomplete(
-            r#"	EQ<cursor>"#,
+            r"	EQ<cursor>",
             &nasm_test_config(),
             CompletionTriggerKind::INVOKED,
             None,
@@ -1981,7 +1981,7 @@ Width: 8 bits",
         let mut raw_vec = populate_registers(x86_regs_raw).unwrap();
 
         // HACK: Windows line endings...
-        for reg in raw_vec.iter_mut() {
+        for reg in &mut raw_vec {
             if let Some(descr) = &reg.description {
                 reg.description = Some(descr.replace('\r', ""));
             }
@@ -1992,18 +1992,19 @@ Width: 8 bits",
         }
         for reg in raw_vec {
             let entry = cmp_map.get_mut(&reg).unwrap();
-            if *entry == 0 {
-                panic!(
-                    "Expected at least one more instruction entry for {:?}, but the count is 0",
-                    reg
-                );
-            }
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {:?}, but the count is 0",
+                reg
+            );
             *entry -= 1;
         }
-        for (reg, count) in cmp_map.iter() {
-            if *count != 0 {
-                panic!("Expected count to be 0, found {count} for {:?}", reg);
-            }
+        for (reg, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {:?}",
+                reg
+            );
         }
     }
     #[test]
@@ -2016,7 +2017,7 @@ Width: 8 bits",
         let mut raw_vec = populate_registers(x86_64_regs_raw).unwrap();
 
         // HACK: Windows line endings...
-        for reg in raw_vec.iter_mut() {
+        for reg in &mut raw_vec {
             if let Some(descr) = &reg.description {
                 reg.description = Some(descr.replace('\r', ""));
             }
@@ -2027,18 +2028,19 @@ Width: 8 bits",
         }
         for reg in raw_vec {
             let entry = cmp_map.get_mut(&reg).unwrap();
-            if *entry == 0 {
-                panic!(
-                    "Expected at least one more instruction entry for {:?}, but the count is 0",
-                    reg
-                );
-            }
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {:?}, but the count is 0",
+                reg
+            );
             *entry -= 1;
         }
-        for (reg, count) in cmp_map.iter() {
-            if *count != 0 {
-                panic!("Expected count to be 0, found {count} for {:?}", reg);
-            }
+        for (reg, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {:?}",
+                reg
+            );
         }
     }
     #[test]
@@ -2051,7 +2053,7 @@ Width: 8 bits",
         let mut raw_vec = populate_registers(arm_regs_raw).unwrap();
 
         // HACK: Windows line endings...
-        for reg in raw_vec.iter_mut() {
+        for reg in &mut raw_vec {
             if let Some(descr) = &reg.description {
                 reg.description = Some(descr.replace('\r', ""));
             }
@@ -2062,18 +2064,19 @@ Width: 8 bits",
         }
         for reg in raw_vec {
             let entry = cmp_map.get_mut(&reg).unwrap();
-            if *entry == 0 {
-                panic!(
-                    "Expected at least one more instruction entry for {:?}, but the count is 0",
-                    reg
-                );
-            }
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {:?}, but the count is 0",
+                reg
+            );
             *entry -= 1;
         }
-        for (reg, count) in cmp_map.iter() {
-            if *count != 0 {
-                panic!("Expected count to be 0, found {count} for {:?}", reg);
-            }
+        for (reg, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {:?}",
+                reg
+            );
         }
     }
     #[test]
@@ -2090,18 +2093,19 @@ Width: 8 bits",
         }
         for reg in raw_vec {
             let entry = cmp_map.get_mut(&reg).unwrap();
-            if *entry == 0 {
-                panic!(
-                    "Expected at least one more instruction entry for {:?}, but the count is 0",
-                    reg
-                );
-            }
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {:?}, but the count is 0",
+                reg
+            );
             *entry -= 1;
         }
-        for (reg, count) in cmp_map.iter() {
-            if *count != 0 {
-                panic!("Expected count to be 0, found {count} for {:?}", reg);
-            }
+        for (reg, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {:?}",
+                reg
+            );
         }
     }
     #[test]
@@ -2115,10 +2119,10 @@ Width: 8 bits",
 
         // HACK: To work around the difference in extra info urls between testing
         // and production
-        for instr in ser_vec.iter_mut() {
+        for instr in &mut ser_vec {
             instr.url = None;
         }
-        for instr in raw_vec.iter_mut() {
+        for instr in &mut raw_vec {
             instr.url = None;
         }
 
@@ -2127,18 +2131,19 @@ Width: 8 bits",
         }
         for instr in raw_vec {
             let entry = cmp_map.get_mut(&instr).unwrap();
-            if *entry == 0 {
-                panic!(
-                    "Expected at least one more instruction entry for {:?}, but the count is 0",
-                    instr
-                );
-            }
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {:?}, but the count is 0",
+                instr
+            );
             *entry -= 1;
         }
-        for (instr, count) in cmp_map.iter() {
-            if *count != 0 {
-                panic!("Expected count to be 0, found {count} for {:?}", instr);
-            }
+        for (instr, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {:?}",
+                instr
+            );
         }
     }
     #[test]
@@ -2152,10 +2157,10 @@ Width: 8 bits",
 
         // HACK: To work around the difference in extra info urls between testing
         // and production
-        for instr in ser_vec.iter_mut() {
+        for instr in &mut ser_vec {
             instr.url = None;
         }
-        for instr in raw_vec.iter_mut() {
+        for instr in &mut raw_vec {
             instr.url = None;
         }
 
@@ -2164,18 +2169,19 @@ Width: 8 bits",
         }
         for instr in raw_vec {
             let entry = cmp_map.get_mut(&instr).unwrap();
-            if *entry == 0 {
-                panic!(
-                    "Expected at least one more instruction entry for {:?}, but the count is 0",
-                    instr
-                );
-            }
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {:?}, but the count is 0",
+                instr
+            );
             *entry -= 1;
         }
-        for (instr, count) in cmp_map.iter() {
-            if *count != 0 {
-                panic!("Expected count to be 0, found {count} for {:?}", instr);
-            }
+        for (instr, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {:?}",
+                instr
+            );
         }
     }
     #[test]
@@ -2194,18 +2200,19 @@ Width: 8 bits",
         }
         for instr in raw_vec {
             let entry = cmp_map.get_mut(&instr).unwrap();
-            if *entry == 0 {
-                panic!(
-                    "Expected at least one more instruction entry for {:?}, but the count is 0",
-                    instr
-                );
-            }
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {:?}, but the count is 0",
+                instr
+            );
             *entry -= 1;
         }
-        for (instr, count) in cmp_map.iter() {
-            if *count != 0 {
-                panic!("Expected count to be 0, found {count} for {:?}", instr);
-            }
+        for (instr, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {:?}",
+                instr
+            );
         }
     }
     #[test]
@@ -2222,18 +2229,19 @@ Width: 8 bits",
         }
         for instr in raw_vec {
             let entry = cmp_map.get_mut(&instr).unwrap();
-            if *entry == 0 {
-                panic!(
-                    "Expected at least one more instruction entry for {:?}, but the count is 0",
-                    instr
-                );
-            }
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {:?}, but the count is 0",
+                instr
+            );
             *entry -= 1;
         }
-        for (instr, count) in cmp_map.iter() {
-            if *count != 0 {
-                panic!("Expected count to be 0, found {count} for {:?}", instr);
-            }
+        for (instr, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {:?}",
+                instr
+            );
         }
     }
     #[test]
@@ -2250,18 +2258,19 @@ Width: 8 bits",
         }
         for dir in raw_vec {
             let entry = cmp_map.get_mut(&dir).unwrap();
-            if *entry == 0 {
-                panic!(
-                    "Expected at least one more instruction entry for {:?}, but the count is 0",
-                    dir
-                );
-            }
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {:?}, but the count is 0",
+                dir
+            );
             *entry -= 1;
         }
-        for (dir, count) in cmp_map.iter() {
-            if *count != 0 {
-                panic!("Expected count to be 0, found {count} for {:?}", dir);
-            }
+        for (dir, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {:?}",
+                dir
+            );
         }
     }
     #[test]
@@ -2278,18 +2287,19 @@ Width: 8 bits",
         }
         for dir in raw_vec {
             let entry = cmp_map.get_mut(&dir).unwrap();
-            if *entry == 0 {
-                panic!(
-                    "Expected at least one more instruction entry for {:?}, but the count is 0",
-                    dir
-                );
-            }
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {:?}, but the count is 0",
+                dir
+            );
             *entry -= 1;
         }
-        for (dir, count) in cmp_map.iter() {
-            if *count != 0 {
-                panic!("Expected count to be 0, found {count} for {:?}", dir);
-            }
+        for (dir, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {:?}",
+                dir
+            );
         }
     }
     #[test]
@@ -2306,18 +2316,19 @@ Width: 8 bits",
         }
         for dir in raw_vec {
             let entry = cmp_map.get_mut(&dir).unwrap();
-            if *entry == 0 {
-                panic!(
-                    "Expected at least one more instruction entry for {:?}, but the count is 0",
-                    dir
-                );
-            }
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {:?}, but the count is 0",
+                dir
+            );
             *entry -= 1;
         }
-        for (dir, count) in cmp_map.iter() {
-            if *count != 0 {
-                panic!("Expected count to be 0, found {count} for {:?}", dir);
-            }
+        for (dir, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {:?}",
+                dir
+            );
         }
     }
 }

@@ -35,7 +35,17 @@ use log::{error, info};
 use lsp_server::{Connection, Message, Notification, Request, RequestId};
 use lsp_textdocument::TextDocuments;
 
-// main -------------------------------------------------------------------------------------------
+/// Entry point of the server. Connects to the client, loads documentation resources,
+/// and then enters the main loop
+///
+/// # Errors
+///
+/// Returns `Err` if the server fails to connect to the lsp client
+///
+/// # Panics
+///
+/// Panics if JSON serialization of the server capabilities fails
+#[allow(clippy::too_many_lines)]
 pub fn main() -> Result<()> {
     // initialisation -----------------------------------------------------------------------------
     // Set up logging. Because `stdio_transport` gets a lock on stdout and stdin, we must have our
@@ -401,7 +411,7 @@ pub fn main() -> Result<()> {
     Ok(())
 }
 
-#[allow(clippy::too_many_arguments)]
+#[allow(clippy::too_many_arguments, clippy::too_many_lines)]
 fn main_loop(
     connection: &Connection,
     config: &Config,

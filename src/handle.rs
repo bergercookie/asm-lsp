@@ -277,7 +277,6 @@ pub fn handle_references_request(
 
 /// Produces diagnostics and sends a `PublishDiagnostics` notification to the client
 /// Diagnostics are only produced for the file specified by `uri`
-/// Returns 'Err' if the response fails to send via `connection`
 ///
 /// # Errors
 ///
