@@ -1,6 +1,7 @@
 pub mod handle;
 pub mod lsp;
 pub mod parser;
+pub mod str;
 mod test;
 pub mod types;
 

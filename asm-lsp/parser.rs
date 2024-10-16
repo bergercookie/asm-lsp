@@ -462,7 +462,7 @@ pub fn populate_arm_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
 fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, String)>> {
-    // iterate through the XML --------------------------------------------------------------------
+    // iterate through the XML
     let mut reader = Reader::from_str(xml_contents);
     let mut aliased_instr: Option<String> = None;
     let mut alias = InstructionAlias::default();
@@ -477,7 +477,7 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
                 QName(b"instructionsection") => {
                     for attr in e.attributes() {
                         let Attribute { key, value } = attr.unwrap();
-                        if Ok("title") == str::from_utf8(key.into_inner()) {
+                        if b"title" == key.local_name().as_ref() {
                             alias.title = (unsafe { str::from_utf8_unchecked(&value) }).to_string();
                         }
                     }
@@ -490,11 +490,13 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
             },
             Ok(Event::Text(ref txt)) => {
                 if in_template {
-                    let cleaned = str::from_utf8(txt)?.replace("&lt;", "").replace("&gt;", "");
+                    let cleaned = txt.unescape().unwrap();
                     if let Some(existing) = curr_template {
                         curr_template = Some(format!("{existing}{cleaned}"));
                     } else {
-                        curr_template = Some(cleaned);
+                        let mut new_template = cleaned.into_owned();
+                        new_template.push(' ');
+                        curr_template = Some(new_template);
                     }
                 } else if in_desc && in_para && alias.summary.is_empty() {
                     str::from_utf8(txt)?.clone_into(&mut alias.summary);
@@ -505,6 +507,8 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
                     let mut alias_next = false;
                     for attr in e.attributes() {
                         let Attribute { key, value } = attr.unwrap();
+                        // TODO: we can get the correct alias from the id of an alias mnemonic
+                        // else the actual alias is the last docvar in the docvars tag
                         if alias_next && Ok("value") == str::from_utf8(key.into_inner()) {
                             aliased_instr = Some(str::from_utf8(&value)?.to_owned());
                             break;
@@ -517,13 +521,12 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
                     }
                 }
             }
-            // end event --------------------------------------------------------------------------
+            // end event
             Ok(Event::End(ref e)) => match e.name() {
                 QName(b"instructionsection") => break,
                 QName(b"asmtemplate") => {
-                    if let Some(template) = curr_template {
+                    if let Some(template) = curr_template.take() {
                         alias.asm_templates.push(template);
-                        curr_template = None;
                     }
                     in_template = false;
                 }
@@ -606,15 +609,14 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
             }
             Ok(Event::Text(ref txt)) => {
                 if in_template {
-                    if curr_template.is_none() {
-                        curr_template = Some(str::from_utf8(txt)?.trim().to_owned());
+                    if let Some(existing) = curr_template {
+                        let cleaned = txt.unescape().unwrap();
+                        curr_template = Some(format!("{existing}{cleaned}"));
                     } else {
-                        let cleaned = str::from_utf8(txt)?.replace("&lt;", "").replace("&gt;", "");
-                        if let Some(existing) = curr_template {
-                            curr_template = Some(format!("{existing}{cleaned}"));
-                        } else {
-                            curr_template = Some(cleaned);
-                        }
+                        let cleaned = txt.unescape().unwrap();
+                        let mut new_template = cleaned.into_owned().trim_ascii().to_owned();
+                        new_template.push(' ');
+                        curr_template = Some(new_template);
                     }
                 } else if in_desc && in_para && instruction.summary.is_empty() {
                     str::from_utf8(txt)?.clone_into(&mut instruction.summary);
@@ -625,9 +627,8 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
                 match e.name() {
                     QName(b"instructionsection") => break,
                     QName(b"encoding") => {
-                        if let Some(template) = curr_template {
+                        if let Some(template) = curr_template.take() {
                             instruction.asm_templates.push(template);
-                            curr_template = None;
                         }
                     }
                     QName(b"desc") => in_desc = false,

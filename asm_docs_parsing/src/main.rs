@@ -58,17 +58,19 @@ fn run(opts: &SerializeDocs) -> Result<()> {
             let path = opts.input_path.canonicalize()?;
             let instrs: Vec<Instruction>;
             match (path.is_dir(), opts.arch) {
-                (true, Some(arch)) => {
-                    if arch == Arch::ARM {
+                (true, Some(arch)) => match arch {
+                    Arch::ARM => {
                         instrs = populate_arm_instructions(&opts.input_path)?;
-                    } else if arch == Arch::RISCV {
+                    }
+                    Arch::RISCV => {
                         instrs = populate_riscv_instructions(&opts.input_path)?;
-                    } else {
+                    }
+                    _ => {
                         return Err(anyhow!(
                             "Directory parsing for {arch} instructions is not supported"
                         ));
                     }
-                }
+                },
                 (true, None) => {
                     return Err(anyhow!(
                         "`Arch` argument must be supplied when `input_path` is a directory"
