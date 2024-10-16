@@ -820,9 +820,11 @@ fn get_label_resp(
                 let matches_iter = cursor.matches(&QUERY_LABEL_DATA, tree.root_node(), curr_doc);
 
                 for match_ in matches_iter {
-                    info!("BOFFA: {:#?}", match_);
                     let caps = match_.captures;
-                    if caps.len() != 2 {
+                    if caps.len() != 2
+                        || caps[0].node.end_byte() >= curr_doc.len()
+                        || caps[1].node.end_byte() >= curr_doc.len()
+                    {
                         continue;
                     }
                     let label_text = caps[0].node.utf8_text(curr_doc);
@@ -1085,6 +1087,9 @@ pub fn get_comp_resp(
         let mut labels = HashSet::new();
         for caps in captures.map(|c| c.0) {
             for cap in caps.captures {
+                if cap.node.end_byte() >= curr_doc.len() {
+                    continue;
+                }
                 match cap.node.utf8_text(curr_doc) {
                     Ok(text) => _ = labels.insert(text),
                     Err(_) => continue,
@@ -1191,7 +1196,7 @@ pub fn get_document_symbols(
         Lazy::new(|| tree_sitter_asm::language().id_for_node_kind("ident", true));
 
     /// Explore `node`, push immediate children into `res`.
-    fn explore_node(curr_doc: &str, node: tree_sitter::Node, res: &mut Vec<DocumentSymbol>) {
+    fn explore_node(curr_doc: &[u8], node: tree_sitter::Node, res: &mut Vec<DocumentSymbol>) {
         if node.kind_id() == *LABEL_KIND_ID {
             let mut children = vec![];
             let mut cursor = node.walk();
@@ -1202,8 +1207,9 @@ pub fn get_document_symbols(
             if cursor.goto_first_child() {
                 loop {
                     let sub_node = cursor.node();
-                    if sub_node.kind_id() == *IDENT_KIND_ID {
-                        if let Ok(text) = sub_node.utf8_text(curr_doc.as_bytes()) {
+                    if sub_node.end_byte() < curr_doc.len() && sub_node.kind_id() == *IDENT_KIND_ID
+                    {
+                        if let Ok(text) = sub_node.utf8_text(curr_doc) {
                             descr = text.to_string();
                         }
                     }
@@ -1253,7 +1259,7 @@ pub fn get_document_symbols(
         let mut res: Vec<DocumentSymbol> = vec![];
         let mut cursor = tree.walk();
         loop {
-            explore_node(curr_doc, cursor.node(), &mut res);
+            explore_node(curr_doc.as_bytes(), cursor.node(), &mut res);
             if !cursor.goto_next_sibling() {
                 break;
             }
@@ -1301,7 +1307,7 @@ pub fn get_sig_help_resp(
             .collect();
         if let Some(match_) = matches.first() {
             let caps = match_.captures;
-            if caps.len() == 1 {
+            if caps.len() == 1 && caps[0].node.end_byte() < curr_doc.len() {
                 if let Ok(instr_name) = caps[0].node.utf8_text(curr_doc) {
                     let mut value = String::new();
                     let mut has_x86 = false;
@@ -1411,7 +1417,7 @@ pub fn get_goto_def_resp(
     tree_entry: &mut TreeEntry,
     params: &GotoDefinitionParams,
 ) -> Option<GotoDefinitionResponse> {
-    let doc = curr_doc.get_content(None);
+    let doc = curr_doc.get_content(None).as_bytes();
     tree_entry.tree = tree_entry.parser.parse(doc, tree_entry.tree.as_ref());
 
     if let Some(ref tree) = tree_entry.tree {
@@ -1421,15 +1427,18 @@ pub fn get_goto_def_resp(
 
         let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
         let mut cursor = tree_sitter::QueryCursor::new();
-        let matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc.as_bytes());
+        let matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc);
 
         let word = get_word_from_pos_params(curr_doc, &params.text_document_position_params);
 
         for match_ in matches {
             for cap in match_.captures {
+                if cap.node.end_byte() >= doc.len() {
+                    continue;
+                }
                 let text = cap
                     .node
-                    .utf8_text(doc.as_bytes())
+                    .utf8_text(doc)
                     .unwrap_or("")
                     .trim()
                     .trim_matches(is_not_ident_char);
@@ -1462,7 +1471,7 @@ pub fn get_ref_resp(
     tree_entry: &mut TreeEntry,
 ) -> Vec<Location> {
     let mut refs: HashSet<Location> = HashSet::new();
-    let doc = curr_doc.get_content(None);
+    let doc = curr_doc.get_content(None).as_bytes();
     tree_entry.tree = tree_entry.parser.parse(doc, tree_entry.tree.as_ref());
 
     if let Some(ref tree) = tree_entry.tree {
@@ -1484,18 +1493,16 @@ pub fn get_ref_resp(
 
         let mut cursor = tree_sitter::QueryCursor::new();
         if params.context.include_declaration {
-            let label_matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc.as_bytes());
+            let label_matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc);
             for match_ in label_matches {
                 for cap in match_.captures {
                     // HACK: Temporary solution for what I believe is a bug in tree-sitter core
-                    if cap.node.start_byte() >= doc.as_bytes().len()
-                        || cap.node.end_byte() >= doc.as_bytes().len()
-                    {
+                    if cap.node.end_byte() >= doc.len() {
                         continue;
                     }
                     let text = cap
                         .node
-                        .utf8_text(doc.as_bytes())
+                        .utf8_text(doc)
                         .unwrap_or("")
                         .trim()
                         .trim_matches(is_not_ident_char);
@@ -1512,18 +1519,16 @@ pub fn get_ref_resp(
             }
         }
 
-        let word_matches = cursor.matches(&QUERY_WORD, tree.root_node(), doc.as_bytes());
+        let word_matches = cursor.matches(&QUERY_WORD, tree.root_node(), doc);
         for match_ in word_matches {
             for cap in match_.captures {
                 // HACK: Temporary solution for what I believe is a bug in tree-sitter core
-                if cap.node.start_byte() >= doc.as_bytes().len()
-                    || cap.node.end_byte() >= doc.as_bytes().len()
-                {
+                if cap.node.end_byte() >= doc.len() {
                     continue;
                 }
                 let text = cap
                     .node
-                    .utf8_text(doc.as_bytes())
+                    .utf8_text(doc)
                     .unwrap_or("")
                     .trim()
                     .trim_matches(is_not_ident_char);
