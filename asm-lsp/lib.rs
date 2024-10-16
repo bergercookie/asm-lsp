@@ -1,9 +1,9 @@
 pub mod handle;
 pub mod lsp;
 pub mod parser;
-pub mod str;
 mod test;
 pub mod types;
+pub mod ustr;
 
 pub use lsp::*;
 pub use parser::{
