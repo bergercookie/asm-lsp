@@ -1994,16 +1994,14 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&reg).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                reg
+                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (reg, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                reg
+                "Expected count to be 0, found {count} for {reg:?}"
             );
         }
     }
@@ -2030,16 +2028,14 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&reg).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                reg
+                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (reg, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                reg
+                "Expected count to be 0, found {count} for {reg:?}"
             );
         }
     }
@@ -2066,16 +2062,14 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&reg).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                reg
+                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (reg, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                reg
+                "Expected count to be 0, found {count} for {reg:?}"
             );
         }
     }
@@ -2095,16 +2089,14 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&reg).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                reg
+                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (reg, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                reg
+                "Expected count to be 0, found {count} for {reg:?}"
             );
         }
     }
@@ -2133,16 +2125,14 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&instr).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                instr
+                "Expected at least one more instruction entry for {instr:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (instr, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                instr
+                "Expected count to be 0, found {count} for {instr:?}"
             );
         }
     }
@@ -2171,16 +2161,14 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&instr).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                instr
+                "Expected at least one more instruction entry for {instr:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (instr, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                instr
+                "Expected count to be 0, found {count} for {instr:?}"
             );
         }
     }
@@ -2202,16 +2190,14 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&instr).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                instr
+                "Expected at least one more instruction entry for {instr:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (instr, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                instr
+                "Expected count to be 0, found {count} for {instr:?}"
             );
         }
     }
@@ -2231,16 +2217,14 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&instr).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                instr
+                "Expected at least one more instruction entry for {instr:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (instr, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                instr
+                "Expected count to be 0, found {count} for {instr:?}"
             );
         }
     }
@@ -2260,16 +2244,14 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&dir).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                dir
+                "Expected at least one more instruction entry for {dir:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (dir, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                dir
+                "Expected count to be 0, found {count} for {dir:?}"
             );
         }
     }
@@ -2289,16 +2271,14 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&dir).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                dir
+                "Expected at least one more instruction entry for {dir:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (dir, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                dir
+                "Expected count to be 0, found {count} for {dir:?}"
             );
         }
     }
@@ -2318,16 +2298,14 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&dir).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                dir
+                "Expected at least one more instruction entry for {dir:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (dir, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                dir
+                "Expected count to be 0, found {count} for {dir:?}"
             );
         }
     }
