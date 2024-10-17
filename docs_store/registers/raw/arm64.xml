@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='utf-8'?>
+<InstructionSet name="arm64">
+    <Register name="NZCV" description="Global condition flag register" type="Condition Register">
+    </Register>
+    <Register name="XZR" description="Dedicated Zero Register" type="Special Register">
+    </Register>
+    <Register name="SP" description="Dedicated Stack Pointer" type="Stack Pointer Register">
+    </Register>
+    <Register name="X30" description="The Link Register. Caller saved." type="General Purpose Register">
+    </Register>
+    <Register name="LR" description="Link Register, alias for X30. Caller saved" type="Special Purpose Register">
+    </Register>
+    <Register name="X29" description="The Frame Pointer. Caller saved." type="General Purpose Register">
+    </Register>
+    <Register name="FP" description="The Frame Pointer. Alias for X29. Caller saved" type="Special Purpose Register">
+    </Register>
+    <Register name="X28" description="Callee saved" type="General Purpose Register">
+    </Register>
+    <Register name="X27" description="Callee saved" type="General Purpose Register">
+    </Register>
+    <Register name="X26" description="Callee saved" type="General Purpose Register">
+    </Register>
+    <Register name="X25" description="Callee saved" type="General Purpose Register">
+    </Register>
+    <Register name="X24" description="Callee saved" type="General Purpose Register">
+    </Register>
+    <Register name="X23" description="Callee saved" type="General Purpose Register">
+    </Register>
+    <Register name="X22" description="Callee saved" type="General Purpose Register">
+    </Register>
+    <Register name="X21" description="Callee saved" type="General Purpose Register">
+    </Register>
+    <Register name="X20" description="Callee saved" type="General Purpose Register">
+    </Register>
+    <Register name="X19" description="Callee saved" type="General Purpose Register">
+    </Register>
+    <Register name="X18" description="The Platform Register, if needed; otherwise a temporary register" type="System Purpose Register">
+    </Register>
+    <Register name="X17" description="The second intra-procedure-call temporary register (can be used by call veneers and PLT code); at other times may be used as a temporary register" type="General Purpose Register">
+    </Register>
+    <Register name="IP1" description="The second intra-procedure-call temporary register (can be used by call veneers and PLT code). Alias for X17." type="Special Purpose Register">
+    </Register>
+    <Register name="X16" description="The first intra-procedure-call scratch register (can be used by call veneers and PLT code); at other times may be used as a temporary register." type="General Purpose Register">
+    </Register>
+    <Register name="IP0" description="The first intra-procedure-call scratch register (can be used by call veneers and PLT code). Alias for X16." type="Special Purpose Register">
+    </Register>
+    <Register name="X15" description="Temporary registers" type="General Purpose Register">
+    </Register>
+    <Register name="X14" description="Temporary registers" type="General Purpose Register">
+    </Register>
+    <Register name="X13" description="Temporary registers" type="General Purpose Register">
+    </Register>
+    <Register name="X12" description="Temporary registers" type="General Purpose Register">
+    </Register>
+    <Register name="X11" description="Temporary registers" type="General Purpose Register">
+    </Register>
+    <Register name="X10" description="Temporary registers" type="General Purpose Register">
+    </Register>
+    <Register name="X9" description="Temporary registers" type="General Purpose Register">
+    </Register>
+    <Register name="X8" description="Indirect result location register" type="General Purpose Register">
+    </Register>
+    <Register name="X7" description="Parameter/ Return result value register. Scratch register. Caller saved." type="General Purpose Register">
+    </Register>
+    <Register name="X6" description="Parameter/ Return result value register. Scratch register. Caller saved." type="General Purpose Register">
+    </Register>
+    <Register name="X5" description="Parameter/ Return result value register. Scratch register. Caller saved." type="General Purpose Register">
+    </Register>
+    <Register name="X4" description="Parameter/ Return result value register. Scratch register. Caller saved." type="General Purpose Register">
+    </Register>
+    <Register name="X3" description="Parameter/ Return result value register. Scratch register. Caller saved." type="General Purpose Register">
+    </Register>
+    <Register name="X2" description="Parameter/ Return result value register. Scratch register. Caller saved." type="General Purpose Register">
+    </Register>
+    <Register name="X1" description="Parameter/ Return result value register. Scratch register. Caller saved." type="General Purpose Register">
+    </Register>
+    <Register name="X0" description="Parameter/ Return result value register. Caller saved." type="General Purpose Register">
+    </Register>
+    <Register name="S0" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S1" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S2" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S3" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S4" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S5" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S6" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S7" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S8" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S9" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S10" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S11" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S12" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S13" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S14" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S15" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S16" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S17" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S18" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S19" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S20" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S21" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S20" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S21" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S22" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S23" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S24" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S25" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S26" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S27" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S28" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S29" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S30" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="S31" description="" type="Floating Point Register" width="32 bits">
+    </Register>
+    <Register name="D0" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D1" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D2" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D3" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D4" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D5" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D6" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D7" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D8" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D9" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D10" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D11" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D12" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D13" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D14" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="D15" description="" type="Floating Point Register" width="64 bits">
+    </Register>
+</InstructionSet>
