@@ -1978,7 +1978,7 @@ Width: 8 bits",
         let x86_regs_ser = include_bytes!("serialized/registers/x86");
         let ser_vec = bincode::deserialize::<Vec<Register>>(x86_regs_ser).unwrap();
 
-        let x86_regs_raw = include_str!("serialized/registers/x86.xml");
+        let x86_regs_raw = include_str!("../docs_store/registers/raw/x86.xml");
         let mut raw_vec = populate_registers(x86_regs_raw).unwrap();
 
         // HACK: Windows line endings...
@@ -2262,7 +2262,7 @@ Width: 8 bits",
         let masm_dirs_ser = include_bytes!("serialized/directives/masm");
         let ser_vec = bincode::deserialize::<Vec<Directive>>(masm_dirs_ser).unwrap();
 
-        let masm_dirs_raw = include_str!("serialized/directives/masm.xml");
+        let masm_dirs_raw = include_str!("../docs_store/directives/raw/masm.xml");
         let raw_vec = populate_masm_nasm_directives(masm_dirs_raw).unwrap();
 
         for dir in ser_vec {

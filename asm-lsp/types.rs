@@ -13,7 +13,6 @@ use tree_sitter::{Parser, Tree};
 #[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
 pub struct Instruction {
     pub name: String,
-    pub alt_names: Vec<String>,
     pub summary: String,
     pub forms: Vec<InstructionForm>,
     pub asm_templates: Vec<String>,
@@ -28,7 +27,6 @@ impl Completable for &Instruction {}
 impl Default for Instruction {
     fn default() -> Self {
         let name = String::new();
-        let alt_names = vec![];
         let summary = String::new();
         let forms = vec![];
         let asm_templates = vec![];
@@ -38,7 +36,6 @@ impl Default for Instruction {
 
         Self {
             name,
-            alt_names,
             summary,
             forms,
             asm_templates,
@@ -124,12 +121,8 @@ impl<'own> Instruction {
     /// Get the primary names
     #[must_use]
     pub fn get_primary_names(&'own self) -> Vec<&'own str> {
-        let mut names = Vec::<&'own str>::new();
-        names.push(&self.name);
+        let names = vec![self.name.as_ref()];
 
-        for name in &self.alt_names {
-            names.push(name);
-        }
         names
     }
 
@@ -395,7 +388,6 @@ impl Display for Z80Timing {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Directive {
     pub name: String,
-    pub alt_names: Vec<String>,
     pub signatures: Vec<String>,
     pub description: String,
     pub deprecated: bool,
@@ -409,7 +401,6 @@ impl Completable for &Directive {}
 impl Default for Directive {
     fn default() -> Self {
         let name = String::new();
-        let alt_names = vec![];
         let signatures = vec![];
         let description = String::new();
         let deprecated = false;
@@ -418,7 +409,6 @@ impl Default for Directive {
 
         Self {
             name,
-            alt_names,
             signatures,
             description,
             deprecated,
@@ -510,12 +500,7 @@ impl<'own> Directive {
     /// get the names of all the associated directives
     #[must_use]
     pub fn get_associated_names(&'own self) -> Vec<&'own str> {
-        let mut names = Vec::<&'own str>::new();
-        names.push(&self.name);
-
-        for name in &self.alt_names {
-            names.push(name);
-        }
+        let names = vec![self.name.as_ref()];
 
         names
     }
@@ -525,7 +510,6 @@ impl<'own> Directive {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Register {
     pub name: String,
-    pub alt_names: Vec<String>,
     pub description: Option<String>,
     pub reg_type: Option<RegisterType>,
     pub width: Option<RegisterWidth>,
@@ -540,7 +524,6 @@ impl Completable for &Register {}
 impl Default for Register {
     fn default() -> Self {
         let name = String::new();
-        let alt_names = vec![];
         let description = None;
         let reg_type = None;
         let width = None;
@@ -550,7 +533,6 @@ impl Default for Register {
 
         Self {
             name,
-            alt_names,
             description,
             reg_type,
             width,
@@ -625,12 +607,7 @@ impl<'own> Register {
     /// get the names of all the associated registers
     #[must_use]
     pub fn get_associated_names(&'own self) -> Vec<&'own str> {
-        let mut names = Vec::<&'own str>::new();
-        names.push(&self.name);
-
-        for name in &self.alt_names {
-            names.push(name);
-        }
+        let names = vec![self.name.as_ref()];
 
         names
     }

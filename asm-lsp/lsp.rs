@@ -670,9 +670,11 @@ fn lookup_hover_resp_by_arch<T: Hoverable>(
     word: &str,
     map: &HashMap<(Arch, &str), T>,
 ) -> Option<Hover> {
+    // ensure hovered text is always lowercase
+    let hovered_text = word.to_ascii_lowercase();
     // switch over to vec?
     let (x86_resp, x86_64_resp, z80_resp, arm_resp, riscv_resp) =
-        search_for_hoverable_by_arch(word, map);
+        search_for_hoverable_by_arch(&hovered_text, map);
     match (
         x86_resp.is_some(),
         x86_64_resp.is_some(),
@@ -1320,8 +1322,10 @@ pub fn get_sig_help_resp(
                     let mut has_x86_64 = false;
                     let mut has_z80 = false;
                     let mut has_arm = false;
+                    // ensure hovered instruction is always lowercase
+                    let hovered_instr_name = instr_name.to_ascii_lowercase();
                     let (x86_info, x86_64_info, z80_info, arm_info, riscv_info) =
-                        search_for_hoverable_by_arch(instr_name, instr_info);
+                        search_for_hoverable_by_arch(&hovered_instr_name, instr_info);
                     if let Some(sig) = x86_info {
                         for form in &sig.forms {
                             if let Some(ref gas_name) = form.gas_name {
