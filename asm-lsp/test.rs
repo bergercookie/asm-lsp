@@ -562,7 +562,7 @@ mod tests {
         let tree = parser.parse(&source_code, None);
         let mut tree_store = TreeStore::new();
         let tree_entry = TreeEntry { tree, parser };
-        tree_store.insert(uri.clone(), tree_entry);
+        tree_store.insert(uri, tree_entry);
 
         let hover_params = HoverParams {
             text_document_position_params: pos_params.clone(),
@@ -571,11 +571,12 @@ mod tests {
             },
         };
 
-        let word = if let Some(ref doc) = curr_doc {
-            get_word_from_pos_params(doc, &pos_params)
-        } else {
-            panic!("No document");
-        };
+        let word = curr_doc.as_ref().map_or_else(
+            || {
+                panic!("No document");
+            },
+            |doc| get_word_from_pos_params(doc, &pos_params),
+        );
 
         let resp = get_hover_resp(
             &hover_params,

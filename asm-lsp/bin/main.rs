@@ -45,7 +45,6 @@ use lsp_textdocument::TextDocuments;
 /// # Panics
 ///
 /// Panics if JSON serialization of the server capabilities fails
-#[allow(clippy::too_many_lines)]
 pub fn main() -> Result<()> {
     // initialisation -----------------------------------------------------------------------------
     // Set up logging. Because `stdio_transport` gets a lock on stdout and stdin, we must have our
@@ -112,7 +111,7 @@ pub fn main() -> Result<()> {
     let server_capabilities = serde_json::to_value(capabilities).unwrap();
     let initialization_params = connection.initialize(server_capabilities)?;
 
-    let params: InitializeParams = serde_json::from_value(initialization_params.clone()).unwrap();
+    let params: InitializeParams = serde_json::from_value(initialization_params).unwrap();
     info!("Client initialization params: {:?}", params);
     let mut config = get_config(&params);
     info!("Server Configuration: {:?}", config);
@@ -411,7 +410,6 @@ pub fn main() -> Result<()> {
     Ok(())
 }
 
-#[allow(clippy::too_many_arguments, clippy::too_many_lines)]
 fn main_loop(
     connection: &Connection,
     config: &Config,
@@ -433,7 +431,8 @@ fn main_loop(
                 if connection.handle_shutdown(&req)? {
                     info!("Recieved shutdown request");
                     return Ok(());
-                } else if let Ok((id, params)) = cast_req::<HoverRequest>(req.clone()) {
+                }
+                if let Ok((id, params)) = cast_req::<HoverRequest>(req.clone()) {
                     handle_hover_request(
                         connection,
                         id,

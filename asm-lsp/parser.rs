@@ -368,11 +368,10 @@ fn consume_classify_table(line_iter: &mut Peekable<Lines>) {
     let empty = line_iter.next().unwrap();
     assert!(empty.is_empty());
     while let Some(next) = line_iter.peek() {
-        if !next.is_empty() {
-            _ = line_iter.next();
-        } else {
+        if next.is_empty() {
             break;
         }
+        _ = line_iter.next();
     }
 }
 
@@ -414,7 +413,7 @@ pub fn populate_arm_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>
                 assert!(!aliased_instr.is_empty());
                 let aliases = alias_map.entry(aliased_instr).or_default();
                 aliases.push(alias);
-            } else if let Some(mut instr) = parse_arm_instruction(&docs)? {
+            } else if let Some(mut instr) = parse_arm_instruction(&docs) {
                 assert!(!instr.name.is_empty());
                 if let Some(entry) = instructions_map.get_mut(&instr.name) {
                     entry.aliases.append(&mut instr.aliases);
@@ -547,11 +546,7 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
         }
     }
 
-    if let Some(aliased_name) = aliased_instr {
-        Ok(Some((alias, aliased_name)))
-    } else {
-        Ok(None)
-    }
+    aliased_instr.map_or_else(|| Ok(None), |aliased_name| Ok(Some((alias, aliased_name))))
 }
 
 /// Parse an xml file containing the documentation for a single ARM instruction
@@ -565,8 +560,8 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
 ///
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
-fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
-    // iterate through the XML --------------------------------------------------------------------
+fn parse_arm_instruction(xml_contents: &str) -> Option<Instruction> {
+    // iterate through the XML
     let mut reader = Reader::from_str(xml_contents);
 
     // ref to the instruction that's currently under construction
@@ -586,7 +581,7 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
                 QName(b"desc") => in_desc = true,
                 QName(b"para") => in_para = true,
                 QName(b"asmtemplate") => in_template = true,
-                QName(b"alphaindex" | b"encodingindex") => return Ok(None),
+                QName(b"alphaindex" | b"encodingindex") => return None,
                 _ => {}
             },
             Ok(Event::Empty(ref e)) => {
@@ -617,11 +612,10 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
             }
             Ok(Event::Text(ref txt)) => {
                 if in_template {
+                    let cleaned = txt.unescape().unwrap();
                     if let Some(existing) = curr_template {
-                        let cleaned = txt.unescape().unwrap();
                         curr_template = Some(format!("{existing}{cleaned}"));
                     } else {
-                        let cleaned = txt.unescape().unwrap();
                         let mut new_template = cleaned.into_owned().trim_ascii().to_owned();
                         new_template.push(' ');
                         curr_template = Some(new_template);
@@ -651,7 +645,7 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
         }
     }
 
-    Ok(Some(instruction))
+    Some(instruction)
 }
 
 /// Parse the provided XML contents and return a vector of all the instructions based on that.
@@ -669,12 +663,11 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
 ///
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
-#[allow(clippy::too_many_lines)]
 pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
     // initialise the instruction set
     let mut instructions_map = HashMap::<String, Instruction>::new();
 
-    // iterate through the XML --------------------------------------------------------------------
+    // iterate through the XML
     let mut reader = Reader::from_str(xml_contents);
 
     // ref to the instruction that's currently under construction
@@ -1054,7 +1047,6 @@ pub fn populate_name_to_instruction_map<'instruction>(
 ///
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
-#[allow(clippy::too_many_lines)]
 pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
     let mut registers_map = HashMap::<String, Register>::new();
 
@@ -1106,17 +1098,13 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
                                 }
                                 b"type" => {
                                     curr_register.reg_type =
-                                        match RegisterType::from_str(ustr::get_str(&value)) {
-                                            Ok(reg) => Some(reg),
-                                            _ => None,
-                                        }
+                                        RegisterType::from_str(ustr::get_str(&value))
+                                            .map_or(None, |reg| Some(reg));
                                 }
                                 b"width" => {
                                     curr_register.width =
-                                        match RegisterWidth::from_str(ustr::get_str(&value)) {
-                                            Ok(width) => Some(width),
-                                            _ => None,
-                                        }
+                                        RegisterWidth::from_str(ustr::get_str(&value))
+                                            .map_or(None, |width| Some(width));
                                 }
                                 _ => {}
                             }
@@ -1488,7 +1476,7 @@ pub fn get_cache_dir() -> Result<PathBuf> {
     }
 
     // If the environment variable isn't set or gives an invalid path, grab the home directory and build off of that
-    let mut x86_cache_path = home::home_dir().ok_or(anyhow!("Home directory not found"))?;
+    let mut x86_cache_path = home::home_dir().ok_or_else(|| anyhow!("Home directory not found"))?;
 
     x86_cache_path.push(".cache");
     x86_cache_path.push("asm-lsp");

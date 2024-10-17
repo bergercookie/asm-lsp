@@ -33,7 +33,6 @@ use crate::{
 /// # Panics
 ///
 /// Panics if JSON encoding of a response fails
-#[allow(clippy::too_many_arguments)]
 pub fn handle_hover_request(
     connection: &Connection,
     id: RequestId,
@@ -84,7 +83,6 @@ pub fn handle_hover_request(
 /// # Panics
 ///
 /// Panics if JSON encoding of a response fails
-#[allow(clippy::too_many_arguments)]
 pub fn handle_completion_request(
     connection: &Connection,
     id: RequestId,
@@ -182,7 +180,7 @@ pub fn handle_document_symbols_request(
                 let resp = DocumentSymbolResponse::Nested(symbols);
                 let result = serde_json::to_value(resp).unwrap();
                 let result = Response {
-                    id: id.clone(),
+                    id,
                     result: Some(result),
                     error: None,
                 };
@@ -225,7 +223,7 @@ pub fn handle_signature_help_request(
             if let Some(sig) = sig_resp {
                 let result = serde_json::to_value(sig).unwrap();
                 let result = Response {
-                    id: id.clone(),
+                    id,
                     result: Some(result),
                     error: None,
                 };
@@ -263,7 +261,7 @@ pub fn handle_references_request(
                 let result = serde_json::to_value(&ref_resp).unwrap();
 
                 let result = Response {
-                    id: id.clone(),
+                    id,
                     result: Some(result),
                     error: None,
                 };

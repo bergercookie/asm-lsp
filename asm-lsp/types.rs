@@ -215,7 +215,9 @@ impl std::fmt::Display for InstructionForm {
         }
 
         // Operands
-        let operands_str: String = if !self.operands.is_empty() {
+        let operands_str: String = if self.operands.is_empty() {
+            String::new()
+        } else {
             self.operands
                 .iter()
                 .map(|op| {
@@ -234,8 +236,6 @@ impl std::fmt::Display for InstructionForm {
                 })
                 .collect::<Vec<String>>()
                 .join("\n")
-        } else {
-            String::new()
         };
 
         s += &operands_str;
@@ -355,10 +355,10 @@ impl FromStr for Z80TimingInfo {
             s.split('/').map(str::parse).collect();
 
         match pieces.len() {
-            1 => match &pieces[0] {
-                Ok(num) => Ok(Self::OneNum(*num)),
-                Err(_) => Err(String::from("Failed to parse one timing value")),
-            },
+            1 => pieces[0].as_ref().map_or_else(
+                |_| Err(String::from("Failed to parse one timing value")),
+                |num| Ok(Self::OneNum(*num)),
+            ),
             2 => match (&pieces[0], &pieces[1]) {
                 (Ok(num1), Ok(num2)) => Ok(Self::TwoNum((*num1, *num2))),
                 _ => Err(String::from("Failed to parse one or more timing values")),

@@ -69,7 +69,6 @@ pub fn find_word_at_pos(line: &str, col: Column) -> (Column, Column) {
         .last()
         .map_or(0, |(i, _)| i + 1);
 
-    #[allow(clippy::filter_next)]
     let mut end = line_
         .chars()
         .enumerate()
@@ -152,7 +151,7 @@ pub fn get_include_dirs(compile_cmds: &CompilationDatabase) -> HashMap<SourceFil
         include_map
             .entry(source_file)
             .and_modify(|dirs| dirs.push(dir.to_owned()))
-            .or_insert(vec![dir.to_owned()]);
+            .or_insert_with(|| vec![dir.to_owned()]);
     }
 
     info!("Include directory map: {:?}", include_map);
@@ -352,8 +351,15 @@ fn get_compilation_db_files(path: &Path) -> Option<CompilationDatabase> {
 /// uninitialized to avoid unnecessary allocations. If you're using this function
 /// in a new place, please reconsider this assumption
 pub fn get_default_compile_cmd(uri: &Uri, cfg: &Config) -> CompileCommand {
-    if let Some(ref compiler) = cfg.opts.compiler {
-        CompileCommand {
+    cfg.opts.compiler.as_ref().map_or_else(
+        || CompileCommand {
+            file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
+            directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
+            arguments: Some(CompileArgs::Flags(vec![uri.path().to_string()])),
+            command: None,
+            output: None,
+        },
+        |compiler| CompileCommand {
             file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
             directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
             arguments: Some(CompileArgs::Arguments(vec![
@@ -362,16 +368,8 @@ pub fn get_default_compile_cmd(uri: &Uri, cfg: &Config) -> CompileCommand {
             ])),
             command: None,
             output: None,
-        }
-    } else {
-        CompileCommand {
-            file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
-            directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
-            arguments: Some(CompileArgs::Flags(vec![uri.path().to_string()])),
-            command: None,
-            output: None,
-        }
-    }
+        },
+    )
 }
 
 /// Attempts to run the given compile command and parses the resulting output. Any
@@ -388,13 +386,11 @@ pub fn apply_compile_cmd(
     if let Some(ref args) = compile_cmd.arguments {
         match args {
             CompileArgs::Flags(flags) => {
-                let compilers = if let Some(ref compiler) = cfg.opts.compiler {
-                    // If the user specified a compiler in their config, use it
-                    vec![compiler.as_str()]
-                } else {
-                    // Otherwise go with these defaults
-                    vec!["gcc", "clang"]
-                };
+                let compilers = cfg
+                    .opts
+                    .compiler
+                    .as_ref()
+                    .map_or_else(|| vec!["gcc", "clang"], |compiler| vec![compiler.as_str()]);
 
                 for compiler in compilers {
                     match Command::new(compiler) // default or user-supplied compiler
@@ -549,7 +545,7 @@ pub fn text_doc_change_to_ts_edit(
     change: &TextDocumentContentChangeEvent,
     doc: &FullTextDocument,
 ) -> Result<InputEdit> {
-    let range = change.range.ok_or(anyhow!("Invalid edit range"))?;
+    let range = change.range.ok_or_else(|| anyhow!("Invalid edit range"))?;
     let start = range.start;
     let end = range.end;
 
@@ -758,14 +754,14 @@ fn lookup_hover_resp_by_assembler<T: Hoverable>(
             if let Some(masm_resp) = masm_resp {
                 value += &format!(
                     "{}{}",
-                    if !value.is_empty() { "\n\n" } else { "" },
+                    if value.is_empty() { "" } else { "\n\n" },
                     masm_resp
                 );
             }
             if let Some(nasm_resp) = nasm_resp {
                 value += &format!(
                     "{}{}",
-                    if !value.is_empty() { "\n\n" } else { "" },
+                    if value.is_empty() { "" } else { "\n\n" },
                     nasm_resp
                 );
             }
@@ -796,8 +792,6 @@ fn get_label_resp(
         if let Some(ref mut tree_entry) = tree_store.get_mut(uri) {
             tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
             if let Some(ref tree) = tree_entry.tree {
-                let mut cursor = tree_sitter::QueryCursor::new();
-
                 static QUERY_LABEL_DATA: Lazy<tree_sitter::Query> = Lazy::new(|| {
                     tree_sitter::Query::new(
                         &tree_sitter_asm::language(),
@@ -817,6 +811,7 @@ fn get_label_resp(
                     )
                     .unwrap()
                 });
+                let mut cursor = tree_sitter::QueryCursor::new();
                 let matches_iter = cursor.matches(&QUERY_LABEL_DATA, tree.root_node(), curr_doc);
 
                 for match_ in matches_iter {
@@ -855,7 +850,7 @@ fn get_demangle_resp(word: &str) -> Option<Hover> {
     let name = Name::new(word, NameMangling::Mangled, Language::Unknown);
     let demangled = name.demangle(DemangleOptions::complete());
     if let Some(demang) = demangled {
-        let value = demang.to_string();
+        let value = demang;
         return Some(Hover {
             contents: HoverContents::Markup(MarkupContent {
                 kind: MarkupKind::Markdown,
@@ -875,11 +870,11 @@ fn get_include_resp(
 ) -> Option<Hover> {
     let mut paths = String::new();
 
-    let mut dir_iter: Box<dyn Iterator<Item = &PathBuf>> = match include_dirs.get(&SourceFile::All)
-    {
-        Some(dirs) => Box::new(dirs.iter()),
-        None => Box::new(std::iter::empty()),
-    };
+    type DirIter<'a> = Box<dyn Iterator<Item = &'a PathBuf> + 'a>;
+    let mut dir_iter = include_dirs.get(&SourceFile::All).map_or_else(
+        || Box::new(std::iter::empty()) as DirIter,
+        |dirs| Box::new(dirs.iter()) as DirIter,
+    );
 
     if let Ok(src_path) = PathBuf::from(source_file.as_str()).canonicalize() {
         if let Some(dirs) = include_dirs.get(&SourceFile::File(src_path)) {
@@ -978,7 +973,6 @@ macro_rules! cursor_matches {
     }};
 }
 
-#[allow(clippy::too_many_lines)]
 pub fn get_comp_resp(
     curr_doc: &str,
     tree_entry: &mut TreeEntry,
@@ -1037,6 +1031,13 @@ pub fn get_comp_resp(
     // TODO: filter register completions by width allowed by corresponding instruction
     tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
     if let Some(ref tree) = tree_entry.tree {
+        static QUERY_DIRECTIVE: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(
+                &tree_sitter_asm::language(),
+                "(meta kind: (meta_ident) @directive)",
+            )
+            .unwrap()
+        });
         let mut line_cursor = tree_sitter::QueryCursor::new();
         line_cursor.set_point_range(std::ops::Range {
             start: tree_sitter::Point {
@@ -1050,13 +1051,6 @@ pub fn get_comp_resp(
         });
         let curr_doc = curr_doc.as_bytes();
 
-        static QUERY_DIRECTIVE: Lazy<tree_sitter::Query> = Lazy::new(|| {
-            tree_sitter::Query::new(
-                &tree_sitter_asm::language(),
-                "(meta kind: (meta_ident) @directive)",
-            )
-            .unwrap()
-        });
         let matches_iter = line_cursor.matches(&QUERY_DIRECTIVE, tree.root_node(), curr_doc);
 
         for match_ in matches_iter {
@@ -1077,12 +1071,12 @@ pub fn get_comp_resp(
         // tree-sitter-asm currently parses label arguments to instructions as *registers*
         // We'll collect all of labels in the document (that are being parsed as labels, at least)
         // and suggest those along with the register completions
-
-        // need a separate cursor to search the entire document
-        let mut doc_cursor = tree_sitter::QueryCursor::new();
         static QUERY_LABEL: Lazy<tree_sitter::Query> = Lazy::new(|| {
             tree_sitter::Query::new(&tree_sitter_asm::language(), "(label (ident) @label)").unwrap()
         });
+
+        // need a separate cursor to search the entire document
+        let mut doc_cursor = tree_sitter::QueryCursor::new();
         let captures = doc_cursor.captures(&QUERY_LABEL, tree.root_node(), curr_doc);
         let mut labels = HashSet::new();
         for caps in captures.map(|c| c.0) {
@@ -1182,92 +1176,107 @@ const fn lsp_pos_of_point(pos: tree_sitter::Point) -> lsp_types::Position {
     }
 }
 
+/// Explore `node`, push immediate children into `res`.
+fn explore_node(
+    curr_doc: &str,
+    node: tree_sitter::Node,
+    res: &mut Vec<DocumentSymbol>,
+    label_kind_id: &Lazy<u16>,
+    ident_kind_id: &Lazy<u16>,
+) {
+    if node.kind_id() == **label_kind_id {
+        let mut children = vec![];
+        let mut cursor = node.walk();
+
+        // description for this node
+        let mut descr = String::new();
+
+        if cursor.goto_first_child() {
+            loop {
+                let sub_node = cursor.node();
+                if sub_node.kind_id() == **ident_kind_id {
+                    if let Ok(text) = sub_node.utf8_text(curr_doc.as_bytes()) {
+                        descr = text.to_string();
+                    }
+                }
+
+                explore_node(
+                    curr_doc,
+                    sub_node,
+                    &mut children,
+                    label_kind_id,
+                    ident_kind_id,
+                );
+                if !cursor.goto_next_sibling() {
+                    break;
+                }
+            }
+        }
+
+        let range = lsp_types::Range::new(
+            lsp_pos_of_point(node.start_position()),
+            lsp_pos_of_point(node.end_position()),
+        );
+
+        #[allow(deprecated)]
+        let doc = DocumentSymbol {
+            name: descr,
+            detail: None,
+            kind: SymbolKind::FUNCTION,
+            tags: None,
+            deprecated: Some(false),
+            range,
+            selection_range: range,
+            children: if children.is_empty() {
+                None
+            } else {
+                Some(children)
+            },
+        };
+        res.push(doc);
+    } else {
+        let mut cursor = node.walk();
+
+        if cursor.goto_first_child() {
+            loop {
+                explore_node(curr_doc, cursor.node(), res, label_kind_id, ident_kind_id);
+                if !cursor.goto_next_sibling() {
+                    break;
+                }
+            }
+        }
+    }
+}
+
 /// Get a tree of symbols describing the document's structure.
 pub fn get_document_symbols(
     curr_doc: &str,
     tree_entry: &mut TreeEntry,
     _params: &DocumentSymbolParams,
 ) -> Option<Vec<DocumentSymbol>> {
-    tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
-
     static LABEL_KIND_ID: Lazy<u16> =
         Lazy::new(|| tree_sitter_asm::language().id_for_node_kind("label", true));
     static IDENT_KIND_ID: Lazy<u16> =
         Lazy::new(|| tree_sitter_asm::language().id_for_node_kind("ident", true));
+    tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
 
-    /// Explore `node`, push immediate children into `res`.
-    fn explore_node(curr_doc: &[u8], node: tree_sitter::Node, res: &mut Vec<DocumentSymbol>) {
-        if node.kind_id() == *LABEL_KIND_ID {
-            let mut children = vec![];
-            let mut cursor = node.walk();
-
-            // description for this node
-            let mut descr = String::new();
-
-            if cursor.goto_first_child() {
-                loop {
-                    let sub_node = cursor.node();
-                    if sub_node.end_byte() < curr_doc.len() && sub_node.kind_id() == *IDENT_KIND_ID
-                    {
-                        if let Ok(text) = sub_node.utf8_text(curr_doc) {
-                            descr = text.to_string();
-                        }
-                    }
-
-                    explore_node(curr_doc, sub_node, &mut children);
-                    if !cursor.goto_next_sibling() {
-                        break;
-                    }
-                }
-            }
-
-            let range = lsp_types::Range::new(
-                lsp_pos_of_point(node.start_position()),
-                lsp_pos_of_point(node.end_position()),
-            );
-
-            #[allow(deprecated)]
-            let doc = DocumentSymbol {
-                name: descr,
-                detail: None,
-                kind: SymbolKind::FUNCTION,
-                tags: None,
-                deprecated: Some(false),
-                range,
-                selection_range: range,
-                children: if children.is_empty() {
-                    None
-                } else {
-                    Some(children)
-                },
-            };
-            res.push(doc);
-        } else {
-            let mut cursor = node.walk();
-
-            if cursor.goto_first_child() {
-                loop {
-                    explore_node(curr_doc, cursor.node(), res);
-                    if !cursor.goto_next_sibling() {
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    if let Some(ref tree) = tree_entry.tree {
+    tree_entry.tree.as_ref().map(|tree| {
         let mut res: Vec<DocumentSymbol> = vec![];
         let mut cursor = tree.walk();
         loop {
-            explore_node(curr_doc.as_bytes(), cursor.node(), &mut res);
+            explore_node(
+                curr_doc,
+                cursor.node(),
+                &mut res,
+                &LABEL_KIND_ID,
+                &IDENT_KIND_ID,
+            );
             if !cursor.goto_next_sibling() {
                 break;
             }
         }
-        Some(res)
-    } else {
-        None
-    }
+        res
+    })
 }
 
 pub fn get_sig_help_resp(
@@ -1280,6 +1289,15 @@ pub fn get_sig_help_resp(
 
     tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
     if let Some(ref tree) = tree_entry.tree {
+        // Instruction with any (including zero) argument(s)
+        static QUERY_INSTR_ANY_ARGS: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(
+                &tree_sitter_asm::language(),
+                "(instruction kind: (word) @instr_name)",
+            )
+            .unwrap()
+        });
+
         let mut line_cursor = tree_sitter::QueryCursor::new();
         line_cursor.set_point_range(std::ops::Range {
             start: tree_sitter::Point {
@@ -1292,15 +1310,6 @@ pub fn get_sig_help_resp(
             },
         });
         let curr_doc = curr_doc.as_bytes();
-
-        // Instruction with any (including zero) argument(s)
-        static QUERY_INSTR_ANY_ARGS: Lazy<tree_sitter::Query> = Lazy::new(|| {
-            tree_sitter::Query::new(
-                &tree_sitter_asm::language(),
-                "(instruction kind: (word) @instr_name)",
-            )
-            .unwrap()
-        });
 
         let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = line_cursor
             .matches(&QUERY_INSTR_ANY_ARGS, tree.root_node(), curr_doc)
@@ -1621,11 +1630,9 @@ fn get_global_config() -> Option<Config> {
         cfg_path.push("asm-lsp");
         let cfg_path_s = cfg_path.display();
         info!("Creating directories along {} as necessary...", cfg_path_s);
-        #[allow(clippy::needless_borrows_for_generic_args)]
         match create_dir_all(&cfg_path) {
             Ok(()) => {
                 cfg_path.push(".asm-lsp.toml");
-                #[allow(clippy::needless_borrows_for_generic_args)]
                 if let Ok(config) = std::fs::read_to_string(&cfg_path) {
                     let cfg_path_s = cfg_path.display();
                     match toml::from_str::<Config>(&config) {
@@ -1651,12 +1658,10 @@ fn get_global_config() -> Option<Config> {
 }
 
 fn alt_mac_config_dir() -> Option<PathBuf> {
-    if let Some(mut path) = home::home_dir() {
+    home::home_dir().map(|mut path| {
         path.push(".config");
-        Some(path)
-    } else {
-        None
-    }
+        path
+    })
 }
 
 /// Attempts to find the project's root directory given its `InitializeParams`
