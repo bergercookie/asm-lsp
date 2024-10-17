@@ -296,7 +296,7 @@ mod tests {
         let mut info = GlobalInfo::new();
 
         info.x86_instructions = if config.instruction_sets.x86.unwrap_or(false) {
-            let x86_instrs = include_bytes!("../docs_store/opcodes/serialized/x86");
+            let x86_instrs = include_bytes!("serialized/opcodes/x86");
             bincode::deserialize::<Vec<Instruction>>(x86_instrs)?
                 .into_iter()
                 .map(|instruction| {
@@ -310,7 +310,7 @@ mod tests {
         };
 
         info.x86_64_instructions = if config.instruction_sets.x86_64.unwrap_or(false) {
-            let x86_64_instrs = include_bytes!("../docs_store/opcodes/serialized/x86_64");
+            let x86_64_instrs = include_bytes!("serialized/opcodes/x86_64");
             bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)?
                 .into_iter()
                 .map(|instruction| {
@@ -324,7 +324,7 @@ mod tests {
         };
 
         info.z80_instructions = if config.instruction_sets.z80.unwrap_or(false) {
-            let z80_instrs = include_bytes!("../docs_store/opcodes/serialized/z80");
+            let z80_instrs = include_bytes!("serialized/opcodes/z80");
             bincode::deserialize::<Vec<Instruction>>(z80_instrs)?
                 .into_iter()
                 .map(|instruction| {
@@ -338,70 +338,70 @@ mod tests {
         };
 
         info.arm_instructions = if config.instruction_sets.arm.unwrap_or(false) {
-            let arm_instrs = include_bytes!("../docs_store/opcodes/serialized/arm");
+            let arm_instrs = include_bytes!("serialized/opcodes/arm");
             bincode::deserialize::<Vec<Instruction>>(arm_instrs)?
         } else {
             Vec::new()
         };
 
         info.riscv_instructions = if config.instruction_sets.riscv.unwrap_or(false) {
-            let riscv_instrs = include_bytes!("../docs_store/opcodes/serialized/riscv");
+            let riscv_instrs = include_bytes!("serialized/opcodes/riscv");
             bincode::deserialize::<Vec<Instruction>>(riscv_instrs)?
         } else {
             Vec::new()
         };
 
         info.x86_registers = if config.instruction_sets.x86.unwrap_or(false) {
-            let regs_x86 = include_bytes!("../docs_store/registers/serialized/x86");
+            let regs_x86 = include_bytes!("serialized/registers/x86");
             bincode::deserialize(regs_x86)?
         } else {
             Vec::new()
         };
 
         info.x86_64_registers = if config.instruction_sets.x86_64.unwrap_or(false) {
-            let regs_x86_64 = include_bytes!("../docs_store/registers/serialized/x86_64");
+            let regs_x86_64 = include_bytes!("serialized/registers/x86_64");
             bincode::deserialize(regs_x86_64)?
         } else {
             Vec::new()
         };
 
         info.z80_registers = if config.instruction_sets.z80.unwrap_or(false) {
-            let regs_z80 = include_bytes!("../docs_store/registers/serialized/z80");
+            let regs_z80 = include_bytes!("serialized/registers/z80");
             bincode::deserialize(regs_z80)?
         } else {
             Vec::new()
         };
 
         info.arm_registers = if config.instruction_sets.arm.unwrap_or(false) {
-            let regs_arm = include_bytes!("../docs_store/registers/serialized/arm");
+            let regs_arm = include_bytes!("serialized/registers/arm");
             bincode::deserialize(regs_arm)?
         } else {
             Vec::new()
         };
 
         info.riscv_registers = if config.instruction_sets.riscv.unwrap_or(false) {
-            let regs_riscv = include_bytes!("../docs_store/registers/serialized/riscv");
+            let regs_riscv = include_bytes!("serialized/registers/riscv");
             bincode::deserialize(regs_riscv)?
         } else {
             Vec::new()
         };
 
         info.gas_directives = if config.assemblers.gas.unwrap_or(false) {
-            let gas_dirs = include_bytes!("../docs_store/directives/serialized/gas");
+            let gas_dirs = include_bytes!("serialized/directives/gas");
             bincode::deserialize(gas_dirs)?
         } else {
             Vec::new()
         };
 
         info.masm_directives = if config.assemblers.masm.unwrap_or(false) {
-            let masm_dirs = include_bytes!("../docs_store/directives/serialized/masm");
+            let masm_dirs = include_bytes!("serialized/directives/masm");
             bincode::deserialize(masm_dirs)?
         } else {
             Vec::new()
         };
 
         info.nasm_directives = if config.assemblers.nasm.unwrap_or(false) {
-            let nasm_dirs = include_bytes!("../docs_store/directives/serialized/nasm");
+            let nasm_dirs = include_bytes!("serialized/directives/nasm");
             bincode::deserialize(nasm_dirs)?
         } else {
             Vec::new()
@@ -1975,10 +1975,10 @@ Width: 8 bits",
     #[test]
     fn serialized_x86_registers_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let x86_regs_ser = include_bytes!("../docs_store/registers/serialized/x86");
+        let x86_regs_ser = include_bytes!("serialized/registers/x86");
         let ser_vec = bincode::deserialize::<Vec<Register>>(x86_regs_ser).unwrap();
 
-        let x86_regs_raw = include_str!("../docs_store/registers/raw/x86.xml");
+        let x86_regs_raw = include_str!("serialized/registers/x86.xml");
         let mut raw_vec = populate_registers(x86_regs_raw).unwrap();
 
         // HACK: Windows line endings...
@@ -2009,7 +2009,7 @@ Width: 8 bits",
     #[test]
     fn serialized_x86_64_registers_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let x86_64_regs_ser = include_bytes!("../docs_store/registers/serialized/x86_64");
+        let x86_64_regs_ser = include_bytes!("serialized/registers/x86_64");
         let ser_vec = bincode::deserialize::<Vec<Register>>(x86_64_regs_ser).unwrap();
 
         let x86_64_regs_raw = include_str!("../docs_store/registers/raw/x86_64.xml");
@@ -2043,7 +2043,7 @@ Width: 8 bits",
     #[test]
     fn serialized_arm_registers_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let arm_regs_ser = include_bytes!("../docs_store/registers/serialized/arm");
+        let arm_regs_ser = include_bytes!("serialized/registers/arm");
         let ser_vec = bincode::deserialize::<Vec<Register>>(arm_regs_ser).unwrap();
 
         let arm_regs_raw = include_str!("../docs_store/registers/raw/arm.xml");
@@ -2077,7 +2077,7 @@ Width: 8 bits",
     #[test]
     fn serialized_z80_registers_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let z80_regs_ser = include_bytes!("../docs_store/registers/serialized/z80");
+        let z80_regs_ser = include_bytes!("serialized/registers/z80");
         let ser_vec = bincode::deserialize::<Vec<Register>>(z80_regs_ser).unwrap();
 
         let z80_regs_raw = include_str!("../docs_store/registers/raw/z80.xml");
@@ -2104,7 +2104,7 @@ Width: 8 bits",
     #[test]
     fn serialized_x86_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let x86_instrs_ser = include_bytes!("../docs_store/opcodes/serialized/x86");
+        let x86_instrs_ser = include_bytes!("serialized/opcodes/x86");
         let mut ser_vec = bincode::deserialize::<Vec<Instruction>>(x86_instrs_ser).unwrap();
 
         let x86_instrs_raw = include_str!("../docs_store/opcodes/raw/x86.xml");
@@ -2140,7 +2140,7 @@ Width: 8 bits",
     #[test]
     fn serialized_x86_64_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let x86_64_instrs_ser = include_bytes!("../docs_store/opcodes/serialized/x86_64");
+        let x86_64_instrs_ser = include_bytes!("serialized/opcodes/x86_64");
         let mut ser_vec = bincode::deserialize::<Vec<Instruction>>(x86_64_instrs_ser).unwrap();
 
         let x86_64_instrs_raw = include_str!("../docs_store/opcodes/raw/x86_64.xml");
@@ -2176,7 +2176,7 @@ Width: 8 bits",
     #[test]
     fn serialized_arm_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let arm_instrs_ser = include_bytes!("../docs_store/opcodes/serialized/arm");
+        let arm_instrs_ser = include_bytes!("serialized/opcodes/arm");
         let mut ser_vec = bincode::deserialize::<Vec<Instruction>>(arm_instrs_ser).unwrap();
         ser_vec.sort_by(|a, b| a.name.cmp(&b.name));
 
@@ -2205,7 +2205,7 @@ Width: 8 bits",
     #[test]
     fn serialized_z80_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let z80_instrs_ser = include_bytes!("../docs_store/opcodes/serialized/z80");
+        let z80_instrs_ser = include_bytes!("serialized/opcodes/z80");
         let ser_vec = bincode::deserialize::<Vec<Instruction>>(z80_instrs_ser).unwrap();
 
         let z80_instrs_raw = include_str!("../docs_store/opcodes/raw/z80.xml");
@@ -2232,7 +2232,7 @@ Width: 8 bits",
     #[test]
     fn serialized_gas_directives_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let gas_dirs_ser = include_bytes!("../docs_store/directives/serialized/gas");
+        let gas_dirs_ser = include_bytes!("serialized/directives/gas");
         let ser_vec = bincode::deserialize::<Vec<Directive>>(gas_dirs_ser).unwrap();
 
         let gas_dirs_raw = include_str!("../docs_store/directives/raw/gas.xml");
@@ -2259,10 +2259,10 @@ Width: 8 bits",
     #[test]
     fn serialized_masm_directives_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let masm_dirs_ser = include_bytes!("../docs_store/directives/serialized/masm");
+        let masm_dirs_ser = include_bytes!("serialized/directives/masm");
         let ser_vec = bincode::deserialize::<Vec<Directive>>(masm_dirs_ser).unwrap();
 
-        let masm_dirs_raw = include_str!("../docs_store/directives/raw/masm.xml");
+        let masm_dirs_raw = include_str!("serialized/directives/masm.xml");
         let raw_vec = populate_masm_nasm_directives(masm_dirs_raw).unwrap();
 
         for dir in ser_vec {
@@ -2286,7 +2286,7 @@ Width: 8 bits",
     #[test]
     fn serialized_nasm_directives_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let nasm_dirs_ser = include_bytes!("../docs_store/directives/serialized/nasm");
+        let nasm_dirs_ser = include_bytes!("serialized/directives/nasm");
         let ser_vec = bincode::deserialize::<Vec<Directive>>(nasm_dirs_ser).unwrap();
 
         let nasm_dirs_raw = include_str!("../docs_store/directives/raw/nasm.xml");

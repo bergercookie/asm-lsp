@@ -128,7 +128,7 @@ pub fn main() -> Result<()> {
     // former map
     let x86_instructions = if config.instruction_sets.x86.unwrap_or(false) {
         let start = std::time::Instant::now();
-        let x86_instrs = include_bytes!("../../docs_store/opcodes/serialized/x86");
+        let x86_instrs = include_bytes!("../serialized/opcodes/x86");
         let instrs = bincode::deserialize::<Vec<Instruction>>(x86_instrs)?
             .into_iter()
             .map(|instruction| {
@@ -148,7 +148,7 @@ pub fn main() -> Result<()> {
 
     let x86_64_instructions = if config.instruction_sets.x86_64.unwrap_or(false) {
         let start = std::time::Instant::now();
-        let x86_64_instrs = include_bytes!("../../docs_store/opcodes/serialized/x86_64");
+        let x86_64_instrs = include_bytes!("../serialized/opcodes/x86_64");
         let instrs = bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)?
             .into_iter()
             .map(|instruction| {
@@ -168,7 +168,7 @@ pub fn main() -> Result<()> {
 
     let z80_instructions = if config.instruction_sets.z80.unwrap_or(false) {
         let start = std::time::Instant::now();
-        let z80_instrs = include_bytes!("../../docs_store/opcodes/serialized/z80");
+        let z80_instrs = include_bytes!("../serialized/opcodes/z80");
         let instrs = bincode::deserialize::<Vec<Instruction>>(z80_instrs)?
             .into_iter()
             .map(|instruction| {
@@ -188,7 +188,7 @@ pub fn main() -> Result<()> {
 
     let arm_instructions = if config.instruction_sets.arm.unwrap_or(false) {
         let start = std::time::Instant::now();
-        let arm_instrs = include_bytes!("../../docs_store/opcodes/serialized/arm");
+        let arm_instrs = include_bytes!("../serialized/opcodes/arm");
         // NOTE: No need to filter these instructions by assembler like we do for
         // x86/x86_64, as our ARM docs don't contain any assembler-specific information (yet)
         let instrs = bincode::deserialize::<Vec<Instruction>>(arm_instrs)?;
@@ -203,7 +203,7 @@ pub fn main() -> Result<()> {
 
     let riscv_instructions = if config.instruction_sets.riscv.unwrap_or(false) {
         let start = std::time::Instant::now();
-        let riscv_instrs = include_bytes!("../../docs_store/opcodes/serialized/riscv");
+        let riscv_instrs = include_bytes!("../serialized/opcodes/riscv");
         // NOTE: No need to filter these instructions by assembler like we do for
         // x86/x86_64, as our RISCV docs don't contain any assembler-specific information (yet)
         let instrs = bincode::deserialize::<Vec<Instruction>>(riscv_instrs)?;
@@ -247,7 +247,7 @@ pub fn main() -> Result<()> {
     // former map
     let x86_registers = if config.instruction_sets.x86.unwrap_or(false) {
         let start = std::time::Instant::now();
-        let regs_x86 = include_bytes!("../../docs_store/registers/serialized/x86");
+        let regs_x86 = include_bytes!("../serialized/registers/x86");
         let regs = bincode::deserialize(regs_x86)?;
         info!(
             "x86 register set loaded in {}ms",
@@ -260,7 +260,7 @@ pub fn main() -> Result<()> {
 
     let x86_64_registers = if config.instruction_sets.x86_64.unwrap_or(false) {
         let start = std::time::Instant::now();
-        let regs_x86_64 = include_bytes!("../../docs_store/registers/serialized/x86_64");
+        let regs_x86_64 = include_bytes!("../serialized/registers/x86_64");
         let regs = bincode::deserialize(regs_x86_64)?;
         info!(
             "x86-64 register set loaded in {}ms",
@@ -273,7 +273,7 @@ pub fn main() -> Result<()> {
 
     let z80_registers = if config.instruction_sets.z80.unwrap_or(false) {
         let start = std::time::Instant::now();
-        let regs_z80 = include_bytes!("../../docs_store/registers/serialized/z80");
+        let regs_z80 = include_bytes!("../serialized/registers/z80");
         let regs = bincode::deserialize(regs_z80)?;
         info!(
             "z80 register set loaded in {}ms",
@@ -286,7 +286,7 @@ pub fn main() -> Result<()> {
 
     let arm_registers = if config.instruction_sets.arm.unwrap_or(false) {
         let start = std::time::Instant::now();
-        let regs_arm = include_bytes!("../../docs_store/registers/serialized/arm");
+        let regs_arm = include_bytes!("../serialized/registers/arm");
         let regs = bincode::deserialize(regs_arm)?;
         info!(
             "arm register set loaded in {}ms",
@@ -299,7 +299,7 @@ pub fn main() -> Result<()> {
 
     let riscv_registers = if config.instruction_sets.riscv.unwrap_or(false) {
         let start = std::time::Instant::now();
-        let regs_riscv = include_bytes!("../../docs_store/registers/serialized/riscv");
+        let regs_riscv = include_bytes!("../serialized/registers/riscv");
         let regs = bincode::deserialize(regs_riscv)?;
         info!(
             "riscv register set loaded in {}ms",
@@ -322,7 +322,7 @@ pub fn main() -> Result<()> {
 
     let gas_directives = if config.assemblers.gas.unwrap_or(false) {
         let start = std::time::Instant::now();
-        let gas_dirs = include_bytes!("../../docs_store/directives/serialized/gas");
+        let gas_dirs = include_bytes!("../serialized/directives/gas");
         let dirs = bincode::deserialize(gas_dirs)?;
         info!(
             "Gas directive set loaded in {}ms",
@@ -335,7 +335,7 @@ pub fn main() -> Result<()> {
 
     let masm_directives = if config.assemblers.masm.unwrap_or(false) {
         let start = std::time::Instant::now();
-        let masm_dirs = include_bytes!("../../docs_store/directives/serialized/masm");
+        let masm_dirs = include_bytes!("../serialized/directives/masm");
         let dirs = bincode::deserialize(masm_dirs)?;
         info!(
             "MASM directive set loaded in {}ms",
@@ -348,7 +348,7 @@ pub fn main() -> Result<()> {
 
     let nasm_directives = if config.assemblers.nasm.unwrap_or(false) {
         let start = std::time::Instant::now();
-        let nasm_dirs = include_bytes!("../../docs_store/directives/serialized/nasm");
+        let nasm_dirs = include_bytes!("../serialized/directives/nasm");
         let dirs = bincode::deserialize(nasm_dirs)?;
         info!(
             "Nasm directive set loaded in {}ms",

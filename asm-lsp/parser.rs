@@ -624,7 +624,7 @@ fn parse_arm_instruction(xml_contents: &str) -> Option<Instruction> {
                     ustr::get_str(txt).clone_into(&mut instruction.summary);
                 }
             }
-            // end event --------------------------------------------------------------------------
+            // end event
             Ok(Event::End(ref e)) => {
                 match e.name() {
                     QName(b"instructionsection") => break,
@@ -678,7 +678,7 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
     debug!("Parsing instruction XML contents...");
     loop {
         match reader.read_event() {
-            // start event ------------------------------------------------------------------------
+            // start event
             Ok(Event::Start(ref e)) => {
                 match e.name() {
                     QName(b"InstructionSet") => {
@@ -962,7 +962,7 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                     _ => {} // unknown event
                 }
             }
-            // end event --------------------------------------------------------------------------
+            // end event
             Ok(Event::End(ref e)) => {
                 match e.name() {
                     QName(b"Instruction") => {
@@ -1050,7 +1050,7 @@ pub fn populate_name_to_instruction_map<'instruction>(
 pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
     let mut registers_map = HashMap::<String, Register>::new();
 
-    // iterate through the XML --------------------------------------------------------------------
+    // iterate through the XML
     let mut reader = Reader::from_str(xml_contents);
 
     // ref to the register that's currently under construction
@@ -1061,7 +1061,7 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
     debug!("Parsing register XML contents...");
     loop {
         match reader.read_event() {
-            // start event ------------------------------------------------------------------------
+            // start event
             Ok(Event::Start(ref e)) => {
                 match e.name() {
                     QName(b"InstructionSet") => {
@@ -1196,7 +1196,7 @@ pub fn populate_name_to_register_map<'register>(
 pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     let mut directives_map = HashMap::<String, Directive>::new();
 
-    // iterate through the XML --------------------------------------------------------------------
+    // iterate through the XML
     let mut reader = Reader::from_str(xml_contents);
 
     // ref to the assembler directive that's currently under construction
@@ -1206,7 +1206,7 @@ pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive
     debug!("Parsing directive XML contents...");
     loop {
         match reader.read_event() {
-            // start event ------------------------------------------------------------------------
+            // start event
             Ok(Event::Start(ref e)) => {
                 match e.name() {
                     QName(b"directive") => {
@@ -1242,7 +1242,7 @@ pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive
                     curr_directive.description = ustr::get_str(txt).trim_ascii().to_string();
                 }
             }
-            // end event --------------------------------------------------------------------------
+            // end event
             Ok(Event::End(ref e)) => {
                 if QName(b"directive") == e.name() {
                     directives_map.insert(curr_directive.name.clone(), curr_directive.clone());
@@ -1282,7 +1282,7 @@ pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive
 pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     let mut directives_map = HashMap::<String, Directive>::new();
 
-    // iterate through the XML --------------------------------------------------------------------
+    // iterate through the XML
     let mut reader = Reader::from_str(xml_contents);
 
     // ref to the assembler directive that's currently under construction
@@ -1292,7 +1292,7 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     debug!("Parsing directive XML contents...");
     loop {
         match reader.read_event() {
-            // start event ------------------------------------------------------------------------
+            // start event
             Ok(Event::Start(ref e)) => {
                 match e.name() {
                     QName(b"Assembler") => {
@@ -1350,7 +1350,7 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
                     _ => {} // unknown event
                 }
             }
-            // end event --------------------------------------------------------------------------
+            // end event
             Ok(Event::End(ref e)) => {
                 if QName(b"Directive") == e.name() {
                     // finish directive
@@ -1379,7 +1379,7 @@ pub fn populate_name_to_directive_map<'directive>(
 }
 
 fn get_docs_body(x86_online_docs: &str) -> Option<String> {
-    // provide a URL example page -----------------------------------------------------------------
+    // provide a URL example page
     // 1. If the cache refresh option is enabled or the cache doesn't exist, attempt to fetch the
     //    data, write it to the cache, and then use it
     // 2. Otherwise, attempt to read the data from the cache

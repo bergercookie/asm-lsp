@@ -12,7 +12,6 @@ readme.workspace = true
 keywords.workspace = true
 categories.workspace = true
 license.workspace = true
-# TODO: restructure so that an include section for docs_store isn't needed
 
 [lib]
 name = "asm_lsp"
