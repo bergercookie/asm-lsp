@@ -19,223 +19,94 @@ mod tests {
         parser::{get_cache_dir, populate_arm_instructions, populate_masm_nasm_directives},
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
-        Assembler, Assemblers, Config, ConfigOptions, Directive, Instruction, InstructionSets,
-        NameToDirectiveMap, NameToInstructionMap, NameToRegisterMap, Register, TreeEntry,
-        TreeStore,
+        Assembler, Config, ConfigOptions, Directive, Instruction, NameToDirectiveMap,
+        NameToInstructionMap, NameToRegisterMap, Register, TreeEntry, TreeStore,
     };
 
     fn empty_test_config() -> Config {
         Config {
-            version: "0.1".to_string(),
-            assemblers: Assemblers {
-                gas: Some(false),
-                go: Some(false),
-                masm: Some(false),
-                nasm: Some(false),
-                z80: Some(false),
-            },
-            instruction_sets: InstructionSets {
-                x86: Some(false),
-                x86_64: Some(false),
-                z80: Some(false),
-                arm: Some(false),
-                arm64: Some(false),
-                riscv: Some(false),
-            },
-            opts: ConfigOptions {
+            version: Some("0.1".to_string()),
+            assembler: Assembler::None,
+            instruction_set: Arch::None,
+            opts: Some(ConfigOptions {
                 compiler: None,
                 diagnostics: None,
                 default_diagnostics: None,
-            },
+            }),
             client: None,
         }
     }
 
     fn z80_test_config() -> Config {
         Config {
-            version: "0.1".to_string(),
-            assemblers: Assemblers {
-                gas: Some(false),
-                go: Some(false),
-                masm: Some(false),
-                nasm: Some(false),
-                z80: Some(false),
-            },
-            instruction_sets: InstructionSets {
-                x86: Some(false),
-                x86_64: Some(false),
-                z80: Some(true),
-                arm: Some(false),
-                arm64: Some(false),
-                riscv: Some(false),
-            },
-            opts: ConfigOptions {
-                compiler: None,
-                diagnostics: None,
-                default_diagnostics: None,
-            },
+            version: Some("0.1".to_string()),
+            assembler: Assembler::None,
+            instruction_set: Arch::Z80,
+            opts: Some(ConfigOptions::default()),
             client: None,
         }
     }
 
     fn arm_test_config() -> Config {
         Config {
-            version: "0.1".to_string(),
-            assemblers: Assemblers {
-                gas: Some(false),
-                go: Some(false),
-                masm: Some(false),
-                nasm: Some(false),
-                z80: Some(false),
-            },
-            instruction_sets: InstructionSets {
-                x86: Some(false),
-                x86_64: Some(false),
-                z80: Some(false),
-                arm: Some(true),
-                arm64: Some(false),
-                riscv: Some(false),
-            },
-            opts: ConfigOptions {
-                compiler: None,
-                diagnostics: None,
-                default_diagnostics: None,
-            },
+            version: Some("0.1".to_string()),
+            assembler: Assembler::None,
+            instruction_set: Arch::ARM,
+            opts: Some(ConfigOptions::default()),
             client: None,
         }
     }
 
     fn riscv_test_config() -> Config {
         Config {
-            version: "0.1".to_string(),
-            assemblers: Assemblers {
-                gas: Some(false),
-                go: Some(false),
-                masm: Some(false),
-                nasm: Some(false),
-                z80: Some(false),
-            },
-            instruction_sets: InstructionSets {
-                x86: Some(false),
-                x86_64: Some(false),
-                z80: Some(false),
-                arm: Some(false),
-                arm64: Some(false),
-                riscv: Some(true),
-            },
-            opts: ConfigOptions {
-                compiler: None,
-                diagnostics: None,
-                default_diagnostics: None,
-            },
+            version: Some("0.1".to_string()),
+            assembler: Assembler::None,
+            instruction_set: Arch::RISCV,
+            opts: Some(ConfigOptions::default()),
             client: None,
         }
     }
 
     fn x86_x86_64_test_config() -> Config {
         Config {
-            version: "0.1".to_string(),
-            assemblers: Assemblers {
-                gas: Some(true),
-                go: Some(true),
-                masm: Some(false),
-                nasm: Some(false),
-                z80: Some(false),
-            },
-            instruction_sets: InstructionSets {
-                x86: Some(true),
-                x86_64: Some(true),
-                z80: Some(false),
-                arm: Some(false),
-                arm64: Some(false),
-                riscv: Some(false),
-            },
-            opts: ConfigOptions {
-                compiler: None,
-                diagnostics: None,
-                default_diagnostics: None,
-            },
+            version: Some("0.1".to_string()),
+            // HACK: The Gas or Go assembler must be enabled for this test
+            // config, as filtering later on removes any x86/x86-64
+            // instructions without any `form` fields that match one of
+            // those assemblers
+            assembler: Assembler::Gas,
+            instruction_set: Arch::X86_AND_X86_64,
+            opts: Some(ConfigOptions::default()),
             client: None,
         }
     }
 
     fn gas_test_config() -> Config {
         Config {
-            version: "0.1".to_string(),
-            assemblers: Assemblers {
-                gas: Some(true),
-                go: Some(false),
-                masm: Some(false),
-                nasm: Some(false),
-                z80: Some(false),
-            },
-            instruction_sets: InstructionSets {
-                x86: Some(false),
-                x86_64: Some(false),
-                z80: Some(false),
-                arm: Some(false),
-                arm64: Some(false),
-                riscv: Some(false),
-            },
-            opts: ConfigOptions {
-                compiler: None,
-                diagnostics: None,
-                default_diagnostics: None,
-            },
+            version: Some("0.1".to_string()),
+            assembler: Assembler::Gas,
+            instruction_set: Arch::None,
+            opts: Some(ConfigOptions::default()),
             client: None,
         }
     }
 
     fn masm_test_config() -> Config {
         Config {
-            version: "0.1".to_string(),
-            assemblers: Assemblers {
-                gas: Some(false),
-                go: Some(false),
-                masm: Some(true),
-                nasm: Some(false),
-                z80: Some(false),
-            },
-            instruction_sets: InstructionSets {
-                x86: Some(false),
-                x86_64: Some(false),
-                z80: Some(false),
-                arm: Some(false),
-                arm64: Some(false),
-                riscv: Some(false),
-            },
-            opts: ConfigOptions {
-                compiler: None,
-                diagnostics: None,
-                default_diagnostics: None,
-            },
+            version: Some("0.1".to_string()),
+            assembler: Assembler::Masm,
+            instruction_set: Arch::None,
+            opts: Some(ConfigOptions::default()),
             client: None,
         }
     }
 
     fn nasm_test_config() -> Config {
         Config {
-            version: "0.1".to_string(),
-            assemblers: Assemblers {
-                gas: Some(false),
-                go: Some(false),
-                masm: Some(false),
-                nasm: Some(true),
-                z80: Some(false),
-            },
-            instruction_sets: InstructionSets {
-                x86: Some(false),
-                x86_64: Some(false),
-                z80: Some(false),
-                arm: Some(false),
-                arm64: Some(false),
-                riscv: Some(false),
-            },
-            opts: ConfigOptions {
-                compiler: None,
-                diagnostics: None,
-                default_diagnostics: None,
-            },
+            version: Some("0.1".to_string()),
+            assembler: Assembler::Nasm,
+            instruction_set: Arch::None,
+            opts: Some(ConfigOptions::default()),
             client: None,
         }
     }
@@ -264,9 +135,9 @@ mod tests {
         names_to_instructions: NameToInstructionMap<'a>,
         names_to_registers: NameToRegisterMap<'a>,
         names_to_directives: NameToDirectiveMap<'a>,
-        instr_completion_items: Vec<CompletionItem>,
-        reg_completion_items: Vec<CompletionItem>,
-        directive_completion_items: Vec<CompletionItem>,
+        instr_completion_items: Vec<(Arch, CompletionItem)>,
+        reg_completion_items: Vec<(Arch, CompletionItem)>,
+        directive_completion_items: Vec<(Assembler, CompletionItem)>,
     }
 
     impl GlobalInfo {
@@ -307,7 +178,7 @@ mod tests {
     fn init_global_info(config: &Config) -> Result<GlobalInfo> {
         let mut info = GlobalInfo::new();
 
-        info.x86_instructions = if config.instruction_sets.x86.unwrap_or(false) {
+        info.x86_instructions = if config.is_isa_enabled(Arch::X86) {
             let x86_instrs = include_bytes!("serialized/opcodes/x86");
             bincode::deserialize::<Vec<Instruction>>(x86_instrs)?
                 .into_iter()
@@ -321,7 +192,7 @@ mod tests {
             Vec::new()
         };
 
-        info.x86_64_instructions = if config.instruction_sets.x86_64.unwrap_or(false) {
+        info.x86_64_instructions = if config.is_isa_enabled(Arch::X86_64) {
             let x86_64_instrs = include_bytes!("serialized/opcodes/x86_64");
             bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)?
                 .into_iter()
@@ -335,98 +206,91 @@ mod tests {
             Vec::new()
         };
 
-        info.z80_instructions = if config.instruction_sets.z80.unwrap_or(false) {
+        info.z80_instructions = if config.is_isa_enabled(Arch::Z80) {
             let z80_instrs = include_bytes!("serialized/opcodes/z80");
             bincode::deserialize::<Vec<Instruction>>(z80_instrs)?
-                .into_iter()
-                .map(|instruction| {
-                    // filter out assemblers by user config
-                    instr_filter_targets(&instruction, config)
-                })
-                .filter(|instruction| !instruction.forms.is_empty())
-                .collect()
         } else {
             Vec::new()
         };
 
-        info.arm_instructions = if config.instruction_sets.arm.unwrap_or(false) {
+        info.arm_instructions = if config.is_isa_enabled(Arch::ARM) {
             let arm_instrs = include_bytes!("serialized/opcodes/arm");
             bincode::deserialize::<Vec<Instruction>>(arm_instrs)?
         } else {
             Vec::new()
         };
 
-        info.arm64_instructions = if config.instruction_sets.arm64.unwrap_or(false) {
+        info.arm64_instructions = if config.is_isa_enabled(Arch::ARM64) {
             let arm64_instrs = include_bytes!("serialized/opcodes/arm64");
             bincode::deserialize::<Vec<Instruction>>(arm64_instrs)?
         } else {
             Vec::new()
         };
 
-        info.riscv_instructions = if config.instruction_sets.riscv.unwrap_or(false) {
+        info.riscv_instructions = if config.is_isa_enabled(Arch::RISCV) {
             let riscv_instrs = include_bytes!("serialized/opcodes/riscv");
             bincode::deserialize::<Vec<Instruction>>(riscv_instrs)?
         } else {
             Vec::new()
         };
 
-        info.x86_registers = if config.instruction_sets.x86.unwrap_or(false) {
+        info.x86_registers = if config.is_isa_enabled(Arch::X86) {
             let regs_x86 = include_bytes!("serialized/registers/x86");
             bincode::deserialize(regs_x86)?
         } else {
             Vec::new()
         };
 
-        info.x86_64_registers = if config.instruction_sets.x86_64.unwrap_or(false) {
+        info.x86_64_registers = if config.is_isa_enabled(Arch::X86_64) {
             let regs_x86_64 = include_bytes!("serialized/registers/x86_64");
             bincode::deserialize(regs_x86_64)?
         } else {
             Vec::new()
         };
 
-        info.z80_registers = if config.instruction_sets.z80.unwrap_or(false) {
+        info.z80_registers = if config.is_isa_enabled(Arch::Z80) {
             let regs_z80 = include_bytes!("serialized/registers/z80");
             bincode::deserialize(regs_z80)?
         } else {
             Vec::new()
         };
 
-        info.arm_registers = if config.instruction_sets.arm.unwrap_or(false) {
+        info.arm_registers = if config.is_isa_enabled(Arch::ARM) {
             let regs_arm = include_bytes!("serialized/registers/arm");
             bincode::deserialize(regs_arm)?
         } else {
             Vec::new()
         };
 
-        info.arm64_registers = if config.instruction_sets.arm64.unwrap_or(false) {
+        info.arm64_registers = if config.is_isa_enabled(Arch::ARM64) {
             let regs_arm64 = include_bytes!("serialized/registers/arm64");
             bincode::deserialize(regs_arm64)?
         } else {
             Vec::new()
         };
 
-        info.riscv_registers = if config.instruction_sets.riscv.unwrap_or(false) {
+        info.riscv_registers = if config.is_isa_enabled(Arch::RISCV) {
             let regs_riscv = include_bytes!("serialized/registers/riscv");
             bincode::deserialize(regs_riscv)?
         } else {
             Vec::new()
         };
 
-        info.gas_directives = if config.assemblers.gas.unwrap_or(false) {
+        info.gas_directives = if config.is_assembler_enabled(Assembler::Gas) {
             let gas_dirs = include_bytes!("serialized/directives/gas");
             bincode::deserialize(gas_dirs)?
         } else {
             Vec::new()
         };
 
-        info.masm_directives = if config.assemblers.masm.unwrap_or(false) {
+        info.masm_directives = if config.is_assembler_enabled(Assembler::Masm) {
             let masm_dirs = include_bytes!("serialized/directives/masm");
             bincode::deserialize(masm_dirs)?
         } else {
             Vec::new()
         };
 
-        info.nasm_directives = if config.assemblers.nasm.unwrap_or(false) {
+        info.nasm_directives = if config.is_assembler_enabled(Assembler::Nasm) {
             let nasm_dirs = include_bytes!("serialized/directives/nasm");
             bincode::deserialize(nasm_dirs)?
         } else {
@@ -615,6 +479,7 @@ mod tests {
             },
             |doc| get_word_from_pos_params(doc, &pos_params),
         );
+        println!("Word: {word}, offset: {cursor_offset}");
 
         let resp = get_hover_resp(
             &hover_params,
@@ -1008,11 +873,11 @@ Move Low Packed Single-Precision Floating-Point Values
 
 ## Forms
 
-- *GAS*: movlps | *GO*: MOVLPS | *XMM*: SSE | *ISA*: SSE
+- *GAS*: movlps | *XMM*: SSE | *ISA*: SSE
 
   + [xmm]    input = true   output = true
   + [m64]    input = true   output = false
-- *GAS*: movlps | *GO*: MOVLPS | *XMM*: SSE | *ISA*: SSE
+- *GAS*: movlps | *XMM*: SSE | *ISA*: SSE
 
   + [m64]    input = false  output = true
   + [xmm]    input = true   output = false
@@ -1022,11 +887,11 @@ Move Low Packed Single-Precision Floating-Point Values
 
 ## Forms
 
-- *GAS*: movlps | *GO*: MOVLPS | *XMM*: SSE | *ISA*: SSE
+- *GAS*: movlps | *XMM*: SSE | *ISA*: SSE
 
   + [xmm]    input = true   output = true
   + [m64]    input = true   output = false
-- *GAS*: movlps | *GO*: MOVLPS | *XMM*: SSE | *ISA*: SSE
+- *GAS*: movlps | *XMM*: SSE | *ISA*: SSE
 
   + [m64]    input = false  output = true
   + [xmm]    input = true   output = false",
@@ -1049,16 +914,16 @@ Push Value Onto the Stack
 - *GAS*: pushq
 
   + [imm32]
-- *GAS*: pushw | *GO*: PUSHW
+- *GAS*: pushw
 
   + [r16]    input = true   output = false
-- *GAS*: pushl | *GO*: PUSHL
+- *GAS*: pushl
 
   + [r32]    input = true   output = false
-- *GAS*: pushw | *GO*: PUSHW
+- *GAS*: pushw
 
   + [m16]    input = true   output = false
-- *GAS*: pushl | *GO*: PUSHL
+- *GAS*: pushl
 
   + [m32]    input = true   output = false
 
@@ -1067,22 +932,22 @@ Push Value Onto the Stack
 
 ## Forms
 
-- *GAS*: pushq | *GO*: PUSHQ
+- *GAS*: pushq
 
   + [imm8]   extended-size = 8
-- *GAS*: pushq | *GO*: PUSHQ
+- *GAS*: pushq
 
   + [imm32]  extended-size = 8
-- *GAS*: pushw | *GO*: PUSHW
+- *GAS*: pushw
 
   + [r16]    input = true   output = false
-- *GAS*: pushq | *GO*: PUSHQ
+- *GAS*: pushq
 
   + [r64]    input = true   output = false
-- *GAS*: pushw | *GO*: PUSHW
+- *GAS*: pushw
 
   + [m16]    input = true   output = false
-- *GAS*: pushq | *GO*: PUSHQ
+- *GAS*: pushq
 
   + [m64]    input = true   output = false",
             &x86_x86_64_test_config(),
@@ -1098,27 +963,27 @@ Move Quadword
 
 ## Forms
 
-- *GAS*: movq | *GO*: MOVQ | *MMX*: MMX | *ISA*: MMX
+- *GAS*: movq | *MMX*: MMX | *ISA*: MMX
 
   + [mm]     input = false  output = true
   + [mm]     input = true   output = false
-- *GAS*: movq | *GO*: MOVQ | *MMX*: MMX | *ISA*: MMX
+- *GAS*: movq | *MMX*: MMX | *ISA*: MMX
 
   + [mm]     input = false  output = true
   + [m64]    input = true   output = false
-- *GAS*: movq | *GO*: MOVQ | *XMM*: SSE | *ISA*: SSE2
+- *GAS*: movq | *XMM*: SSE | *ISA*: SSE2
 
   + [xmm]    input = false  output = true
   + [xmm]    input = true   output = false
-- *GAS*: movq | *GO*: MOVQ | *XMM*: SSE | *ISA*: SSE2
+- *GAS*: movq | *XMM*: SSE | *ISA*: SSE2
 
   + [xmm]    input = false  output = true
   + [m64]    input = true   output = false
-- *GAS*: movq | *GO*: MOVQ | *MMX*: MMX | *ISA*: MMX
+- *GAS*: movq | *MMX*: MMX | *ISA*: MMX
 
   + [m64]    input = false  output = true
   + [mm]     input = true   output = false
-- *GAS*: movq | *GO*: MOVQ | *XMM*: SSE | *ISA*: SSE2
+- *GAS*: movq | *XMM*: SSE | *ISA*: SSE2
 
   + [m64]    input = false  output = true
   + [xmm]    input = true   output = false
@@ -1128,43 +993,43 @@ Move Quadword
 
 ## Forms
 
-- *GAS*: movq | *GO*: MOVQ | *MMX*: MMX | *ISA*: MMX
+- *GAS*: movq | *MMX*: MMX | *ISA*: MMX
 
   + [r64]    input = false  output = true
   + [mm]     input = true   output = false
-- *GAS*: movq | *GO*: MOVQ | *XMM*: SSE | *ISA*: SSE2
+- *GAS*: movq | *XMM*: SSE | *ISA*: SSE2
 
   + [r64]    input = false  output = true
   + [xmm]    input = true   output = false
-- *GAS*: movq | *GO*: MOVQ | *MMX*: MMX | *ISA*: MMX
+- *GAS*: movq | *MMX*: MMX | *ISA*: MMX
 
   + [mm]     input = false  output = true
   + [r64]    input = true   output = false
-- *GAS*: movq | *GO*: MOVQ | *MMX*: MMX | *ISA*: MMX
+- *GAS*: movq | *MMX*: MMX | *ISA*: MMX
 
   + [mm]     input = false  output = true
   + [mm]     input = true   output = false
-- *GAS*: movq | *GO*: MOVQ | *MMX*: MMX | *ISA*: MMX
+- *GAS*: movq | *MMX*: MMX | *ISA*: MMX
 
   + [mm]     input = false  output = true
   + [m64]    input = true   output = false
-- *GAS*: movq | *GO*: MOVQ | *XMM*: SSE | *ISA*: SSE2
+- *GAS*: movq | *XMM*: SSE | *ISA*: SSE2
 
   + [xmm]    input = false  output = true
   + [r64]    input = true   output = false
-- *GAS*: movq | *GO*: MOVQ | *XMM*: SSE | *ISA*: SSE2
+- *GAS*: movq | *XMM*: SSE | *ISA*: SSE2
 
   + [xmm]    input = false  output = true
   + [xmm]    input = true   output = false
-- *GAS*: movq | *GO*: MOVQ | *XMM*: SSE | *ISA*: SSE2
+- *GAS*: movq | *XMM*: SSE | *ISA*: SSE2
 
   + [xmm]    input = false  output = true
   + [m64]    input = true   output = false
-- *GAS*: movq | *GO*: MOVQ | *MMX*: MMX | *ISA*: MMX
+- *GAS*: movq | *MMX*: MMX | *ISA*: MMX
 
   + [m64]    input = false  output = true
   + [mm]     input = true   output = false
-- *GAS*: movq | *GO*: MOVQ | *XMM*: SSE | *ISA*: SSE2
+- *GAS*: movq | *XMM*: SSE | *ISA*: SSE2
 
   + [m64]    input = false  output = true
   + [xmm]    input = true   output = false",

@@ -1,4 +1,6 @@
 use crate::ustr;
+use std::borrow::ToOwned;
+use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 use std::convert::TryFrom;
 use std::fs::{create_dir_all, File};
@@ -6,6 +8,7 @@ use std::io::BufRead;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::str::FromStr;
+use std::string::ToString;
 
 use anyhow::{anyhow, Result};
 use compile_commands::{CompilationDatabase, CompileArgs, CompileCommand, SourceFile};
@@ -29,8 +32,8 @@ use tree_sitter::InputEdit;
 
 use crate::types::Column;
 use crate::{
-    Arch, ArchOrAssembler, Assembler, Completable, Config, Hoverable, Instruction, LspClient,
-    NameToInstructionMap, TreeEntry, TreeStore,
+    Arch, ArchOrAssembler, Assembler, Completable, Config, ConfigOptions, Directive, Instruction,
+    LspClient, NameToInstructionMap, Register, RootConfig, TreeEntry, TreeStore,
 };
 
 /// Sends an empty, non-error response to the lsp client via `connection`
@@ -345,6 +348,59 @@ fn get_compilation_db_files(path: &Path) -> Option<CompilationDatabase> {
     None
 }
 
+/// Attempts to find the user-provided compile command for `req_uri`, as specified within a
+/// `project` field in `.asm-lsp.toml`
+///
+/// NOTE: The `directory` field is intentionally left empty. If this function is being used
+/// in a new place, please reconsider this assumption
+///
+/// # Panics
+///
+/// Will panic if `req_uri` cannot be canonicalized
+pub fn get_comp_cmd_for_path(config: &RootConfig, req_uri: &Uri) -> Option<CompileCommand> {
+    #[allow(irrefutable_let_patterns)]
+    let Ok(req_path) = PathBuf::from_str(req_uri.path().as_str()) else {
+        unreachable!()
+    };
+    let request_path = match req_path.canonicalize() {
+        Ok(path) => path,
+        Err(e) => panic!("Invalid request path: \"{}\" - {e}", req_path.display()),
+    };
+    // if the path is within a project configuration and that project specifies
+    // a compiler invocation, use it
+    if let Some(project) = config.get_project(&request_path) {
+        if let Some(ref cmd) = project.compile_cmd {
+            info!("Used config compile command!");
+            let args = {
+                let mut user_cmds: Vec<String> =
+                    cmd.split_whitespace().map(ToString::to_string).collect();
+                if let Some(path) = request_path.to_str() {
+                    user_cmds.push(path.to_string()); // append the request path as the last
+                                                      // compiler argument
+                }
+                user_cmds
+            };
+            // let directory = if project.path.is_dir() {
+            //     project.path.clone()
+            // } else {
+            //     project
+            //         .path
+            //         .parent()
+            //         .map_or(PathBuf::new(), ToOwned::to_owned)
+            // };
+            return Some(CompileCommand {
+                file: SourceFile::File(request_path.clone()),
+                directory: PathBuf::new(),
+                arguments: Some(CompileArgs::Arguments(args)),
+                command: None,
+                output: None,
+            });
+        }
+    }
+
+    None
+}
+
 /// Returns a default `CompileCommand` for the provided `uri`.
 ///
 /// - If the user specified a compiler in their config, it will be used.
@@ -355,7 +411,7 @@ fn get_compilation_db_files(path: &Path) -> Option<CompilationDatabase> {
 /// uninitialized to avoid unnecessary allocations. If you're using this function
 /// in a new place, please reconsider this assumption
 pub fn get_default_compile_cmd(uri: &Uri, cfg: &Config) -> CompileCommand {
-    cfg.opts.compiler.as_ref().map_or_else(
+    cfg.get_compiler().as_ref().map_or_else(
         || CompileCommand {
             file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
             directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
@@ -367,7 +423,7 @@ pub fn get_default_compile_cmd(uri: &Uri, cfg: &Config) -> CompileCommand {
             file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
             directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
             arguments: Some(CompileArgs::Arguments(vec![
-                compiler.to_string(),
+                (*compiler).to_string(),
                 uri.path().to_string(),
             ])),
             command: None,
@@ -391,10 +447,9 @@ pub fn apply_compile_cmd(
         match args {
             CompileArgs::Flags(flags) => {
                 let compilers = cfg
-                    .opts
-                    .compiler
+                    .get_compiler()
                     .as_ref()
-                    .map_or_else(|| vec!["gcc", "clang"], |compiler| vec![compiler.as_str()]);
+                    .map_or_else(|| vec!["gcc", "clang"], |compiler| vec![compiler]);
 
                 for compiler in compilers {
                     match Command::new(compiler) // default or user-supplied compiler
@@ -578,73 +633,78 @@ pub fn text_doc_change_to_ts_edit(
 pub fn get_completes<T: Completable, U: ArchOrAssembler>(
     map: &HashMap<(U, &str), T>,
     kind: Option<CompletionItemKind>,
-) -> Vec<CompletionItem> {
+) -> Vec<(U, CompletionItem)> {
     map.iter()
-        .map(|((_arch_or_asm, name), item_info)| {
-            let value = format!("{item_info}");
+        .map(|((arch_or_asm, name), item_info)| {
+            let value = item_info.to_string();
 
-            CompletionItem {
-                label: (*name).to_string(),
-                kind,
-                documentation: Some(Documentation::MarkupContent(MarkupContent {
-                    kind: MarkupKind::Markdown,
-                    value,
-                })),
-                ..Default::default()
-            }
+            (
+                *arch_or_asm,
+                CompletionItem {
+                    label: (*name).to_string(),
+                    kind,
+                    documentation: Some(Documentation::MarkupContent(MarkupContent {
+                        kind: MarkupKind::Markdown,
+                        value,
+                    })),
+                    ..Default::default()
+                },
+            )
         })
         .collect()
 }
 
 #[must_use]
-pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
+pub fn get_hover_resp(
     params: &HoverParams,
     config: &Config,
     word: &str,
     cursor_offset: usize,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
-    instruction_map: &HashMap<(Arch, &str), T>,
-    register_map: &HashMap<(Arch, &str), U>,
-    directive_map: &HashMap<(Assembler, &str), V>,
+    instruction_map: &HashMap<(Arch, &str), &Instruction>,
+    register_map: &HashMap<(Arch, &str), &Register>,
+    directive_map: &HashMap<(Assembler, &str), &Directive>,
     include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
 ) -> Option<Hover> {
-    let instr_lookup = lookup_hover_resp_by_arch(word, instruction_map);
+    let instr_lookup = get_instr_hover_resp(word, instruction_map, config);
     if instr_lookup.is_some() {
         return instr_lookup;
     }
 
     // directive lookup
     {
-        if config.assemblers.gas.unwrap_or(false) || config.assemblers.masm.unwrap_or(false) {
+        if config.is_assembler_enabled(Assembler::Gas)
+            || config.is_assembler_enabled(Assembler::Masm)
+        {
             // all gas directives have a '.' prefix, some masm directives do
-            let directive_lookup = lookup_hover_resp_by_assembler(word, directive_map);
+            let directive_lookup = get_directive_hover_resp(word, directive_map, config);
             if directive_lookup.is_some() {
                 return directive_lookup;
             }
-        } else if config.assemblers.nasm.unwrap_or(false) {
+        } else if config.is_assembler_enabled(Assembler::Nasm) {
             // most nasm directives have no prefix, 2 have a '.' prefix
-            let directive_lookup = lookup_hover_resp_by_assembler(word, directive_map);
+            let directive_lookup = get_directive_hover_resp(word, directive_map, config);
             if directive_lookup.is_some() {
                 return directive_lookup;
             }
             // Some nasm directives have a % prefix
             let prefixed = format!("%{word}");
-            let directive_lookup = lookup_hover_resp_by_assembler(&prefixed, directive_map);
+            let directive_lookup = get_directive_hover_resp(&prefixed, directive_map, config);
             if directive_lookup.is_some() {
                 return directive_lookup;
             }
         }
     }
 
-    let reg_lookup = if config.instruction_sets.arm64.unwrap_or(false) {
+    let reg_lookup = if config.is_isa_enabled(Arch::ARM64) {
         word.find('.').map_or_else(
-            || lookup_hover_resp_by_arch(&word[0..], register_map),
+            || get_reg_hover_resp(&word[0..], register_map, config),
             |dot| {
                 if cursor_offset <= dot {
                     // main vector register info on ARM64
                     let main_register = &word[0..dot];
-                    lookup_hover_resp_by_arch(main_register, register_map)
+                    get_reg_hover_resp(main_register, register_map, config)
                 } else {
                     // if Vector = V21.2D -> lower Register = D21
                     // lower vector register info on ARM64
@@ -654,12 +714,12 @@ pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
                     lower_register.push_str(&word[reg_letter..]);
                     let reg_num = 1..dot;
                     lower_register.push_str(&word[reg_num]);
-                    lookup_hover_resp_by_arch(&lower_register, register_map)
+                    get_reg_hover_resp(&lower_register, register_map, config)
                 }
             },
         )
     } else {
-        lookup_hover_resp_by_arch(word, register_map)
+        get_reg_hover_resp(word, register_map, config)
     };
 
     if reg_lookup.is_some() {
@@ -693,128 +753,109 @@ pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
     None
 }
 
-fn lookup_hover_resp_by_arch<T: Hoverable>(
-    word: &str,
-    map: &HashMap<(Arch, &str), T>,
-) -> Option<Hover> {
-    // ensure hovered text is always lowercase
-    let hovered_text = word.to_ascii_lowercase();
-    // switch over to vec?
-    let (x86_resp, x86_64_resp, z80_resp, arm_resp, arm64_resp, riscv_resp) =
-        search_for_hoverable_by_arch(&hovered_text, map);
-    match (
-        x86_resp.is_some(),
-        x86_64_resp.is_some(),
-        z80_resp.is_some(),
-        arm_resp.is_some(),
-        arm64_resp.is_some(),
-        riscv_resp.is_some(),
-    ) {
-        (true, _, _, _, _, _)
-        | (_, true, _, _, _, _)
-        | (_, _, true, _, _, _)
-        | (_, _, _, true, _, _)
-        | (_, _, _, _, true, _)
-        | (_, _, _, _, _, true) => {
-            let mut value = String::new();
-            if let Some(x86_resp) = x86_resp {
-                value += &format!("{x86_resp}");
-            }
-            if let Some(x86_64_resp) = x86_64_resp {
-                value += &format!(
-                    "{}{}",
-                    if value.is_empty() { "" } else { "\n\n" },
-                    x86_64_resp
-                );
-            }
-            if let Some(z80_resp) = z80_resp {
-                value += &format!("{}{}", if value.is_empty() { "" } else { "\n\n" }, z80_resp);
-            }
-            if let Some(arm_resp) = arm_resp {
-                value += &format!("{}{}", if value.is_empty() { "" } else { "\n\n" }, arm_resp);
-            }
-            if let Some(arm64_resp) = arm64_resp {
-                value += &format!(
-                    "{}{}",
-                    if value.is_empty() { "" } else { "\n\n" },
-                    arm64_resp
-                );
-            }
-            if let Some(riscv_resp) = riscv_resp {
-                value += &format!(
-                    "{}{}",
-                    if value.is_empty() { "" } else { "\n\n" },
-                    riscv_resp
-                );
-            }
-            Some(Hover {
-                contents: HoverContents::Markup(MarkupContent {
-                    kind: MarkupKind::Markdown,
-                    value,
-                }),
-                range: None,
-            })
+fn search_for_instr_by_arch<'a>(
+    word: &'a str,
+    instr_map: &'a HashMap<(Arch, &str), &Instruction>,
+    config: &Config,
+) -> (Option<&'a Instruction>, Option<&'a Instruction>) {
+    match config.instruction_set {
+        Arch::X86_AND_X86_64 => {
+            let x86_resp = instr_map.get(&(Arch::X86, word)).copied();
+            let x86_64_resp = instr_map.get(&(Arch::X86_64, word)).copied();
+            (x86_resp, x86_64_resp)
         }
-        _ => {
-            // don't know of this word
-            None
-        }
+        arch => (instr_map.get(&(arch, word)).copied(), None),
     }
 }
 
-fn lookup_hover_resp_by_assembler<T: Hoverable>(
-    word: &str,
-    map: &HashMap<(Assembler, &str), T>,
-) -> Option<Hover> {
-    let hovered_directive = word.to_ascii_lowercase();
-    let (gas_resp, go_resp, masm_resp, nasm_resp) =
-        search_for_hoverable_by_assembler(&hovered_directive, map);
-
-    match (
-        gas_resp.is_some(),
-        go_resp.is_some(),
-        masm_resp.is_some(),
-        nasm_resp.is_some(),
-    ) {
-        (true, _, _, _) | (_, true, _, _) | (_, _, true, _) | (_, _, _, true) => {
-            let mut value = String::new();
-            if let Some(gas_resp) = gas_resp {
-                value += &format!("{gas_resp}");
-            }
-            if let Some(go_resp) = go_resp {
-                value += &format!(
-                    "{}{}",
-                    if gas_resp.is_some() { "\n\n" } else { "" },
-                    go_resp
-                );
-            }
-            if let Some(masm_resp) = masm_resp {
-                value += &format!(
-                    "{}{}",
-                    if value.is_empty() { "" } else { "\n\n" },
-                    masm_resp
-                );
-            }
-            if let Some(nasm_resp) = nasm_resp {
-                value += &format!(
-                    "{}{}",
-                    if value.is_empty() { "" } else { "\n\n" },
-                    nasm_resp
-                );
-            }
-            Some(Hover {
-                contents: HoverContents::Markup(MarkupContent {
-                    kind: MarkupKind::Markdown,
-                    value,
-                }),
-                range: None,
-            })
+fn search_for_reg_by_arch<'a>(
+    word: &'a str,
+    reg_map: &'a HashMap<(Arch, &str), &Register>,
+    config: &Config,
+) -> (Option<&'a Register>, Option<&'a Register>) {
+    match config.instruction_set {
+        Arch::X86_AND_X86_64 => {
+            let x86_resp = reg_map.get(&(Arch::X86, word)).copied();
+            let x86_64_resp = reg_map.get(&(Arch::X86_64, word)).copied();
+            (x86_resp, x86_64_resp)
         }
-        _ => {
-            // don't know of this word
-            None
-        }
+        arch => (reg_map.get(&(arch, word)).copied(), None),
     }
+}
+
+fn search_for_dir_by_assembler<'a>(
+    word: &'a str,
+    dir_map: &'a HashMap<(Assembler, &str), &Directive>,
+    config: &Config,
+) -> Option<&'a Directive> {
+    dir_map.get(&(config.assembler, word)).copied()
+}
+
+fn get_instr_hover_resp(
+    word: &str,
+    instr_map: &HashMap<(Arch, &str), &Instruction>,
+    config: &Config,
+) -> Option<Hover> {
+    let hovered_word = word.to_ascii_lowercase();
+    let instr_resp = search_for_instr_by_arch(&hovered_word, instr_map, config);
+    let value = match instr_resp {
+        (Some(instr1), Some(instr2)) => {
+            format!("{instr1}\n\n{instr2}")
+        }
+        (Some(instr), None) | (None, Some(instr)) => {
+            format!("{instr}")
+        }
+        (None, None) => return None,
+    };
+
+    Some(Hover {
+        contents: HoverContents::Markup(MarkupContent {
+            kind: MarkupKind::Markdown,
+            value,
+        }),
+        range: None,
+    })
+}
+
+fn get_reg_hover_resp(
+    word: &str,
+    reg_map: &HashMap<(Arch, &str), &Register>,
+    config: &Config,
+) -> Option<Hover> {
+    let hovered_text = word.to_ascii_lowercase();
+    let reg_resp = search_for_reg_by_arch(&hovered_text, reg_map, config);
+    let value = match reg_resp {
+        (Some(reg1), Some(reg2)) => {
+            format!("{reg1}\n\n{reg2}")
+        }
+        (Some(reg), None) | (None, Some(reg)) => {
+            format!("{reg}")
+        }
+        (None, None) => return None,
+    };
+
+    Some(Hover {
+        contents: HoverContents::Markup(MarkupContent {
+            kind: MarkupKind::Markdown,
+            value,
+        }),
+        range: None,
+    })
+}
+
+fn get_directive_hover_resp(
+    word: &str,
+    dir_map: &HashMap<(Assembler, &str), &Directive>,
+    config: &Config,
+) -> Option<Hover> {
+    let hovered_word = word.to_ascii_lowercase();
+    search_for_dir_by_assembler(&hovered_word, dir_map, config).map(|dir_resp| Hover {
+        contents: HoverContents::Markup(MarkupContent {
+            kind: MarkupKind::Markdown,
+            value: dir_resp.to_string(),
+        }),
+        range: None,
+    })
 }
 
 /// Returns the data associated with a given label `word`
@@ -960,34 +1001,17 @@ fn get_include_resp(
     }
 }
 
-/// Filter out duplicate completion suggestions
-fn filtered_comp_list(comps: &[CompletionItem]) -> Vec<CompletionItem> {
+/// Filter out duplicate completion suggestions, and those that aren't allowed
+/// by `config`
+fn filtered_comp_list_arch(
+    comps: &[(Arch, CompletionItem)],
+    config: &Config,
+) -> Vec<CompletionItem> {
     let mut seen = HashSet::new();
-
     comps
         .iter()
-        .filter(|comp_item| {
-            if seen.contains(&comp_item.label) {
-                false
-            } else {
-                seen.insert(&comp_item.label);
-                true
-            }
-        })
-        .cloned()
-        .collect()
-}
-
-/// 'prefix' allows the caller to optionally require completion items to start with
-/// a given character
-/// This is kept separate from `filtered_comp_list` for performance reasons
-fn filtered_comp_list_prefix(comps: &[CompletionItem], prefix: char) -> Vec<CompletionItem> {
-    let mut seen = HashSet::new();
-
-    comps
-        .iter()
-        .filter(|comp_item| {
-            if !comp_item.label.starts_with(prefix) {
+        .filter(|(arch, comp_item)| {
+            if !config.is_isa_enabled(*arch) {
                 return false;
             }
             if seen.contains(&comp_item.label) {
@@ -997,6 +1021,40 @@ fn filtered_comp_list_prefix(comps: &[CompletionItem], prefix: char) -> Vec<Comp
                 true
             }
         })
+        .map(|(_, comp_item)| comp_item)
+        .cloned()
+        .collect()
+}
+
+/// Filter out duplicate completion suggestions, and those that aren't allowed
+/// by `config`
+/// 'prefix' allows the caller to optionally require completion items to start with
+/// a given character
+fn filtered_comp_list_assem(
+    comps: &[(Assembler, CompletionItem)],
+    config: &Config,
+    prefix: Option<char>,
+) -> Vec<CompletionItem> {
+    let mut seen = HashSet::new();
+    comps
+        .iter()
+        .filter(|(assem, comp_item)| {
+            if !config.is_assembler_enabled(*assem) {
+                return false;
+            }
+            if let Some(c) = prefix {
+                if !comp_item.label.starts_with(c) {
+                    return false;
+                }
+            }
+            if seen.contains(&comp_item.label) {
+                false
+            } else {
+                seen.insert(&comp_item.label);
+                true
+            }
+        })
+        .map(|(_, comp_item)| comp_item)
         .cloned()
         .collect()
 }
@@ -1015,9 +1073,9 @@ pub fn get_comp_resp(
     tree_entry: &mut TreeEntry,
     params: &CompletionParams,
     config: &Config,
-    instr_comps: &[CompletionItem],
-    dir_comps: &[CompletionItem],
-    reg_comps: &[CompletionItem],
+    instr_comps: &[(Arch, CompletionItem)],
+    dir_comps: &[(Assembler, CompletionItem)],
+    reg_comps: &[(Arch, CompletionItem)],
 ) -> Option<CompletionList> {
     let cursor_line = params.text_document_position.position.line as usize;
     let cursor_char = params.text_document_position.position.character as usize;
@@ -1032,13 +1090,11 @@ pub fn get_comp_resp(
                 // prepend GAS registers, some NASM directives with "%"
                 Some("%") => {
                     let mut items = Vec::new();
-                    if config.instruction_sets.x86.unwrap_or(false)
-                        || config.instruction_sets.x86_64.unwrap_or(false)
-                    {
-                        items.append(&mut filtered_comp_list(reg_comps));
+                    if config.is_isa_enabled(Arch::X86) || config.is_isa_enabled(Arch::X86_64) {
+                        items.append(&mut filtered_comp_list_arch(reg_comps, config));
                     }
-                    if config.assemblers.nasm.unwrap_or(false) {
-                        items.append(&mut filtered_comp_list_prefix(dir_comps, '%'));
+                    if config.is_assembler_enabled(Assembler::Nasm) {
+                        items.append(&mut filtered_comp_list_assem(dir_comps, config, Some('%')));
                     }
 
                     if !items.is_empty() {
@@ -1050,13 +1106,13 @@ pub fn get_comp_resp(
                 }
                 // prepend all GAS, some MASM, some NASM directives with "."
                 Some(".") => {
-                    if config.assemblers.gas.unwrap_or(false)
-                        || config.assemblers.masm.unwrap_or(false)
-                        || config.assemblers.nasm.unwrap_or(false)
+                    if config.is_assembler_enabled(Assembler::Gas)
+                        || config.is_assembler_enabled(Assembler::Masm)
+                        || config.is_assembler_enabled(Assembler::Nasm)
                     {
                         return Some(CompletionList {
                             is_incomplete: true,
-                            items: filtered_comp_list_prefix(dir_comps, '.'),
+                            items: filtered_comp_list_assem(dir_comps, config, Some('.')),
                         });
                     }
                 }
@@ -1096,7 +1152,7 @@ pub fn get_comp_resp(
                 let arg_start = cap.node.range().start_point;
                 let arg_end = cap.node.range().end_point;
                 if cursor_matches!(cursor_line, cursor_char, arg_start, arg_end) {
-                    let items = filtered_comp_list(dir_comps);
+                    let items = filtered_comp_list_assem(dir_comps, config, None);
                     return Some(CompletionList {
                         is_incomplete: true,
                         items,
@@ -1176,12 +1232,14 @@ pub fn get_comp_resp(
                     // an instruction is always capture #0 for this query, any capture
                     // number after must be a register or label
                     let is_instr = cap_num == 0;
-                    let mut items =
-                        filtered_comp_list(if is_instr { instr_comps } else { reg_comps });
+                    let mut items = filtered_comp_list_arch(
+                        if is_instr { instr_comps } else { reg_comps },
+                        config,
+                    );
                     if is_instr {
                         // Sometimes tree-sitter-asm parses a directive as an instruction, so we'll
                         // suggest both in this case
-                        items.append(&mut filtered_comp_list(dir_comps));
+                        items.append(&mut filtered_comp_list_assem(dir_comps, config, None));
                     } else {
                         items.append(
                             &mut labels
@@ -1316,9 +1374,15 @@ pub fn get_document_symbols(
     })
 }
 
+/// Produces a signature help response if the appropriate instruction forms can
+/// be found
+///
+/// # Panics
+#[allow(clippy::too_many_lines)]
 pub fn get_sig_help_resp(
     curr_doc: &str,
     params: &SignatureHelpParams,
+    config: &Config,
     tree_entry: &mut TreeEntry,
     instr_info: &NameToInstructionMap,
 ) -> Option<SignatureHelp> {
@@ -1356,97 +1420,40 @@ pub fn get_sig_help_resp(
             if caps.len() == 1 && caps[0].node.end_byte() < curr_doc.len() {
                 if let Ok(instr_name) = caps[0].node.utf8_text(curr_doc) {
                     let mut value = String::new();
-                    // Switch to a better structure
-                    let mut has_x86 = false;
-                    let mut has_x86_64 = false;
-                    let mut has_z80 = false;
-                    let mut has_arm = false;
-                    let mut has_arm64 = false;
-                    // ensure hovered instruction is always lowercase
-                    let hovered_instr_name = instr_name.to_ascii_lowercase();
-                    let (x86_info, x86_64_info, z80_info, arm_info, arm64_info, riscv_info) =
-                    // TODO: switch to an appropriate DS like dyn list or static list
-                        search_for_hoverable_by_arch(&hovered_instr_name, instr_info);
-                    if let Some(sig) = x86_info {
-                        for form in &sig.forms {
-                            if let Some(ref gas_name) = form.gas_name {
-                                if instr_name.eq_ignore_ascii_case(gas_name) {
-                                    if !has_x86 {
-                                        value += "**x86**\n";
-                                        has_x86 = true;
+                    let (instr1, instr2) = search_for_instr_by_arch(instr_name, instr_info, config);
+                    let instructions = vec![instr1, instr2];
+                    for instr in instructions.into_iter().flatten() {
+                        for form in &instr.forms {
+                            match instr.arch {
+                                Some(Arch::X86 | Arch::X86_64) => {
+                                    if let Some(ref gas_name) = form.gas_name {
+                                        if instr_name.eq_ignore_ascii_case(gas_name) {
+                                            value +=
+                                                &format!("**{}**\n{form}\n", instr.arch.unwrap());
+                                        }
+                                    } else if let Some(ref go_name) = form.go_name {
+                                        if instr_name.eq_ignore_ascii_case(go_name) {
+                                            value +=
+                                                &format!("**{}**\n{form}\n", instr.arch.unwrap());
+                                        }
                                     }
-                                    value += &format!("{form}\n");
                                 }
-                            } else if let Some(ref go_name) = form.go_name {
-                                if instr_name.eq_ignore_ascii_case(go_name) {
-                                    if !has_x86 {
-                                        value += "**x86**\n";
-                                        has_x86 = true;
+                                Some(Arch::Z80) => {
+                                    for form in &instr.forms {
+                                        if let Some(ref z80_name) = form.z80_name {
+                                            if instr_name.eq_ignore_ascii_case(z80_name) {
+                                                value += &format!("{form}\n");
+                                            }
+                                        }
                                     }
-                                    value += &format!("{form}\n");
                                 }
-                            }
-                        }
-                    }
-                    if let Some(sig) = x86_64_info {
-                        for form in &sig.forms {
-                            if let Some(ref gas_name) = form.gas_name {
-                                if instr_name.eq_ignore_ascii_case(gas_name) {
-                                    if !has_x86_64 {
-                                        value += "**x86_64**\n";
-                                        has_x86_64 = true;
+                                Some(Arch::ARM | Arch::RISCV) => {
+                                    for form in &instr.asm_templates {
+                                        value += &format!("{form}\n");
                                     }
-                                    value += &format!("{form}\n");
                                 }
-                            } else if let Some(ref go_name) = form.go_name {
-                                if instr_name.eq_ignore_ascii_case(go_name) {
-                                    if !has_x86_64 {
-                                        value += "**x86_64**\n";
-                                        has_x86_64 = true;
-                                    }
-                                    value += &format!("{form}\n");
-                                }
+                                _ => {}
                             }
-                        }
-                    }
-                    if let Some(sig) = z80_info {
-                        for form in &sig.forms {
-                            if let Some(ref z80_name) = form.z80_name {
-                                if instr_name.eq_ignore_ascii_case(z80_name) {
-                                    if !has_z80 {
-                                        value += "**z80**\n";
-                                        has_z80 = true;
-                                    }
-                                    value += &format!("{form}\n");
-                                }
-                            }
-                        }
-                    }
-                    if let Some(sig) = arm_info {
-                        for form in &sig.asm_templates {
-                            if !has_arm {
-                                value += "**arm**\n";
-                                has_arm = true;
-                            }
-                            value += &format!("{form}\n");
-                        }
-                    }
-                    if let Some(sig) = arm64_info {
-                        for form in &sig.asm_templates {
-                            if !has_arm64 {
-                                value += "**arm64**\n";
-                                has_arm64 = true;
-                            }
-                            value += &format!("{form}\n");
-                        }
-                    }
-                    if let Some(sig) = riscv_info {
-                        for form in &sig.asm_templates {
-                            if !has_arm {
-                                value += "**riscv**\n";
-                                has_arm = true;
-                            }
-                            value += &format!("{form}\n");
                         }
                     }
                     if !value.is_empty() {
@@ -1608,76 +1615,115 @@ pub fn get_ref_resp(
     refs.into_iter().collect()
 }
 
-// Note: Some issues here regarding entangled lifetimes
-// -- https://github.com/rust-lang/rust/issues/80389
-// If issue is resolved, can add a separate lifetime "'b" to "word"
-// parameter such that 'a: 'b
-// For now, using 'a for both isn't strictly necessary, but fits our use case
-#[allow(clippy::type_complexity)]
-fn search_for_hoverable_by_arch<'a, T: Hoverable>(
-    word: &'a str,
-    map: &'a HashMap<(Arch, &str), T>,
-) -> (
-    Option<&'a T>,
-    Option<&'a T>,
-    Option<&'a T>,
-    Option<&'a T>,
-    Option<&'a T>,
-    Option<&'a T>,
-) {
-    let x86_resp = map.get(&(Arch::X86, word));
-    let x86_64_resp = map.get(&(Arch::X86_64, word));
-    let z80_resp = map.get(&(Arch::Z80, word));
-    let arm_resp = map.get(&(Arch::ARM, word));
-    let arm64_resp = map.get(&(Arch::ARM64, word));
-    let riscv_resp = map.get(&(Arch::RISCV, word));
-    (
-        x86_resp,
-        x86_64_resp,
-        z80_resp,
-        arm_resp,
-        arm64_resp,
-        riscv_resp,
-    )
-}
-
-fn search_for_hoverable_by_assembler<'a, T: Hoverable>(
-    word: &'a str,
-    map: &'a HashMap<(Assembler, &str), T>,
-) -> (Option<&'a T>, Option<&'a T>, Option<&'a T>, Option<&'a T>) {
-    let gas_resp = map.get(&(Assembler::Gas, word));
-    let go_resp = map.get(&(Assembler::Go, word));
-    let masm_resp = map.get(&(Assembler::Masm, word));
-    let nasm_resp = map.get(&(Assembler::Nasm, word));
-
-    (gas_resp, go_resp, masm_resp, nasm_resp)
-}
-
 /// Searches for global config in ~/.config/asm-lsp, then the project's directory
 /// Project specific configs will override global configs
 #[must_use]
-pub fn get_config(params: &InitializeParams) -> Config {
+pub fn get_root_config(params: &InitializeParams) -> RootConfig {
     let mut config = match (get_global_config(), get_project_config(params)) {
         (_, Some(proj_cfg)) => proj_cfg,
         (Some(global_cfg), None) => global_cfg,
-        (None, None) => Config::default(),
+        (None, None) => RootConfig::default(),
     };
 
-    // Want diagnostics enabled by default
-    if config.opts.diagnostics.is_none() {
-        config.opts.diagnostics = Some(true);
+    // Validate project paths and enforce default diagnostics settings
+    if let Some(ref mut projects) = config.projects {
+        if let Some(ref path) = get_project_root(params) {
+            let mut project_idx = 0;
+            while project_idx < projects.len() {
+                let mut path = path.clone();
+                path.push(&projects[project_idx].path);
+                let Ok(project_path) = path.canonicalize() else {
+                    error!("Failed to canonicalize project path \"{}\", disabling this project configuration.", path.display());
+                    projects.remove(project_idx);
+                    continue;
+                };
+                projects[project_idx].path = project_path;
+                if let Some(ref mut opts) = projects[project_idx].config.opts {
+                    // Want diagnostics enabled by default
+                    if opts.diagnostics.is_none() {
+                        opts.diagnostics = Some(true);
+                    }
+                    // Want default diagnostics enabled by default
+                    if opts.default_diagnostics.is_none() {
+                        opts.default_diagnostics = Some(true);
+                    }
+                } else {
+                    projects[project_idx].config.opts = Some(ConfigOptions::default());
+                }
+
+                project_idx += 1;
+            }
+        } else {
+            error!("Unable to detect project root directory. The projects configuration feature has been disabled.");
+            *projects = Vec::new();
+        }
+
+        // sort project configurations so when we select a project config at request
+        // time, we find configs controlling specific files first, and then configs
+        // for a sub-directory of another config before the parent config
+        projects.sort_unstable_by(|c1, c2| {
+            // - If both are files, we don't care
+            // - If one is file and other is directory, file goes first
+            // - Else (just assuming both are directories for the default case),
+            //   go by the length metric (parent directories get placed *after*
+            //   their children)
+            let c1_dir = c1.path.is_dir();
+            let c1_file = c1.path.is_file();
+            let c2_dir = c2.path.is_dir();
+            let c2_file = c2.path.is_file();
+            if c1_file && c2_file {
+                Ordering::Equal
+            } else if c1_dir && c2_file {
+                Ordering::Greater
+            } else if c1_file && c2_dir {
+                Ordering::Less
+            } else {
+                c2.path
+                    .to_string_lossy()
+                    .len()
+                    .cmp(&c1.path.to_string_lossy().len())
+            }
+        });
+
+        // Check if the user specified multiple configs pointing to the same
+        // file or directory
+        let mut path_check = HashSet::new();
+        for project in projects {
+            if path_check.contains(&project.path) {
+                error!(
+                    "Multiple project configurations for \"{}\".",
+                    project.path.display()
+                );
+            }
+            path_check.insert(&project.path);
+        }
     }
 
-    // Want default diagnostics enabled by default
-    if config.opts.default_diagnostics.is_none() {
-        config.opts.default_diagnostics = Some(true);
+    // Enforce default diagnostics settings for default config
+    if let Some(ref mut default_cfg) = config.default_config {
+        if let Some(ref mut opts) = default_cfg.opts {
+            // Want diagnostics enabled by default
+            if opts.diagnostics.is_none() {
+                opts.diagnostics = Some(true);
+            }
+            // Want default diagnostics enabled by default
+            if opts.default_diagnostics.is_none() {
+                opts.default_diagnostics = Some(true);
+            }
+        } else {
+            default_cfg.opts = Some(ConfigOptions::default());
+        }
+    } else {
+        // provide a default empty configuration for sub-directories
+        // not specified in `projects`
+        config.default_config = Some(Config::empty());
     }
 
     config
 }
 
 /// Checks ~/.config/asm-lsp for a config file, creating directories along the way as necessary
-fn get_global_config() -> Option<Config> {
+fn get_global_config() -> Option<RootConfig> {
     let mut paths = if cfg!(target_os = "macos") {
         // `$HOME`/Library/Application Support/ and `$HOME`/.config/
         vec![config_dir(), alt_mac_config_dir()]
@@ -1694,7 +1740,7 @@ fn get_global_config() -> Option<Config> {
                 cfg_path.push(".asm-lsp.toml");
                 if let Ok(config) = std::fs::read_to_string(&cfg_path) {
                     let cfg_path_s = cfg_path.display();
-                    match toml::from_str::<Config>(&config) {
+                    match toml::from_str::<RootConfig>(&config) {
                         Ok(config) => {
                             info!("Parsing global asm-lsp config from file -> {cfg_path_s}\n");
                             return Some(config);
@@ -1776,13 +1822,13 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
 }
 
 /// checks for a config specific to the project's root directory
-fn get_project_config(params: &InitializeParams) -> Option<Config> {
+fn get_project_config(params: &InitializeParams) -> Option<RootConfig> {
     if let Some(mut path) = get_project_root(params) {
         path.push(".asm-lsp.toml");
         match std::fs::read_to_string(&path) {
             Ok(config) => {
                 let path_s = path.display();
-                match toml::from_str::<Config>(&config) {
+                match toml::from_str::<RootConfig>(&config) {
                     Ok(config) => {
                         info!("Parsing asm-lsp project config from file -> {path_s}");
                         return Some(config);
@@ -1809,21 +1855,17 @@ pub fn instr_filter_targets(instr: &Instruction, config: &Config) -> Instruction
         .forms
         .iter()
         .filter(|form| {
-            (form.gas_name.is_some() && config.assemblers.gas.unwrap_or(false))
-                || (form.go_name.is_some() && config.assemblers.go.unwrap_or(false))
-                || (form.z80_name.is_some() && config.instruction_sets.z80.unwrap_or(false))
+            (form.gas_name.is_some() && config.is_assembler_enabled(Assembler::Gas))
+                || (form.go_name.is_some() && config.is_assembler_enabled(Assembler::Go))
         })
         .map(|form| {
             let mut filtered = form.clone();
             // handle cases where gas and go both have names on the same form
-            if !config.assemblers.gas.unwrap_or(false) {
+            if !config.is_assembler_enabled(Assembler::Gas) {
                 filtered.gas_name = None;
             }
-            if !config.assemblers.go.unwrap_or(false) {
+            if !config.is_assembler_enabled(Assembler::Go) {
                 filtered.go_name = None;
-            }
-            if !config.assemblers.z80.unwrap_or(false) {
-                filtered.z80_name = None;
             }
             filtered
         })

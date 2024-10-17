@@ -1,9 +1,11 @@
 use std::{
     collections::{BTreeMap, HashMap},
     fmt::Display,
+    path::PathBuf,
     str::FromStr,
 };
 
+use log::info;
 use lsp_types::Uri;
 use serde::{Deserialize, Serialize};
 use strum_macros::{AsRefStr, Display, EnumString};
@@ -631,7 +633,7 @@ pub type NameToDirectiveMap<'directive> =
 
 pub trait Hoverable: Display + Clone + Copy {}
 pub trait Completable: Display {}
-pub trait ArchOrAssembler {}
+pub trait ArchOrAssembler: Clone + Copy {}
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, EnumString, AsRefStr, Serialize, Deserialize)]
 pub enum XMMMode {
@@ -645,23 +647,35 @@ pub enum MMXMode {
     MMX,
 }
 
+#[allow(non_camel_case_types)]
 #[derive(
     Debug, Default, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Serialize, Deserialize,
 )]
 pub enum Arch {
     #[default]
     #[strum(serialize = "x86")]
+    #[serde(rename = "x86")]
     X86,
     #[strum(serialize = "x86-64")]
+    #[serde(rename = "x86-64")]
     X86_64,
+    /// enables both `Arch::X86` and `Arch::X86_64`
+    #[strum(serialize = "x86/x86-64")]
+    #[serde(rename = "x86/x86-64")]
+    X86_AND_X86_64,
     #[strum(serialize = "arm")]
+    #[serde(rename = "arm")]
     ARM,
     #[strum(serialize = "arm64")]
     ARM64,
     #[strum(serialize = "riscv")]
+    #[serde(rename = "riscv")]
     RISCV,
     #[strum(serialize = "z80")]
+    #[serde(rename = "z80")]
     Z80,
+    #[serde(skip)]
+    None,
 }
 
 impl ArchOrAssembler for Arch {}
@@ -671,19 +685,33 @@ impl std::fmt::Display for Arch {
         match self {
             Self::X86 => write!(f, "x86")?,
             Self::X86_64 => write!(f, "x86-64")?,
+            Self::X86_AND_X86_64 => write!(f, "x86/x86-64")?,
             Self::ARM => write!(f, "arm")?,
             Self::ARM64 => write!(f, "arm64")?,
             Self::Z80 => write!(f, "z80")?,
             Self::RISCV => write!(f, "riscv")?,
+            Self::None => write!(f, "None")?,
         }
         Ok(())
     }
 }
 
 #[derive(
-    Debug, Display, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Serialize, Deserialize,
+    Debug,
+    Display,
+    Default,
+    Hash,
+    PartialEq,
+    Eq,
+    Clone,
+    Copy,
+    EnumString,
+    AsRefStr,
+    Serialize,
+    Deserialize,
 )]
 pub enum Assembler {
+    #[default]
     #[strum(serialize = "gas")]
     Gas,
     #[strum(serialize = "go")]
@@ -692,6 +720,10 @@ pub enum Assembler {
     Masm,
     #[strum(serialize = "nasm")]
     Nasm,
+    #[strum(serialize = "z80")]
+    Z80,
+    #[serde(skip)]
+    None,
 }
 
 impl ArchOrAssembler for Assembler {}
@@ -783,54 +815,210 @@ impl std::fmt::Display for RegisterBitInfo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Assemblers {
-    pub gas: Option<bool>,
-    pub go: Option<bool>,
-    pub masm: Option<bool>,
-    pub nasm: Option<bool>,
-    pub z80: Option<bool>,
+pub struct RootConfig {
+    // #[serde(flatten)]
+    pub default_config: Option<Config>,
+    #[serde(rename = "project")]
+    pub projects: Option<Vec<ProjectConfig>>,
 }
 
-impl Default for Assemblers {
+impl Default for RootConfig {
     fn default() -> Self {
         Self {
-            gas: Some(true),
-            go: Some(true),
-            masm: Some(false),
-            nasm: Some(false),
-            z80: Some(false),
+            default_config: Some(Config::default()),
+            projects: None,
         }
     }
 }
 
-#[allow(non_snake_case)]
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct InstructionSets {
-    pub x86: Option<bool>,
-    pub x86_64: Option<bool>,
-    pub z80: Option<bool>,
-    pub arm: Option<bool>,
-    pub arm64: Option<bool>,
-    pub riscv: Option<bool>,
+impl RootConfig {
+    /// Returns the `Project` associated with `uri`
+    ///
+    /// # Panics
+    ///
+    /// Will panic if `req_uri` cannot be canonicalized
+    #[must_use]
+    pub fn get_project<'a>(&'a self, request_path: &PathBuf) -> Option<&'a ProjectConfig> {
+        #[allow(irrefutable_let_patterns)]
+        if let Some(projects) = &self.projects {
+            for project in projects {
+                if (project.path.is_dir() && request_path.starts_with(&project.path))
+                    || (project.path.is_file() && request_path.eq(&project.path))
+                {
+                    return Some(project);
+                }
+            }
+        }
+
+        None
+    }
+
+    /// Returns the project-specific `Config` associated with `uri`, or the default if no
+    /// matching configuration is found
+    ///
+    /// # Panics
+    ///
+    /// Will panic if `req_uri` cannot be canonicalized
+    pub fn get_config<'a>(&'a self, req_uri: &'a Uri) -> &'a Config {
+        #[allow(irrefutable_let_patterns)]
+        let Ok(req_path) = PathBuf::from_str(req_uri.path().as_str()) else {
+            unreachable!()
+        };
+        let request_path = match req_path.canonicalize() {
+            Ok(path) => path,
+            Err(e) => panic!("Invalid request path: \"{}\" - {e}", req_path.display()),
+        };
+        if let Some(project) = self.get_project(&request_path) {
+            info!(
+                "Selected project config with path \"{}\"",
+                project.path.display()
+            );
+            return &project.config;
+        }
+        if let Some(root) = &self.default_config {
+            info!("Selected root config");
+            return root;
+        }
+
+        panic!(
+            "Invalid configuration for \"{}\" -- Must contain a per-project configuration or default",
+            req_uri.path()
+        );
+    }
+
+    /// Sets the `client` field of the default config and all project configs
+    pub fn set_client(&mut self, client: LspClient) {
+        if let Some(ref mut root) = self.default_config {
+            root.client = Some(client);
+        }
+
+        if let Some(ref mut projects) = self.projects {
+            for project in projects {
+                project.config.client = Some(client);
+            }
+        }
+    }
+
+    #[must_use]
+    pub fn is_isa_enabled(&self, isa: Arch) -> bool {
+        if let Some(ref root) = self.default_config {
+            if root.is_isa_enabled(isa) {
+                return true;
+            }
+        }
+
+        if let Some(ref projects) = self.projects {
+            for project in projects {
+                if project.config.is_isa_enabled(isa) {
+                    return true;
+                }
+            }
+        }
+
+        false
+    }
+
+    #[must_use]
+    pub fn is_assembler_enabled(&self, assembler: Assembler) -> bool {
+        if let Some(ref root) = self.default_config {
+            if root.is_assembler_enabled(assembler) {
+                return true;
+            }
+        }
+
+        if let Some(ref projects) = self.projects {
+            for project in projects {
+                if project.config.is_assembler_enabled(assembler) {
+                    return true;
+                }
+            }
+        }
+
+        false
+    }
 }
 
-impl Default for InstructionSets {
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProjectConfig {
+    // path to a directory or source file on which this config applies
+    // can be relative to the server's root directory, or absolute
+    pub path: PathBuf,
+    // Means to override compilation behavior for this project. The input file
+    // should not be included
+    pub compile_cmd: Option<String>,
+    #[serde(flatten)]
+    pub config: Config,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Config {
+    pub version: Option<String>,
+    pub assembler: Assembler,
+    pub instruction_set: Arch,
+    pub opts: Option<ConfigOptions>,
+    #[serde(skip)]
+    pub client: Option<LspClient>,
+}
+
+impl Default for Config {
     fn default() -> Self {
         Self {
-            x86: Some(true),
-            x86_64: Some(true),
-            z80: Some(false),
-            arm: Some(false),
-            arm64: Some(false),
-            riscv: Some(false),
+            version: Some(String::from("0.1")),
+            assembler: Assembler::default(),
+            instruction_set: Arch::default(),
+            opts: Some(ConfigOptions::default()),
+            client: None,
         }
+    }
+}
+
+impl Config {
+    #[must_use]
+    pub const fn empty() -> Self {
+        Self {
+            version: None,
+            assembler: Assembler::None,
+            instruction_set: Arch::None,
+            opts: Some(ConfigOptions::empty()),
+            client: None,
+        }
+    }
+
+    #[must_use]
+    pub fn get_compiler(&self) -> Option<&str> {
+        match self.opts {
+            Some(ConfigOptions {
+                compiler: Some(ref compiler),
+                ..
+            }) => Some(compiler),
+            _ => None,
+        }
+    }
+
+    #[must_use]
+    pub fn is_isa_enabled(&self, isa: Arch) -> bool {
+        match self.instruction_set {
+            Arch::X86_AND_X86_64 => {
+                isa == Arch::X86 || isa == Arch::X86_64 || isa == Arch::X86_AND_X86_64
+            }
+            // TODO: Same treatment as above for ARM32/ARM64
+            arch => isa == arch,
+        }
+    }
+
+    #[must_use]
+    pub fn is_assembler_enabled(&self, assembler: Assembler) -> bool {
+        self.assembler == assembler
     }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ConfigOptions {
+    // Specify compiler to generate diagnostics via `compile_flags.txt`
     pub compiler: Option<String>,
+    // Turn diagnostics feature on/off
     pub diagnostics: Option<bool>,
+    // Turn default diagnostics (no compilation db detected) on/off
     pub default_diagnostics: Option<bool>,
 }
 
@@ -844,23 +1032,12 @@ impl Default for ConfigOptions {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Config {
-    pub version: String,
-    pub assemblers: Assemblers,
-    pub instruction_sets: InstructionSets,
-    pub opts: ConfigOptions,
-    pub client: Option<LspClient>,
-}
-
-impl Default for Config {
-    fn default() -> Self {
+impl ConfigOptions {
+    const fn empty() -> Self {
         Self {
-            version: String::from("0.1"),
-            assemblers: Assemblers::default(),
-            instruction_sets: InstructionSets::default(),
-            opts: ConfigOptions::default(),
-            client: None,
+            compiler: None,
+            diagnostics: Some(false),
+            default_diagnostics: Some(false),
         }
     }
 }

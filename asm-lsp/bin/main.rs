@@ -10,9 +10,10 @@ use asm_lsp::handle::{
     handle_references_request, handle_signature_help_request,
 };
 use asm_lsp::{
-    get_compile_cmds, get_completes, get_config, get_include_dirs, instr_filter_targets,
+    get_comp_cmd_for_path, get_compile_cmds, get_completes, get_include_dirs, get_root_config,
     populate_name_to_directive_map, populate_name_to_instruction_map,
-    populate_name_to_register_map, Arch, Assembler, Config, Instruction, NameToInfoMaps, TreeStore,
+    populate_name_to_register_map, Arch, Assembler, Instruction, NameToInfoMaps, RootConfig,
+    TreeStore,
 };
 
 use compile_commands::{CompilationDatabase, SourceFile};
@@ -52,7 +53,7 @@ pub fn main() -> Result<()> {
     flexi_logger::Logger::try_with_str("info")?.start()?;
 
     // LSP server initialisation ------------------------------------------------------------------
-    info!("Starting asm_lsp...");
+    info!("Starting asm_lsp-{}", env!("CARGO_PKG_VERSION"));
 
     // Create the transport
     let (connection, _io_threads) = Connection::stdio();
@@ -113,12 +114,12 @@ pub fn main() -> Result<()> {
 
     let params: InitializeParams = serde_json::from_value(initialization_params).unwrap();
     info!("Client initialization params: {:?}", params);
-    let mut config = get_config(&params);
+    let mut config = get_root_config(&params);
     info!("Server Configuration: {:?}", config);
     if let Some(ref client_info) = params.client_info {
         if client_info.name.eq("helix") {
             info!("Helix LSP client detected");
-            config.client = Some(LspClient::Helix);
+            config.set_client(LspClient::Helix);
         }
     }
 
@@ -126,17 +127,10 @@ pub fn main() -> Result<()> {
     // create a map of &Instruction_name -> &Instruction - Use that in user queries
     // The Instruction(s) themselves are stored in a vector and we only keep references to the
     // former map
-    let x86_instructions = if config.instruction_sets.x86.unwrap_or(false) {
+    let x86_instructions = if config.is_isa_enabled(Arch::X86) {
         let start = std::time::Instant::now();
         let x86_instrs = include_bytes!("../serialized/opcodes/x86");
-        let instrs = bincode::deserialize::<Vec<Instruction>>(x86_instrs)?
-            .into_iter()
-            .map(|instruction| {
-                // filter out assemblers by user config
-                instr_filter_targets(&instruction, &config)
-            })
-            .filter(|instruction| !instruction.forms.is_empty())
-            .collect();
+        let instrs = bincode::deserialize::<Vec<Instruction>>(x86_instrs)?;
         info!(
             "x86 instruction set loaded in {}ms",
             start.elapsed().as_millis()
@@ -146,17 +140,10 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let x86_64_instructions = if config.instruction_sets.x86_64.unwrap_or(false) {
+    let x86_64_instructions = if config.is_isa_enabled(Arch::X86_64) {
         let start = std::time::Instant::now();
         let x86_64_instrs = include_bytes!("../serialized/opcodes/x86_64");
-        let instrs = bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)?
-            .into_iter()
-            .map(|instruction| {
-                // filter out assemblers by user config
-                instr_filter_targets(&instruction, &config)
-            })
-            .filter(|instruction| !instruction.forms.is_empty())
-            .collect();
+        let instrs = bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)?;
         info!(
             "x86-64 instruction set loaded in {}ms",
             start.elapsed().as_millis()
@@ -166,17 +153,10 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let z80_instructions = if config.instruction_sets.z80.unwrap_or(false) {
+    let z80_instructions = if config.is_isa_enabled(Arch::Z80) {
         let start = std::time::Instant::now();
         let z80_instrs = include_bytes!("../serialized/opcodes/z80");
-        let instrs = bincode::deserialize::<Vec<Instruction>>(z80_instrs)?
-            .into_iter()
-            .map(|instruction| {
-                // filter out assemblers by user config
-                instr_filter_targets(&instruction, &config)
-            })
-            .filter(|instruction| !instruction.forms.is_empty())
-            .collect();
+        let instrs = bincode::deserialize::<Vec<Instruction>>(z80_instrs)?;
         info!(
             "z80 instruction set loaded in {}ms",
             start.elapsed().as_millis()
@@ -186,7 +166,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let arm_instructions = if config.instruction_sets.arm.unwrap_or(false) {
+    let arm_instructions = if config.is_isa_enabled(Arch::ARM) {
         let start = std::time::Instant::now();
         let arm_instrs = include_bytes!("../serialized/opcodes/arm");
         // NOTE: Actually, the arm file are all arm64 so we needed to get
@@ -204,7 +184,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let arm64_instructions = if config.instruction_sets.arm64.unwrap_or(false) {
+    let arm64_instructions = if config.is_isa_enabled(Arch::ARM64) {
         let start = std::time::Instant::now();
         // TODO: change to arm64 after arm32 has been added
         let arm_instrs = include_bytes!("../serialized/opcodes/arm");
@@ -223,7 +203,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let riscv_instructions = if config.instruction_sets.riscv.unwrap_or(false) {
+    let riscv_instructions = if config.is_isa_enabled(Arch::RISCV) {
         let start = std::time::Instant::now();
         let riscv_instrs = include_bytes!("../serialized/opcodes/riscv");
         // NOTE: No need to filter these instructions by assembler like we do for
@@ -272,7 +252,7 @@ pub fn main() -> Result<()> {
     // create a map of &Register_name -> &Register - Use that in user queries
     // The Register(s) themselves are stored in a vector and we only keep references to the
     // former map
-    let x86_registers = if config.instruction_sets.x86.unwrap_or(false) {
+    let x86_registers = if config.is_isa_enabled(Arch::X86) {
         let start = std::time::Instant::now();
         let regs_x86 = include_bytes!("../serialized/registers/x86");
         let regs = bincode::deserialize(regs_x86)?;
@@ -285,7 +265,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let x86_64_registers = if config.instruction_sets.x86_64.unwrap_or(false) {
+    let x86_64_registers = if config.is_isa_enabled(Arch::X86_64) {
         let start = std::time::Instant::now();
         let regs_x86_64 = include_bytes!("../serialized/registers/x86_64");
         let regs = bincode::deserialize(regs_x86_64)?;
@@ -298,7 +278,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let z80_registers = if config.instruction_sets.z80.unwrap_or(false) {
+    let z80_registers = if config.is_isa_enabled(Arch::Z80) {
         let start = std::time::Instant::now();
         let regs_z80 = include_bytes!("../serialized/registers/z80");
         let regs = bincode::deserialize(regs_z80)?;
@@ -311,7 +291,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let arm_registers = if config.instruction_sets.arm.unwrap_or(false) {
+    let arm_registers = if config.is_isa_enabled(Arch::ARM) {
         let start = std::time::Instant::now();
         let regs_arm = include_bytes!("../serialized/registers/arm");
         let regs = bincode::deserialize(regs_arm)?;
@@ -324,7 +304,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let arm64_registers = if config.instruction_sets.arm64.unwrap_or(false) {
+    let arm64_registers = if config.is_isa_enabled(Arch::ARM64) {
         let start = std::time::Instant::now();
         let regs_arm64 = include_bytes!("../serialized/registers/arm64");
         let regs = bincode::deserialize(regs_arm64)?;
@@ -337,7 +317,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let riscv_registers = if config.instruction_sets.riscv.unwrap_or(false) {
+    let riscv_registers = if config.is_isa_enabled(Arch::RISCV) {
         let start = std::time::Instant::now();
         let regs_riscv = include_bytes!("../serialized/registers/riscv");
         let regs = bincode::deserialize(regs_riscv)?;
@@ -361,7 +341,7 @@ pub fn main() -> Result<()> {
     populate_name_to_register_map(Arch::ARM64, &arm64_registers, &mut names_to_info.registers);
     populate_name_to_register_map(Arch::RISCV, &riscv_registers, &mut names_to_info.registers);
 
-    let gas_directives = if config.assemblers.gas.unwrap_or(false) {
+    let gas_directives = if config.is_assembler_enabled(Assembler::Gas) {
         let start = std::time::Instant::now();
         let gas_dirs = include_bytes!("../serialized/directives/gas");
         let dirs = bincode::deserialize(gas_dirs)?;
@@ -374,7 +354,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let masm_directives = if config.assemblers.masm.unwrap_or(false) {
+    let masm_directives = if config.is_assembler_enabled(Assembler::Masm) {
         let start = std::time::Instant::now();
         let masm_dirs = include_bytes!("../serialized/directives/masm");
         let dirs = bincode::deserialize(masm_dirs)?;
@@ -387,7 +367,7 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
-    let nasm_directives = if config.assemblers.nasm.unwrap_or(false) {
+    let nasm_directives = if config.is_assembler_enabled(Assembler::Nasm) {
         let start = std::time::Instant::now();
         let nasm_dirs = include_bytes!("../serialized/directives/nasm");
         let dirs = bincode::deserialize(nasm_dirs)?;
@@ -447,24 +427,24 @@ pub fn main() -> Result<()> {
     // (and thus allowing the process to exit) is fine
     // _io_threads.join()?;
 
-    info!("Shutting down asm_lsp");
+    info!("Shutting down asm-lsp");
     Ok(())
 }
 
 fn main_loop(
     connection: &Connection,
-    config: &Config,
+    config: &RootConfig,
     names_to_info: &NameToInfoMaps,
-    instruction_completion_items: &[CompletionItem],
-    directive_completion_items: &[CompletionItem],
-    register_completion_items: &[CompletionItem],
+    instruction_completion_items: &[(Arch, CompletionItem)],
+    directive_completion_items: &[(Assembler, CompletionItem)],
+    register_completion_items: &[(Arch, CompletionItem)],
     compile_cmds: &CompilationDatabase,
     include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
 ) -> Result<()> {
     let mut text_store = TextDocuments::new();
     let mut tree_store = TreeStore::new();
 
-    info!("Starting asm_lsp loop...");
+    info!("Starting asm-lsp loop...");
     for msg in &connection.receiver {
         let start = std::time::Instant::now();
         match msg {
@@ -477,7 +457,7 @@ fn main_loop(
                     handle_hover_request(
                         connection,
                         id,
-                        config,
+                        config.get_config(&params.text_document_position_params.text_document.uri),
                         &params,
                         &text_store,
                         &mut tree_store,
@@ -493,7 +473,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
-                        config,
+                        config.get_config(&params.text_document_position.text_document.uri),
                         &text_store,
                         &mut tree_store,
                         instruction_completion_items,
@@ -509,7 +489,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
-                        config,
+                        config.get_config(&params.text_document_position_params.text_document.uri),
                         &text_store,
                         &mut tree_store,
                     )?;
@@ -522,7 +502,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
-                        config,
+                        config.get_config(&params.text_document.uri),
                         &text_store,
                         &mut tree_store,
                     )?;
@@ -535,7 +515,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
-                        config,
+                        config.get_config(&params.text_document_position_params.text_document.uri),
                         &text_store,
                         &mut tree_store,
                         &names_to_info.instructions,
@@ -549,7 +529,7 @@ fn main_loop(
                         connection,
                         id,
                         &params,
-                        config,
+                        config.get_config(&params.text_document_position.text_document.uri),
                         &text_store,
                         &mut tree_store,
                     )?;
@@ -559,13 +539,24 @@ fn main_loop(
                     );
                 } else if let Ok((_id, params)) = cast_req::<DocumentDiagnosticRequest>(req.clone())
                 {
+                    let project_config = config.get_config(&params.text_document.uri);
+                    let cmp_cmds = if let Some(cmd) =
+                        get_comp_cmd_for_path(config, &params.text_document.uri)
+                    {
+                        // If the user provided a compiler invocation command in their config
+                        // for the project config covering this file, use it
+                        &vec![cmd]
+                    } else {
+                        // Otherwise pass the default compile commands object
+                        compile_cmds
+                    };
                     // Ok to unwrap, this should never be `None`
-                    if config.opts.diagnostics.unwrap() {
+                    if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
                         handle_diagnostics(
                             connection,
                             &params.text_document.uri,
-                            config,
-                            compile_cmds,
+                            project_config,
+                            cmp_cmds,
                         )?;
                         info!(
                             "Diagnostics request serviced in {}ms",
@@ -608,13 +599,24 @@ fn main_loop(
                         start.elapsed().as_millis()
                     );
                 } else if let Ok(params) = cast_notif::<DidSaveTextDocument>(notif.clone()) {
+                    let project_config = config.get_config(&params.text_document.uri);
                     // Ok to unwrap, this should never be `None`
-                    if config.opts.diagnostics.unwrap() {
+                    if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
+                        let cmp_cmds = if let Some(cmd) =
+                            get_comp_cmd_for_path(config, &params.text_document.uri)
+                        {
+                            // If the user provided a compiler invocation command in their config
+                            // for the project config covering this file, use it
+                            &vec![cmd]
+                        } else {
+                            // Otherwise pass the default compile commands object
+                            compile_cmds
+                        };
                         handle_diagnostics(
                             connection,
                             &params.text_document.uri,
-                            config,
-                            compile_cmds,
+                            project_config,
+                            cmp_cmds,
                         )?;
                         info!(
                             "Published diagnostics on save in {}ms",
