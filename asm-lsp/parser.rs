@@ -185,6 +185,7 @@ pub fn populate_riscv_instructions(docs_path: &PathBuf) -> Result<Vec<Instructio
 ///
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
+#[allow(clippy::too_many_lines)]
 fn parse_riscv_instructions(rst_contents: &str) -> Vec<Instruction> {
     // We could pull in an actual rst parser to do this, but the files' contents
     // are straightforward/structured enough that this should be fairly trivial
