@@ -43,6 +43,16 @@ jobs:
           ruby-version: '3.1'
           msys2: true
 
+      - name: Install Ruby on Ubuntu
+        if: runner.os == 'Linux'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+
+      - name: Setup Ruby on Ubuntu
+        if: runner.os == 'Linux'
+        run: sudo ln -s "$(which ruby)" /usr/bin/ruby3.2
+
       - name: Install pre-commit dependencies
         run: python -m pip install pre-commit
 
