@@ -7,7 +7,9 @@
 # opcode binaries
 cargo run --release -- ../docs_store/opcodes/raw/x86.xml -o ../asm-lsp/serialized/opcodes/x86 --doc-type instruction
 cargo run --release -- ../docs_store/opcodes/raw/x86_64.xml -o ../asm-lsp/serialized/opcodes/x86_64 --doc-type instruction
+# TODO: get the official arm32 opcode files
 cargo run --release -- ../docs_store/opcodes/raw/ARM/ -o ../asm-lsp/serialized/opcodes/arm --doc-type instruction --arch arm
+cargo run --release -- ../docs_store/opcodes/raw/ARM/ -o ../asm-lsp/serialized/opcodes/arm64 --doc-type instruction --arch arm64
 cargo run --release -- ../docs_store/opcodes/raw/RISCV/ -o ../asm-lsp/serialized/opcodes/riscv --doc-type instruction --arch riscv
 cargo run --release -- ../docs_store/opcodes/raw/z80.xml -o ../asm-lsp/serialized/opcodes/z80 --doc-type instruction
 
@@ -15,6 +17,7 @@ cargo run --release -- ../docs_store/opcodes/raw/z80.xml -o ../asm-lsp/serialize
 cargo run --release -- ../docs_store/registers/raw/x86.xml -o ../asm-lsp/serialized/registers/x86 --doc-type register --arch x86
 cargo run --release -- ../docs_store/registers/raw/x86_64.xml -o ../asm-lsp/serialized/registers/x86_64 --doc-type register --arch x86-64
 cargo run --release -- ../docs_store/registers/raw/arm.xml -o ../asm-lsp/serialized/registers/arm --doc-type register --arch arm
+cargo run --release -- ../docs_store/registers/raw/arm64.xml -o ../asm-lsp/serialized/registers/arm64 --doc-type register --arch arm64
 cargo run --release -- ../docs_store/registers/raw/riscv.rst.txt -o ../asm-lsp/serialized/registers/riscv --doc-type register --arch riscv
 cargo run --release -- ../docs_store/registers/raw/z80.xml -o ../asm-lsp/serialized/registers/z80 --doc-type register --arch z80
 
