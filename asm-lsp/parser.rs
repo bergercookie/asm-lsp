@@ -434,7 +434,10 @@ pub fn populate_arm_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>
                 instr_name.to_owned(),
                 Instruction {
                     name: instr_name.to_owned(),
-                    arch: Some(Arch::ARM),
+                    // TODO:currently changing into either doesn't change
+                    // anything as both source form the 64bit info which should
+                    // change when arm32 info is added
+                    arch: Some(Arch::ARM64),
                     aliases: aliases.to_owned(),
                     ..Default::default()
                 },
@@ -557,7 +560,8 @@ fn parse_arm_instruction(xml_contents: &str) -> Option<Instruction> {
 
     // ref to the instruction that's currently under construction
     let mut instruction = Instruction {
-        arch: Some(Arch::ARM),
+        // TODO: switch for archs
+        arch: Some(Arch::ARM64),
         ..Default::default()
     };
     let mut curr_template: Option<String> = None;

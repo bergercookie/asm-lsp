@@ -62,6 +62,9 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                     Arch::ARM => {
                         instrs = populate_arm_instructions(&opts.input_path)?;
                     }
+                    Arch::ARM64 => {
+                        instrs = populate_arm_instructions(&opts.input_path)?;
+                    }
                     Arch::RISCV => {
                         instrs = populate_riscv_instructions(&opts.input_path)?;
                     }

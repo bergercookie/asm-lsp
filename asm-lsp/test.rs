@@ -39,6 +39,7 @@ mod tests {
                 x86_64: Some(false),
                 z80: Some(false),
                 arm: Some(false),
+                arm64: Some(false),
                 riscv: Some(false),
             },
             opts: ConfigOptions {
@@ -65,6 +66,7 @@ mod tests {
                 x86_64: Some(false),
                 z80: Some(true),
                 arm: Some(false),
+                arm64: Some(false),
                 riscv: Some(false),
             },
             opts: ConfigOptions {
@@ -91,6 +93,7 @@ mod tests {
                 x86_64: Some(false),
                 z80: Some(false),
                 arm: Some(true),
+                arm64: Some(false),
                 riscv: Some(false),
             },
             opts: ConfigOptions {
@@ -117,6 +120,7 @@ mod tests {
                 x86_64: Some(false),
                 z80: Some(false),
                 arm: Some(false),
+                arm64: Some(false),
                 riscv: Some(true),
             },
             opts: ConfigOptions {
@@ -143,6 +147,7 @@ mod tests {
                 x86_64: Some(true),
                 z80: Some(false),
                 arm: Some(false),
+                arm64: Some(false),
                 riscv: Some(false),
             },
             opts: ConfigOptions {
@@ -169,6 +174,7 @@ mod tests {
                 x86_64: Some(false),
                 z80: Some(false),
                 arm: Some(false),
+                arm64: Some(false),
                 riscv: Some(false),
             },
             opts: ConfigOptions {
@@ -195,6 +201,7 @@ mod tests {
                 x86_64: Some(false),
                 z80: Some(false),
                 arm: Some(false),
+                arm64: Some(false),
                 riscv: Some(false),
             },
             opts: ConfigOptions {
@@ -221,6 +228,7 @@ mod tests {
                 x86_64: Some(false),
                 z80: Some(false),
                 arm: Some(false),
+                arm64: Some(false),
                 riscv: Some(false),
             },
             opts: ConfigOptions {
@@ -240,6 +248,8 @@ mod tests {
         x86_64_registers: Vec<Register>,
         arm_instructions: Vec<Instruction>,
         arm_registers: Vec<Register>,
+        arm64_instructions: Vec<Instruction>,
+        arm64_registers: Vec<Register>,
         riscv_instructions: Vec<Instruction>,
         riscv_registers: Vec<Register>,
         z80_instructions: Vec<Instruction>,
@@ -268,6 +278,8 @@ mod tests {
                 x86_64_registers: Vec::new(),
                 arm_instructions: Vec::new(),
                 arm_registers: Vec::new(),
+                arm64_instructions: Vec::new(),
+                arm64_registers: Vec::new(),
                 riscv_instructions: Vec::new(),
                 riscv_registers: Vec::new(),
                 z80_instructions: Vec::new(),
@@ -344,6 +356,13 @@ mod tests {
             Vec::new()
         };
 
+        info.arm64_instructions = if config.instruction_sets.arm64.unwrap_or(false) {
+            let arm64_instrs = include_bytes!("serialized/opcodes/arm64");
+            bincode::deserialize::<Vec<Instruction>>(arm64_instrs)?
+        } else {
+            Vec::new()
+        };
+
         info.riscv_instructions = if config.instruction_sets.riscv.unwrap_or(false) {
             let riscv_instrs = include_bytes!("serialized/opcodes/riscv");
             bincode::deserialize::<Vec<Instruction>>(riscv_instrs)?
@@ -375,6 +394,13 @@ mod tests {
         info.arm_registers = if config.instruction_sets.arm.unwrap_or(false) {
             let regs_arm = include_bytes!("serialized/registers/arm");
             bincode::deserialize(regs_arm)?
+        } else {
+            Vec::new()
+        };
+
+        info.arm64_registers = if config.instruction_sets.arm64.unwrap_or(false) {
+            let regs_arm64 = include_bytes!("serialized/registers/arm64");
+            bincode::deserialize(regs_arm64)?
         } else {
             Vec::new()
         };
@@ -438,6 +464,12 @@ mod tests {
         );
 
         populate_name_to_instruction_map(
+            Arch::ARM64,
+            &info.arm64_instructions,
+            &mut store.names_to_instructions,
+        );
+
+        populate_name_to_instruction_map(
             Arch::RISCV,
             &info.riscv_instructions,
             &mut store.names_to_instructions,
@@ -464,6 +496,12 @@ mod tests {
         populate_name_to_register_map(
             Arch::ARM,
             &info.arm_registers,
+            &mut store.names_to_registers,
+        );
+
+        populate_name_to_register_map(
+            Arch::ARM64,
+            &info.arm64_registers,
             &mut store.names_to_registers,
         );
 
@@ -2075,6 +2113,40 @@ Width: 8 bits",
         }
     }
     #[test]
+    fn serialized_arm64_registers_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let arm_regs_ser = include_bytes!("serialized/registers/arm64");
+        let ser_vec = bincode::deserialize::<Vec<Register>>(arm_regs_ser).unwrap();
+
+        let arm64_regs_raw = include_str!("../docs_store/registers/raw/arm64.xml");
+        let mut raw_vec = populate_registers(arm64_regs_raw).unwrap();
+
+        // HACK: Windows line endings...
+        for reg in &mut raw_vec {
+            if let Some(descr) = &reg.description {
+                reg.description = Some(descr.replace('\r', ""));
+            }
+        }
+
+        for reg in ser_vec {
+            *cmp_map.entry(reg.clone()).or_insert(0) += 1;
+        }
+        for reg in raw_vec {
+            let entry = cmp_map.get_mut(&reg).unwrap();
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
+            );
+            *entry -= 1;
+        }
+        for (reg, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {reg:?}"
+            );
+        }
+    }
+    #[test]
     fn serialized_z80_registers_are_up_to_date() {
         let mut cmp_map = HashMap::new();
         let z80_regs_ser = include_bytes!("serialized/registers/z80");
@@ -2173,6 +2245,7 @@ Width: 8 bits",
             );
         }
     }
+    //TODO: sperate test for aarch64 when the arm32 opcodes are added
     #[test]
     fn serialized_arm_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();

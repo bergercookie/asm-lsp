@@ -656,6 +656,8 @@ pub enum Arch {
     X86_64,
     #[strum(serialize = "arm")]
     ARM,
+    #[strum(serialize = "arm64")]
+    ARM64,
     #[strum(serialize = "riscv")]
     RISCV,
     #[strum(serialize = "z80")]
@@ -670,6 +672,7 @@ impl std::fmt::Display for Arch {
             Self::X86 => write!(f, "x86")?,
             Self::X86_64 => write!(f, "x86-64")?,
             Self::ARM => write!(f, "arm")?,
+            Self::ARM64 => write!(f, "arm64")?,
             Self::Z80 => write!(f, "z80")?,
             Self::RISCV => write!(f, "riscv")?,
         }
@@ -807,6 +810,7 @@ pub struct InstructionSets {
     pub x86_64: Option<bool>,
     pub z80: Option<bool>,
     pub arm: Option<bool>,
+    pub arm64: Option<bool>,
     pub riscv: Option<bool>,
 }
 
@@ -817,6 +821,7 @@ impl Default for InstructionSets {
             x86_64: Some(true),
             z80: Some(false),
             arm: Some(false),
+            arm64: Some(false),
             riscv: Some(false),
         }
     }

@@ -673,20 +673,22 @@ fn lookup_hover_resp_by_arch<T: Hoverable>(
     // ensure hovered text is always lowercase
     let hovered_text = word.to_ascii_lowercase();
     // switch over to vec?
-    let (x86_resp, x86_64_resp, z80_resp, arm_resp, riscv_resp) =
+    let (x86_resp, x86_64_resp, z80_resp, arm_resp, arm64_resp, riscv_resp) =
         search_for_hoverable_by_arch(&hovered_text, map);
     match (
         x86_resp.is_some(),
         x86_64_resp.is_some(),
         z80_resp.is_some(),
         arm_resp.is_some(),
+        arm64_resp.is_some(),
         riscv_resp.is_some(),
     ) {
-        (true, _, _, _, _)
-        | (_, true, _, _, _)
-        | (_, _, true, _, _)
-        | (_, _, _, true, _)
-        | (_, _, _, _, true) => {
+        (true, _, _, _, _, _)
+        | (_, true, _, _, _, _)
+        | (_, _, true, _, _, _)
+        | (_, _, _, true, _, _)
+        | (_, _, _, _, true, _)
+        | (_, _, _, _, _, true) => {
             let mut value = String::new();
             if let Some(x86_resp) = x86_resp {
                 value += &format!("{x86_resp}");
@@ -703,6 +705,13 @@ fn lookup_hover_resp_by_arch<T: Hoverable>(
             }
             if let Some(arm_resp) = arm_resp {
                 value += &format!("{}{}", if value.is_empty() { "" } else { "\n\n" }, arm_resp);
+            }
+            if let Some(arm64_resp) = arm64_resp {
+                value += &format!(
+                    "{}{}",
+                    if value.is_empty() { "" } else { "\n\n" },
+                    arm64_resp
+                );
             }
             if let Some(riscv_resp) = riscv_resp {
                 value += &format!(
@@ -1318,13 +1327,16 @@ pub fn get_sig_help_resp(
             if caps.len() == 1 && caps[0].node.end_byte() < curr_doc.len() {
                 if let Ok(instr_name) = caps[0].node.utf8_text(curr_doc) {
                     let mut value = String::new();
+                    // Switch to a better structure
                     let mut has_x86 = false;
                     let mut has_x86_64 = false;
                     let mut has_z80 = false;
                     let mut has_arm = false;
+                    let mut has_arm64 = false;
                     // ensure hovered instruction is always lowercase
                     let hovered_instr_name = instr_name.to_ascii_lowercase();
-                    let (x86_info, x86_64_info, z80_info, arm_info, riscv_info) =
+                    let (x86_info, x86_64_info, z80_info, arm_info, arm64_info, riscv_info) =
+                    // TODO: switch to an appropriate DS like dyn list or static list
                         search_for_hoverable_by_arch(&hovered_instr_name, instr_info);
                     if let Some(sig) = x86_info {
                         for form in &sig.forms {
@@ -1386,6 +1398,15 @@ pub fn get_sig_help_resp(
                             if !has_arm {
                                 value += "**arm**\n";
                                 has_arm = true;
+                            }
+                            value += &format!("{form}\n");
+                        }
+                    }
+                    if let Some(sig) = arm64_info {
+                        for form in &sig.asm_templates {
+                            if !has_arm64 {
+                                value += "**arm64**\n";
+                                has_arm64 = true;
                             }
                             value += &format!("{form}\n");
                         }
@@ -1573,14 +1594,23 @@ fn search_for_hoverable_by_arch<'a, T: Hoverable>(
     Option<&'a T>,
     Option<&'a T>,
     Option<&'a T>,
+    Option<&'a T>,
 ) {
     let x86_resp = map.get(&(Arch::X86, word));
     let x86_64_resp = map.get(&(Arch::X86_64, word));
     let z80_resp = map.get(&(Arch::Z80, word));
     let arm_resp = map.get(&(Arch::ARM, word));
+    let arm64_resp = map.get(&(Arch::ARM64, word));
     let riscv_resp = map.get(&(Arch::RISCV, word));
 
-    (x86_resp, x86_64_resp, z80_resp, arm_resp, riscv_resp)
+    (
+        x86_resp,
+        x86_64_resp,
+        z80_resp,
+        arm_resp,
+        arm64_resp,
+        riscv_resp,
+    )
 }
 
 fn search_for_hoverable_by_assembler<'a, T: Hoverable>(

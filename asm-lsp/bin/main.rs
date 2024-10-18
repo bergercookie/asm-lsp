@@ -189,8 +189,30 @@ pub fn main() -> Result<()> {
     let arm_instructions = if config.instruction_sets.arm.unwrap_or(false) {
         let start = std::time::Instant::now();
         let arm_instrs = include_bytes!("../serialized/opcodes/arm");
-        // NOTE: No need to filter these instructions by assembler like we do for
-        // x86/x86_64, as our ARM docs don't contain any assembler-specific information (yet)
+        // NOTE: Actually, the arm file are all arm64 so we needed to get
+        // the arm32 versions then do the below
+        // NOTE: No need to filter these instructions by assembler
+        // like we do for x86/x86_64, as our ARM docs don't contain any
+        // assembler-specific information (yet)
+        let instrs = bincode::deserialize::<Vec<Instruction>>(arm_instrs)?;
+        info!(
+            "arm instruction set loaded in {}ms",
+            start.elapsed().as_millis()
+        );
+        instrs
+    } else {
+        Vec::new()
+    };
+
+    let arm64_instructions = if config.instruction_sets.arm64.unwrap_or(false) {
+        let start = std::time::Instant::now();
+        // TODO: change to arm64 after arm32 has been added
+        let arm_instrs = include_bytes!("../serialized/opcodes/arm");
+        // NOTE: Actually, the arm file are all arm64 so we needed to get
+        // the arm32 versions then do the below
+        // NOTE: No need to filter these instructions by assembler
+        // like we do for x86/x86_64, as our ARM docs don't contain any
+        // assembler-specific information (yet)
         let instrs = bincode::deserialize::<Vec<Instruction>>(arm_instrs)?;
         info!(
             "arm instruction set loaded in {}ms",
@@ -234,6 +256,11 @@ pub fn main() -> Result<()> {
     populate_name_to_instruction_map(
         Arch::ARM,
         &arm_instructions,
+        &mut names_to_info.instructions,
+    );
+    populate_name_to_instruction_map(
+        Arch::ARM64,
+        &arm64_instructions,
         &mut names_to_info.instructions,
     );
     populate_name_to_instruction_map(
@@ -297,6 +324,19 @@ pub fn main() -> Result<()> {
         Vec::new()
     };
 
+    let arm64_registers = if config.instruction_sets.arm64.unwrap_or(false) {
+        let start = std::time::Instant::now();
+        let regs_arm64 = include_bytes!("../serialized/registers/arm64");
+        let regs = bincode::deserialize(regs_arm64)?;
+        info!(
+            "arm register set loaded in {}ms",
+            start.elapsed().as_millis()
+        );
+        regs
+    } else {
+        Vec::new()
+    };
+
     let riscv_registers = if config.instruction_sets.riscv.unwrap_or(false) {
         let start = std::time::Instant::now();
         let regs_riscv = include_bytes!("../serialized/registers/riscv");
@@ -318,6 +358,7 @@ pub fn main() -> Result<()> {
     );
     populate_name_to_register_map(Arch::Z80, &z80_registers, &mut names_to_info.registers);
     populate_name_to_register_map(Arch::ARM, &arm_registers, &mut names_to_info.registers);
+    populate_name_to_register_map(Arch::ARM64, &arm64_registers, &mut names_to_info.registers);
     populate_name_to_register_map(Arch::RISCV, &riscv_registers, &mut names_to_info.registers);
 
     let gas_directives = if config.assemblers.gas.unwrap_or(false) {
