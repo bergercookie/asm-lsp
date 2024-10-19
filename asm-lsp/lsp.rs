@@ -54,11 +54,13 @@ pub fn send_empty_resp(connection: &Connection, id: RequestId, config: &Config) 
     }
 }
 
-/// Find the start and end indices of a word inside the given line
+/// Find the ([start], [end]) indices and the cursor's offset in a word
+/// on the given line
+///
 /// Borrowed from RLS
 /// characters besides the default alphanumeric and '_'
 #[must_use]
-pub fn find_word_at_pos(line: &str, col: Column) -> (Column, Column) {
+pub fn find_word_at_pos(line: &str, col: Column) -> ((Column, Column), usize) {
     let line_ = format!("{line} ");
     let is_ident_char = |c: char| c.is_alphanumeric() || c == '_' || c == '.';
 
@@ -77,7 +79,7 @@ pub fn find_word_at_pos(line: &str, col: Column) -> (Column, Column) {
         .filter(|&(_, c)| !is_ident_char(c));
 
     let end = end.next();
-    (start, end.map_or(col, |(i, _)| i))
+    ((start, end.map_or(col, |(i, _)| i)), col - start)
 }
 
 /// Returns the word undernearth the cursor given the specified `TextDocumentPositionParams`
@@ -105,19 +107,20 @@ pub fn get_word_from_file_params(pos_params: &TextDocumentPositionParams) -> Res
             let buf_reader = std::io::BufReader::new(file);
 
             let line_conts = buf_reader.lines().nth(line).unwrap().unwrap();
-            let (start, end) = find_word_at_pos(&line_conts, col);
+            let ((start, end), _) = find_word_at_pos(&line_conts, col);
             Ok(String::from(&line_conts[start..end]))
         }
         Err(e) => Err(anyhow!("Filepath get error -- Error: {e}")),
     }
 }
 
-/// Returns a string slice to the word in doc specified by the position params
+/// Returns a string slice to the word in doc specified by the position params,
+/// and the cursor's offset into the word
 #[must_use]
 pub fn get_word_from_pos_params<'a>(
     doc: &'a FullTextDocument,
     pos_params: &TextDocumentPositionParams,
-) -> &'a str {
+) -> (&'a str, usize) {
     let line_contents = doc.get_content(Some(Range {
         start: Position {
             line: pos_params.position.line,
@@ -129,9 +132,9 @@ pub fn get_word_from_pos_params<'a>(
         },
     }));
 
-    let (word_start, word_end) =
+    let ((word_start, word_end), cursor_offset) =
         find_word_at_pos(line_contents, pos_params.position.character as usize);
-    &line_contents[word_start..word_end]
+    (&line_contents[word_start..word_end], cursor_offset)
 }
 
 /// Fetches default include directories, as well as any additional directories
@@ -593,12 +596,12 @@ pub fn get_completes<T: Completable, U: ArchOrAssembler>(
         .collect()
 }
 
-#[allow(clippy::too_many_arguments)]
 #[must_use]
 pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
     params: &HoverParams,
     config: &Config,
     word: &str,
+    cursor_offset: usize,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
     instruction_map: &HashMap<(Arch, &str), T>,
@@ -634,7 +637,31 @@ pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
         }
     }
 
-    let reg_lookup = lookup_hover_resp_by_arch(word, register_map);
+    let reg_lookup = if config.instruction_sets.arm64.unwrap_or(false) {
+        word.find('.').map_or_else(
+            || lookup_hover_resp_by_arch(&word[0..], register_map),
+            |dot| {
+                if cursor_offset <= dot {
+                    // main vector register info on ARM64
+                    let main_register = &word[0..dot];
+                    lookup_hover_resp_by_arch(main_register, register_map)
+                } else {
+                    // if Vector = V21.2D -> lower Register = D21
+                    // lower vector register info on ARM64
+                    let reg_len = 3;
+                    let mut lower_register = String::with_capacity(reg_len);
+                    let reg_letter = dot + 2;
+                    lower_register.push_str(&word[reg_letter..]);
+                    let reg_num = 1..dot;
+                    lower_register.push_str(&word[reg_num]);
+                    lookup_hover_resp_by_arch(&lower_register, register_map)
+                }
+            },
+        )
+    } else {
+        lookup_hover_resp_by_arch(word, register_map)
+    };
+
     if reg_lookup.is_some() {
         return reg_lookup;
     }
@@ -1462,7 +1489,7 @@ pub fn get_goto_def_resp(
         let mut cursor = tree_sitter::QueryCursor::new();
         let matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc);
 
-        let word = get_word_from_pos_params(curr_doc, &params.text_document_position_params);
+        let (word, _) = get_word_from_pos_params(curr_doc, &params.text_document_position_params);
 
         for match_ in matches {
             for cap in match_.captures {
@@ -1521,7 +1548,7 @@ pub fn get_ref_resp(
         });
 
         let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
-        let word = get_word_from_pos_params(curr_doc, &params.text_document_position);
+        let (word, _) = get_word_from_pos_params(curr_doc, &params.text_document_position);
         let uri = &params.text_document_position.text_document.uri;
 
         let mut cursor = tree_sitter::QueryCursor::new();
@@ -1602,13 +1629,7 @@ fn search_for_hoverable_by_arch<'a, T: Hoverable>(
     let x86_64_resp = map.get(&(Arch::X86_64, word));
     let z80_resp = map.get(&(Arch::Z80, word));
     let arm_resp = map.get(&(Arch::ARM, word));
-    let arm64_resp = if &word[0..1] == "v" {
-        // TODO: support for hover info of subfields of a vector register
-        // hover info for a vector register
-        map.get(&(Arch::ARM64, &word[0..2]))
-    } else {
-        map.get(&(Arch::ARM64, word))
-    };
+    let arm64_resp = map.get(&(Arch::ARM64, word));
     let riscv_resp = map.get(&(Arch::RISCV, word));
     (
         x86_resp,

@@ -609,7 +609,7 @@ mod tests {
             },
         };
 
-        let word = curr_doc.as_ref().map_or_else(
+        let (word, cursor_offset) = curr_doc.as_ref().map_or_else(
             || {
                 panic!("No document");
             },
@@ -620,6 +620,7 @@ mod tests {
             &hover_params,
             config,
             word,
+            cursor_offset,
             &text_store,
             &mut tree_store,
             &globals.names_to_instructions,

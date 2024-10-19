@@ -43,7 +43,7 @@ pub fn handle_hover_request(
     names_to_info: &NameToInfoMaps,
     include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
 ) -> Result<()> {
-    let word = if let Some(doc) =
+    let (word, cursor_offset) = if let Some(doc) =
         text_store.get_document(&params.text_document_position_params.text_document.uri)
     {
         get_word_from_pos_params(doc, &params.text_document_position_params)
@@ -55,6 +55,7 @@ pub fn handle_hover_request(
         params,
         config,
         word,
+        cursor_offset,
         text_store,
         tree_store,
         &names_to_info.instructions,
