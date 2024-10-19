@@ -1602,9 +1602,14 @@ fn search_for_hoverable_by_arch<'a, T: Hoverable>(
     let x86_64_resp = map.get(&(Arch::X86_64, word));
     let z80_resp = map.get(&(Arch::Z80, word));
     let arm_resp = map.get(&(Arch::ARM, word));
-    let arm64_resp = map.get(&(Arch::ARM64, word));
+    let arm64_resp = if &word[0..1] == "v" {
+        // TODO: support for hover info of subfields of a vector register
+        // hover info for a vector register
+        map.get(&(Arch::ARM64, &word[0..2]))
+    } else {
+        map.get(&(Arch::ARM64, word))
+    };
     let riscv_resp = map.get(&(Arch::RISCV, word));
-
     (
         x86_resp,
         x86_64_resp,
