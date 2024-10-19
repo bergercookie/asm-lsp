@@ -2254,7 +2254,7 @@ Width: 8 bits",
         ser_vec.sort_by(|a, b| a.name.cmp(&b.name));
 
         let mut raw_vec =
-            populate_arm_instructions(&PathBuf::from("docs_store/opcodes/raw/ARM/")).unwrap();
+            populate_arm_instructions(&PathBuf::from("../docs_store/opcodes/raw/ARM/")).unwrap();
         raw_vec.sort_by(|a, b| a.name.cmp(&b.name));
 
         for instr in ser_vec {
