@@ -75,6 +75,7 @@ x86 = false
 x86_64 = true
 z80 = false
 arm = false
+arm64 = false
 riscv = false
 
 [opts]
