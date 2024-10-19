@@ -912,6 +912,7 @@ bar:
             &empty_test_config(),
             );
     }
+
     #[test]
     fn handle_hover_it_demangles_cpp_2() {
         test_hover(
@@ -920,6 +921,7 @@ bar:
             &empty_test_config(),
         );
     }
+
     #[test]
     fn handle_hover_it_demangles_cpp_3() {
         test_hover("	movq	_ZSt4endlIcSt<cursor>11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@GOTPCREL(%rip), %rax",
@@ -1000,7 +1002,7 @@ bar:
     fn handle_hover_x86_x86_64_it_provides_instr_info_no_args() {
         test_hover(
             "<cursor>MOVLPS",
-            "MOVLPS [x86]
+            "movlps [x86]
 Move Low Packed Single-Precision Floating-Point Values
 
 ## Forms
@@ -1014,9 +1016,7 @@ Move Low Packed Single-Precision Floating-Point Values
   + [m64]    input = false  output = true
   + [xmm]    input = true   output = false
 
-More info: https://www.felixcloutier.com/x86/movlps
-
-MOVLPS [x86-64]
+movlps [x86-64]
 Move Low Packed Single-Precision Floating-Point Values
 
 ## Forms
@@ -1028,17 +1028,16 @@ Move Low Packed Single-Precision Floating-Point Values
 - *GAS*: movlps | *GO*: MOVLPS | *XMM*: SSE | *ISA*: SSE
 
   + [m64]    input = false  output = true
-  + [xmm]    input = true   output = false
-
-More info: https://www.felixcloutier.com/x86/movlps",
+  + [xmm]    input = true   output = false",
             &x86_x86_64_test_config(),
-        );
+        ); // More info: https://www.felixcloutier.com/x86/movlps
     }
+
     #[test]
     fn handle_hover_x86_x86_64_it_provides_instr_info_one_reg_arg() {
         test_hover(
             "push<cursor>q	%rbp",
-            "PUSH [x86]
+            "push [x86]
 Push Value Onto the Stack
 
 ## Forms
@@ -1062,9 +1061,7 @@ Push Value Onto the Stack
 
   + [m32]    input = true   output = false
 
-More info: https://www.felixcloutier.com/x86/push
-
-PUSH [x86-64]
+push [x86-64]
 Push Value Onto the Stack
 
 ## Forms
@@ -1086,17 +1083,16 @@ Push Value Onto the Stack
   + [m16]    input = true   output = false
 - *GAS*: pushq | *GO*: PUSHQ
 
-  + [m64]    input = true   output = false
-
-More info: https://www.felixcloutier.com/x86/push",
+  + [m64]    input = true   output = false",
             &x86_x86_64_test_config(),
-        );
+        ); // More info: https://www.felixcloutier.com/x86/push
     }
+
     #[test]
     fn handle_hover_x86_x86_64_it_provides_instr_info_two_reg_args() {
         test_hover(
             "	m<cursor>ovq	%rsp, %rbp",
-            "MOVQ [x86]
+            "movq [x86]
 Move Quadword
 
 ## Forms
@@ -1126,9 +1122,7 @@ Move Quadword
   + [m64]    input = false  output = true
   + [xmm]    input = true   output = false
 
-More info: https://www.felixcloutier.com/x86/movq
-
-MOVQ [x86-64]
+movq [x86-64]
 Move Quadword
 
 ## Forms
@@ -1172,11 +1166,9 @@ Move Quadword
 - *GAS*: movq | *GO*: MOVQ | *XMM*: SSE | *ISA*: SSE2
 
   + [m64]    input = false  output = true
-  + [xmm]    input = true   output = false
-
-More info: https://www.felixcloutier.com/x86/movq",
+  + [xmm]    input = true   output = false",
             &x86_x86_64_test_config(),
-        );
+        ); // More info: https://www.felixcloutier.com/x86/movq
     }
 
     #[test]
@@ -1334,17 +1326,18 @@ More info: https://sourceware.org/binutils/docs-2.41/as/Global.html",
     #[test]
     fn handle_hover_masm_it_provides_directive_info_1() {
         test_hover(
-            "ADD<cursor>R",
-            "ADDR [masm]
+            "add<cursor>R",
+            "addr [masm]
 Operator used exclusively with INVOKE to pass the address of a variable to a procedure.",
             &masm_test_config(),
         );
     }
+
     #[test]
     fn handle_hover_masm_it_provides_directive_info_2() {
         test_hover(
             "add<cursor>r",
-            "ADDR [masm]
+            "addr [masm]
 Operator used exclusively with INVOKE to pass the address of a variable to a procedure.",
             &masm_test_config(),
         );
@@ -1352,8 +1345,8 @@ Operator used exclusively with INVOKE to pass the address of a variable to a pro
     #[test]
     fn handle_hover_masm_it_provides_directive_info_3() {
         test_hover(
-            ".ALLOC<cursor>STACK",
-            ".ALLOCSTACK [masm]
+            ".alloc<cursor>STACK",
+            ".allocstack [masm]
 MASM64: Generates a UWOP_ALLOC_SMALL or a UWOP_ALLOC_LARGE with the specified size for the current offset in the prologue.",
             &masm_test_config(),
         );
@@ -1371,6 +1364,7 @@ MASM64: Generates a UWOP_ALLOC_SMALL or a UWOP_ALLOC_LARGE with the specified si
             None,
         );
     }
+
     #[test]
     fn handle_autocomplete_nasm_it_provides_directive_completes_2() {
         test_directive_autocomplete(
@@ -1380,6 +1374,7 @@ MASM64: Generates a UWOP_ALLOC_SMALL or a UWOP_ALLOC_LARGE with the specified si
             Some("%".to_string()),
         );
     }
+
     #[test]
     fn handle_autocomplete_nasm_it_provides_directive_completes_3() {
         test_directive_autocomplete(
@@ -1394,16 +1389,17 @@ MASM64: Generates a UWOP_ALLOC_SMALL or a UWOP_ALLOC_LARGE with the specified si
     fn handle_hover_nasm_it_provides_directive_info_1() {
         test_hover(
             "EQ<cursor>U",
-            "EQU [nasm]
+            "equ [nasm]
 EQU defines a symbol to a given constant value: when EQU is used, the source line must contain a label. The action of EQU is to define the given label name to the value of its (only) operand. This definition is absolute, and cannot change later.",
             &nasm_test_config(),
         );
     }
+
     #[test]
     fn handle_hover_nasm_it_provides_directive_info_2() {
         test_hover(
             "%def<cursor>ine",
-            "%DEFINE [nasm]
+            "%define [nasm]
 Define Single-line macros that is resolved at the time the embedded macro is expanded.",
             &nasm_test_config(),
         );
@@ -1412,7 +1408,7 @@ Define Single-line macros that is resolved at the time the embedded macro is exp
     fn handle_hover_nasm_it_provides_directive_info_3() {
         test_hover(
             ".ATT_<cursor>SYNTAX",
-            ".ATT_SYNTAX [nasm]
+            ".att_syntax [nasm]
 switch to AT&amp;T syntax",
             &nasm_test_config(),
         );
@@ -1440,6 +1436,7 @@ switch to AT&amp;T syntax",
             None,
         );
     }
+
     #[test]
     fn handle_autocomplete_z80_it_provides_reg_comps_in_existing_reg_arg_2() {
         test_register_autocomplete(
@@ -1449,6 +1446,7 @@ switch to AT&amp;T syntax",
             None,
         );
     }
+
     #[test]
     fn handle_autocomplete_z80_it_provides_reg_comps_in_existing_reg_arg_3() {
         test_register_autocomplete(
@@ -1475,6 +1473,7 @@ LoaD and Increment. Copies the byte pointed to by HL to the address pointed to b
 &z80_test_config(),
             );
     }
+
     #[test]
     fn handle_hover_z80_it_provides_instr_info_one_reg_arg() {
         test_hover("        CP<cursor> (HL)         ;COMPARE MEMORY CONTENTS WITH",
@@ -1521,6 +1520,7 @@ ComPare. Sets the flags as if a SUB was performed but does not perform it. Legal
 &z80_test_config(),
             );
     }
+
     #[test]
     fn handle_hover_z80_it_provides_instr_info_two_reg_args() {
         test_hover("        L<cursor>D HL, DATA     ;STARTING ADDRESS OF DATA STRING",

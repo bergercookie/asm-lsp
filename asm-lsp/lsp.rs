@@ -739,7 +739,9 @@ fn lookup_hover_resp_by_assembler<T: Hoverable>(
     word: &str,
     map: &HashMap<(Assembler, &str), T>,
 ) -> Option<Hover> {
-    let (gas_resp, go_resp, masm_resp, nasm_resp) = search_for_hoverable_by_assembler(word, map);
+    let hovered_directive = word.to_ascii_lowercase();
+    let (gas_resp, go_resp, masm_resp, nasm_resp) =
+        search_for_hoverable_by_assembler(&hovered_directive, map);
 
     match (
         gas_resp.is_some(),
