@@ -1735,7 +1735,10 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
     if let Some(folders) = &params.workspace_folders {
         // if there's multiple, just visit in order until we find a valid folder
         for folder in folders {
-            let Ok(parsed) = PathBuf::from_str(folder.uri.path().as_str());
+            #[allow(irrefutable_let_patterns)] // TODO: Remove once CI is bumped past 1.82
+            let Ok(parsed) = PathBuf::from_str(folder.uri.path().as_str()) else {
+                unreachable!()
+            };
             if let Ok(parsed_path) = parsed.canonicalize() {
                 info!("Detected project root: {}", parsed_path.display());
                 return Some(parsed_path);
@@ -1746,7 +1749,10 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
     // if workspace folders weren't set or came up empty, we check the root_uri
     #[allow(deprecated)]
     if let Some(root_uri) = &params.root_uri {
-        let Ok(parsed) = PathBuf::from_str(root_uri.path().as_str());
+        #[allow(irrefutable_let_patterns)] // TODO: Remove once CI is bumped past 1.82
+        let Ok(parsed) = PathBuf::from_str(root_uri.path().as_str()) else {
+            unreachable!()
+        };
         if let Ok(parsed_path) = parsed.canonicalize() {
             info!("Detected project root: {}", parsed_path.display());
             return Some(parsed_path);
@@ -1756,7 +1762,10 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
     // if both `workspace_folders` and `root_uri` weren't set or came up empty, we check the root_path
     #[allow(deprecated)]
     if let Some(root_path) = &params.root_path {
-        let Ok(parsed) = PathBuf::from_str(root_path.as_str());
+        #[allow(irrefutable_let_patterns)] // TODO: Remove once CI is bumped past 1.82
+        let Ok(parsed) = PathBuf::from_str(root_path.as_str()) else {
+            unreachable!()
+        };
         if let Ok(parsed_path) = parsed.canonicalize() {
             return Some(parsed_path);
         }
