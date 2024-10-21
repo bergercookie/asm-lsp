@@ -9,9 +9,9 @@ repos:
       - id: end-of-file-fixer
         exclude: |
           (?x)^(
-             docs_store/opcodes/serialized/.*|
-             docs_store/registers/serialized/.*|
-             docs_store/directives/serialized/.*
+             asm-lsp/serialized/opcodes/.*|
+             asm-lsp/serialized/registers/.*|
+             asm-lsp/serialized/directives/.*
           )$
       - id: mixed-line-ending
       - id: trailing-whitespace
