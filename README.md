@@ -1,4 +1,4 @@
-# Language Server for GAS/GO Assembly
+# Language Server for NASM/GAS/GO Assembly
 
 [![crates.io](https://img.shields.io/crates/v/asm-lsp.svg)](https://crates.io/crates/asm-lsp)
 [![Tests](https://github.com/bergercookie/asm-lsp/actions/workflows/lint_and_test.yml/badge.svg)](https://github.com/bergercookie/asm-lsp/actions/workflows/lint_and_test.yml)
@@ -23,7 +23,13 @@ Install using the cargo package manager, either from `crates.io` or from github:
 ```bash
 cargo install asm-lsp
 # or to get the latest version from github
-cargo install --git https://github.com/bergercookie/asm-lsp
+cargo install --git https://github.com/bergercookie/asm-lsp asm-lsp
+```
+
+Install using the cargo from source:
+
+```bash
+cargo install --path asm-lsp
 ```
 
 ### Precompiled Binaries
@@ -69,6 +75,7 @@ x86 = false
 x86_64 = true
 z80 = false
 arm = false
+arm64 = false
 riscv = false
 
 [opts]
@@ -149,6 +156,6 @@ git repository.
     Visual Studio extension project. Additions sourced from [Microsoft](https://learn.microsoft.com/en-us/cpp/assembler/masm/directives-reference?view=msvc-170)
     and [NASM](https://www.nasm.us/xdoc/2.13.03/html/nasmdoc0.html) documentation.
 
-- ARM instruction documentation builds on top of ARM's official [Exploration tools documentation](https://developer.arm.com/Architectures/A-Profile%20Architecture#Software-Download)
+- ARM instruction documentation builds on top of ARM's official [Exploration tools documentation](https://developer.arm.com/Architectures/A-Profile%20Architecture#Downloads)
 
 - RISCV instruction and register documentation builds on top of the [riscv-isadoc project](https://github.com/msyksphinz-self/riscv-isadoc?tab=CC-BY-4.0-1-ov-file)

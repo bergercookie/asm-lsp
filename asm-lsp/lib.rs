@@ -3,6 +3,7 @@ pub mod lsp;
 pub mod parser;
 mod test;
 pub mod types;
+pub mod ustr;
 
 pub use lsp::*;
 pub use parser::{

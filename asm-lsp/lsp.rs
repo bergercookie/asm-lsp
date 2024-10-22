@@ -1,3 +1,4 @@
+use crate::ustr;
 use std::collections::{HashMap, HashSet};
 use std::convert::TryFrom;
 use std::fs::{create_dir_all, File};
@@ -53,11 +54,13 @@ pub fn send_empty_resp(connection: &Connection, id: RequestId, config: &Config) 
     }
 }
 
-/// Find the start and end indices of a word inside the given line
+/// Find the ([start], [end]) indices and the cursor's offset in a word
+/// on the given line
+///
 /// Borrowed from RLS
 /// characters besides the default alphanumeric and '_'
 #[must_use]
-pub fn find_word_at_pos(line: &str, col: Column) -> (Column, Column) {
+pub fn find_word_at_pos(line: &str, col: Column) -> ((Column, Column), usize) {
     let line_ = format!("{line} ");
     let is_ident_char = |c: char| c.is_alphanumeric() || c == '_' || c == '.';
 
@@ -69,7 +72,6 @@ pub fn find_word_at_pos(line: &str, col: Column) -> (Column, Column) {
         .last()
         .map_or(0, |(i, _)| i + 1);
 
-    #[allow(clippy::filter_next)]
     let mut end = line_
         .chars()
         .enumerate()
@@ -77,7 +79,7 @@ pub fn find_word_at_pos(line: &str, col: Column) -> (Column, Column) {
         .filter(|&(_, c)| !is_ident_char(c));
 
     let end = end.next();
-    (start, end.map_or(col, |(i, _)| i))
+    ((start, end.map_or(col, |(i, _)| i)), col - start)
 }
 
 /// Returns the word undernearth the cursor given the specified `TextDocumentPositionParams`
@@ -105,19 +107,20 @@ pub fn get_word_from_file_params(pos_params: &TextDocumentPositionParams) -> Res
             let buf_reader = std::io::BufReader::new(file);
 
             let line_conts = buf_reader.lines().nth(line).unwrap().unwrap();
-            let (start, end) = find_word_at_pos(&line_conts, col);
+            let ((start, end), _) = find_word_at_pos(&line_conts, col);
             Ok(String::from(&line_conts[start..end]))
         }
         Err(e) => Err(anyhow!("Filepath get error -- Error: {e}")),
     }
 }
 
-/// Returns a string slice to the word in doc specified by the position params
+/// Returns a string slice to the word in doc specified by the position params,
+/// and the cursor's offset into the word
 #[must_use]
 pub fn get_word_from_pos_params<'a>(
     doc: &'a FullTextDocument,
     pos_params: &TextDocumentPositionParams,
-) -> &'a str {
+) -> (&'a str, usize) {
     let line_contents = doc.get_content(Some(Range {
         start: Position {
             line: pos_params.position.line,
@@ -129,9 +132,9 @@ pub fn get_word_from_pos_params<'a>(
         },
     }));
 
-    let (word_start, word_end) =
+    let ((word_start, word_end), cursor_offset) =
         find_word_at_pos(line_contents, pos_params.position.character as usize);
-    &line_contents[word_start..word_end]
+    (&line_contents[word_start..word_end], cursor_offset)
 }
 
 /// Fetches default include directories, as well as any additional directories
@@ -152,7 +155,7 @@ pub fn get_include_dirs(compile_cmds: &CompilationDatabase) -> HashMap<SourceFil
         include_map
             .entry(source_file)
             .and_modify(|dirs| dirs.push(dir.to_owned()))
-            .or_insert(vec![dir.to_owned()]);
+            .or_insert_with(|| vec![dir.to_owned()]);
     }
 
     info!("Include directory map: {:?}", include_map);
@@ -179,7 +182,7 @@ fn get_default_include_dirs() -> Vec<PathBuf> {
             .output()
         {
             if cmd_output.status.success() {
-                let output_str: String = String::from_utf8(cmd_output.stderr).unwrap_or_default();
+                let output_str: String = ustr::get_string(cmd_output.stderr);
 
                 output_str
                     .lines()
@@ -352,8 +355,15 @@ fn get_compilation_db_files(path: &Path) -> Option<CompilationDatabase> {
 /// uninitialized to avoid unnecessary allocations. If you're using this function
 /// in a new place, please reconsider this assumption
 pub fn get_default_compile_cmd(uri: &Uri, cfg: &Config) -> CompileCommand {
-    if let Some(ref compiler) = cfg.opts.compiler {
-        CompileCommand {
+    cfg.opts.compiler.as_ref().map_or_else(
+        || CompileCommand {
+            file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
+            directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
+            arguments: Some(CompileArgs::Flags(vec![uri.path().to_string()])),
+            command: None,
+            output: None,
+        },
+        |compiler| CompileCommand {
             file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
             directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
             arguments: Some(CompileArgs::Arguments(vec![
@@ -362,16 +372,8 @@ pub fn get_default_compile_cmd(uri: &Uri, cfg: &Config) -> CompileCommand {
             ])),
             command: None,
             output: None,
-        }
-    } else {
-        CompileCommand {
-            file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
-            directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
-            arguments: Some(CompileArgs::Flags(vec![uri.path().to_string()])),
-            command: None,
-            output: None,
-        }
-    }
+        },
+    )
 }
 
 /// Attempts to run the given compile command and parses the resulting output. Any
@@ -388,13 +390,11 @@ pub fn apply_compile_cmd(
     if let Some(ref args) = compile_cmd.arguments {
         match args {
             CompileArgs::Flags(flags) => {
-                let compilers = if let Some(ref compiler) = cfg.opts.compiler {
-                    // If the user specified a compiler in their config, use it
-                    vec![compiler.as_str()]
-                } else {
-                    // Otherwise go with these defaults
-                    vec!["gcc", "clang"]
-                };
+                let compilers = cfg
+                    .opts
+                    .compiler
+                    .as_ref()
+                    .map_or_else(|| vec!["gcc", "clang"], |compiler| vec![compiler.as_str()]);
 
                 for compiler in compilers {
                     match Command::new(compiler) // default or user-supplied compiler
@@ -403,10 +403,8 @@ pub fn apply_compile_cmd(
                         .output()
                     {
                         Ok(result) => {
-                            if let Ok(output_str) = String::from_utf8(result.stderr) {
-                                get_diagnostics(diagnostics, &output_str);
-                                return;
-                            }
+                            let output_str = ustr::get_string(result.stderr);
+                            get_diagnostics(diagnostics, &output_str);
                         }
                         Err(e) => {
                             warn!("Failed to launch compile command process with {compiler} -- Error: {e}");
@@ -425,9 +423,8 @@ pub fn apply_compile_cmd(
                         return;
                     }
                 };
-                if let Ok(output_str) = String::from_utf8(output.stderr) {
-                    get_diagnostics(diagnostics, &output_str);
-                }
+                let output_str = ustr::get_string(output.stderr);
+                get_diagnostics(diagnostics, &output_str);
             }
         }
     } else if let Some(args) = compile_cmd.args_from_cmd() {
@@ -441,9 +438,8 @@ pub fn apply_compile_cmd(
                 return;
             }
         };
-        if let Ok(output_str) = String::from_utf8(output.stderr) {
-            get_diagnostics(diagnostics, &output_str);
-        }
+        let output_str = ustr::get_string(output.stderr);
+        get_diagnostics(diagnostics, &output_str);
     }
 }
 
@@ -549,7 +545,7 @@ pub fn text_doc_change_to_ts_edit(
     change: &TextDocumentContentChangeEvent,
     doc: &FullTextDocument,
 ) -> Result<InputEdit> {
-    let range = change.range.ok_or(anyhow!("Invalid edit range"))?;
+    let range = change.range.ok_or_else(|| anyhow!("Invalid edit range"))?;
     let start = range.start;
     let end = range.end;
 
@@ -600,12 +596,12 @@ pub fn get_completes<T: Completable, U: ArchOrAssembler>(
         .collect()
 }
 
-#[allow(clippy::too_many_arguments)]
 #[must_use]
 pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
     params: &HoverParams,
     config: &Config,
     word: &str,
+    cursor_offset: usize,
     text_store: &TextDocuments,
     tree_store: &mut TreeStore,
     instruction_map: &HashMap<(Arch, &str), T>,
@@ -641,7 +637,31 @@ pub fn get_hover_resp<T: Hoverable, U: Hoverable, V: Hoverable>(
         }
     }
 
-    let reg_lookup = lookup_hover_resp_by_arch(word, register_map);
+    let reg_lookup = if config.instruction_sets.arm64.unwrap_or(false) {
+        word.find('.').map_or_else(
+            || lookup_hover_resp_by_arch(&word[0..], register_map),
+            |dot| {
+                if cursor_offset <= dot {
+                    // main vector register info on ARM64
+                    let main_register = &word[0..dot];
+                    lookup_hover_resp_by_arch(main_register, register_map)
+                } else {
+                    // if Vector = V21.2D -> lower Register = D21
+                    // lower vector register info on ARM64
+                    let reg_len = 3;
+                    let mut lower_register = String::with_capacity(reg_len);
+                    let reg_letter = dot + 2;
+                    lower_register.push_str(&word[reg_letter..]);
+                    let reg_num = 1..dot;
+                    lower_register.push_str(&word[reg_num]);
+                    lookup_hover_resp_by_arch(&lower_register, register_map)
+                }
+            },
+        )
+    } else {
+        lookup_hover_resp_by_arch(word, register_map)
+    };
+
     if reg_lookup.is_some() {
         return reg_lookup;
     }
@@ -677,21 +697,25 @@ fn lookup_hover_resp_by_arch<T: Hoverable>(
     word: &str,
     map: &HashMap<(Arch, &str), T>,
 ) -> Option<Hover> {
+    // ensure hovered text is always lowercase
+    let hovered_text = word.to_ascii_lowercase();
     // switch over to vec?
-    let (x86_resp, x86_64_resp, z80_resp, arm_resp, riscv_resp) =
-        search_for_hoverable_by_arch(word, map);
+    let (x86_resp, x86_64_resp, z80_resp, arm_resp, arm64_resp, riscv_resp) =
+        search_for_hoverable_by_arch(&hovered_text, map);
     match (
         x86_resp.is_some(),
         x86_64_resp.is_some(),
         z80_resp.is_some(),
         arm_resp.is_some(),
+        arm64_resp.is_some(),
         riscv_resp.is_some(),
     ) {
-        (true, _, _, _, _)
-        | (_, true, _, _, _)
-        | (_, _, true, _, _)
-        | (_, _, _, true, _)
-        | (_, _, _, _, true) => {
+        (true, _, _, _, _, _)
+        | (_, true, _, _, _, _)
+        | (_, _, true, _, _, _)
+        | (_, _, _, true, _, _)
+        | (_, _, _, _, true, _)
+        | (_, _, _, _, _, true) => {
             let mut value = String::new();
             if let Some(x86_resp) = x86_resp {
                 value += &format!("{x86_resp}");
@@ -708,6 +732,13 @@ fn lookup_hover_resp_by_arch<T: Hoverable>(
             }
             if let Some(arm_resp) = arm_resp {
                 value += &format!("{}{}", if value.is_empty() { "" } else { "\n\n" }, arm_resp);
+            }
+            if let Some(arm64_resp) = arm64_resp {
+                value += &format!(
+                    "{}{}",
+                    if value.is_empty() { "" } else { "\n\n" },
+                    arm64_resp
+                );
             }
             if let Some(riscv_resp) = riscv_resp {
                 value += &format!(
@@ -735,7 +766,9 @@ fn lookup_hover_resp_by_assembler<T: Hoverable>(
     word: &str,
     map: &HashMap<(Assembler, &str), T>,
 ) -> Option<Hover> {
-    let (gas_resp, go_resp, masm_resp, nasm_resp) = search_for_hoverable_by_assembler(word, map);
+    let hovered_directive = word.to_ascii_lowercase();
+    let (gas_resp, go_resp, masm_resp, nasm_resp) =
+        search_for_hoverable_by_assembler(&hovered_directive, map);
 
     match (
         gas_resp.is_some(),
@@ -758,14 +791,14 @@ fn lookup_hover_resp_by_assembler<T: Hoverable>(
             if let Some(masm_resp) = masm_resp {
                 value += &format!(
                     "{}{}",
-                    if !value.is_empty() { "\n\n" } else { "" },
+                    if value.is_empty() { "" } else { "\n\n" },
                     masm_resp
                 );
             }
             if let Some(nasm_resp) = nasm_resp {
                 value += &format!(
                     "{}{}",
-                    if !value.is_empty() { "\n\n" } else { "" },
+                    if value.is_empty() { "" } else { "\n\n" },
                     nasm_resp
                 );
             }
@@ -796,8 +829,6 @@ fn get_label_resp(
         if let Some(ref mut tree_entry) = tree_store.get_mut(uri) {
             tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
             if let Some(ref tree) = tree_entry.tree {
-                let mut cursor = tree_sitter::QueryCursor::new();
-
                 static QUERY_LABEL_DATA: Lazy<tree_sitter::Query> = Lazy::new(|| {
                     tree_sitter::Query::new(
                         &tree_sitter_asm::language(),
@@ -817,6 +848,7 @@ fn get_label_resp(
                     )
                     .unwrap()
                 });
+                let mut cursor = tree_sitter::QueryCursor::new();
                 let matches_iter = cursor.matches(&QUERY_LABEL_DATA, tree.root_node(), curr_doc);
 
                 for match_ in matches_iter {
@@ -855,7 +887,7 @@ fn get_demangle_resp(word: &str) -> Option<Hover> {
     let name = Name::new(word, NameMangling::Mangled, Language::Unknown);
     let demangled = name.demangle(DemangleOptions::complete());
     if let Some(demang) = demangled {
-        let value = demang.to_string();
+        let value = demang;
         return Some(Hover {
             contents: HoverContents::Markup(MarkupContent {
                 kind: MarkupKind::Markdown,
@@ -875,11 +907,11 @@ fn get_include_resp(
 ) -> Option<Hover> {
     let mut paths = String::new();
 
-    let mut dir_iter: Box<dyn Iterator<Item = &PathBuf>> = match include_dirs.get(&SourceFile::All)
-    {
-        Some(dirs) => Box::new(dirs.iter()),
-        None => Box::new(std::iter::empty()),
-    };
+    type DirIter<'a> = Box<dyn Iterator<Item = &'a PathBuf> + 'a>;
+    let mut dir_iter = include_dirs.get(&SourceFile::All).map_or_else(
+        || Box::new(std::iter::empty()) as DirIter,
+        |dirs| Box::new(dirs.iter()) as DirIter,
+    );
 
     if let Ok(src_path) = PathBuf::from(source_file.as_str()).canonicalize() {
         if let Some(dirs) = include_dirs.get(&SourceFile::File(src_path)) {
@@ -978,7 +1010,6 @@ macro_rules! cursor_matches {
     }};
 }
 
-#[allow(clippy::too_many_lines)]
 pub fn get_comp_resp(
     curr_doc: &str,
     tree_entry: &mut TreeEntry,
@@ -1037,6 +1068,13 @@ pub fn get_comp_resp(
     // TODO: filter register completions by width allowed by corresponding instruction
     tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
     if let Some(ref tree) = tree_entry.tree {
+        static QUERY_DIRECTIVE: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(
+                &tree_sitter_asm::language(),
+                "(meta kind: (meta_ident) @directive)",
+            )
+            .unwrap()
+        });
         let mut line_cursor = tree_sitter::QueryCursor::new();
         line_cursor.set_point_range(std::ops::Range {
             start: tree_sitter::Point {
@@ -1050,13 +1088,6 @@ pub fn get_comp_resp(
         });
         let curr_doc = curr_doc.as_bytes();
 
-        static QUERY_DIRECTIVE: Lazy<tree_sitter::Query> = Lazy::new(|| {
-            tree_sitter::Query::new(
-                &tree_sitter_asm::language(),
-                "(meta kind: (meta_ident) @directive)",
-            )
-            .unwrap()
-        });
         let matches_iter = line_cursor.matches(&QUERY_DIRECTIVE, tree.root_node(), curr_doc);
 
         for match_ in matches_iter {
@@ -1077,12 +1108,12 @@ pub fn get_comp_resp(
         // tree-sitter-asm currently parses label arguments to instructions as *registers*
         // We'll collect all of labels in the document (that are being parsed as labels, at least)
         // and suggest those along with the register completions
-
-        // need a separate cursor to search the entire document
-        let mut doc_cursor = tree_sitter::QueryCursor::new();
         static QUERY_LABEL: Lazy<tree_sitter::Query> = Lazy::new(|| {
             tree_sitter::Query::new(&tree_sitter_asm::language(), "(label (ident) @label)").unwrap()
         });
+
+        // need a separate cursor to search the entire document
+        let mut doc_cursor = tree_sitter::QueryCursor::new();
         let captures = doc_cursor.captures(&QUERY_LABEL, tree.root_node(), curr_doc);
         let mut labels = HashSet::new();
         for caps in captures.map(|c| c.0) {
@@ -1182,92 +1213,107 @@ const fn lsp_pos_of_point(pos: tree_sitter::Point) -> lsp_types::Position {
     }
 }
 
+/// Explore `node`, push immediate children into `res`.
+fn explore_node(
+    curr_doc: &str,
+    node: tree_sitter::Node,
+    res: &mut Vec<DocumentSymbol>,
+    label_kind_id: &Lazy<u16>,
+    ident_kind_id: &Lazy<u16>,
+) {
+    if node.kind_id() == **label_kind_id {
+        let mut children = vec![];
+        let mut cursor = node.walk();
+
+        // description for this node
+        let mut descr = String::new();
+
+        if cursor.goto_first_child() {
+            loop {
+                let sub_node = cursor.node();
+                if sub_node.kind_id() == **ident_kind_id {
+                    if let Ok(text) = sub_node.utf8_text(curr_doc.as_bytes()) {
+                        descr = text.to_string();
+                    }
+                }
+
+                explore_node(
+                    curr_doc,
+                    sub_node,
+                    &mut children,
+                    label_kind_id,
+                    ident_kind_id,
+                );
+                if !cursor.goto_next_sibling() {
+                    break;
+                }
+            }
+        }
+
+        let range = lsp_types::Range::new(
+            lsp_pos_of_point(node.start_position()),
+            lsp_pos_of_point(node.end_position()),
+        );
+
+        #[allow(deprecated)]
+        let doc = DocumentSymbol {
+            name: descr,
+            detail: None,
+            kind: SymbolKind::FUNCTION,
+            tags: None,
+            deprecated: Some(false),
+            range,
+            selection_range: range,
+            children: if children.is_empty() {
+                None
+            } else {
+                Some(children)
+            },
+        };
+        res.push(doc);
+    } else {
+        let mut cursor = node.walk();
+
+        if cursor.goto_first_child() {
+            loop {
+                explore_node(curr_doc, cursor.node(), res, label_kind_id, ident_kind_id);
+                if !cursor.goto_next_sibling() {
+                    break;
+                }
+            }
+        }
+    }
+}
+
 /// Get a tree of symbols describing the document's structure.
 pub fn get_document_symbols(
     curr_doc: &str,
     tree_entry: &mut TreeEntry,
     _params: &DocumentSymbolParams,
 ) -> Option<Vec<DocumentSymbol>> {
-    tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
-
     static LABEL_KIND_ID: Lazy<u16> =
         Lazy::new(|| tree_sitter_asm::language().id_for_node_kind("label", true));
     static IDENT_KIND_ID: Lazy<u16> =
         Lazy::new(|| tree_sitter_asm::language().id_for_node_kind("ident", true));
+    tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
 
-    /// Explore `node`, push immediate children into `res`.
-    fn explore_node(curr_doc: &[u8], node: tree_sitter::Node, res: &mut Vec<DocumentSymbol>) {
-        if node.kind_id() == *LABEL_KIND_ID {
-            let mut children = vec![];
-            let mut cursor = node.walk();
-
-            // description for this node
-            let mut descr = String::new();
-
-            if cursor.goto_first_child() {
-                loop {
-                    let sub_node = cursor.node();
-                    if sub_node.end_byte() < curr_doc.len() && sub_node.kind_id() == *IDENT_KIND_ID
-                    {
-                        if let Ok(text) = sub_node.utf8_text(curr_doc) {
-                            descr = text.to_string();
-                        }
-                    }
-
-                    explore_node(curr_doc, sub_node, &mut children);
-                    if !cursor.goto_next_sibling() {
-                        break;
-                    }
-                }
-            }
-
-            let range = lsp_types::Range::new(
-                lsp_pos_of_point(node.start_position()),
-                lsp_pos_of_point(node.end_position()),
-            );
-
-            #[allow(deprecated)]
-            let doc = DocumentSymbol {
-                name: descr,
-                detail: None,
-                kind: SymbolKind::FUNCTION,
-                tags: None,
-                deprecated: Some(false),
-                range,
-                selection_range: range,
-                children: if children.is_empty() {
-                    None
-                } else {
-                    Some(children)
-                },
-            };
-            res.push(doc);
-        } else {
-            let mut cursor = node.walk();
-
-            if cursor.goto_first_child() {
-                loop {
-                    explore_node(curr_doc, cursor.node(), res);
-                    if !cursor.goto_next_sibling() {
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    if let Some(ref tree) = tree_entry.tree {
+    tree_entry.tree.as_ref().map(|tree| {
         let mut res: Vec<DocumentSymbol> = vec![];
         let mut cursor = tree.walk();
         loop {
-            explore_node(curr_doc.as_bytes(), cursor.node(), &mut res);
+            explore_node(
+                curr_doc,
+                cursor.node(),
+                &mut res,
+                &LABEL_KIND_ID,
+                &IDENT_KIND_ID,
+            );
             if !cursor.goto_next_sibling() {
                 break;
             }
         }
-        Some(res)
-    } else {
-        None
-    }
+        res
+    })
 }
 
 pub fn get_sig_help_resp(
@@ -1280,6 +1326,15 @@ pub fn get_sig_help_resp(
 
     tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
     if let Some(ref tree) = tree_entry.tree {
+        // Instruction with any (including zero) argument(s)
+        static QUERY_INSTR_ANY_ARGS: Lazy<tree_sitter::Query> = Lazy::new(|| {
+            tree_sitter::Query::new(
+                &tree_sitter_asm::language(),
+                "(instruction kind: (word) @instr_name)",
+            )
+            .unwrap()
+        });
+
         let mut line_cursor = tree_sitter::QueryCursor::new();
         line_cursor.set_point_range(std::ops::Range {
             start: tree_sitter::Point {
@@ -1293,15 +1348,6 @@ pub fn get_sig_help_resp(
         });
         let curr_doc = curr_doc.as_bytes();
 
-        // Instruction with any (including zero) argument(s)
-        static QUERY_INSTR_ANY_ARGS: Lazy<tree_sitter::Query> = Lazy::new(|| {
-            tree_sitter::Query::new(
-                &tree_sitter_asm::language(),
-                "(instruction kind: (word) @instr_name)",
-            )
-            .unwrap()
-        });
-
         let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = line_cursor
             .matches(&QUERY_INSTR_ANY_ARGS, tree.root_node(), curr_doc)
             .collect();
@@ -1310,12 +1356,17 @@ pub fn get_sig_help_resp(
             if caps.len() == 1 && caps[0].node.end_byte() < curr_doc.len() {
                 if let Ok(instr_name) = caps[0].node.utf8_text(curr_doc) {
                     let mut value = String::new();
+                    // Switch to a better structure
                     let mut has_x86 = false;
                     let mut has_x86_64 = false;
                     let mut has_z80 = false;
                     let mut has_arm = false;
-                    let (x86_info, x86_64_info, z80_info, arm_info, riscv_info) =
-                        search_for_hoverable_by_arch(instr_name, instr_info);
+                    let mut has_arm64 = false;
+                    // ensure hovered instruction is always lowercase
+                    let hovered_instr_name = instr_name.to_ascii_lowercase();
+                    let (x86_info, x86_64_info, z80_info, arm_info, arm64_info, riscv_info) =
+                    // TODO: switch to an appropriate DS like dyn list or static list
+                        search_for_hoverable_by_arch(&hovered_instr_name, instr_info);
                     if let Some(sig) = x86_info {
                         for form in &sig.forms {
                             if let Some(ref gas_name) = form.gas_name {
@@ -1380,6 +1431,15 @@ pub fn get_sig_help_resp(
                             value += &format!("{form}\n");
                         }
                     }
+                    if let Some(sig) = arm64_info {
+                        for form in &sig.asm_templates {
+                            if !has_arm64 {
+                                value += "**arm64**\n";
+                                has_arm64 = true;
+                            }
+                            value += &format!("{form}\n");
+                        }
+                    }
                     if let Some(sig) = riscv_info {
                         for form in &sig.asm_templates {
                             if !has_arm {
@@ -1429,7 +1489,7 @@ pub fn get_goto_def_resp(
         let mut cursor = tree_sitter::QueryCursor::new();
         let matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc);
 
-        let word = get_word_from_pos_params(curr_doc, &params.text_document_position_params);
+        let (word, _) = get_word_from_pos_params(curr_doc, &params.text_document_position_params);
 
         for match_ in matches {
             for cap in match_.captures {
@@ -1488,7 +1548,7 @@ pub fn get_ref_resp(
         });
 
         let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
-        let word = get_word_from_pos_params(curr_doc, &params.text_document_position);
+        let (word, _) = get_word_from_pos_params(curr_doc, &params.text_document_position);
         let uri = &params.text_document_position.text_document.uri;
 
         let mut cursor = tree_sitter::QueryCursor::new();
@@ -1563,14 +1623,22 @@ fn search_for_hoverable_by_arch<'a, T: Hoverable>(
     Option<&'a T>,
     Option<&'a T>,
     Option<&'a T>,
+    Option<&'a T>,
 ) {
     let x86_resp = map.get(&(Arch::X86, word));
     let x86_64_resp = map.get(&(Arch::X86_64, word));
     let z80_resp = map.get(&(Arch::Z80, word));
     let arm_resp = map.get(&(Arch::ARM, word));
+    let arm64_resp = map.get(&(Arch::ARM64, word));
     let riscv_resp = map.get(&(Arch::RISCV, word));
-
-    (x86_resp, x86_64_resp, z80_resp, arm_resp, riscv_resp)
+    (
+        x86_resp,
+        x86_64_resp,
+        z80_resp,
+        arm_resp,
+        arm64_resp,
+        riscv_resp,
+    )
 }
 
 fn search_for_hoverable_by_assembler<'a, T: Hoverable>(
@@ -1621,11 +1689,9 @@ fn get_global_config() -> Option<Config> {
         cfg_path.push("asm-lsp");
         let cfg_path_s = cfg_path.display();
         info!("Creating directories along {} as necessary...", cfg_path_s);
-        #[allow(clippy::needless_borrows_for_generic_args)]
         match create_dir_all(&cfg_path) {
             Ok(()) => {
                 cfg_path.push(".asm-lsp.toml");
-                #[allow(clippy::needless_borrows_for_generic_args)]
                 if let Ok(config) = std::fs::read_to_string(&cfg_path) {
                     let cfg_path_s = cfg_path.display();
                     match toml::from_str::<Config>(&config) {
@@ -1651,12 +1717,10 @@ fn get_global_config() -> Option<Config> {
 }
 
 fn alt_mac_config_dir() -> Option<PathBuf> {
-    if let Some(mut path) = home::home_dir() {
+    home::home_dir().map(|mut path| {
         path.push(".config");
-        Some(path)
-    } else {
-        None
-    }
+        path
+    })
 }
 
 /// Attempts to find the project's root directory given its `InitializeParams`
@@ -1671,24 +1735,10 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
     if let Some(folders) = &params.workspace_folders {
         // if there's multiple, just visit in order until we find a valid folder
         for folder in folders {
-            #[allow(irrefutable_let_patterns)]
-            if let Ok(parsed) = PathBuf::from_str(folder.uri.path().as_str()) {
-                #[allow(irrefutable_let_patterns)]
-                if let Ok(parsed_path) = parsed.canonicalize() {
-                    info!("Detected project root: {}", parsed_path.display());
-                    return Some(parsed_path);
-                }
-            }
-        }
-    }
-
-    // if workspace folders weren't set or came up empty, we check the root_uri
-    #[allow(deprecated)]
-    #[allow(irrefutable_let_patterns)]
-    if let Some(root_uri) = &params.root_uri {
-        #[allow(irrefutable_let_patterns)]
-        if let Ok(parsed) = PathBuf::from_str(root_uri.path().as_str()) {
-            #[allow(irrefutable_let_patterns)]
+            #[allow(irrefutable_let_patterns)] // TODO: Remove once CI is bumped past 1.82
+            let Ok(parsed) = PathBuf::from_str(folder.uri.path().as_str()) else {
+                unreachable!()
+            };
             if let Ok(parsed_path) = parsed.canonicalize() {
                 info!("Detected project root: {}", parsed_path.display());
                 return Some(parsed_path);
@@ -1696,14 +1746,28 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
         }
     }
 
+    // if workspace folders weren't set or came up empty, we check the root_uri
+    #[allow(deprecated)]
+    if let Some(root_uri) = &params.root_uri {
+        #[allow(irrefutable_let_patterns)] // TODO: Remove once CI is bumped past 1.82
+        let Ok(parsed) = PathBuf::from_str(root_uri.path().as_str()) else {
+            unreachable!()
+        };
+        if let Ok(parsed_path) = parsed.canonicalize() {
+            info!("Detected project root: {}", parsed_path.display());
+            return Some(parsed_path);
+        }
+    }
+
     // if both `workspace_folders` and `root_uri` weren't set or came up empty, we check the root_path
     #[allow(deprecated)]
     if let Some(root_path) = &params.root_path {
-        #[allow(irrefutable_let_patterns)]
-        if let Ok(parsed) = PathBuf::from_str(root_path.as_str()) {
-            if let Ok(parsed_path) = parsed.canonicalize() {
-                return Some(parsed_path);
-            }
+        #[allow(irrefutable_let_patterns)] // TODO: Remove once CI is bumped past 1.82
+        let Ok(parsed) = PathBuf::from_str(root_path.as_str()) else {
+            unreachable!()
+        };
+        if let Ok(parsed_path) = parsed.canonicalize() {
+            return Some(parsed_path);
         }
     }
 

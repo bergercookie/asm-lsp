@@ -1,11 +1,11 @@
-use core::panic;
+use crate::ustr;
 use std::collections::HashMap;
 use std::env::args;
 use std::fs;
 use std::io::Write;
 use std::iter::Peekable;
 use std::path::PathBuf;
-use std::str::{self, FromStr, Lines};
+use std::str::{FromStr, Lines};
 
 use crate::types::{
     Arch, Assembler, Directive, Instruction, InstructionForm, MMXMode, NameToDirectiveMap,
@@ -67,7 +67,7 @@ pub fn populate_riscv_registers(rst_contents: &str) -> Vec<Register> {
                 } else if section_header.contains("Floating Point") {
                     curr_reg_type = Some(RegisterType::FloatingPoint);
                 } else {
-                    panic!("Unexpected section header: {}", section_header);
+                    panic!("Unexpected section header: {section_header}");
                 }
                 let separator = lines.next().unwrap();
                 assert!(separator.starts_with('-'));
@@ -105,28 +105,20 @@ pub fn populate_riscv_registers(rst_contents: &str) -> Vec<Register> {
                     .split('|')
                     .collect();
                 assert!(entries.len() == 4);
-                let reg_name = entries[0].trim();
-                let saved_info = if entries[3].trim().is_empty() {
+                let saved_info = if entries[3].trim_ascii().is_empty() {
                     String::new()
                 } else {
-                    format!("\n{} saved", entries[3].trim())
+                    format!("\n{} saved", entries[3].trim_ascii())
                 };
-                let description = format!("{}{}", entries[2].trim(), saved_info);
-                let mut curr_register = Register {
-                    name: reg_name.to_owned(),
+                let description = format!("{}{}", entries[2].trim_ascii(), saved_info);
+                let reg_name = entries[0].trim_ascii().to_lowercase();
+                let curr_register = Register {
+                    name: reg_name,
                     description: Some(description),
                     reg_type: curr_reg_type,
                     arch: Some(Arch::RISCV),
                     ..Default::default()
                 };
-                curr_register.alt_names.push(reg_name.to_lowercase());
-                curr_register.alt_names.push(reg_name.to_uppercase());
-                let abi_names = entries[1].trim().split('/');
-                for name in abi_names {
-                    curr_register.alt_names.push(name.to_lowercase());
-                    curr_register.alt_names.push(name.to_uppercase());
-                }
-
                 registers.push(curr_register);
                 parse_state = ParseState::TableSeparator;
             }
@@ -172,8 +164,9 @@ pub fn populate_riscv_instructions(docs_path: &PathBuf) -> Result<Vec<Instructio
     for path in entries {
         if let Ok(docs) = std::fs::read_to_string(&path) {
             for instr in parse_riscv_instructions(&docs) {
-                assert!(!instructions_map.contains_key(&instr.name));
-                instructions_map.insert(instr.name.clone(), instr);
+                let instr_name = instr.name.to_ascii_lowercase();
+                assert!(!instructions_map.contains_key(&instr_name));
+                instructions_map.insert(instr_name, instr);
             }
         }
     }
@@ -218,20 +211,21 @@ fn parse_riscv_instructions(rst_contents: &str) -> Vec<Instruction> {
             ParseState::FileStart => {
                 let _header = lines.next().unwrap();
                 let separator = lines.next().unwrap();
-                assert!(separator.trim().starts_with('='));
+                assert!(separator.trim_ascii().starts_with('='));
                 consume_empty_lines(&mut lines);
                 parse_state = ParseState::InstructionStart;
             }
             ParseState::InstructionStart => {
-                curr_instruction.name = lines.next().unwrap().trim().to_string();
+                curr_instruction.name = lines.next().unwrap().trim_ascii().to_ascii_lowercase();
                 let separator = lines.next().unwrap();
                 // e.g. ----------
-                assert!(separator.trim().starts_with('-'));
+                assert!(separator.trim_ascii().starts_with('-'));
                 consume_empty_lines(&mut lines);
 
                 // some forms have an explanation for the mnemonic before the table section
                 if !lines.peek().unwrap().starts_with("..") {
-                    curr_instruction.summary = format!("{}\n\n", lines.next().unwrap().trim());
+                    curr_instruction.summary =
+                        format!("{}\n\n", lines.next().unwrap().trim_ascii());
                     consume_empty_lines(&mut lines);
                 }
                 parse_state = ParseState::InstructionTableInfo;
@@ -239,10 +233,10 @@ fn parse_riscv_instructions(rst_contents: &str) -> Vec<Instruction> {
             ParseState::InstructionTableInfo => {
                 // e.g. .. tabularcolumns:: |c|c|c|c|c|c|c|c|
                 let table_info_1 = lines.next().unwrap();
-                assert!(table_info_1.trim().starts_with(".."));
+                assert!(table_info_1.trim_ascii().starts_with(".."));
                 // e.g. .. table::
                 let table_info_2 = lines.next().unwrap();
-                assert!(table_info_2.trim().starts_with(".."));
+                assert!(table_info_2.trim_ascii().starts_with(".."));
 
                 consume_empty_lines(&mut lines);
 
@@ -254,15 +248,15 @@ fn parse_riscv_instructions(rst_contents: &str) -> Vec<Instruction> {
                   +-----+--+--+-----+-----+-----+-----+-----+---+
                 */
                 let top = lines.next().unwrap();
-                assert!(top.trim().starts_with('+'));
+                assert!(top.trim_ascii().starts_with('+'));
                 let first_row = lines.next().unwrap();
-                assert!(first_row.trim().starts_with('|'));
+                assert!(first_row.trim_ascii().starts_with('|'));
                 let middle = lines.next().unwrap();
-                assert!(middle.trim().starts_with('+'));
+                assert!(middle.trim_ascii().starts_with('+'));
                 let second_row = lines.next().unwrap();
-                assert!(second_row.trim().starts_with('|'));
+                assert!(second_row.trim_ascii().starts_with('|'));
                 let bottom = lines.next().unwrap();
-                assert!(bottom.trim().starts_with('+'));
+                assert!(bottom.trim_ascii().starts_with('+'));
                 consume_empty_lines(&mut lines);
                 parse_state = ParseState::InstructionFormat;
             }
@@ -273,9 +267,9 @@ fn parse_riscv_instructions(rst_contents: &str) -> Vec<Instruction> {
                     lines
                         .next()
                         .unwrap()
-                        .trim()
+                        .trim_ascii()
                         .trim_start_matches('|')
-                        .trim()
+                        .trim_ascii()
                         .to_string(),
                 );
                 consume_empty_lines(&mut lines);
@@ -286,8 +280,12 @@ fn parse_riscv_instructions(rst_contents: &str) -> Vec<Instruction> {
                 assert!(header.eq(":Description:"));
                 while let Some(next) = lines.peek() {
                     if next.contains('|') {
-                        curr_instruction.summary +=
-                            lines.next().unwrap().trim().trim_start_matches('|').trim();
+                        curr_instruction.summary += lines
+                            .next()
+                            .unwrap()
+                            .trim_ascii()
+                            .trim_start_matches('|')
+                            .trim_ascii();
                     } else {
                         break;
                     }
@@ -358,15 +356,14 @@ fn consume_classify_table(line_iter: &mut Peekable<Lines>) {
     let info_2 = line_iter.next().unwrap();
     assert!(info_2.eq(".. table::"));
     let info_3 = line_iter.next().unwrap();
-    assert!(info_3.trim().eq("Classify Table:"));
+    assert!(info_3.trim_ascii().eq("Classify Table:"));
     let empty = line_iter.next().unwrap();
     assert!(empty.is_empty());
     while let Some(next) = line_iter.peek() {
-        if !next.is_empty() {
-            _ = line_iter.next();
-        } else {
+        if next.is_empty() {
             break;
         }
+        _ = line_iter.next();
     }
 }
 
@@ -408,7 +405,7 @@ pub fn populate_arm_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>
                 assert!(!aliased_instr.is_empty());
                 let aliases = alias_map.entry(aliased_instr).or_default();
                 aliases.push(alias);
-            } else if let Some(mut instr) = parse_arm_instruction(&docs)? {
+            } else if let Some(mut instr) = parse_arm_instruction(&docs) {
                 assert!(!instr.name.is_empty());
                 if let Some(entry) = instructions_map.get_mut(&instr.name) {
                     entry.aliases.append(&mut instr.aliases);
@@ -417,7 +414,7 @@ pub fn populate_arm_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>
                         entry.summary = instr.summary;
                     }
                 } else {
-                    instructions_map.insert(instr.name.clone(), instr.clone());
+                    instructions_map.insert(instr.name.clone(), instr);
                 }
             }
         } else {
@@ -429,16 +426,18 @@ pub fn populate_arm_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>
     }
 
     // add aliases to their corresponding instruction, creating them as necessary
-    for (instr_name, aliases) in &alias_map {
+    for (instr_name, aliases) in &mut alias_map {
         if let Some(entry) = instructions_map.get_mut(instr_name) {
-            entry.aliases.append(&mut aliases.to_owned());
+            entry.aliases.append(aliases);
         } else {
             instructions_map.insert(
                 instr_name.to_owned(),
                 Instruction {
-                    name: instr_name.to_owned().to_uppercase(),
-                    alt_names: vec![instr_name.to_lowercase(), instr_name.to_uppercase()],
-                    arch: Some(Arch::ARM),
+                    name: instr_name.to_owned(),
+                    // TODO:currently changing into either doesn't change
+                    // anything as both source form the 64bit info which should
+                    // change when arm32 info is added
+                    arch: Some(Arch::ARM64),
                     aliases: aliases.to_owned(),
                     ..Default::default()
                 },
@@ -462,7 +461,7 @@ pub fn populate_arm_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
 fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, String)>> {
-    // iterate through the XML --------------------------------------------------------------------
+    // iterate through the XML
     let mut reader = Reader::from_str(xml_contents);
     let mut aliased_instr: Option<String> = None;
     let mut alias = InstructionAlias::default();
@@ -477,8 +476,8 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
                 QName(b"instructionsection") => {
                     for attr in e.attributes() {
                         let Attribute { key, value } = attr.unwrap();
-                        if Ok("title") == str::from_utf8(key.into_inner()) {
-                            alias.title = (unsafe { str::from_utf8_unchecked(&value) }).to_string();
+                        if b"title" == key.into_inner() {
+                            alias.title = ustr::get_str(&value).to_string();
                         }
                     }
                 }
@@ -490,14 +489,16 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
             },
             Ok(Event::Text(ref txt)) => {
                 if in_template {
-                    let cleaned = str::from_utf8(txt)?.replace("&lt;", "").replace("&gt;", "");
+                    let cleaned = txt.unescape().unwrap();
                     if let Some(existing) = curr_template {
                         curr_template = Some(format!("{existing}{cleaned}"));
                     } else {
-                        curr_template = Some(cleaned);
+                        let mut new_template = cleaned.into_owned().trim_ascii().to_owned();
+                        new_template.push(' ');
+                        curr_template = Some(new_template);
                     }
                 } else if in_desc && in_para && alias.summary.is_empty() {
-                    str::from_utf8(txt)?.clone_into(&mut alias.summary);
+                    ustr::get_str(txt).clone_into(&mut alias.summary);
                 }
             }
             Ok(Event::Empty(ref e)) => {
@@ -505,25 +506,26 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
                     let mut alias_next = false;
                     for attr in e.attributes() {
                         let Attribute { key, value } = attr.unwrap();
-                        if alias_next && Ok("value") == str::from_utf8(key.into_inner()) {
-                            aliased_instr = Some(str::from_utf8(&value)?.to_owned());
+                        // TODO: we can get the correct alias from the id of an alias mnemonic
+                        // else the actual alias is the last docvar in the docvars tag
+                        if alias_next && b"value" == key.into_inner() {
+                            aliased_instr = Some(ustr::get_str(&value).to_ascii_lowercase());
                             break;
                         }
-                        if Ok("key") == str::from_utf8(key.into_inner())
-                            && Ok("alias_mnemonic") == str::from_utf8(&value)
+                        if b"key" == key.into_inner()
+                            && b"alias_mnemonic" == ustr::get_str(&value).as_bytes()
                         {
                             alias_next = true;
                         }
                     }
                 }
             }
-            // end event --------------------------------------------------------------------------
+            // end event
             Ok(Event::End(ref e)) => match e.name() {
                 QName(b"instructionsection") => break,
                 QName(b"asmtemplate") => {
-                    if let Some(template) = curr_template {
+                    if let Some(template) = curr_template.take() {
                         alias.asm_templates.push(template);
-                        curr_template = None;
                     }
                     in_template = false;
                 }
@@ -538,11 +540,7 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
         }
     }
 
-    if let Some(aliased_name) = aliased_instr {
-        Ok(Some((alias, aliased_name)))
-    } else {
-        Ok(None)
-    }
+    aliased_instr.map_or_else(|| Ok(None), |aliased_name| Ok(Some((alias, aliased_name))))
 }
 
 /// Parse an xml file containing the documentation for a single ARM instruction
@@ -556,13 +554,14 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
 ///
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
-fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
-    // iterate through the XML --------------------------------------------------------------------
+fn parse_arm_instruction(xml_contents: &str) -> Option<Instruction> {
+    // iterate through the XML
     let mut reader = Reader::from_str(xml_contents);
 
     // ref to the instruction that's currently under construction
     let mut instruction = Instruction {
-        arch: Some(Arch::ARM),
+        // TODO: switch for archs
+        arch: Some(Arch::ARM64),
         ..Default::default()
     };
     let mut curr_template: Option<String> = None;
@@ -577,7 +576,7 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
                 QName(b"desc") => in_desc = true,
                 QName(b"para") => in_para = true,
                 QName(b"asmtemplate") => in_template = true,
-                QName(b"alphaindex" | b"encodingindex") => return Ok(None),
+                QName(b"alphaindex" | b"encodingindex") => return None,
                 _ => {}
             },
             Ok(Event::Empty(ref e)) => {
@@ -590,14 +589,10 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
                         let mut mnemonic_next = false;
                         for attr in e.attributes() {
                             let Attribute { key: _, value } = attr.unwrap();
-                            if Ok("mnemonic") == str::from_utf8(&value) {
+                            if b"mnemonic" == ustr::get_str(&value).as_bytes() {
                                 mnemonic_next = true;
                             } else if mnemonic_next {
-                                let name =
-                                    (unsafe { str::from_utf8_unchecked(&value) }).to_string();
-                                instruction.alt_names.push(name.to_lowercase());
-                                instruction.alt_names.push(name.to_uppercase());
-                                instruction.name = name.to_uppercase();
+                                instruction.name = ustr::get_str(&value).to_ascii_lowercase();
                                 break;
                             }
                         }
@@ -606,28 +601,25 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
             }
             Ok(Event::Text(ref txt)) => {
                 if in_template {
-                    if curr_template.is_none() {
-                        curr_template = Some(str::from_utf8(txt)?.trim().to_owned());
+                    let cleaned = txt.unescape().unwrap();
+                    if let Some(existing) = curr_template {
+                        curr_template = Some(format!("{existing}{cleaned}"));
                     } else {
-                        let cleaned = str::from_utf8(txt)?.replace("&lt;", "").replace("&gt;", "");
-                        if let Some(existing) = curr_template {
-                            curr_template = Some(format!("{existing}{cleaned}"));
-                        } else {
-                            curr_template = Some(cleaned);
-                        }
+                        let mut new_template = cleaned.into_owned().trim_ascii().to_owned();
+                        new_template.push(' ');
+                        curr_template = Some(new_template);
                     }
                 } else if in_desc && in_para && instruction.summary.is_empty() {
-                    str::from_utf8(txt)?.clone_into(&mut instruction.summary);
+                    ustr::get_str(txt).clone_into(&mut instruction.summary);
                 }
             }
-            // end event --------------------------------------------------------------------------
+            // end event
             Ok(Event::End(ref e)) => {
                 match e.name() {
                     QName(b"instructionsection") => break,
                     QName(b"encoding") => {
-                        if let Some(template) = curr_template {
+                        if let Some(template) = curr_template.take() {
                             instruction.asm_templates.push(template);
-                            curr_template = None;
                         }
                     }
                     QName(b"desc") => in_desc = false,
@@ -642,7 +634,7 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
         }
     }
 
-    Ok(Some(instruction))
+    Some(instruction)
 }
 
 /// Parse the provided XML contents and return a vector of all the instructions based on that.
@@ -660,12 +652,11 @@ fn parse_arm_instruction(xml_contents: &str) -> Result<Option<Instruction>> {
 ///
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
-#[allow(clippy::too_many_lines)]
 pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
     // initialise the instruction set
     let mut instructions_map = HashMap::<String, Instruction>::new();
 
-    // iterate through the XML --------------------------------------------------------------------
+    // iterate through the XML
     let mut reader = Reader::from_str(xml_contents);
 
     // ref to the instruction that's currently under construction
@@ -676,15 +667,14 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
     debug!("Parsing instruction XML contents...");
     loop {
         match reader.read_event() {
-            // start event ------------------------------------------------------------------------
+            // start event
             Ok(Event::Start(ref e)) => {
                 match e.name() {
                     QName(b"InstructionSet") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if Ok("name") == str::from_utf8(key.into_inner()) {
-                                arch = Arch::from_str(unsafe { str::from_utf8_unchecked(&value) })
-                                    .ok();
+                            if b"name" == key.into_inner() {
+                                arch = Arch::from_str(ustr::get_str(&value)).ok();
                             } else {
                                 warn!("Failed to parse architecture name");
                             }
@@ -698,17 +688,13 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                         // iterate over the attributes
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            match str::from_utf8(key.into_inner()).unwrap() {
+                            match ustr::get_str(key.into_inner()) {
                                 "name" => {
-                                    let name =
-                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
-                                    curr_instruction.alt_names.push(name.to_uppercase());
-                                    curr_instruction.alt_names.push(name.to_lowercase());
-                                    curr_instruction.name = name;
+                                    let name = ustr::get_str(&value);
+                                    curr_instruction.name = name.to_ascii_lowercase();
                                 }
                                 "summary" => {
-                                    curr_instruction.summary =
-                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                    ustr::get_str(&value).clone_into(&mut curr_instruction.summary);
                                 }
                                 _ => {}
                             }
@@ -731,32 +717,26 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                         // iterate over the attributes
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            match str::from_utf8(key.into_inner()).unwrap() {
+                            match ustr::get_str(key.into_inner()) {
                                 "gas-name" => {
-                                    curr_instruction_form.gas_name = Some(String::from(unsafe {
-                                        str::from_utf8_unchecked(&value)
-                                    }));
+                                    curr_instruction_form.gas_name =
+                                        Some(ustr::get_str(&value).to_owned());
                                 }
                                 "go-name" => {
-                                    curr_instruction_form.go_name = Some(String::from(unsafe {
-                                        str::from_utf8_unchecked(&value)
-                                    }));
+                                    curr_instruction_form.go_name =
+                                        Some(ustr::get_str(&value).to_owned());
                                 }
                                 "mmx-mode" => {
                                     let value_ = value.as_ref();
                                     curr_instruction_form.mmx_mode =
-                                        Some(MMXMode::from_str(unsafe {
-                                            str::from_utf8_unchecked(value_)
-                                        })?);
+                                        Some(MMXMode::from_str(ustr::get_str(value_))?);
                                 }
                                 "xmm-mode" => {
                                     let value_ = value.as_ref();
                                     curr_instruction_form.xmm_mode =
-                                        Some(XMMMode::from_str(unsafe {
-                                            str::from_utf8_unchecked(value_)
-                                        })?);
+                                        Some(XMMMode::from_str(ustr::get_str(value_))?);
                                 }
-                                "cancelling-inputs" => match str::from_utf8(&value).unwrap() {
+                                "cancelling-inputs" => match ustr::get_str(&value) {
                                     "true" => curr_instruction_form.cancelling_inputs = Some(true),
                                     "false" => {
                                         curr_instruction_form.cancelling_inputs = Some(false);
@@ -771,30 +751,27 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                                     curr_instruction_form.nacl_version =
                                         value.as_ref().first().copied();
                                 }
-                                "nacl-zero-extends-outputs" => {
-                                    match str::from_utf8(&value).unwrap() {
-                                        "true" => {
-                                            curr_instruction_form.nacl_zero_extends_outputs =
-                                                Some(true);
-                                        }
-                                        "false" => {
-                                            curr_instruction_form.nacl_zero_extends_outputs =
-                                                Some(false);
-                                        }
-                                        val => {
-                                            return Err(anyhow!(
+                                "nacl-zero-extends-outputs" => match ustr::get_str(&value) {
+                                    "true" => {
+                                        curr_instruction_form.nacl_zero_extends_outputs =
+                                            Some(true);
+                                    }
+                                    "false" => {
+                                        curr_instruction_form.nacl_zero_extends_outputs =
+                                            Some(false);
+                                    }
+                                    val => {
+                                        return Err(anyhow!(
                                                 "Unknown value '{val}' for XML attribute nacl-zero-extends-outputs",
                                             ));
-                                        }
                                     }
-                                }
+                                },
                                 "z80name" => {
-                                    curr_instruction_form.z80_name = Some(String::from(unsafe {
-                                        str::from_utf8_unchecked(&value)
-                                    }));
+                                    curr_instruction_form.z80_name =
+                                        Some(ustr::get_str(&value).to_owned());
                                 }
                                 "form" => {
-                                    let value_ = unsafe { str::from_utf8_unchecked(&value) };
+                                    let value_ = ustr::get_str(&value);
                                     curr_instruction_form.urls.push(format!(
                                         "https://www.zilog.com/docs/z80/z80cpu_um.pdf#{}",
                                         encode_www_form_urlencoded(value_)
@@ -809,13 +786,12 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                     QName(b"Encoding") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if str::from_utf8(key.into_inner()).unwrap() == "byte" {
-                                let disp_code =
-                                    unsafe { str::from_utf8_unchecked(&value) }.to_string() + " ";
+                            if key.into_inner() == b"byte" {
+                                let disp_code = ustr::get_str(&value);
                                 if let Some(ref mut opcodes) = curr_instruction_form.z80_opcode {
-                                    opcodes.push_str(&disp_code);
+                                    opcodes.push_str(disp_code);
                                 } else {
-                                    curr_instruction_form.z80_opcode = Some(disp_code);
+                                    curr_instruction_form.z80_opcode = Some(disp_code.to_owned());
                                 }
                             }
                         }
@@ -828,19 +804,17 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                     QName(b"ISA") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if str::from_utf8(key.into_inner()).unwrap() == "id" {
+                            if key.into_inner() == b"id" {
                                 {
-                                    curr_instruction_form.isa =
-                                        Some(
-                                            ISA::from_str(unsafe {
-                                                str::from_utf8_unchecked(value.as_ref())
-                                            })
+                                    curr_instruction_form.isa = Some(
+                                        ISA::from_str(ustr::get_str(value.as_ref()))
                                             .unwrap_or_else(|_| {
-                                                panic!("Unexpected ISA variant - {}", unsafe {
-                                                    str::from_utf8_unchecked(&value)
-                                                })
+                                                panic!(
+                                                    "Unexpected ISA variant {}",
+                                                    ustr::get_str(&value)
+                                                )
                                             }),
-                                        );
+                                    );
                                 }
                             }
                         }
@@ -853,32 +827,31 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
 
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            match str::from_utf8(key.into_inner()).unwrap() {
-                                "type" => {
-                                    type_ = match OperandType::from_str(str::from_utf8(&value)?) {
+                            match key.into_inner() {
+                                b"type" => {
+                                    type_ = match OperandType::from_str(ustr::get_str(&value)) {
                                         Ok(op_type) => op_type,
                                         Err(_) => {
                                             return Err(anyhow!(
                                                 "Unknown value for operand type -- Variant: {}",
-                                                str::from_utf8(&value)?
+                                                ustr::get_str(&value)
                                             ));
                                         }
                                     }
                                 }
-                                "input" => match str::from_utf8(&value).unwrap() {
-                                    "true" => input = Some(true),
-                                    "false" => input = Some(false),
+                                b"input" => match value.as_ref() {
+                                    b"true" => input = Some(true),
+                                    b"false" => input = Some(false),
                                     _ => return Err(anyhow!("Unknown value for operand type")),
                                 },
-                                "output" => match str::from_utf8(&value).unwrap() {
-                                    "true" => output = Some(true),
-                                    "false" => output = Some(false),
+                                b"output" => match value.as_ref() {
+                                    b"true" => output = Some(true),
+                                    b"false" => output = Some(false),
                                     _ => return Err(anyhow!("Unknown value for operand type")),
                                 },
-                                "extended-size" => {
-                                    extended_size = Some(
-                                        str::from_utf8(value.as_ref()).unwrap().parse::<usize>()?,
-                                    );
+                                b"extended-size" => {
+                                    extended_size =
+                                        Some(ustr::get_str(value.as_ref()).parse::<usize>()?);
                                 }
                                 _ => {} // unknown event
                             }
@@ -894,10 +867,8 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                     QName(b"TimingZ80") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if str::from_utf8(key.into_inner()).unwrap() == "value" {
-                                let z80 = match Z80TimingInfo::from_str(unsafe {
-                                    str::from_utf8_unchecked(&value)
-                                }) {
+                            if key.into_inner() == b"value" {
+                                let z80 = match Z80TimingInfo::from_str(ustr::get_str(&value)) {
                                     Ok(timing) => timing,
                                     Err(e) => return Err(anyhow!(e)),
                                 };
@@ -916,13 +887,12 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                     QName(b"TimingZ80M1") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if str::from_utf8(key.into_inner()).unwrap() == "value" {
-                                let z80_plus_m1 = match Z80TimingInfo::from_str(unsafe {
-                                    str::from_utf8_unchecked(&value)
-                                }) {
-                                    Ok(timing) => timing,
-                                    Err(e) => return Err(anyhow!(e)),
-                                };
+                            if key.into_inner() == b"value" {
+                                let z80_plus_m1 =
+                                    match Z80TimingInfo::from_str(ustr::get_str(&value)) {
+                                        Ok(timing) => timing,
+                                        Err(e) => return Err(anyhow!(e)),
+                                    };
                                 if let Some(ref mut timing_entry) = curr_instruction_form.z80_timing
                                 {
                                     timing_entry.z80_plus_m1 = z80_plus_m1;
@@ -938,10 +908,8 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                     QName(b"TimingR800") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if str::from_utf8(key.into_inner()).unwrap() == "value" {
-                                let r800 = match Z80TimingInfo::from_str(unsafe {
-                                    str::from_utf8_unchecked(&value)
-                                }) {
+                            if key.into_inner() == b"value" {
+                                let r800 = match Z80TimingInfo::from_str(ustr::get_str(&value)) {
                                     Ok(timing) => timing,
                                     Err(e) => return Err(anyhow!(e)),
                                 };
@@ -960,13 +928,12 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                     QName(b"TimingR800Wait") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if str::from_utf8(key.into_inner()).unwrap() == "value" {
-                                let r800_plus_wait = match Z80TimingInfo::from_str(unsafe {
-                                    str::from_utf8_unchecked(&value)
-                                }) {
-                                    Ok(timing) => timing,
-                                    Err(e) => return Err(anyhow!(e)),
-                                };
+                            if key.into_inner() == b"value" {
+                                let r800_plus_wait =
+                                    match Z80TimingInfo::from_str(ustr::get_str(&value)) {
+                                        Ok(timing) => timing,
+                                        Err(e) => return Err(anyhow!(e)),
+                                    };
                                 if let Some(ref mut timing_entry) = curr_instruction_form.z80_timing
                                 {
                                     timing_entry.r800_plus_wait = r800_plus_wait;
@@ -982,7 +949,7 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                     _ => {} // unknown event
                 }
             }
-            // end event --------------------------------------------------------------------------
+            // end event
             Ok(Event::End(ref e)) => {
                 match e.name() {
                     QName(b"Instruction") => {
@@ -1067,11 +1034,10 @@ pub fn populate_name_to_instruction_map<'instruction>(
 ///
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
-#[allow(clippy::too_many_lines)]
 pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
     let mut registers_map = HashMap::<String, Register>::new();
 
-    // iterate through the XML --------------------------------------------------------------------
+    // iterate through the XML
     let mut reader = Reader::from_str(xml_contents);
 
     // ref to the register that's currently under construction
@@ -1082,15 +1048,14 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
     debug!("Parsing register XML contents...");
     loop {
         match reader.read_event() {
-            // start event ------------------------------------------------------------------------
+            // start event
             Ok(Event::Start(ref e)) => {
                 match e.name() {
                     QName(b"InstructionSet") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if Ok("name") == str::from_utf8(key.into_inner()) {
-                                arch = Arch::from_str(unsafe { str::from_utf8_unchecked(&value) })
-                                    .ok();
+                            if b"name" == key.into_inner() {
+                                arch = Arch::from_str(ustr::get_str(&value)).ok();
                             }
                         }
                     }
@@ -1102,39 +1067,24 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
                         // iterate over the attributes
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            match str::from_utf8(key.into_inner()).unwrap() {
-                                "name" => {
-                                    let name_ =
-                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
-                                    curr_register.alt_names.push(name_.to_uppercase());
-                                    curr_register.alt_names.push(name_.to_lowercase());
-                                    curr_register.name = name_;
+                            match key.into_inner() {
+                                b"name" => {
+                                    let name_ = String::from(ustr::get_str(&value));
+                                    curr_register.name = name_.to_ascii_lowercase();
                                 }
-                                "altname" => {
-                                    curr_register.alt_names.push(String::from(unsafe {
-                                        str::from_utf8_unchecked(&value)
-                                    }));
+                                b"description" => {
+                                    curr_register.description =
+                                        Some(String::from(ustr::get_str(&value)));
                                 }
-                                "description" => {
-                                    curr_register.description = Some(String::from(unsafe {
-                                        str::from_utf8_unchecked(&value)
-                                    }));
+                                b"type" => {
+                                    curr_register.reg_type =
+                                        RegisterType::from_str(ustr::get_str(&value))
+                                            .map_or(None, |reg| Some(reg));
                                 }
-                                "type" => {
-                                    curr_register.reg_type = match RegisterType::from_str(unsafe {
-                                        str::from_utf8_unchecked(&value)
-                                    }) {
-                                        Ok(reg) => Some(reg),
-                                        _ => None,
-                                    }
-                                }
-                                "width" => {
-                                    curr_register.width = match RegisterWidth::from_str(unsafe {
-                                        str::from_utf8_unchecked(&value)
-                                    }) {
-                                        Ok(width) => Some(width),
-                                        _ => None,
-                                    }
+                                b"width" => {
+                                    curr_register.width =
+                                        RegisterWidth::from_str(ustr::get_str(&value))
+                                            .map_or(None, |width| Some(width));
                                 }
                                 _ => {}
                             }
@@ -1146,27 +1096,22 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
 
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            match str::from_utf8(key.into_inner()).unwrap() {
-                                "bit" => {
-                                    curr_bit_flag.bit = unsafe { str::from_utf8_unchecked(&value) }
-                                        .parse::<u32>()
-                                        .unwrap();
+                            match key.into_inner() {
+                                b"bit" => {
+                                    curr_bit_flag.bit =
+                                        ustr::get_str(&value).parse::<u32>().unwrap();
                                 }
-                                "label" => {
-                                    curr_bit_flag.label =
-                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                b"label" => {
+                                    curr_bit_flag.label = String::from(ustr::get_str(&value));
                                 }
-                                "description" => {
-                                    curr_bit_flag.description =
-                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                b"description" => {
+                                    curr_bit_flag.description = String::from(ustr::get_str(&value));
                                 }
-                                "pae" => {
-                                    curr_bit_flag.pae =
-                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                b"pae" => {
+                                    curr_bit_flag.pae = String::from(ustr::get_str(&value));
                                 }
-                                "longmode" => {
-                                    curr_bit_flag.long_mode =
-                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                b"longmode" => {
+                                    curr_bit_flag.long_mode = String::from(ustr::get_str(&value));
                                 }
                                 _ => {}
                             }
@@ -1175,7 +1120,7 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
                     _ => {} // unknown event
                 }
             }
-            // end event --------------------------------------------------------------------------
+            // end event
             Ok(Event::End(ref e)) => {
                 match e.name() {
                     QName(b"Register") => {
@@ -1231,7 +1176,7 @@ pub fn populate_name_to_register_map<'register>(
 pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     let mut directives_map = HashMap::<String, Directive>::new();
 
-    // iterate through the XML --------------------------------------------------------------------
+    // iterate through the XML
     let mut reader = Reader::from_str(xml_contents);
 
     // ref to the assembler directive that's currently under construction
@@ -1241,7 +1186,7 @@ pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive
     debug!("Parsing directive XML contents...");
     loop {
         match reader.read_event() {
-            // start event ------------------------------------------------------------------------
+            // start event
             Ok(Event::Start(ref e)) => {
                 match e.name() {
                     QName(b"directive") => {
@@ -1251,18 +1196,13 @@ pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive
                         // iterate over the attributes
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            match str::from_utf8(key.into_inner()).unwrap() {
-                                "name" => {
-                                    let name =
-                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
-                                    curr_directive.alt_names.push(name.to_uppercase());
-                                    curr_directive.alt_names.push(name.to_lowercase());
-                                    curr_directive.name = name;
+                            match key.into_inner() {
+                                b"name" => {
+                                    let name = ustr::get_str(&value);
+                                    curr_directive.name = name.to_ascii_lowercase();
                                 }
-                                "tool" => {
-                                    let assembler = Assembler::from_str(unsafe {
-                                        str::from_utf8_unchecked(&value)
-                                    })?;
+                                b"tool" => {
+                                    let assembler = Assembler::from_str(ustr::get_str(&value))?;
                                     curr_directive.assembler = Some(assembler);
                                 }
                                 _ => {}
@@ -1277,10 +1217,12 @@ pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive
             }
             Ok(Event::Text(ref txt)) => {
                 if in_desc {
-                    curr_directive.description = str::from_utf8(txt)?.trim().to_string();
+                    ustr::get_str(txt)
+                        .trim_ascii()
+                        .clone_into(&mut curr_directive.description);
                 }
             }
-            // end event --------------------------------------------------------------------------
+            // end event
             Ok(Event::End(ref e)) => {
                 if QName(b"directive") == e.name() {
                     directives_map.insert(curr_directive.name.clone(), curr_directive.clone());
@@ -1320,7 +1262,7 @@ pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive
 pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     let mut directives_map = HashMap::<String, Directive>::new();
 
-    // iterate through the XML --------------------------------------------------------------------
+    // iterate through the XML
     let mut reader = Reader::from_str(xml_contents);
 
     // ref to the assembler directive that's currently under construction
@@ -1330,17 +1272,14 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     debug!("Parsing directive XML contents...");
     loop {
         match reader.read_event() {
-            // start event ------------------------------------------------------------------------
+            // start event
             Ok(Event::Start(ref e)) => {
                 match e.name() {
                     QName(b"Assembler") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if Ok("name") == str::from_utf8(key.into_inner()) {
-                                assembler = Assembler::from_str(unsafe {
-                                    str::from_utf8_unchecked(&value)
-                                })
-                                .ok();
+                            if b"name" == key.into_inner() {
+                                assembler = Assembler::from_str(ustr::get_str(&value)).ok();
                             }
                         }
                     }
@@ -1352,29 +1291,24 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
                         // iterate over the attributes
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            match str::from_utf8(key.into_inner()).unwrap() {
-                                "name" => {
-                                    let name =
-                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
-                                    curr_directive.alt_names.push(name.to_uppercase());
-                                    curr_directive.name = name;
+                            match key.into_inner() {
+                                b"name" => {
+                                    let name = ustr::get_str(&value);
+                                    curr_directive.name = name.to_ascii_lowercase();
                                 }
-                                "md_description" => {
-                                    let description =
-                                        String::from(unsafe { str::from_utf8_unchecked(&value) });
+                                b"md_description" => {
+                                    let description = ustr::get_str(&value);
                                     curr_directive.description =
-                                        unescape(&description).unwrap().to_string();
+                                        unescape(description).unwrap().to_string();
                                 }
-                                "deprecated" => {
-                                    curr_directive.deprecated = FromStr::from_str(unsafe {
-                                        str::from_utf8_unchecked(&value)
-                                    })
-                                    .unwrap();
+                                b"deprecated" => {
+                                    curr_directive.deprecated =
+                                        FromStr::from_str(ustr::get_str(&value)).unwrap();
                                 }
-                                "url_fragment" => {
+                                b"url_fragment" => {
                                     curr_directive.url = Some(format!(
                                         "https://sourceware.org/binutils/docs-2.41/as/{}.html",
-                                        unsafe { str::from_utf8_unchecked(&value) }
+                                        ustr::get_str(&value)
                                     ));
                                 }
                                 _ => {}
@@ -1384,18 +1318,18 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
                     QName(b"Signature") => {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
-                            if Ok("sig") == str::from_utf8(key.into_inner()) {
-                                let sig = String::from(unsafe { str::from_utf8_unchecked(&value) });
+                            if b"sig" == key.into_inner() {
+                                let sig = ustr::get_str(&value);
                                 curr_directive
                                     .signatures
-                                    .push(unescape(&sig).unwrap().to_string());
+                                    .push(unescape(sig).unwrap().to_string());
                             }
                         }
                     }
                     _ => {} // unknown event
                 }
             }
-            // end event --------------------------------------------------------------------------
+            // end event
             Ok(Event::End(ref e)) => {
                 if QName(b"Directive") == e.name() {
                     // finish directive
@@ -1424,7 +1358,7 @@ pub fn populate_name_to_directive_map<'directive>(
 }
 
 fn get_docs_body(x86_online_docs: &str) -> Option<String> {
-    // provide a URL example page -----------------------------------------------------------------
+    // provide a URL example page
     // 1. If the cache refresh option is enabled or the cache doesn't exist, attempt to fetch the
     //    data, write it to the cache, and then use it
     // 2. Otherwise, attempt to read the data from the cache
@@ -1521,7 +1455,7 @@ pub fn get_cache_dir() -> Result<PathBuf> {
     }
 
     // If the environment variable isn't set or gives an invalid path, grab the home directory and build off of that
-    let mut x86_cache_path = home::home_dir().ok_or(anyhow!("Home directory not found"))?;
+    let mut x86_cache_path = home::home_dir().ok_or_else(|| anyhow!("Home directory not found"))?;
 
     x86_cache_path.push(".cache");
     x86_cache_path.push("asm-lsp");

@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='utf-8'?>
+<InstructionSet name="arm64">
+	<Register name="NZCV" description="Global condition flag register" type="Condition Register"></Register>
+	<Register name="XZR" description="Dedicated Zero Register" type="Special Register"></Register>
+	<Register name="SP" description="Dedicated Stack Pointer. Callee Saved" type="Stack Pointer Register"></Register>
+	<Register name="X30" description="The Link Register. Caller Saved." type="General Purpose Register"></Register>
+	<Register name="W30" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="LR" description="Link Register, alias for X30. Caller Saved" type="Special Purpose Register"></Register>
+	<Register name="X29" description="The Frame Pointer. Callee Saved." type="General Purpose Register"></Register>
+	<Register name="W29" description="Callee Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="FP" description="The Frame Pointer. Alias for X29. Caller Saved" type="Special Purpose Register"></Register>
+	<Register name="X28" description="Callee Saved" type="General Purpose Register"></Register>
+	<Register name="W28" description="Callee Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X27" description="Callee Saved" type="General Purpose Register"></Register>
+	<Register name="W27" description="Callee Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X26" description="Callee Saved" type="General Purpose Register"></Register>
+	<Register name="W26" description="Callee Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X25" description="Callee Saved" type="General Purpose Register"></Register>
+	<Register name="W25" description="Callee Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X24" description="Callee Saved" type="General Purpose Register"></Register>
+	<Register name="W24" description="Callee Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X23" description="Callee Saved" type="General Purpose Register"></Register>
+	<Register name="W23" description="Callee Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X22" description="Callee Saved" type="General Purpose Register"></Register>
+	<Register name="W22" description="Callee Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X21" description="Callee Saved" type="General Purpose Register"></Register>
+	<Register name="W21" description="Callee Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X20" description="Callee Saved" type="General Purpose Register"></Register>
+	<Register name="W20" description="Callee Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X19" description="Callee Saved" type="General Purpose Register"></Register>
+	<Register name="W19" description="Callee Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X18" description="The Platform Register, if needed; otherwise a temporary register" type="System Purpose Register"></Register>
+	<Register name="W18" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X17" description="The second intra-procedure-call temporary register (can be used by call veneers and PLT code); at other times may be used as a temporary register" type="General Purpose Register"></Register>
+	<Register name="W17" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="IP1" description="The second intra-procedure-call temporary register (can be used by call veneers and PLT code). Alias for X17." type="Special Purpose Register"></Register>
+	<Register name="X16" description="The first intra-procedure-call scratch register (can be used by call veneers and PLT code); at other times may be used as a temporary register." type="General Purpose Register"></Register>
+	<Register name="W16" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="IP0" description="The first intra-procedure-call scratch register (can be used by call veneers and PLT code). Alias for X16." type="Special Purpose Register"></Register>
+	<Register name="X15" description="Scratch Register" type="General Purpose Register"></Register>
+	<Register name="W15" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X14" description="Scratch Register" type="General Purpose Register"></Register>
+	<Register name="W14" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X13" description="Scratch Register" type="General Purpose Register"></Register>
+	<Register name="W13" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X12" description="Scratch Register" type="General Purpose Register"></Register>
+	<Register name="W12" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X11" description="Scratch Register" type="General Purpose Register"></Register>
+	<Register name="W11" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X10" description="Scratch Register" type="General Purpose Register"></Register>
+	<Register name="W10" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X9" description="Scratch Register" type="General Purpose Register"></Register>
+	<Register name="W9" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X8" description="Indirect result location register" type="General Purpose Register"></Register>
+	<Register name="W8" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X7" description="Parameter/ Return result value register. Scratch register. Caller Saved." type="General Purpose Register"></Register>
+	<Register name="W7" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X6" description="Parameter/ Return result value register. Scratch register. Caller Saved." type="General Purpose Register"></Register>
+	<Register name="W6" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X5" description="Parameter/ Return result value register. Scratch register. Caller Saved." type="General Purpose Register"></Register>
+	<Register name="W5" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X4" description="Parameter/ Return result value register. Scratch register. Caller Saved." type="General Purpose Register"></Register>
+	<Register name="W4" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X3" description="Parameter/ Return result value register. Scratch register. Caller Saved." type="General Purpose Register"></Register>
+	<Register name="W3" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X2" description="Parameter/ Return result value register. Scratch register. Caller Saved." type="General Purpose Register"></Register>
+	<Register name="W2" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X1" description="Parameter/ Return result value register. Scratch register. Caller Saved." type="General Purpose Register"></Register>
+	<Register name="W1" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="X0" description="Parameter/ Return result value register. Caller Saved." type="General Purpose Register"></Register>
+	<Register name="W0" description="Caller Saved." type="General Purpose Register" width="32 bit"></Register>
+	<Register name="V0" description="SIMD/Floating-Point Parameter/Return result value register. Scratch register. Caller Saved." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B0" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H0" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S0" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D0" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V1" description="SIMD/Floating-Point Parameter/Return result value register. Scratch register. Caller Saved." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B1" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H1" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S1" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D1" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V2" description="SIMD/Floating-Point Parameter/Return result value register. Scratch register. Caller Saved." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B2" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H2" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S2" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D2" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V3" description="SIMD/Floating-Point Parameter/Return result value register. Scratch register. Caller Saved." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B3" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H3" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S3" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D3" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V4" description="SIMD/Floating-Point Parameter/Return result value register. Scratch register. Caller Saved." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B4" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H4" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S4" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D4" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V5" description="SIMD/Floating-Point Parameter/Return result value register. Scratch register. Caller Saved." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B5" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H5" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S5" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D5" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V6" description="SIMD/Floating-Point Parameter/Return result value register. Scratch register. Caller Saved." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B6" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H6" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S6" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D6" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V7" description="SIMD/Floating-Point Parameter/Return result value register. Scratch register. Caller Saved." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B7" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H7" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S7" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D7" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V8" description="Scratch Float/SIMD register. The bottom 64 bits of V8 is Callee Saved; it is the responsibility of the caller to preserve larger values." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B8" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H8" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S8" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D8" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V9" description="Scratch Float/SIMD register. The bottom 64 bits of V9 is Callee Saved; it is the responsibility of the caller to preserve larger values." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B9" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H9" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S9" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D9" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V10" description="Scratch Float/SIMD register. The bottom 64 bits of V10 is Callee Saved; it is the responsibility of the caller to preserve larger values." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B10" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H10" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S10" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D10" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V11" description="Scratch Float/SIMD register. The bottom 64 bits of V11 is Callee Saved; it is the responsibility of the caller to preserve larger values." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B11" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H11" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S11" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D11" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V12" description="Scratch Float/SIMD register. The bottom 64 bits of V12 is Callee Saved; it is the responsibility of the caller to preserve larger values." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B12" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H12" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S12" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D12" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V13" description="Scratch Float/SIMD register. The bottom 64 bits of V13 is Callee Saved; it is the responsibility of the caller to preserve larger values." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B13" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H13" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S13" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D13" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V14" description="Scratch Float/SIMD register. The bottom 64 bits of V14 is Callee Saved; it is the responsibility of the caller to preserve larger values." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B14" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H14" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S14" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D14" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V15" description="Scratch Float/SIMD register. The bottom 64 bits of V15 is Callee Saved; it is the responsibility of the caller to preserve larger values." type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B15" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H15" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S15" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D15" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V16" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B16" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H16" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S16" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D16" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V17" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B17" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H17" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S17" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D17" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V18" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B18" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H18" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S18" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D18" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V19" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B19" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H19" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S19" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D19" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V20" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B20" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H20" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S20" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D20" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V21" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B21" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H21" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S21" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D21" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V22" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B22" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H22" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S22" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D22" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V23" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B23" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H23" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S23" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D23" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V24" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B24" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H24" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S24" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D24" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V25" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B25" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H25" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S25" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D25" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V26" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B26" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H26" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S26" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D26" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V27" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B27" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H27" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S27" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D27" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V28" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B28" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H28" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S28" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D28" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V29" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B29" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H29" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S29" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D29" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V30" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B30" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H30" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S30" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D30" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="V31" description="Float/SIMD register. Caller Saved" type="SIMD/Floating-Point Register" width="128 bits"></Register>
+	<Register name="B31" description="" type="SIMD/FP Register" width="8 bits"></Register>
+	<Register name="H31" description="" type="SIMD/FP Register" width="16 bits"></Register>
+	<Register name="S31" description="" type="SIMD/FP Register" width="32 bits"></Register>
+	<Register name="D31" description="" type="SIMD/FP Register" width="64 bits"></Register>
+	<Register name="FPSR" description="Floating-Point status register. Holds the cumulative exception bits of the floating-point unit" type="Status Register"></Register>
+	<Register name="FPCR" description="Used to control the behavior of the floating-point unit. Holds the cumulative exception bits of the floating-point unit" type="Global Register"></Register>
+</InstructionSet>

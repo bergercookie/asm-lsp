@@ -1,91 +1,91 @@
 {
-    "$id": "asm-lsp_config_schema.json",
-    "$schema": "http://json-schema.org/schema",
-    "title": "asm-lsp Configuration Schema",
-    "description": "Configuration for asm-lsp.",
-    "type": "object",
-    "properties": {
-        "version": {
-            "description": "Config version number.",
-            "type": "string"
-        },
-        "assemblers": {
-            "description": "Options to manage assembler-dependent features.",
-            "type": "object",
-            "properties": {
-                "gas": {
-                    "description": "Flag to turn features related to the GNU Assembler on/off.",
-                    "type": "boolean"
-                },
-                "go": {
-                    "description": "Flag to turn features related to the Go Assembler on/off.",
-                    "type": "boolean"
-                },
-                "z80": {
-                    "description": "Flag to turn features related to the z80 Assembler on/off.",
-                    "type": "boolean"
-                },
-                "masm": {
-                    "description": "Flag to turn features related to the MASM Assembler on/off.",
-                    "type": "boolean"
-                },
-                "nasm": {
-                    "description": "Flag to turn features related to the NASM Assembler on/off.",
-                    "type": "boolean"
-                }
-            },
-            "required": []
-        },
-        "instruction_sets": {
-            "description": "Options to manage instruction set-dependent features.",
-            "type": "object",
-            "properties": {
-                "x86": {
-                    "description": "Flag to turn features related to the x86 instruction set on/off.",
-                    "type": "boolean"
-                },
-                "x86_64": {
-                    "description": "Flag to turn features related to the x86_64 instruction set on/off.",
-                    "type": "boolean"
-                },
-                "z80": {
-                    "description": "Flag to turn features related to the z80 instruction set on/off.",
-                    "type": "boolean"
-                },
-                "arm": {
-                    "description": "Flag to turn features related to the arm instruction set on/off.",
-                    "type": "boolean"
-                },
-                "riscv": {
-                    "description": "Flag to turn features related to the riscv instruction set on/off.",
-                    "type": "boolean"
-                }
-            },
-            "required": []
-        },
-        "opts": {
-            "description": "Options to modify the server's behavior.",
-            "type": "object",
-            "properties": {
-                "compiler": {
-                    "description": "Compiler to use to invoke provided or default compile commands.",
-                    "type": "string"
-                },
-                "diagnostics": {
-                    "description": "Flag to enable or disable the server's diagnostics feature.",
-                    "type": "boolean"
-                },
-                "default_diagnostics": {
-                    "description": "Flag to enable or disable the server's default diagnostics feature.",
-                    "type": "boolean"
-                }
-            }
-        },
-        "required": []
+  "$id": "asm-lsp_config_schema.json",
+  "$schema": "http://json-schema.org/schema",
+  "title": "asm-lsp Configuration Schema",
+  "description": "Configuration for asm-lsp.",
+  "type": "object",
+  "properties": {
+    "version": {
+      "description": "Config version number.",
+      "type": "string"
     },
-    "required": [
-        "version",
-        "assemblers",
-        "instruction_sets"
-    ]
+    "assemblers": {
+      "description": "Options to manage assembler-dependent features.",
+      "type": "object",
+      "properties": {
+        "gas": {
+          "description": "Flag to turn features related to the GNU Assembler on/off.",
+          "type": "boolean"
+        },
+        "go": {
+          "description": "Flag to turn features related to the Go Assembler on/off.",
+          "type": "boolean"
+        },
+        "z80": {
+          "description": "Flag to turn features related to the z80 Assembler on/off.",
+          "type": "boolean"
+        },
+        "masm": {
+          "description": "Flag to turn features related to the MASM Assembler on/off.",
+          "type": "boolean"
+        },
+        "nasm": {
+          "description": "Flag to turn features related to the NASM Assembler on/off.",
+          "type": "boolean"
+        }
+      },
+      "required": []
+    },
+    "instruction_sets": {
+      "description": "Options to manage instruction set-dependent features.",
+      "type": "object",
+      "properties": {
+        "x86": {
+          "description": "Flag to turn features related to the x86 instruction set on/off.",
+          "type": "boolean"
+        },
+        "x86_64": {
+          "description": "Flag to turn features related to the x86_64 instruction set on/off.",
+          "type": "boolean"
+        },
+        "z80": {
+          "description": "Flag to turn features related to the z80 instruction set on/off.",
+          "type": "boolean"
+        },
+        "arm": {
+          "description": "Flag to turn features related to the arm instruction set on/off.",
+          "type": "boolean"
+        },
+        "arm64": {
+          "description": "Flag to turn features related to the arm64 instruction set on/off.",
+          "type": "boolean"
+        },
+        "riscv": {
+          "description": "Flag to turn features related to the riscv instruction set on/off.",
+          "type": "boolean"
+        }
+      },
+      "required": []
+    },
+    "opts": {
+      "description": "Options to modify the server's behavior.",
+      "type": "object",
+      "properties": {
+        "compiler": {
+          "description": "Compiler to use to invoke provided or default compile commands.",
+          "type": "string"
+        },
+        "diagnostics": {
+          "description": "Flag to enable or disable the server's diagnostics feature.",
+          "type": "boolean"
+        },
+        "default_diagnostics": {
+          "description": "Flag to enable or disable the server's default diagnostics feature.",
+          "type": "boolean"
+        }
+      }
+    },
+    "required": []
+  },
+  "required": ["version", "assemblers", "instruction_sets"]
 }

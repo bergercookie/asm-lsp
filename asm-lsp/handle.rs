@@ -33,7 +33,6 @@ use crate::{
 /// # Panics
 ///
 /// Panics if JSON encoding of a response fails
-#[allow(clippy::too_many_arguments)]
 pub fn handle_hover_request(
     connection: &Connection,
     id: RequestId,
@@ -44,7 +43,7 @@ pub fn handle_hover_request(
     names_to_info: &NameToInfoMaps,
     include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
 ) -> Result<()> {
-    let word = if let Some(doc) =
+    let (word, cursor_offset) = if let Some(doc) =
         text_store.get_document(&params.text_document_position_params.text_document.uri)
     {
         get_word_from_pos_params(doc, &params.text_document_position_params)
@@ -56,6 +55,7 @@ pub fn handle_hover_request(
         params,
         config,
         word,
+        cursor_offset,
         text_store,
         tree_store,
         &names_to_info.instructions,
@@ -84,7 +84,6 @@ pub fn handle_hover_request(
 /// # Panics
 ///
 /// Panics if JSON encoding of a response fails
-#[allow(clippy::too_many_arguments)]
 pub fn handle_completion_request(
     connection: &Connection,
     id: RequestId,
@@ -182,7 +181,7 @@ pub fn handle_document_symbols_request(
                 let resp = DocumentSymbolResponse::Nested(symbols);
                 let result = serde_json::to_value(resp).unwrap();
                 let result = Response {
-                    id: id.clone(),
+                    id,
                     result: Some(result),
                     error: None,
                 };
@@ -225,7 +224,7 @@ pub fn handle_signature_help_request(
             if let Some(sig) = sig_resp {
                 let result = serde_json::to_value(sig).unwrap();
                 let result = Response {
-                    id: id.clone(),
+                    id,
                     result: Some(result),
                     error: None,
                 };
@@ -263,7 +262,7 @@ pub fn handle_references_request(
                 let result = serde_json::to_value(&ref_resp).unwrap();
 
                 let result = Response {
-                    id: id.clone(),
+                    id,
                     result: Some(result),
                     error: None,
                 };

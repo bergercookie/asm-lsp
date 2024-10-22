@@ -39,6 +39,7 @@ mod tests {
                 x86_64: Some(false),
                 z80: Some(false),
                 arm: Some(false),
+                arm64: Some(false),
                 riscv: Some(false),
             },
             opts: ConfigOptions {
@@ -65,6 +66,7 @@ mod tests {
                 x86_64: Some(false),
                 z80: Some(true),
                 arm: Some(false),
+                arm64: Some(false),
                 riscv: Some(false),
             },
             opts: ConfigOptions {
@@ -91,6 +93,7 @@ mod tests {
                 x86_64: Some(false),
                 z80: Some(false),
                 arm: Some(true),
+                arm64: Some(false),
                 riscv: Some(false),
             },
             opts: ConfigOptions {
@@ -117,6 +120,7 @@ mod tests {
                 x86_64: Some(false),
                 z80: Some(false),
                 arm: Some(false),
+                arm64: Some(false),
                 riscv: Some(true),
             },
             opts: ConfigOptions {
@@ -143,6 +147,7 @@ mod tests {
                 x86_64: Some(true),
                 z80: Some(false),
                 arm: Some(false),
+                arm64: Some(false),
                 riscv: Some(false),
             },
             opts: ConfigOptions {
@@ -169,6 +174,7 @@ mod tests {
                 x86_64: Some(false),
                 z80: Some(false),
                 arm: Some(false),
+                arm64: Some(false),
                 riscv: Some(false),
             },
             opts: ConfigOptions {
@@ -195,6 +201,7 @@ mod tests {
                 x86_64: Some(false),
                 z80: Some(false),
                 arm: Some(false),
+                arm64: Some(false),
                 riscv: Some(false),
             },
             opts: ConfigOptions {
@@ -221,6 +228,7 @@ mod tests {
                 x86_64: Some(false),
                 z80: Some(false),
                 arm: Some(false),
+                arm64: Some(false),
                 riscv: Some(false),
             },
             opts: ConfigOptions {
@@ -240,6 +248,8 @@ mod tests {
         x86_64_registers: Vec<Register>,
         arm_instructions: Vec<Instruction>,
         arm_registers: Vec<Register>,
+        arm64_instructions: Vec<Instruction>,
+        arm64_registers: Vec<Register>,
         riscv_instructions: Vec<Instruction>,
         riscv_registers: Vec<Register>,
         z80_instructions: Vec<Instruction>,
@@ -268,6 +278,8 @@ mod tests {
                 x86_64_registers: Vec::new(),
                 arm_instructions: Vec::new(),
                 arm_registers: Vec::new(),
+                arm64_instructions: Vec::new(),
+                arm64_registers: Vec::new(),
                 riscv_instructions: Vec::new(),
                 riscv_registers: Vec::new(),
                 z80_instructions: Vec::new(),
@@ -296,7 +308,7 @@ mod tests {
         let mut info = GlobalInfo::new();
 
         info.x86_instructions = if config.instruction_sets.x86.unwrap_or(false) {
-            let x86_instrs = include_bytes!("../docs_store/opcodes/serialized/x86");
+            let x86_instrs = include_bytes!("serialized/opcodes/x86");
             bincode::deserialize::<Vec<Instruction>>(x86_instrs)?
                 .into_iter()
                 .map(|instruction| {
@@ -310,7 +322,7 @@ mod tests {
         };
 
         info.x86_64_instructions = if config.instruction_sets.x86_64.unwrap_or(false) {
-            let x86_64_instrs = include_bytes!("../docs_store/opcodes/serialized/x86_64");
+            let x86_64_instrs = include_bytes!("serialized/opcodes/x86_64");
             bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)?
                 .into_iter()
                 .map(|instruction| {
@@ -324,7 +336,7 @@ mod tests {
         };
 
         info.z80_instructions = if config.instruction_sets.z80.unwrap_or(false) {
-            let z80_instrs = include_bytes!("../docs_store/opcodes/serialized/z80");
+            let z80_instrs = include_bytes!("serialized/opcodes/z80");
             bincode::deserialize::<Vec<Instruction>>(z80_instrs)?
                 .into_iter()
                 .map(|instruction| {
@@ -338,70 +350,84 @@ mod tests {
         };
 
         info.arm_instructions = if config.instruction_sets.arm.unwrap_or(false) {
-            let arm_instrs = include_bytes!("../docs_store/opcodes/serialized/arm");
+            let arm_instrs = include_bytes!("serialized/opcodes/arm");
             bincode::deserialize::<Vec<Instruction>>(arm_instrs)?
         } else {
             Vec::new()
         };
 
+        info.arm64_instructions = if config.instruction_sets.arm64.unwrap_or(false) {
+            let arm64_instrs = include_bytes!("serialized/opcodes/arm64");
+            bincode::deserialize::<Vec<Instruction>>(arm64_instrs)?
+        } else {
+            Vec::new()
+        };
+
         info.riscv_instructions = if config.instruction_sets.riscv.unwrap_or(false) {
-            let riscv_instrs = include_bytes!("../docs_store/opcodes/serialized/riscv");
+            let riscv_instrs = include_bytes!("serialized/opcodes/riscv");
             bincode::deserialize::<Vec<Instruction>>(riscv_instrs)?
         } else {
             Vec::new()
         };
 
         info.x86_registers = if config.instruction_sets.x86.unwrap_or(false) {
-            let regs_x86 = include_bytes!("../docs_store/registers/serialized/x86");
+            let regs_x86 = include_bytes!("serialized/registers/x86");
             bincode::deserialize(regs_x86)?
         } else {
             Vec::new()
         };
 
         info.x86_64_registers = if config.instruction_sets.x86_64.unwrap_or(false) {
-            let regs_x86_64 = include_bytes!("../docs_store/registers/serialized/x86_64");
+            let regs_x86_64 = include_bytes!("serialized/registers/x86_64");
             bincode::deserialize(regs_x86_64)?
         } else {
             Vec::new()
         };
 
         info.z80_registers = if config.instruction_sets.z80.unwrap_or(false) {
-            let regs_z80 = include_bytes!("../docs_store/registers/serialized/z80");
+            let regs_z80 = include_bytes!("serialized/registers/z80");
             bincode::deserialize(regs_z80)?
         } else {
             Vec::new()
         };
 
         info.arm_registers = if config.instruction_sets.arm.unwrap_or(false) {
-            let regs_arm = include_bytes!("../docs_store/registers/serialized/arm");
+            let regs_arm = include_bytes!("serialized/registers/arm");
             bincode::deserialize(regs_arm)?
         } else {
             Vec::new()
         };
 
+        info.arm64_registers = if config.instruction_sets.arm64.unwrap_or(false) {
+            let regs_arm64 = include_bytes!("serialized/registers/arm64");
+            bincode::deserialize(regs_arm64)?
+        } else {
+            Vec::new()
+        };
+
         info.riscv_registers = if config.instruction_sets.riscv.unwrap_or(false) {
-            let regs_riscv = include_bytes!("../docs_store/registers/serialized/riscv");
+            let regs_riscv = include_bytes!("serialized/registers/riscv");
             bincode::deserialize(regs_riscv)?
         } else {
             Vec::new()
         };
 
         info.gas_directives = if config.assemblers.gas.unwrap_or(false) {
-            let gas_dirs = include_bytes!("../docs_store/directives/serialized/gas");
+            let gas_dirs = include_bytes!("serialized/directives/gas");
             bincode::deserialize(gas_dirs)?
         } else {
             Vec::new()
         };
 
         info.masm_directives = if config.assemblers.masm.unwrap_or(false) {
-            let masm_dirs = include_bytes!("../docs_store/directives/serialized/masm");
+            let masm_dirs = include_bytes!("serialized/directives/masm");
             bincode::deserialize(masm_dirs)?
         } else {
             Vec::new()
         };
 
         info.nasm_directives = if config.assemblers.nasm.unwrap_or(false) {
-            let nasm_dirs = include_bytes!("../docs_store/directives/serialized/nasm");
+            let nasm_dirs = include_bytes!("serialized/directives/nasm");
             bincode::deserialize(nasm_dirs)?
         } else {
             Vec::new()
@@ -438,6 +464,12 @@ mod tests {
         );
 
         populate_name_to_instruction_map(
+            Arch::ARM64,
+            &info.arm64_instructions,
+            &mut store.names_to_instructions,
+        );
+
+        populate_name_to_instruction_map(
             Arch::RISCV,
             &info.riscv_instructions,
             &mut store.names_to_instructions,
@@ -464,6 +496,12 @@ mod tests {
         populate_name_to_register_map(
             Arch::ARM,
             &info.arm_registers,
+            &mut store.names_to_registers,
+        );
+
+        populate_name_to_register_map(
+            Arch::ARM64,
+            &info.arm64_registers,
             &mut store.names_to_registers,
         );
 
@@ -562,7 +600,7 @@ mod tests {
         let tree = parser.parse(&source_code, None);
         let mut tree_store = TreeStore::new();
         let tree_entry = TreeEntry { tree, parser };
-        tree_store.insert(uri.clone(), tree_entry);
+        tree_store.insert(uri, tree_entry);
 
         let hover_params = HoverParams {
             text_document_position_params: pos_params.clone(),
@@ -571,16 +609,18 @@ mod tests {
             },
         };
 
-        let word = if let Some(ref doc) = curr_doc {
-            get_word_from_pos_params(doc, &pos_params)
-        } else {
-            panic!("No document");
-        };
+        let (word, cursor_offset) = curr_doc.as_ref().map_or_else(
+            || {
+                panic!("No document");
+            },
+            |doc| get_word_from_pos_params(doc, &pos_params),
+        );
 
         let resp = get_hover_resp(
             &hover_params,
             config,
             word,
+            cursor_offset,
             &text_store,
             &mut tree_store,
             &globals.names_to_instructions,
@@ -873,6 +913,7 @@ bar:
             &empty_test_config(),
             );
     }
+
     #[test]
     fn handle_hover_it_demangles_cpp_2() {
         test_hover(
@@ -881,6 +922,7 @@ bar:
             &empty_test_config(),
         );
     }
+
     #[test]
     fn handle_hover_it_demangles_cpp_3() {
         test_hover("	movq	_ZSt4endlIcSt<cursor>11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@GOTPCREL(%rip), %rax",
@@ -961,7 +1003,7 @@ bar:
     fn handle_hover_x86_x86_64_it_provides_instr_info_no_args() {
         test_hover(
             "<cursor>MOVLPS",
-            "MOVLPS [x86]
+            "movlps [x86]
 Move Low Packed Single-Precision Floating-Point Values
 
 ## Forms
@@ -975,9 +1017,7 @@ Move Low Packed Single-Precision Floating-Point Values
   + [m64]    input = false  output = true
   + [xmm]    input = true   output = false
 
-More info: https://www.felixcloutier.com/x86/movlps
-
-MOVLPS [x86-64]
+movlps [x86-64]
 Move Low Packed Single-Precision Floating-Point Values
 
 ## Forms
@@ -989,17 +1029,16 @@ Move Low Packed Single-Precision Floating-Point Values
 - *GAS*: movlps | *GO*: MOVLPS | *XMM*: SSE | *ISA*: SSE
 
   + [m64]    input = false  output = true
-  + [xmm]    input = true   output = false
-
-More info: https://www.felixcloutier.com/x86/movlps",
+  + [xmm]    input = true   output = false",
             &x86_x86_64_test_config(),
-        );
+        ); // More info: https://www.felixcloutier.com/x86/movlps
     }
+
     #[test]
     fn handle_hover_x86_x86_64_it_provides_instr_info_one_reg_arg() {
         test_hover(
             "push<cursor>q	%rbp",
-            "PUSH [x86]
+            "push [x86]
 Push Value Onto the Stack
 
 ## Forms
@@ -1023,9 +1062,7 @@ Push Value Onto the Stack
 
   + [m32]    input = true   output = false
 
-More info: https://www.felixcloutier.com/x86/push
-
-PUSH [x86-64]
+push [x86-64]
 Push Value Onto the Stack
 
 ## Forms
@@ -1047,17 +1084,16 @@ Push Value Onto the Stack
   + [m16]    input = true   output = false
 - *GAS*: pushq | *GO*: PUSHQ
 
-  + [m64]    input = true   output = false
-
-More info: https://www.felixcloutier.com/x86/push",
+  + [m64]    input = true   output = false",
             &x86_x86_64_test_config(),
-        );
+        ); // More info: https://www.felixcloutier.com/x86/push
     }
+
     #[test]
     fn handle_hover_x86_x86_64_it_provides_instr_info_two_reg_args() {
         test_hover(
             "	m<cursor>ovq	%rsp, %rbp",
-            "MOVQ [x86]
+            "movq [x86]
 Move Quadword
 
 ## Forms
@@ -1087,9 +1123,7 @@ Move Quadword
   + [m64]    input = false  output = true
   + [xmm]    input = true   output = false
 
-More info: https://www.felixcloutier.com/x86/movq
-
-MOVQ [x86-64]
+movq [x86-64]
 Move Quadword
 
 ## Forms
@@ -1133,11 +1167,9 @@ Move Quadword
 - *GAS*: movq | *GO*: MOVQ | *XMM*: SSE | *ISA*: SSE2
 
   + [m64]    input = false  output = true
-  + [xmm]    input = true   output = false
-
-More info: https://www.felixcloutier.com/x86/movq",
+  + [xmm]    input = true   output = false",
             &x86_x86_64_test_config(),
-        );
+        ); // More info: https://www.felixcloutier.com/x86/movq
     }
 
     #[test]
@@ -1295,17 +1327,18 @@ More info: https://sourceware.org/binutils/docs-2.41/as/Global.html",
     #[test]
     fn handle_hover_masm_it_provides_directive_info_1() {
         test_hover(
-            "ADD<cursor>R",
-            "ADDR [masm]
+            "add<cursor>R",
+            "addr [masm]
 Operator used exclusively with INVOKE to pass the address of a variable to a procedure.",
             &masm_test_config(),
         );
     }
+
     #[test]
     fn handle_hover_masm_it_provides_directive_info_2() {
         test_hover(
             "add<cursor>r",
-            "ADDR [masm]
+            "addr [masm]
 Operator used exclusively with INVOKE to pass the address of a variable to a procedure.",
             &masm_test_config(),
         );
@@ -1313,8 +1346,8 @@ Operator used exclusively with INVOKE to pass the address of a variable to a pro
     #[test]
     fn handle_hover_masm_it_provides_directive_info_3() {
         test_hover(
-            ".ALLOC<cursor>STACK",
-            ".ALLOCSTACK [masm]
+            ".alloc<cursor>STACK",
+            ".allocstack [masm]
 MASM64: Generates a UWOP_ALLOC_SMALL or a UWOP_ALLOC_LARGE with the specified size for the current offset in the prologue.",
             &masm_test_config(),
         );
@@ -1332,6 +1365,7 @@ MASM64: Generates a UWOP_ALLOC_SMALL or a UWOP_ALLOC_LARGE with the specified si
             None,
         );
     }
+
     #[test]
     fn handle_autocomplete_nasm_it_provides_directive_completes_2() {
         test_directive_autocomplete(
@@ -1341,6 +1375,7 @@ MASM64: Generates a UWOP_ALLOC_SMALL or a UWOP_ALLOC_LARGE with the specified si
             Some("%".to_string()),
         );
     }
+
     #[test]
     fn handle_autocomplete_nasm_it_provides_directive_completes_3() {
         test_directive_autocomplete(
@@ -1355,16 +1390,17 @@ MASM64: Generates a UWOP_ALLOC_SMALL or a UWOP_ALLOC_LARGE with the specified si
     fn handle_hover_nasm_it_provides_directive_info_1() {
         test_hover(
             "EQ<cursor>U",
-            "EQU [nasm]
+            "equ [nasm]
 EQU defines a symbol to a given constant value: when EQU is used, the source line must contain a label. The action of EQU is to define the given label name to the value of its (only) operand. This definition is absolute, and cannot change later.",
             &nasm_test_config(),
         );
     }
+
     #[test]
     fn handle_hover_nasm_it_provides_directive_info_2() {
         test_hover(
             "%def<cursor>ine",
-            "%DEFINE [nasm]
+            "%define [nasm]
 Define Single-line macros that is resolved at the time the embedded macro is expanded.",
             &nasm_test_config(),
         );
@@ -1373,7 +1409,7 @@ Define Single-line macros that is resolved at the time the embedded macro is exp
     fn handle_hover_nasm_it_provides_directive_info_3() {
         test_hover(
             ".ATT_<cursor>SYNTAX",
-            ".ATT_SYNTAX [nasm]
+            ".att_syntax [nasm]
 switch to AT&amp;T syntax",
             &nasm_test_config(),
         );
@@ -1401,6 +1437,7 @@ switch to AT&amp;T syntax",
             None,
         );
     }
+
     #[test]
     fn handle_autocomplete_z80_it_provides_reg_comps_in_existing_reg_arg_2() {
         test_register_autocomplete(
@@ -1410,6 +1447,7 @@ switch to AT&amp;T syntax",
             None,
         );
     }
+
     #[test]
     fn handle_autocomplete_z80_it_provides_reg_comps_in_existing_reg_arg_3() {
         test_register_autocomplete(
@@ -1436,6 +1474,7 @@ LoaD and Increment. Copies the byte pointed to by HL to the address pointed to b
 &z80_test_config(),
             );
     }
+
     #[test]
     fn handle_hover_z80_it_provides_instr_info_one_reg_arg() {
         test_hover("        CP<cursor> (HL)         ;COMPARE MEMORY CONTENTS WITH",
@@ -1482,6 +1521,7 @@ ComPare. Sets the flags as if a SUB was performed but does not perform it. Legal
 &z80_test_config(),
             );
     }
+
     #[test]
     fn handle_hover_z80_it_provides_instr_info_two_reg_args() {
         test_hover("        L<cursor>D HL, DATA     ;STARTING ADDRESS OF DATA STRING",
@@ -1974,7 +2014,7 @@ Width: 8 bits",
     #[test]
     fn serialized_x86_registers_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let x86_regs_ser = include_bytes!("../docs_store/registers/serialized/x86");
+        let x86_regs_ser = include_bytes!("serialized/registers/x86");
         let ser_vec = bincode::deserialize::<Vec<Register>>(x86_regs_ser).unwrap();
 
         let x86_regs_raw = include_str!("../docs_store/registers/raw/x86.xml");
@@ -1994,23 +2034,21 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&reg).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                reg
+                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (reg, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                reg
+                "Expected count to be 0, found {count} for {reg:?}"
             );
         }
     }
     #[test]
     fn serialized_x86_64_registers_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let x86_64_regs_ser = include_bytes!("../docs_store/registers/serialized/x86_64");
+        let x86_64_regs_ser = include_bytes!("serialized/registers/x86_64");
         let ser_vec = bincode::deserialize::<Vec<Register>>(x86_64_regs_ser).unwrap();
 
         let x86_64_regs_raw = include_str!("../docs_store/registers/raw/x86_64.xml");
@@ -2030,23 +2068,21 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&reg).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                reg
+                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (reg, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                reg
+                "Expected count to be 0, found {count} for {reg:?}"
             );
         }
     }
     #[test]
     fn serialized_arm_registers_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let arm_regs_ser = include_bytes!("../docs_store/registers/serialized/arm");
+        let arm_regs_ser = include_bytes!("serialized/registers/arm");
         let ser_vec = bincode::deserialize::<Vec<Register>>(arm_regs_ser).unwrap();
 
         let arm_regs_raw = include_str!("../docs_store/registers/raw/arm.xml");
@@ -2066,23 +2102,55 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&reg).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                reg
+                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (reg, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                reg
+                "Expected count to be 0, found {count} for {reg:?}"
+            );
+        }
+    }
+    #[test]
+    fn serialized_arm64_registers_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let arm_regs_ser = include_bytes!("serialized/registers/arm64");
+        let ser_vec = bincode::deserialize::<Vec<Register>>(arm_regs_ser).unwrap();
+
+        let arm64_regs_raw = include_str!("../docs_store/registers/raw/arm64.xml");
+        let mut raw_vec = populate_registers(arm64_regs_raw).unwrap();
+
+        // HACK: Windows line endings...
+        for reg in &mut raw_vec {
+            if let Some(descr) = &reg.description {
+                reg.description = Some(descr.replace('\r', ""));
+            }
+        }
+
+        for reg in ser_vec {
+            *cmp_map.entry(reg.clone()).or_insert(0) += 1;
+        }
+        for reg in raw_vec {
+            let entry = cmp_map.get_mut(&reg).unwrap();
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
+            );
+            *entry -= 1;
+        }
+        for (reg, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {reg:?}"
             );
         }
     }
     #[test]
     fn serialized_z80_registers_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let z80_regs_ser = include_bytes!("../docs_store/registers/serialized/z80");
+        let z80_regs_ser = include_bytes!("serialized/registers/z80");
         let ser_vec = bincode::deserialize::<Vec<Register>>(z80_regs_ser).unwrap();
 
         let z80_regs_raw = include_str!("../docs_store/registers/raw/z80.xml");
@@ -2095,23 +2163,21 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&reg).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                reg
+                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (reg, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                reg
+                "Expected count to be 0, found {count} for {reg:?}"
             );
         }
     }
     #[test]
     fn serialized_x86_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let x86_instrs_ser = include_bytes!("../docs_store/opcodes/serialized/x86");
+        let x86_instrs_ser = include_bytes!("serialized/opcodes/x86");
         let mut ser_vec = bincode::deserialize::<Vec<Instruction>>(x86_instrs_ser).unwrap();
 
         let x86_instrs_raw = include_str!("../docs_store/opcodes/raw/x86.xml");
@@ -2133,23 +2199,21 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&instr).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                instr
+                "Expected at least one more instruction entry for {instr:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (instr, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                instr
+                "Expected count to be 0, found {count} for {instr:?}"
             );
         }
     }
     #[test]
     fn serialized_x86_64_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let x86_64_instrs_ser = include_bytes!("../docs_store/opcodes/serialized/x86_64");
+        let x86_64_instrs_ser = include_bytes!("serialized/opcodes/x86_64");
         let mut ser_vec = bincode::deserialize::<Vec<Instruction>>(x86_64_instrs_ser).unwrap();
 
         let x86_64_instrs_raw = include_str!("../docs_store/opcodes/raw/x86_64.xml");
@@ -2171,28 +2235,27 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&instr).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                instr
+                "Expected at least one more instruction entry for {instr:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (instr, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                instr
+                "Expected count to be 0, found {count} for {instr:?}"
             );
         }
     }
+    //TODO: sperate test for aarch64 when the arm32 opcodes are added
     #[test]
     fn serialized_arm_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let arm_instrs_ser = include_bytes!("../docs_store/opcodes/serialized/arm");
+        let arm_instrs_ser = include_bytes!("serialized/opcodes/arm");
         let mut ser_vec = bincode::deserialize::<Vec<Instruction>>(arm_instrs_ser).unwrap();
         ser_vec.sort_by(|a, b| a.name.cmp(&b.name));
 
         let mut raw_vec =
-            populate_arm_instructions(&PathBuf::from("docs_store/opcodes/raw/ARM/")).unwrap();
+            populate_arm_instructions(&PathBuf::from("../docs_store/opcodes/raw/ARM/")).unwrap();
         raw_vec.sort_by(|a, b| a.name.cmp(&b.name));
 
         for instr in ser_vec {
@@ -2202,23 +2265,21 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&instr).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                instr
+                "Expected at least one more instruction entry for {instr:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (instr, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                instr
+                "Expected count to be 0, found {count} for {instr:?}"
             );
         }
     }
     #[test]
     fn serialized_z80_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let z80_instrs_ser = include_bytes!("../docs_store/opcodes/serialized/z80");
+        let z80_instrs_ser = include_bytes!("serialized/opcodes/z80");
         let ser_vec = bincode::deserialize::<Vec<Instruction>>(z80_instrs_ser).unwrap();
 
         let z80_instrs_raw = include_str!("../docs_store/opcodes/raw/z80.xml");
@@ -2231,23 +2292,21 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&instr).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                instr
+                "Expected at least one more instruction entry for {instr:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (instr, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                instr
+                "Expected count to be 0, found {count} for {instr:?}"
             );
         }
     }
     #[test]
     fn serialized_gas_directives_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let gas_dirs_ser = include_bytes!("../docs_store/directives/serialized/gas");
+        let gas_dirs_ser = include_bytes!("serialized/directives/gas");
         let ser_vec = bincode::deserialize::<Vec<Directive>>(gas_dirs_ser).unwrap();
 
         let gas_dirs_raw = include_str!("../docs_store/directives/raw/gas.xml");
@@ -2260,23 +2319,21 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&dir).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                dir
+                "Expected at least one more instruction entry for {dir:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (dir, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                dir
+                "Expected count to be 0, found {count} for {dir:?}"
             );
         }
     }
     #[test]
     fn serialized_masm_directives_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let masm_dirs_ser = include_bytes!("../docs_store/directives/serialized/masm");
+        let masm_dirs_ser = include_bytes!("serialized/directives/masm");
         let ser_vec = bincode::deserialize::<Vec<Directive>>(masm_dirs_ser).unwrap();
 
         let masm_dirs_raw = include_str!("../docs_store/directives/raw/masm.xml");
@@ -2289,23 +2346,21 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&dir).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                dir
+                "Expected at least one more instruction entry for {dir:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (dir, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                dir
+                "Expected count to be 0, found {count} for {dir:?}"
             );
         }
     }
     #[test]
     fn serialized_nasm_directives_are_up_to_date() {
         let mut cmp_map = HashMap::new();
-        let nasm_dirs_ser = include_bytes!("../docs_store/directives/serialized/nasm");
+        let nasm_dirs_ser = include_bytes!("serialized/directives/nasm");
         let ser_vec = bincode::deserialize::<Vec<Directive>>(nasm_dirs_ser).unwrap();
 
         let nasm_dirs_raw = include_str!("../docs_store/directives/raw/nasm.xml");
@@ -2318,16 +2373,14 @@ Width: 8 bits",
             let entry = cmp_map.get_mut(&dir).unwrap();
             assert!(
                 *entry != 0,
-                "Expected at least one more instruction entry for {:?}, but the count is 0",
-                dir
+                "Expected at least one more instruction entry for {dir:?}, but the count is 0"
             );
             *entry -= 1;
         }
         for (dir, count) in &cmp_map {
             assert!(
                 *count == 0,
-                "Expected count to be 0, found {count} for {:?}",
-                dir
+                "Expected count to be 0, found {count} for {dir:?}"
             );
         }
     }

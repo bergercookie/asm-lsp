@@ -13,7 +13,6 @@ use tree_sitter::{Parser, Tree};
 #[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
 pub struct Instruction {
     pub name: String,
-    pub alt_names: Vec<String>,
     pub summary: String,
     pub forms: Vec<InstructionForm>,
     pub asm_templates: Vec<String>,
@@ -28,7 +27,6 @@ impl Completable for &Instruction {}
 impl Default for Instruction {
     fn default() -> Self {
         let name = String::new();
-        let alt_names = vec![];
         let summary = String::new();
         let forms = vec![];
         let asm_templates = vec![];
@@ -38,7 +36,6 @@ impl Default for Instruction {
 
         Self {
             name,
-            alt_names,
             summary,
             forms,
             asm_templates,
@@ -124,12 +121,8 @@ impl<'own> Instruction {
     /// Get the primary names
     #[must_use]
     pub fn get_primary_names(&'own self) -> Vec<&'own str> {
-        let mut names = Vec::<&'own str>::new();
-        names.push(&self.name);
+        let names = vec![self.name.as_ref()];
 
-        for name in &self.alt_names {
-            names.push(name);
-        }
         names
     }
 
@@ -215,7 +208,9 @@ impl std::fmt::Display for InstructionForm {
         }
 
         // Operands
-        let operands_str: String = if !self.operands.is_empty() {
+        let operands_str: String = if self.operands.is_empty() {
+            String::new()
+        } else {
             self.operands
                 .iter()
                 .map(|op| {
@@ -234,8 +229,6 @@ impl std::fmt::Display for InstructionForm {
                 })
                 .collect::<Vec<String>>()
                 .join("\n")
-        } else {
-            String::new()
         };
 
         s += &operands_str;
@@ -355,10 +348,10 @@ impl FromStr for Z80TimingInfo {
             s.split('/').map(str::parse).collect();
 
         match pieces.len() {
-            1 => match &pieces[0] {
-                Ok(num) => Ok(Self::OneNum(*num)),
-                Err(_) => Err(String::from("Failed to parse one timing value")),
-            },
+            1 => pieces[0].as_ref().map_or_else(
+                |_| Err(String::from("Failed to parse one timing value")),
+                |num| Ok(Self::OneNum(*num)),
+            ),
             2 => match (&pieces[0], &pieces[1]) {
                 (Ok(num1), Ok(num2)) => Ok(Self::TwoNum((*num1, *num2))),
                 _ => Err(String::from("Failed to parse one or more timing values")),
@@ -395,7 +388,6 @@ impl Display for Z80Timing {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Directive {
     pub name: String,
-    pub alt_names: Vec<String>,
     pub signatures: Vec<String>,
     pub description: String,
     pub deprecated: bool,
@@ -409,7 +401,6 @@ impl Completable for &Directive {}
 impl Default for Directive {
     fn default() -> Self {
         let name = String::new();
-        let alt_names = vec![];
         let signatures = vec![];
         let description = String::new();
         let deprecated = false;
@@ -418,7 +409,6 @@ impl Default for Directive {
 
         Self {
             name,
-            alt_names,
             signatures,
             description,
             deprecated,
@@ -510,12 +500,7 @@ impl<'own> Directive {
     /// get the names of all the associated directives
     #[must_use]
     pub fn get_associated_names(&'own self) -> Vec<&'own str> {
-        let mut names = Vec::<&'own str>::new();
-        names.push(&self.name);
-
-        for name in &self.alt_names {
-            names.push(name);
-        }
+        let names = vec![self.name.as_ref()];
 
         names
     }
@@ -525,7 +510,6 @@ impl<'own> Directive {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Register {
     pub name: String,
-    pub alt_names: Vec<String>,
     pub description: Option<String>,
     pub reg_type: Option<RegisterType>,
     pub width: Option<RegisterWidth>,
@@ -540,7 +524,6 @@ impl Completable for &Register {}
 impl Default for Register {
     fn default() -> Self {
         let name = String::new();
-        let alt_names = vec![];
         let description = None;
         let reg_type = None;
         let width = None;
@@ -550,7 +533,6 @@ impl Default for Register {
 
         Self {
             name,
-            alt_names,
             description,
             reg_type,
             width,
@@ -625,12 +607,7 @@ impl<'own> Register {
     /// get the names of all the associated registers
     #[must_use]
     pub fn get_associated_names(&'own self) -> Vec<&'own str> {
-        let mut names = Vec::<&'own str>::new();
-        names.push(&self.name);
-
-        for name in &self.alt_names {
-            names.push(name);
-        }
+        let names = vec![self.name.as_ref()];
 
         names
     }
@@ -679,6 +656,8 @@ pub enum Arch {
     X86_64,
     #[strum(serialize = "arm")]
     ARM,
+    #[strum(serialize = "arm64")]
+    ARM64,
     #[strum(serialize = "riscv")]
     RISCV,
     #[strum(serialize = "z80")]
@@ -693,6 +672,7 @@ impl std::fmt::Display for Arch {
             Self::X86 => write!(f, "x86")?,
             Self::X86_64 => write!(f, "x86-64")?,
             Self::ARM => write!(f, "arm")?,
+            Self::ARM64 => write!(f, "arm64")?,
             Self::Z80 => write!(f, "z80")?,
             Self::RISCV => write!(f, "riscv")?,
         }
@@ -830,6 +810,7 @@ pub struct InstructionSets {
     pub x86_64: Option<bool>,
     pub z80: Option<bool>,
     pub arm: Option<bool>,
+    pub arm64: Option<bool>,
     pub riscv: Option<bool>,
 }
 
@@ -840,6 +821,7 @@ impl Default for InstructionSets {
             x86_64: Some(true),
             z80: Some(false),
             arm: Some(false),
+            arm64: Some(false),
             riscv: Some(false),
         }
     }
