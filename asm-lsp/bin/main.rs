@@ -540,6 +540,7 @@ fn main_loop(
                 } else if let Ok((_id, params)) = cast_req::<DocumentDiagnosticRequest>(req.clone())
                 {
                     let project_config = config.get_config(&params.text_document.uri);
+                    #[allow(clippy::option_if_let_else)]
                     let cmp_cmds = if let Some(cmd) =
                         get_comp_cmd_for_path(config, &params.text_document.uri)
                     {
@@ -602,6 +603,7 @@ fn main_loop(
                     let project_config = config.get_config(&params.text_document.uri);
                     // Ok to unwrap, this should never be `None`
                     if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
+                        #[allow(clippy::option_if_let_else)]
                         let cmp_cmds = if let Some(cmd) =
                             get_comp_cmd_for_path(config, &params.text_document.uri)
                         {
