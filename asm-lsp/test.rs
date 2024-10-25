@@ -30,6 +30,7 @@ mod tests {
             instruction_set: Arch::None,
             opts: Some(ConfigOptions {
                 compiler: None,
+                compile_flags_txt: None,
                 diagnostics: None,
                 default_diagnostics: None,
             }),
@@ -131,10 +132,10 @@ mod tests {
     }
 
     #[derive(Debug)]
-    struct GlobalVars<'a> {
-        names_to_instructions: NameToInstructionMap<'a>,
-        names_to_registers: NameToRegisterMap<'a>,
-        names_to_directives: NameToDirectiveMap<'a>,
+    struct GlobalVars {
+        names_to_instructions: NameToInstructionMap,
+        names_to_registers: NameToRegisterMap,
+        names_to_directives: NameToDirectiveMap,
         instr_completion_items: Vec<(Arch, CompletionItem)>,
         reg_completion_items: Vec<(Arch, CompletionItem)>,
         directive_completion_items: Vec<(Assembler, CompletionItem)>,
@@ -162,7 +163,7 @@ mod tests {
         }
     }
 
-    impl GlobalVars<'_> {
+    impl GlobalVars {
         fn new() -> Self {
             Self {
                 names_to_instructions: NameToInstructionMap::new(),
@@ -300,7 +301,7 @@ mod tests {
         Ok(info)
     }
 
-    fn init_test_store(info: &GlobalInfo) -> GlobalVars<'_> {
+    fn init_test_store(info: &GlobalInfo) -> GlobalVars {
         let mut store = GlobalVars::new();
 
         let mut x86_cache_path = get_cache_dir().unwrap();

@@ -185,7 +185,6 @@ pub fn populate_riscv_instructions(docs_path: &PathBuf) -> Result<Vec<Instructio
 ///
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
-#[allow(clippy::too_many_lines)]
 fn parse_riscv_instructions(rst_contents: &str) -> Vec<Instruction> {
     // We could pull in an actual rst parser to do this, but the files' contents
     // are straightforward/structured enough that this should be fairly trivial
@@ -999,23 +998,19 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
     Ok(instructions_map.into_values().collect())
 }
 
-pub fn populate_name_to_instruction_map<'instruction>(
+pub fn populate_name_to_instruction_map(
     arch: Arch,
-    instructions: &'instruction Vec<Instruction>,
-    names_to_instructions: &mut NameToInstructionMap<'instruction>,
+    instructions: &Vec<Instruction>,
+    names_to_instructions: &mut NameToInstructionMap,
 ) {
-    // Add the "true" names first
     for instruction in instructions {
-        for name in &instruction.get_primary_names() {
-            names_to_instructions.insert((arch, name), instruction);
-        }
-    }
-    // Add alternate form names next, ensuring we don't overwrite existing entries
-    for instruction in instructions {
+        names_to_instructions.insert((arch, instruction.name.clone()), instruction.clone());
+        // Inserts instruction form names in addition to the instruction's "main"
+        // name
         for name in &instruction.get_associated_names() {
             names_to_instructions
-                .entry((arch, name))
-                .or_insert_with(|| instruction);
+                .entry((arch, (*name).to_string()))
+                .or_insert_with(|| instruction.clone());
         }
     }
 }
@@ -1147,14 +1142,14 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
     Ok(registers_map.into_values().collect())
 }
 
-pub fn populate_name_to_register_map<'register>(
+pub fn populate_name_to_register_map(
     arch: Arch,
-    registers: &'register Vec<Register>,
-    names_to_registers: &mut NameToRegisterMap<'register>,
+    registers: &Vec<Register>,
+    names_to_registers: &mut NameToRegisterMap,
 ) {
     for register in registers {
         for name in &register.get_associated_names() {
-            names_to_registers.insert((arch, name), register);
+            names_to_registers.insert((arch, (*name).to_string()), register.clone());
         }
     }
 }
@@ -1346,14 +1341,14 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     Ok(directives_map.into_values().collect())
 }
 
-pub fn populate_name_to_directive_map<'directive>(
+pub fn populate_name_to_directive_map(
     assem: Assembler,
-    directives: &'directive Vec<Directive>,
-    names_to_directives: &mut NameToDirectiveMap<'directive>,
+    directives: &Vec<Directive>,
+    names_to_directives: &mut NameToDirectiveMap,
 ) {
     for directive in directives {
         for name in &directive.get_associated_names() {
-            names_to_directives.insert((assem, name), directive);
+            names_to_directives.insert((assem, (*name).to_string()), directive.clone());
         }
     }
 }

@@ -1,17 +1,21 @@
 use std::{
-    collections::{BTreeMap, HashMap},
+    collections::{BTreeMap, HashMap, HashSet},
     fmt::Display,
     path::PathBuf,
     str::FromStr,
 };
 
-use log::info;
+use log::{info, warn};
 use lsp_types::Uri;
 use serde::{Deserialize, Serialize};
 use strum_macros::{AsRefStr, Display, EnumString};
 use tree_sitter::{Parser, Tree};
 
-// Instruction ------------------------------------------------------------------------------------
+use crate::{
+    populate_name_to_directive_map, populate_name_to_instruction_map, populate_name_to_register_map,
+};
+
+// Instruction
 #[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
 pub struct Instruction {
     pub name: String,
@@ -23,8 +27,8 @@ pub struct Instruction {
     pub arch: Option<Arch>,
 }
 
-impl Hoverable for &Instruction {}
-impl Completable for &Instruction {}
+impl Hoverable for Instruction {}
+impl Completable for Instruction {}
 
 impl Default for Instruction {
     fn default() -> Self {
@@ -147,7 +151,7 @@ impl<'own> Instruction {
     }
 }
 
-// InstructionForm --------------------------------------------------------------------------------
+// InstructionForm
 #[derive(Default, Eq, PartialEq, Hash, Debug, Clone, Serialize, Deserialize)]
 pub struct InstructionForm {
     // --- Gas/Go-Specific Information ---
@@ -248,7 +252,7 @@ impl std::fmt::Display for InstructionForm {
     }
 }
 
-// InstructionAlias --------------------------------------------------------------------------------
+// InstructionAlias
 #[derive(Default, Eq, PartialEq, Hash, Debug, Clone, Serialize, Deserialize)]
 pub struct InstructionAlias {
     pub title: String,
@@ -386,7 +390,7 @@ impl Display for Z80Timing {
     }
 }
 
-// Directive ------------------------------------------------------------------------------------
+// Directive
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Directive {
     pub name: String,
@@ -397,8 +401,8 @@ pub struct Directive {
     pub assembler: Option<Assembler>,
 }
 
-impl Hoverable for &Directive {}
-impl Completable for &Directive {}
+impl Hoverable for Directive {}
+impl Completable for Directive {}
 
 impl Default for Directive {
     fn default() -> Self {
@@ -508,7 +512,7 @@ impl<'own> Directive {
     }
 }
 
-// Register ---------------------------------------------------------------------------------------
+// Register
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Register {
     pub name: String,
@@ -520,8 +524,8 @@ pub struct Register {
     pub url: Option<String>,
 }
 
-impl Hoverable for &Register {}
-impl Completable for &Register {}
+impl Hoverable for Register {}
+impl Completable for Register {}
 
 impl Default for Register {
     fn default() -> Self {
@@ -615,23 +619,21 @@ impl<'own> Register {
     }
 }
 
-// helper structs, types and functions ------------------------------------------------------------
+// helper structs, types and functions
 #[derive(Debug, Clone, Default)]
-pub struct NameToInfoMaps<'a> {
-    pub instructions: NameToInstructionMap<'a>,
-    pub registers: NameToRegisterMap<'a>,
-    pub directives: NameToDirectiveMap<'a>,
+pub struct NameToInfoMaps {
+    pub instructions: NameToInstructionMap,
+    pub registers: NameToRegisterMap,
+    pub directives: NameToDirectiveMap,
 }
 
-pub type NameToInstructionMap<'instruction> =
-    HashMap<(Arch, &'instruction str), &'instruction Instruction>;
+pub type NameToInstructionMap = HashMap<(Arch, String), Instruction>;
 
-pub type NameToRegisterMap<'register> = HashMap<(Arch, &'register str), &'register Register>;
+pub type NameToRegisterMap = HashMap<(Arch, String), Register>;
 
-pub type NameToDirectiveMap<'directive> =
-    HashMap<(Assembler, &'directive str), &'directive Directive>;
+pub type NameToDirectiveMap = HashMap<(Assembler, String), Directive>;
 
-pub trait Hoverable: Display + Clone + Copy {}
+pub trait Hoverable: Display + Clone {}
 pub trait Completable: Display {}
 pub trait ArchOrAssembler: Clone + Copy {}
 
@@ -648,11 +650,8 @@ pub enum MMXMode {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(
-    Debug, Default, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Serialize, Deserialize,
-)]
+#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Serialize, Deserialize)]
 pub enum Arch {
-    #[default]
     #[strum(serialize = "x86")]
     #[serde(rename = "x86")]
     X86,
@@ -674,11 +673,294 @@ pub enum Arch {
     #[strum(serialize = "z80")]
     #[serde(rename = "z80")]
     Z80,
+    /// For testing purposes *only*. This is not a valid config option
     #[serde(skip)]
     None,
 }
 
 impl ArchOrAssembler for Arch {}
+
+impl Arch {
+    /// Setup registers for a particular architecture
+    ///
+    /// # Panics
+    ///
+    /// Panics if unable to deserialize `Register`
+    pub fn setup_registers(self, names_to_registers: &mut HashMap<(Self, String), Register>) {
+        match self {
+            Self::X86 => {
+                // create a map of &Register_name -> &Register - Use that in user queries
+                // The Register(s) themselves are stored in a vector and we only keep references to the
+                // former map
+                let start = std::time::Instant::now();
+                let regs_x86 = include_bytes!("serialized/registers/x86");
+                let x86_registers =
+                    bincode::deserialize(regs_x86)
+                    .expect("Error deserializing x86 registers;\nRegenerate serialized data with regenerate.sh");
+                info!(
+                    "x86 register set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_register_map(Self::X86, &x86_registers, names_to_registers);
+            }
+            Self::X86_64 => {
+                let start = std::time::Instant::now();
+                let regs_x86_64 = include_bytes!("serialized/registers/x86_64");
+                let x86_64_registers = bincode::deserialize(regs_x86_64)
+                    .expect("Error deserializing x86-64 registers;\nRegenerate serialized data with regenerate.sh");
+                info!(
+                    "x86-64 register set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_register_map(Self::X86_64, &x86_64_registers, names_to_registers);
+            }
+            Self::X86_AND_X86_64 => {
+                let start = std::time::Instant::now();
+
+                let regs_x86 = include_bytes!("serialized/registers/x86");
+                let x86_registers =
+                    bincode::deserialize(regs_x86)
+                    .expect("Error deserializing x86 registers;\nRegenerate serialized data with regenerate.sh");
+
+                let regs_x86_64 = include_bytes!("serialized/registers/x86_64");
+                let x86_64_registers = bincode::deserialize(regs_x86_64)
+                    .expect("Error deserializing x86-64 registers;\nRegenerate serialized data with regenerate.sh");
+
+                populate_name_to_register_map(Self::X86, &x86_registers, names_to_registers);
+                populate_name_to_register_map(Self::X86_64, &x86_64_registers, names_to_registers);
+
+                info!(
+                    "x86/x86-64 register set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+            }
+            Self::ARM => {
+                let start = std::time::Instant::now();
+                let regs_arm = include_bytes!("serialized/registers/arm");
+                let arm_registers =
+                    bincode::deserialize(regs_arm)
+                    .expect("Error deserializing arm registers;\nRegenerate serialized data with regenerate.sh");
+                info!(
+                    "arm register set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_register_map(Self::ARM, &arm_registers, names_to_registers);
+            }
+            Self::ARM64 => {
+                let start = std::time::Instant::now();
+                let regs_arm64 = include_bytes!("serialized/registers/arm64");
+                let arm64_registers = bincode::deserialize(regs_arm64)
+                    .expect("Error deserializing arm64 registers;\nRegenerate serialized data with regenerate.sh");
+                populate_name_to_register_map(Self::ARM64, &arm64_registers, names_to_registers);
+                info!(
+                    "arm register set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+            }
+            Self::RISCV => {
+                let start = std::time::Instant::now();
+                let regs_riscv = include_bytes!("serialized/registers/riscv");
+                let riscv_registers =
+                    bincode::deserialize(regs_riscv)
+                    .expect("Error deserializing riscv registers;\nRegenerate serialized data with regenerate.sh");
+                info!(
+                    "riscv register set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_register_map(Self::RISCV, &riscv_registers, names_to_registers);
+            }
+            Self::Z80 => {
+                let start = std::time::Instant::now();
+                let regs_z80 = include_bytes!("serialized/registers/z80");
+                let z80_registers =
+                    bincode::deserialize(regs_z80)
+                    .expect("Error deserializing z80 registers;\nRegenerate serialized data with regenerate.sh");
+                info!(
+                    "z80 register set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+                populate_name_to_register_map(Self::Z80, &z80_registers, names_to_registers);
+            }
+            Self::None => unreachable!(),
+        }
+    }
+
+    /// Setup instructions for a particular architecture
+    ///
+    /// # Panics
+    ///
+    /// Panics if unable to deserialize `Instruction`s
+    pub fn setup_instructions(
+        self,
+        names_to_instructions: &mut HashMap<(Self, String), Instruction>,
+    ) {
+        match self {
+            Self::X86 => {
+                let start = std::time::Instant::now();
+                let x86_instrs = include_bytes!("serialized/opcodes/x86");
+                let x86_instructions = bincode::deserialize::<Vec<Instruction>>(x86_instrs)
+                    .expect("Error deserializing x86 instructions;\nRegenerate serialized data with regenerate.sh");
+                info!(
+                    "x86 instruction set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_instruction_map(
+                    Self::X86,
+                    &x86_instructions,
+                    names_to_instructions,
+                );
+            }
+            Self::X86_64 => {
+                let start = std::time::Instant::now();
+                let x86_64_instrs = include_bytes!("serialized/opcodes/x86_64");
+                let x86_64_instructions = bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)
+                    .expect("Error deserializing x86_64 instructions;\nRegenerate serialized data with regenerate.sh");
+                info!(
+                    "x86-64 instruction set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_instruction_map(
+                    Self::X86_64,
+                    &x86_64_instructions,
+                    names_to_instructions,
+                );
+            }
+            Self::X86_AND_X86_64 => {
+                let start = std::time::Instant::now();
+
+                let x86_instrs = include_bytes!("serialized/opcodes/x86");
+                let x86_instructions = bincode::deserialize::<Vec<Instruction>>(x86_instrs)
+                    .expect("Error deserializing x86 instructions;\nRegenerate serialized data with regenerate.sh");
+
+                let x86_64_instrs = include_bytes!("serialized/opcodes/x86_64");
+                let x86_64_instructions = bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)
+                    .expect("Error deserializing x86_64 instructions;\nRegenerate serialized data with regenerate.sh");
+
+                populate_name_to_instruction_map(
+                    Self::X86,
+                    &x86_instructions,
+                    names_to_instructions,
+                );
+
+                populate_name_to_instruction_map(
+                    Self::X86_64,
+                    &x86_64_instructions,
+                    names_to_instructions,
+                );
+
+                info!(
+                    "x86/x86-64 instruction sets loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+            }
+            Self::ARM => {
+                let start = std::time::Instant::now();
+                let arm_instrs = include_bytes!("serialized/opcodes/arm");
+                let arm_instructions = bincode::deserialize::<Vec<Instruction>>(arm_instrs)
+                    .expect("Error deserializing arm32 instructions;\nRegenerate serialized data with regenerate.sh");
+                info!(
+                    "arm instruction set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_instruction_map(
+                    Self::ARM,
+                    &arm_instructions,
+                    names_to_instructions,
+                );
+            }
+            Self::ARM64 => {
+                let start = std::time::Instant::now();
+                // TODO: change to arm64 after arm32 has been added
+                let arm_instrs = include_bytes!("serialized/opcodes/arm");
+                // NOTE: Actually, the arm file are all arm64 so we needed to get
+                // the arm32 versions then do the below
+                // NOTE: No need to filter these instructions by assembler
+                // like we do for x86/x86_64, as our ARM docs don't contain any
+                // assembler-specific information (yet)
+                let arm64_instructions = bincode::deserialize::<Vec<Instruction>>(arm_instrs)
+                    .expect("Error deserializing arm64 instructions;\nRegenerate serialized data with regenerate.sh");
+                populate_name_to_instruction_map(
+                    Self::ARM64,
+                    &arm64_instructions,
+                    names_to_instructions,
+                );
+                info!(
+                    "arm64 instruction set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+            }
+            Self::RISCV => {
+                let start = std::time::Instant::now();
+                let riscv_instrs = include_bytes!("serialized/opcodes/riscv");
+                // NOTE: No need to filter these instructions by assembler like we do for
+                // x86/x86_64, as our RISCV docs don't contain any assembler-specific information (yet)
+                let riscv_instructions = bincode::deserialize::<Vec<Instruction>>(riscv_instrs).expect("Error deserializing riscv instructions;\nRegenerate serialized data with regenerate.sh");
+                info!(
+                    "riscv instruction set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_instruction_map(
+                    Self::RISCV,
+                    &riscv_instructions,
+                    names_to_instructions,
+                );
+            }
+            Self::Z80 => {
+                let start = std::time::Instant::now();
+                let z80_instrs = include_bytes!("serialized/opcodes/z80");
+                let z80_instructions = bincode::deserialize::<Vec<Instruction>>(z80_instrs)
+                    .expect("Error deserializing z80 instructions;\nRegenerate serialized data with regenerate.sh");
+                info!(
+                    "z80 instruction set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_instruction_map(
+                    Self::Z80,
+                    &z80_instructions,
+                    names_to_instructions,
+                );
+            }
+            Self::None => unreachable!(),
+        }
+    }
+}
+
+impl Default for Arch {
+    fn default() -> Self {
+        if cfg!(target_arch = "x86") {
+            info!("Detected host arch as x86");
+            Self::X86
+        } else if cfg!(target_arch = "arm") {
+            info!("Detected host arch as arm");
+            Self::ARM
+        } else if cfg!(target_arch = "aarch64") {
+            info!("Detected host arch as aarch64");
+            Self::ARM64
+        } else if cfg!(target_arch = "riscv32") {
+            info!("Detected host arch as riscv32");
+            Self::RISCV
+        } else if cfg!(target_arch = "riscv64") {
+            info!("Detected host arch as riscv64");
+            Self::RISCV
+        } else {
+            if cfg!(target_arch = "x86_64") {
+                info!("Detected host arch as x86-64");
+            } else {
+                info!("Failed to detect host arch, defaulting to x86-64");
+            }
+            Self::X86_64 // somewhat arbitrary default
+        }
+    }
+}
 
 impl std::fmt::Display for Arch {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -696,6 +978,8 @@ impl std::fmt::Display for Arch {
     }
 }
 
+// All of the `#[serde(rename = "...")] allows for both lower case and the literal
+// enum representations of the values to be deserialized
 #[derive(
     Debug,
     Display,
@@ -713,20 +997,74 @@ impl std::fmt::Display for Arch {
 pub enum Assembler {
     #[default]
     #[strum(serialize = "gas")]
+    #[serde(rename = "gas")]
     Gas,
     #[strum(serialize = "go")]
+    #[serde(rename = "go")]
     Go,
     #[strum(serialize = "masm")]
+    #[serde(rename = "masm")]
     Masm,
     #[strum(serialize = "nasm")]
+    #[serde(rename = "nasm")]
     Nasm,
-    #[strum(serialize = "z80")]
-    Z80,
     #[serde(skip)]
     None,
 }
 
 impl ArchOrAssembler for Assembler {}
+
+impl Assembler {
+    /// Setup directives for an assembler
+    ///
+    /// # Panics
+    ///
+    /// Panics if unable to deserialize `Directive`s
+    pub fn setup_directives(self, names_to_directives: &mut HashMap<(Self, String), Directive>) {
+        match self {
+            Self::Gas => {
+                let start = std::time::Instant::now();
+                let gas_dirs = include_bytes!("serialized/directives/gas");
+                let gas_directives =
+                    bincode::deserialize(gas_dirs).expect("Error deserializing Gas directives\nRegenerate serialized data with regenerate.sh");
+                info!(
+                    "Gas directive set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_directive_map(Self::Gas, &gas_directives, names_to_directives);
+            }
+            Self::Masm => {
+                let start = std::time::Instant::now();
+                let masm_dirs = include_bytes!("serialized/directives/masm");
+                let masm_directives =
+                    bincode::deserialize(masm_dirs).expect("Error deserializing Masm directives\nRegenerate serialized data with regenerate.sh");
+                info!(
+                    "MASM directive set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_directive_map(Self::Masm, &masm_directives, names_to_directives);
+            }
+            Self::Nasm => {
+                let start = std::time::Instant::now();
+                let nasm_dirs = include_bytes!("serialized/directives/nasm");
+                let nasm_directives =
+                    bincode::deserialize(nasm_dirs).expect("Error deserializing Nasm directives\nRegenerate serialized data with regenerate.sh");
+                info!(
+                    "Nasm directive set loaded in {}ms",
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_directive_map(Self::Nasm, &nasm_directives, names_to_directives);
+            }
+            Self::Go => {
+                warn!("There is currently no Go-specific assembler documentation");
+            }
+            Self::None => unreachable!(),
+        }
+    }
+}
 
 #[derive(
     Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Display, Serialize, Deserialize,
@@ -816,7 +1154,6 @@ impl std::fmt::Display for RegisterBitInfo {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RootConfig {
-    // #[serde(flatten)]
     pub default_config: Option<Config>,
     #[serde(rename = "project")]
     pub projects: Option<Vec<ProjectConfig>>,
@@ -886,6 +1223,46 @@ impl RootConfig {
         );
     }
 
+    /// # Panics
+    ///
+    /// Will panic if `self.default_config` is `None`
+    #[must_use]
+    pub fn effective_arches(&self) -> Vec<Arch> {
+        let mut arch_set = HashSet::new();
+
+        // NOTE: `self.default_config` is assumed to be set to `Some` in
+        // `get_root_config`
+        assert!(self.default_config.is_some());
+        arch_set.insert(self.default_config.as_ref().unwrap().instruction_set);
+        if let Some(ref projects) = self.projects {
+            for project in projects {
+                arch_set.insert(project.config.instruction_set);
+            }
+        }
+
+        arch_set.into_iter().collect()
+    }
+
+    /// # Panics
+    ///
+    /// Will panic if `self.default_config` is `None`
+    #[must_use]
+    pub fn effective_assemblers(&self) -> Vec<Assembler> {
+        let mut assembler_set = HashSet::new();
+
+        // NOTE: `self.default_config` is assumed to be set to `Some` in
+        // `get_root_config`
+        assert!(self.default_config.is_some());
+        assembler_set.insert(self.default_config.as_ref().unwrap().assembler);
+        if let Some(ref projects) = self.projects {
+            for project in projects {
+                assembler_set.insert(project.config.assembler);
+            }
+        }
+
+        assembler_set.into_iter().collect()
+    }
+
     /// Sets the `client` field of the default config and all project configs
     pub fn set_client(&mut self, client: LspClient) {
         if let Some(ref mut root) = self.default_config {
@@ -943,9 +1320,6 @@ pub struct ProjectConfig {
     // path to a directory or source file on which this config applies
     // can be relative to the server's root directory, or absolute
     pub path: PathBuf,
-    // Means to override compilation behavior for this project. The input file
-    // should not be included
-    pub compile_cmd: Option<String>,
     #[serde(flatten)]
     pub config: Config,
 }
@@ -974,23 +1348,23 @@ impl Default for Config {
 
 impl Config {
     #[must_use]
-    pub const fn empty() -> Self {
-        Self {
-            version: None,
-            assembler: Assembler::None,
-            instruction_set: Arch::None,
-            opts: Some(ConfigOptions::empty()),
-            client: None,
-        }
-    }
-
-    #[must_use]
     pub fn get_compiler(&self) -> Option<&str> {
         match self.opts {
             Some(ConfigOptions {
                 compiler: Some(ref compiler),
                 ..
             }) => Some(compiler),
+            _ => None,
+        }
+    }
+
+    #[must_use]
+    pub const fn get_compile_flags_txt(&self) -> Option<&Vec<String>> {
+        match self.opts {
+            Some(ConfigOptions {
+                compile_flags_txt: Some(ref flags),
+                ..
+            }) => Some(flags),
             _ => None,
         }
     }
@@ -1016,6 +1390,10 @@ impl Config {
 pub struct ConfigOptions {
     // Specify compiler to generate diagnostics via `compile_flags.txt`
     pub compiler: Option<String>,
+    // List of compile flags to override compilation behavior for this config.
+    // Do not include the input source file as an argument
+    // *Not* a path to `compile_flags.txt`
+    pub compile_flags_txt: Option<Vec<String>>,
     // Turn diagnostics feature on/off
     pub diagnostics: Option<bool>,
     // Turn default diagnostics (no compilation db detected) on/off
@@ -1026,18 +1404,9 @@ impl Default for ConfigOptions {
     fn default() -> Self {
         Self {
             compiler: None,
+            compile_flags_txt: None,
             diagnostics: Some(true),
             default_diagnostics: Some(true),
-        }
-    }
-}
-
-impl ConfigOptions {
-    const fn empty() -> Self {
-        Self {
-            compiler: None,
-            diagnostics: Some(false),
-            default_diagnostics: Some(false),
         }
     }
 }
@@ -1047,7 +1416,7 @@ pub enum LspClient {
     Helix,
 }
 
-// Instruction Set Architecture -------------------------------------------------------------------
+// Instruction Set Architecture
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, EnumString, AsRefStr, Serialize, Deserialize)]
 pub enum ISA {
     #[strum(serialize = "RAO-INT")]
@@ -1172,7 +1541,7 @@ pub enum ISA {
     A64,
 }
 
-// Operand ----------------------------------------------------------------------------------------
+// Operand
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 pub struct Operand {
     pub type_: OperandType,
@@ -1312,7 +1681,7 @@ pub enum OperandType {
     tmm,
 }
 
-// lsp types --------------------------------------------------------------------------------------
+// lsp types
 
 /// Represents a text cursor between characters, pointing at the next character in the buffer.
 pub type Column = usize;
