@@ -1,4 +1,4 @@
-use crate::ustr;
+use crate::{ustr, CompletionItems, DocumentStore, Hoverable, ServerStore};
 use std::borrow::ToOwned;
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
@@ -15,12 +15,13 @@ use compile_commands::{CompilationDatabase, CompileArgs, CompileCommand, SourceF
 use dirs::config_dir;
 use log::{error, info, log, log_enabled, warn};
 use lsp_server::{Connection, Message, RequestId, Response};
-use lsp_textdocument::{FullTextDocument, TextDocuments};
+use lsp_textdocument::FullTextDocument;
+use lsp_types::notification::Notification as _;
 use lsp_types::{
     CompletionItem, CompletionItemKind, CompletionList, CompletionParams, CompletionTriggerKind,
     Diagnostic, DocumentSymbol, DocumentSymbolParams, Documentation, GotoDefinitionParams,
     GotoDefinitionResponse, Hover, HoverContents, HoverParams, InitializeParams, Location,
-    MarkupContent, MarkupKind, Position, Range, ReferenceParams, SignatureHelp,
+    MarkupContent, MarkupKind, MessageType, Position, Range, ReferenceParams, SignatureHelp,
     SignatureHelpParams, SignatureInformation, SymbolKind, TextDocumentContentChangeEvent,
     TextDocumentPositionParams, Uri,
 };
@@ -33,7 +34,7 @@ use tree_sitter::InputEdit;
 use crate::types::Column;
 use crate::{
     Arch, ArchOrAssembler, Assembler, Completable, Config, ConfigOptions, Directive, Instruction,
-    LspClient, NameToInstructionMap, Register, RootConfig, TreeEntry, TreeStore,
+    LspClient, NameToInstructionMap, RootConfig, TreeEntry,
 };
 
 /// Sends an empty, non-error response to the lsp client via `connection`
@@ -55,6 +56,26 @@ pub fn send_empty_resp(connection: &Connection, id: RequestId, config: &Config) 
     } else {
         Ok(connection.sender.send(Message::Response(empty_resp))?)
     }
+}
+
+/// Sends a notification with to the client
+/// Param `message` is the owned type `String` to help reduce redundant allocations
+///
+/// # Errors
+///
+/// Returns `Err` if the response fails to send via `connection`
+///
+/// # Panics
+///
+/// Panics if JSON encoding of the notification fails
+pub fn send_notification(message: String, typ: MessageType, connection: &Connection) -> Result<()> {
+    let msg_params = lsp_types::ShowMessageParams { typ, message };
+    let result = serde_json::to_value(msg_params).unwrap();
+    let err_notif = lsp_server::Notification {
+        method: lsp_types::notification::ShowMessage::METHOD.to_string(),
+        params: result,
+    };
+    Ok(connection.sender.send(Message::Notification(err_notif))?)
 }
 
 /// Find the ([start], [end]) indices and the cursor's offset in a word
@@ -311,7 +332,7 @@ fn get_additional_include_dirs(compile_cmds: &CompilationDatabase) -> Vec<(Sourc
 /// `CompilationDatabase` object
 ///
 /// If both are present, `compile_commands.json` will override `compile_flags.txt`
-pub fn get_compile_cmds(params: &InitializeParams) -> Option<CompilationDatabase> {
+pub fn get_compile_cmds_from_file(params: &InitializeParams) -> Option<CompilationDatabase> {
     if let Some(mut path) = get_project_root(params) {
         // Check the project root directory first
         let db = get_compilation_db_files(&path);
@@ -348,16 +369,28 @@ fn get_compilation_db_files(path: &Path) -> Option<CompilationDatabase> {
     None
 }
 
-/// Attempts to find the user-provided compile command for `req_uri`, as specified within a
-/// `project` field in `.asm-lsp.toml`
+/// Returns the compile command associated with `uri` if it exists, or the default
+/// one from `compile_cmds` otherwise
 ///
-/// NOTE: The `directory` field is intentionally left empty. If this function is being used
-/// in a new place, please reconsider this assumption
+/// - If the user specified a `compiler` *and* flags in their config, use that
+/// - If the user specified a `compiler` but no flags in their config (`None`,
+///   *not* an empty `Vec`), try to find flags from `compile_flags.txt` in
+///   `compile_cmds` and combine the two
+/// - If the user didn't specify any compiler info in the relevant config, return
+///   the default commands from `compile_cmds`
 ///
 /// # Panics
 ///
-/// Will panic if `req_uri` cannot be canonicalized
-pub fn get_comp_cmd_for_path(config: &RootConfig, req_uri: &Uri) -> Option<CompileCommand> {
+/// Will panic if `req_uri` can't be canonicalized
+///
+/// NOTE: Several fields within the returned `CompilationDatabase` are intentionally left
+/// uninitialized to avoid unnecessary allocations. If you're using this function
+/// in a new place, please reconsider this assumption
+pub fn get_compile_cmd_for_req(
+    config: &RootConfig,
+    req_uri: &Uri,
+    compile_cmds: &CompilationDatabase,
+) -> CompilationDatabase {
     #[allow(irrefutable_let_patterns)]
     let Ok(req_path) = PathBuf::from_str(req_uri.path().as_str()) else {
         unreachable!()
@@ -366,39 +399,61 @@ pub fn get_comp_cmd_for_path(config: &RootConfig, req_uri: &Uri) -> Option<Compi
         Ok(path) => path,
         Err(e) => panic!("Invalid request path: \"{}\" - {e}", req_path.display()),
     };
-    // if the path is within a project configuration and that project specifies
-    // a compiler invocation, use it
-    if let Some(project) = config.get_project(&request_path) {
-        if let Some(ref cmd) = project.compile_cmd {
-            info!("Used config compile command!");
-            let args = {
-                let mut user_cmds: Vec<String> =
-                    cmd.split_whitespace().map(ToString::to_string).collect();
-                if let Some(path) = request_path.to_str() {
-                    user_cmds.push(path.to_string()); // append the request path as the last
-                                                      // compiler argument
-                }
-                user_cmds
-            };
-            // let directory = if project.path.is_dir() {
-            //     project.path.clone()
-            // } else {
-            //     project
-            //         .path
-            //         .parent()
-            //         .map_or(PathBuf::new(), ToOwned::to_owned)
-            // };
-            return Some(CompileCommand {
-                file: SourceFile::File(request_path.clone()),
+    let config = config.get_config(req_uri);
+    match (config.get_compiler(), config.get_compile_flags_txt()) {
+        (Some(compiler), Some(flags)) => {
+            // Fill out the full command invocation
+            let mut args = vec![compiler.to_owned()];
+            args.append(&mut flags.clone());
+            args.push(request_path.to_str().unwrap_or_default().to_string());
+            vec![CompileCommand {
+                file: SourceFile::File(request_path),
                 directory: PathBuf::new(),
                 arguments: Some(CompileArgs::Arguments(args)),
                 command: None,
                 output: None,
-            });
+            }]
+        }
+        (Some(compiler), None) => {
+            // Fill out the full command invocation, check if `compile_cmds`
+            // has flags to tack on
+            let mut args = vec![compiler.to_owned()];
+            // Check if we have flags as the first compile command from files,
+            // `compile_flags.txt` files get loaded as a single `CompileCommand`
+            // object as structured in the below `if` block
+            if compile_cmds.len() == 1 {
+                if let CompileCommand {
+                    arguments: Some(CompileArgs::Flags(flags)),
+                    ..
+                } = &compile_cmds[0]
+                {
+                    args.append(&mut flags.clone());
+                }
+            }
+            args.push(request_path.to_str().unwrap_or_default().to_string());
+            vec![CompileCommand {
+                file: SourceFile::File(request_path),
+                directory: PathBuf::new(),
+                arguments: Some(CompileArgs::Arguments(args)),
+                command: None,
+                output: None,
+            }]
+        }
+        (None, Some(flags)) => {
+            // Fill out flags, no compiler
+            vec![CompileCommand {
+                file: SourceFile::File(request_path),
+                directory: PathBuf::new(),
+                arguments: Some(CompileArgs::Flags(flags.clone())),
+                command: None,
+                output: None,
+            }]
+        }
+        (None, None) => {
+            // Grab the default command from `compile_cmds`
+            compile_cmds.clone()
         }
     }
-
-    None
 }
 
 /// Returns a default `CompileCommand` for the provided `uri`.
@@ -631,7 +686,7 @@ pub fn text_doc_change_to_ts_edit(
 /// contained within the map
 #[must_use]
 pub fn get_completes<T: Completable, U: ArchOrAssembler>(
-    map: &HashMap<(U, &str), T>,
+    map: &HashMap<(U, String), T>,
     kind: Option<CompletionItemKind>,
 ) -> Vec<(U, CompletionItem)> {
     map.iter()
@@ -660,14 +715,10 @@ pub fn get_hover_resp(
     config: &Config,
     word: &str,
     cursor_offset: usize,
-    text_store: &TextDocuments,
-    tree_store: &mut TreeStore,
-    instruction_map: &HashMap<(Arch, &str), &Instruction>,
-    register_map: &HashMap<(Arch, &str), &Register>,
-    directive_map: &HashMap<(Assembler, &str), &Directive>,
-    include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
+    doc_store: &mut DocumentStore,
+    store: &ServerStore,
 ) -> Option<Hover> {
-    let instr_lookup = get_instr_hover_resp(word, instruction_map, config);
+    let instr_lookup = get_hover_resp_by_arch(word, &store.names_to_info.instructions, config);
     if instr_lookup.is_some() {
         return instr_lookup;
     }
@@ -678,19 +729,22 @@ pub fn get_hover_resp(
             || config.is_assembler_enabled(Assembler::Masm)
         {
             // all gas directives have a '.' prefix, some masm directives do
-            let directive_lookup = get_directive_hover_resp(word, directive_map, config);
+            let directive_lookup =
+                get_directive_hover_resp(word, &store.names_to_info.directives, config);
             if directive_lookup.is_some() {
                 return directive_lookup;
             }
         } else if config.is_assembler_enabled(Assembler::Nasm) {
             // most nasm directives have no prefix, 2 have a '.' prefix
-            let directive_lookup = get_directive_hover_resp(word, directive_map, config);
+            let directive_lookup =
+                get_directive_hover_resp(word, &store.names_to_info.directives, config);
             if directive_lookup.is_some() {
                 return directive_lookup;
             }
             // Some nasm directives have a % prefix
             let prefixed = format!("%{word}");
-            let directive_lookup = get_directive_hover_resp(&prefixed, directive_map, config);
+            let directive_lookup =
+                get_directive_hover_resp(&prefixed, &store.names_to_info.directives, config);
             if directive_lookup.is_some() {
                 return directive_lookup;
             }
@@ -699,12 +753,12 @@ pub fn get_hover_resp(
 
     let reg_lookup = if config.is_isa_enabled(Arch::ARM64) {
         word.find('.').map_or_else(
-            || get_reg_hover_resp(&word[0..], register_map, config),
+            || get_hover_resp_by_arch(word, &store.names_to_info.registers, config),
             |dot| {
                 if cursor_offset <= dot {
                     // main vector register info on ARM64
                     let main_register = &word[0..dot];
-                    get_reg_hover_resp(main_register, register_map, config)
+                    get_hover_resp_by_arch(main_register, &store.names_to_info.registers, config)
                 } else {
                     // if Vector = V21.2D -> lower Register = D21
                     // lower vector register info on ARM64
@@ -714,12 +768,12 @@ pub fn get_hover_resp(
                     lower_register.push_str(&word[reg_letter..]);
                     let reg_num = 1..dot;
                     lower_register.push_str(&word[reg_num]);
-                    get_reg_hover_resp(&lower_register, register_map, config)
+                    get_hover_resp_by_arch(&lower_register, &store.names_to_info.registers, config)
                 }
             },
         )
     } else {
-        get_reg_hover_resp(word, register_map, config)
+        get_hover_resp_by_arch(word, &store.names_to_info.registers, config)
     };
 
     if reg_lookup.is_some() {
@@ -729,8 +783,7 @@ pub fn get_hover_resp(
     let label_data = get_label_resp(
         word,
         &params.text_document_position_params.text_document.uri,
-        text_store,
-        tree_store,
+        doc_store,
     );
     if label_data.is_some() {
         return label_data;
@@ -744,7 +797,7 @@ pub fn get_hover_resp(
     let include_path = get_include_resp(
         &params.text_document_position_params.text_document.uri,
         word,
-        include_dirs,
+        &store.include_dirs,
     );
     if include_path.is_some() {
         return include_path;
@@ -753,83 +806,43 @@ pub fn get_hover_resp(
     None
 }
 
-fn search_for_instr_by_arch<'a>(
+fn search_for_hoverable_by_arch<'a, T: Hoverable>(
     word: &'a str,
-    instr_map: &'a HashMap<(Arch, &str), &Instruction>,
+    map: &'a HashMap<(Arch, String), T>,
     config: &Config,
-) -> (Option<&'a Instruction>, Option<&'a Instruction>) {
+) -> (Option<&'a T>, Option<&'a T>) {
     match config.instruction_set {
         Arch::X86_AND_X86_64 => {
-            let x86_resp = instr_map.get(&(Arch::X86, word)).copied();
-            let x86_64_resp = instr_map.get(&(Arch::X86_64, word)).copied();
+            let x86_resp = map.get(&(Arch::X86, word.to_string()));
+            let x86_64_resp = map.get(&(Arch::X86_64, word.to_string()));
             (x86_resp, x86_64_resp)
         }
-        arch => (instr_map.get(&(arch, word)).copied(), None),
-    }
-}
-
-fn search_for_reg_by_arch<'a>(
-    word: &'a str,
-    reg_map: &'a HashMap<(Arch, &str), &Register>,
-    config: &Config,
-) -> (Option<&'a Register>, Option<&'a Register>) {
-    match config.instruction_set {
-        Arch::X86_AND_X86_64 => {
-            let x86_resp = reg_map.get(&(Arch::X86, word)).copied();
-            let x86_64_resp = reg_map.get(&(Arch::X86_64, word)).copied();
-            (x86_resp, x86_64_resp)
-        }
-        arch => (reg_map.get(&(arch, word)).copied(), None),
+        arch => (map.get(&(arch, word.to_string())), None),
     }
 }
 
 fn search_for_dir_by_assembler<'a>(
     word: &'a str,
-    dir_map: &'a HashMap<(Assembler, &str), &Directive>,
+    dir_map: &'a HashMap<(Assembler, String), Directive>,
     config: &Config,
 ) -> Option<&'a Directive> {
-    dir_map.get(&(config.assembler, word)).copied()
+    dir_map.get(&(config.assembler, word.to_string()))
 }
 
-fn get_instr_hover_resp(
+fn get_hover_resp_by_arch<T: Hoverable>(
     word: &str,
-    instr_map: &HashMap<(Arch, &str), &Instruction>,
+    map: &HashMap<(Arch, String), T>,
     config: &Config,
 ) -> Option<Hover> {
+    // ensure hovered text is always lowercase
     let hovered_word = word.to_ascii_lowercase();
-    let instr_resp = search_for_instr_by_arch(&hovered_word, instr_map, config);
+    let instr_resp = search_for_hoverable_by_arch(&hovered_word, map, config);
     let value = match instr_resp {
-        (Some(instr1), Some(instr2)) => {
-            format!("{instr1}\n\n{instr2}")
+        (Some(resp1), Some(resp2)) => {
+            format!("{resp1}\n\n{resp2}")
         }
-        (Some(instr), None) | (None, Some(instr)) => {
-            format!("{instr}")
-        }
-        (None, None) => return None,
-    };
-
-    Some(Hover {
-        contents: HoverContents::Markup(MarkupContent {
-            kind: MarkupKind::Markdown,
-            value,
-        }),
-        range: None,
-    })
-}
-
-fn get_reg_hover_resp(
-    word: &str,
-    reg_map: &HashMap<(Arch, &str), &Register>,
-    config: &Config,
-) -> Option<Hover> {
-    let hovered_text = word.to_ascii_lowercase();
-    let reg_resp = search_for_reg_by_arch(&hovered_text, reg_map, config);
-    let value = match reg_resp {
-        (Some(reg1), Some(reg2)) => {
-            format!("{reg1}\n\n{reg2}")
-        }
-        (Some(reg), None) | (None, Some(reg)) => {
-            format!("{reg}")
+        (Some(resp), None) | (None, Some(resp)) => {
+            format!("{resp}")
         }
         (None, None) => return None,
     };
@@ -845,7 +858,7 @@ fn get_reg_hover_resp(
 
 fn get_directive_hover_resp(
     word: &str,
-    dir_map: &HashMap<(Assembler, &str), &Directive>,
+    dir_map: &HashMap<(Assembler, String), Directive>,
     config: &Config,
 ) -> Option<Hover> {
     let hovered_word = word.to_ascii_lowercase();
@@ -859,15 +872,10 @@ fn get_directive_hover_resp(
 }
 
 /// Returns the data associated with a given label `word`
-fn get_label_resp(
-    word: &str,
-    uri: &Uri,
-    text_store: &TextDocuments,
-    tree_store: &mut TreeStore,
-) -> Option<Hover> {
-    if let Some(doc) = text_store.get_document(uri) {
+fn get_label_resp(word: &str, uri: &Uri, doc_store: &mut DocumentStore) -> Option<Hover> {
+    if let Some(doc) = doc_store.text_store.get_document(uri) {
         let curr_doc = doc.get_content(None).as_bytes();
-        if let Some(ref mut tree_entry) = tree_store.get_mut(uri) {
+        if let Some(ref mut tree_entry) = doc_store.tree_store.get_mut(uri) {
             tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
             if let Some(ref tree) = tree_entry.tree {
                 static QUERY_LABEL_DATA: Lazy<tree_sitter::Query> = Lazy::new(|| {
@@ -1073,9 +1081,7 @@ pub fn get_comp_resp(
     tree_entry: &mut TreeEntry,
     params: &CompletionParams,
     config: &Config,
-    instr_comps: &[(Arch, CompletionItem)],
-    dir_comps: &[(Assembler, CompletionItem)],
-    reg_comps: &[(Arch, CompletionItem)],
+    completion_items: &CompletionItems,
 ) -> Option<CompletionList> {
     let cursor_line = params.text_document_position.position.line as usize;
     let cursor_char = params.text_document_position.position.character as usize;
@@ -1091,10 +1097,17 @@ pub fn get_comp_resp(
                 Some("%") => {
                     let mut items = Vec::new();
                     if config.is_isa_enabled(Arch::X86) || config.is_isa_enabled(Arch::X86_64) {
-                        items.append(&mut filtered_comp_list_arch(reg_comps, config));
+                        items.append(&mut filtered_comp_list_arch(
+                            &completion_items.registers,
+                            config,
+                        ));
                     }
                     if config.is_assembler_enabled(Assembler::Nasm) {
-                        items.append(&mut filtered_comp_list_assem(dir_comps, config, Some('%')));
+                        items.append(&mut filtered_comp_list_assem(
+                            &completion_items.directives,
+                            config,
+                            Some('%'),
+                        ));
                     }
 
                     if !items.is_empty() {
@@ -1112,7 +1125,11 @@ pub fn get_comp_resp(
                     {
                         return Some(CompletionList {
                             is_incomplete: true,
-                            items: filtered_comp_list_assem(dir_comps, config, Some('.')),
+                            items: filtered_comp_list_assem(
+                                &completion_items.directives,
+                                config,
+                                Some('.'),
+                            ),
                         });
                     }
                 }
@@ -1152,7 +1169,8 @@ pub fn get_comp_resp(
                 let arg_start = cap.node.range().start_point;
                 let arg_end = cap.node.range().end_point;
                 if cursor_matches!(cursor_line, cursor_char, arg_start, arg_end) {
-                    let items = filtered_comp_list_assem(dir_comps, config, None);
+                    let items =
+                        filtered_comp_list_assem(&completion_items.directives, config, None);
                     return Some(CompletionList {
                         is_incomplete: true,
                         items,
@@ -1233,13 +1251,21 @@ pub fn get_comp_resp(
                     // number after must be a register or label
                     let is_instr = cap_num == 0;
                     let mut items = filtered_comp_list_arch(
-                        if is_instr { instr_comps } else { reg_comps },
+                        if is_instr {
+                            &completion_items.instructions
+                        } else {
+                            &completion_items.registers
+                        },
                         config,
                     );
                     if is_instr {
                         // Sometimes tree-sitter-asm parses a directive as an instruction, so we'll
                         // suggest both in this case
-                        items.append(&mut filtered_comp_list_assem(dir_comps, config, None));
+                        items.append(&mut filtered_comp_list_assem(
+                            &completion_items.directives,
+                            config,
+                            None,
+                        ));
                     } else {
                         items.append(
                             &mut labels
@@ -1376,9 +1402,6 @@ pub fn get_document_symbols(
 
 /// Produces a signature help response if the appropriate instruction forms can
 /// be found
-///
-/// # Panics
-#[allow(clippy::too_many_lines)]
 pub fn get_sig_help_resp(
     curr_doc: &str,
     params: &SignatureHelpParams,
@@ -1420,25 +1443,24 @@ pub fn get_sig_help_resp(
             if caps.len() == 1 && caps[0].node.end_byte() < curr_doc.len() {
                 if let Ok(instr_name) = caps[0].node.utf8_text(curr_doc) {
                     let mut value = String::new();
-                    let (instr1, instr2) = search_for_instr_by_arch(instr_name, instr_info, config);
+                    let (instr1, instr2) =
+                        search_for_hoverable_by_arch(instr_name, instr_info, config);
                     let instructions = vec![instr1, instr2];
                     for instr in instructions.into_iter().flatten() {
                         for form in &instr.forms {
                             match instr.arch {
-                                Some(Arch::X86 | Arch::X86_64) => {
+                                Arch::X86 | Arch::X86_64 => {
                                     if let Some(ref gas_name) = form.gas_name {
                                         if instr_name.eq_ignore_ascii_case(gas_name) {
-                                            value +=
-                                                &format!("**{}**\n{form}\n", instr.arch.unwrap());
+                                            value += &format!("**{}**\n{form}\n", instr.arch);
                                         }
                                     } else if let Some(ref go_name) = form.go_name {
                                         if instr_name.eq_ignore_ascii_case(go_name) {
-                                            value +=
-                                                &format!("**{}**\n{form}\n", instr.arch.unwrap());
+                                            value += &format!("**{}**\n{form}\n", instr.arch);
                                         }
                                     }
                                 }
-                                Some(Arch::Z80) => {
+                                Arch::Z80 => {
                                     for form in &instr.forms {
                                         if let Some(ref z80_name) = form.z80_name {
                                             if instr_name.eq_ignore_ascii_case(z80_name) {
@@ -1447,7 +1469,7 @@ pub fn get_sig_help_resp(
                                         }
                                     }
                                 }
-                                Some(Arch::ARM | Arch::RISCV) => {
+                                Arch::ARM | Arch::RISCV => {
                                     for form in &instr.asm_templates {
                                         value += &format!("{form}\n");
                                     }
@@ -1617,27 +1639,53 @@ pub fn get_ref_resp(
 
 /// Searches for global config in ~/.config/asm-lsp, then the project's directory
 /// Project specific configs will override global configs
-#[must_use]
-pub fn get_root_config(params: &InitializeParams) -> RootConfig {
+///
+/// If no valid config files can be found, this function will cause the program
+/// to exit with code -1
+///
+/// # Errors
+///
+/// Will return `Err` if an invalid configuration file is found
+pub fn get_root_config(params: &InitializeParams) -> Result<RootConfig> {
+    let report_err = |msg: &str| -> Result<RootConfig> {
+        error!("{msg}");
+        Err(anyhow!(msg.to_string()))
+    };
     let mut config = match (get_global_config(), get_project_config(params)) {
-        (_, Some(proj_cfg)) => proj_cfg,
-        (Some(global_cfg), None) => global_cfg,
-        (None, None) => RootConfig::default(),
+        // If we have a valid project config, ignore bad global configs
+        (_, Some(Ok(proj_cfg))) => proj_cfg,
+        (Some(Ok(global_cfg)), None) => global_cfg,
+        (Some(Ok(_)) | None, Some(Err(e))) => {
+            return report_err(&format!("Inavlid project config file -- {e}"));
+        }
+        (Some(Err(e)), None) => {
+            return report_err(&format!("Invalid global config file -- {e}"));
+        }
+        (Some(Err(e_global)), Some(Err(e_project))) => {
+            return report_err(&format!(
+                "Invalid project and global config files -- {e_project} -- {e_global}"
+            ));
+        }
+        (None, None) => {
+            info!("No configuration files found, using default options");
+            RootConfig::default()
+        }
     };
 
     // Validate project paths and enforce default diagnostics settings
     if let Some(ref mut projects) = config.projects {
-        if let Some(ref path) = get_project_root(params) {
+        if let Some(ref project_root) = get_project_root(params) {
             let mut project_idx = 0;
             while project_idx < projects.len() {
-                let mut path = path.clone();
-                path.push(&projects[project_idx].path);
-                let Ok(project_path) = path.canonicalize() else {
-                    error!("Failed to canonicalize project path \"{}\", disabling this project configuration.", path.display());
-                    projects.remove(project_idx);
-                    continue;
+                let mut project_path = project_root.clone();
+                project_path.push(&projects[project_idx].path);
+                let Ok(canonicalized_project_path) = project_path.canonicalize() else {
+                    return report_err(&format!(
+                        "Failed to canonicalize project path \"{}\".",
+                        project_path.display()
+                    ));
                 };
-                projects[project_idx].path = project_path;
+                projects[project_idx].path = canonicalized_project_path;
                 if let Some(ref mut opts) = projects[project_idx].config.opts {
                     // Want diagnostics enabled by default
                     if opts.diagnostics.is_none() {
@@ -1654,8 +1702,7 @@ pub fn get_root_config(params: &InitializeParams) -> RootConfig {
                 project_idx += 1;
             }
         } else {
-            error!("Unable to detect project root directory. The projects configuration feature has been disabled.");
-            *projects = Vec::new();
+            return report_err("Unable to detect project root directory.");
         }
 
         // sort project configurations so when we select a project config at request
@@ -1690,10 +1737,10 @@ pub fn get_root_config(params: &InitializeParams) -> RootConfig {
         let mut path_check = HashSet::new();
         for project in projects {
             if path_check.contains(&project.path) {
-                error!(
+                return report_err(&format!(
                     "Multiple project configurations for \"{}\".",
                     project.path.display()
-                );
+                ));
             }
             path_check.insert(&project.path);
         }
@@ -1714,16 +1761,17 @@ pub fn get_root_config(params: &InitializeParams) -> RootConfig {
             default_cfg.opts = Some(ConfigOptions::default());
         }
     } else {
+        info!("No `default_config` specified, filling in default options");
         // provide a default empty configuration for sub-directories
         // not specified in `projects`
-        config.default_config = Some(Config::empty());
+        config.default_config = Some(Config::default());
     }
 
-    config
+    Ok(config)
 }
 
 /// Checks ~/.config/asm-lsp for a config file, creating directories along the way as necessary
-fn get_global_config() -> Option<RootConfig> {
+fn get_global_config() -> Option<Result<RootConfig>> {
     let mut paths = if cfg!(target_os = "macos") {
         // `$HOME`/Library/Application Support/ and `$HOME`/.config/
         vec![config_dir(), alt_mac_config_dir()]
@@ -1733,8 +1781,10 @@ fn get_global_config() -> Option<RootConfig> {
 
     for cfg_path in paths.iter_mut().flatten() {
         cfg_path.push("asm-lsp");
-        let cfg_path_s = cfg_path.display();
-        info!("Creating directories along {} as necessary...", cfg_path_s);
+        info!(
+            "Creating directories along {} as necessary...",
+            cfg_path.display()
+        );
         match create_dir_all(&cfg_path) {
             Ok(()) => {
                 cfg_path.push(".asm-lsp.toml");
@@ -1742,19 +1792,24 @@ fn get_global_config() -> Option<RootConfig> {
                     let cfg_path_s = cfg_path.display();
                     match toml::from_str::<RootConfig>(&config) {
                         Ok(config) => {
-                            info!("Parsing global asm-lsp config from file -> {cfg_path_s}\n");
-                            return Some(config);
+                            info!(
+                                "Parsing global asm-lsp config from file -> {}",
+                                cfg_path.display()
+                            );
+                            return Some(Ok(config));
                         }
                         Err(e) => {
-                            error!(
-                                "Failed to parse global config file {cfg_path_s} - Error: {e}\n"
-                            );
+                            error!("Failed to parse global config file {cfg_path_s} - Error: {e}");
+                            return Some(Err(e.into()));
                         }
                     }
                 }
             }
             Err(e) => {
-                error!("Failed to create global config directory {cfg_path_s} - Error: {e}");
+                error!(
+                    "Failed to create global config directory {} - Error: {e}",
+                    cfg_path.display()
+                );
             }
         }
     }
@@ -1822,22 +1877,30 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
 }
 
 /// checks for a config specific to the project's root directory
-fn get_project_config(params: &InitializeParams) -> Option<RootConfig> {
+///
+/// # Errors
+///
+/// Returns `Err` if the file cannot be deserialized
+fn get_project_config(params: &InitializeParams) -> Option<Result<RootConfig>> {
     if let Some(mut path) = get_project_root(params) {
         path.push(".asm-lsp.toml");
         match std::fs::read_to_string(&path) {
-            Ok(config) => {
-                let path_s = path.display();
-                match toml::from_str::<RootConfig>(&config) {
-                    Ok(config) => {
-                        info!("Parsing asm-lsp project config from file -> {path_s}");
-                        return Some(config);
-                    }
-                    Err(e) => {
-                        error!("Failed to parse project config file {path_s} - Error: {e}");
-                    } // if there's an error we fall through to check for a global config in the caller
+            Ok(config) => match toml::from_str::<RootConfig>(&config) {
+                Ok(config) => {
+                    info!(
+                        "Parsing asm-lsp project config from file -> {}",
+                        path.display()
+                    );
+                    return Some(Ok(config));
                 }
-            }
+                Err(e) => {
+                    error!(
+                        "Failed to parse project config file {} - Error: {e}",
+                        path.display()
+                    );
+                    return Some(Err(e.into()));
+                }
+            },
             Err(e) => {
                 error!("Failed to read config file {} - Error: {e}", path.display());
             }

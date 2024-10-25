@@ -116,7 +116,7 @@ pub fn populate_riscv_registers(rst_contents: &str) -> Vec<Register> {
                     name: reg_name,
                     description: Some(description),
                     reg_type: curr_reg_type,
-                    arch: Some(Arch::RISCV),
+                    arch: Arch::RISCV,
                     ..Default::default()
                 };
                 registers.push(curr_register);
@@ -185,7 +185,6 @@ pub fn populate_riscv_instructions(docs_path: &PathBuf) -> Result<Vec<Instructio
 ///
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
-#[allow(clippy::too_many_lines)]
 fn parse_riscv_instructions(rst_contents: &str) -> Vec<Instruction> {
     // We could pull in an actual rst parser to do this, but the files' contents
     // are straightforward/structured enough that this should be fairly trivial
@@ -202,7 +201,7 @@ fn parse_riscv_instructions(rst_contents: &str) -> Vec<Instruction> {
     let mut parse_state = ParseState::FileStart;
     let mut instructions = Vec::new();
     let mut curr_instruction = Instruction {
-        arch: Some(Arch::RISCV),
+        arch: Arch::RISCV,
         ..Default::default()
     };
     let mut lines = rst_contents.lines().peekable();
@@ -330,7 +329,7 @@ fn parse_riscv_instructions(rst_contents: &str) -> Vec<Instruction> {
 
                 instructions.push(curr_instruction);
                 curr_instruction = Instruction {
-                    arch: Some(Arch::RISCV),
+                    arch: Arch::RISCV,
                     ..Default::default()
                 };
             }
@@ -438,7 +437,7 @@ pub fn populate_arm_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>
                     // TODO:currently changing into either doesn't change
                     // anything as both source form the 64bit info which should
                     // change when arm32 info is added
-                    arch: Some(Arch::ARM64),
+                    arch: Arch::ARM64,
                     aliases: aliases.to_owned(),
                     ..Default::default()
                 },
@@ -562,7 +561,7 @@ fn parse_arm_instruction(xml_contents: &str) -> Option<Instruction> {
     // ref to the instruction that's currently under construction
     let mut instruction = Instruction {
         // TODO: switch for archs
-        arch: Some(Arch::ARM64),
+        arch: Arch::ARM64,
         ..Default::default()
     };
     let mut curr_template: Option<String> = None;
@@ -663,7 +662,7 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
     // ref to the instruction that's currently under construction
     let mut curr_instruction = Instruction::default();
     let mut curr_instruction_form = InstructionForm::default();
-    let mut arch: Option<Arch> = None;
+    let mut arch: Arch = Arch::None;
 
     debug!("Parsing instruction XML contents...");
     loop {
@@ -675,7 +674,9 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
                             if b"name" == key.into_inner() {
-                                arch = Arch::from_str(ustr::get_str(&value)).ok();
+                                arch = Arch::from_str(ustr::get_str(&value)).unwrap_or_else(|e| {
+                                    panic!("Failed parse Arch {} -- {e}", ustr::get_str(&value))
+                                });
                             } else {
                                 warn!("Failed to parse architecture name");
                             }
@@ -955,6 +956,7 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                 match e.name() {
                     QName(b"Instruction") => {
                         // finish instruction
+                        assert!(curr_instruction.arch != Arch::None);
                         instructions_map
                             .insert(curr_instruction.name.clone(), curr_instruction.clone());
                     }
@@ -970,7 +972,7 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
         }
     }
 
-    if let Some(Arch::X86 | Arch::X86_64) = arch {
+    if matches!(arch, Arch::X86 | Arch::X86_64) {
         let x86_online_docs = get_x86_docs_url();
         let body = get_docs_body(&x86_online_docs).unwrap_or_default();
         let body_it = body.split("<td>").skip(1).step_by(2);
@@ -999,23 +1001,19 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
     Ok(instructions_map.into_values().collect())
 }
 
-pub fn populate_name_to_instruction_map<'instruction>(
+pub fn populate_name_to_instruction_map(
     arch: Arch,
-    instructions: &'instruction Vec<Instruction>,
-    names_to_instructions: &mut NameToInstructionMap<'instruction>,
+    instructions: &Vec<Instruction>,
+    names_to_instructions: &mut NameToInstructionMap,
 ) {
-    // Add the "true" names first
     for instruction in instructions {
-        for name in &instruction.get_primary_names() {
-            names_to_instructions.insert((arch, name), instruction);
-        }
-    }
-    // Add alternate form names next, ensuring we don't overwrite existing entries
-    for instruction in instructions {
+        names_to_instructions.insert((arch, instruction.name.clone()), instruction.clone());
+        // Inserts instruction form names in addition to the instruction's "main"
+        // name
         for name in &instruction.get_associated_names() {
             names_to_instructions
-                .entry((arch, name))
-                .or_insert_with(|| instruction);
+                .entry((arch, (*name).to_string()))
+                .or_insert_with(|| instruction.clone());
         }
     }
 }
@@ -1044,7 +1042,7 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
     // ref to the register that's currently under construction
     let mut curr_register = Register::default();
     let mut curr_bit_flag = RegisterBitInfo::default();
-    let mut arch: Option<Arch> = None;
+    let mut arch: Arch = Arch::None;
 
     debug!("Parsing register XML contents...");
     loop {
@@ -1056,7 +1054,12 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
                             if b"name" == key.into_inner() {
-                                arch = Arch::from_str(ustr::get_str(&value)).ok();
+                                arch = Arch::from_str(ustr::get_str(&value)).unwrap_or_else(|e| {
+                                    panic!(
+                                        "Unexpected Arch variant {} -- {e}",
+                                        ustr::get_str(&value)
+                                    )
+                                });
                             }
                         }
                     }
@@ -1126,6 +1129,7 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
                 match e.name() {
                     QName(b"Register") => {
                         // finish register
+                        assert!(curr_register.arch != Arch::None);
                         registers_map.insert(curr_register.name.clone(), curr_register.clone());
                     }
                     QName(b"Flag") => {
@@ -1147,14 +1151,14 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
     Ok(registers_map.into_values().collect())
 }
 
-pub fn populate_name_to_register_map<'register>(
+pub fn populate_name_to_register_map(
     arch: Arch,
-    registers: &'register Vec<Register>,
-    names_to_registers: &mut NameToRegisterMap<'register>,
+    registers: &Vec<Register>,
+    names_to_registers: &mut NameToRegisterMap,
 ) {
     for register in registers {
         for name in &register.get_associated_names() {
-            names_to_registers.insert((arch, name), register);
+            names_to_registers.insert((arch, (*name).to_string()), register.clone());
         }
     }
 }
@@ -1346,14 +1350,14 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     Ok(directives_map.into_values().collect())
 }
 
-pub fn populate_name_to_directive_map<'directive>(
+pub fn populate_name_to_directive_map(
     assem: Assembler,
-    directives: &'directive Vec<Directive>,
-    names_to_directives: &mut NameToDirectiveMap<'directive>,
+    directives: &Vec<Directive>,
+    names_to_directives: &mut NameToDirectiveMap,
 ) {
     for directive in directives {
         for name in &directive.get_associated_names() {
-            names_to_directives.insert((assem, name), directive);
+            names_to_directives.insert((assem, (*name).to_string()), directive.clone());
         }
     }
 }
