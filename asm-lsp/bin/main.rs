@@ -1,6 +1,8 @@
 use std::thread::sleep;
 use std::time::Duration;
 
+use asm_lsp::config_builder::{gen_config, GenerateArgs, GenerateOpts};
+use asm_lsp::run_info;
 use asm_lsp::types::LspClient;
 
 use asm_lsp::handle::{handle_notification, handle_request};
@@ -9,6 +11,7 @@ use asm_lsp::{
     send_notification, DocumentStore, RootConfig, ServerStore,
 };
 
+use clap::{Command, FromArgMatches as _, Subcommand};
 use lsp_types::{
     CompletionItemKind, CompletionOptions, CompletionOptionsCompletionItem, DiagnosticOptions,
     DiagnosticServerCapabilities, HoverProviderCapability, InitializeParams, MessageType, OneOf,
@@ -20,7 +23,61 @@ use anyhow::Result;
 use log::{info, warn};
 use lsp_server::{Connection, Message};
 
-/// Entry point of the server. Connects to the client, loads documentation resources,
+#[derive(Subcommand)]
+enum Commands {
+    GenConfig(GenerateArgs),
+    /// Print information about asm-lsp
+    Info,
+    #[clap(hide(true))]
+    Run,
+}
+
+/// Entry point of the lsp. Runs a subcommand is specified, otherwise starts the
+/// lsp server
+///
+/// # Errors
+///
+/// Returns `Err` on failure to parse arguments, if a sub command fails, or if the
+/// server returns an error
+pub fn main() -> Result<()> {
+    let cli = Command::new("asm-lsp").subcommand_required(false);
+    let cli = Commands::augment_subcommands(cli);
+
+    let command = match Commands::from_arg_matches(&cli.get_matches()) {
+        Ok(cmd) => cmd,
+        Err(e) => {
+            // If no subcommand is provided, run the server as normal
+            if e.kind() == clap::error::ErrorKind::MissingSubcommand {
+                Commands::Run
+            } else {
+                eprintln!("{e}");
+                std::process::exit(1);
+            }
+        }
+    };
+    match command {
+        Commands::GenConfig(args) => {
+            let opts: GenerateOpts = match args.try_into() {
+                Ok(opts) => opts,
+                Err(e) => {
+                    eprintln!("{e}");
+                    std::process::exit(1);
+                }
+            };
+
+            if let Err(e) = gen_config(&opts) {
+                eprintln!("Error: {e}");
+                std::process::exit(1);
+            }
+        }
+        Commands::Info => run_info(),
+        Commands::Run => run_lsp()?,
+    }
+
+    Ok(())
+}
+
+/// Entry point of the lsp server. Connects to the client, loads documentation resources,
 /// and then enters the main loop
 ///
 /// # Errors
@@ -30,7 +87,7 @@ use lsp_server::{Connection, Message};
 /// # Panics
 ///
 /// Panics if JSON serialization of the server capabilities fails
-pub fn main() -> Result<()> {
+pub fn run_lsp() -> Result<()> {
     // initialisation
     // Set up logging. Because `stdio_transport` gets a lock on stdout and stdin, we must have our
     // logging only write out to stderr.
