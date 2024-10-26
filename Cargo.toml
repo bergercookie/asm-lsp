@@ -20,6 +20,9 @@ license = "BSD-2-Clause"
 [workspace.dependencies]
 anyhow = "1.0.86"
 bincode = "1.3.3"
+dirs = "5.0.1"
+toml = "0.8.1"
+clap = { version = "4.5.8", features = ["derive", "cargo"] }
 serde = { version = "1.0.204", features = ["derive"] }
 
 [workspace.lints.clippy]

@@ -37,6 +37,34 @@ use crate::{
     LspClient, NameToInstructionMap, RootConfig, TreeEntry,
 };
 
+/// Prints information about the server
+///
+/// - Server version
+/// - Attempts to find the global configuration directories on the host machine,
+///   and indicates whether a `.asm-lsp.toml` config file is present
+pub fn run_info() {
+    println!("asm-lsp-{}\n", env!("CARGO_PKG_VERSION"));
+    let mut global_cfgs: Vec<PathBuf> = get_global_cfg_dirs()
+        .iter()
+        .filter_map(|p| (*p).clone())
+        .collect();
+    println!("Default config architecture: {}", Arch::default());
+    println!(
+        "Global config director{}:",
+        if global_cfgs.len() > 1 { "ies" } else { "y" }
+    );
+    for cfg_path in &mut global_cfgs {
+        cfg_path.push("asm-lsp");
+        print!("\t{}", cfg_path.display());
+        cfg_path.push(".asm-lsp.toml");
+        if cfg_path.exists() {
+            println!(" -- Config detected");
+        } else {
+            println!(" -- No config detected");
+        }
+    }
+}
+
 /// Sends an empty, non-error response to the lsp client via `connection`
 ///
 /// # Errors
@@ -1770,14 +1798,19 @@ pub fn get_root_config(params: &InitializeParams) -> Result<RootConfig> {
     Ok(config)
 }
 
-/// Checks ~/.config/asm-lsp for a config file, creating directories along the way as necessary
-fn get_global_config() -> Option<Result<RootConfig>> {
-    let mut paths = if cfg!(target_os = "macos") {
+#[must_use]
+pub fn get_global_cfg_dirs() -> Vec<Option<PathBuf>> {
+    if cfg!(target_os = "macos") {
         // `$HOME`/Library/Application Support/ and `$HOME`/.config/
         vec![config_dir(), alt_mac_config_dir()]
     } else {
         vec![config_dir()]
-    };
+    }
+}
+
+/// Checks ~/.config/asm-lsp for a config file, creating directories along the way as necessary
+fn get_global_config() -> Option<Result<RootConfig>> {
+    let mut paths = get_global_cfg_dirs();
 
     for cfg_path in paths.iter_mut().flatten() {
         cfg_path.push("asm-lsp");
@@ -1817,7 +1850,10 @@ fn get_global_config() -> Option<Result<RootConfig>> {
     None
 }
 
-fn alt_mac_config_dir() -> Option<PathBuf> {
+// Returns `$HOME`/.config/ for usage on MacOS, as this isn't the default
+// config directory
+#[must_use]
+pub fn alt_mac_config_dir() -> Option<PathBuf> {
     home::home_dir().map(|mut path| {
         path.push(".config");
         path
