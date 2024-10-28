@@ -133,6 +133,18 @@ pub fn main() -> Result<()> {
             std::process::exit(1);
         }
     };
+    if config == RootConfig::default() {
+        let warn_msg_params = lsp_types::ShowMessageParams {
+            typ: lsp_types::MessageType::WARNING,
+            message: "No .asm-lsp.toml config file found. Using default options.".to_string(),
+        };
+        let result = serde_json::to_value(warn_msg_params).unwrap();
+        let err_notif = lsp_server::Notification {
+            method: lsp_types::notification::ShowMessage::METHOD.to_string(),
+            params: result,
+        };
+        connection.sender.send(Message::Notification(err_notif))?;
+    }
     info!("Server Configuration: {:?}", config);
     if let Some(ref client_info) = params.client_info {
         if client_info.name.eq("helix") {

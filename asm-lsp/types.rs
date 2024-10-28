@@ -1143,7 +1143,7 @@ impl std::fmt::Display for RegisterBitInfo {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RootConfig {
     pub default_config: Option<Config>,
     #[serde(rename = "project")]
@@ -1306,7 +1306,7 @@ impl RootConfig {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProjectConfig {
     // path to a directory or source file on which this config applies
     // can be relative to the server's root directory, or absolute
@@ -1315,7 +1315,7 @@ pub struct ProjectConfig {
     pub config: Config,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Config {
     pub version: Option<String>,
     pub assembler: Assembler,
@@ -1377,7 +1377,7 @@ impl Config {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ConfigOptions {
     // Specify compiler to generate diagnostics via `compile_flags.txt`
     pub compiler: Option<String>,
