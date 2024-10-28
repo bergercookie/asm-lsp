@@ -54,18 +54,22 @@ Add a section like the following in your `settings.json` file:
 
 Add a `.asm-lsp.toml` file like the following to your project's root directory
 and/or `~/.config/asm-lsp/` (project configs will override global configs) to
-selectively target specific assemblers and/or instruction sets. Omitting an item
-from the `assemblers` or `instruction_sets` sections is equivalent to setting it
-to `false`. Be default, diagnostics are enabled and the server attempts to invoke
-`gcc` (and then `clang`) to generate them. If the `compiler` config field is specified,
-the server will attempt to use the specified path to generate diagnostics. Different
-configurations can be created for different sub-directories or files  within your
-project as `project`s. Source files not contained within any `project` configs will
-use the default configuration if provided.
+selectively target specific assemblers and/or instruction sets. By default, diagnostics
+are enabled and the server attempts to invoke `gcc` (and then `clang`) to generate
+them. If the `compiler` config field is specified, the server will attempt to use
+the specified compiler to generate diagnostics. Different configurations can be
+created for different sub-directories or files within your project as `project`s.
+Source files not contained within any `project` configs will use the default configuration
+if provided.
+
+#### NOTE:
+
+If the server reads in an invalid configuration file, it will display an error
+message and exit.
 
 ```toml
 [default_config]
-assembler = "Go"
+assembler = "go"
 instruction_set = "x86/x86-64"
 
 [opts]
@@ -76,11 +80,44 @@ default_diagnostics = true
 # Configure the server's treatment of source files in the `arm-project` sub-directory
 [[project]]
 path = "arm-project"
-assembler = "Gas"
+assembler = "gas"
 instruction_set = "arm"
 
-# NOTE: Specifying the `opts` field isn't necessary
+[project.opts]
+compiler = "zig"
+compile_flags_txt = [
+  "cc",
+  "-x",
+  "assembler-with-cpp",
+  "-g",
+  "-Wall",
+  "-Wextra",
+  "-pedantic",
+  "-pedantic-errors",
+  "-std=c2y",
+  "-target",
+  "aarch64-linux-musl",
+]
 ```
+
+Valid options for the `instruction_set` field include:
+- ``"x86"``
+- ``"x86-64"``
+- ``"x86/x86-64"`` (Enable both)
+- ``"arm"``
+- ``"arm64"``
+- ``"riscv"``
+- ``"z80"``
+
+Valid options for the `assembler` field include:
+- ``"gas"``
+- ``"go"``
+- ``"masm"``
+- ``"nasm"``
+
+Don't see an architecture and/or assembler that you'd like to work with? File an
+[issue](https://github.com/bergercookie/asm-lsp/issues/new/choose)! We would be
+happy to add new options to the tool.
 
 ### [OPTIONAL] Extend functionality via `compile_commands.json`/`compile_flags.txt`
 
