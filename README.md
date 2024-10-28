@@ -34,7 +34,7 @@ cargo install --path asm-lsp
 
 ### Precompiled Binaries
 
-Download an uncompress the appropriate precompiled binaries from the project's
+Download and uncompress the appropriate precompiled binaries from the project's
 [releases page](https://github.com/bergercookie/asm-lsp/releases).
 
 ## Set up as a language server
