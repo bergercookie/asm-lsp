@@ -6,7 +6,8 @@ use std::{
 };
 
 use log::{info, warn};
-use lsp_types::Uri;
+use lsp_textdocument::TextDocuments;
+use lsp_types::{CompletionItem, Uri};
 use serde::{Deserialize, Serialize};
 use strum_macros::{AsRefStr, Display, EnumString};
 use tree_sitter::{Parser, Tree};
@@ -24,7 +25,7 @@ pub struct Instruction {
     pub asm_templates: Vec<String>,
     pub aliases: Vec<InstructionAlias>,
     pub url: Option<String>,
-    pub arch: Option<Arch>,
+    pub arch: Arch,
 }
 
 impl Hoverable for Instruction {}
@@ -38,7 +39,7 @@ impl Default for Instruction {
         let asm_templates = vec![];
         let aliases = vec![];
         let url = None;
-        let arch = None;
+        let arch = Arch::None;
 
         Self {
             name,
@@ -55,12 +56,7 @@ impl Default for Instruction {
 impl std::fmt::Display for Instruction {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // basic fields
-        let header: String;
-        if let Some(arch) = &self.arch {
-            header = format!("{} [{}]", &self.name, arch.as_ref());
-        } else {
-            header = self.name.clone();
-        }
+        let header = format!("{} [{}]", &self.name, self.arch.as_ref());
 
         //let mut v: Vec<&str> = vec![&header, &self.summary, "\n", "## Forms", "\n"];
         let mut v: Vec<&str> = vec![&header, &self.summary, "\n"];
@@ -520,7 +516,7 @@ pub struct Register {
     pub reg_type: Option<RegisterType>,
     pub width: Option<RegisterWidth>,
     pub flag_info: Vec<RegisterBitInfo>,
-    pub arch: Option<Arch>,
+    pub arch: Arch,
     pub url: Option<String>,
 }
 
@@ -534,7 +530,7 @@ impl Default for Register {
         let reg_type = None;
         let width = None;
         let flag_info = vec![];
-        let arch = None;
+        let arch = Arch::None;
         let url = None;
 
         Self {
@@ -552,12 +548,7 @@ impl Default for Register {
 impl std::fmt::Display for Register {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // basic fields
-        let header: String;
-        if let Some(arch) = &self.arch {
-            header = format!("{} [{}]", &self.name.to_uppercase(), arch.as_ref());
-        } else {
-            header = self.name.to_uppercase();
-        }
+        let header = format!("{} [{}]", &self.name.to_uppercase(), self.arch.as_ref());
 
         let mut v: Vec<String> = if let Some(description_) = &self.description {
             vec![header, description_.clone(), String::from("\n")]
@@ -1694,3 +1685,37 @@ pub struct TreeEntry {
 
 /// Associates URIs with their corresponding tree-sitter tree and parser
 pub type TreeStore = BTreeMap<Uri, TreeEntry>;
+
+#[derive(Default)]
+pub struct DocumentStore {
+    pub tree_store: TreeStore,
+    pub text_store: TextDocuments,
+}
+
+impl DocumentStore {
+    #[must_use]
+    pub fn new() -> Self {
+        Self {
+            tree_store: TreeStore::new(),
+            text_store: TextDocuments::new(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct CompletionItems {
+    pub instructions: Vec<(Arch, CompletionItem)>,
+    pub registers: Vec<(Arch, CompletionItem)>,
+    pub directives: Vec<(Assembler, CompletionItem)>,
+}
+
+impl CompletionItems {
+    #[must_use]
+    pub const fn new() -> Self {
+        Self {
+            instructions: Vec::new(),
+            registers: Vec::new(),
+            directives: Vec::new(),
+        }
+    }
+}

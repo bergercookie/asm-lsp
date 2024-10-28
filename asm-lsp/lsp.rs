@@ -1,4 +1,4 @@
-use crate::ustr;
+use crate::{ustr, CompletionItems, DocumentStore, NameToInfoMaps};
 use std::borrow::ToOwned;
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
@@ -15,7 +15,7 @@ use compile_commands::{CompilationDatabase, CompileArgs, CompileCommand, SourceF
 use dirs::config_dir;
 use log::{error, info, log, log_enabled, warn};
 use lsp_server::{Connection, Message, RequestId, Response};
-use lsp_textdocument::{FullTextDocument, TextDocuments};
+use lsp_textdocument::FullTextDocument;
 use lsp_types::{
     CompletionItem, CompletionItemKind, CompletionList, CompletionParams, CompletionTriggerKind,
     Diagnostic, DocumentSymbol, DocumentSymbolParams, Documentation, GotoDefinitionParams,
@@ -33,7 +33,7 @@ use tree_sitter::InputEdit;
 use crate::types::Column;
 use crate::{
     Arch, ArchOrAssembler, Assembler, Completable, Config, ConfigOptions, Directive, Instruction,
-    LspClient, NameToInstructionMap, Register, RootConfig, TreeEntry, TreeStore,
+    LspClient, NameToInstructionMap, Register, RootConfig, TreeEntry,
 };
 
 /// Sends an empty, non-error response to the lsp client via `connection`
@@ -672,14 +672,11 @@ pub fn get_hover_resp(
     config: &Config,
     word: &str,
     cursor_offset: usize,
-    text_store: &TextDocuments,
-    tree_store: &mut TreeStore,
-    instruction_map: &HashMap<(Arch, String), Instruction>,
-    register_map: &HashMap<(Arch, String), Register>,
-    directive_map: &HashMap<(Assembler, String), Directive>,
+    doc_store: &mut DocumentStore,
+    names_to_info: &NameToInfoMaps,
     include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
 ) -> Option<Hover> {
-    let instr_lookup = get_instr_hover_resp(word, instruction_map, config);
+    let instr_lookup = get_instr_hover_resp(word, &names_to_info.instructions, config);
     if instr_lookup.is_some() {
         return instr_lookup;
     }
@@ -690,19 +687,22 @@ pub fn get_hover_resp(
             || config.is_assembler_enabled(Assembler::Masm)
         {
             // all gas directives have a '.' prefix, some masm directives do
-            let directive_lookup = get_directive_hover_resp(word, directive_map, config);
+            let directive_lookup =
+                get_directive_hover_resp(word, &names_to_info.directives, config);
             if directive_lookup.is_some() {
                 return directive_lookup;
             }
         } else if config.is_assembler_enabled(Assembler::Nasm) {
             // most nasm directives have no prefix, 2 have a '.' prefix
-            let directive_lookup = get_directive_hover_resp(word, directive_map, config);
+            let directive_lookup =
+                get_directive_hover_resp(word, &names_to_info.directives, config);
             if directive_lookup.is_some() {
                 return directive_lookup;
             }
             // Some nasm directives have a % prefix
             let prefixed = format!("%{word}");
-            let directive_lookup = get_directive_hover_resp(&prefixed, directive_map, config);
+            let directive_lookup =
+                get_directive_hover_resp(&prefixed, &names_to_info.directives, config);
             if directive_lookup.is_some() {
                 return directive_lookup;
             }
@@ -711,12 +711,12 @@ pub fn get_hover_resp(
 
     let reg_lookup = if config.is_isa_enabled(Arch::ARM64) {
         word.find('.').map_or_else(
-            || get_reg_hover_resp(&word[0..], register_map, config),
+            || get_reg_hover_resp(&word[0..], &names_to_info.registers, config),
             |dot| {
                 if cursor_offset <= dot {
                     // main vector register info on ARM64
                     let main_register = &word[0..dot];
-                    get_reg_hover_resp(main_register, register_map, config)
+                    get_reg_hover_resp(main_register, &names_to_info.registers, config)
                 } else {
                     // if Vector = V21.2D -> lower Register = D21
                     // lower vector register info on ARM64
@@ -726,12 +726,12 @@ pub fn get_hover_resp(
                     lower_register.push_str(&word[reg_letter..]);
                     let reg_num = 1..dot;
                     lower_register.push_str(&word[reg_num]);
-                    get_reg_hover_resp(&lower_register, register_map, config)
+                    get_reg_hover_resp(&lower_register, &names_to_info.registers, config)
                 }
             },
         )
     } else {
-        get_reg_hover_resp(word, register_map, config)
+        get_reg_hover_resp(word, &names_to_info.registers, config)
     };
 
     if reg_lookup.is_some() {
@@ -741,8 +741,7 @@ pub fn get_hover_resp(
     let label_data = get_label_resp(
         word,
         &params.text_document_position_params.text_document.uri,
-        text_store,
-        tree_store,
+        doc_store,
     );
     if label_data.is_some() {
         return label_data;
@@ -774,8 +773,6 @@ fn search_for_instr_by_arch<'a>(
         Arch::X86_AND_X86_64 => {
             let x86_resp = instr_map.get(&(Arch::X86, word.to_string()));
             let x86_64_resp = instr_map.get(&(Arch::X86_64, word.to_string()));
-            // println!("{instr_map:#?}");
-            println!("x86: {x86_resp:#?}, x86_64: {x86_64_resp:#?}");
             (x86_resp, x86_64_resp)
         }
         arch => (instr_map.get(&(arch, word.to_string())), None),
@@ -810,6 +807,7 @@ fn get_instr_hover_resp(
     instr_map: &HashMap<(Arch, String), Instruction>,
     config: &Config,
 ) -> Option<Hover> {
+    // ensure hovered text is always lowercase
     let hovered_word = word.to_ascii_lowercase();
     let instr_resp = search_for_instr_by_arch(&hovered_word, instr_map, config);
     let value = match instr_resp {
@@ -873,15 +871,10 @@ fn get_directive_hover_resp(
 }
 
 /// Returns the data associated with a given label `word`
-fn get_label_resp(
-    word: &str,
-    uri: &Uri,
-    text_store: &TextDocuments,
-    tree_store: &mut TreeStore,
-) -> Option<Hover> {
-    if let Some(doc) = text_store.get_document(uri) {
+fn get_label_resp(word: &str, uri: &Uri, doc_store: &mut DocumentStore) -> Option<Hover> {
+    if let Some(doc) = doc_store.text_store.get_document(uri) {
         let curr_doc = doc.get_content(None).as_bytes();
-        if let Some(ref mut tree_entry) = tree_store.get_mut(uri) {
+        if let Some(ref mut tree_entry) = doc_store.tree_store.get_mut(uri) {
             tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
             if let Some(ref tree) = tree_entry.tree {
                 static QUERY_LABEL_DATA: Lazy<tree_sitter::Query> = Lazy::new(|| {
@@ -1087,9 +1080,7 @@ pub fn get_comp_resp(
     tree_entry: &mut TreeEntry,
     params: &CompletionParams,
     config: &Config,
-    instr_comps: &[(Arch, CompletionItem)],
-    dir_comps: &[(Assembler, CompletionItem)],
-    reg_comps: &[(Arch, CompletionItem)],
+    completion_items: &CompletionItems,
 ) -> Option<CompletionList> {
     let cursor_line = params.text_document_position.position.line as usize;
     let cursor_char = params.text_document_position.position.character as usize;
@@ -1105,10 +1096,17 @@ pub fn get_comp_resp(
                 Some("%") => {
                     let mut items = Vec::new();
                     if config.is_isa_enabled(Arch::X86) || config.is_isa_enabled(Arch::X86_64) {
-                        items.append(&mut filtered_comp_list_arch(reg_comps, config));
+                        items.append(&mut filtered_comp_list_arch(
+                            &completion_items.registers,
+                            config,
+                        ));
                     }
                     if config.is_assembler_enabled(Assembler::Nasm) {
-                        items.append(&mut filtered_comp_list_assem(dir_comps, config, Some('%')));
+                        items.append(&mut filtered_comp_list_assem(
+                            &completion_items.directives,
+                            config,
+                            Some('%'),
+                        ));
                     }
 
                     if !items.is_empty() {
@@ -1126,7 +1124,11 @@ pub fn get_comp_resp(
                     {
                         return Some(CompletionList {
                             is_incomplete: true,
-                            items: filtered_comp_list_assem(dir_comps, config, Some('.')),
+                            items: filtered_comp_list_assem(
+                                &completion_items.directives,
+                                config,
+                                Some('.'),
+                            ),
                         });
                     }
                 }
@@ -1166,7 +1168,8 @@ pub fn get_comp_resp(
                 let arg_start = cap.node.range().start_point;
                 let arg_end = cap.node.range().end_point;
                 if cursor_matches!(cursor_line, cursor_char, arg_start, arg_end) {
-                    let items = filtered_comp_list_assem(dir_comps, config, None);
+                    let items =
+                        filtered_comp_list_assem(&completion_items.directives, config, None);
                     return Some(CompletionList {
                         is_incomplete: true,
                         items,
@@ -1247,13 +1250,21 @@ pub fn get_comp_resp(
                     // number after must be a register or label
                     let is_instr = cap_num == 0;
                     let mut items = filtered_comp_list_arch(
-                        if is_instr { instr_comps } else { reg_comps },
+                        if is_instr {
+                            &completion_items.instructions
+                        } else {
+                            &completion_items.registers
+                        },
                         config,
                     );
                     if is_instr {
                         // Sometimes tree-sitter-asm parses a directive as an instruction, so we'll
                         // suggest both in this case
-                        items.append(&mut filtered_comp_list_assem(dir_comps, config, None));
+                        items.append(&mut filtered_comp_list_assem(
+                            &completion_items.directives,
+                            config,
+                            None,
+                        ));
                     } else {
                         items.append(
                             &mut labels
@@ -1390,8 +1401,6 @@ pub fn get_document_symbols(
 
 /// Produces a signature help response if the appropriate instruction forms can
 /// be found
-///
-/// # Panics
 pub fn get_sig_help_resp(
     curr_doc: &str,
     params: &SignatureHelpParams,
@@ -1438,20 +1447,18 @@ pub fn get_sig_help_resp(
                     for instr in instructions.into_iter().flatten() {
                         for form in &instr.forms {
                             match instr.arch {
-                                Some(Arch::X86 | Arch::X86_64) => {
+                                Arch::X86 | Arch::X86_64 => {
                                     if let Some(ref gas_name) = form.gas_name {
                                         if instr_name.eq_ignore_ascii_case(gas_name) {
-                                            value +=
-                                                &format!("**{}**\n{form}\n", instr.arch.unwrap());
+                                            value += &format!("**{}**\n{form}\n", instr.arch);
                                         }
                                     } else if let Some(ref go_name) = form.go_name {
                                         if instr_name.eq_ignore_ascii_case(go_name) {
-                                            value +=
-                                                &format!("**{}**\n{form}\n", instr.arch.unwrap());
+                                            value += &format!("**{}**\n{form}\n", instr.arch);
                                         }
                                     }
                                 }
-                                Some(Arch::Z80) => {
+                                Arch::Z80 => {
                                     for form in &instr.forms {
                                         if let Some(ref z80_name) = form.z80_name {
                                             if instr_name.eq_ignore_ascii_case(z80_name) {
@@ -1460,7 +1467,7 @@ pub fn get_sig_help_resp(
                                         }
                                     }
                                 }
-                                Some(Arch::ARM | Arch::RISCV) => {
+                                Arch::ARM | Arch::RISCV => {
                                     for form in &instr.asm_templates {
                                         value += &format!("{form}\n");
                                     }

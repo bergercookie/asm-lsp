@@ -13,7 +13,7 @@ use asm_lsp::handle::{
 };
 use asm_lsp::{
     get_compile_cmd_for_path, get_compile_cmds, get_completes, get_include_dirs, get_root_config,
-    Arch, Assembler, NameToInfoMaps, RootConfig, TreeStore,
+    CompletionItems, DocumentStore, NameToInfoMaps, RootConfig,
 };
 
 use compile_commands::{CompilationDatabase, SourceFile};
@@ -26,16 +26,15 @@ use lsp_types::request::{
     References, SignatureHelpRequest,
 };
 use lsp_types::{
-    CompletionItem, CompletionItemKind, CompletionOptions, CompletionOptionsCompletionItem,
-    DiagnosticOptions, DiagnosticServerCapabilities, HoverProviderCapability, InitializeParams,
-    OneOf, PositionEncodingKind, ServerCapabilities, SignatureHelpOptions,
-    TextDocumentSyncCapability, TextDocumentSyncKind, WorkDoneProgressOptions,
+    CompletionItemKind, CompletionOptions, CompletionOptionsCompletionItem, DiagnosticOptions,
+    DiagnosticServerCapabilities, HoverProviderCapability, InitializeParams, OneOf,
+    PositionEncodingKind, ServerCapabilities, SignatureHelpOptions, TextDocumentSyncCapability,
+    TextDocumentSyncKind, WorkDoneProgressOptions,
 };
 
 use anyhow::Result;
 use log::{error, info};
 use lsp_server::{Connection, Message, Notification, Request, RequestId};
-use lsp_textdocument::TextDocuments;
 
 /// Entry point of the server. Connects to the client, loads documentation resources,
 /// and then enters the main loop
@@ -154,15 +153,16 @@ pub fn main() -> Result<()> {
     }
 
     // Use the maps we populated above to generate completion items
-    let instr_completion_items = get_completes(
+    let mut completion_items = CompletionItems::new();
+    completion_items.instructions = get_completes(
         &names_to_info.instructions,
         Some(CompletionItemKind::OPERATOR),
     );
 
-    let reg_completion_items =
+    completion_items.registers =
         get_completes(&names_to_info.registers, Some(CompletionItemKind::VARIABLE));
 
-    let directive_completion_items = get_completes(
+    completion_items.directives = get_completes(
         &names_to_info.directives,
         Some(CompletionItemKind::OPERATOR),
     );
@@ -175,9 +175,7 @@ pub fn main() -> Result<()> {
         &connection,
         &config,
         &names_to_info,
-        &instr_completion_items,
-        &directive_completion_items,
-        &reg_completion_items,
+        &completion_items,
         &compile_cmds,
         &include_dirs,
     )?;
@@ -191,18 +189,17 @@ pub fn main() -> Result<()> {
     Ok(())
 }
 
+// TODO: Wrap up all the completion items into a struct
+
 fn main_loop(
     connection: &Connection,
     config: &RootConfig,
     names_to_info: &NameToInfoMaps,
-    instruction_completion_items: &[(Arch, CompletionItem)],
-    directive_completion_items: &[(Assembler, CompletionItem)],
-    register_completion_items: &[(Arch, CompletionItem)],
+    completion_tiems: &CompletionItems,
     compile_cmds: &CompilationDatabase,
     include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
 ) -> Result<()> {
-    let mut text_store = TextDocuments::new();
-    let mut tree_store = TreeStore::new();
+    let mut doc_store = DocumentStore::new();
 
     info!("Starting asm-lsp loop...");
     for msg in &connection.receiver {
@@ -219,8 +216,7 @@ fn main_loop(
                         id,
                         config.get_config(&params.text_document_position_params.text_document.uri),
                         &params,
-                        &text_store,
-                        &mut tree_store,
+                        &mut doc_store,
                         names_to_info,
                         include_dirs,
                     )?;
@@ -234,11 +230,8 @@ fn main_loop(
                         id,
                         &params,
                         config.get_config(&params.text_document_position.text_document.uri),
-                        &text_store,
-                        &mut tree_store,
-                        instruction_completion_items,
-                        directive_completion_items,
-                        register_completion_items,
+                        &mut doc_store,
+                        completion_tiems,
                     )?;
                     info!(
                         "Completion request serviced in {}ms",
@@ -250,8 +243,7 @@ fn main_loop(
                         id,
                         &params,
                         config.get_config(&params.text_document_position_params.text_document.uri),
-                        &text_store,
-                        &mut tree_store,
+                        &mut doc_store,
                     )?;
                     info!(
                         "Goto definition request serviced in {}ms",
@@ -263,8 +255,7 @@ fn main_loop(
                         id,
                         &params,
                         config.get_config(&params.text_document.uri),
-                        &text_store,
-                        &mut tree_store,
+                        &mut doc_store,
                     )?;
                     info!(
                         "Document symbols request serviced in {}ms",
@@ -276,8 +267,7 @@ fn main_loop(
                         id,
                         &params,
                         config.get_config(&params.text_document_position_params.text_document.uri),
-                        &text_store,
-                        &mut tree_store,
+                        &mut doc_store,
                         &names_to_info.instructions,
                     )?;
                     info!(
@@ -290,8 +280,7 @@ fn main_loop(
                         id,
                         &params,
                         config.get_config(&params.text_document_position.text_document.uri),
-                        &text_store,
-                        &mut tree_store,
+                        &mut doc_store,
                     )?;
                     info!(
                         "References request serviced in {}ms",
@@ -331,31 +320,19 @@ fn main_loop(
             }
             Message::Notification(notif) => {
                 if let Ok(params) = cast_notif::<DidOpenTextDocument>(notif.clone()) {
-                    handle_did_open_text_document_notification(
-                        &params,
-                        &mut text_store,
-                        &mut tree_store,
-                    );
+                    handle_did_open_text_document_notification(&params, &mut doc_store);
                     info!(
                         "Did open text document notification serviced in {}ms",
                         start.elapsed().as_millis()
                     );
                 } else if let Ok(params) = cast_notif::<DidChangeTextDocument>(notif.clone()) {
-                    handle_did_change_text_document_notification(
-                        &params,
-                        &mut text_store,
-                        &mut tree_store,
-                    )?;
+                    handle_did_change_text_document_notification(&params, &mut doc_store)?;
                     info!(
                         "Did change text document notification serviced in {}ms",
                         start.elapsed().as_millis()
                     );
                 } else if let Ok(params) = cast_notif::<DidCloseTextDocument>(notif.clone()) {
-                    handle_did_close_text_document_notification(
-                        &params,
-                        &mut text_store,
-                        &mut tree_store,
-                    );
+                    handle_did_close_text_document_notification(&params, &mut doc_store);
                     info!(
                         "Did close text document notification serviced in {}ms",
                         start.elapsed().as_millis()

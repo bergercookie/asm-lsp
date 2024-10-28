@@ -4,12 +4,12 @@ mod tests {
     use std::{collections::HashMap, path::PathBuf, str::FromStr};
 
     use anyhow::Result;
-    use lsp_textdocument::{FullTextDocument, TextDocuments};
+    use lsp_textdocument::FullTextDocument;
     use lsp_types::{
-        CompletionContext, CompletionItem, CompletionItemKind, CompletionParams,
-        CompletionTriggerKind, DidOpenTextDocumentParams, HoverContents, HoverParams,
-        MarkupContent, MarkupKind, PartialResultParams, Position, TextDocumentIdentifier,
-        TextDocumentItem, TextDocumentPositionParams, Uri, WorkDoneProgressParams,
+        CompletionContext, CompletionItemKind, CompletionParams, CompletionTriggerKind,
+        DidOpenTextDocumentParams, HoverContents, HoverParams, MarkupContent, MarkupKind,
+        PartialResultParams, Position, TextDocumentIdentifier, TextDocumentItem,
+        TextDocumentPositionParams, Uri, WorkDoneProgressParams,
     };
     use tree_sitter::Parser;
 
@@ -19,8 +19,8 @@ mod tests {
         parser::{get_cache_dir, populate_arm_instructions, populate_masm_nasm_directives},
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
-        Assembler, Config, ConfigOptions, Directive, Instruction, NameToDirectiveMap,
-        NameToInstructionMap, NameToRegisterMap, Register, TreeEntry, TreeStore,
+        Assembler, CompletionItems, Config, ConfigOptions, Directive, DocumentStore, Instruction,
+        NameToInfoMaps, Register, TreeEntry,
     };
 
     fn empty_test_config() -> Config {
@@ -131,14 +131,10 @@ mod tests {
         nasm_directives: Vec<Directive>,
     }
 
-    #[derive(Debug)]
+    #[derive(Debug, Default)]
     struct GlobalVars {
-        names_to_instructions: NameToInstructionMap,
-        names_to_registers: NameToRegisterMap,
-        names_to_directives: NameToDirectiveMap,
-        instr_completion_items: Vec<(Arch, CompletionItem)>,
-        reg_completion_items: Vec<(Arch, CompletionItem)>,
-        directive_completion_items: Vec<(Assembler, CompletionItem)>,
+        names_to_info: NameToInfoMaps,
+        completion_items: CompletionItems,
     }
 
     impl GlobalInfo {
@@ -159,19 +155,6 @@ mod tests {
                 gas_directives: Vec::new(),
                 masm_directives: Vec::new(),
                 nasm_directives: Vec::new(),
-            }
-        }
-    }
-
-    impl GlobalVars {
-        fn new() -> Self {
-            Self {
-                names_to_instructions: NameToInstructionMap::new(),
-                names_to_registers: NameToRegisterMap::new(),
-                names_to_directives: NameToDirectiveMap::new(),
-                instr_completion_items: Vec::new(),
-                reg_completion_items: Vec::new(),
-                directive_completion_items: Vec::new(),
             }
         }
     }
@@ -302,7 +285,7 @@ mod tests {
     }
 
     fn init_test_store(info: &GlobalInfo) -> GlobalVars {
-        let mut store = GlobalVars::new();
+        let mut store = GlobalVars::default();
 
         let mut x86_cache_path = get_cache_dir().unwrap();
         x86_cache_path.push("x86_instr_docs.html");
@@ -313,105 +296,105 @@ mod tests {
         populate_name_to_instruction_map(
             Arch::X86,
             &info.x86_instructions,
-            &mut store.names_to_instructions,
+            &mut store.names_to_info.instructions,
         );
 
         populate_name_to_instruction_map(
             Arch::X86_64,
             &info.x86_64_instructions,
-            &mut store.names_to_instructions,
+            &mut store.names_to_info.instructions,
         );
 
         populate_name_to_instruction_map(
             Arch::ARM,
             &info.arm_instructions,
-            &mut store.names_to_instructions,
+            &mut store.names_to_info.instructions,
         );
 
         populate_name_to_instruction_map(
             Arch::ARM64,
             &info.arm64_instructions,
-            &mut store.names_to_instructions,
+            &mut store.names_to_info.instructions,
         );
 
         populate_name_to_instruction_map(
             Arch::RISCV,
             &info.riscv_instructions,
-            &mut store.names_to_instructions,
+            &mut store.names_to_info.instructions,
         );
 
         populate_name_to_instruction_map(
             Arch::Z80,
             &info.z80_instructions,
-            &mut store.names_to_instructions,
+            &mut store.names_to_info.instructions,
         );
 
         populate_name_to_register_map(
             Arch::X86,
             &info.x86_registers,
-            &mut store.names_to_registers,
+            &mut store.names_to_info.registers,
         );
 
         populate_name_to_register_map(
             Arch::X86_64,
             &info.x86_64_registers,
-            &mut store.names_to_registers,
+            &mut store.names_to_info.registers,
         );
 
         populate_name_to_register_map(
             Arch::ARM,
             &info.arm_registers,
-            &mut store.names_to_registers,
+            &mut store.names_to_info.registers,
         );
 
         populate_name_to_register_map(
             Arch::ARM64,
             &info.arm64_registers,
-            &mut store.names_to_registers,
+            &mut store.names_to_info.registers,
         );
 
         populate_name_to_register_map(
             Arch::RISCV,
             &info.riscv_registers,
-            &mut store.names_to_registers,
+            &mut store.names_to_info.registers,
         );
 
         populate_name_to_register_map(
             Arch::Z80,
             &info.z80_registers,
-            &mut store.names_to_registers,
+            &mut store.names_to_info.registers,
         );
 
         populate_name_to_directive_map(
             Assembler::Gas,
             &info.gas_directives,
-            &mut store.names_to_directives,
+            &mut store.names_to_info.directives,
         );
 
         populate_name_to_directive_map(
             Assembler::Masm,
             &info.masm_directives,
-            &mut store.names_to_directives,
+            &mut store.names_to_info.directives,
         );
 
         populate_name_to_directive_map(
             Assembler::Nasm,
             &info.nasm_directives,
-            &mut store.names_to_directives,
+            &mut store.names_to_info.directives,
         );
 
-        store.instr_completion_items = get_completes(
-            &store.names_to_instructions,
+        store.completion_items.instructions = get_completes(
+            &store.names_to_info.instructions,
             Some(CompletionItemKind::OPERATOR),
         );
 
-        store.reg_completion_items = get_completes(
-            &store.names_to_registers,
+        store.completion_items.registers = get_completes(
+            &store.names_to_info.registers,
             Some(CompletionItemKind::VARIABLE),
         );
 
-        store.directive_completion_items = get_completes(
-            &store.names_to_directives,
+        store.completion_items.directives = get_completes(
+            &store.names_to_info.directives,
             Some(CompletionItemKind::OPERATOR),
         );
 
@@ -441,7 +424,7 @@ mod tests {
         ));
         let uri: Uri = Uri::from_str("file://").unwrap();
 
-        let mut text_store = TextDocuments::new();
+        let mut doc_store = DocumentStore::new();
         // mock the didOpen notification to insert a new document
         let method = "textDocument/didOpen";
         let did_open_params = DidOpenTextDocumentParams {
@@ -453,7 +436,7 @@ mod tests {
             },
         };
         let params = serde_json::to_value(did_open_params).unwrap();
-        text_store.listen(method, &params);
+        doc_store.text_store.listen(method, &params);
 
         let pos_params = TextDocumentPositionParams {
             text_document: TextDocumentIdentifier { uri: uri.clone() },
@@ -463,9 +446,8 @@ mod tests {
         let mut parser = Parser::new();
         parser.set_language(&tree_sitter_asm::language()).unwrap();
         let tree = parser.parse(&source_code, None);
-        let mut tree_store = TreeStore::new();
         let tree_entry = TreeEntry { tree, parser };
-        tree_store.insert(uri, tree_entry);
+        doc_store.tree_store.insert(uri, tree_entry);
 
         let hover_params = HoverParams {
             text_document_position_params: pos_params.clone(),
@@ -480,18 +462,14 @@ mod tests {
             },
             |doc| get_word_from_pos_params(doc, &pos_params),
         );
-        println!("Word: {word}, offset: {cursor_offset}");
 
         let resp = get_hover_resp(
             &hover_params,
             config,
             word,
             cursor_offset,
-            &text_store,
-            &mut tree_store,
-            &globals.names_to_instructions,
-            &globals.names_to_registers,
-            &globals.names_to_directives,
+            &mut doc_store,
+            &globals.names_to_info,
             &HashMap::new(),
         )
         .unwrap();
@@ -564,9 +542,7 @@ mod tests {
             &mut tree_entry,
             &params,
             config,
-            &globals.instr_completion_items,
-            &globals.directive_completion_items,
-            &globals.reg_completion_items,
+            &globals.completion_items,
         )
         .unwrap();
 

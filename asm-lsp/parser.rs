@@ -116,7 +116,7 @@ pub fn populate_riscv_registers(rst_contents: &str) -> Vec<Register> {
                     name: reg_name,
                     description: Some(description),
                     reg_type: curr_reg_type,
-                    arch: Some(Arch::RISCV),
+                    arch: Arch::RISCV,
                     ..Default::default()
                 };
                 registers.push(curr_register);
@@ -201,7 +201,7 @@ fn parse_riscv_instructions(rst_contents: &str) -> Vec<Instruction> {
     let mut parse_state = ParseState::FileStart;
     let mut instructions = Vec::new();
     let mut curr_instruction = Instruction {
-        arch: Some(Arch::RISCV),
+        arch: Arch::RISCV,
         ..Default::default()
     };
     let mut lines = rst_contents.lines().peekable();
@@ -329,7 +329,7 @@ fn parse_riscv_instructions(rst_contents: &str) -> Vec<Instruction> {
 
                 instructions.push(curr_instruction);
                 curr_instruction = Instruction {
-                    arch: Some(Arch::RISCV),
+                    arch: Arch::RISCV,
                     ..Default::default()
                 };
             }
@@ -437,7 +437,7 @@ pub fn populate_arm_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>
                     // TODO:currently changing into either doesn't change
                     // anything as both source form the 64bit info which should
                     // change when arm32 info is added
-                    arch: Some(Arch::ARM64),
+                    arch: Arch::ARM64,
                     aliases: aliases.to_owned(),
                     ..Default::default()
                 },
@@ -561,7 +561,7 @@ fn parse_arm_instruction(xml_contents: &str) -> Option<Instruction> {
     // ref to the instruction that's currently under construction
     let mut instruction = Instruction {
         // TODO: switch for archs
-        arch: Some(Arch::ARM64),
+        arch: Arch::ARM64,
         ..Default::default()
     };
     let mut curr_template: Option<String> = None;
@@ -662,7 +662,7 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
     // ref to the instruction that's currently under construction
     let mut curr_instruction = Instruction::default();
     let mut curr_instruction_form = InstructionForm::default();
-    let mut arch: Option<Arch> = None;
+    let mut arch: Arch = Arch::None;
 
     debug!("Parsing instruction XML contents...");
     loop {
@@ -674,7 +674,9 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
                             if b"name" == key.into_inner() {
-                                arch = Arch::from_str(ustr::get_str(&value)).ok();
+                                arch = Arch::from_str(ustr::get_str(&value)).unwrap_or_else(|e| {
+                                    panic!("Failed parse Arch {} -- {e}", ustr::get_str(&value))
+                                });
                             } else {
                                 warn!("Failed to parse architecture name");
                             }
@@ -954,6 +956,7 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                 match e.name() {
                     QName(b"Instruction") => {
                         // finish instruction
+                        assert!(curr_instruction.arch != Arch::None);
                         instructions_map
                             .insert(curr_instruction.name.clone(), curr_instruction.clone());
                     }
@@ -969,7 +972,7 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
         }
     }
 
-    if let Some(Arch::X86 | Arch::X86_64) = arch {
+    if matches!(arch, Arch::X86 | Arch::X86_64) {
         let x86_online_docs = get_x86_docs_url();
         let body = get_docs_body(&x86_online_docs).unwrap_or_default();
         let body_it = body.split("<td>").skip(1).step_by(2);
@@ -1039,7 +1042,7 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
     // ref to the register that's currently under construction
     let mut curr_register = Register::default();
     let mut curr_bit_flag = RegisterBitInfo::default();
-    let mut arch: Option<Arch> = None;
+    let mut arch: Arch = Arch::None;
 
     debug!("Parsing register XML contents...");
     loop {
@@ -1051,7 +1054,12 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
                             if b"name" == key.into_inner() {
-                                arch = Arch::from_str(ustr::get_str(&value)).ok();
+                                arch = Arch::from_str(ustr::get_str(&value)).unwrap_or_else(|e| {
+                                    panic!(
+                                        "Unexpected Arch variant {} -- {e}",
+                                        ustr::get_str(&value)
+                                    )
+                                });
                             }
                         }
                     }
@@ -1121,6 +1129,7 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
                 match e.name() {
                     QName(b"Register") => {
                         // finish register
+                        assert!(curr_register.arch != Arch::None);
                         registers_map.insert(curr_register.name.clone(), curr_register.clone());
                     }
                     QName(b"Flag") => {

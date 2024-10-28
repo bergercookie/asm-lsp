@@ -62,7 +62,7 @@ created for different sub-directories or files within your project as `project`s
 Source files not contained within any `project` configs will use the default configuration
 if provided.
 
-#### NOTE:
+#### NOTE
 
 If the server reads in an invalid configuration file, it will display an error
 message and exit.
@@ -101,19 +101,21 @@ compile_flags_txt = [
 ```
 
 Valid options for the `instruction_set` field include:
-- ``"x86"``
-- ``"x86-64"``
-- ``"x86/x86-64"`` (Enable both)
-- ``"arm"``
-- ``"arm64"``
-- ``"riscv"``
-- ``"z80"``
+
+- `"x86"`
+- `"x86-64"`
+- `"x86/x86-64"` (Enable both)
+- `"arm"`
+- `"arm64"`
+- `"riscv"`
+- `"z80"`
 
 Valid options for the `assembler` field include:
-- ``"gas"``
-- ``"go"``
-- ``"masm"``
-- ``"nasm"``
+
+- `"gas"`
+- `"go"`
+- `"masm"`
+- `"nasm"`
 
 Don't see an architecture and/or assembler that you'd like to work with? File an
 [issue](https://github.com/bergercookie/asm-lsp/issues/new/choose)! We would be

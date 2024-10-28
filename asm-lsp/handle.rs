@@ -4,24 +4,22 @@ use anyhow::{anyhow, Result};
 use compile_commands::{CompilationDatabase, SourceFile};
 use log::info;
 use lsp_server::{Connection, Message, RequestId, Response};
-use lsp_textdocument::TextDocuments;
 use lsp_types::{
     notification::{
         DidChangeTextDocument, DidCloseTextDocument, DidOpenTextDocument, Notification,
         PublishDiagnostics,
     },
-    CompletionItem, CompletionParams, Diagnostic, DidChangeTextDocumentParams,
-    DidCloseTextDocumentParams, DidOpenTextDocumentParams, DocumentSymbolParams,
-    DocumentSymbolResponse, GotoDefinitionParams, HoverParams, PublishDiagnosticsParams,
-    ReferenceParams, SignatureHelpParams, Uri,
+    CompletionParams, Diagnostic, DidChangeTextDocumentParams, DidCloseTextDocumentParams,
+    DidOpenTextDocumentParams, DocumentSymbolParams, DocumentSymbolResponse, GotoDefinitionParams,
+    HoverParams, PublishDiagnosticsParams, ReferenceParams, SignatureHelpParams, Uri,
 };
 use tree_sitter::Parser;
 
 use crate::{
     apply_compile_cmd, get_comp_resp, get_default_compile_cmd, get_document_symbols,
     get_goto_def_resp, get_hover_resp, get_ref_resp, get_sig_help_resp, get_word_from_pos_params,
-    send_empty_resp, text_doc_change_to_ts_edit, Arch, Assembler, Config, ConfigOptions,
-    NameToInfoMaps, NameToInstructionMap, TreeEntry, TreeStore,
+    send_empty_resp, text_doc_change_to_ts_edit, CompletionItems, Config, ConfigOptions,
+    DocumentStore, NameToInfoMaps, NameToInstructionMap, TreeEntry,
 };
 
 /// Handles hover requests
@@ -38,29 +36,29 @@ pub fn handle_hover_request(
     id: RequestId,
     config: &Config,
     params: &HoverParams,
-    text_store: &TextDocuments,
-    tree_store: &mut TreeStore,
+    doc_store: &mut DocumentStore,
     names_to_info: &NameToInfoMaps,
     include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
 ) -> Result<()> {
-    let (word, cursor_offset) = if let Some(doc) =
-        text_store.get_document(&params.text_document_position_params.text_document.uri)
+    let (word, cursor_offset) = if let Some(doc) = doc_store
+        .text_store
+        .get_document(&params.text_document_position_params.text_document.uri)
     {
         get_word_from_pos_params(doc, &params.text_document_position_params)
     } else {
         return send_empty_resp(connection, id, config);
     };
 
+    // needed to appease the borrow checker, since `word` is a reference to owned
+    // data inside `doc_store.text_store`, which we're passing as mutable
+    let word = word.to_string();
     if let Some(hover_resp) = get_hover_resp(
         params,
         config,
-        word,
+        &word,
         cursor_offset,
-        text_store,
-        tree_store,
-        &names_to_info.instructions,
-        &names_to_info.registers,
-        &names_to_info.directives,
+        doc_store,
+        names_to_info,
         include_dirs,
     ) {
         let result = serde_json::to_value(hover_resp).unwrap();
@@ -89,23 +87,18 @@ pub fn handle_completion_request(
     id: RequestId,
     params: &CompletionParams,
     config: &Config,
-    text_store: &TextDocuments,
-    tree_store: &mut TreeStore,
-    instruction_completion_items: &[(Arch, CompletionItem)],
-    directive_completion_items: &[(Assembler, CompletionItem)],
-    register_completion_items: &[(Arch, CompletionItem)],
+    doc_store: &mut DocumentStore,
+    completion_items: &CompletionItems,
 ) -> Result<()> {
     let uri = &params.text_document_position.text_document.uri;
-    if let Some(doc) = text_store.get_document(uri) {
-        if let Some(ref mut tree_entry) = tree_store.get_mut(uri) {
+    if let Some(doc) = doc_store.text_store.get_document(uri) {
+        if let Some(ref mut tree_entry) = doc_store.tree_store.get_mut(uri) {
             if let Some(comp_resp) = get_comp_resp(
                 doc.get_content(None),
                 tree_entry,
                 params,
                 config,
-                instruction_completion_items,
-                directive_completion_items,
-                register_completion_items,
+                completion_items,
             ) {
                 let result = serde_json::to_value(comp_resp).unwrap();
                 let result = Response {
@@ -135,12 +128,11 @@ pub fn handle_goto_def_request(
     id: RequestId,
     params: &GotoDefinitionParams,
     config: &Config,
-    text_store: &TextDocuments,
-    tree_store: &mut TreeStore,
+    doc_store: &mut DocumentStore,
 ) -> Result<()> {
     let uri = &params.text_document_position_params.text_document.uri;
-    if let Some(doc) = text_store.get_document(uri) {
-        if let Some(tree_entry) = tree_store.get_mut(uri) {
+    if let Some(doc) = doc_store.text_store.get_document(uri) {
+        if let Some(tree_entry) = doc_store.tree_store.get_mut(uri) {
             if let Some(def_resp) = get_goto_def_resp(doc, tree_entry, params) {
                 let result = serde_json::to_value(def_resp).unwrap();
                 let result = Response {
@@ -171,12 +163,11 @@ pub fn handle_document_symbols_request(
     id: RequestId,
     params: &DocumentSymbolParams,
     config: &Config,
-    text_store: &TextDocuments,
-    tree_store: &mut TreeStore,
+    doc_store: &mut DocumentStore,
 ) -> Result<()> {
     let uri = &params.text_document.uri;
-    if let Some(doc) = text_store.get_document(uri) {
-        if let Some(tree_entry) = tree_store.get_mut(uri) {
+    if let Some(doc) = doc_store.text_store.get_document(uri) {
+        if let Some(tree_entry) = doc_store.tree_store.get_mut(uri) {
             if let Some(symbols) = get_document_symbols(doc.get_content(None), tree_entry, params) {
                 let resp = DocumentSymbolResponse::Nested(symbols);
                 let result = serde_json::to_value(resp).unwrap();
@@ -207,13 +198,12 @@ pub fn handle_signature_help_request(
     id: RequestId,
     params: &SignatureHelpParams,
     config: &Config,
-    text_store: &TextDocuments,
-    tree_store: &mut TreeStore,
+    doc_store: &mut DocumentStore,
     names_to_instructions: &NameToInstructionMap,
 ) -> Result<()> {
     let uri = &params.text_document_position_params.text_document.uri;
-    if let Some(doc) = text_store.get_document(uri) {
-        if let Some(tree_entry) = tree_store.get_mut(uri) {
+    if let Some(doc) = doc_store.text_store.get_document(uri) {
+        if let Some(tree_entry) = doc_store.tree_store.get_mut(uri) {
             let sig_resp = get_sig_help_resp(
                 doc.get_content(None),
                 params,
@@ -252,12 +242,11 @@ pub fn handle_references_request(
     id: RequestId,
     params: &ReferenceParams,
     config: &Config,
-    text_store: &TextDocuments,
-    tree_store: &mut TreeStore,
+    doc_store: &mut DocumentStore,
 ) -> Result<()> {
     let uri = &params.text_document_position.text_document.uri;
-    if let Some(doc) = text_store.get_document(uri) {
-        if let Some(tree_entry) = tree_store.get_mut(uri) {
+    if let Some(doc) = doc_store.text_store.get_document(uri) {
+        if let Some(tree_entry) = doc_store.tree_store.get_mut(uri) {
             let ref_resp = get_ref_resp(params, doc, tree_entry);
             if !ref_resp.is_empty() {
                 let result = serde_json::to_value(&ref_resp).unwrap();
@@ -365,15 +354,16 @@ pub fn handle_diagnostics(
 /// fails to set the language
 pub fn handle_did_open_text_document_notification(
     params: &DidOpenTextDocumentParams,
-    text_store: &mut TextDocuments,
-    tree_store: &mut TreeStore,
+    doc_store: &mut DocumentStore,
 ) {
     let raw_params = serde_json::to_value(params).unwrap();
-    text_store.listen(DidOpenTextDocument::METHOD, &raw_params);
+    doc_store
+        .text_store
+        .listen(DidOpenTextDocument::METHOD, &raw_params);
 
     let mut parser = Parser::new();
     parser.set_language(&tree_sitter_asm::language()).unwrap();
-    tree_store.insert(
+    doc_store.tree_store.insert(
         params.text_document.uri.clone(),
         TreeEntry {
             tree: parser.parse(&params.text_document.text, None),
@@ -395,15 +385,16 @@ pub fn handle_did_open_text_document_notification(
 /// Panics if JSON encoding of a response fails
 pub fn handle_did_change_text_document_notification(
     params: &DidChangeTextDocumentParams,
-    text_store: &mut TextDocuments,
-    tree_store: &mut TreeStore,
+    doc_store: &mut DocumentStore,
 ) -> Result<()> {
     let raw_params = serde_json::to_value(params).unwrap();
-    text_store.listen(DidChangeTextDocument::METHOD, &raw_params);
+    doc_store
+        .text_store
+        .listen(DidChangeTextDocument::METHOD, &raw_params);
 
     let uri = &params.text_document.uri;
-    if let Some(ref mut doc) = text_store.get_document(uri) {
-        if let Some(tree_entry) = tree_store.get_mut(uri) {
+    if let Some(ref mut doc) = doc_store.text_store.get_document(uri) {
+        if let Some(tree_entry) = doc_store.tree_store.get_mut(uri) {
             if let Some(ref mut curr_tree) = tree_entry.tree {
                 for change in &params.content_changes {
                     match text_doc_change_to_ts_edit(change, doc) {
@@ -429,10 +420,11 @@ pub fn handle_did_change_text_document_notification(
 /// Panics if JSON encoding of `params` fails
 pub fn handle_did_close_text_document_notification(
     params: &DidCloseTextDocumentParams,
-    text_store: &mut TextDocuments,
-    tree_store: &mut TreeStore,
+    doc_store: &mut DocumentStore,
 ) {
     let raw_params = serde_json::to_value(params).unwrap();
-    text_store.listen(DidCloseTextDocument::METHOD, &raw_params);
-    tree_store.remove(&params.text_document.uri);
+    doc_store
+        .text_store
+        .listen(DidCloseTextDocument::METHOD, &raw_params);
+    doc_store.tree_store.remove(&params.text_document.uri);
 }
