@@ -1,4 +1,4 @@
-use std::process::Command;
+use std::path::Path;
 use std::string::ToString;
 use std::{env::current_dir, path::PathBuf};
 
@@ -244,6 +244,83 @@ fn prompt_project(opts: &GenerateOpts) -> ProjectConfig {
     ProjectConfig { path, config }
 }
 
+/// Check if a path points to an executable file
+fn is_executable(path: &Path) -> bool {
+    if path.is_file() {
+        #[cfg(unix)]
+        {
+            // On Unix, check the `x` bit
+            use std::fs;
+            use std::os::unix::fs::PermissionsExt;
+            let metadata = fs::metadata(path).unwrap();
+            metadata.permissions().mode() & 0o111 != 0
+        }
+        #[cfg(windows)]
+        {
+            // On Windows, check for common executable extensions
+            let extensions = ["exe", "cmd", "bat", "com"];
+            if let Some(ext) = path.extension().and_then(|s| s.to_str()) {
+                return extensions.contains(&ext);
+            }
+            false
+        }
+    } else {
+        false
+    }
+}
+
+/// Check if `cmd` has a corresponding executable file on $PATH
+#[must_use]
+fn is_executable_on_path(cmd: &str) -> bool {
+    use std::env;
+    // Get the PATH environment variable
+    let path_var = env::var_os("PATH").unwrap();
+
+    for path in env::split_paths(&path_var) {
+        let full_path = path.join(cmd);
+        if is_executable(&full_path) {
+            return true;
+        }
+    }
+    println!("Warning: Unable to find provided compiler as executable file on $PATH");
+    false
+}
+
+fn validate_compiler(comp: &str) -> bool {
+    // Attempt to provide some soft validation, warn the user if something
+    // looks fishy
+    if comp.contains(std::path::MAIN_SEPARATOR) {
+        // Treat it as a path
+        let Ok(path) = PathBuf::from(comp).canonicalize() else {
+            println!("Warning: Failed to canonicalize path \"{comp}\"",);
+            return false;
+        };
+        let exists = path.exists();
+        let is_file = path.is_file();
+        let is_exec = is_executable(&path);
+        if !exists {
+            println!(
+                "Warning: File does not exist at path \"{}\"",
+                path.display()
+            );
+        } else if !is_file {
+            println!(
+                "Warning: Path \"{}\" does not point to a file",
+                path.display()
+            );
+        } else if !is_exec {
+            println!(
+                "Warning: Path \"{}\" does not point to an executable file",
+                path.display()
+            );
+        }
+
+        exists && is_file && is_exec
+    } else {
+        is_executable_on_path(comp)
+    }
+}
+
 fn prompt_compiler() -> Option<String> {
     if !Confirm::with_theme(&ColorfulTheme::default())
         .with_prompt("Provide compiler to use with `compile_flags.txt` files or the following (optional) compile flags field")
@@ -261,42 +338,7 @@ fn prompt_compiler() -> Option<String> {
 
         // Attempt to provide some soft validation, warn the user if something
         // looks fishy
-        let looks_ok = if comp.contains('/') {
-            // Treat it as a path, try checking if it exists
-            let path = PathBuf::from(&comp);
-            let exists = path.exists();
-            let is_file = path.is_file();
-            if !exists {
-                println!(
-                    "Warning: File does not exist at path \"{}\"",
-                    path.display()
-                );
-            } else if !is_file {
-                println!(
-                    "Warning: Path \"{}\" does not point to a file",
-                    path.display()
-                );
-            }
-            exists && is_file
-        } else {
-            // TODO: Find a less hacky, reasonably performant way to validate this
-            let find_cmd = if cfg!(target_os = "windows") {
-                "where"
-            } else {
-                "which"
-            };
-            if let Ok(result) = Command::new(find_cmd).arg(&comp).output() {
-                let success = result.status.success();
-                if !success {
-                    println!("Warning: Unable to confirm \"{comp}\" as an executable on path");
-                }
-                success
-            } else {
-                println!("Warning: Failed to run compiler validation");
-                false
-            }
-        };
-        if looks_ok
+        if validate_compiler(&comp)
             || !Confirm::with_theme(&ColorfulTheme::default())
                 .with_prompt("Re-enter compiler?")
                 .default(true)
