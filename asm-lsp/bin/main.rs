@@ -12,8 +12,8 @@ use asm_lsp::handle::{
     handle_references_request, handle_signature_help_request,
 };
 use asm_lsp::{
-    get_compile_cmd_for_path, get_compile_cmds, get_completes, get_include_dirs, get_root_config,
-    CompletionItems, DocumentStore, NameToInfoMaps, RootConfig,
+    get_compile_cmd_for_req, get_compile_cmds_from_file, get_completes, get_include_dirs,
+    get_root_config, CompletionItems, DocumentStore, NameToInfoMaps, RootConfig,
 };
 
 use compile_commands::{CompilationDatabase, SourceFile};
@@ -179,8 +179,10 @@ pub fn main() -> Result<()> {
         Some(CompletionItemKind::OPERATOR),
     );
 
-    let compile_cmds = get_compile_cmds(&params).unwrap_or_default();
-    info!("Loaded compile commands: {:?}", compile_cmds);
+    let compile_cmds = get_compile_cmds_from_file(&params).unwrap_or_default();
+    if !compile_cmds.is_empty() {
+        info!("Loaded compile commands: {:?}", compile_cmds);
+    }
     let include_dirs = get_include_dirs(&compile_cmds);
 
     main_loop(
@@ -301,25 +303,22 @@ fn main_loop(
                 } else if let Ok((_id, params)) = cast_req::<DocumentDiagnosticRequest>(req.clone())
                 {
                     let project_config = config.get_config(&params.text_document.uri);
-                    #[allow(clippy::option_if_let_else)]
-                    let cmp_cmds = if let Some(cmd) =
-                        get_compile_cmd_for_path(config, &params.text_document.uri)
-                    {
-                        // If the user provided a compiler invocation command in their config
-                        // for the project config covering this file, use it
-                        &vec![cmd]
-                    } else {
-                        // Otherwise pass the default compile commands object
-                        compile_cmds
-                    };
-
                     // Ok to unwrap, this should never be `None`
                     if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
+                        let compile_cmds = get_compile_cmd_for_req(
+                            config,
+                            &params.text_document.uri,
+                            compile_cmds,
+                        );
+                        info!(
+                            "Selected compile command(s) for request: {:#?}",
+                            compile_cmds
+                        );
                         handle_diagnostics(
                             connection,
                             &params.text_document.uri,
                             project_config,
-                            cmp_cmds,
+                            &compile_cmds,
                         )?;
                         info!(
                             "Diagnostics request serviced in {}ms",
@@ -353,22 +352,20 @@ fn main_loop(
                     let project_config = config.get_config(&params.text_document.uri);
                     // Ok to unwrap, this should never be `None`
                     if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
-                        #[allow(clippy::option_if_let_else)]
-                        let cmp_cmds = if let Some(cmd) =
-                            get_compile_cmd_for_path(config, &params.text_document.uri)
-                        {
-                            // If the user provided a compiler invocation command in their config
-                            // for the project config covering this file, use it
-                            &vec![cmd]
-                        } else {
-                            // Otherwise pass the default compile commands object
+                        let compile_cmds = get_compile_cmd_for_req(
+                            config,
+                            &params.text_document.uri,
+                            compile_cmds,
+                        );
+                        info!(
+                            "Selected compile command(s) for request: {:#?}",
                             compile_cmds
-                        };
+                        );
                         handle_diagnostics(
                             connection,
                             &params.text_document.uri,
                             project_config,
-                            cmp_cmds,
+                            &compile_cmds,
                         )?;
                         info!(
                             "Published diagnostics on save in {}ms",

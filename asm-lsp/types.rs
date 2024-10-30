@@ -657,6 +657,7 @@ pub enum Arch {
     #[serde(rename = "arm")]
     ARM,
     #[strum(serialize = "arm64")]
+    #[serde(rename = "arm64")]
     ARM64,
     #[strum(serialize = "riscv")]
     #[serde(rename = "riscv")]
