@@ -1,40 +1,24 @@
-use std::collections::HashMap;
-use std::path::PathBuf;
 use std::thread::sleep;
 use std::time::Duration;
 
 use asm_lsp::types::LspClient;
 
-use asm_lsp::handle::{
-    handle_completion_request, handle_diagnostics, handle_did_change_text_document_notification,
-    handle_did_close_text_document_notification, handle_did_open_text_document_notification,
-    handle_document_symbols_request, handle_goto_def_request, handle_hover_request,
-    handle_references_request, handle_signature_help_request,
-};
+use asm_lsp::handle::{handle_notification, handle_request};
 use asm_lsp::{
-    get_compile_cmd_for_req, get_compile_cmds_from_file, get_completes, get_include_dirs,
-    get_root_config, CompletionItems, DocumentStore, NameToInfoMaps, RootConfig,
+    get_compile_cmds_from_file, get_completes, get_include_dirs, get_root_config,
+    send_notification, DocumentStore, RootConfig, ServerStore,
 };
 
-use compile_commands::{CompilationDatabase, SourceFile};
-use lsp_types::notification::{
-    DidChangeTextDocument, DidCloseTextDocument, DidOpenTextDocument, DidSaveTextDocument,
-    Notification as LspTypesNotification,
-};
-use lsp_types::request::{
-    Completion, DocumentDiagnosticRequest, DocumentSymbolRequest, GotoDefinition, HoverRequest,
-    References, SignatureHelpRequest,
-};
 use lsp_types::{
     CompletionItemKind, CompletionOptions, CompletionOptionsCompletionItem, DiagnosticOptions,
-    DiagnosticServerCapabilities, HoverProviderCapability, InitializeParams, OneOf,
+    DiagnosticServerCapabilities, HoverProviderCapability, InitializeParams, MessageType, OneOf,
     PositionEncodingKind, ServerCapabilities, SignatureHelpOptions, TextDocumentSyncCapability,
     TextDocumentSyncKind, WorkDoneProgressOptions,
 };
 
 use anyhow::Result;
-use log::{error, info};
-use lsp_server::{Connection, Message, Notification, Request, RequestId};
+use log::{info, warn};
+use lsp_server::{Connection, Message};
 
 /// Entry point of the server. Connects to the client, loads documentation resources,
 /// and then enters the main loop
@@ -53,7 +37,7 @@ pub fn main() -> Result<()> {
     flexi_logger::Logger::try_with_str("info")?.start()?;
 
     // LSP server initialisation
-    info!("Starting asm_lsp-{}", env!("CARGO_PKG_VERSION"));
+    info!("Starting asm-lsp-{}", env!("CARGO_PKG_VERSION"));
 
     // Create the transport
     let (connection, _io_threads) = Connection::stdio();
@@ -117,16 +101,8 @@ pub fn main() -> Result<()> {
     let mut config = match get_root_config(&params) {
         Ok(cfg) => cfg,
         Err(e) => {
-            let err_msg_params = lsp_types::ShowMessageParams {
-                typ: lsp_types::MessageType::ERROR,
-                message: format!("{e}. Please make corrections and restart asm-lsp."),
-            };
-            let result = serde_json::to_value(err_msg_params).unwrap();
-            let err_notif = lsp_server::Notification {
-                method: lsp_types::notification::ShowMessage::METHOD.to_string(),
-                params: result,
-            };
-            connection.sender.send(Message::Notification(err_notif))?;
+            let msg = format!("{e}. Please make corrections and restart asm-lsp.");
+            send_notification(msg, MessageType::ERROR, &connection)?;
             // HACK: Sleep so our error message isn't immediately overwritten by
             // the LSP client informing the user that we exited with an error code
             sleep(Duration::from_secs(5));
@@ -134,16 +110,8 @@ pub fn main() -> Result<()> {
         }
     };
     if config == RootConfig::default() {
-        let warn_msg_params = lsp_types::ShowMessageParams {
-            typ: lsp_types::MessageType::WARNING,
-            message: "No .asm-lsp.toml config file found. Using default options.".to_string(),
-        };
-        let result = serde_json::to_value(warn_msg_params).unwrap();
-        let err_notif = lsp_server::Notification {
-            method: lsp_types::notification::ShowMessage::METHOD.to_string(),
-            params: result,
-        };
-        connection.sender.send(Message::Notification(err_notif))?;
+        let msg = "No .asm-lsp.toml config file found. Using default options.".to_string();
+        send_notification(msg, MessageType::WARNING, &connection)?;
     }
     info!("Server Configuration: {:?}", config);
     if let Some(ref client_info) = params.client_info {
@@ -153,46 +121,40 @@ pub fn main() -> Result<()> {
         }
     }
 
+    let mut store = ServerStore::default();
     // Populate names to `Instruction`/`Register`/`Directive` maps
-    let mut names_to_info = NameToInfoMaps::default();
     for isa in config.effective_arches() {
-        isa.setup_instructions(&mut names_to_info.instructions);
-        isa.setup_registers(&mut names_to_info.registers);
+        isa.setup_instructions(&mut store.names_to_info.instructions);
+        isa.setup_registers(&mut store.names_to_info.registers);
     }
 
     for assembler in config.effective_assemblers() {
-        assembler.setup_directives(&mut names_to_info.directives);
+        assembler.setup_directives(&mut store.names_to_info.directives);
     }
 
     // Use the maps we populated above to generate completion items
-    let mut completion_items = CompletionItems::new();
-    completion_items.instructions = get_completes(
-        &names_to_info.instructions,
+    store.completion_items.instructions = get_completes(
+        &store.names_to_info.instructions,
         Some(CompletionItemKind::OPERATOR),
     );
 
-    completion_items.registers =
-        get_completes(&names_to_info.registers, Some(CompletionItemKind::VARIABLE));
+    store.completion_items.registers = get_completes(
+        &store.names_to_info.registers,
+        Some(CompletionItemKind::VARIABLE),
+    );
 
-    completion_items.directives = get_completes(
-        &names_to_info.directives,
+    store.completion_items.directives = get_completes(
+        &store.names_to_info.directives,
         Some(CompletionItemKind::OPERATOR),
     );
 
-    let compile_cmds = get_compile_cmds_from_file(&params).unwrap_or_default();
-    if !compile_cmds.is_empty() {
-        info!("Loaded compile commands: {:?}", compile_cmds);
+    store.compile_commands = get_compile_cmds_from_file(&params).unwrap_or_default();
+    if !store.compile_commands.is_empty() {
+        info!("Loaded compile commands: {:?}", store.compile_commands);
     }
-    let include_dirs = get_include_dirs(&compile_cmds);
+    store.include_dirs = get_include_dirs(&store.compile_commands);
 
-    main_loop(
-        &connection,
-        &config,
-        &names_to_info,
-        &completion_items,
-        &compile_cmds,
-        &include_dirs,
-    )?;
+    main_loop(&connection, &config, &store)?;
 
     // HACK: the `writer` thread of `connection` hangs on joining more often than
     // not. Need to investigate this further, but for now just skipping the join
@@ -203,203 +165,24 @@ pub fn main() -> Result<()> {
     Ok(())
 }
 
-// TODO: Wrap up all the completion items into a struct
-
-fn main_loop(
-    connection: &Connection,
-    config: &RootConfig,
-    names_to_info: &NameToInfoMaps,
-    completion_tiems: &CompletionItems,
-    compile_cmds: &CompilationDatabase,
-    include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
-) -> Result<()> {
+fn main_loop(connection: &Connection, config: &RootConfig, store: &ServerStore) -> Result<()> {
     let mut doc_store = DocumentStore::new();
 
     info!("Starting asm-lsp loop...");
     for msg in &connection.receiver {
-        let start = std::time::Instant::now();
         match msg {
             Message::Request(req) => {
                 if connection.handle_shutdown(&req)? {
                     info!("Recieved shutdown request");
                     return Ok(());
                 }
-                if let Ok((id, params)) = cast_req::<HoverRequest>(req.clone()) {
-                    handle_hover_request(
-                        connection,
-                        id,
-                        config.get_config(&params.text_document_position_params.text_document.uri),
-                        &params,
-                        &mut doc_store,
-                        names_to_info,
-                        include_dirs,
-                    )?;
-                    info!(
-                        "Hover request serviced in {}ms",
-                        start.elapsed().as_millis()
-                    );
-                } else if let Ok((id, params)) = cast_req::<Completion>(req.clone()) {
-                    handle_completion_request(
-                        connection,
-                        id,
-                        &params,
-                        config.get_config(&params.text_document_position.text_document.uri),
-                        &mut doc_store,
-                        completion_tiems,
-                    )?;
-                    info!(
-                        "Completion request serviced in {}ms",
-                        start.elapsed().as_millis()
-                    );
-                } else if let Ok((id, params)) = cast_req::<GotoDefinition>(req.clone()) {
-                    handle_goto_def_request(
-                        connection,
-                        id,
-                        &params,
-                        config.get_config(&params.text_document_position_params.text_document.uri),
-                        &mut doc_store,
-                    )?;
-                    info!(
-                        "Goto definition request serviced in {}ms",
-                        start.elapsed().as_millis()
-                    );
-                } else if let Ok((id, params)) = cast_req::<DocumentSymbolRequest>(req.clone()) {
-                    handle_document_symbols_request(
-                        connection,
-                        id,
-                        &params,
-                        config.get_config(&params.text_document.uri),
-                        &mut doc_store,
-                    )?;
-                    info!(
-                        "Document symbols request serviced in {}ms",
-                        start.elapsed().as_millis()
-                    );
-                } else if let Ok((id, params)) = cast_req::<SignatureHelpRequest>(req.clone()) {
-                    handle_signature_help_request(
-                        connection,
-                        id,
-                        &params,
-                        config.get_config(&params.text_document_position_params.text_document.uri),
-                        &mut doc_store,
-                        &names_to_info.instructions,
-                    )?;
-                    info!(
-                        "Signature help request serviced in {}ms",
-                        start.elapsed().as_millis()
-                    );
-                } else if let Ok((id, params)) = cast_req::<References>(req.clone()) {
-                    handle_references_request(
-                        connection,
-                        id,
-                        &params,
-                        config.get_config(&params.text_document_position.text_document.uri),
-                        &mut doc_store,
-                    )?;
-                    info!(
-                        "References request serviced in {}ms",
-                        start.elapsed().as_millis()
-                    );
-                } else if let Ok((_id, params)) = cast_req::<DocumentDiagnosticRequest>(req.clone())
-                {
-                    let project_config = config.get_config(&params.text_document.uri);
-                    // Ok to unwrap, this should never be `None`
-                    if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
-                        let compile_cmds = get_compile_cmd_for_req(
-                            config,
-                            &params.text_document.uri,
-                            compile_cmds,
-                        );
-                        info!(
-                            "Selected compile command(s) for request: {:#?}",
-                            compile_cmds
-                        );
-                        handle_diagnostics(
-                            connection,
-                            &params.text_document.uri,
-                            project_config,
-                            &compile_cmds,
-                        )?;
-                        info!(
-                            "Diagnostics request serviced in {}ms",
-                            start.elapsed().as_millis()
-                        );
-                    }
-                } else {
-                    error!("Invalid request format -> {:#?}", req);
-                }
+                handle_request(req, connection, config, &mut doc_store, store)?;
             }
             Message::Notification(notif) => {
-                if let Ok(params) = cast_notif::<DidOpenTextDocument>(notif.clone()) {
-                    handle_did_open_text_document_notification(&params, &mut doc_store);
-                    info!(
-                        "Did open text document notification serviced in {}ms",
-                        start.elapsed().as_millis()
-                    );
-                } else if let Ok(params) = cast_notif::<DidChangeTextDocument>(notif.clone()) {
-                    handle_did_change_text_document_notification(&params, &mut doc_store)?;
-                    info!(
-                        "Did change text document notification serviced in {}ms",
-                        start.elapsed().as_millis()
-                    );
-                } else if let Ok(params) = cast_notif::<DidCloseTextDocument>(notif.clone()) {
-                    handle_did_close_text_document_notification(&params, &mut doc_store);
-                    info!(
-                        "Did close text document notification serviced in {}ms",
-                        start.elapsed().as_millis()
-                    );
-                } else if let Ok(params) = cast_notif::<DidSaveTextDocument>(notif.clone()) {
-                    let project_config = config.get_config(&params.text_document.uri);
-                    // Ok to unwrap, this should never be `None`
-                    if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
-                        let compile_cmds = get_compile_cmd_for_req(
-                            config,
-                            &params.text_document.uri,
-                            compile_cmds,
-                        );
-                        info!(
-                            "Selected compile command(s) for request: {:#?}",
-                            compile_cmds
-                        );
-                        handle_diagnostics(
-                            connection,
-                            &params.text_document.uri,
-                            project_config,
-                            &compile_cmds,
-                        )?;
-                        info!(
-                            "Published diagnostics on save in {}ms",
-                            start.elapsed().as_millis()
-                        );
-                    }
-                }
+                handle_notification(notif, connection, &mut doc_store, config, store)?;
             }
-            Message::Response(_resp) => {}
+            Message::Response(resp) => warn!("Unexpected client response: {resp:#?}"),
         }
     }
     Ok(())
-}
-
-fn cast_req<R>(req: Request) -> Result<(RequestId, R::Params)>
-where
-    R: lsp_types::request::Request,
-    R::Params: serde::de::DeserializeOwned,
-{
-    match req.extract(R::METHOD) {
-        Ok(value) => Ok(value),
-        // Fixme please
-        Err(e) => Err(anyhow::anyhow!("Error: {e}")),
-    }
-}
-
-fn cast_notif<R>(notif: Notification) -> Result<R::Params>
-where
-    R: lsp_types::notification::Notification,
-    R::Params: serde::de::DeserializeOwned,
-{
-    match notif.extract(R::METHOD) {
-        Ok(value) => Ok(value),
-        // Fixme please
-        Err(e) => Err(anyhow::anyhow!("Error: {e}")),
-    }
 }

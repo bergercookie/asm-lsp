@@ -19,13 +19,13 @@ mod tests {
         parser::{get_cache_dir, populate_arm_instructions, populate_masm_nasm_directives},
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
-        Assembler, CompletionItems, Config, ConfigOptions, Directive, DocumentStore, Instruction,
-        NameToInfoMaps, Register, TreeEntry,
+        Assembler, Config, ConfigOptions, Directive, DocumentStore, Instruction, Register,
+        ServerStore, TreeEntry,
     };
 
-    fn empty_test_config() -> Config {
+    const fn empty_test_config() -> Config {
         Config {
-            version: Some("0.1".to_string()),
+            version: None,
             assembler: Assembler::None,
             instruction_set: Arch::None,
             opts: Some(ConfigOptions {
@@ -40,7 +40,7 @@ mod tests {
 
     fn z80_test_config() -> Config {
         Config {
-            version: Some("0.1".to_string()),
+            version: None,
             assembler: Assembler::None,
             instruction_set: Arch::Z80,
             opts: Some(ConfigOptions::default()),
@@ -50,7 +50,7 @@ mod tests {
 
     fn arm_test_config() -> Config {
         Config {
-            version: Some("0.1".to_string()),
+            version: None,
             assembler: Assembler::None,
             instruction_set: Arch::ARM,
             opts: Some(ConfigOptions::default()),
@@ -60,7 +60,7 @@ mod tests {
 
     fn riscv_test_config() -> Config {
         Config {
-            version: Some("0.1".to_string()),
+            version: None,
             assembler: Assembler::None,
             instruction_set: Arch::RISCV,
             opts: Some(ConfigOptions::default()),
@@ -70,11 +70,12 @@ mod tests {
 
     fn x86_x86_64_test_config() -> Config {
         Config {
-            version: Some("0.1".to_string()),
+            version: None,
             // HACK: The Gas or Go assembler must be enabled for this test
             // config, as filtering later on removes any x86/x86-64
             // instructions without any `form` fields that match one of
-            // those assemblers
+            // those assemblers. Currently, the tests are written with the
+            // expectation of Gas being enbabled and Go disabled
             assembler: Assembler::Gas,
             instruction_set: Arch::X86_AND_X86_64,
             opts: Some(ConfigOptions::default()),
@@ -84,7 +85,7 @@ mod tests {
 
     fn gas_test_config() -> Config {
         Config {
-            version: Some("0.1".to_string()),
+            version: None,
             assembler: Assembler::Gas,
             instruction_set: Arch::None,
             opts: Some(ConfigOptions::default()),
@@ -94,7 +95,7 @@ mod tests {
 
     fn masm_test_config() -> Config {
         Config {
-            version: Some("0.1".to_string()),
+            version: None,
             assembler: Assembler::Masm,
             instruction_set: Arch::None,
             opts: Some(ConfigOptions::default()),
@@ -104,7 +105,7 @@ mod tests {
 
     fn nasm_test_config() -> Config {
         Config {
-            version: Some("0.1".to_string()),
+            version: None,
             assembler: Assembler::Nasm,
             instruction_set: Arch::None,
             opts: Some(ConfigOptions::default()),
@@ -129,12 +130,6 @@ mod tests {
         gas_directives: Vec<Directive>,
         masm_directives: Vec<Directive>,
         nasm_directives: Vec<Directive>,
-    }
-
-    #[derive(Debug, Default)]
-    struct GlobalVars {
-        names_to_info: NameToInfoMaps,
-        completion_items: CompletionItems,
     }
 
     impl GlobalInfo {
@@ -284,8 +279,8 @@ mod tests {
         Ok(info)
     }
 
-    fn init_test_store(info: &GlobalInfo) -> GlobalVars {
-        let mut store = GlobalVars::default();
+    fn init_test_store(info: &GlobalInfo) -> ServerStore {
+        let mut store = ServerStore::default();
 
         let mut x86_cache_path = get_cache_dir().unwrap();
         x86_cache_path.push("x86_instr_docs.html");
@@ -403,7 +398,7 @@ mod tests {
 
     fn test_hover(source: &str, expected: &str, config: &Config) {
         let info = init_global_info(config).expect("Failed to load info");
-        let globals = init_test_store(&info);
+        let store = init_test_store(&info);
 
         let mut position: Option<Position> = None;
         for (line_num, line) in source.lines().enumerate() {
@@ -469,8 +464,7 @@ mod tests {
             word,
             cursor_offset,
             &mut doc_store,
-            &globals.names_to_info,
-            &HashMap::new(),
+            &store,
         )
         .unwrap();
 

@@ -5,6 +5,7 @@ use std::{
     str::FromStr,
 };
 
+use compile_commands::{CompilationDatabase, SourceFile};
 use log::{info, warn};
 use lsp_textdocument::TextDocuments;
 use lsp_types::{CompletionItem, Uri};
@@ -679,104 +680,34 @@ impl Arch {
     ///
     /// Panics if unable to deserialize `Register`
     pub fn setup_registers(self, names_to_registers: &mut HashMap<(Self, String), Register>) {
+        macro_rules! load_registers_with_path {
+            ($arch:expr, $path:literal) => {{
+                let start = std::time::Instant::now();
+                let serialized_regs = include_bytes!($path);
+                let registers = bincode::deserialize::<Vec<Register>>(serialized_regs)
+                    .unwrap_or_else(|e| panic!("Error deserializing {} registers -- {}\nRegenerate serialized data with regenerate.sh", $arch, e));
+
+                info!(
+                    "{} register set loaded in {}ms",
+                    $arch,
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_register_map($arch, &registers, names_to_registers);
+            }};
+        }
+
         match self {
-            Self::X86 => {
-                // create a map of &Register_name -> &Register - Use that in user queries
-                // The Register(s) themselves are stored in a vector and we only keep references to the
-                // former map
-                let start = std::time::Instant::now();
-                let regs_x86 = include_bytes!("serialized/registers/x86");
-                let x86_registers =
-                    bincode::deserialize(regs_x86)
-                    .expect("Error deserializing x86 registers;\nRegenerate serialized data with regenerate.sh");
-                info!(
-                    "x86 register set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-
-                populate_name_to_register_map(Self::X86, &x86_registers, names_to_registers);
-            }
-            Self::X86_64 => {
-                let start = std::time::Instant::now();
-                let regs_x86_64 = include_bytes!("serialized/registers/x86_64");
-                let x86_64_registers = bincode::deserialize(regs_x86_64)
-                    .expect("Error deserializing x86-64 registers;\nRegenerate serialized data with regenerate.sh");
-                info!(
-                    "x86-64 register set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-
-                populate_name_to_register_map(Self::X86_64, &x86_64_registers, names_to_registers);
-            }
+            Self::X86 => load_registers_with_path!(Self::X86, "serialized/registers/x86"),
+            Self::X86_64 => load_registers_with_path!(Self::X86_64, "serialized/registers/x86_64"),
             Self::X86_AND_X86_64 => {
-                let start = std::time::Instant::now();
-
-                let regs_x86 = include_bytes!("serialized/registers/x86");
-                let x86_registers =
-                    bincode::deserialize(regs_x86)
-                    .expect("Error deserializing x86 registers;\nRegenerate serialized data with regenerate.sh");
-
-                let regs_x86_64 = include_bytes!("serialized/registers/x86_64");
-                let x86_64_registers = bincode::deserialize(regs_x86_64)
-                    .expect("Error deserializing x86-64 registers;\nRegenerate serialized data with regenerate.sh");
-
-                populate_name_to_register_map(Self::X86, &x86_registers, names_to_registers);
-                populate_name_to_register_map(Self::X86_64, &x86_64_registers, names_to_registers);
-
-                info!(
-                    "x86/x86-64 register set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
+                load_registers_with_path!(Self::X86, "serialized/registers/x86");
+                load_registers_with_path!(Self::X86_64, "serialized/registers/x86_64");
             }
-            Self::ARM => {
-                let start = std::time::Instant::now();
-                let regs_arm = include_bytes!("serialized/registers/arm");
-                let arm_registers =
-                    bincode::deserialize(regs_arm)
-                    .expect("Error deserializing arm registers;\nRegenerate serialized data with regenerate.sh");
-                info!(
-                    "arm register set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-
-                populate_name_to_register_map(Self::ARM, &arm_registers, names_to_registers);
-            }
-            Self::ARM64 => {
-                let start = std::time::Instant::now();
-                let regs_arm64 = include_bytes!("serialized/registers/arm64");
-                let arm64_registers = bincode::deserialize(regs_arm64)
-                    .expect("Error deserializing arm64 registers;\nRegenerate serialized data with regenerate.sh");
-                populate_name_to_register_map(Self::ARM64, &arm64_registers, names_to_registers);
-                info!(
-                    "arm register set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-            }
-            Self::RISCV => {
-                let start = std::time::Instant::now();
-                let regs_riscv = include_bytes!("serialized/registers/riscv");
-                let riscv_registers =
-                    bincode::deserialize(regs_riscv)
-                    .expect("Error deserializing riscv registers;\nRegenerate serialized data with regenerate.sh");
-                info!(
-                    "riscv register set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-
-                populate_name_to_register_map(Self::RISCV, &riscv_registers, names_to_registers);
-            }
-            Self::Z80 => {
-                let start = std::time::Instant::now();
-                let regs_z80 = include_bytes!("serialized/registers/z80");
-                let z80_registers =
-                    bincode::deserialize(regs_z80)
-                    .expect("Error deserializing z80 registers;\nRegenerate serialized data with regenerate.sh");
-                info!(
-                    "z80 register set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-                populate_name_to_register_map(Self::Z80, &z80_registers, names_to_registers);
-            }
+            Self::ARM => load_registers_with_path!(Self::ARM, "serialized/registers/arm"),
+            Self::ARM64 => load_registers_with_path!(Self::ARM64, "serialized/registers/arm"),
+            Self::RISCV => load_registers_with_path!(Self::RISCV, "serialized/registers/riscv"),
+            Self::Z80 => load_registers_with_path!(Self::Z80, "serialized/registers/z80"),
             Self::None => unreachable!(),
         }
     }
@@ -790,137 +721,36 @@ impl Arch {
         self,
         names_to_instructions: &mut HashMap<(Self, String), Instruction>,
     ) {
+        macro_rules! load_instructions_with_path {
+            ($arch:expr, $path:literal) => {{
+                let start = std::time::Instant::now();
+                let serialized_instrs = include_bytes!($path);
+                let instructions = bincode::deserialize::<Vec<Instruction>>(serialized_instrs)
+                    .unwrap_or_else(|e| panic!("Error deserializing {} instructions -- {}\nRegenerate serialized data with regenerate.sh", $arch, e));
+
+                info!(
+                    "{} instruction set loaded in {}ms",
+                    $arch,
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_instruction_map($arch, &instructions, names_to_instructions);
+            }};
+        }
+
         match self {
-            Self::X86 => {
-                let start = std::time::Instant::now();
-                let x86_instrs = include_bytes!("serialized/opcodes/x86");
-                let x86_instructions = bincode::deserialize::<Vec<Instruction>>(x86_instrs)
-                    .expect("Error deserializing x86 instructions;\nRegenerate serialized data with regenerate.sh");
-                info!(
-                    "x86 instruction set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-
-                populate_name_to_instruction_map(
-                    Self::X86,
-                    &x86_instructions,
-                    names_to_instructions,
-                );
-            }
-            Self::X86_64 => {
-                let start = std::time::Instant::now();
-                let x86_64_instrs = include_bytes!("serialized/opcodes/x86_64");
-                let x86_64_instructions = bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)
-                    .expect("Error deserializing x86_64 instructions;\nRegenerate serialized data with regenerate.sh");
-                info!(
-                    "x86-64 instruction set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-
-                populate_name_to_instruction_map(
-                    Self::X86_64,
-                    &x86_64_instructions,
-                    names_to_instructions,
-                );
-            }
+            Self::X86 => load_instructions_with_path!(Self::X86, "serialized/opcodes/x86"),
+            Self::X86_64 => load_instructions_with_path!(Self::X86_64, "serialized/opcodes/x86_64"),
             Self::X86_AND_X86_64 => {
-                let start = std::time::Instant::now();
-
-                let x86_instrs = include_bytes!("serialized/opcodes/x86");
-                let x86_instructions = bincode::deserialize::<Vec<Instruction>>(x86_instrs)
-                    .expect("Error deserializing x86 instructions;\nRegenerate serialized data with regenerate.sh");
-
-                let x86_64_instrs = include_bytes!("serialized/opcodes/x86_64");
-                let x86_64_instructions = bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)
-                    .expect("Error deserializing x86_64 instructions;\nRegenerate serialized data with regenerate.sh");
-
-                populate_name_to_instruction_map(
-                    Self::X86,
-                    &x86_instructions,
-                    names_to_instructions,
-                );
-
-                populate_name_to_instruction_map(
-                    Self::X86_64,
-                    &x86_64_instructions,
-                    names_to_instructions,
-                );
-
-                info!(
-                    "x86/x86-64 instruction sets loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
+                load_instructions_with_path!(Self::X86, "serialized/opcodes/x86");
+                load_instructions_with_path!(Self::X86_64, "serialized/opcodes/x86_64");
             }
-            Self::ARM => {
-                let start = std::time::Instant::now();
-                let arm_instrs = include_bytes!("serialized/opcodes/arm");
-                let arm_instructions = bincode::deserialize::<Vec<Instruction>>(arm_instrs)
-                    .expect("Error deserializing arm32 instructions;\nRegenerate serialized data with regenerate.sh");
-                info!(
-                    "arm instruction set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-
-                populate_name_to_instruction_map(
-                    Self::ARM,
-                    &arm_instructions,
-                    names_to_instructions,
-                );
-            }
-            Self::ARM64 => {
-                let start = std::time::Instant::now();
-                // TODO: change to arm64 after arm32 has been added
-                let arm_instrs = include_bytes!("serialized/opcodes/arm");
-                // NOTE: Actually, the arm file are all arm64 so we needed to get
-                // the arm32 versions then do the below
-                // NOTE: No need to filter these instructions by assembler
-                // like we do for x86/x86_64, as our ARM docs don't contain any
-                // assembler-specific information (yet)
-                let arm64_instructions = bincode::deserialize::<Vec<Instruction>>(arm_instrs)
-                    .expect("Error deserializing arm64 instructions;\nRegenerate serialized data with regenerate.sh");
-                populate_name_to_instruction_map(
-                    Self::ARM64,
-                    &arm64_instructions,
-                    names_to_instructions,
-                );
-                info!(
-                    "arm64 instruction set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-            }
-            Self::RISCV => {
-                let start = std::time::Instant::now();
-                let riscv_instrs = include_bytes!("serialized/opcodes/riscv");
-                // NOTE: No need to filter these instructions by assembler like we do for
-                // x86/x86_64, as our RISCV docs don't contain any assembler-specific information (yet)
-                let riscv_instructions = bincode::deserialize::<Vec<Instruction>>(riscv_instrs).expect("Error deserializing riscv instructions;\nRegenerate serialized data with regenerate.sh");
-                info!(
-                    "riscv instruction set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-
-                populate_name_to_instruction_map(
-                    Self::RISCV,
-                    &riscv_instructions,
-                    names_to_instructions,
-                );
-            }
-            Self::Z80 => {
-                let start = std::time::Instant::now();
-                let z80_instrs = include_bytes!("serialized/opcodes/z80");
-                let z80_instructions = bincode::deserialize::<Vec<Instruction>>(z80_instrs)
-                    .expect("Error deserializing z80 instructions;\nRegenerate serialized data with regenerate.sh");
-                info!(
-                    "z80 instruction set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-
-                populate_name_to_instruction_map(
-                    Self::Z80,
-                    &z80_instructions,
-                    names_to_instructions,
-                );
-            }
+            Self::ARM => load_instructions_with_path!(Self::ARM, "serialized/opcodes/arm"),
+            // NOTE: Actually, the arm file are all arm64 so we needed to get
+            // the arm32 versions then do the below
+            Self::ARM64 => load_instructions_with_path!(Self::ARM64, "serialized/opcodes/arm"),
+            Self::RISCV => load_instructions_with_path!(Self::RISCV, "serialized/opcodes/riscv"),
+            Self::Z80 => load_instructions_with_path!(Self::Z80, "serialized/opcodes/z80"),
             Self::None => unreachable!(),
         }
     }
@@ -928,28 +758,35 @@ impl Arch {
 
 impl Default for Arch {
     fn default() -> Self {
-        if cfg!(target_arch = "x86") {
-            info!("Detected host arch as x86");
-            Self::X86
-        } else if cfg!(target_arch = "arm") {
-            info!("Detected host arch as arm");
-            Self::ARM
-        } else if cfg!(target_arch = "aarch64") {
-            info!("Detected host arch as aarch64");
-            Self::ARM64
-        } else if cfg!(target_arch = "riscv32") {
-            info!("Detected host arch as riscv32");
-            Self::RISCV
-        } else if cfg!(target_arch = "riscv64") {
-            info!("Detected host arch as riscv64");
-            Self::RISCV
-        } else {
-            if cfg!(target_arch = "x86_64") {
-                info!("Detected host arch as x86-64");
-            } else {
-                info!("Failed to detect host arch, defaulting to x86-64");
+        match () {
+            () if cfg!(target_arch = "x86") => {
+                info!("Detected host arch as x86");
+                Self::X86
             }
-            Self::X86_64 // somewhat arbitrary default
+            () if cfg!(target_arch = "arm") => {
+                info!("Detected host arch as arm");
+                Self::ARM
+            }
+            () if cfg!(target_arch = "aarch64") => {
+                info!("Detected host arch as aarch64");
+                Self::ARM64
+            }
+            () if cfg!(target_arch = "riscv32") => {
+                info!("Detected host arch as riscv32");
+                Self::RISCV
+            }
+            () if cfg!(target_arch = "riscv64") => {
+                info!("Detected host arch as riscv64");
+                Self::RISCV
+            }
+            () => {
+                if cfg!(target_arch = "x86_64") {
+                    info!("Detected host arch as x86-64");
+                } else {
+                    info!("Failed to detect host arch, defaulting to x86-64");
+                }
+                Self::X86_64 // Somewhat arbitrary default
+            }
         }
     }
 }
@@ -970,8 +807,6 @@ impl std::fmt::Display for Arch {
     }
 }
 
-// All of the `#[serde(rename = "...")] allows for both lower case and the literal
-// enum representations of the values to be deserialized
 #[derive(
     Debug,
     Display,
@@ -1013,46 +848,28 @@ impl Assembler {
     ///
     /// Panics if unable to deserialize `Directive`s
     pub fn setup_directives(self, names_to_directives: &mut HashMap<(Self, String), Directive>) {
+        macro_rules! load_directives_with_path {
+            ($assembler:expr, $path:literal) => {{
+                let start = std::time::Instant::now();
+                let serialized_dirs = include_bytes!($path);
+                let directives = bincode::deserialize::<Vec<Directive>>(serialized_dirs)
+                    .unwrap_or_else(|e| panic!("Error deserializing {} directives -- {}\nRegenerate serialized data with regenerate.sh", $assembler, e));
+
+                info!(
+                    "{} directive set loaded in {}ms",
+                    $assembler,
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_directive_map($assembler, &directives, names_to_directives);
+            }};
+        }
+
         match self {
-            Self::Gas => {
-                let start = std::time::Instant::now();
-                let gas_dirs = include_bytes!("serialized/directives/gas");
-                let gas_directives =
-                    bincode::deserialize(gas_dirs).expect("Error deserializing Gas directives\nRegenerate serialized data with regenerate.sh");
-                info!(
-                    "Gas directive set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-
-                populate_name_to_directive_map(Self::Gas, &gas_directives, names_to_directives);
-            }
-            Self::Masm => {
-                let start = std::time::Instant::now();
-                let masm_dirs = include_bytes!("serialized/directives/masm");
-                let masm_directives =
-                    bincode::deserialize(masm_dirs).expect("Error deserializing Masm directives\nRegenerate serialized data with regenerate.sh");
-                info!(
-                    "MASM directive set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-
-                populate_name_to_directive_map(Self::Masm, &masm_directives, names_to_directives);
-            }
-            Self::Nasm => {
-                let start = std::time::Instant::now();
-                let nasm_dirs = include_bytes!("serialized/directives/nasm");
-                let nasm_directives =
-                    bincode::deserialize(nasm_dirs).expect("Error deserializing Nasm directives\nRegenerate serialized data with regenerate.sh");
-                info!(
-                    "Nasm directive set loaded in {}ms",
-                    start.elapsed().as_millis()
-                );
-
-                populate_name_to_directive_map(Self::Nasm, &nasm_directives, names_to_directives);
-            }
-            Self::Go => {
-                warn!("There is currently no Go-specific assembler documentation");
-            }
+            Self::Gas => load_directives_with_path!(Self::Gas, "serialized/directives/gas"),
+            Self::Masm => load_directives_with_path!(Self::Masm, "serialized/directives/masm"),
+            Self::Nasm => load_directives_with_path!(Self::Nasm, "serialized/directives/nasm"),
+            Self::Go => warn!("There is currently no Go-specific assembler documentation"),
             Self::None => unreachable!(),
         }
     }
@@ -1309,9 +1126,11 @@ impl RootConfig {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProjectConfig {
-    // path to a directory or source file on which this config applies
-    // can be relative to the server's root directory, or absolute
+    // Path to a directory or source file on which this config applies
+    // Can be relative to the server's root directory, or absolute
     pub path: PathBuf,
+    /// Config for this project. If `path` is a directory, applies to all files
+    /// and subdirectories. If `path` is a file, just applies to that file
     #[serde(flatten)]
     pub config: Config,
 }
@@ -1329,7 +1148,7 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            version: Some(String::from("0.1")),
+            version: None,
             assembler: Assembler::default(),
             instruction_set: Arch::default(),
             opts: Some(ConfigOptions::default()),
@@ -1719,4 +1538,17 @@ impl CompletionItems {
             directives: Vec::new(),
         }
     }
+}
+
+/// Struct to store all documentation the server uses to service user requests
+#[derive(Default)]
+pub struct ServerStore {
+    /// Links names of instructions, registers, and directives to their documentation
+    pub names_to_info: NameToInfoMaps,
+    /// `Completion` items for instructions, registers, and directives
+    pub completion_items: CompletionItems,
+    /// Compilation database loaded from `compile_commands.json` or `compile_flags.txt`
+    pub compile_commands: CompilationDatabase,
+    /// Include directories
+    pub include_dirs: HashMap<SourceFile, Vec<PathBuf>>,
 }

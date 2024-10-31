@@ -1,13 +1,17 @@
-use std::{collections::HashMap, path::PathBuf};
+use std::path::PathBuf;
 
 use anyhow::{anyhow, Result};
 use compile_commands::{CompilationDatabase, SourceFile};
-use log::info;
-use lsp_server::{Connection, Message, RequestId, Response};
+use log::{info, warn};
+use lsp_server::{Connection, Message, Notification, Request, RequestId, Response};
 use lsp_types::{
     notification::{
-        DidChangeTextDocument, DidCloseTextDocument, DidOpenTextDocument, Notification,
-        PublishDiagnostics,
+        DidChangeTextDocument, DidCloseTextDocument, DidOpenTextDocument, DidSaveTextDocument,
+        Notification as _, PublishDiagnostics,
+    },
+    request::{
+        Completion, DocumentDiagnosticRequest, DocumentSymbolRequest, GotoDefinition, HoverRequest,
+        References, Request as RequestMessage, SignatureHelpRequest,
     },
     CompletionParams, Diagnostic, DidChangeTextDocumentParams, DidCloseTextDocumentParams,
     DidOpenTextDocumentParams, DocumentSymbolParams, DocumentSymbolResponse, GotoDefinitionParams,
@@ -16,11 +20,268 @@ use lsp_types::{
 use tree_sitter::Parser;
 
 use crate::{
-    apply_compile_cmd, get_comp_resp, get_default_compile_cmd, get_document_symbols,
-    get_goto_def_resp, get_hover_resp, get_ref_resp, get_sig_help_resp, get_word_from_pos_params,
-    send_empty_resp, text_doc_change_to_ts_edit, CompletionItems, Config, ConfigOptions,
-    DocumentStore, NameToInfoMaps, NameToInstructionMap, TreeEntry,
+    apply_compile_cmd, get_comp_resp, get_compile_cmd_for_req, get_default_compile_cmd,
+    get_document_symbols, get_goto_def_resp, get_hover_resp, get_ref_resp, get_sig_help_resp,
+    get_word_from_pos_params, send_empty_resp, text_doc_change_to_ts_edit, CompletionItems, Config,
+    ConfigOptions, DocumentStore, NameToInstructionMap, RootConfig, ServerStore, TreeEntry,
 };
+
+/// Handles `Request`s from the lsp client
+///
+/// # Errors
+///
+/// Returns errors from any of the handler functions. The majority of error sources
+/// are failures to send a response via `connection`
+///
+/// # Panics
+///
+/// Panics if JSON encoding of a response fails, a json request fails to cast into
+/// its equivalent in memory struct, or the server detects it is in an invalid state
+pub fn handle_request(
+    req: Request,
+    connection: &Connection,
+    config: &RootConfig,
+    doc_store: &mut DocumentStore,
+    store: &ServerStore,
+) -> Result<()> {
+    let start = std::time::Instant::now();
+    match req.method.as_str() {
+        HoverRequest::METHOD => {
+            let (id, params) = cast_req::<HoverRequest>(req).expect("Failed to cast hover request");
+            handle_hover_request(
+                connection,
+                id,
+                config.get_config(&params.text_document_position_params.text_document.uri),
+                &params,
+                doc_store,
+                store,
+            )?;
+            info!(
+                "{} request serviced in {}ms",
+                HoverRequest::METHOD,
+                start.elapsed().as_millis()
+            );
+        }
+        Completion::METHOD => {
+            let (id, params) =
+                cast_req::<Completion>(req).expect("Failed to cast completion request");
+            handle_completion_request(
+                connection,
+                id,
+                &params,
+                config.get_config(&params.text_document_position.text_document.uri),
+                doc_store,
+                &store.completion_items,
+            )?;
+            info!(
+                "{} request serviced in {}ms",
+                Completion::METHOD,
+                start.elapsed().as_millis()
+            );
+        }
+        GotoDefinition::METHOD => {
+            let (id, params) =
+                cast_req::<GotoDefinition>(req).expect("Failed to cast completion request");
+            handle_goto_def_request(
+                connection,
+                id,
+                &params,
+                config.get_config(&params.text_document_position_params.text_document.uri),
+                doc_store,
+            )?;
+            info!(
+                "{} request serviced in {}ms",
+                GotoDefinition::METHOD,
+                start.elapsed().as_millis()
+            );
+        }
+        DocumentSymbolRequest::METHOD => {
+            let (id, params) =
+                cast_req::<DocumentSymbolRequest>(req).expect("Failed to cast completion request");
+            handle_document_symbols_request(
+                connection,
+                id,
+                &params,
+                config.get_config(&params.text_document.uri),
+                doc_store,
+            )?;
+            info!(
+                "{} request serviced in {}ms",
+                DocumentSymbolRequest::METHOD,
+                start.elapsed().as_millis()
+            );
+        }
+        SignatureHelpRequest::METHOD => {
+            let (id, params) =
+                cast_req::<SignatureHelpRequest>(req).expect("Failed to cast completion request");
+            handle_signature_help_request(
+                connection,
+                id,
+                &params,
+                config.get_config(&params.text_document_position_params.text_document.uri),
+                doc_store,
+                &store.names_to_info.instructions,
+            )?;
+            info!(
+                "{} request serviced in {}ms",
+                SignatureHelpRequest::METHOD,
+                start.elapsed().as_millis()
+            );
+        }
+        References::METHOD => {
+            let (id, params) =
+                cast_req::<References>(req).expect("Failed to cast completion request");
+            handle_references_request(
+                connection,
+                id,
+                &params,
+                config.get_config(&params.text_document_position.text_document.uri),
+                doc_store,
+            )?;
+            info!(
+                "{} request serviced in {}ms",
+                References::METHOD,
+                start.elapsed().as_millis()
+            );
+        }
+        DocumentDiagnosticRequest::METHOD => {
+            let (_id, params) = cast_req::<DocumentDiagnosticRequest>(req)
+                .expect("Failed to cast completion request");
+            let project_config = config.get_config(&params.text_document.uri);
+            // Ok to unwrap, this should never be `None`
+            if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
+                let compile_cmds = get_compile_cmd_for_req(
+                    config,
+                    &params.text_document.uri,
+                    &store.compile_commands,
+                );
+                info!(
+                    "Selected compile command(s) for request: {:#?}",
+                    compile_cmds
+                );
+                handle_diagnostics(
+                    connection,
+                    &params.text_document.uri,
+                    project_config,
+                    &compile_cmds,
+                )?;
+                info!(
+                    "{} request serviced in {}ms",
+                    DocumentDiagnosticRequest::METHOD,
+                    start.elapsed().as_millis()
+                );
+            }
+        }
+        method => warn!("Invalid request format: {method:#?}"),
+    }
+
+    Ok(())
+}
+
+/// Handles `Notification`s from the lsp client
+///
+/// # Errors
+///
+/// Returns errors from any of the handler functions.
+///
+/// # Panics
+///
+/// Panics if JSON encoding of a response fails, a json request fails to cast into
+/// its equivalent in memory struct, or the server detects it is in an invalid state
+pub fn handle_notification(
+    notif: Notification,
+    connection: &Connection,
+    doc_store: &mut DocumentStore,
+    config: &RootConfig,
+    store: &ServerStore,
+) -> Result<()> {
+    let start = std::time::Instant::now();
+    match notif.method.as_str() {
+        DidOpenTextDocument::METHOD => {
+            let params = cast_notif::<DidOpenTextDocument>(notif)
+                .expect("Failed to cast did open text document notification");
+            handle_did_open_text_document_notification(&params, doc_store);
+            info!(
+                "{} notification serviced in {}ms",
+                DidOpenTextDocument::METHOD,
+                start.elapsed().as_millis()
+            );
+        }
+        DidChangeTextDocument::METHOD => {
+            let params = cast_notif::<DidChangeTextDocument>(notif)
+                .expect("Failed to cast did change text document notification");
+            handle_did_change_text_document_notification(&params, doc_store)?;
+            info!(
+                "{} notification serviced in {}ms",
+                DidChangeTextDocument::METHOD,
+                start.elapsed().as_millis()
+            );
+        }
+        DidCloseTextDocument::METHOD => {
+            let params = cast_notif::<DidCloseTextDocument>(notif)
+                .expect("Failed to cast did close text document notification");
+            handle_did_close_text_document_notification(&params, doc_store);
+            info!(
+                "{} notification serviced in {}ms",
+                DidCloseTextDocument::METHOD,
+                start.elapsed().as_millis()
+            );
+        }
+        DidSaveTextDocument::METHOD => {
+            let params = cast_notif::<DidSaveTextDocument>(notif)
+                .expect("Failed to cast did save text document notification");
+            let project_config = config.get_config(&params.text_document.uri);
+            // Ok to unwrap, this should never be `None`
+            if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
+                let compile_cmds = get_compile_cmd_for_req(
+                    config,
+                    &params.text_document.uri,
+                    &store.compile_commands,
+                );
+                info!(
+                    "Selected compile command(s) for request: {:#?}",
+                    compile_cmds
+                );
+                handle_diagnostics(
+                    connection,
+                    &params.text_document.uri,
+                    project_config,
+                    &compile_cmds,
+                )?;
+                info!(
+                    "Published diagnostics on save in {}ms",
+                    start.elapsed().as_millis()
+                );
+            }
+        }
+        method => warn!("Invalid notification format: {method:#?}"),
+    }
+    Ok(())
+}
+
+fn cast_req<R>(req: Request) -> Result<(RequestId, R::Params)>
+where
+    R: lsp_types::request::Request,
+    R::Params: serde::de::DeserializeOwned,
+{
+    match req.extract(R::METHOD) {
+        Ok(value) => Ok(value),
+        // Fixme please
+        Err(e) => Err(anyhow::anyhow!("Error: {e}")),
+    }
+}
+
+fn cast_notif<R>(notif: Notification) -> Result<R::Params>
+where
+    R: lsp_types::notification::Notification,
+    R::Params: serde::de::DeserializeOwned,
+{
+    match notif.extract(R::METHOD) {
+        Ok(value) => Ok(value),
+        // Fixme please
+        Err(e) => Err(anyhow::anyhow!("Error: {e}")),
+    }
+}
 
 /// Handles hover requests
 ///
@@ -37,8 +298,7 @@ pub fn handle_hover_request(
     config: &Config,
     params: &HoverParams,
     doc_store: &mut DocumentStore,
-    names_to_info: &NameToInfoMaps,
-    include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
+    store: &ServerStore,
 ) -> Result<()> {
     let (word, cursor_offset) = if let Some(doc) = doc_store
         .text_store
@@ -52,15 +312,8 @@ pub fn handle_hover_request(
     // needed to appease the borrow checker, since `word` is a reference to owned
     // data inside `doc_store.text_store`, which we're passing as mutable
     let word = word.to_string();
-    if let Some(hover_resp) = get_hover_resp(
-        params,
-        config,
-        &word,
-        cursor_offset,
-        doc_store,
-        names_to_info,
-        include_dirs,
-    ) {
+    if let Some(hover_resp) = get_hover_resp(params, config, &word, cursor_offset, doc_store, store)
+    {
         let result = serde_json::to_value(hover_resp).unwrap();
         let result = Response {
             id,

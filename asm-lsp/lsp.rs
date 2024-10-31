@@ -1,4 +1,4 @@
-use crate::{ustr, CompletionItems, DocumentStore, NameToInfoMaps};
+use crate::{ustr, CompletionItems, DocumentStore, Hoverable, ServerStore};
 use std::borrow::ToOwned;
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
@@ -16,11 +16,12 @@ use dirs::config_dir;
 use log::{error, info, log, log_enabled, warn};
 use lsp_server::{Connection, Message, RequestId, Response};
 use lsp_textdocument::FullTextDocument;
+use lsp_types::notification::Notification as _;
 use lsp_types::{
     CompletionItem, CompletionItemKind, CompletionList, CompletionParams, CompletionTriggerKind,
     Diagnostic, DocumentSymbol, DocumentSymbolParams, Documentation, GotoDefinitionParams,
     GotoDefinitionResponse, Hover, HoverContents, HoverParams, InitializeParams, Location,
-    MarkupContent, MarkupKind, Position, Range, ReferenceParams, SignatureHelp,
+    MarkupContent, MarkupKind, MessageType, Position, Range, ReferenceParams, SignatureHelp,
     SignatureHelpParams, SignatureInformation, SymbolKind, TextDocumentContentChangeEvent,
     TextDocumentPositionParams, Uri,
 };
@@ -33,7 +34,7 @@ use tree_sitter::InputEdit;
 use crate::types::Column;
 use crate::{
     Arch, ArchOrAssembler, Assembler, Completable, Config, ConfigOptions, Directive, Instruction,
-    LspClient, NameToInstructionMap, Register, RootConfig, TreeEntry,
+    LspClient, NameToInstructionMap, RootConfig, TreeEntry,
 };
 
 /// Sends an empty, non-error response to the lsp client via `connection`
@@ -55,6 +56,26 @@ pub fn send_empty_resp(connection: &Connection, id: RequestId, config: &Config) 
     } else {
         Ok(connection.sender.send(Message::Response(empty_resp))?)
     }
+}
+
+/// Sends a notification with to the client
+/// Param `message` is the owned type `String` to help reduce redundant allocations
+///
+/// # Errors
+///
+/// Returns `Err` if the response fails to send via `connection`
+///
+/// # Panics
+///
+/// Panics if JSON encoding of the notification fails
+pub fn send_notification(message: String, typ: MessageType, connection: &Connection) -> Result<()> {
+    let msg_params = lsp_types::ShowMessageParams { typ, message };
+    let result = serde_json::to_value(msg_params).unwrap();
+    let err_notif = lsp_server::Notification {
+        method: lsp_types::notification::ShowMessage::METHOD.to_string(),
+        params: result,
+    };
+    Ok(connection.sender.send(Message::Notification(err_notif))?)
 }
 
 /// Find the ([start], [end]) indices and the cursor's offset in a word
@@ -695,10 +716,9 @@ pub fn get_hover_resp(
     word: &str,
     cursor_offset: usize,
     doc_store: &mut DocumentStore,
-    names_to_info: &NameToInfoMaps,
-    include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
+    store: &ServerStore,
 ) -> Option<Hover> {
-    let instr_lookup = get_instr_hover_resp(word, &names_to_info.instructions, config);
+    let instr_lookup = get_hover_resp_by_arch(word, &store.names_to_info.instructions, config);
     if instr_lookup.is_some() {
         return instr_lookup;
     }
@@ -710,21 +730,21 @@ pub fn get_hover_resp(
         {
             // all gas directives have a '.' prefix, some masm directives do
             let directive_lookup =
-                get_directive_hover_resp(word, &names_to_info.directives, config);
+                get_directive_hover_resp(word, &store.names_to_info.directives, config);
             if directive_lookup.is_some() {
                 return directive_lookup;
             }
         } else if config.is_assembler_enabled(Assembler::Nasm) {
             // most nasm directives have no prefix, 2 have a '.' prefix
             let directive_lookup =
-                get_directive_hover_resp(word, &names_to_info.directives, config);
+                get_directive_hover_resp(word, &store.names_to_info.directives, config);
             if directive_lookup.is_some() {
                 return directive_lookup;
             }
             // Some nasm directives have a % prefix
             let prefixed = format!("%{word}");
             let directive_lookup =
-                get_directive_hover_resp(&prefixed, &names_to_info.directives, config);
+                get_directive_hover_resp(&prefixed, &store.names_to_info.directives, config);
             if directive_lookup.is_some() {
                 return directive_lookup;
             }
@@ -733,12 +753,12 @@ pub fn get_hover_resp(
 
     let reg_lookup = if config.is_isa_enabled(Arch::ARM64) {
         word.find('.').map_or_else(
-            || get_reg_hover_resp(&word[0..], &names_to_info.registers, config),
+            || get_hover_resp_by_arch(word, &store.names_to_info.registers, config),
             |dot| {
                 if cursor_offset <= dot {
                     // main vector register info on ARM64
                     let main_register = &word[0..dot];
-                    get_reg_hover_resp(main_register, &names_to_info.registers, config)
+                    get_hover_resp_by_arch(main_register, &store.names_to_info.registers, config)
                 } else {
                     // if Vector = V21.2D -> lower Register = D21
                     // lower vector register info on ARM64
@@ -748,12 +768,12 @@ pub fn get_hover_resp(
                     lower_register.push_str(&word[reg_letter..]);
                     let reg_num = 1..dot;
                     lower_register.push_str(&word[reg_num]);
-                    get_reg_hover_resp(&lower_register, &names_to_info.registers, config)
+                    get_hover_resp_by_arch(&lower_register, &store.names_to_info.registers, config)
                 }
             },
         )
     } else {
-        get_reg_hover_resp(word, &names_to_info.registers, config)
+        get_hover_resp_by_arch(word, &store.names_to_info.registers, config)
     };
 
     if reg_lookup.is_some() {
@@ -777,7 +797,7 @@ pub fn get_hover_resp(
     let include_path = get_include_resp(
         &params.text_document_position_params.text_document.uri,
         word,
-        include_dirs,
+        &store.include_dirs,
     );
     if include_path.is_some() {
         return include_path;
@@ -786,33 +806,18 @@ pub fn get_hover_resp(
     None
 }
 
-fn search_for_instr_by_arch<'a>(
+fn search_for_hoverable_by_arch<'a, T: Hoverable>(
     word: &'a str,
-    instr_map: &'a HashMap<(Arch, String), Instruction>,
+    map: &'a HashMap<(Arch, String), T>,
     config: &Config,
-) -> (Option<&'a Instruction>, Option<&'a Instruction>) {
+) -> (Option<&'a T>, Option<&'a T>) {
     match config.instruction_set {
         Arch::X86_AND_X86_64 => {
-            let x86_resp = instr_map.get(&(Arch::X86, word.to_string()));
-            let x86_64_resp = instr_map.get(&(Arch::X86_64, word.to_string()));
+            let x86_resp = map.get(&(Arch::X86, word.to_string()));
+            let x86_64_resp = map.get(&(Arch::X86_64, word.to_string()));
             (x86_resp, x86_64_resp)
         }
-        arch => (instr_map.get(&(arch, word.to_string())), None),
-    }
-}
-
-fn search_for_reg_by_arch<'a>(
-    word: &'a str,
-    reg_map: &'a HashMap<(Arch, String), Register>,
-    config: &Config,
-) -> (Option<&'a Register>, Option<&'a Register>) {
-    match config.instruction_set {
-        Arch::X86_AND_X86_64 => {
-            let x86_resp = reg_map.get(&(Arch::X86, word.to_string()));
-            let x86_64_resp = reg_map.get(&(Arch::X86_64, word.to_string()));
-            (x86_resp, x86_64_resp)
-        }
-        arch => (reg_map.get(&(arch, word.to_string())), None),
+        arch => (map.get(&(arch, word.to_string())), None),
     }
 }
 
@@ -824,46 +829,20 @@ fn search_for_dir_by_assembler<'a>(
     dir_map.get(&(config.assembler, word.to_string()))
 }
 
-fn get_instr_hover_resp(
+fn get_hover_resp_by_arch<T: Hoverable>(
     word: &str,
-    instr_map: &HashMap<(Arch, String), Instruction>,
+    map: &HashMap<(Arch, String), T>,
     config: &Config,
 ) -> Option<Hover> {
     // ensure hovered text is always lowercase
     let hovered_word = word.to_ascii_lowercase();
-    let instr_resp = search_for_instr_by_arch(&hovered_word, instr_map, config);
+    let instr_resp = search_for_hoverable_by_arch(&hovered_word, map, config);
     let value = match instr_resp {
-        (Some(instr1), Some(instr2)) => {
-            format!("{instr1}\n\n{instr2}")
+        (Some(resp1), Some(resp2)) => {
+            format!("{resp1}\n\n{resp2}")
         }
-        (Some(instr), None) | (None, Some(instr)) => {
-            format!("{instr}")
-        }
-        (None, None) => return None,
-    };
-
-    Some(Hover {
-        contents: HoverContents::Markup(MarkupContent {
-            kind: MarkupKind::Markdown,
-            value,
-        }),
-        range: None,
-    })
-}
-
-fn get_reg_hover_resp(
-    word: &str,
-    reg_map: &HashMap<(Arch, String), Register>,
-    config: &Config,
-) -> Option<Hover> {
-    let hovered_text = word.to_ascii_lowercase();
-    let reg_resp = search_for_reg_by_arch(&hovered_text, reg_map, config);
-    let value = match reg_resp {
-        (Some(reg1), Some(reg2)) => {
-            format!("{reg1}\n\n{reg2}")
-        }
-        (Some(reg), None) | (None, Some(reg)) => {
-            format!("{reg}")
+        (Some(resp), None) | (None, Some(resp)) => {
+            format!("{resp}")
         }
         (None, None) => return None,
     };
@@ -1464,7 +1443,8 @@ pub fn get_sig_help_resp(
             if caps.len() == 1 && caps[0].node.end_byte() < curr_doc.len() {
                 if let Ok(instr_name) = caps[0].node.utf8_text(curr_doc) {
                     let mut value = String::new();
-                    let (instr1, instr2) = search_for_instr_by_arch(instr_name, instr_info, config);
+                    let (instr1, instr2) =
+                        search_for_hoverable_by_arch(instr_name, instr_info, config);
                     let instructions = vec![instr1, instr2];
                     for instr in instructions.into_iter().flatten() {
                         for form in &instr.forms {
@@ -1667,12 +1647,8 @@ pub fn get_ref_resp(
 ///
 /// Will return `Err` if an invalid configuration file is found
 pub fn get_root_config(params: &InitializeParams) -> Result<RootConfig> {
-    let report_err = |msg: &str, err: anyhow::Error| -> Result<RootConfig> {
-        error!("{msg} -- {err}");
-        Err(anyhow!(msg.to_string()))
-    };
-    let report_errs = |msg: &str, err1: anyhow::Error, err2: anyhow::Error| -> Result<RootConfig> {
-        error!("{msg} -- {err1} -- {err2}");
+    let report_err = |msg: &str| -> Result<RootConfig> {
+        error!("{msg}");
         Err(anyhow!(msg.to_string()))
     };
     let mut config = match (get_global_config(), get_project_config(params)) {
@@ -1680,17 +1656,15 @@ pub fn get_root_config(params: &InitializeParams) -> Result<RootConfig> {
         (_, Some(Ok(proj_cfg))) => proj_cfg,
         (Some(Ok(global_cfg)), None) => global_cfg,
         (Some(Ok(_)) | None, Some(Err(e))) => {
-            return report_err("Invalid project config file", e);
+            return report_err(&format!("Inavlid project config file -- {e}"));
         }
         (Some(Err(e)), None) => {
-            return report_err("Invalid global config file", e);
+            return report_err(&format!("Invalid global config file -- {e}"));
         }
         (Some(Err(e_global)), Some(Err(e_project))) => {
-            return report_errs(
-                "Invalid project and global config files",
-                e_project,
-                e_global,
-            );
+            return report_err(&format!(
+                "Invalid project and global config files -- {e_project} -- {e_global}"
+            ));
         }
         (None, None) => {
             info!("No configuration files found, using default options");
@@ -1706,9 +1680,10 @@ pub fn get_root_config(params: &InitializeParams) -> Result<RootConfig> {
                 let mut project_path = project_root.clone();
                 project_path.push(&projects[project_idx].path);
                 let Ok(canonicalized_project_path) = project_path.canonicalize() else {
-                    error!("Failed to canonicalize project path \"{}\", disabling this project configuration.", project_path.display());
-                    projects.remove(project_idx);
-                    continue;
+                    return report_err(&format!(
+                        "Failed to canonicalize project path \"{}\".",
+                        project_path.display()
+                    ));
                 };
                 projects[project_idx].path = canonicalized_project_path;
                 if let Some(ref mut opts) = projects[project_idx].config.opts {
@@ -1727,8 +1702,7 @@ pub fn get_root_config(params: &InitializeParams) -> Result<RootConfig> {
                 project_idx += 1;
             }
         } else {
-            error!("Unable to detect project root directory. The projects configuration feature has been disabled.");
-            *projects = Vec::new();
+            return report_err("Unable to detect project root directory.");
         }
 
         // sort project configurations so when we select a project config at request
@@ -1763,10 +1737,10 @@ pub fn get_root_config(params: &InitializeParams) -> Result<RootConfig> {
         let mut path_check = HashSet::new();
         for project in projects {
             if path_check.contains(&project.path) {
-                error!(
+                return report_err(&format!(
                     "Multiple project configurations for \"{}\".",
                     project.path.display()
-                );
+                ));
             }
             path_check.insert(&project.path);
         }
