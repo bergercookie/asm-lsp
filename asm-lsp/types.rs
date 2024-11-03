@@ -1,15 +1,23 @@
 use std::{
-    collections::{BTreeMap, HashMap},
+    collections::{BTreeMap, HashMap, HashSet},
     fmt::Display,
+    path::PathBuf,
     str::FromStr,
 };
 
-use lsp_types::Uri;
+use compile_commands::{CompilationDatabase, SourceFile};
+use log::{info, warn};
+use lsp_textdocument::TextDocuments;
+use lsp_types::{CompletionItem, Uri};
 use serde::{Deserialize, Serialize};
 use strum_macros::{AsRefStr, Display, EnumString};
 use tree_sitter::{Parser, Tree};
 
-// Instruction ------------------------------------------------------------------------------------
+use crate::{
+    populate_name_to_directive_map, populate_name_to_instruction_map, populate_name_to_register_map,
+};
+
+// Instruction
 #[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
 pub struct Instruction {
     pub name: String,
@@ -18,11 +26,11 @@ pub struct Instruction {
     pub asm_templates: Vec<String>,
     pub aliases: Vec<InstructionAlias>,
     pub url: Option<String>,
-    pub arch: Option<Arch>,
+    pub arch: Arch,
 }
 
-impl Hoverable for &Instruction {}
-impl Completable for &Instruction {}
+impl Hoverable for Instruction {}
+impl Completable for Instruction {}
 
 impl Default for Instruction {
     fn default() -> Self {
@@ -32,7 +40,7 @@ impl Default for Instruction {
         let asm_templates = vec![];
         let aliases = vec![];
         let url = None;
-        let arch = None;
+        let arch = Arch::None;
 
         Self {
             name,
@@ -49,12 +57,7 @@ impl Default for Instruction {
 impl std::fmt::Display for Instruction {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // basic fields
-        let header: String;
-        if let Some(arch) = &self.arch {
-            header = format!("{} [{}]", &self.name, arch.as_ref());
-        } else {
-            header = self.name.clone();
-        }
+        let header = format!("{} [{}]", &self.name, self.arch.as_ref());
 
         //let mut v: Vec<&str> = vec![&header, &self.summary, "\n", "## Forms", "\n"];
         let mut v: Vec<&str> = vec![&header, &self.summary, "\n"];
@@ -145,7 +148,7 @@ impl<'own> Instruction {
     }
 }
 
-// InstructionForm --------------------------------------------------------------------------------
+// InstructionForm
 #[derive(Default, Eq, PartialEq, Hash, Debug, Clone, Serialize, Deserialize)]
 pub struct InstructionForm {
     // --- Gas/Go-Specific Information ---
@@ -246,7 +249,7 @@ impl std::fmt::Display for InstructionForm {
     }
 }
 
-// InstructionAlias --------------------------------------------------------------------------------
+// InstructionAlias
 #[derive(Default, Eq, PartialEq, Hash, Debug, Clone, Serialize, Deserialize)]
 pub struct InstructionAlias {
     pub title: String,
@@ -384,7 +387,7 @@ impl Display for Z80Timing {
     }
 }
 
-// Directive ------------------------------------------------------------------------------------
+// Directive
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Directive {
     pub name: String,
@@ -395,8 +398,8 @@ pub struct Directive {
     pub assembler: Option<Assembler>,
 }
 
-impl Hoverable for &Directive {}
-impl Completable for &Directive {}
+impl Hoverable for Directive {}
+impl Completable for Directive {}
 
 impl Default for Directive {
     fn default() -> Self {
@@ -506,7 +509,7 @@ impl<'own> Directive {
     }
 }
 
-// Register ---------------------------------------------------------------------------------------
+// Register
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Register {
     pub name: String,
@@ -514,12 +517,12 @@ pub struct Register {
     pub reg_type: Option<RegisterType>,
     pub width: Option<RegisterWidth>,
     pub flag_info: Vec<RegisterBitInfo>,
-    pub arch: Option<Arch>,
+    pub arch: Arch,
     pub url: Option<String>,
 }
 
-impl Hoverable for &Register {}
-impl Completable for &Register {}
+impl Hoverable for Register {}
+impl Completable for Register {}
 
 impl Default for Register {
     fn default() -> Self {
@@ -528,7 +531,7 @@ impl Default for Register {
         let reg_type = None;
         let width = None;
         let flag_info = vec![];
-        let arch = None;
+        let arch = Arch::None;
         let url = None;
 
         Self {
@@ -546,12 +549,7 @@ impl Default for Register {
 impl std::fmt::Display for Register {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // basic fields
-        let header: String;
-        if let Some(arch) = &self.arch {
-            header = format!("{} [{}]", &self.name.to_uppercase(), arch.as_ref());
-        } else {
-            header = self.name.to_uppercase();
-        }
+        let header = format!("{} [{}]", &self.name.to_uppercase(), self.arch.as_ref());
 
         let mut v: Vec<String> = if let Some(description_) = &self.description {
             vec![header, description_.clone(), String::from("\n")]
@@ -613,25 +611,23 @@ impl<'own> Register {
     }
 }
 
-// helper structs, types and functions ------------------------------------------------------------
+// helper structs, types and functions
 #[derive(Debug, Clone, Default)]
-pub struct NameToInfoMaps<'a> {
-    pub instructions: NameToInstructionMap<'a>,
-    pub registers: NameToRegisterMap<'a>,
-    pub directives: NameToDirectiveMap<'a>,
+pub struct NameToInfoMaps {
+    pub instructions: NameToInstructionMap,
+    pub registers: NameToRegisterMap,
+    pub directives: NameToDirectiveMap,
 }
 
-pub type NameToInstructionMap<'instruction> =
-    HashMap<(Arch, &'instruction str), &'instruction Instruction>;
+pub type NameToInstructionMap = HashMap<(Arch, String), Instruction>;
 
-pub type NameToRegisterMap<'register> = HashMap<(Arch, &'register str), &'register Register>;
+pub type NameToRegisterMap = HashMap<(Arch, String), Register>;
 
-pub type NameToDirectiveMap<'directive> =
-    HashMap<(Assembler, &'directive str), &'directive Directive>;
+pub type NameToDirectiveMap = HashMap<(Assembler, String), Directive>;
 
-pub trait Hoverable: Display + Clone + Copy {}
+pub trait Hoverable: Display + Clone {}
 pub trait Completable: Display {}
-pub trait ArchOrAssembler {}
+pub trait ArchOrAssembler: Clone + Copy {}
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, EnumString, AsRefStr, Serialize, Deserialize)]
 pub enum XMMMode {
@@ -645,56 +641,239 @@ pub enum MMXMode {
     MMX,
 }
 
-#[derive(
-    Debug, Default, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Serialize, Deserialize,
-)]
+#[allow(non_camel_case_types)]
+#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Serialize, Deserialize)]
 pub enum Arch {
-    #[default]
     #[strum(serialize = "x86")]
+    #[serde(rename = "x86")]
     X86,
     #[strum(serialize = "x86-64")]
+    #[serde(rename = "x86-64")]
     X86_64,
+    /// enables both `Arch::X86` and `Arch::X86_64`
+    #[strum(serialize = "x86/x86-64")]
+    #[serde(rename = "x86/x86-64")]
+    X86_AND_X86_64,
     #[strum(serialize = "arm")]
+    #[serde(rename = "arm")]
     ARM,
     #[strum(serialize = "arm64")]
+    #[serde(rename = "arm64")]
     ARM64,
     #[strum(serialize = "riscv")]
+    #[serde(rename = "riscv")]
     RISCV,
     #[strum(serialize = "z80")]
+    #[serde(rename = "z80")]
     Z80,
+    /// For testing purposes *only*. This is not a valid config option
+    #[serde(skip)]
+    None,
 }
 
 impl ArchOrAssembler for Arch {}
+
+impl Arch {
+    /// Setup registers for a particular architecture
+    ///
+    /// # Panics
+    ///
+    /// Panics if unable to deserialize `Register`
+    pub fn setup_registers(self, names_to_registers: &mut HashMap<(Self, String), Register>) {
+        macro_rules! load_registers_with_path {
+            ($arch:expr, $path:literal) => {{
+                let start = std::time::Instant::now();
+                let serialized_regs = include_bytes!($path);
+                let registers = bincode::deserialize::<Vec<Register>>(serialized_regs)
+                    .unwrap_or_else(|e| panic!("Error deserializing {} registers -- {}\nRegenerate serialized data with regenerate.sh", $arch, e));
+
+                info!(
+                    "{} register set loaded in {}ms",
+                    $arch,
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_register_map($arch, &registers, names_to_registers);
+            }};
+        }
+
+        match self {
+            Self::X86 => load_registers_with_path!(Self::X86, "serialized/registers/x86"),
+            Self::X86_64 => load_registers_with_path!(Self::X86_64, "serialized/registers/x86_64"),
+            Self::X86_AND_X86_64 => {
+                load_registers_with_path!(Self::X86, "serialized/registers/x86");
+                load_registers_with_path!(Self::X86_64, "serialized/registers/x86_64");
+            }
+            Self::ARM => load_registers_with_path!(Self::ARM, "serialized/registers/arm"),
+            Self::ARM64 => load_registers_with_path!(Self::ARM64, "serialized/registers/arm"),
+            Self::RISCV => load_registers_with_path!(Self::RISCV, "serialized/registers/riscv"),
+            Self::Z80 => load_registers_with_path!(Self::Z80, "serialized/registers/z80"),
+            Self::None => unreachable!(),
+        }
+    }
+
+    /// Setup instructions for a particular architecture
+    ///
+    /// # Panics
+    ///
+    /// Panics if unable to deserialize `Instruction`s
+    pub fn setup_instructions(
+        self,
+        names_to_instructions: &mut HashMap<(Self, String), Instruction>,
+    ) {
+        macro_rules! load_instructions_with_path {
+            ($arch:expr, $path:literal) => {{
+                let start = std::time::Instant::now();
+                let serialized_instrs = include_bytes!($path);
+                let instructions = bincode::deserialize::<Vec<Instruction>>(serialized_instrs)
+                    .unwrap_or_else(|e| panic!("Error deserializing {} instructions -- {}\nRegenerate serialized data with regenerate.sh", $arch, e));
+
+                info!(
+                    "{} instruction set loaded in {}ms",
+                    $arch,
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_instruction_map($arch, &instructions, names_to_instructions);
+            }};
+        }
+
+        match self {
+            Self::X86 => load_instructions_with_path!(Self::X86, "serialized/opcodes/x86"),
+            Self::X86_64 => load_instructions_with_path!(Self::X86_64, "serialized/opcodes/x86_64"),
+            Self::X86_AND_X86_64 => {
+                load_instructions_with_path!(Self::X86, "serialized/opcodes/x86");
+                load_instructions_with_path!(Self::X86_64, "serialized/opcodes/x86_64");
+            }
+            Self::ARM => load_instructions_with_path!(Self::ARM, "serialized/opcodes/arm"),
+            // NOTE: Actually, the arm file are all arm64 so we needed to get
+            // the arm32 versions then do the below
+            Self::ARM64 => load_instructions_with_path!(Self::ARM64, "serialized/opcodes/arm"),
+            Self::RISCV => load_instructions_with_path!(Self::RISCV, "serialized/opcodes/riscv"),
+            Self::Z80 => load_instructions_with_path!(Self::Z80, "serialized/opcodes/z80"),
+            Self::None => unreachable!(),
+        }
+    }
+}
+
+impl Default for Arch {
+    fn default() -> Self {
+        match () {
+            () if cfg!(target_arch = "x86") => {
+                info!("Detected host arch as x86");
+                Self::X86
+            }
+            () if cfg!(target_arch = "arm") => {
+                info!("Detected host arch as arm");
+                Self::ARM
+            }
+            () if cfg!(target_arch = "aarch64") => {
+                info!("Detected host arch as aarch64");
+                Self::ARM64
+            }
+            () if cfg!(target_arch = "riscv32") => {
+                info!("Detected host arch as riscv32");
+                Self::RISCV
+            }
+            () if cfg!(target_arch = "riscv64") => {
+                info!("Detected host arch as riscv64");
+                Self::RISCV
+            }
+            () => {
+                if cfg!(target_arch = "x86_64") {
+                    info!("Detected host arch as x86-64");
+                } else {
+                    info!("Failed to detect host arch, defaulting to x86-64");
+                }
+                Self::X86_64 // Somewhat arbitrary default
+            }
+        }
+    }
+}
 
 impl std::fmt::Display for Arch {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::X86 => write!(f, "x86")?,
             Self::X86_64 => write!(f, "x86-64")?,
+            Self::X86_AND_X86_64 => write!(f, "x86/x86-64")?,
             Self::ARM => write!(f, "arm")?,
             Self::ARM64 => write!(f, "arm64")?,
             Self::Z80 => write!(f, "z80")?,
             Self::RISCV => write!(f, "riscv")?,
+            Self::None => write!(f, "None")?,
         }
         Ok(())
     }
 }
 
 #[derive(
-    Debug, Display, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Serialize, Deserialize,
+    Debug,
+    Display,
+    Default,
+    Hash,
+    PartialEq,
+    Eq,
+    Clone,
+    Copy,
+    EnumString,
+    AsRefStr,
+    Serialize,
+    Deserialize,
 )]
 pub enum Assembler {
+    #[default]
     #[strum(serialize = "gas")]
+    #[serde(rename = "gas")]
     Gas,
     #[strum(serialize = "go")]
+    #[serde(rename = "go")]
     Go,
     #[strum(serialize = "masm")]
+    #[serde(rename = "masm")]
     Masm,
     #[strum(serialize = "nasm")]
+    #[serde(rename = "nasm")]
     Nasm,
+    #[serde(skip)]
+    None,
 }
 
 impl ArchOrAssembler for Assembler {}
+
+impl Assembler {
+    /// Setup directives for an assembler
+    ///
+    /// # Panics
+    ///
+    /// Panics if unable to deserialize `Directive`s
+    pub fn setup_directives(self, names_to_directives: &mut HashMap<(Self, String), Directive>) {
+        macro_rules! load_directives_with_path {
+            ($assembler:expr, $path:literal) => {{
+                let start = std::time::Instant::now();
+                let serialized_dirs = include_bytes!($path);
+                let directives = bincode::deserialize::<Vec<Directive>>(serialized_dirs)
+                    .unwrap_or_else(|e| panic!("Error deserializing {} directives -- {}\nRegenerate serialized data with regenerate.sh", $assembler, e));
+
+                info!(
+                    "{} directive set loaded in {}ms",
+                    $assembler,
+                    start.elapsed().as_millis()
+                );
+
+                populate_name_to_directive_map($assembler, &directives, names_to_directives);
+            }};
+        }
+
+        match self {
+            Self::Gas => load_directives_with_path!(Self::Gas, "serialized/directives/gas"),
+            Self::Masm => load_directives_with_path!(Self::Masm, "serialized/directives/masm"),
+            Self::Nasm => load_directives_with_path!(Self::Nasm, "serialized/directives/nasm"),
+            Self::Go => warn!("There is currently no Go-specific assembler documentation"),
+            Self::None => unreachable!(),
+        }
+    }
+}
 
 #[derive(
     Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Display, Serialize, Deserialize,
@@ -782,55 +961,253 @@ impl std::fmt::Display for RegisterBitInfo {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Assemblers {
-    pub gas: Option<bool>,
-    pub go: Option<bool>,
-    pub masm: Option<bool>,
-    pub nasm: Option<bool>,
-    pub z80: Option<bool>,
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct RootConfig {
+    pub default_config: Option<Config>,
+    #[serde(rename = "project")]
+    pub projects: Option<Vec<ProjectConfig>>,
 }
 
-impl Default for Assemblers {
+impl Default for RootConfig {
     fn default() -> Self {
         Self {
-            gas: Some(true),
-            go: Some(true),
-            masm: Some(false),
-            nasm: Some(false),
-            z80: Some(false),
+            default_config: Some(Config::default()),
+            projects: None,
         }
     }
 }
 
-#[allow(non_snake_case)]
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct InstructionSets {
-    pub x86: Option<bool>,
-    pub x86_64: Option<bool>,
-    pub z80: Option<bool>,
-    pub arm: Option<bool>,
-    pub arm64: Option<bool>,
-    pub riscv: Option<bool>,
+impl RootConfig {
+    /// Returns the `Project` associated with `uri`
+    ///
+    /// # Panics
+    ///
+    /// Will panic if `req_uri` cannot be canonicalized
+    #[must_use]
+    pub fn get_project<'a>(&'a self, request_path: &PathBuf) -> Option<&'a ProjectConfig> {
+        #[allow(irrefutable_let_patterns)]
+        if let Some(projects) = &self.projects {
+            for project in projects {
+                if (project.path.is_dir() && request_path.starts_with(&project.path))
+                    || (project.path.is_file() && request_path.eq(&project.path))
+                {
+                    return Some(project);
+                }
+            }
+        }
+
+        None
+    }
+
+    /// Returns the project-specific `Config` associated with `uri`, or the default if no
+    /// matching configuration is found
+    ///
+    /// # Panics
+    ///
+    /// Will panic if `req_uri` cannot be canonicalized
+    pub fn get_config<'a>(&'a self, req_uri: &'a Uri) -> &'a Config {
+        #[allow(irrefutable_let_patterns)]
+        let Ok(req_path) = PathBuf::from_str(req_uri.path().as_str()) else {
+            unreachable!()
+        };
+        let request_path = match req_path.canonicalize() {
+            Ok(path) => path,
+            Err(e) => panic!("Invalid request path: \"{}\" - {e}", req_path.display()),
+        };
+        if let Some(project) = self.get_project(&request_path) {
+            info!(
+                "Selected project config with path \"{}\"",
+                project.path.display()
+            );
+            return &project.config;
+        }
+        if let Some(root) = &self.default_config {
+            info!("Selected root config");
+            return root;
+        }
+
+        panic!(
+            "Invalid configuration for \"{}\" -- Must contain a per-project configuration or default",
+            req_uri.path()
+        );
+    }
+
+    /// # Panics
+    ///
+    /// Will panic if `self.default_config` is `None`
+    #[must_use]
+    pub fn effective_arches(&self) -> Vec<Arch> {
+        let mut arch_set = HashSet::new();
+
+        // NOTE: `self.default_config` is assumed to be set to `Some` in
+        // `get_root_config`
+        assert!(self.default_config.is_some());
+        arch_set.insert(self.default_config.as_ref().unwrap().instruction_set);
+        if let Some(ref projects) = self.projects {
+            for project in projects {
+                arch_set.insert(project.config.instruction_set);
+            }
+        }
+
+        arch_set.into_iter().collect()
+    }
+
+    /// # Panics
+    ///
+    /// Will panic if `self.default_config` is `None`
+    #[must_use]
+    pub fn effective_assemblers(&self) -> Vec<Assembler> {
+        let mut assembler_set = HashSet::new();
+
+        // NOTE: `self.default_config` is assumed to be set to `Some` in
+        // `get_root_config`
+        assert!(self.default_config.is_some());
+        assembler_set.insert(self.default_config.as_ref().unwrap().assembler);
+        if let Some(ref projects) = self.projects {
+            for project in projects {
+                assembler_set.insert(project.config.assembler);
+            }
+        }
+
+        assembler_set.into_iter().collect()
+    }
+
+    /// Sets the `client` field of the default config and all project configs
+    pub fn set_client(&mut self, client: LspClient) {
+        if let Some(ref mut root) = self.default_config {
+            root.client = Some(client);
+        }
+
+        if let Some(ref mut projects) = self.projects {
+            for project in projects {
+                project.config.client = Some(client);
+            }
+        }
+    }
+
+    #[must_use]
+    pub fn is_isa_enabled(&self, isa: Arch) -> bool {
+        if let Some(ref root) = self.default_config {
+            if root.is_isa_enabled(isa) {
+                return true;
+            }
+        }
+
+        if let Some(ref projects) = self.projects {
+            for project in projects {
+                if project.config.is_isa_enabled(isa) {
+                    return true;
+                }
+            }
+        }
+
+        false
+    }
+
+    #[must_use]
+    pub fn is_assembler_enabled(&self, assembler: Assembler) -> bool {
+        if let Some(ref root) = self.default_config {
+            if root.is_assembler_enabled(assembler) {
+                return true;
+            }
+        }
+
+        if let Some(ref projects) = self.projects {
+            for project in projects {
+                if project.config.is_assembler_enabled(assembler) {
+                    return true;
+                }
+            }
+        }
+
+        false
+    }
 }
 
-impl Default for InstructionSets {
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ProjectConfig {
+    // Path to a directory or source file on which this config applies
+    // Can be relative to the server's root directory, or absolute
+    pub path: PathBuf,
+    /// Config for this project. If `path` is a directory, applies to all files
+    /// and subdirectories. If `path` is a file, just applies to that file
+    #[serde(flatten)]
+    pub config: Config,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Config {
+    pub version: Option<String>,
+    pub assembler: Assembler,
+    pub instruction_set: Arch,
+    pub opts: Option<ConfigOptions>,
+    #[serde(skip)]
+    pub client: Option<LspClient>,
+}
+
+impl Default for Config {
     fn default() -> Self {
         Self {
-            x86: Some(true),
-            x86_64: Some(true),
-            z80: Some(false),
-            arm: Some(false),
-            arm64: Some(false),
-            riscv: Some(false),
+            version: None,
+            assembler: Assembler::default(),
+            instruction_set: Arch::default(),
+            opts: Some(ConfigOptions::default()),
+            client: None,
         }
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+impl Config {
+    #[must_use]
+    pub fn get_compiler(&self) -> Option<&str> {
+        match self.opts {
+            Some(ConfigOptions {
+                compiler: Some(ref compiler),
+                ..
+            }) => Some(compiler),
+            _ => None,
+        }
+    }
+
+    #[must_use]
+    pub const fn get_compile_flags_txt(&self) -> Option<&Vec<String>> {
+        match self.opts {
+            Some(ConfigOptions {
+                compile_flags_txt: Some(ref flags),
+                ..
+            }) => Some(flags),
+            _ => None,
+        }
+    }
+
+    #[must_use]
+    pub fn is_isa_enabled(&self, isa: Arch) -> bool {
+        match self.instruction_set {
+            Arch::X86_AND_X86_64 => {
+                isa == Arch::X86 || isa == Arch::X86_64 || isa == Arch::X86_AND_X86_64
+            }
+            // TODO: Same treatment as above for ARM32/ARM64
+            arch => isa == arch,
+        }
+    }
+
+    #[must_use]
+    pub fn is_assembler_enabled(&self, assembler: Assembler) -> bool {
+        self.assembler == assembler
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ConfigOptions {
+    // Specify compiler to generate diagnostics via `compile_flags.txt`
     pub compiler: Option<String>,
+    // List of compile flags to override compilation behavior for this config.
+    // Do not include the input source file as an argument
+    // *Not* a path to `compile_flags.txt`
+    pub compile_flags_txt: Option<Vec<String>>,
+    // Turn diagnostics feature on/off
     pub diagnostics: Option<bool>,
+    // Turn default diagnostics (no compilation db detected) on/off
     pub default_diagnostics: Option<bool>,
 }
 
@@ -838,29 +1215,9 @@ impl Default for ConfigOptions {
     fn default() -> Self {
         Self {
             compiler: None,
+            compile_flags_txt: None,
             diagnostics: Some(true),
             default_diagnostics: Some(true),
-        }
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Config {
-    pub version: String,
-    pub assemblers: Assemblers,
-    pub instruction_sets: InstructionSets,
-    pub opts: ConfigOptions,
-    pub client: Option<LspClient>,
-}
-
-impl Default for Config {
-    fn default() -> Self {
-        Self {
-            version: String::from("0.1"),
-            assemblers: Assemblers::default(),
-            instruction_sets: InstructionSets::default(),
-            opts: ConfigOptions::default(),
-            client: None,
         }
     }
 }
@@ -870,7 +1227,7 @@ pub enum LspClient {
     Helix,
 }
 
-// Instruction Set Architecture -------------------------------------------------------------------
+// Instruction Set Architecture
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, EnumString, AsRefStr, Serialize, Deserialize)]
 pub enum ISA {
     #[strum(serialize = "RAO-INT")]
@@ -995,7 +1352,7 @@ pub enum ISA {
     A64,
 }
 
-// Operand ----------------------------------------------------------------------------------------
+// Operand
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 pub struct Operand {
     pub type_: OperandType,
@@ -1135,7 +1492,7 @@ pub enum OperandType {
     tmm,
 }
 
-// lsp types --------------------------------------------------------------------------------------
+// lsp types
 
 /// Represents a text cursor between characters, pointing at the next character in the buffer.
 pub type Column = usize;
@@ -1148,3 +1505,50 @@ pub struct TreeEntry {
 
 /// Associates URIs with their corresponding tree-sitter tree and parser
 pub type TreeStore = BTreeMap<Uri, TreeEntry>;
+
+#[derive(Default)]
+pub struct DocumentStore {
+    pub tree_store: TreeStore,
+    pub text_store: TextDocuments,
+}
+
+impl DocumentStore {
+    #[must_use]
+    pub fn new() -> Self {
+        Self {
+            tree_store: TreeStore::new(),
+            text_store: TextDocuments::new(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct CompletionItems {
+    pub instructions: Vec<(Arch, CompletionItem)>,
+    pub registers: Vec<(Arch, CompletionItem)>,
+    pub directives: Vec<(Assembler, CompletionItem)>,
+}
+
+impl CompletionItems {
+    #[must_use]
+    pub const fn new() -> Self {
+        Self {
+            instructions: Vec::new(),
+            registers: Vec::new(),
+            directives: Vec::new(),
+        }
+    }
+}
+
+/// Struct to store all documentation the server uses to service user requests
+#[derive(Default)]
+pub struct ServerStore {
+    /// Links names of instructions, registers, and directives to their documentation
+    pub names_to_info: NameToInfoMaps,
+    /// `Completion` items for instructions, registers, and directives
+    pub completion_items: CompletionItems,
+    /// Compilation database loaded from `compile_commands.json` or `compile_flags.txt`
+    pub compile_commands: CompilationDatabase,
+    /// Include directories
+    pub include_dirs: HashMap<SourceFile, Vec<PathBuf>>,
+}
