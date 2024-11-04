@@ -459,6 +459,13 @@ fn prompt_config() -> Config {
 }
 
 fn prompt_root_config(opts: &GenerateOpts) -> RootConfig {
+    let get_project_idx = |path: &PathBuf, projects: &Vec<ProjectConfig>| -> Option<usize> {
+        projects
+            .iter()
+            .enumerate()
+            .find(|(_, p)| p.path == *path)
+            .map(|(idx, _)| idx)
+    };
     let default_config = if Confirm::with_theme(&ColorfulTheme::default())
         .with_prompt("Create default config?")
         .interact()
@@ -469,7 +476,7 @@ fn prompt_root_config(opts: &GenerateOpts) -> RootConfig {
         None
     };
 
-    let mut projects = Vec::new();
+    let mut projects: Vec<ProjectConfig> = Vec::new();
     loop {
         if !Confirm::with_theme(&ColorfulTheme::default())
             .with_prompt("Add a new project config?")
@@ -478,7 +485,73 @@ fn prompt_root_config(opts: &GenerateOpts) -> RootConfig {
         {
             break;
         }
-        projects.push(prompt_project(opts));
+        let mut new_project = prompt_project(opts);
+        let mut check_action: Option<usize> = None;
+        for (i, project) in projects.iter().enumerate() {
+            if project.path == new_project.path {
+                eprintln!("Error: Multiple project configs with the same project path.");
+                println!(
+                    "Newer project config:\n{}",
+                    toml::to_string_pretty::<ProjectConfig>(&new_project)
+                        .expect("Failed to display project config")
+                );
+                println!(
+                    "Older project config ({i}):\n{}",
+                    toml::to_string_pretty::<ProjectConfig>(project)
+                        .expect("Failed to display project config")
+                );
+                let options = &[
+                    "Discard newer project config",
+                    "Edit newer project config path",
+                    "Discard older project config",
+                    "Edit older project config path",
+                ];
+                check_action = FuzzySelect::with_theme(&ColorfulTheme::default())
+                    .with_prompt("Choose resolution method")
+                    .default(0)
+                    .items(&options[..])
+                    .interact()
+                    .unwrap()
+                    .into();
+                break;
+            }
+        }
+        match check_action {
+            // Everything's good, add the new project
+            None => projects.push(new_project),
+            // Don't push `new_project` into `projects`
+            Some(0) => {}
+            // Prompt the user to change their new project path until one doesn't collide
+            Some(1) => {
+                while let Some(idx) = get_project_idx(&new_project.path, &projects) {
+                    println!(
+                        "Project path collision with project config {idx} -- {}",
+                        new_project.path.display()
+                    );
+                    new_project.path = prompt_project_path(opts);
+                }
+                projects.push(new_project);
+            }
+            // Remove the old project from `projects`
+            Some(2) => {
+                let old_idx = get_project_idx(&new_project.path, &projects).unwrap();
+                projects.remove(old_idx);
+                projects.push(new_project);
+            }
+            // Prompt the user to change their old project path until one doesn't collide
+            Some(3) => {
+                let old_idx = get_project_idx(&new_project.path, &projects).unwrap();
+                while let Some(idx) = get_project_idx(&new_project.path, &projects) {
+                    println!(
+                        "Project path collision with project config {idx} -- {}",
+                        new_project.path.display()
+                    );
+                    projects[old_idx].path = prompt_project_path(opts);
+                }
+                projects.push(new_project);
+            }
+            _ => unreachable!(),
+        }
     }
 
     RootConfig {
