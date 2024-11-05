@@ -62,6 +62,28 @@ created for different sub-directories or files within your project as `project`s
 Source files not contained within any `project` configs will use the default configuration
 if provided.
 
+#### Config Builder
+
+Creating a `.asm-lsp.toml` file manually is fine, but can be error-prone as projects
+grow in complexity. Running `asm-lsp gen-config` will walk you through the creation
+of a config interactively, with informative prompts and extra validation checks
+along the way.
+
+```
+$ asm-lsp gen-config --help
+Generate a .asm-lsp.toml config file
+
+Usage: asm-lsp gen-config [OPTIONS]
+
+Options:
+  -o, --output-dir <OUTPUT_DIR>      Directory to place .asm-lsp.toml into. (Default is the current directory)
+  -g, --global-cfg                   Place the config in the global config directory
+  -p, --project-path <PROJECT_PATH>  Path to the project this config is being generated for. (Default is the current directory)
+  -w, --overwrite                    Overwrite any existing .asm-lsp.toml in the target directory
+  -q, --quiet                        Don't display the generated config file after generation
+  -h, --help                         Print help
+```
+
 #### NOTE
 
 If the server reads in an invalid configuration file, it will display an error

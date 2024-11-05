@@ -13,8 +13,8 @@ edition.workspace = true
 bincode.workspace = true
 anyhow.workspace = true
 serde.workspace = true
+clap.workspace = true
 asm-lsp = { path = "../asm-lsp" }
-clap = { version = "4.5.8", features = ["derive"] }
 
 [lints]
 workspace = true

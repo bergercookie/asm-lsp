@@ -1,3 +1,4 @@
+pub mod config_builder;
 pub mod handle;
 pub mod lsp;
 pub mod parser;
