@@ -282,12 +282,6 @@ mod tests {
     fn init_test_store(info: &GlobalInfo) -> ServerStore {
         let mut store = ServerStore::default();
 
-        let mut x86_cache_path = get_cache_dir().unwrap();
-        x86_cache_path.push("x86_instr_docs.html");
-        if x86_cache_path.is_file() {
-            std::fs::remove_file(&x86_cache_path).unwrap();
-        }
-
         populate_name_to_instruction_map(
             Arch::X86,
             &info.x86_instructions,
