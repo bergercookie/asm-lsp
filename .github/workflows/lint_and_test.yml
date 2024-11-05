@@ -47,7 +47,7 @@ jobs:
         if: runner.os == 'Linux'
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'
+          ruby-version: '3.2.6'
 
       - name: Setup Ruby on Ubuntu
         if: runner.os == 'Linux'
