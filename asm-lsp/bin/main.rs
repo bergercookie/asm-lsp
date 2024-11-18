@@ -28,6 +28,8 @@ enum Commands {
     GenConfig(GenerateArgs),
     /// Print information about asm-lsp
     Info,
+    /// Print the version number only
+    Version,
     #[clap(hide(true))]
     Run,
 }
@@ -70,6 +72,7 @@ pub fn main() -> Result<()> {
                 std::process::exit(1);
             }
         }
+        Commands::Version => println!("{}", env!("CARGO_PKG_VERSION")),
         Commands::Info => run_info(),
         Commands::Run => run_lsp()?,
     }
