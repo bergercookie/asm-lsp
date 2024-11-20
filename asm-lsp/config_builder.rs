@@ -279,6 +279,24 @@ fn is_executable(path: &Path) -> bool {
             false
         }
     } else {
+        #[cfg(windows)]
+        {
+            // On Windows, it's valid to omit file extensions, i.e. `gcc` can be
+            // used to designate `gcc.exe`. However, this will cause `.is_file()`
+            // to return `false`, so we need to check for this case here rather
+            // than above
+            let extensions = ["exe", "cmd", "bat", "com"];
+            for ext in &extensions {
+                let Some(path) = path.to_str() else {
+                    continue;
+                };
+                let ext_path = PathBuf::from(format!("{path}.{ext}"));
+                if ext_path.exists() && ext_path.is_file() {
+                    println!("Warning: Extended provided path with \".{ext}\" in order to find valid compiler");
+                    return true;
+                }
+            }
+        }
         false
     }
 }
