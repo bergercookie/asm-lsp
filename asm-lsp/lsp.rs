@@ -134,6 +134,42 @@ pub fn find_word_at_pos(line: &str, col: Column) -> ((Column, Column), usize) {
     ((start, end.map_or(col, |(i, _)| i)), col - start)
 }
 
+pub enum UriConversion {
+    Canonicalized(PathBuf),
+    Unchecked(PathBuf),
+}
+
+/// Sanitizes the URI path sent by an LSP client
+///
+/// - "%3A" is replaced by ':' on windows, as this is likely escaped
+///   by the emacs client on windows/mingw/msys2
+/// - Returning `UriConversion::Canonicalized` indicates a path was able to be
+///   canonicalized. This indicates the path is valid and said file exists on disk
+/// - Returning `UriConversion::Unchecked` indicates that the path couldn't be
+///   canonicalized
+///
+/// # Panics
+///
+/// Will panic if `uri` cannot be interpreted as valid utf-8 after being percent-decoded
+#[must_use]
+pub fn process_uri(uri: &Uri) -> UriConversion {
+    let clean_path: String = url_escape::percent_encoding::percent_decode_str(uri.path().as_str())
+        .decode_utf8()
+        .unwrap_or_else(|e| {
+            panic!(
+                "Invalid encoding for uri \"{}\" -- {e}",
+                uri.path().as_str()
+            )
+        })
+        .to_string();
+
+    let Ok(path) = PathBuf::from_str(&clean_path);
+    path.canonicalize()
+        .map_or(UriConversion::Unchecked(path), |canonicalized| {
+            UriConversion::Canonicalized(canonicalized)
+        })
+}
+
 /// Returns the word undernearth the cursor given the specified `TextDocumentPositionParams`
 ///
 /// # Errors
@@ -419,13 +455,16 @@ pub fn get_compile_cmd_for_req(
     req_uri: &Uri,
     compile_cmds: &CompilationDatabase,
 ) -> CompilationDatabase {
-    #[allow(irrefutable_let_patterns)]
-    let Ok(req_path) = PathBuf::from_str(req_uri.path().as_str()) else {
-        unreachable!()
-    };
-    let request_path = match req_path.canonicalize() {
-        Ok(path) => path,
-        Err(e) => panic!("Invalid request path: \"{}\" - {e}", req_path.display()),
+    let request_path = match process_uri(req_uri) {
+        UriConversion::Canonicalized(p) => p,
+        UriConversion::Unchecked(p) => {
+            error!(
+                "Failed to canonicalized request path {}, using {}",
+                req_uri.path().as_str(),
+                p.display()
+            );
+            p
+        }
     };
     let config = config.get_config(req_uri);
     match (config.get_compiler(), config.get_compile_flags_txt()) {
