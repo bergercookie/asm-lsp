@@ -62,7 +62,7 @@ created for different sub-directories or files within your project as `project`s
 Source files not contained within any `project` configs will use the default configuration
 if provided.
 
-#### Config Builder
+#### Config Builder (MASTER BRANCH ONLY)
 
 Creating a `.asm-lsp.toml` file manually is fine, but can be error-prone as projects
 grow in complexity. Running `asm-lsp gen-config` will walk you through the creation
