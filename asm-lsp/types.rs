@@ -14,7 +14,8 @@ use strum_macros::{AsRefStr, Display, EnumString};
 use tree_sitter::{Parser, Tree};
 
 use crate::{
-    populate_name_to_directive_map, populate_name_to_instruction_map, populate_name_to_register_map,
+    populate_name_to_directive_map, populate_name_to_instruction_map,
+    populate_name_to_register_map, process_uri, UriConversion,
 };
 
 // Instruction
@@ -1004,15 +1005,19 @@ impl RootConfig {
     ///
     /// # Panics
     ///
-    /// Will panic if `req_uri` cannot be canonicalized
+    /// Will panic if `self` does not have a valid configuration for `req_uri`, meaning
+    /// no default config and no applicable project config
     pub fn get_config<'a>(&'a self, req_uri: &'a Uri) -> &'a Config {
-        #[allow(irrefutable_let_patterns)]
-        let Ok(req_path) = PathBuf::from_str(req_uri.path().as_str()) else {
-            unreachable!()
-        };
-        let request_path = match req_path.canonicalize() {
-            Ok(path) => path,
-            Err(e) => panic!("Invalid request path: \"{}\" - {e}", req_path.display()),
+        let request_path = match process_uri(req_uri) {
+            UriConversion::Canonicalized(p) => p,
+            UriConversion::Unchecked(p) => {
+                warn!(
+                    "Failed to canonicalized request path {}, using {}",
+                    req_uri.path().as_str(),
+                    p.display()
+                );
+                p
+            }
         };
         if let Some(project) = self.get_project(&request_path) {
             info!(
