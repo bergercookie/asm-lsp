@@ -986,7 +986,6 @@ impl RootConfig {
     /// Will panic if `req_uri` cannot be canonicalized
     #[must_use]
     pub fn get_project<'a>(&'a self, request_path: &PathBuf) -> Option<&'a ProjectConfig> {
-        #[allow(irrefutable_let_patterns)]
         if let Some(projects) = &self.projects {
             for project in projects {
                 if (project.path.is_dir() && request_path.starts_with(&project.path))
