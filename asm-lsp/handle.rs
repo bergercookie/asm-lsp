@@ -1,8 +1,6 @@
-use std::path::PathBuf;
-
 use anyhow::{anyhow, Result};
 use compile_commands::{CompilationDatabase, SourceFile};
-use log::{info, warn};
+use log::{error, info, warn};
 use lsp_server::{Connection, Message, Notification, Request, RequestId, Response};
 use lsp_types::{
     notification::{
@@ -22,8 +20,9 @@ use tree_sitter::Parser;
 use crate::{
     apply_compile_cmd, get_comp_resp, get_compile_cmd_for_req, get_default_compile_cmd,
     get_document_symbols, get_goto_def_resp, get_hover_resp, get_ref_resp, get_sig_help_resp,
-    get_word_from_pos_params, send_empty_resp, text_doc_change_to_ts_edit, CompletionItems, Config,
-    ConfigOptions, DocumentStore, NameToInstructionMap, RootConfig, ServerStore, TreeEntry,
+    get_word_from_pos_params, process_uri, send_empty_resp, text_doc_change_to_ts_edit,
+    CompletionItems, Config, ConfigOptions, DocumentStore, NameToInstructionMap, RootConfig,
+    ServerStore, TreeEntry, UriConversion,
 };
 
 /// Handles `Request`s from the lsp client
@@ -533,17 +532,35 @@ pub fn handle_diagnostics(
     cfg: &Config,
     compile_cmds: &CompilationDatabase,
 ) -> Result<()> {
-    let req_source_path = PathBuf::from(uri.path().as_str());
+    let req_source_path = match process_uri(uri) {
+        UriConversion::Canonicalized(p) => p,
+        UriConversion::Unchecked(p) => {
+            error!(
+                "Failed to canonicalize request path {}, using {}",
+                uri.path().as_str(),
+                p.display()
+            );
+            p
+        }
+    };
 
     let source_entries = compile_cmds.iter().filter(|entry| match entry.file {
         SourceFile::File(ref file) => {
-            if file.is_absolute() {
-                file.eq(&req_source_path)
-            } else if let Ok(source_path) = file.canonicalize() {
-                source_path.eq(&req_source_path)
-            } else {
-                false
-            }
+            file.canonicalize().map_or(false, |source_path| {
+                // HACK: See comment inside `process_uri`
+                let cleaned_path = if cfg!(windows) {
+                    #[allow(clippy::option_if_let_else)]
+                    if let Some(tmp) = source_path.to_str().unwrap().strip_prefix("\\\\?\\") {
+                        warn!("Stripping Windows canonicalization prefix \"\\\\?\\\" from path");
+                        tmp.into()
+                    } else {
+                        source_path
+                    }
+                } else {
+                    source_path
+                };
+                cleaned_path.eq(&req_source_path)
+            })
         }
         SourceFile::All => true,
     });

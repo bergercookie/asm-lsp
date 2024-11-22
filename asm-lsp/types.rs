@@ -1011,7 +1011,7 @@ impl RootConfig {
             UriConversion::Canonicalized(p) => p,
             UriConversion::Unchecked(p) => {
                 warn!(
-                    "Failed to canonicalized request path {}, using {}",
+                    "Failed to canonicalize request path {}, using {}",
                     req_uri.path().as_str(),
                     p.display()
                 );
