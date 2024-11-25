@@ -153,20 +153,46 @@ pub enum UriConversion {
 /// Will panic if `uri` cannot be interpreted as valid utf-8 after being percent-decoded
 #[must_use]
 pub fn process_uri(uri: &Uri) -> UriConversion {
-    let clean_path: String = url_escape::percent_encoding::percent_decode_str(uri.path().as_str())
-        .decode_utf8()
-        .unwrap_or_else(|e| {
-            panic!(
-                "Invalid encoding for uri \"{}\" -- {e}",
-                uri.path().as_str()
-            )
-        })
-        .to_string();
+    let mut clean_path: String =
+        url_escape::percent_encoding::percent_decode_str(uri.path().as_str())
+            .decode_utf8()
+            .unwrap_or_else(|e| {
+                panic!(
+                    "Invalid encoding for uri \"{}\" -- {e}",
+                    uri.path().as_str()
+                )
+            })
+            .to_string();
+
+    // HACK: On Windows, sometimes a leading '/',  e.g. /C:/Users/foo/bar/...
+    // is passed as part of the path -- Stuff like Git bash and MSYS2 will accept
+    // /C/Users/foo/bar/..., but *not* if the colon is present. Vanila windows
+    // will not accept a leading slash at all, but requires the colon after the
+    // drive letter, like C:/Users/foo/... So we do our best to clean up here
+    if cfg!(windows) && clean_path.contains(':') {
+        clean_path = clean_path.strip_prefix('/').unwrap_or(&clean_path).into();
+    }
 
     let Ok(path) = PathBuf::from_str(&clean_path);
     path.canonicalize()
         .map_or(UriConversion::Unchecked(path), |canonicalized| {
-            UriConversion::Canonicalized(canonicalized)
+            // HACK: On Windows, when a path is canonicalized, sometimes it gets prefixed
+            // with "\\?\" -- https://stackoverflow.com/questions/41233684/why-does-my-canonicalized-path-get-prefixed-with
+            // That's great and all, but it looks like common tools (like gcc) don't handle
+            // this correctly, and you get something like the following:
+            // Error: can't open //test.s for reading: No such file or directory
+            // The solution? Just cut out the prefix and hope that doesn't break anything else
+            if cfg!(windows) {
+                #[allow(clippy::option_if_let_else)]
+                if let Some(tmp) = canonicalized.to_str().unwrap().strip_prefix("\\\\?\\") {
+                    warn!("Stripping Windows canonicalization prefix \"\\\\?\\\" from path");
+                    UriConversion::Canonicalized(tmp.into())
+                } else {
+                    UriConversion::Canonicalized(canonicalized)
+                }
+            } else {
+                UriConversion::Canonicalized(canonicalized)
+            }
         })
 }
 
@@ -459,7 +485,7 @@ pub fn get_compile_cmd_for_req(
         UriConversion::Canonicalized(p) => p,
         UriConversion::Unchecked(p) => {
             error!(
-                "Failed to canonicalized request path {}, using {}",
+                "Failed to canonicalize request path {}, using {}",
                 req_uri.path().as_str(),
                 p.display()
             );
