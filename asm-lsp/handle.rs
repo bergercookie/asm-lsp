@@ -155,7 +155,7 @@ pub fn handle_request(
                     &store.compile_commands,
                 );
                 info!(
-                    "Selected compile command(s) for request: {:#?}",
+                    "Selected compile command(s) for request: {:?}",
                     compile_cmds
                 );
                 handle_diagnostics(
@@ -171,7 +171,7 @@ pub fn handle_request(
                 );
             }
         }
-        method => warn!("Invalid request format: {method:#?}"),
+        method => warn!("Invalid request format: {method:?}"),
     }
 
     Ok(())
@@ -238,7 +238,7 @@ pub fn handle_notification(
                     &store.compile_commands,
                 );
                 info!(
-                    "Selected compile command(s) for request: {:#?}",
+                    "Selected compile command(s) for request: {:?}",
                     compile_cmds
                 );
                 handle_diagnostics(
@@ -253,7 +253,7 @@ pub fn handle_notification(
                 );
             }
         }
-        method => warn!("Invalid notification format: {method:#?}"),
+        method => warn!("Invalid notification format: {method:?}"),
     }
     Ok(())
 }

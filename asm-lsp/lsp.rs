@@ -589,6 +589,7 @@ pub fn apply_compile_cmd(
     uri: &Uri,
     compile_cmd: &CompileCommand,
 ) {
+    info!("Attempting to apply compile command: {compile_cmd:?}");
     // TODO: Consolidate this logic, a little tricky because we need to capture
     // compile_cmd.arguments by reference, but we get an owned Vec out of args_from_cmd()...
     if let Some(ref args) = compile_cmd.arguments {
