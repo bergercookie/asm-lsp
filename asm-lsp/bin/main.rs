@@ -241,7 +241,7 @@ fn main_loop(connection: &Connection, config: &RootConfig, store: &ServerStore) 
             Message::Notification(notif) => {
                 handle_notification(notif, connection, &mut doc_store, config, store)?;
             }
-            Message::Response(resp) => warn!("Unexpected client response: {resp:#?}"),
+            Message::Response(resp) => warn!("Unexpected client response: {resp:?}"),
         }
     }
     Ok(())
