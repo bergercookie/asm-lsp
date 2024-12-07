@@ -16,7 +16,7 @@ mod tests {
     use crate::{
         get_comp_resp, get_completes, get_hover_resp, get_word_from_pos_params,
         instr_filter_targets,
-        parser::{get_cache_dir, populate_arm_instructions, populate_masm_nasm_directives},
+        parser::{populate_arm_instructions, populate_masm_nasm_directives},
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
         Assembler, Config, ConfigOptions, Directive, DocumentStore, Instruction, Register,
