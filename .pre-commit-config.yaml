@@ -46,3 +46,4 @@ repos:
       - id: cargo-check
         args: ["--locked"]
       - id: clippy
+        args: ["--tests"]
