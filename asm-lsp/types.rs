@@ -667,6 +667,9 @@ pub enum Arch {
     #[strum(serialize = "z80")]
     #[serde(rename = "z80")]
     Z80,
+    #[strum(serialize = "6502")]
+    #[serde(rename = "6502")]
+    MOS6502,
     /// For testing purposes *only*. This is not a valid config option
     #[serde(skip)]
     None,
@@ -709,6 +712,7 @@ impl Arch {
             Self::ARM64 => load_registers_with_path!(Self::ARM64, "serialized/registers/arm"),
             Self::RISCV => load_registers_with_path!(Self::RISCV, "serialized/registers/riscv"),
             Self::Z80 => load_registers_with_path!(Self::Z80, "serialized/registers/z80"),
+            Self::MOS6502 => load_registers_with_path!(Self::MOS6502, "serialized/registers/6502"),
             Self::None => unreachable!(),
         }
     }
@@ -752,6 +756,7 @@ impl Arch {
             Self::ARM64 => load_instructions_with_path!(Self::ARM64, "serialized/opcodes/arm"),
             Self::RISCV => load_instructions_with_path!(Self::RISCV, "serialized/opcodes/riscv"),
             Self::Z80 => load_instructions_with_path!(Self::Z80, "serialized/opcodes/z80"),
+            Self::MOS6502 => load_instructions_with_path!(Self::MOS6502, "serialized/opcodes/6502"),
             Self::None => unreachable!(),
         }
     }
@@ -800,8 +805,9 @@ impl std::fmt::Display for Arch {
             Self::X86_AND_X86_64 => write!(f, "x86/x86-64")?,
             Self::ARM => write!(f, "arm")?,
             Self::ARM64 => write!(f, "arm64")?,
-            Self::Z80 => write!(f, "z80")?,
             Self::RISCV => write!(f, "riscv")?,
+            Self::Z80 => write!(f, "z80")?,
+            Self::MOS6502 => write!(f, "6502")?,
             Self::None => write!(f, "None")?,
         }
         Ok(())
@@ -836,6 +842,9 @@ pub enum Assembler {
     #[strum(serialize = "nasm")]
     #[serde(rename = "nasm")]
     Nasm,
+    #[strum(serialize = "ca65")]
+    #[serde(rename = "ca65")]
+    Ca65,
     #[serde(skip)]
     None,
 }
@@ -871,6 +880,7 @@ impl Assembler {
             Self::Masm => load_directives_with_path!(Self::Masm, "serialized/directives/masm"),
             Self::Nasm => load_directives_with_path!(Self::Nasm, "serialized/directives/nasm"),
             Self::Go => warn!("There is currently no Go-specific assembler documentation"),
+            Self::Ca65 => load_directives_with_path!(Self::Ca65, "serialized/directives/ca65"),
             Self::None => unreachable!(),
         }
     }
