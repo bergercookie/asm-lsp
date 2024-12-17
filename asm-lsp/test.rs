@@ -2077,269 +2077,156 @@ Width: 8 bits",
     /**************************************************************************
      * Serialization Tests
      *************************************************************************/
+    macro_rules! serialized_registers_test {
+        ($serialized_path:literal, $raw_path:literal) => {
+            let mut cmp_map = HashMap::new();
+            let regs_ser = include_bytes!($serialized_path);
+            let ser_vec = bincode::deserialize::<Vec<Register>>(regs_ser).unwrap();
+
+            let regs_raw = include_str!($raw_path);
+            let mut raw_vec = populate_registers(regs_raw).unwrap();
+
+            // HACK: Windows line endings...
+            for reg in &mut raw_vec {
+                if let Some(descr) = &reg.description {
+                    reg.description = Some(descr.replace('\r', ""));
+                }
+            }
+
+            for reg in ser_vec {
+                *cmp_map.entry(reg.clone()).or_insert(0) += 1;
+            }
+            for reg in raw_vec {
+                let entry = cmp_map.get_mut(&reg).unwrap();
+                assert!(
+                    *entry != 0,
+                    "Expected at least one more instruction entry for {reg:?}, but the count is 0"
+                );
+                *entry -= 1;
+            }
+            for (reg, count) in &cmp_map {
+                assert!(
+                    *count == 0,
+                    "Expected count to be 0, found {count} for {reg:?}"
+                );
+            }
+        };
+    }
     #[test]
     fn serialized_x86_registers_are_up_to_date() {
-        let mut cmp_map = HashMap::new();
-        let x86_regs_ser = include_bytes!("serialized/registers/x86");
-        let ser_vec = bincode::deserialize::<Vec<Register>>(x86_regs_ser).unwrap();
-
-        let x86_regs_raw = include_str!("../docs_store/registers/raw/x86.xml");
-        let mut raw_vec = populate_registers(x86_regs_raw).unwrap();
-
-        // HACK: Windows line endings...
-        for reg in &mut raw_vec {
-            if let Some(descr) = &reg.description {
-                reg.description = Some(descr.replace('\r', ""));
-            }
-        }
-
-        for reg in ser_vec {
-            *cmp_map.entry(reg.clone()).or_insert(0) += 1;
-        }
-        for reg in raw_vec {
-            let entry = cmp_map.get_mut(&reg).unwrap();
-            assert!(
-                *entry != 0,
-                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
-            );
-            *entry -= 1;
-        }
-        for (reg, count) in &cmp_map {
-            assert!(
-                *count == 0,
-                "Expected count to be 0, found {count} for {reg:?}"
-            );
-        }
+        serialized_registers_test!(
+            "serialized/registers/x86",
+            "../docs_store/registers/raw/x86.xml"
+        );
     }
     #[test]
     fn serialized_x86_64_registers_are_up_to_date() {
-        let mut cmp_map = HashMap::new();
-        let x86_64_regs_ser = include_bytes!("serialized/registers/x86_64");
-        let ser_vec = bincode::deserialize::<Vec<Register>>(x86_64_regs_ser).unwrap();
-
-        let x86_64_regs_raw = include_str!("../docs_store/registers/raw/x86_64.xml");
-        let mut raw_vec = populate_registers(x86_64_regs_raw).unwrap();
-
-        // HACK: Windows line endings...
-        for reg in &mut raw_vec {
-            if let Some(descr) = &reg.description {
-                reg.description = Some(descr.replace('\r', ""));
-            }
-        }
-
-        for reg in ser_vec {
-            *cmp_map.entry(reg.clone()).or_insert(0) += 1;
-        }
-        for reg in raw_vec {
-            let entry = cmp_map.get_mut(&reg).unwrap();
-            assert!(
-                *entry != 0,
-                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
-            );
-            *entry -= 1;
-        }
-        for (reg, count) in &cmp_map {
-            assert!(
-                *count == 0,
-                "Expected count to be 0, found {count} for {reg:?}"
-            );
-        }
+        serialized_registers_test!(
+            "serialized/registers/x86_64",
+            "../docs_store/registers/raw/x86_64.xml"
+        );
     }
     #[test]
     fn serialized_arm_registers_are_up_to_date() {
-        let mut cmp_map = HashMap::new();
-        let arm_regs_ser = include_bytes!("serialized/registers/arm");
-        let ser_vec = bincode::deserialize::<Vec<Register>>(arm_regs_ser).unwrap();
-
-        let arm_regs_raw = include_str!("../docs_store/registers/raw/arm.xml");
-        let mut raw_vec = populate_registers(arm_regs_raw).unwrap();
-
-        // HACK: Windows line endings...
-        for reg in &mut raw_vec {
-            if let Some(descr) = &reg.description {
-                reg.description = Some(descr.replace('\r', ""));
-            }
-        }
-
-        for reg in ser_vec {
-            *cmp_map.entry(reg.clone()).or_insert(0) += 1;
-        }
-        for reg in raw_vec {
-            let entry = cmp_map.get_mut(&reg).unwrap();
-            assert!(
-                *entry != 0,
-                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
-            );
-            *entry -= 1;
-        }
-        for (reg, count) in &cmp_map {
-            assert!(
-                *count == 0,
-                "Expected count to be 0, found {count} for {reg:?}"
-            );
-        }
+        serialized_registers_test!(
+            "serialized/registers/arm",
+            "../docs_store/registers/raw/arm.xml"
+        );
     }
     #[test]
     fn serialized_arm64_registers_are_up_to_date() {
-        let mut cmp_map = HashMap::new();
-        let arm_regs_ser = include_bytes!("serialized/registers/arm64");
-        let ser_vec = bincode::deserialize::<Vec<Register>>(arm_regs_ser).unwrap();
-
-        let arm64_regs_raw = include_str!("../docs_store/registers/raw/arm64.xml");
-        let mut raw_vec = populate_registers(arm64_regs_raw).unwrap();
-
-        // HACK: Windows line endings...
-        for reg in &mut raw_vec {
-            if let Some(descr) = &reg.description {
-                reg.description = Some(descr.replace('\r', ""));
-            }
-        }
-
-        for reg in ser_vec {
-            *cmp_map.entry(reg.clone()).or_insert(0) += 1;
-        }
-        for reg in raw_vec {
-            let entry = cmp_map.get_mut(&reg).unwrap();
-            assert!(
-                *entry != 0,
-                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
-            );
-            *entry -= 1;
-        }
-        for (reg, count) in &cmp_map {
-            assert!(
-                *count == 0,
-                "Expected count to be 0, found {count} for {reg:?}"
-            );
-        }
+        serialized_registers_test!(
+            "serialized/registers/arm64",
+            "../docs_store/registers/raw/arm64.xml"
+        );
     }
     #[test]
     fn serialized_z80_registers_are_up_to_date() {
-        let mut cmp_map = HashMap::new();
-        let z80_regs_ser = include_bytes!("serialized/registers/z80");
-        let ser_vec = bincode::deserialize::<Vec<Register>>(z80_regs_ser).unwrap();
-
-        let z80_regs_raw = include_str!("../docs_store/registers/raw/z80.xml");
-        let raw_vec = populate_registers(z80_regs_raw).unwrap();
-
-        for reg in ser_vec {
-            *cmp_map.entry(reg.clone()).or_insert(0) += 1;
-        }
-        for reg in raw_vec {
-            let entry = cmp_map.get_mut(&reg).unwrap();
-            assert!(
-                *entry != 0,
-                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
-            );
-            *entry -= 1;
-        }
-        for (reg, count) in &cmp_map {
-            assert!(
-                *count == 0,
-                "Expected count to be 0, found {count} for {reg:?}"
-            );
-        }
+        serialized_registers_test!(
+            "serialized/registers/z80",
+            "../docs_store/registers/raw/z80.xml"
+        );
     }
     #[test]
     fn serialized_6502_registers_are_up_to_date() {
-        let mut cmp_map = HashMap::new();
-        let mos6502_regs_ser = include_bytes!("serialized/registers/6502");
-        let ser_vec = bincode::deserialize::<Vec<Register>>(mos6502_regs_ser).unwrap();
-
-        let mos6502_regs_raw = include_str!("../docs_store/registers/raw/6502.xml");
-        let raw_vec = populate_registers(mos6502_regs_raw).unwrap();
-
-        for reg in ser_vec {
-            *cmp_map.entry(reg.clone()).or_insert(0) += 1;
-        }
-        for reg in raw_vec {
-            let entry = cmp_map.get_mut(&reg).unwrap();
-            assert!(
-                *entry != 0,
-                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
-            );
-            *entry -= 1;
-        }
-        for (reg, count) in &cmp_map {
-            assert!(
-                *count == 0,
-                "Expected count to be 0, found {count} for {reg:?}"
-            );
-        }
+        serialized_registers_test!(
+            "serialized/registers/6502",
+            "../docs_store/registers/raw/6502.xml"
+        );
     }
+
+    macro_rules! serialized_instructions_test {
+        ($serialized_path:literal, $raw_path:literal, $populate_fn:expr) => {
+            let mut cmp_map = HashMap::new();
+            let instrs_ser = include_bytes!($serialized_path);
+            let mut ser_vec = bincode::deserialize::<Vec<Instruction>>(instrs_ser).unwrap();
+
+            let instrs_raw = include_str!($raw_path);
+            let mut raw_vec = $populate_fn(instrs_raw).unwrap();
+
+            // HACK: To work around the difference in extra info urls between testing
+            // and production
+            for instr in &mut ser_vec {
+                instr.url = None;
+            }
+            for instr in &mut raw_vec {
+                instr.url = None;
+            }
+
+            for instr in ser_vec {
+                *cmp_map.entry(instr.clone()).or_insert(0) += 1;
+            }
+            for instr in raw_vec {
+                let entry = cmp_map.get_mut(&instr).unwrap();
+                assert!(
+                    *entry != 0,
+                    "Expected at least one more instruction entry for {instr:?}, but the count is 0"
+                );
+                *entry -= 1;
+            }
+            for (instr, count) in &cmp_map {
+                assert!(
+                    *count == 0,
+                    "Expected count to be 0, found {count} for {instr:?}"
+                );
+            }
+        };
+    }
+
     #[test]
     fn serialized_x86_instructions_are_up_to_date() {
-        let mut cmp_map = HashMap::new();
-        let x86_instrs_ser = include_bytes!("serialized/opcodes/x86");
-        let mut ser_vec = bincode::deserialize::<Vec<Instruction>>(x86_instrs_ser).unwrap();
-
-        let x86_instrs_raw = include_str!("../docs_store/opcodes/raw/x86.xml");
-        let mut raw_vec = populate_instructions(x86_instrs_raw).unwrap();
-
-        // HACK: To work around the difference in extra info urls between testing
-        // and production
-        for instr in &mut ser_vec {
-            instr.url = None;
-        }
-        for instr in &mut raw_vec {
-            instr.url = None;
-        }
-
-        for instr in ser_vec {
-            *cmp_map.entry(instr.clone()).or_insert(0) += 1;
-        }
-        for instr in raw_vec {
-            let entry = cmp_map.get_mut(&instr).unwrap();
-            assert!(
-                *entry != 0,
-                "Expected at least one more instruction entry for {instr:?}, but the count is 0"
-            );
-            *entry -= 1;
-        }
-        for (instr, count) in &cmp_map {
-            assert!(
-                *count == 0,
-                "Expected count to be 0, found {count} for {instr:?}"
-            );
-        }
+        serialized_instructions_test!(
+            "serialized/opcodes/x86",
+            "../docs_store/opcodes/raw/x86.xml",
+            populate_instructions
+        );
     }
     #[test]
     fn serialized_x86_64_instructions_are_up_to_date() {
-        let mut cmp_map = HashMap::new();
-        let x86_64_instrs_ser = include_bytes!("serialized/opcodes/x86_64");
-        let mut ser_vec = bincode::deserialize::<Vec<Instruction>>(x86_64_instrs_ser).unwrap();
-
-        let x86_64_instrs_raw = include_str!("../docs_store/opcodes/raw/x86_64.xml");
-        let mut raw_vec = populate_instructions(x86_64_instrs_raw).unwrap();
-
-        // HACK: To work around the difference in extra info urls between testing
-        // and production
-        for instr in &mut ser_vec {
-            instr.url = None;
-        }
-        for instr in &mut raw_vec {
-            instr.url = None;
-        }
-
-        for instr in ser_vec {
-            *cmp_map.entry(instr.clone()).or_insert(0) += 1;
-        }
-        for instr in raw_vec {
-            let entry = cmp_map.get_mut(&instr).unwrap();
-            assert!(
-                *entry != 0,
-                "Expected at least one more instruction entry for {instr:?}, but the count is 0"
-            );
-            *entry -= 1;
-        }
-        for (instr, count) in &cmp_map {
-            assert!(
-                *count == 0,
-                "Expected count to be 0, found {count} for {instr:?}"
-            );
-        }
+        serialized_instructions_test!(
+            "serialized/opcodes/x86_64",
+            "../docs_store/opcodes/raw/x86_64.xml",
+            populate_instructions
+        );
     }
-    //TODO: sperate test for aarch64 when the arm32 opcodes are added
+    #[test]
+    fn serialized_z80_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/z80",
+            "../docs_store/opcodes/raw/z80.xml",
+            populate_instructions
+        );
+    }
+    #[test]
+    fn serialized_6502_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/6502",
+            "../docs_store/opcodes/raw/6502.html",
+            populate_6502_instructions
+        );
+    }
+    // TODO: Consolidate this into `serialized_instruction_test!`
+    // TODO: sperate test for aarch64 when the arm32 opcodes are added
     #[test]
     fn serialized_arm_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
@@ -2369,166 +2256,65 @@ Width: 8 bits",
             );
         }
     }
-    #[test]
-    fn serialized_z80_instructions_are_up_to_date() {
-        let mut cmp_map = HashMap::new();
-        let z80_instrs_ser = include_bytes!("serialized/opcodes/z80");
-        let ser_vec = bincode::deserialize::<Vec<Instruction>>(z80_instrs_ser).unwrap();
 
-        let z80_instrs_raw = include_str!("../docs_store/opcodes/raw/z80.xml");
-        let raw_vec = populate_instructions(z80_instrs_raw).unwrap();
+    macro_rules! serialized_directives_test {
+        ($serialized_path:literal, $raw_path:literal, $populate_fn:expr) => {
+            let mut cmp_map = HashMap::new();
+            let dirs_ser = include_bytes!($serialized_path);
+            let ser_vec = bincode::deserialize::<Vec<Directive>>(dirs_ser).unwrap();
 
-        for instr in ser_vec {
-            *cmp_map.entry(instr.clone()).or_insert(0) += 1;
-        }
-        for instr in raw_vec {
-            let entry = cmp_map.get_mut(&instr).unwrap();
-            assert!(
-                *entry != 0,
-                "Expected at least one more instruction entry for {instr:?}, but the count is 0"
-            );
-            *entry -= 1;
-        }
-        for (instr, count) in &cmp_map {
-            assert!(
-                *count == 0,
-                "Expected count to be 0, found {count} for {instr:?}"
-            );
-        }
-    }
-    #[test]
-    fn serialized_6502_instructions_are_up_to_date() {
-        let mut cmp_map = HashMap::new();
-        let mos6502_instrs_ser = include_bytes!("serialized/opcodes/6502");
-        let ser_vec = bincode::deserialize::<Vec<Instruction>>(mos6502_instrs_ser).unwrap();
+            let dirs_raw = include_str!($raw_path);
+            let raw_vec = $populate_fn(dirs_raw).unwrap();
 
-        let mos6502_instrs_raw = include_str!("../docs_store/opcodes/raw/6502.html");
-        let raw_vec = populate_6502_instructions(mos6502_instrs_raw);
-
-        for instr in ser_vec {
-            *cmp_map.entry(instr.clone()).or_insert(0) += 1;
-        }
-        for instr in raw_vec {
-            let entry = cmp_map.get_mut(&instr).unwrap();
-            assert!(
-                *entry != 0,
-                "Expected at least one more instruction entry for {instr:?}, but the count is 0"
-            );
-            *entry -= 1;
-        }
-        for (instr, count) in &cmp_map {
-            assert!(
-                *count == 0,
-                "Expected count to be 0, found {count} for {instr:?}"
-            );
-        }
+            for dir in ser_vec {
+                *cmp_map.entry(dir.clone()).or_insert(0) += 1;
+            }
+            for dir in raw_vec {
+                let entry = cmp_map.get_mut(&dir).unwrap();
+                assert!(
+                    *entry != 0,
+                    "Expected at least one more instruction entry for {dir:?}, but the count is 0"
+                );
+                *entry -= 1;
+            }
+            for (dir, count) in &cmp_map {
+                assert!(
+                    *count == 0,
+                    "Expected count to be 0, found {count} for {dir:?}"
+                );
+            }
+        };
     }
     #[test]
     fn serialized_gas_directives_are_up_to_date() {
-        let mut cmp_map = HashMap::new();
-        let gas_dirs_ser = include_bytes!("serialized/directives/gas");
-        let ser_vec = bincode::deserialize::<Vec<Directive>>(gas_dirs_ser).unwrap();
-
-        let gas_dirs_raw = include_str!("../docs_store/directives/raw/gas.xml");
-        let raw_vec = populate_gas_directives(gas_dirs_raw).unwrap();
-
-        for dir in ser_vec {
-            *cmp_map.entry(dir.clone()).or_insert(0) += 1;
-        }
-        for dir in raw_vec {
-            let entry = cmp_map.get_mut(&dir).unwrap();
-            assert!(
-                *entry != 0,
-                "Expected at least one more instruction entry for {dir:?}, but the count is 0"
-            );
-            *entry -= 1;
-        }
-        for (dir, count) in &cmp_map {
-            assert!(
-                *count == 0,
-                "Expected count to be 0, found {count} for {dir:?}"
-            );
-        }
+        serialized_directives_test!(
+            "serialized/directives/gas",
+            "../docs_store/directives/raw/gas.xml",
+            populate_gas_directives
+        );
     }
     #[test]
     fn serialized_masm_directives_are_up_to_date() {
-        let mut cmp_map = HashMap::new();
-        let masm_dirs_ser = include_bytes!("serialized/directives/masm");
-        let ser_vec = bincode::deserialize::<Vec<Directive>>(masm_dirs_ser).unwrap();
-
-        let masm_dirs_raw = include_str!("../docs_store/directives/raw/masm.xml");
-        let raw_vec = populate_masm_nasm_directives(masm_dirs_raw).unwrap();
-
-        for dir in ser_vec {
-            *cmp_map.entry(dir.clone()).or_insert(0) += 1;
-        }
-        for dir in raw_vec {
-            let entry = cmp_map.get_mut(&dir).unwrap();
-            assert!(
-                *entry != 0,
-                "Expected at least one more instruction entry for {dir:?}, but the count is 0"
-            );
-            *entry -= 1;
-        }
-        for (dir, count) in &cmp_map {
-            assert!(
-                *count == 0,
-                "Expected count to be 0, found {count} for {dir:?}"
-            );
-        }
+        serialized_directives_test!(
+            "serialized/directives/masm",
+            "../docs_store/directives/raw/masm.xml",
+            populate_masm_nasm_directives
+        );
     }
     #[test]
     fn serialized_nasm_directives_are_up_to_date() {
-        let mut cmp_map = HashMap::new();
-        let nasm_dirs_ser = include_bytes!("serialized/directives/nasm");
-        let ser_vec = bincode::deserialize::<Vec<Directive>>(nasm_dirs_ser).unwrap();
-
-        let nasm_dirs_raw = include_str!("../docs_store/directives/raw/nasm.xml");
-        let raw_vec = populate_masm_nasm_directives(nasm_dirs_raw).unwrap();
-
-        for dir in ser_vec {
-            *cmp_map.entry(dir.clone()).or_insert(0) += 1;
-        }
-        for dir in raw_vec {
-            let entry = cmp_map.get_mut(&dir).unwrap();
-            assert!(
-                *entry != 0,
-                "Expected at least one more instruction entry for {dir:?}, but the count is 0"
-            );
-            *entry -= 1;
-        }
-        for (dir, count) in &cmp_map {
-            assert!(
-                *count == 0,
-                "Expected count to be 0, found {count} for {dir:?}"
-            );
-        }
+        serialized_directives_test!(
+            "serialized/directives/nasm",
+            "../docs_store/directives/raw/nasm.xml",
+            populate_masm_nasm_directives
+        );
     }
     #[test]
     fn serialized_ca65_directives_are_up_to_date() {
-        let mut cmp_map = HashMap::new();
-        let ca65_dirs_ser = include_bytes!("serialized/directives/ca65");
-        let ser_vec = bincode::deserialize::<Vec<Directive>>(ca65_dirs_ser).unwrap();
-
-        let ca65_dirs_raw = include_str!("../docs_store/directives/raw/ca65.html");
-        let raw_vec = populate_ca65_directives(ca65_dirs_raw);
-
-        for dir in ser_vec {
-            *cmp_map.entry(dir.clone()).or_insert(0) += 1;
-        }
-        for dir in raw_vec {
-            let entry = cmp_map.get_mut(&dir).unwrap();
-            assert!(
-                *entry != 0,
-                "Expected at least one more instruction entry for {dir:?}, but the count is 0"
-            );
-            *entry -= 1;
-        }
-        for (dir, count) in &cmp_map {
-            assert!(
-                *count == 0,
-                "Expected count to be 0, found {count} for {dir:?}"
-            );
-        }
+        serialized_directives_test!(
+            "serialized/directives/ca65",
+            "../docs_store/directives/raw/ca65.html",
+            populate_ca65_directives
+        );
     }
 }
