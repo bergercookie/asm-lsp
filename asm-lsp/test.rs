@@ -18,7 +18,7 @@ mod tests {
         instr_filter_targets,
         parser::{
             populate_6502_instructions, populate_arm_instructions, populate_ca65_directives,
-            populate_masm_nasm_directives,
+            populate_masm_nasm_directives, populate_riscv_instructions,
         },
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
@@ -2237,6 +2237,36 @@ Width: 8 bits",
         let mut raw_vec =
             populate_arm_instructions(&PathBuf::from("../docs_store/opcodes/raw/ARM/")).unwrap();
         raw_vec.sort_by(|a, b| a.name.cmp(&b.name));
+
+        for instr in ser_vec {
+            *cmp_map.entry(instr.clone()).or_insert(0) += 1;
+        }
+        for instr in raw_vec {
+            let entry = cmp_map.get_mut(&instr).unwrap();
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {instr:?}, but the count is 0"
+            );
+            *entry -= 1;
+        }
+        for (instr, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {instr:?}"
+            );
+        }
+    }
+
+    // TODO: Consolidate this into `serialized_instruction_test!`
+    #[test]
+    fn serialized_riscv_instructions_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let riscv_instrs_ser = include_bytes!("serialized/opcodes/riscv");
+        let ser_vec = bincode::deserialize::<Vec<Instruction>>(riscv_instrs_ser).unwrap();
+
+        let raw_vec =
+            populate_riscv_instructions(&PathBuf::from("../docs_store/opcodes/raw/RISCV/"))
+                .unwrap();
 
         for instr in ser_vec {
             *cmp_map.entry(instr.clone()).or_insert(0) += 1;
