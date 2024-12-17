@@ -1349,7 +1349,7 @@ pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive
                                 }
                                 b"tool" => {
                                     let assembler = Assembler::from_str(ustr::get_str(&value))?;
-                                    curr_directive.assembler = Some(assembler);
+                                    curr_directive.assembler = assembler;
                                 }
                                 _ => {}
                             }
@@ -1385,7 +1385,7 @@ pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive
     // Since directive entries have their assembler labeled on a per-instance basis,
     // we check to make sure all of them have been assigned correctly
     for directive in directives_map.values() {
-        assert!(directive.assembler.is_some());
+        assert_ne!(directive.assembler, Assembler::None);
     }
 
     Ok(directives_map.into_values().collect())
@@ -1414,7 +1414,7 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
 
     // ref to the assembler directive that's currently under construction
     let mut curr_directive = Directive::default();
-    let mut assembler: Option<Assembler> = None;
+    let mut assembler = Assembler::None;
 
     debug!("Parsing directive XML contents...");
     loop {
@@ -1426,7 +1426,7 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
                             if b"name" == key.into_inner() {
-                                assembler = Assembler::from_str(ustr::get_str(&value)).ok();
+                                assembler = Assembler::from_str(ustr::get_str(&value)).unwrap();
                             }
                         }
                     }
@@ -1487,6 +1487,12 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
             Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
             _ => {} // rest of events that we don't consider
         }
+    }
+
+    // Since directive entries have their assembler labeled on a per-instance basis,
+    // we check to make sure all of them have been assigned correctly
+    for directive in directives_map.values() {
+        assert_ne!(directive.assembler, Assembler::None);
     }
 
     Ok(directives_map.into_values().collect())
@@ -1606,7 +1612,7 @@ pub fn populate_ca65_directives(html_conts: &str) -> Result<Vec<Directive>> {
                     description: description.clone(),
                     deprecated: false,
                     url: Some(url.clone()),
-                    assembler: Some(Assembler::Ca65), // TODO: Make this non-optional
+                    assembler: Assembler::Ca65,
                 });
             }
         } else {
@@ -1616,7 +1622,7 @@ pub fn populate_ca65_directives(html_conts: &str) -> Result<Vec<Directive>> {
                 description,
                 deprecated: false,
                 url: Some(url),
-                assembler: Some(Assembler::Ca65), // TODO: Make this non-optional
+                assembler: Assembler::Ca65,
             });
         }
     }

@@ -396,7 +396,7 @@ pub struct Directive {
     pub description: String,
     pub deprecated: bool,
     pub url: Option<String>,
-    pub assembler: Option<Assembler>,
+    pub assembler: Assembler,
 }
 
 impl Hoverable for Directive {}
@@ -409,7 +409,7 @@ impl Default for Directive {
         let description = String::new();
         let deprecated = false;
         let url = None;
-        let assembler = None;
+        let assembler = Assembler::None;
 
         Self {
             name,
@@ -425,21 +425,17 @@ impl Default for Directive {
 impl std::fmt::Display for Directive {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // basic fields
-        let header: String;
-        if let Some(assembler) = &self.assembler {
-            header = format!(
-                "{} [{}]{}",
-                &self.name,
-                assembler.as_ref(),
-                if self.deprecated {
-                    "\n**DEPRECATED**"
-                } else {
-                    ""
-                }
-            );
-        } else {
-            header = self.name.clone();
-        }
+        // &self.assembler {
+        let header = format!(
+            "{} [{}]{}",
+            &self.name,
+            self.assembler,
+            if self.deprecated {
+                "\n**DEPRECATED**"
+            } else {
+                ""
+            }
+        );
 
         let mut v: Vec<&str> = vec![&header, &self.description, "\n"];
 
