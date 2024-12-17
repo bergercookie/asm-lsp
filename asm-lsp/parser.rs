@@ -653,8 +653,7 @@ fn parse_arm_instruction(xml_contents: &str) -> Option<Instruction> {
 // NOTE: We could use an HTML parsing library like scraper or html5ever, but the input
 // is regular/constrained enough that we can just use some regexes and avoid
 // the extra dependency
-#[must_use]
-pub fn populate_6502_instructions(html_conts: &str) -> Vec<Instruction> {
+pub fn populate_6502_instructions(html_conts: &str) -> Result<Vec<Instruction>> {
     let name_regex = Regex::new(r#"<dt id="[A-Z]{3}">(?<name>[A-Z]{3})</dt>$"#).unwrap();
     let summary_regex = Regex::new(r#"<p aria-label="summary">(?<summary>.+)</p>$"#).unwrap();
     let mut instructions = Vec::new();
@@ -776,7 +775,7 @@ pub fn populate_6502_instructions(html_conts: &str) -> Vec<Instruction> {
         }
     }
 
-    instructions
+    Ok(instructions)
 }
 
 /// Parse the provided XML contents and return a vector of all the instructions based on that.
@@ -1507,8 +1506,7 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
 ///
 /// This function is highly specialized to parse a single file and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
-#[must_use]
-pub fn populate_ca65_directives(html_conts: &str) -> Vec<Directive> {
+pub fn populate_ca65_directives(html_conts: &str) -> Result<Vec<Directive>> {
     let eat_lines = |lines: &mut Peekable<Lines<'_>>, empty: bool| {
         while let Some(line) = lines.peek() {
             if empty != line.is_empty() {
@@ -1623,7 +1621,7 @@ pub fn populate_ca65_directives(html_conts: &str) -> Vec<Directive> {
         }
     }
 
-    directives
+    Ok(directives)
 }
 
 pub fn populate_name_to_directive_map(
