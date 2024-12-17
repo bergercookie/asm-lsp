@@ -10,7 +10,7 @@ use crate::types::{Arch, Assembler, Config, ConfigOptions, ProjectConfig, RootCo
 
 use dialoguer::{theme::ColorfulTheme, Confirm, FuzzySelect, Input};
 
-const ARCH_LIST: [Arch; 7] = [
+const ARCH_LIST: [Arch; 8] = [
     Arch::X86,
     Arch::X86_64,
     Arch::X86_AND_X86_64,
@@ -18,13 +18,15 @@ const ARCH_LIST: [Arch; 7] = [
     Arch::ARM64,
     Arch::RISCV,
     Arch::Z80,
+    Arch::MOS6502,
 ];
 
-const ASSEMBLER_LIST: [Assembler; 4] = [
+const ASSEMBLER_LIST: [Assembler; 5] = [
     Assembler::Gas,
     Assembler::Go,
     Assembler::Masm,
     Assembler::Nasm,
+    Assembler::Ca65,
 ];
 
 #[derive(Args, Debug, Clone)]

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<InstructionSet name="6502">
+    <Register name="ac" description="The accumulator is the main rgister of the 6502. Its content is typically used by the arithmetic logic unit (ALU) for the first operand and results are deposited in the accumulator again. Thus its name, as results accumulate in this register. Most arithmetic and logical operations interact with this register." type="General Purpose Register" width="8 bits">
+    </Register>
+    <Register name="x" description="The X and Y registers are auxiliary registers. Like the accumulator, they can be loaded directly with values, both immediatedly (as literal constants) or from memory. Additionally, they can be incremented and decremented, and their contents may be transferred to and from the acuumulator. Their main purpose is the use as index registers, where their contents is added to a base memory location, before any values are either stored to or retrieved from the resulting address, which is known as the effective address. This is commonly used for loops and table lookups at a given index, hence the name." width="8 bits">
+    </Register>
+    <Register name="y" description="The X and Y registers are auxiliary registers. Like the accumulator, they can be loaded directly with values, both immediatedly (as literal constants) or from memory. Additionally, they can be incremented and decremented, and their contents may be transferred to and from the acuumulator. Their main purpose is the use as index registers, where their contents is added to a base memory location, before any values are either stored to or retrieved from the resulting address, which is known as the effective address. This is commonly used for loops and table lookups at a given index, hence the name." width="8 bits">
+    </Register>
+    <Register name="pc" description="The program counter keeps track of the memory location holding the current instruction code. Its contents is automatically stepped up as the program is executed and is modified by branch and jump operations. As it must be able to address the full 16-bit address range of 64K bytes, it's the only 16-bit register of the 6502." width="16 bits">
+    </Register>
+    <Register name="sp" description="The stack pointer points to the current top of stack (or rather, to its bottom, as the stack grows top-down.) The processor stack is located on memory page #1 ($0100–$01FF), a 256 bytes last-in-first-out (LIFO) stack, which enables subroutines and also serves as a quick intermediate storage. As a 8-bit register, the stack pointer holds just the low-byte of this address (the offset from $0100.) Be aware that this will just wrap around, in case that the stack underflows." width="8 bits">
+    </Register>
+    <Register name="sr" description="The status register holds the status of the processor, consisting of flags reflecting results of previous operations, configuration flags, like disabeling (blocking) interrupts or setting up binary encoded decimal mode (BCD), and the carry flag, which enables multi-byte arithmetics." width="8 bits">
+    </Register>
+</InstructionSet>

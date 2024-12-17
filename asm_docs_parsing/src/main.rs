@@ -1,9 +1,9 @@
 use std::path::PathBuf;
 
 use ::asm_lsp::parser::{
-    populate_arm_instructions, populate_gas_directives, populate_instructions,
-    populate_masm_nasm_directives, populate_registers, populate_riscv_instructions,
-    populate_riscv_registers,
+    populate_6502_instructions, populate_arm_instructions, populate_ca65_directives,
+    populate_gas_directives, populate_instructions, populate_masm_nasm_directives,
+    populate_registers, populate_riscv_instructions, populate_riscv_registers,
 };
 use asm_lsp::{Arch, Assembler, Directive, Instruction, Register};
 
@@ -80,11 +80,15 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                     ));
                 }
                 (false, arch_in) => {
-                    if arch_in.is_some() {
-                        println!("WARNING: `Arch` argument is ignored when `input_path` isn't a directory");
-                    }
                     let conts = std::fs::read_to_string(&path)?;
-                    instrs = populate_instructions(&conts)?;
+                    match arch_in {
+                        Some(Arch::MOS6502) => {
+                            instrs = populate_6502_instructions(&conts);
+                        }
+                        _ => {
+                            instrs = populate_instructions(&conts)?;
+                        }
+                    }
                 }
             }
             if instrs.is_empty() {
@@ -131,17 +135,12 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                         "`assembler` argument is requred when parsing directive documentation"
                     ));
                 }
-                (false, Some(assembler_in)) => {
-                    if assembler_in == Assembler::Gas || assembler_in == Assembler::Go {
-                        populate_gas_directives(&conts)?
-                    } else if assembler_in == Assembler::Masm || assembler_in == Assembler::Nasm {
-                        populate_masm_nasm_directives(&conts)?
-                    } else {
-                        return Err(anyhow!(
-                            "Directives documentation parsing isn't support for `{assembler_in}`"
-                        ));
-                    }
-                }
+                (false, Some(assembler_in)) => match assembler_in {
+                    Assembler::Gas | Assembler::Go => populate_gas_directives(&conts)?,
+                    Assembler::Masm | Assembler::Nasm => populate_masm_nasm_directives(&conts)?,
+                    Assembler::Ca65 => populate_ca65_directives(&conts),
+                    Assembler::None => unreachable!(),
+                },
             };
             if directives.is_empty() {
                 return Err(anyhow!("Zero directives read in"));

@@ -15,6 +15,7 @@ use crate::types::{
 use crate::InstructionAlias;
 
 use anyhow::{anyhow, Result};
+use htmlentity::entity::ICodedDataTrait;
 use log::{debug, error, info, warn};
 use quick_xml::escape::unescape;
 use quick_xml::events::attributes::Attribute;
@@ -637,6 +638,147 @@ fn parse_arm_instruction(xml_contents: &str) -> Option<Instruction> {
     Some(instruction)
 }
 
+/// Parse the provided HTML contents and return a vector of all the instructions based on that.
+/// <https://www.masswerk.at/6502/6502_instruction_set.html>
+///
+/// # Errors
+///
+/// This function is highly specialized to parse a single file and will panic or return
+/// `Err` for most mal-formed inputs
+///
+/// # Panics
+///
+/// This function is highly specialized to parse a single file and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+// NOTE: We could use an HTML parsing library like scraper or html5ever, but the input
+// is regular/constrained enough that we can just use some regexes and avoid
+// the extra dependency
+#[must_use]
+pub fn populate_6502_instructions(html_conts: &str) -> Vec<Instruction> {
+    let name_regex = Regex::new(r#"<dt id="[A-Z]{3}">(?<name>[A-Z]{3})</dt>$"#).unwrap();
+    let summary_regex = Regex::new(r#"<p aria-label="summary">(?<summary>.+)</p>$"#).unwrap();
+    let mut instructions = Vec::new();
+    let start = {
+        let start_marker = r#"<dl class="opcodes">"#;
+        let section_start = html_conts.find(start_marker).unwrap();
+        section_start + start_marker.len() + 1 // + 1 for '\n'
+    };
+    let mut lines = html_conts[start..].lines().peekable();
+    loop {
+        // opcode id
+        let Some(name_line) = lines.next() else {
+            break;
+        };
+        if name_line.is_empty() {
+            continue;
+        }
+        let name = &name_regex.captures(name_line).unwrap()["name"];
+        assert_eq!(lines.next().unwrap(), "<dd>");
+        // summary
+        let mut summary =
+            summary_regex.captures(lines.next().unwrap()).unwrap()["summary"].to_string();
+        let implementation_notes_marker = r#"<p aria-label="notes on the implementation">"#;
+        let synopsis_marker = r#"<p aria-label="synopsis">"#;
+        if lines
+            .peek()
+            .unwrap()
+            .starts_with(implementation_notes_marker)
+        {
+            summary.push('\n');
+            while !lines.peek().unwrap().starts_with(synopsis_marker) {
+                summary += &lines
+                    .next()
+                    .unwrap()
+                    .replace(r#"<p aria-label="notes on the implementation">"#, "")
+                    .replace("<br />", "")
+                    .replace("</p>", "");
+            }
+        }
+        // synopsis
+        let synopsis_line = lines.next().unwrap();
+        let mut synopsis = String::new();
+        let mut prev_idx = 0;
+        for (i, c) in synopsis_line.chars().enumerate() {
+            match c {
+                '<' => {
+                    if prev_idx != 0 {
+                        let bytes: Vec<u8> = synopsis_line[prev_idx..i].as_bytes().to_vec();
+                        let decoded = htmlentity::entity::decode(&bytes).to_string().unwrap();
+                        synopsis += &decoded;
+                    }
+                }
+                '>' => prev_idx = i + 1,
+                _ => {}
+            }
+        }
+        // flags
+        assert_eq!(
+            r#"<table aria-label="flags">"#,
+            lines.next().unwrap().trim()
+        );
+        // This is always the same
+        assert_eq!(
+            r"<tr><th>N</th><th>Z</th><th>C</th><th>I</th><th>D</th><th>V</th></tr>",
+            lines.next().unwrap().trim()
+        );
+        let flag_line = lines.next().unwrap().trim();
+        let flags: String = if flag_line.contains("from stack") {
+            "from stack".to_string()
+        } else {
+            flag_line
+                .chars()
+                .skip("<tr><td>".len())
+                .step_by("</td><td>".len() + 1)
+                .take(6) // N, Z, C, I, D, V
+                .collect()
+        };
+        assert!(
+            flags.len() == 6 || flags.eq("from stack"),
+            "name: {name}, flagline: {flag_line}"
+        );
+        assert_eq!("</table>", lines.next().unwrap().trim());
+        // details (table)
+        assert_eq!(
+            r#"<table aria-label="details">"#,
+            lines.next().unwrap().trim()
+        );
+        let mut templates = Vec::new();
+        assert_eq!(
+            r"<tr><th>addressing</th><th>assembler</th><th>opc</th><th>bytes</th><th>cycles</th></tr>",
+            lines.next().unwrap().trim()
+        );
+        loop {
+            let next = lines.next().unwrap().trim();
+            if next.eq("</table>") {
+                break;
+            }
+            let template_marker = "</td><td>";
+            let start_idx = next.find(template_marker).unwrap() + template_marker.len();
+            let end_offset = next[start_idx..].find(template_marker).unwrap();
+            templates.push(next[start_idx..start_idx + end_offset].to_string());
+        }
+        assert_eq!("</dd>", lines.next().unwrap().trim());
+        let combined_summary = format!("{summary}\n{synopsis}\nNZCIDV\n`{flags}`");
+        instructions.push(Instruction {
+            name: name.to_lowercase(),
+            summary: combined_summary,
+            forms: Vec::new(),
+            asm_templates: templates,
+            aliases: Vec::new(),
+            arch: Arch::MOS6502,
+            url: Some(format!(
+                "https://www.masswerk.at/6502/6502_instruction_set.html#{}",
+                name.to_uppercase()
+            )),
+        });
+        if name.eq("TYA") {
+            break;
+        }
+    }
+
+    instructions
+}
+
 /// Parse the provided XML contents and return a vector of all the instructions based on that.
 /// If parsing fails, the appropriate error will be returned instead.
 ///
@@ -1249,6 +1391,7 @@ pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive
 
     Ok(directives_map.into_values().collect())
 }
+
 /// Parse the provided XML contents and return a vector of all the directives based on that.
 /// If parsing fails, the appropriate error will be returned instead.
 ///
@@ -1348,6 +1491,139 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     }
 
     Ok(directives_map.into_values().collect())
+}
+
+/// Parse the provided HTML contents and return a vector of all the directives based on that.
+/// If parsing fails, the appropriate error will be returned instead.
+///
+/// <https://cc65.github.io/doc/ca65.html>
+///
+/// # Errors
+///
+/// This function is highly specialized to parse a single file and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+///
+/// # Panics
+///
+/// This function is highly specialized to parse a single file and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+#[must_use]
+pub fn populate_ca65_directives(html_conts: &str) -> Vec<Directive> {
+    let eat_lines = |lines: &mut Peekable<Lines<'_>>, empty: bool| {
+        while let Some(line) = lines.peek() {
+            if empty != line.is_empty() {
+                break;
+            }
+            _ = lines.next().unwrap();
+        }
+    };
+    let name_regex = Regex::new(r"<CODE>(?<name>.+)</CODE>").unwrap();
+    let url_regex =
+        Regex::new(r#"^<H2><A NAME=".+"></A> <A NAME="(?<fragment>[a-z, A-Z, 0-9, .]+)">"#)
+            .unwrap();
+    let mut directives = Vec::new();
+    let start = {
+        let start_marker = r##"<H2><A NAME="pseudo-variables"></A> <A NAME="s9">9.</A> <A HREF="#toc9">Pseudo variables</A></H2>"##;
+        let section_start = html_conts.find(start_marker).unwrap();
+        section_start + start_marker.len() + 1 // + 1 for '\n'
+    };
+    let mut lines = html_conts[start..].lines().peekable();
+    eat_lines(&mut lines, true);
+    _ = lines.next().unwrap(); // Extra info on pseudo variables
+    _ = lines.next().unwrap();
+    eat_lines(&mut lines, true);
+    'outer: loop {
+        // Consume lines until we find a section header
+        loop {
+            let Some(next) = lines.peek() else {
+                break 'outer;
+            };
+            let next = next.trim();
+            if next.starts_with("<H2><A NAME=\".") || next.starts_with("<H2><A NAME=\"*") {
+                break;
+            }
+            _ = lines.next().unwrap();
+        }
+
+        let name_line = lines.next().unwrap();
+        let name = {
+            let Some(caps) = &name_regex.captures(name_line) else {
+                // If this capture fails, we're at a section header rather than a subsection header
+                // We don't care about section headers, since they don't document any information
+                // about directives or anything else of importance. Just consume the lines and move on
+                eat_lines(&mut lines, true);
+                eat_lines(&mut lines, false);
+                eat_lines(&mut lines, true);
+                continue;
+            };
+            caps["name"].to_string()
+        };
+        let fragment = &url_regex.captures(name_line).unwrap()["fragment"];
+        let url = format!("https://cc65.github.io/doc/ca65.html#{fragment}");
+        assert_eq!(lines.next().unwrap().trim(), "</H2>");
+        eat_lines(&mut lines, true);
+        // get the description, remove anything inside carets
+        let mut description = String::new();
+        while !lines.peek().unwrap().is_empty() {
+            let description_line = lines.next().unwrap();
+            let len_before = description.len();
+            let mut prev_idx = 0;
+            for (i, c) in description_line.chars().enumerate() {
+                match c {
+                    '<' => {
+                        let bytes: Vec<u8> = description_line[prev_idx..i].as_bytes().to_vec();
+                        let decoded = htmlentity::entity::decode(&bytes).to_string().unwrap();
+                        description += &decoded;
+                    }
+                    '>' => prev_idx = i + 1,
+                    _ => {}
+                }
+            }
+            let line_len = description_line.len();
+            // Not all lines end with a closing tag...
+            if prev_idx < line_len - 1 {
+                let bytes: Vec<u8> = description_line[prev_idx..description_line.len()]
+                    .as_bytes()
+                    .to_vec();
+                let decoded = htmlentity::entity::decode(&bytes).to_string().unwrap();
+                description += &decoded;
+            }
+            if description.len() != len_before {
+                description.push(' ');
+            }
+        }
+        let description = {
+            while description.ends_with('\n') {
+                _ = description.pop();
+            }
+            description.push('\n');
+            description.trim().replace("  ", " ")
+        };
+        // Some entries cover two items, add both to the map
+        if name.contains(',') {
+            for alias in name.split(", ") {
+                directives.push(Directive {
+                    name: alias.trim().to_lowercase(),
+                    signatures: Vec::new(),
+                    description: description.clone(),
+                    deprecated: false,
+                    url: Some(url.clone()),
+                    assembler: Some(Assembler::Ca65), // TODO: Make this non-optional
+                });
+            }
+        } else {
+            directives.push(Directive {
+                name: name.to_lowercase(),
+                signatures: Vec::new(),
+                description,
+                deprecated: false,
+                url: Some(url),
+                assembler: Some(Assembler::Ca65), // TODO: Make this non-optional
+            });
+        }
+    }
+
+    directives
 }
 
 pub fn populate_name_to_directive_map(

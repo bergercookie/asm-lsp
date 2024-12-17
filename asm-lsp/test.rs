@@ -16,7 +16,10 @@ mod tests {
     use crate::{
         get_comp_resp, get_completes, get_hover_resp, get_word_from_pos_params,
         instr_filter_targets,
-        parser::{populate_arm_instructions, populate_masm_nasm_directives},
+        parser::{
+            populate_6502_instructions, populate_arm_instructions, populate_ca65_directives,
+            populate_masm_nasm_directives,
+        },
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
         Assembler, Config, ConfigOptions, Directive, DocumentStore, Instruction, Register,
@@ -34,6 +37,16 @@ mod tests {
                 diagnostics: None,
                 default_diagnostics: None,
             }),
+            client: None,
+        }
+    }
+
+    fn mos6502_test_config() -> Config {
+        Config {
+            version: None,
+            assembler: Assembler::None,
+            instruction_set: Arch::MOS6502,
+            opts: Some(ConfigOptions::default()),
             client: None,
         }
     }
@@ -113,6 +126,16 @@ mod tests {
         }
     }
 
+    fn ca65_test_config() -> Config {
+        Config {
+            version: None,
+            assembler: Assembler::Ca65,
+            instruction_set: Arch::None,
+            opts: Some(ConfigOptions::default()),
+            client: None,
+        }
+    }
+
     #[derive(Debug)]
     struct GlobalInfo {
         x86_instructions: Vec<Instruction>,
@@ -124,12 +147,15 @@ mod tests {
         arm64_instructions: Vec<Instruction>,
         arm64_registers: Vec<Register>,
         riscv_instructions: Vec<Instruction>,
+        mos6502_instructions: Vec<Instruction>,
         riscv_registers: Vec<Register>,
         z80_instructions: Vec<Instruction>,
         z80_registers: Vec<Register>,
+        mos6502_registers: Vec<Register>,
         gas_directives: Vec<Directive>,
         masm_directives: Vec<Directive>,
         nasm_directives: Vec<Directive>,
+        ca65_directives: Vec<Directive>,
     }
 
     impl GlobalInfo {
@@ -147,9 +173,12 @@ mod tests {
                 riscv_registers: Vec::new(),
                 z80_instructions: Vec::new(),
                 z80_registers: Vec::new(),
+                mos6502_instructions: Vec::new(),
+                mos6502_registers: Vec::new(),
                 gas_directives: Vec::new(),
                 masm_directives: Vec::new(),
                 nasm_directives: Vec::new(),
+                ca65_directives: Vec::new(),
             }
         }
     }
@@ -213,6 +242,13 @@ mod tests {
             Vec::new()
         };
 
+        info.mos6502_instructions = if config.is_isa_enabled(Arch::MOS6502) {
+            let mos6502_instrs = include_bytes!("serialized/opcodes/6502");
+            bincode::deserialize::<Vec<Instruction>>(mos6502_instrs)?
+        } else {
+            Vec::new()
+        };
+
         info.x86_registers = if config.is_isa_enabled(Arch::X86) {
             let regs_x86 = include_bytes!("serialized/registers/x86");
             bincode::deserialize(regs_x86)?
@@ -255,6 +291,13 @@ mod tests {
             Vec::new()
         };
 
+        info.mos6502_registers = if config.is_isa_enabled(Arch::MOS6502) {
+            let regs_mos6502 = include_bytes!("serialized/registers/6502");
+            bincode::deserialize(regs_mos6502)?
+        } else {
+            Vec::new()
+        };
+
         info.gas_directives = if config.is_assembler_enabled(Assembler::Gas) {
             let gas_dirs = include_bytes!("serialized/directives/gas");
             bincode::deserialize(gas_dirs)?
@@ -272,6 +315,13 @@ mod tests {
         info.nasm_directives = if config.is_assembler_enabled(Assembler::Nasm) {
             let nasm_dirs = include_bytes!("serialized/directives/nasm");
             bincode::deserialize(nasm_dirs)?
+        } else {
+            Vec::new()
+        };
+
+        info.ca65_directives = if config.is_assembler_enabled(Assembler::Ca65) {
+            let ca65_dirs = include_bytes!("serialized/directives/ca65");
+            bincode::deserialize(ca65_dirs)?
         } else {
             Vec::new()
         };
@@ -318,6 +368,12 @@ mod tests {
             &mut store.names_to_info.instructions,
         );
 
+        populate_name_to_instruction_map(
+            Arch::MOS6502,
+            &info.mos6502_instructions,
+            &mut store.names_to_info.instructions,
+        );
+
         populate_name_to_register_map(
             Arch::X86,
             &info.x86_registers,
@@ -349,6 +405,12 @@ mod tests {
         );
 
         populate_name_to_register_map(
+            Arch::MOS6502,
+            &info.mos6502_registers,
+            &mut store.names_to_info.registers,
+        );
+
+        populate_name_to_register_map(
             Arch::Z80,
             &info.z80_registers,
             &mut store.names_to_info.registers,
@@ -369,6 +431,12 @@ mod tests {
         populate_name_to_directive_map(
             Assembler::Nasm,
             &info.nasm_directives,
+            &mut store.names_to_info.directives,
+        );
+
+        populate_name_to_directive_map(
+            Assembler::Ca65,
+            &info.ca65_directives,
             &mut store.names_to_info.directives,
         );
 
@@ -467,7 +535,9 @@ mod tests {
             value: resp_text,
         }) = resp.contents
         {
-            let cleaned = resp_text.replace("\n\n\n", "\n\n"); // not sure what's going on here...
+            let cleaned = resp_text
+                .replace("\n\n\n\n", "\n\n") // HACK:: not sure what's going on here...
+                .replace("\n\n\n", "\n\n"); // ...or here
             assert_eq!(expected, cleaned);
         } else {
             panic!("Invalid hover response contents: {:?}", resp.contents);
@@ -535,7 +605,7 @@ mod tests {
         .unwrap();
 
         // - We currently have a very course-grained approach to completions,
-        // - We just send all of the appropriate items (e.g. all instrucitons, all
+        // - We just send all of the appropriate items (e.g. all instructions, all
         // registers, or all directives) and let the editor's lsp client sort out
         // which to display/ in what order
         // - Given this, we won't check for equality for all of the expected items,
@@ -610,6 +680,172 @@ mod tests {
             expected_kind,
             trigger_kind,
             trigger_character,
+        );
+    }
+
+    /**************************************************************************
+     * Ca65 Tests
+     *************************************************************************/
+    #[test]
+    fn handle_autocomplete_ca65_it_provides_comps_1() {
+        test_directive_autocomplete(
+            ".en<cursor>",
+            &ca65_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_autocomplete_ca65_it_provides_comps_2() {
+        test_directive_autocomplete(
+            r#".ou<cursor> "An out message""#,
+            &ca65_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_autocomplete_ca65_it_provides_comps_3() {
+        test_directive_autocomplete(
+            ".<cursor>",
+            &ca65_test_config(),
+            CompletionTriggerKind::TRIGGER_CHARACTER,
+            Some('.'.to_string()),
+        );
+    }
+
+    #[test]
+    fn handle_hover_ca65_it_provides_info_asterisk() {
+        test_hover("*<cursor>", "* [ca65]
+Reading this pseudo variable will return the program counter at the start of the current input line. Assignment to this variable is possible when .FEATURE pc_assignment is used. Note: You should not use assignments to *, use .ORG instead.
+
+More info: https://cc65.github.io/doc/ca65.html#ss9.1",&ca65_test_config());
+    }
+
+    #[test]
+    fn handle_hover_ca65_it_provides_info_1() {
+        test_hover(".end<cursor>mac", ".endmac [ca65]
+Marks the end of a macro definition. Note, .ENDMACRO should be on its own line to successfully end the macro definition. It is possible to use .DEFINE to create a symbol that references .ENDMACRO without ending the macro definition. Example:     .macro new_mac         .define startmac .macro         .define endmac .endmacro     .endmacro  See: .DELMACRO .EXITMACRO .MACRO See also section Macros.
+
+More info: https://cc65.github.io/doc/ca65.html#ss11.28", &ca65_test_config());
+    }
+
+    #[test]
+    fn handle_hover_ca65_it_provides_info_2() {
+        test_hover(
+            "<cursor>.byte $08, $0d",
+            r#".byte [ca65]
+Define byte sized data. Must be followed by a sequence of (byte ranged) expressions or strings. Strings will be translated using the current character mapping definition. Example:     .byte  "Hello "     .byt  "world", $0D, $00  See: .ASCIIZ, .CHARMAP .LITERAL
+
+More info: https://cc65.github.io/doc/ca65.html#ss11.10"#,
+            &ca65_test_config(),
+        );
+    }
+
+    /**************************************************************************
+     * 6502 Tests
+     *************************************************************************/
+    #[test]
+    fn handle_autocomplete_6502_it_provides_instr_comps_no_args() {
+        test_instruction_autocomplete(
+            "cl<cursor>",
+            &mos6502_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_autocomplete_6502_it_provides_instr_comps_existing_args_1() {
+        test_instruction_autocomplete(
+            "ld<cursor> inputnumber, x",
+            &mos6502_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_autocomplete_6502_it_provides_instr_comps_existing_args_2() {
+        test_instruction_autocomplete(
+            "s<cursor> #$30",
+            &mos6502_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_hover_6502_it_provides_reg_info() {
+        test_hover("sta inputnumber, <cursor>x", "X [6502]
+The X and Y registers are auxiliary registers. Like the accumulator, they can be loaded directly with values, both immediatedly (as literal constants) or from memory. Additionally, they can be incremented and decremented, and their contents may be transferred to and from the acuumulator. Their main purpose is the use as index registers, where their contents is added to a base memory location, before any values are either stored to or retrieved from the resulting address, which is known as the effective address. This is commonly used for loops and table lookups at a given index, hence the name.
+
+Width: 8 bits", &mos6502_test_config());
+    }
+
+    #[test]
+    fn handle_hover_6502_it_provides_instr_info_1() {
+        test_hover(
+            "c<cursor>lc",
+            "clc [6502]
+Clear Carry Flag
+0 -> C
+NZCIDV
+`--0---`
+
+## Templates
+
+ + `CLC`
+
+More info: https://www.masswerk.at/6502/6502_instruction_set.html#CLC",
+            &mos6502_test_config(),
+        );
+    }
+
+    #[test]
+    fn handle_hover_6502_it_provides_instr_info_2() {
+        test_hover(
+            "jsr<cursor> CHRIN",
+            "jsr [6502]
+Jump to New Location Saving Return Address
+push (PC+2),operand 1st byte -> PCLoperand 2nd byte -> PCH
+NZCIDV
+`------`
+
+## Templates
+
+ + `JSR oper`
+
+More info: https://www.masswerk.at/6502/6502_instruction_set.html#JSR",
+            &mos6502_test_config(),
+        );
+    }
+
+    #[test]
+    fn handle_hover_6502_it_provides_instr_info_3() {
+        test_hover(
+            "<cursor>sbc #$30",
+            "sbc [6502]
+Subtract Memory from Accumulator with Borrow
+A - M - C̅ -> A
+NZCIDV
+`+++--+`
+
+## Templates
+
+ + `SBC #oper`
+ + `SBC oper`
+ + `SBC oper,X`
+ + `SBC oper`
+ + `SBC oper,X`
+ + `SBC oper,Y`
+ + `SBC (oper,X)`
+ + `SBC (oper),Y`
+
+More info: https://www.masswerk.at/6502/6502_instruction_set.html#SBC",
+            &mos6502_test_config(),
         );
     }
 
@@ -2005,6 +2241,33 @@ Width: 8 bits",
         }
     }
     #[test]
+    fn serialized_6502_registers_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let mos6502_regs_ser = include_bytes!("serialized/registers/6502");
+        let ser_vec = bincode::deserialize::<Vec<Register>>(mos6502_regs_ser).unwrap();
+
+        let mos6502_regs_raw = include_str!("../docs_store/registers/raw/6502.xml");
+        let raw_vec = populate_registers(mos6502_regs_raw).unwrap();
+
+        for reg in ser_vec {
+            *cmp_map.entry(reg.clone()).or_insert(0) += 1;
+        }
+        for reg in raw_vec {
+            let entry = cmp_map.get_mut(&reg).unwrap();
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {reg:?}, but the count is 0"
+            );
+            *entry -= 1;
+        }
+        for (reg, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {reg:?}"
+            );
+        }
+    }
+    #[test]
     fn serialized_x86_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
         let x86_instrs_ser = include_bytes!("serialized/opcodes/x86");
@@ -2134,6 +2397,33 @@ Width: 8 bits",
         }
     }
     #[test]
+    fn serialized_6502_instructions_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let mos6502_instrs_ser = include_bytes!("serialized/opcodes/6502");
+        let ser_vec = bincode::deserialize::<Vec<Instruction>>(mos6502_instrs_ser).unwrap();
+
+        let mos6502_instrs_raw = include_str!("../docs_store/opcodes/raw/6502.html");
+        let raw_vec = populate_6502_instructions(mos6502_instrs_raw);
+
+        for instr in ser_vec {
+            *cmp_map.entry(instr.clone()).or_insert(0) += 1;
+        }
+        for instr in raw_vec {
+            let entry = cmp_map.get_mut(&instr).unwrap();
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {instr:?}, but the count is 0"
+            );
+            *entry -= 1;
+        }
+        for (instr, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {instr:?}"
+            );
+        }
+    }
+    #[test]
     fn serialized_gas_directives_are_up_to_date() {
         let mut cmp_map = HashMap::new();
         let gas_dirs_ser = include_bytes!("serialized/directives/gas");
@@ -2195,6 +2485,33 @@ Width: 8 bits",
 
         let nasm_dirs_raw = include_str!("../docs_store/directives/raw/nasm.xml");
         let raw_vec = populate_masm_nasm_directives(nasm_dirs_raw).unwrap();
+
+        for dir in ser_vec {
+            *cmp_map.entry(dir.clone()).or_insert(0) += 1;
+        }
+        for dir in raw_vec {
+            let entry = cmp_map.get_mut(&dir).unwrap();
+            assert!(
+                *entry != 0,
+                "Expected at least one more instruction entry for {dir:?}, but the count is 0"
+            );
+            *entry -= 1;
+        }
+        for (dir, count) in &cmp_map {
+            assert!(
+                *count == 0,
+                "Expected count to be 0, found {count} for {dir:?}"
+            );
+        }
+    }
+    #[test]
+    fn serialized_ca65_directives_are_up_to_date() {
+        let mut cmp_map = HashMap::new();
+        let ca65_dirs_ser = include_bytes!("serialized/directives/ca65");
+        let ser_vec = bincode::deserialize::<Vec<Directive>>(ca65_dirs_ser).unwrap();
+
+        let ca65_dirs_raw = include_str!("../docs_store/directives/raw/ca65.html");
+        let raw_vec = populate_ca65_directives(ca65_dirs_raw);
 
         for dir in ser_vec {
             *cmp_map.entry(dir.clone()).or_insert(0) += 1;

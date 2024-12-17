@@ -114,7 +114,11 @@ pub fn send_notification(message: String, typ: MessageType, connection: &Connect
 #[must_use]
 pub fn find_word_at_pos(line: &str, col: Column) -> ((Column, Column), usize) {
     let line_ = format!("{line} ");
-    let is_ident_char = |c: char| c.is_alphanumeric() || c == '_' || c == '.';
+    // NOTE: '*' is added as an allowed character to account for the the program
+    // counter pseudo variable of the Ca65 assembler. It's included unconditionally
+    // here for simplicity, but if this proves to be an issue we can pass in a `config`
+    // and only use it if the Ca65 assembler is enabled
+    let is_ident_char = |c: char| c.is_alphanumeric() || c == '_' || c == '.' || c == '*';
 
     let start = line_
         .chars()
@@ -821,6 +825,7 @@ pub fn get_hover_resp(
     {
         if config.is_assembler_enabled(Assembler::Gas)
             || config.is_assembler_enabled(Assembler::Masm)
+            || config.is_assembler_enabled(Assembler::Ca65)
         {
             // all gas directives have a '.' prefix, some masm directives do
             let directive_lookup =
@@ -1211,11 +1216,12 @@ pub fn get_comp_resp(
                         });
                     }
                 }
-                // prepend all GAS, some MASM, some NASM directives with "."
+                // prepend all GAS, all Ca65, some MASM, some NASM directives with "."
                 Some(".") => {
                     if config.is_assembler_enabled(Assembler::Gas)
                         || config.is_assembler_enabled(Assembler::Masm)
                         || config.is_assembler_enabled(Assembler::Nasm)
+                        || config.is_assembler_enabled(Assembler::Ca65)
                     {
                         return Some(CompletionList {
                             is_incomplete: true,
