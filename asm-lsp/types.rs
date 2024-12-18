@@ -666,6 +666,9 @@ pub enum Arch {
     #[strum(serialize = "6502")]
     #[serde(rename = "6502")]
     MOS6502,
+    #[strum(serialize = "power-isa")]
+    #[serde(rename = "power-isa")]
+    PowerISA,
     /// For testing purposes *only*. This is not a valid config option
     #[serde(skip)]
     None,
@@ -709,6 +712,9 @@ impl Arch {
             Self::RISCV => load_registers_with_path!(Self::RISCV, "serialized/registers/riscv"),
             Self::Z80 => load_registers_with_path!(Self::Z80, "serialized/registers/z80"),
             Self::MOS6502 => load_registers_with_path!(Self::MOS6502, "serialized/registers/6502"),
+            Self::PowerISA => {
+                load_registers_with_path!(Self::PowerISA, "serialized/registers/power-isa");
+            }
             Self::None => unreachable!(),
         }
     }
@@ -753,6 +759,9 @@ impl Arch {
             Self::RISCV => load_instructions_with_path!(Self::RISCV, "serialized/opcodes/riscv"),
             Self::Z80 => load_instructions_with_path!(Self::Z80, "serialized/opcodes/z80"),
             Self::MOS6502 => load_instructions_with_path!(Self::MOS6502, "serialized/opcodes/6502"),
+            Self::PowerISA => {
+                load_instructions_with_path!(Self::PowerISA, "serialized/opcodes/power-isa");
+            }
             Self::None => unreachable!(),
         }
     }
@@ -804,6 +813,7 @@ impl std::fmt::Display for Arch {
             Self::RISCV => write!(f, "riscv")?,
             Self::Z80 => write!(f, "z80")?,
             Self::MOS6502 => write!(f, "6502")?,
+            Self::PowerISA => write!(f, "power-isa")?,
             Self::None => write!(f, "None")?,
         }
         Ok(())

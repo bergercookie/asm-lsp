@@ -18,7 +18,8 @@ mod tests {
         instr_filter_targets,
         parser::{
             populate_6502_instructions, populate_arm_instructions, populate_ca65_directives,
-            populate_masm_nasm_directives, populate_riscv_instructions,
+            populate_masm_nasm_directives, populate_power_isa_instructions,
+            populate_riscv_instructions,
         },
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
@@ -37,6 +38,16 @@ mod tests {
                 diagnostics: None,
                 default_diagnostics: None,
             }),
+            client: None,
+        }
+    }
+
+    fn power_isa_test_config() -> Config {
+        Config {
+            version: None,
+            assembler: Assembler::None,
+            instruction_set: Arch::PowerISA,
+            opts: Some(ConfigOptions::default()),
             client: None,
         }
     }
@@ -148,10 +159,12 @@ mod tests {
         arm64_registers: Vec<Register>,
         riscv_instructions: Vec<Instruction>,
         mos6502_instructions: Vec<Instruction>,
+        power_isa_instructions: Vec<Instruction>,
         riscv_registers: Vec<Register>,
         z80_instructions: Vec<Instruction>,
         z80_registers: Vec<Register>,
         mos6502_registers: Vec<Register>,
+        power_isa_registers: Vec<Register>,
         gas_directives: Vec<Directive>,
         masm_directives: Vec<Directive>,
         nasm_directives: Vec<Directive>,
@@ -170,11 +183,13 @@ mod tests {
                 arm64_instructions: Vec::new(),
                 arm64_registers: Vec::new(),
                 riscv_instructions: Vec::new(),
+                mos6502_instructions: Vec::new(),
+                power_isa_instructions: Vec::new(),
                 riscv_registers: Vec::new(),
                 z80_instructions: Vec::new(),
                 z80_registers: Vec::new(),
-                mos6502_instructions: Vec::new(),
                 mos6502_registers: Vec::new(),
+                power_isa_registers: Vec::new(),
                 gas_directives: Vec::new(),
                 masm_directives: Vec::new(),
                 nasm_directives: Vec::new(),
@@ -249,6 +264,13 @@ mod tests {
             Vec::new()
         };
 
+        info.power_isa_instructions = if config.is_isa_enabled(Arch::PowerISA) {
+            let power_isa_instrs = include_bytes!("serialized/opcodes/power-isa");
+            bincode::deserialize::<Vec<Instruction>>(power_isa_instrs)?
+        } else {
+            Vec::new()
+        };
+
         info.x86_registers = if config.is_isa_enabled(Arch::X86) {
             let regs_x86 = include_bytes!("serialized/registers/x86");
             bincode::deserialize(regs_x86)?
@@ -294,6 +316,13 @@ mod tests {
         info.mos6502_registers = if config.is_isa_enabled(Arch::MOS6502) {
             let regs_mos6502 = include_bytes!("serialized/registers/6502");
             bincode::deserialize(regs_mos6502)?
+        } else {
+            Vec::new()
+        };
+
+        info.power_isa_registers = if config.is_isa_enabled(Arch::PowerISA) {
+            let regs_power_isa = include_bytes!("serialized/registers/power-isa");
+            bincode::deserialize(regs_power_isa)?
         } else {
             Vec::new()
         };
@@ -374,6 +403,12 @@ mod tests {
             &mut store.names_to_info.instructions,
         );
 
+        populate_name_to_instruction_map(
+            Arch::PowerISA,
+            &info.power_isa_instructions,
+            &mut store.names_to_info.instructions,
+        );
+
         populate_name_to_register_map(
             Arch::X86,
             &info.x86_registers,
@@ -413,6 +448,12 @@ mod tests {
         populate_name_to_register_map(
             Arch::Z80,
             &info.z80_registers,
+            &mut store.names_to_info.registers,
+        );
+
+        populate_name_to_register_map(
+            Arch::PowerISA,
+            &info.power_isa_registers,
             &mut store.names_to_info.registers,
         );
 
@@ -680,6 +721,200 @@ mod tests {
             expected_kind,
             trigger_kind,
             trigger_character,
+        );
+    }
+
+    /**************************************************************************
+     * PowerISA Tests
+     *************************************************************************/
+    #[test]
+    fn handle_autocomplete_power_isa_it_provides_instr_comps_no_args() {
+        test_instruction_autocomplete(
+            "lb<cursor>",
+            &power_isa_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_autocomplete_power_isa_it_provides_instr_comps_existing_args_1() {
+        test_instruction_autocomplete(
+            "l<cursor> r4, 0(r3)",
+            &power_isa_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_autocomplete_power_isa_it_provides_instr_comps_existing_args_2() {
+        test_instruction_autocomplete(
+            "add<cursor> r3, r3, 1",
+            &power_isa_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_autocomplete_power_isa_it_provides_reg_comps_1() {
+        test_register_autocomplete(
+            "lbz r<cursor>",
+            &power_isa_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_autocomplete_power_isa_it_provides_reg_comps_2() {
+        test_register_autocomplete(
+            "lbz r4, 0(r<cursor>)",
+            &power_isa_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_autocomplete_power_isa_it_provides_reg_comps_existing_args_3() {
+        test_register_autocomplete(
+            "addi r<cursor>, r3, 1",
+            &power_isa_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_hover_power_isa_it_provides_instr_info_1() {
+        test_hover(
+            "lb<cursor>z r4, 0(r3)",
+            "lbz [power-isa]
+
+Load Byte and Zero (Introduced in POWER Architecture)
+
+ + `D(RA)`
+
+For lbz, let the effective address (EA) be the sum (RA|0)+EXTS64(D).
+
+For plbz with R=0, let EA
+be the sum of the contents of register RA, or the value 0
+if RA=0, and the value d0||d1,
+sign-extended to 64 bits.
+
+For plbz with R=1, let EA
+be the sum of the address of the instruction and the value d0||d1, sign-extended to 64 bits.
+
+The byte in storage addressed by EA is loaded into
+RT56:63.
+RT0:55 are set to 0.
+
+For plbz, if R is equal to 1 and RA is not equal to 0, the instruction form is
+invalid.
+
+",
+            &power_isa_test_config(),
+        );
+    }
+
+    #[test]
+    fn handle_hover_power_isa_it_provides_instr_info_2() {
+        test_hover(
+            "        add<cursor>i r4, r4, 0x20   # 'a' - 'A'",
+            "addi [power-isa]
+
+Add Immediate (Introduced in POWER Architecture)
+
+ + `SI`
+
+For addi, let the sum of the contents of register
+RA, or the value 0 if RA=0, and the value
+SI, sign-extended to 64 bits, is placed into register
+RT.
+
+For paddi with R=0, the sum of the
+contents of register RA, or the value 0 if RA=0, and the value si0||si1, sign-extended
+to 64 bits, is placed into register RT.
+
+For paddi with R=1, the sum of the
+address of the instruction and the value si0||si1, sign-extended to 64 bits, is placed into register RT.
+
+For paddi, if R is equal to
+1 and RA is not equal to 0, the instruction
+form is invalid.
+
+",
+            &power_isa_test_config(),
+        );
+    }
+
+    #[test]
+    fn handle_hover_power_isa_it_provides_instr_info_3() {
+        test_hover(
+            "b<cursor> loop",
+            "b [power-isa]
+
+Branch (Introduced in POWER Architecture)
+
+ + `target_addr`
+
+target_addr specifies the branch target address.
+
+If AA=0 then the branch target address is the sum of LI||0b00
+sign-extended and the address of this instruction, with the
+high-order 32 bits of the branch target address set to 0 in 32-bit
+mode.
+
+If AA=1 then the branch target address is the value LI||0b00
+sign-extended, with the high-order 32 bits of the branch target
+address set to 0 in 32-bit mode.
+
+If LK=1 then the effective address of the instruction following the
+Branch instruction is placed into the Link Register.
+
+",
+            &power_isa_test_config(),
+        );
+    }
+
+    #[test]
+    fn handle_hover_power_isa_it_provides_reg_info_1() {
+        test_hover(
+            "lbz r<cursor>4, 0(r3)",
+            "R4 [power-isa]
+For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01.
+
+Type: General Purpose Register
+Width: 64 bits",
+            &power_isa_test_config(),
+        );
+    }
+
+    #[test]
+    fn handle_hover_power_isa_it_provides_reg_info_2() {
+        test_hover(
+            "lbz r4, 0(r<cursor>3)",
+            "R3 [power-isa]
+For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01.
+
+Type: General Purpose Register
+Width: 64 bits",
+            &power_isa_test_config(),
+        );
+    }
+
+    #[test]
+    fn handle_hover_power_isa_it_provides_reg_info_3() {
+        test_hover(
+            "fadd f<cursor>3, f3, 1.0",
+            "F3 [power-isa]
+For floating point operations.
+
+Type: Floating Point Register
+Width: 64 bits",
+            &power_isa_test_config(),
         );
     }
 
@@ -2154,6 +2389,13 @@ Width: 8 bits",
             "../docs_store/registers/raw/6502.xml"
         );
     }
+    #[test]
+    fn serialized_power_isa_registers_are_up_to_date() {
+        serialized_registers_test!(
+            "serialized/registers/power-isa",
+            "../docs_store/registers/raw/power-isa.xml"
+        );
+    }
 
     macro_rules! serialized_instructions_test {
         ($serialized_path:literal, $raw_path:literal, $populate_fn:expr) => {
@@ -2223,6 +2465,14 @@ Width: 8 bits",
             "serialized/opcodes/6502",
             "../docs_store/opcodes/raw/6502.html",
             populate_6502_instructions
+        );
+    }
+    #[test]
+    fn serialized_power_isa_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/power-isa",
+            "../docs_store/opcodes/raw/power-isa.json",
+            populate_power_isa_instructions
         );
     }
     // TODO: Consolidate this into `serialized_instruction_test!`
