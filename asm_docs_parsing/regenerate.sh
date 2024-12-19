@@ -16,6 +16,7 @@ cargo build --release
 ../target/release/asm_docs_parsing ../docs_store/opcodes/raw/RISCV/ -o ../asm-lsp/serialized/opcodes/riscv --doc-type instruction --arch riscv
 ../target/release/asm_docs_parsing ../docs_store/opcodes/raw/z80.xml -o ../asm-lsp/serialized/opcodes/z80 --doc-type instruction
 ../target/release/asm_docs_parsing ../docs_store/opcodes/raw/6502.html -o ../asm-lsp/serialized/opcodes/6502 --doc-type instruction --arch 6502
+../target/release/asm_docs_parsing ../docs_store/opcodes/raw/power-isa.json -o ../asm-lsp/serialized/opcodes/power-isa --doc-type instruction --arch power-isa
 
 # register binaries
 ../target/release/asm_docs_parsing ../docs_store/registers/raw/x86.xml -o ../asm-lsp/serialized/registers/x86 --doc-type register --arch x86
