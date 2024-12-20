@@ -31,4 +31,4 @@ jobs:
         name: Build crate
         with:
           command: build
-          args: --verbose --all-features
+          args: --workspace --verbose --all-features

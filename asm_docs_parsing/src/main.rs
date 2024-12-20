@@ -83,7 +83,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                     let conts = std::fs::read_to_string(&path)?;
                     match arch_in {
                         Some(Arch::MOS6502) => {
-                            instrs = populate_6502_instructions(&conts);
+                            instrs = populate_6502_instructions(&conts)?;
                         }
                         _ => {
                             instrs = populate_instructions(&conts)?;
@@ -138,7 +138,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                 (false, Some(assembler_in)) => match assembler_in {
                     Assembler::Gas | Assembler::Go => populate_gas_directives(&conts)?,
                     Assembler::Masm | Assembler::Nasm => populate_masm_nasm_directives(&conts)?,
-                    Assembler::Ca65 => populate_ca65_directives(&conts),
+                    Assembler::Ca65 => populate_ca65_directives(&conts)?,
                     Assembler::None => unreachable!(),
                 },
             };
