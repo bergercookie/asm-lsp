@@ -18,7 +18,8 @@ mod tests {
         instr_filter_targets,
         parser::{
             populate_6502_instructions, populate_arm_instructions, populate_ca65_directives,
-            populate_masm_nasm_directives, populate_riscv_instructions,
+            populate_masm_nasm_directives, populate_power_isa_instructions,
+            populate_riscv_instructions,
         },
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
@@ -2223,6 +2224,14 @@ Width: 8 bits",
             "serialized/opcodes/6502",
             "../docs_store/opcodes/raw/6502.html",
             populate_6502_instructions
+        );
+    }
+    #[test]
+    fn serialized_power_isa_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/power-isa",
+            "../docs_store/opcodes/raw/power-isa.json",
+            populate_power_isa_instructions
         );
     }
     // TODO: Consolidate this into `serialized_instruction_test!`

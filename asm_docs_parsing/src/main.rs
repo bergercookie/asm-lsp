@@ -5,7 +5,9 @@ use ::asm_lsp::parser::{
     populate_gas_directives, populate_instructions, populate_masm_nasm_directives,
     populate_registers, populate_riscv_instructions, populate_riscv_registers,
 };
-use asm_lsp::{Arch, Assembler, Directive, Instruction, Register};
+use asm_lsp::{
+    parser::populate_power_isa_instructions, Arch, Assembler, Directive, Instruction, Register,
+};
 
 use anyhow::{anyhow, Result};
 use clap::{Parser, Subcommand};
@@ -83,7 +85,10 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                     let conts = std::fs::read_to_string(&path)?;
                     match arch_in {
                         Some(Arch::MOS6502) => {
-                            instrs = populate_6502_instructions(&conts);
+                            instrs = populate_6502_instructions(&conts)?;
+                        }
+                        Some(Arch::PowerISA) => {
+                            instrs = populate_power_isa_instructions(&conts)?;
                         }
                         _ => {
                             instrs = populate_instructions(&conts)?;
@@ -138,7 +143,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                 (false, Some(assembler_in)) => match assembler_in {
                     Assembler::Gas | Assembler::Go => populate_gas_directives(&conts)?,
                     Assembler::Masm | Assembler::Nasm => populate_masm_nasm_directives(&conts)?,
-                    Assembler::Ca65 => populate_ca65_directives(&conts),
+                    Assembler::Ca65 => populate_ca65_directives(&conts)?,
                     Assembler::None => unreachable!(),
                 },
             };
