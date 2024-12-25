@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='utf-8'?>
+<InstructionSet name="power-isa">
+    <Register name="r0" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r1" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r2" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r3" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r4" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r5" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r6" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r7" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r8" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r9" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r10" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r11" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r12" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r13" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r14" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r15" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r16" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r17" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r18" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r19" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r20" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r21" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r22" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r23" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r24" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r25" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r26" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r27" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r28" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r29" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r30" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="r31" description="For integer operations. 32 bit width prior to PowerPC Architecture Version 2.01." type="General Purpose Register" width="64 bits">
+    </Register>
+    <Register name="f0" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f1" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f2" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f3" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f4" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f5" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f6" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f7" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f8" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f9" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f10" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f11" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f12" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f13" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f14" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f15" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f16" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f17" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f18" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f19" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f20" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f21" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f22" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f23" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f24" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f25" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f26" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f27" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f28" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f29" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f30" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+    <Register name="f31" description="For floating point operations." type="Floating Point Register" width="64 bits">
+    </Register>
+</InstructionSet>

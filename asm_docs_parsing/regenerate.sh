@@ -16,6 +16,7 @@ cargo build --release
 ../target/release/asm_docs_parsing ../docs_store/opcodes/raw/RISCV/ -o ../asm-lsp/serialized/opcodes/riscv --doc-type instruction --arch riscv
 ../target/release/asm_docs_parsing ../docs_store/opcodes/raw/z80.xml -o ../asm-lsp/serialized/opcodes/z80 --doc-type instruction
 ../target/release/asm_docs_parsing ../docs_store/opcodes/raw/6502.html -o ../asm-lsp/serialized/opcodes/6502 --doc-type instruction --arch 6502
+../target/release/asm_docs_parsing ../docs_store/opcodes/raw/power-isa.json -o ../asm-lsp/serialized/opcodes/power-isa --doc-type instruction --arch power-isa
 
 # register binaries
 ../target/release/asm_docs_parsing ../docs_store/registers/raw/x86.xml -o ../asm-lsp/serialized/registers/x86 --doc-type register --arch x86
@@ -25,6 +26,7 @@ cargo build --release
 ../target/release/asm_docs_parsing ../docs_store/registers/raw/riscv.rst.txt -o ../asm-lsp/serialized/registers/riscv --doc-type register --arch riscv
 ../target/release/asm_docs_parsing ../docs_store/registers/raw/z80.xml -o ../asm-lsp/serialized/registers/z80 --doc-type register --arch z80
 ../target/release/asm_docs_parsing ../docs_store/registers/raw/6502.xml -o ../asm-lsp/serialized/registers/6502 --doc-type register --arch 6502
+../target/release/asm_docs_parsing ../docs_store/registers/raw/power-isa.xml -o ../asm-lsp/serialized/registers/power-isa --doc-type register --arch power-isa
 
 # directive binaries
 ../target/release/asm_docs_parsing ../docs_store/directives/raw/gas.xml -o ../asm-lsp/serialized/directives/gas --doc-type directive --assembler gas

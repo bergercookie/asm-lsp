@@ -5,7 +5,9 @@ use ::asm_lsp::parser::{
     populate_gas_directives, populate_instructions, populate_masm_nasm_directives,
     populate_registers, populate_riscv_instructions, populate_riscv_registers,
 };
-use asm_lsp::{Arch, Assembler, Directive, Instruction, Register};
+use asm_lsp::{
+    parser::populate_power_isa_instructions, Arch, Assembler, Directive, Instruction, Register,
+};
 
 use anyhow::{anyhow, Result};
 use clap::{Parser, Subcommand};
@@ -84,6 +86,9 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                     match arch_in {
                         Some(Arch::MOS6502) => {
                             instrs = populate_6502_instructions(&conts)?;
+                        }
+                        Some(Arch::PowerISA) => {
+                            instrs = populate_power_isa_instructions(&conts)?;
                         }
                         _ => {
                             instrs = populate_instructions(&conts)?;

@@ -24,6 +24,7 @@ use quick_xml::name::QName;
 use quick_xml::Reader;
 use regex::Regex;
 use reqwest;
+use serde::Deserialize;
 use url_escape::encode_www_form_urlencoded;
 
 /// Parse all of the register information witin the documentation file
@@ -773,6 +774,147 @@ pub fn populate_6502_instructions(html_conts: &str) -> Result<Vec<Instruction>> 
         if name.eq("TYA") {
             break;
         }
+    }
+
+    Ok(instructions)
+}
+
+/// Parse the provided JSON contents and return a vector of all the instructions based on that.
+/// <https://github.com/open-power-sdk/PowerISA/blob/main/ISA.json>
+///
+/// # Errors
+///
+/// This function is highly specialized to parse a single file and will panic or return
+/// `Err` for most mal-formed inputs
+///
+/// # Panics
+///
+/// This function is highly specialized to parse a single file and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+// NOTE:
+// Raw JSON file pruned via the command:
+// ```
+// jq ".instructions | map({mnemonics: .mnemonics | map(del(.intrinsics)), body})" power-isa.json
+// ```
+pub fn populate_power_isa_instructions(json_conts: &str) -> Result<Vec<Instruction>> {
+    #[allow(non_camel_case_types, clippy::upper_case_acronyms)]
+    #[derive(Deserialize, Debug, Copy, Clone)]
+    enum PowerReleaseRepr {
+        P1,
+        P2,
+        PPC,
+        #[serde(rename = "v2.00")]
+        v200,
+        #[serde(rename = "v2.01")]
+        v201,
+        #[serde(rename = "v2.02")]
+        v202,
+        #[serde(rename = "v2.03")]
+        v203,
+        #[serde(rename = "v2.04")]
+        v204,
+        #[serde(rename = "v2.05")]
+        v205,
+        #[serde(rename = "v2.06")]
+        v206,
+        #[serde(rename = "v2.07")]
+        v207,
+        #[serde(rename = "v3.0")]
+        v30,
+        #[serde(rename = "v3.0B")]
+        v30B,
+        #[serde(rename = "v3.0C")]
+        v30C,
+        #[serde(rename = "v3.1")]
+        v31,
+        #[serde(rename = "v3.1B")]
+        v31B,
+    }
+
+    impl PowerReleaseRepr {
+        fn release_message(self) -> String {
+            String::from(match self {
+                Self::P1 => "Introduced in POWER Architecture",
+                Self::P2 => "Introduced in POWER2 Architecture",
+                Self::PPC => "Introduced in PowerPC Architecture prior to v2.00",
+                Self::v200 => "Introduced in PowerPC Architecture Version 2.00",
+                Self::v201 => "Introduced in PowerPC Architecture Version 2.01",
+                Self::v202 => "Introduced in PowerPC Architecture Version 2.02",
+                Self::v203 => "Introduced in Power ISA Version 2.03",
+                Self::v204 => "Introduced in Power ISA Version 2.04",
+                Self::v205 => "Introduced in Power ISA Version 2.05",
+                Self::v206 => "Introduced in Power ISA Version 2.06",
+                Self::v207 => "Introduced in Power ISA Version 2.07",
+                Self::v30 => "Introduced in Power ISA Version 3.0",
+                Self::v30B => "Introduced in Power ISA Version 3.0B",
+                Self::v30C => "Introduced in Power ISA Version 3.0C",
+                Self::v31 => "Introduced in Power ISA Version 3.1",
+                Self::v31B => "Introduced in Power ISA Version 3.1B",
+            })
+        }
+    }
+    #[allow(dead_code)]
+    #[derive(Deserialize, Debug)]
+    struct PowerConditionRepr {
+        pub field: String,
+        pub value: String,
+    }
+    #[allow(dead_code)]
+    #[derive(Deserialize, Debug)]
+    struct PowerLayoutRepr {
+        pub name: String,
+        pub size: String,
+    }
+    #[allow(dead_code)]
+    #[derive(Deserialize, Debug)]
+    struct PowerMnemonicRepr {
+        pub name: String,
+        pub form: String,
+        pub mnemonic: String,
+        pub operands: Vec<String>,
+        pub conditions: Vec<PowerConditionRepr>,
+        pub layout: Vec<PowerLayoutRepr>,
+        pub release: PowerReleaseRepr,
+    }
+    #[derive(Deserialize, Debug)]
+    struct PowerJsonRepr {
+        pub mnemonics: Vec<PowerMnemonicRepr>,
+        pub body: Vec<String>,
+    }
+
+    impl From<PowerJsonRepr> for Vec<Instruction> {
+        fn from(value: PowerJsonRepr) -> Self {
+            let mut instructions = Self::new();
+            for op in value.mnemonics {
+                let name = op.mnemonic.trim();
+                let mut instruction = Instruction {
+                    arch: Arch::PowerISA,
+                    name: name.to_string(),
+                    ..Default::default()
+                };
+                instruction.summary = {
+                    let operands = op.operands.iter().fold(String::new(), |accum, x| {
+                        format!("{} + `{x}`", if accum.is_empty() { "" } else { "\n" })
+                    });
+                    let description = value.body.join("\n");
+
+                    format!(
+                        "\n{} ({})\n\n{operands}\n{description}",
+                        op.name,
+                        op.release.release_message(),
+                    )
+                };
+                instructions.push(instruction);
+            }
+
+            instructions
+        }
+    }
+
+    let json_instrs: Vec<PowerJsonRepr> = serde_json::from_str(json_conts)?;
+    let mut instructions = Vec::new();
+    for instr in json_instrs {
+        instructions.append(&mut instr.into());
     }
 
     Ok(instructions)
