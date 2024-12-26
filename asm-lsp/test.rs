@@ -2419,9 +2419,11 @@ Width: 8 bits",
             let mut raw_vec = populate_registers(regs_raw).unwrap();
 
             // HACK: Windows line endings...
-            for reg in &mut raw_vec {
-                if let Some(descr) = &reg.description {
-                    reg.description = Some(descr.replace('\r', ""));
+            if cfg!(target_os = "windows") {
+                for reg in &mut raw_vec {
+                    if let Some(descr) = &reg.description {
+                        reg.description = Some(descr.replace('\r', ""));
+                    }
                 }
             }
 
@@ -2644,8 +2646,10 @@ Width: 8 bits",
             let mut raw_vec = $populate_fn(dirs_raw).unwrap();
 
             // HACK: Windows line endings...
-            for dir in &mut raw_vec {
-                dir.description = dir.description.replace('\r', "");
+            if cfg!(target_os = "windows") {
+                for dir in &mut raw_vec {
+                    dir.description = dir.description.replace('\r', "");
+                }
             }
 
             for dir in ser_vec {
