@@ -6,7 +6,8 @@ use ::asm_lsp::parser::{
     populate_registers, populate_riscv_instructions, populate_riscv_registers,
 };
 use asm_lsp::{
-    parser::populate_power_isa_instructions, Arch, Assembler, Directive, Instruction, Register,
+    parser::{populate_avr_directives, populate_power_isa_instructions},
+    Arch, Assembler, Directive, Instruction, Register,
 };
 
 use anyhow::{anyhow, Result};
@@ -144,6 +145,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                     Assembler::Gas | Assembler::Go => populate_gas_directives(&conts)?,
                     Assembler::Masm | Assembler::Nasm => populate_masm_nasm_directives(&conts)?,
                     Assembler::Ca65 => populate_ca65_directives(&conts)?,
+                    Assembler::Avr => populate_avr_directives(&conts)?,
                     Assembler::None => unreachable!(),
                 },
             };

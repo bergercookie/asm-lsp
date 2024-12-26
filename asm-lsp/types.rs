@@ -851,6 +851,9 @@ pub enum Assembler {
     #[strum(serialize = "ca65")]
     #[serde(rename = "ca65")]
     Ca65,
+    #[strum(serialize = "avr")]
+    #[serde(rename = "avr")]
+    Avr,
     #[serde(skip)]
     None,
 }
@@ -887,6 +890,7 @@ impl Assembler {
             Self::Nasm => load_directives_with_path!(Self::Nasm, "serialized/directives/nasm"),
             Self::Go => warn!("There is currently no Go-specific assembler documentation"),
             Self::Ca65 => load_directives_with_path!(Self::Ca65, "serialized/directives/ca65"),
+            Self::Avr => load_directives_with_path!(Self::Avr, "serialized/directives/avr"),
             Self::None => unreachable!(),
         }
     }

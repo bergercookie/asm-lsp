@@ -826,8 +826,9 @@ pub fn get_hover_resp(
         if config.is_assembler_enabled(Assembler::Gas)
             || config.is_assembler_enabled(Assembler::Masm)
             || config.is_assembler_enabled(Assembler::Ca65)
+            || config.is_assembler_enabled(Assembler::Avr)
         {
-            // all gas directives have a '.' prefix, some masm directives do
+            // all gas and AVR directives have a '.' prefix, some masm directives do
             let directive_lookup =
                 get_directive_hover_resp(word, &store.names_to_info.directives, config);
             if directive_lookup.is_some() {
@@ -1216,12 +1217,13 @@ pub fn get_comp_resp(
                         });
                     }
                 }
-                // prepend all GAS, all Ca65, some MASM, some NASM directives with "."
+                // prepend all GAS, all Ca65, all AVR, some MASM, some NASM directives with "."
                 Some(".") => {
                     if config.is_assembler_enabled(Assembler::Gas)
                         || config.is_assembler_enabled(Assembler::Masm)
                         || config.is_assembler_enabled(Assembler::Nasm)
                         || config.is_assembler_enabled(Assembler::Ca65)
+                        || config.is_assembler_enabled(Assembler::Avr)
                     {
                         return Some(CompletionList {
                             is_incomplete: true,

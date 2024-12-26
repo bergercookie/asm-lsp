@@ -17,9 +17,9 @@ mod tests {
         get_comp_resp, get_completes, get_hover_resp, get_word_from_pos_params,
         instr_filter_targets,
         parser::{
-            populate_6502_instructions, populate_arm_instructions, populate_ca65_directives,
-            populate_masm_nasm_directives, populate_power_isa_instructions,
-            populate_riscv_instructions,
+            populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
+            populate_ca65_directives, populate_masm_nasm_directives,
+            populate_power_isa_instructions, populate_riscv_instructions,
         },
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
@@ -38,6 +38,16 @@ mod tests {
                 diagnostics: None,
                 default_diagnostics: None,
             }),
+            client: None,
+        }
+    }
+
+    fn avr_assembler_test_config() -> Config {
+        Config {
+            version: None,
+            assembler: Assembler::Avr,
+            instruction_set: Arch::None,
+            opts: Some(ConfigOptions::default()),
             client: None,
         }
     }
@@ -169,6 +179,7 @@ mod tests {
         masm_directives: Vec<Directive>,
         nasm_directives: Vec<Directive>,
         ca65_directives: Vec<Directive>,
+        avr_directives: Vec<Directive>,
     }
 
     impl GlobalInfo {
@@ -194,6 +205,7 @@ mod tests {
                 masm_directives: Vec::new(),
                 nasm_directives: Vec::new(),
                 ca65_directives: Vec::new(),
+                avr_directives: Vec::new(),
             }
         }
     }
@@ -355,6 +367,13 @@ mod tests {
             Vec::new()
         };
 
+        info.avr_directives = if config.is_assembler_enabled(Assembler::Avr) {
+            let avr_dirs = include_bytes!("serialized/directives/avr");
+            bincode::deserialize(avr_dirs)?
+        } else {
+            Vec::new()
+        };
+
         Ok(info)
     }
 
@@ -478,6 +497,12 @@ mod tests {
         populate_name_to_directive_map(
             Assembler::Ca65,
             &info.ca65_directives,
+            &mut store.names_to_info.directives,
+        );
+
+        populate_name_to_directive_map(
+            Assembler::Avr,
+            &info.avr_directives,
             &mut store.names_to_info.directives,
         );
 
@@ -721,6 +746,78 @@ mod tests {
             expected_kind,
             trigger_kind,
             trigger_character,
+        );
+    }
+
+    /**************************************************************************
+     * AVR Tests
+     *************************************************************************/
+    #[test]
+    fn handle_autocomplete_avr_assembler_it_provides_dir_comps_no_args() {
+        test_directive_autocomplete(
+            ".und<cursor>",
+            &avr_assembler_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_autocomplete_avr_assembler_it_provides_dir_comps_args_1() {
+        test_directive_autocomplete(
+            ".or<cursor> 0x120 ; Set SRAM address to hex 120",
+            &avr_assembler_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_autocomplete_avr_assembler_it_provides_dir_comps_args_2() {
+        test_directive_autocomplete(
+            ".incl<cursor> <foo>",
+            &avr_assembler_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    #[test]
+    fn handle_hover_avr_assembler_it_provides_dir_info_1() {
+        test_hover(
+            ".incl<cursor>ude <foo>",
+            r#".include [avr]
+Include another file.
+The INCLUDE directive tells the Assembler to start reading from a specified file. The Assembler then
+assembles the specified file until end of file (EOF) or an EXIT directive is encountered. An included file
+may contain INCLUDE directives itself. The difference between the two forms is that the first one search
+the current directory first, the second one does not.
+
+- .INCLUDE "filename"
+- .INCLUDE <filename>"#,
+            &avr_assembler_test_config(),
+        );
+    }
+
+    #[test]
+    fn handle_hover_avr_assembler_it_provides_dir_info_2() {
+        test_hover(
+            ".or<cursor>g 0x0000",
+            ".org [avr]
+Set program origin.
+The ORG directive sets the location counter to an absolute value. The value to set is given as a
+parameter. If an ORG directive is given within a Data Segment, then it is the SRAM location counter
+which is set, if the directive is given within a Code Segment, then it is the Program memory counter which
+is set and if the directive is given within an EEPROM Segment, it is the EEPROM location counter which
+is set.
+The default values of the Code and the EEPROM location counters are zero, and the default value of the
+SRAM location counter is the address immediately following the end of I/O address space (0x60 for
+devices without extended I/O, 0x100 or more for devices with extended I/O) when the assembling is
+started. Note that the SRAM and EEPROM location counters count bytes whereas the Program memory
+location counter counts words. Also note that some devices lack SRAM and/or EEPROM.
+
+- .ORG expression",
+            &avr_assembler_test_config(),
         );
     }
 
@@ -2544,7 +2641,12 @@ Width: 8 bits",
             let ser_vec = bincode::deserialize::<Vec<Directive>>(dirs_ser).unwrap();
 
             let dirs_raw = include_str!($raw_path);
-            let raw_vec = $populate_fn(dirs_raw).unwrap();
+            let mut raw_vec = $populate_fn(dirs_raw).unwrap();
+
+            // HACK: Windows line endings...
+            for dir in &mut raw_vec {
+                dir.description = dir.description.replace('\r', "");
+            }
 
             for dir in ser_vec {
                 *cmp_map.entry(dir.clone()).or_insert(0) += 1;
@@ -2595,6 +2697,14 @@ Width: 8 bits",
             "serialized/directives/ca65",
             "../docs_store/directives/raw/ca65.html",
             populate_ca65_directives
+        );
+    }
+    #[test]
+    fn serialized_avr_directives_are_up_to_date() {
+        serialized_directives_test!(
+            "serialized/directives/avr",
+            "../docs_store/directives/raw/avr.xml",
+            populate_avr_directives
         );
     }
 }
