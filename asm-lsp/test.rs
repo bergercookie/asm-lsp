@@ -19,7 +19,7 @@ mod tests {
         parser::{
             populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
             populate_ca65_directives, populate_masm_nasm_directives,
-            populate_power_isa_instructions, populate_riscv_instructions,
+            populate_power_isa_instructions, populate_riscv_instructions, populate_riscv_registers,
         },
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
@@ -2410,13 +2410,13 @@ Width: 8 bits",
      * Serialization Tests
      *************************************************************************/
     macro_rules! serialized_registers_test {
-        ($serialized_path:literal, $raw_path:literal) => {
+        ($serialized_path:literal, $raw_path:literal, $populate_fn:expr) => {
             let mut cmp_map = HashMap::new();
             let regs_ser = include_bytes!($serialized_path);
             let ser_vec = bincode::deserialize::<Vec<Register>>(regs_ser).unwrap();
 
             let regs_raw = include_str!($raw_path);
-            let mut raw_vec = populate_registers(regs_raw).unwrap();
+            let mut raw_vec = $populate_fn(regs_raw).unwrap();
 
             // HACK: Windows line endings...
             if cfg!(target_os = "windows") {
@@ -2450,49 +2450,64 @@ Width: 8 bits",
     fn serialized_x86_registers_are_up_to_date() {
         serialized_registers_test!(
             "serialized/registers/x86",
-            "../docs_store/registers/x86.xml"
+            "../docs_store/registers/x86.xml",
+            populate_registers
         );
     }
     #[test]
     fn serialized_x86_64_registers_are_up_to_date() {
         serialized_registers_test!(
             "serialized/registers/x86_64",
-            "../docs_store/registers/x86_64.xml"
+            "../docs_store/registers/x86_64.xml",
+            populate_registers
         );
     }
     #[test]
     fn serialized_arm_registers_are_up_to_date() {
         serialized_registers_test!(
             "serialized/registers/arm",
-            "../docs_store/registers/arm.xml"
+            "../docs_store/registers/arm.xml",
+            populate_registers
         );
     }
     #[test]
     fn serialized_arm64_registers_are_up_to_date() {
         serialized_registers_test!(
             "serialized/registers/arm64",
-            "../docs_store/registers/arm64.xml"
+            "../docs_store/registers/arm64.xml",
+            populate_registers
         );
     }
     #[test]
     fn serialized_z80_registers_are_up_to_date() {
         serialized_registers_test!(
             "serialized/registers/z80",
-            "../docs_store/registers/z80.xml"
+            "../docs_store/registers/z80.xml",
+            populate_registers
+        );
+    }
+    #[test]
+    fn serialized_riscv_registers_are_up_to_date() {
+        serialized_registers_test!(
+            "serialized/registers/riscv",
+            "../docs_store/registers/riscv.rst.txt",
+            populate_riscv_registers
         );
     }
     #[test]
     fn serialized_6502_registers_are_up_to_date() {
         serialized_registers_test!(
             "serialized/registers/6502",
-            "../docs_store/registers/6502.xml"
+            "../docs_store/registers/6502.xml",
+            populate_registers
         );
     }
     #[test]
     fn serialized_power_isa_registers_are_up_to_date() {
         serialized_registers_test!(
             "serialized/registers/power-isa",
-            "../docs_store/registers/power-isa.xml"
+            "../docs_store/registers/power-isa.xml",
+            populate_registers
         );
     }
 

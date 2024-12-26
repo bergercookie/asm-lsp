@@ -32,12 +32,16 @@ use url_escape::encode_www_form_urlencoded;
 /// Current function assumes that the RST file is already read and that it's been given a reference
 /// to its contents (`&str`).
 ///
+/// # Errors
+///
+/// This function will not error, it maintains a `Result` return type for compatibility
+/// with a macro in the server's test code
+///
 /// # Panics
 ///
 /// This function is highly specialized to parse a specific file and will panic
 /// for most mal-formed/unexpected inputs
-#[must_use]
-pub fn populate_riscv_registers(rst_contents: &str) -> Vec<Register> {
+pub fn populate_riscv_registers(rst_contents: &str) -> Result<Vec<Register>> {
     enum ParseState {
         FileStart,
         SectionStart,
@@ -136,7 +140,7 @@ pub fn populate_riscv_registers(rst_contents: &str) -> Vec<Register> {
         }
     }
 
-    registers
+    Ok(registers)
 }
 
 /// Parse all of the RISCV instruction rst files inside of `docs_dir`
