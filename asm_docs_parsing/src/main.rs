@@ -117,7 +117,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                 }
                 (false, Some(arch_in)) => {
                     if arch_in == Arch::RISCV {
-                        populate_riscv_registers(&conts)
+                        populate_riscv_registers(&conts)?
                     } else {
                         populate_registers(&conts)?
                     }
