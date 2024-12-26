@@ -1,0 +1,309 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Assembler name="avr">
+    <Directive name=".byte" description="Reserves bytes for a variable.
+The BYTE directive reserves memory resources in the SRAM or EEPROM. In order to be able to refer to
+the reserved location, the BYTE directive should be preceded by a label. The directive takes one
+parameter, which is the number of bytes to reserve. The directive can not be used within a Code segment
+(see directives ESEG, CSEG, and DSEG). Note that a parameter must be given. The allocated bytes are
+not initialized.">
+        <Signatures>
+            <Signature sig="LABEL .BYTE expression"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".cseg" description="Code segment.
+The CSEG directive defines the start of a Code Segment. An Assembler file can consist of several Code
+Segments, which are concatenated into one Code Segment when assembled. The BYTE directive can
+not be used within a Code Segment. The default segment type is Code. The Code Segments have their
+own location counter which is a word counter. The ORG directive can be used to place code and
+constants at specific locations in the Program memory. The directive does not take any parameters.">
+        <Signatures>
+            <Signature sig=".CSEG"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".csegsize" description="Program Memory Size.
+AT94K devices have a user configurable memory partition between the AVR Program memory and the
+data memory. The program and data SRAM is divided into three blocks: 10K x 16 dedicated program
+    SRAM, 4K x 8 dedicated data SRAM, and 6K x 16 or 12K x 8 configurable SRAM, which may be
+    swapped between program and data memory spaces in 2K x 16 or 4K x 8 partitions. This directive is
+used to specify the size of the program memory block.">
+        <Signatures>
+            <Signature sig=".CSEGSIZE = 10 | 12 | 14 | 16"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".db" description="Define constant byte(s) in program memory and EEPROM.
+The DB directive reserves memory resources in the program memory or the EEPROM memory. In order
+to be able to refer to the reserved locations, the DB directive should be preceded by a label. The DB
+directive takes a list of expressions, and must contain at least one expression. The DB directive must be
+placed in a Code Segment or an EEPROM Segment.
+The expression list is a sequence of expressions, delimited by commas. Each expression must evaluate
+to a number between -128 and 255. If the expression evaluates to a negative number, the 8-bits twos
+complement of the number will be placed in the program memory or EEPROM memory location.">
+        <Signatures>
+            <Signature sig="LABEL: .DB expressionlist"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".dd" description="Define constant double-word(s) in program memory and EEPROM.
+This directive is very similar to the DW directive, except it is used to define 32-bit (double-word). The data
+layout in memory is strictly little-endian.">
+        <Signatures>
+            <Signature sig="LABEL: .DD expressionlist"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".def" description="Set a symbolic name on a register.
+The DEF directive allows the registers to be referred to through symbols. A defined symbol can be used
+in the rest of the program to refer to the register it is assigned to. A register can have several symbolic
+names attached to it. A symbol can be redefined later in the program.">
+        <Signatures>
+            <Signature sig=".DEF Symbol=Register"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".dq" description="Define constant quad-word(s) in program memory and EEPROM.
+This directive is very similar to the DW directive, except it is used to define 64-bit (quad-word). The data
+layout in memory is strictly little-endian.">
+        <Signatures>
+            <Signature sig="LABEL: .DQ expressionlist"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".dseg" description="Data Segment.
+The DSEG directive defines the start of a Data segment. An assembler source file can consist of several
+data segments, which are concatenated into a single data segment when assembled. A data segment will
+normally consist of BYTE directives (and labels) only. The Data Segments have their own location
+counter which is a byte counter. The ORG directive can be used to place the variables at specific
+locations in the SRAM. The directive does not take any parameters.">
+        <Signatures>
+            <Signature sig=".DSEG"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".dw" description="Define constant word(s) in program memory and EEPROM.
+The DW directive reserves memory resources in the program memory or the EEPROM. In order to be
+able to refer to the reserved locations, the DW directive should be preceded by a label. The DW directive
+takes a list of expressions, and must contain at least one expression. The DB directive must be placed in
+a Code Segment or an EEPROM Segment.
+The expression list is a sequence of expressions, delimited by commas. Each expression must evaluate
+to a number between -32768 and 65535. If the expression evaluates to a negative number, the 16-bits
+two's complement of the number will be placed in the program memory or EEPROM location.">
+        <Signatures>
+            <Signature sig="LABEL: .DW expressionlist"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".elif" description="Conditional assembly.
+.ELIF will include code until the corresponding ENDIF of the next ELIF at the same level if the expression
+is true, and both the initial .IF clause and all following .ELIF clauses are false">
+        <Signatures>
+            <Signature sig=".ELIF <expression>"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".else" description="Conditioonal assembly.
+.ELSE will include code until the corresponding .ENDIF if the initial .IF clause and all .ELIF clauses (if
+any) all are false.">
+        <Signatures>
+            <Signature sig=".ELSE"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".endif" description="Conditional assembly.
+Conditional assembly includes a set of commands at assembly time. The ENDIF directive defines the end
+for the conditional IF, IFDEF, or IFNDEF directives.
+Conditionals (.IF...ELIF...ELSE...ENDIF blocks) may be nested, but all conditionals must be terminated at
+the end of file (conditionals may not span multiple files).">
+        <Signatures>
+            <Signature sig=".ENDIF"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".endm" description="End macro.
+The ENDM directive defines the end of a macro definition. The directive does not take any
+parameters. See the MACRO directive for more information on defining macros. ENDMACRO is an alternative
+form, fully equivalent with ENDM.">
+        <Signatures>
+            <Signature sig=".endm"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".endmacro" description="End macro.
+The ENDMACRO directive defines the end of a macro definition. The directive does not take any
+parameters. See the MACRO directive for more information on defining macros. ENDM is an alternative
+form, fully equivalent with ENDMACRO.">
+        <Signatures>
+            <Signature sig=".endmacro"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".equ" description="Set a symbol equal to an expression.
+The EQU directive assigns a value to a label. This label can then be used in later expressions. A label
+assigned to a value by the EQU directive is a constant and can not be changed or redefined.">
+        <Signatures>
+            <Signature sig=".EQU label = expression"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".error" description="Outputs an error message string.
+The ERROR directive outputs a string and halts the assembling. May be used in conditional assembly.">
+        <Signatures>
+            <Signature sig=".ERROR &quot;&lt;string&gt;&quot;"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".eseg" description="EEPROM Segment.
+The ESEG directive defines the start of an EEPROM segment. An assembler source file can consist of
+several EEPROM segments, which are concatenated into a single EEPROM segment when assembled.
+An EEPROM segment will normally consist of DB and DW directives (and labels) only. The EEPROM
+segments have their own location counter, which is a byte counter. The ORG directive can be used to
+place the variables at specific locations in the EEPROM. The directive does not take any parameters.">
+        <Signatures>
+            <Signature sig=".ESEG"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".exit" description="Exit this file.
+The EXIT directive tells the Assembler to stop assembling the file. Normally, the Assembler runs until end
+of file (EOF). If an EXIT directive appears in an included file, the Assembler continues from the line
+following the INCLUDE directive in the file containing the INCLUDE directive.">
+        <Signatures>
+            <Signature sig=".EXIT"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".if" description="Conditional assembly.
+Conditional assembly includes a set of commands at assembly time.The IF directive will include code if the
+&lt;expression &gt;is evaluated different from 0. Valid till the corresponding ELSE or ENDIF directive.
+Up to five levels of nesting is possible.">
+        <Signatures>
+            <Signature sig=".IF <expression>"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".ifdef" description="Conditional assembly.
+Conditional assembly includes a set of commands at assembly time. The IFDEF directive will include
+code till the corresponding ELSE directive if &lt;symbol&gt; is defined. The symbol must be defined with the
+EQU or SET directive. (Will not work with the DEF directive.).
+Up to five levels of nesting is possible.">
+        <Signatures>
+            <Signature sig=".IFDEF <symbol>"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".ifndef" description="Conditional assembly.
+Conditional assembly includes a set of commands at assembly time. The IFNDEF directive will include
+code till the corresponding ELSE directive if &lt;symbol&gt; is not defined.
+Up to five levels of nesting is possible.">
+        <Signatures>
+            <Signature sig=".IFNDEF <symbol>"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".include" description="Include another file.
+The INCLUDE directive tells the Assembler to start reading from a specified file. The Assembler then
+assembles the specified file until end of file (EOF) or an EXIT directive is encountered. An included file
+may contain INCLUDE directives itself. The difference between the two forms is that the first one search
+the current directory first, the second one does not.">
+        <Signatures>
+            <Signature sig=".INCLUDE &quot;filename&quot;"></Signature>
+        </Signatures>
+        <Signatures>
+            <Signature sig=".INCLUDE &lt;filename&gt;"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".list" description="Turn the listfile generation on.
+The LIST directive tells the Assembler to turn listfile generation on. The Assembler generates a listfile,
+which is a combination of assembly source code, addresses, and opcodes. Listfile generation is turned
+on by default. The directive can also be used together with the NOLIST directive in order to only generate
+listfile of selected parts of an assembly source file.">
+        <Signatures>
+            <Signature sig=".LIST"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".listmac" description="Turn macro expansion on.
+The LISTMAC directive tells the Assembler that when a macro is called, the expansion of the macro is to
+be shown on the listfile generated by the Assembler. The default is that only the macro-call with
+parameters is shown in the listfile.">
+        <Signatures>
+            <Signature sig=".LISTMAC"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".macro" description="Begin macro.
+The MACRO directive tells the Assembler that this is the start of a Macro. The MACRO directive takes the
+Macro name as parameter. When the name of the Macro is written later in the program, the Macro
+definition is expanded at the place it was used. A Macro can take up to 10 parameters. These parameters
+are referred to as @0-@9 within the Macro definition. When issuing a Macro call, the parameters are
+given as a comma separated list. The Macro definition is terminated by an ENDMACRO directive.
+By default, only the call to the Macro is shown on the listfile generated by the Assembler. In order to
+include the macro expansion in the listfile, a LISTMAC directive must be used. A macro is marked with a
++ in the opcode field of the listfile.">
+        <Signatures>
+            <Signature sig=".MACRO macroname"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".message" description="Output a message string.
+The MESSAGE directive outputs a string. Useful in conditional assembly.">
+        <Signatures>
+            <Signature sig=".MESSAGE &quot;&lt;string&gt;&quot;"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".list" description="Turn listfile generation OFF.
+The NOLIST directive tells the Assembler to turn listfile generation OFF. The Assembler normally
+generates a listfile, which is a combination of assembly source code, addresses, and opcodes. Listfile
+generation is turned on by default, but can be disabled by using this directive. The directive can also be
+used together with the LIST directive in order to only generate listfile of selected parts of an assembly
+source file.">
+        <Signatures>
+            <Signature sig=".LIST"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".org" description="Set program origin.
+The ORG directive sets the location counter to an absolute value. The value to set is given as a
+parameter. If an ORG directive is given within a Data Segment, then it is the SRAM location counter
+which is set, if the directive is given within a Code Segment, then it is the Program memory counter which
+is set and if the directive is given within an EEPROM Segment, it is the EEPROM location counter which
+is set.
+The default values of the Code and the EEPROM location counters are zero, and the default value of the
+SRAM location counter is the address immediately following the end of I/O address space (0x60 for
+devices without extended I/O, 0x100 or more for devices with extended I/O) when the assembling is
+started. Note that the SRAM and EEPROM location counters count bytes whereas the Program memory
+location counter counts words. Also note that some devices lack SRAM and/or EEPROM.">
+        <Signatures>
+            <Signature sig=".ORG expression"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".overlap" description="Set up overlapping section.
+Introduced in AVRASM 2.1. These directives are for projects with special needs and should normally not
+be used.
+These directives only affect the currently active segment (CSEG, DSEG, and ESEG).
+The .overlap/nooverlap directives mark a section that will be allowed to overlap code/data with code/data
+defined elsewhere, without any error or warning messages being generated. This is totally independent of
+what is set using the #pragma, General Purpose directives. The overlap-allowed attribute will stay in
+effect across .org directives, but will not follow across .cseg/.eseg/.dseg directives (each segment marked
+separately).
+The typical use of this is to set up some form of default code or data that may or may not later be
+modified by overlapping code or data, without having to disable assembler overlap detection altogether.">
+        <Signatures>
+            <Signature sig=".OVERLAP"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".nooverlap" description="Set up overlapping section.
+Introduced in AVRASM 2.1. These directives are for projects with special needs and should normally not
+be used.
+These directives only affect the currently active segment (CSEG, DSEG, and ESEG).
+The .overlap/nooverlap directives mark a section that will be allowed to overlap code/data with code/data
+defined elsewhere, without any error or warning messages being generated. This is totally independent of
+what is set using the #pragma, General Purpose directives. The overlap-allowed attribute will stay in
+effect across .org directives, but will not follow across .cseg/.eseg/.dseg directives (each segment marked
+separately).
+The typical use of this is to set up some form of default code or data that may or may not later be
+modified by overlapping code or data, without having to disable assembler overlap detection altogether.">
+        <Signatures>
+            <Signature sig=".NOOVERLAP"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".set" description="Set a symbol equal to an expression.
+The SET directive assigns a value to a label. This label can then be used in later expressions. Unlike the
+EQU directive, a label assigned to a value by the SET directive can be changed (redefined) later in the
+program.">
+        <Signatures>
+            <Signature sig=".SET label = expression"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".undef" description="Undefine a register symbolic name.
+The UNDEF directive is used to undefine a symbol previously defined with the DEF directive. This
+provides a way to obtain a simple scoping of register definitions, to avoid warnings about register reuse.">
+        <Signatures>
+            <Signature sig=".UNDEF symbol"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".warning" description="Outputs a warning message string.
+The .WARNING directive outputs a warning string, but unlike the .ERROR directive it does not halt
+assembling. May be used in conditional assembly.">
+        <Signatures>
+            <Signature sig=".WARNING &quot;&lt;string&gt;&quot;"></Signature>
+        </Signatures>
+    </Directive>
+</Assembler>

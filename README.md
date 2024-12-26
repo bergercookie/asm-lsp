@@ -145,6 +145,7 @@ Valid options for the `assembler` field include:
 - `"masm"`
 - `"nasm"`
 - `"ca65"`
+- `"avr"`
 
 Don't see an architecture and/or assembler that you'd like to work with? File an
 [issue](https://github.com/bergercookie/asm-lsp/issues/new/choose)! We would be
@@ -233,6 +234,8 @@ git repository.
 
 - PowerISA instruction documentation sourced from the [open-power-sdk](https://github.com/open-power-sdk)
     PowerISA [documentation](https://github.com/open-power-sdk/PowerISA?tab=Apache-2.0-1-ov-file)*
+
+- AVR assembler documentation sourced from the [AVR documentation](https://ww1.microchip.com/downloads/en/DeviceDoc/40001917A.pdf)
 
 <details><summary>* Licensed under Apache 2.0</summary><p>
 

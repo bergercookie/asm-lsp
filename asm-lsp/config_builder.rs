@@ -22,12 +22,13 @@ const ARCH_LIST: [Arch; 9] = [
     Arch::PowerISA,
 ];
 
-const ASSEMBLER_LIST: [Assembler; 5] = [
+const ASSEMBLER_LIST: [Assembler; 6] = [
     Assembler::Gas,
     Assembler::Go,
     Assembler::Masm,
     Assembler::Nasm,
     Assembler::Ca65,
+    Assembler::Avr,
 ];
 
 #[derive(Args, Debug, Clone)]

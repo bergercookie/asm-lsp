@@ -33,3 +33,4 @@ cargo build --release
 ../target/release/asm_docs_parsing ../docs_store/directives/raw/masm.xml -o ../asm-lsp/serialized/directives/masm --doc-type directive --assembler masm
 ../target/release/asm_docs_parsing ../docs_store/directives/raw/nasm.xml -o ../asm-lsp/serialized/directives/nasm --doc-type directive --assembler nasm
 ../target/release/asm_docs_parsing ../docs_store/directives/raw/ca65.html -o ../asm-lsp/serialized/directives/ca65 --doc-type directive --assembler ca65
+../target/release/asm_docs_parsing ../docs_store/directives/raw/avr.xml -o ../asm-lsp/serialized/directives/avr --doc-type directive --assembler avr

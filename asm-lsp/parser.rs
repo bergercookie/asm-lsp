@@ -1640,6 +1640,103 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     Ok(directives_map.into_values().collect())
 }
 
+/// Parse the provided XML contents and return a vector of all the directives based on that.
+/// If parsing fails, the appropriate error will be returned instead.
+///
+/// Current function assumes that the XML file is already read and that it's been given a reference
+/// to its contents (`&str`).
+///
+/// # Errors
+///
+/// This function is highly specialized to parse a handful of files and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+///
+/// # Panics
+///
+/// This function is highly specialized to parse a handful of files and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+pub fn populate_avr_directives(xml_contents: &str) -> Result<Vec<Directive>> {
+    let mut directives_map = HashMap::<String, Directive>::new();
+
+    // iterate through the XML
+    let mut reader = Reader::from_str(xml_contents);
+
+    // ref to the assembler directive that's currently under construction
+    let mut curr_directive = Directive::default();
+    let mut assembler = Assembler::None;
+
+    debug!("Parsing directive XML contents...");
+    loop {
+        match reader.read_event() {
+            // start event
+            Ok(Event::Start(ref e)) => {
+                match e.name() {
+                    QName(b"Assembler") => {
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            if b"name" == key.into_inner() {
+                                assembler = Assembler::from_str(ustr::get_str(&value)).unwrap();
+                            }
+                        }
+                    }
+                    QName(b"Directive") => {
+                        // start of a new directive
+                        curr_directive = Directive::default();
+                        curr_directive.assembler = assembler;
+
+                        // iterate over the attributes
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            match key.into_inner() {
+                                b"name" => {
+                                    let name = ustr::get_str(&value);
+                                    curr_directive.name = name.to_ascii_lowercase();
+                                }
+                                b"description" => {
+                                    let description = ustr::get_str(&value);
+                                    curr_directive.description =
+                                        unescape(description).unwrap().to_string();
+                                }
+                                _ => {}
+                            }
+                        }
+                    }
+                    QName(b"Signature") => {
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            if b"sig" == key.into_inner() {
+                                let sig = ustr::get_str(&value);
+                                curr_directive
+                                    .signatures
+                                    .push(unescape(sig).unwrap().to_string());
+                            }
+                        }
+                    }
+                    _ => {} // unknown event
+                }
+            }
+            // end event
+            Ok(Event::End(ref e)) => {
+                if QName(b"Directive") == e.name() {
+                    // finish directive
+                    directives_map.insert(curr_directive.name.clone(), curr_directive.clone());
+                }
+            }
+            Ok(Event::Eof) => break,
+            Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
+            _ => {} // rest of events that we don't consider
+        }
+    }
+
+    // Since directive entries have their assembler labeled on a per-instance basis,
+    // we check to make sure all of them have been assigned correctly
+    for directive in directives_map.values() {
+        assert_ne!(directive.assembler, Assembler::None);
+    }
+
+    Ok(directives_map.into_values().collect())
+}
+
 /// Parse the provided HTML contents and return a vector of all the directives based on that.
 /// If parsing fails, the appropriate error will be returned instead.
 ///
