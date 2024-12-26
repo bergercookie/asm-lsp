@@ -2069,13 +2069,13 @@ mod tests {
         if x86_cache_path.is_file() {
             std::fs::remove_file(&x86_cache_path).unwrap();
         }
-        let xml_conts_x86 = include_str!("../docs_store/opcodes/raw/x86.xml");
+        let xml_conts_x86 = include_str!("../docs_store/opcodes/x86.xml");
         assert!(populate_instructions(xml_conts_x86).is_ok());
 
         if x86_cache_path.is_file() {
             std::fs::remove_file(&x86_cache_path).unwrap();
         }
-        let xml_conts_x86_64 = include_str!("../docs_store/opcodes/raw/x86_64.xml");
+        let xml_conts_x86_64 = include_str!("../docs_store/opcodes/x86_64.xml");
         assert!(populate_instructions(xml_conts_x86_64).is_ok());
 
         // Clean things up so we don't have an empty cache file

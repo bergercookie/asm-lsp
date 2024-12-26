@@ -17,8 +17,8 @@ repos:
       - id: trailing-whitespace
         exclude: |
           (?x)^(
-             docs_store/directives/raw/ca65.html|
-             docs_store/opcodes/raw/6502.html
+             docs_store/directives/ca65.html|
+             docs_store/opcodes/6502.html
           )$
   - repo: https://github.com/tcort/markdown-link-check
     rev: "v3.10.3"

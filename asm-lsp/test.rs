@@ -2450,49 +2450,49 @@ Width: 8 bits",
     fn serialized_x86_registers_are_up_to_date() {
         serialized_registers_test!(
             "serialized/registers/x86",
-            "../docs_store/registers/raw/x86.xml"
+            "../docs_store/registers/x86.xml"
         );
     }
     #[test]
     fn serialized_x86_64_registers_are_up_to_date() {
         serialized_registers_test!(
             "serialized/registers/x86_64",
-            "../docs_store/registers/raw/x86_64.xml"
+            "../docs_store/registers/x86_64.xml"
         );
     }
     #[test]
     fn serialized_arm_registers_are_up_to_date() {
         serialized_registers_test!(
             "serialized/registers/arm",
-            "../docs_store/registers/raw/arm.xml"
+            "../docs_store/registers/arm.xml"
         );
     }
     #[test]
     fn serialized_arm64_registers_are_up_to_date() {
         serialized_registers_test!(
             "serialized/registers/arm64",
-            "../docs_store/registers/raw/arm64.xml"
+            "../docs_store/registers/arm64.xml"
         );
     }
     #[test]
     fn serialized_z80_registers_are_up_to_date() {
         serialized_registers_test!(
             "serialized/registers/z80",
-            "../docs_store/registers/raw/z80.xml"
+            "../docs_store/registers/z80.xml"
         );
     }
     #[test]
     fn serialized_6502_registers_are_up_to_date() {
         serialized_registers_test!(
             "serialized/registers/6502",
-            "../docs_store/registers/raw/6502.xml"
+            "../docs_store/registers/6502.xml"
         );
     }
     #[test]
     fn serialized_power_isa_registers_are_up_to_date() {
         serialized_registers_test!(
             "serialized/registers/power-isa",
-            "../docs_store/registers/raw/power-isa.xml"
+            "../docs_store/registers/power-isa.xml"
         );
     }
 
@@ -2538,7 +2538,7 @@ Width: 8 bits",
     fn serialized_x86_instructions_are_up_to_date() {
         serialized_instructions_test!(
             "serialized/opcodes/x86",
-            "../docs_store/opcodes/raw/x86.xml",
+            "../docs_store/opcodes/x86.xml",
             populate_instructions
         );
     }
@@ -2546,7 +2546,7 @@ Width: 8 bits",
     fn serialized_x86_64_instructions_are_up_to_date() {
         serialized_instructions_test!(
             "serialized/opcodes/x86_64",
-            "../docs_store/opcodes/raw/x86_64.xml",
+            "../docs_store/opcodes/x86_64.xml",
             populate_instructions
         );
     }
@@ -2554,7 +2554,7 @@ Width: 8 bits",
     fn serialized_z80_instructions_are_up_to_date() {
         serialized_instructions_test!(
             "serialized/opcodes/z80",
-            "../docs_store/opcodes/raw/z80.xml",
+            "../docs_store/opcodes/z80.xml",
             populate_instructions
         );
     }
@@ -2562,7 +2562,7 @@ Width: 8 bits",
     fn serialized_6502_instructions_are_up_to_date() {
         serialized_instructions_test!(
             "serialized/opcodes/6502",
-            "../docs_store/opcodes/raw/6502.html",
+            "../docs_store/opcodes/6502.html",
             populate_6502_instructions
         );
     }
@@ -2570,7 +2570,7 @@ Width: 8 bits",
     fn serialized_power_isa_instructions_are_up_to_date() {
         serialized_instructions_test!(
             "serialized/opcodes/power-isa",
-            "../docs_store/opcodes/raw/power-isa.json",
+            "../docs_store/opcodes/power-isa.json",
             populate_power_isa_instructions
         );
     }
@@ -2584,7 +2584,7 @@ Width: 8 bits",
         ser_vec.sort_by(|a, b| a.name.cmp(&b.name));
 
         let mut raw_vec =
-            populate_arm_instructions(&PathBuf::from("../docs_store/opcodes/raw/ARM/")).unwrap();
+            populate_arm_instructions(&PathBuf::from("../docs_store/opcodes/ARM/")).unwrap();
         raw_vec.sort_by(|a, b| a.name.cmp(&b.name));
 
         for instr in ser_vec {
@@ -2614,8 +2614,7 @@ Width: 8 bits",
         let ser_vec = bincode::deserialize::<Vec<Instruction>>(riscv_instrs_ser).unwrap();
 
         let raw_vec =
-            populate_riscv_instructions(&PathBuf::from("../docs_store/opcodes/raw/RISCV/"))
-                .unwrap();
+            populate_riscv_instructions(&PathBuf::from("../docs_store/opcodes/RISCV/")).unwrap();
 
         for instr in ser_vec {
             *cmp_map.entry(instr.clone()).or_insert(0) += 1;
@@ -2675,7 +2674,7 @@ Width: 8 bits",
     fn serialized_gas_directives_are_up_to_date() {
         serialized_directives_test!(
             "serialized/directives/gas",
-            "../docs_store/directives/raw/gas.xml",
+            "../docs_store/directives/gas.xml",
             populate_gas_directives
         );
     }
@@ -2683,7 +2682,7 @@ Width: 8 bits",
     fn serialized_masm_directives_are_up_to_date() {
         serialized_directives_test!(
             "serialized/directives/masm",
-            "../docs_store/directives/raw/masm.xml",
+            "../docs_store/directives/masm.xml",
             populate_masm_nasm_directives
         );
     }
@@ -2691,7 +2690,7 @@ Width: 8 bits",
     fn serialized_nasm_directives_are_up_to_date() {
         serialized_directives_test!(
             "serialized/directives/nasm",
-            "../docs_store/directives/raw/nasm.xml",
+            "../docs_store/directives/nasm.xml",
             populate_masm_nasm_directives
         );
     }
@@ -2699,7 +2698,7 @@ Width: 8 bits",
     fn serialized_ca65_directives_are_up_to_date() {
         serialized_directives_test!(
             "serialized/directives/ca65",
-            "../docs_store/directives/raw/ca65.html",
+            "../docs_store/directives/ca65.html",
             populate_ca65_directives
         );
     }
@@ -2707,7 +2706,7 @@ Width: 8 bits",
     fn serialized_avr_directives_are_up_to_date() {
         serialized_directives_test!(
             "serialized/directives/avr",
-            "../docs_store/directives/raw/avr.xml",
+            "../docs_store/directives/avr.xml",
             populate_avr_directives
         );
     }
