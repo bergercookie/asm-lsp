@@ -669,6 +669,9 @@ pub enum Arch {
     #[strum(serialize = "power-isa")]
     #[serde(rename = "power-isa")]
     PowerISA,
+    #[strum(serialize = "avr")]
+    #[serde(rename = "avr")]
+    Avr,
     /// For testing purposes *only*. This is not a valid config option
     #[serde(skip)]
     None,
@@ -715,6 +718,7 @@ impl Arch {
             Self::PowerISA => {
                 load_registers_with_path!(Self::PowerISA, "serialized/registers/power-isa");
             }
+            Self::Avr => load_registers_with_path!(Self::Avr, "serialized/registers/avr"),
             Self::None => unreachable!(),
         }
     }
@@ -762,6 +766,7 @@ impl Arch {
             Self::PowerISA => {
                 load_instructions_with_path!(Self::PowerISA, "serialized/opcodes/power-isa");
             }
+            Self::Avr => warn!("AVR opcodes are not supported"),
             Self::None => unreachable!(),
         }
     }
@@ -814,6 +819,7 @@ impl std::fmt::Display for Arch {
             Self::Z80 => write!(f, "z80")?,
             Self::MOS6502 => write!(f, "6502")?,
             Self::PowerISA => write!(f, "power-isa")?,
+            Self::Avr => write!(f, "avr")?,
             Self::None => write!(f, "None")?,
         }
         Ok(())

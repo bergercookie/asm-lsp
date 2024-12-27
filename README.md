@@ -237,6 +237,8 @@ git repository.
 
 - AVR assembler documentation sourced from the [AVR documentation](https://ww1.microchip.com/downloads/en/DeviceDoc/40001917A.pdf)
 
+- AVR register documentation sourced from the [AVR documentation](https://developerhelp.microchip.com/xwiki/bin/view/products/mcu-mpu/8-bit-avr/structure/gpr/)
+
 <details><summary>* Licensed under Apache 2.0</summary><p>
 
 ```
