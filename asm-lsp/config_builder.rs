@@ -10,7 +10,7 @@ use crate::types::{Arch, Assembler, Config, ConfigOptions, ProjectConfig, RootCo
 
 use dialoguer::{theme::ColorfulTheme, Confirm, FuzzySelect, Input};
 
-const ARCH_LIST: [Arch; 9] = [
+const ARCH_LIST: [Arch; 10] = [
     Arch::X86,
     Arch::X86_64,
     Arch::X86_AND_X86_64,
@@ -20,6 +20,7 @@ const ARCH_LIST: [Arch; 9] = [
     Arch::Z80,
     Arch::MOS6502,
     Arch::PowerISA,
+    Arch::Avr,
 ];
 
 const ASSEMBLER_LIST: [Assembler; 6] = [

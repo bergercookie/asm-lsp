@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='utf-8'?>
+<InstructionSet name="avr">
+    <Register name="r0" description="General purpose register 0. Mapped to address 0x00." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r1" description="General purpose register 1. Mapped to address 0x01." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r2" description="General purpose register 2. Mapped to address 0x02." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r3" description="General purpose register 3. Mapped to address 0x03." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r4" description="General purpose register 4. Mapped to address 0x04." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r5" description="General purpose register 5. Mapped to address 0x05." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r6" description="General purpose register 6. Mapped to address 0x06." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r7" description="General purpose register 7. Mapped to address 0x07." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r8" description="General purpose register 8. Mapped to address 0x08." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r9" description="General purpose register 9. Mapped to address 0x09." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r10" description="General purpose register 10. Mapped to address 0x0a." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r11" description="General purpose register 11. Mapped to address 0x0b." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r12" description="General purpose register 12. Mapped to address 0x0c." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r13" description="General purpose register 13. Mapped to address 0x0d." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r14" description="General purpose register 14. Mapped to address 0x0e." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r15" description="General purpose register 15. Mapped to address 0x0f." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r16" description="General purpose register 16. Mapped to address 0x10." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r17" description="General purpose register 17. Mapped to address 0x11." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r18" description="General purpose register 18. Mapped to address 0x12." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r19" description="General purpose register 19. Mapped to address 0x13." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r20" description="General purpose register 20. Mapped to address 0x14." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r21" description="General purpose register 21. Mapped to address 0x15." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r22" description="General purpose register 22. Mapped to address 0x16." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r23" description="General purpose register 23. Mapped to address 0x17." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r24" description="General purpose register 24. Mapped to address 0x18." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r25" description="General purpose register 25. Mapped to address 0x19." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r26" description="General purpose register 26. X register low byte. Mapped to address 0x1a." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r27" description="General purpose register 27. X register high byte. Mapped to address 0x1b." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r28" description="General purpose register 28. Y register low byte. Mapped to address 0x1c." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r29" description="General purpose register 29. Y register high byte. Mapped to address 0x1d." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r30" description="General purpose register 30. Z register low byte. Mapped to address 0x1e." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="r31" description="General purpose register 31. Z register high byte. Mapped to address 0x1f." type="General Purpose Register" width = "8 bits">
+    </Register>
+    <Register name="x" description="General purpose X-register. Low byte is r26 and high byte is r27." type="General Purpose Register" width = "16 bits">
+    </Register>
+    <Register name="y" description="General purpose Y-register. Low byte is r28 and high byte is r29." type="General Purpose Register" width = "16 bits">
+    </Register>
+    <Register name="z" description="General purpose Z-register. Low byte is r30 and high byte is r31." type="General Purpose Register" width = "16 bits">
+    </Register>
+</InstructionSet>

@@ -42,6 +42,16 @@ mod tests {
         }
     }
 
+    fn avr_arch_test_config() -> Config {
+        Config {
+            version: None,
+            assembler: Assembler::None,
+            instruction_set: Arch::Avr,
+            opts: Some(ConfigOptions::default()),
+            client: None,
+        }
+    }
+
     fn avr_assembler_test_config() -> Config {
         Config {
             version: None,
@@ -175,6 +185,7 @@ mod tests {
         z80_registers: Vec<Register>,
         mos6502_registers: Vec<Register>,
         power_isa_registers: Vec<Register>,
+        avr_registers: Vec<Register>,
         gas_directives: Vec<Directive>,
         masm_directives: Vec<Directive>,
         nasm_directives: Vec<Directive>,
@@ -194,13 +205,14 @@ mod tests {
                 arm64_instructions: Vec::new(),
                 arm64_registers: Vec::new(),
                 riscv_instructions: Vec::new(),
-                mos6502_instructions: Vec::new(),
-                power_isa_instructions: Vec::new(),
                 riscv_registers: Vec::new(),
+                power_isa_instructions: Vec::new(),
+                power_isa_registers: Vec::new(),
                 z80_instructions: Vec::new(),
                 z80_registers: Vec::new(),
+                mos6502_instructions: Vec::new(),
                 mos6502_registers: Vec::new(),
-                power_isa_registers: Vec::new(),
+                avr_registers: Vec::new(),
                 gas_directives: Vec::new(),
                 masm_directives: Vec::new(),
                 nasm_directives: Vec::new(),
@@ -339,6 +351,13 @@ mod tests {
             Vec::new()
         };
 
+        info.avr_registers = if config.is_isa_enabled(Arch::Avr) {
+            let regs_avr = include_bytes!("serialized/registers/avr");
+            bincode::deserialize(regs_avr)?
+        } else {
+            Vec::new()
+        };
+
         info.gas_directives = if config.is_assembler_enabled(Assembler::Gas) {
             let gas_dirs = include_bytes!("serialized/directives/gas");
             bincode::deserialize(gas_dirs)?
@@ -473,6 +492,12 @@ mod tests {
         populate_name_to_register_map(
             Arch::PowerISA,
             &info.power_isa_registers,
+            &mut store.names_to_info.registers,
+        );
+
+        populate_name_to_register_map(
+            Arch::Avr,
+            &info.avr_registers,
             &mut store.names_to_info.registers,
         );
 
@@ -752,6 +777,69 @@ mod tests {
     /**************************************************************************
      * AVR Tests
      *************************************************************************/
+    #[test]
+    fn handle_hover_avr_arch_it_provides_reg_info_1() {
+        test_hover(
+            "ldi     r1<cursor>6,0xC0",
+            "R16 [avr]
+General purpose register 16. Mapped to address 0x10.
+
+Type: General Purpose Register
+Width: 8 bits",
+            &avr_arch_test_config(),
+        );
+    }
+    #[test]
+    fn handle_hover_avr_arch_it_provides_reg_info_2() {
+        test_hover(
+            "clr r<cursor>17",
+            "R17 [avr]
+General purpose register 17. Mapped to address 0x11.
+
+Type: General Purpose Register
+Width: 8 bits",
+            &avr_arch_test_config(),
+        );
+    }
+    #[test]
+    fn handle_hover_avr_arch_it_provides_reg_info_3() {
+        test_hover(
+            "x<cursor>",
+            "X [avr]
+General purpose X-register. Low byte is r26 and high byte is r27.
+
+Type: General Purpose Register
+Width: 16 bits",
+            &avr_arch_test_config(),
+        );
+    }
+    #[test]
+    fn handle_autocomplete_avr_arch_it_provides_reg_comps_1() {
+        test_register_autocomplete(
+            "ldi	r<cursor>",
+            &avr_arch_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_avr_arch_it_provides_reg_comps_2() {
+        test_register_autocomplete(
+            "ldi	r1<cursor>,0xC0",
+            &avr_arch_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_avr_arch_it_provides_reg_comps_3() {
+        test_register_autocomplete(
+            "fmuls	r16,r1<cursor>",
+            &avr_arch_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
     #[test]
     fn handle_autocomplete_avr_assembler_it_provides_dir_comps_no_args() {
         test_directive_autocomplete(
@@ -2507,6 +2595,14 @@ Width: 8 bits",
         serialized_registers_test!(
             "serialized/registers/power-isa",
             "../docs_store/registers/power-isa.xml",
+            populate_registers
+        );
+    }
+    #[test]
+    fn serialized_avr_registers_are_up_to_date() {
+        serialized_registers_test!(
+            "serialized/registers/avr",
+            "../docs_store/registers/avr.xml",
             populate_registers
         );
     }
