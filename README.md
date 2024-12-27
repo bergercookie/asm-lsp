@@ -137,6 +137,7 @@ Valid options for the `instruction_set` field include:
 - `"riscv"`
 - `"z80"`
 - `"6502"`
+- `"avr"`
 
 Valid options for the `assembler` field include:
 
