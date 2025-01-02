@@ -336,15 +336,23 @@
 	<directive name=".ATT_SYNTAX" tool="nasm">
 		<description>switch to AT&amp;T syntax</description>
 	</directive>
+
+  <!-- See https://www.nasm.us/xdoc/2.16.03/html/nasmdoc7.html -->
+   <directive name="EXTERN" tool="nasm">
+     <description>EXTERN is similar to the MASM directive EXTRN and the C keyword extern: it is used to declare a symbol which is not defined anywhere in the module being assembled, but is assumed to be defined in some other module and needs to be referred to by this one. Not every object-file format can support external variables: the bin format cannot.</description>
+   </directive>
+   <directive name="GLOBAL" tool="nasm">
+     <description>GLOBAL is the other end of EXTERN: if one module declares a symbol as EXTERN and refers to it, then in order to prevent linker errors, some other module must actually define the symbol and declare it as GLOBAL. Some assemblers use the name PUBLIC for this purpose.</description>
+   </directive>
+
+   <!-- No need for this, see ALIGN and ALIGNB macro -->
+   <!-- <directive name=".ALIGN" tool="nasm"> -->
+   <!-- 	<description>TODO</description> -->
+   <!-- </directive> -->
+
     <!-- NOTE: Wasn't able to find any reference to .TEXT, .GLOBAL, .ALIGN, or
     .NOPREFIX as a NASM directive online, commenting these out for now -->
 	<!-- <directive name=".TEXT" tool="nasm"> -->
-	<!-- 	<description>TODO</description> -->
-	<!-- </directive> -->
-	<!-- <directive name=".GLOBAL" tool="nasm"> -->
-	<!-- 	<description>TODO</description> -->
-	<!-- </directive> -->
-	<!-- <directive name=".ALIGN" tool="nasm"> -->
 	<!-- 	<description>TODO</description> -->
 	<!-- </directive> -->
 	<!-- <directive name=".NOPREFIX" tool="nasm"> -->

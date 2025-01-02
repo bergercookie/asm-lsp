@@ -222,7 +222,7 @@ git repository.
 
 - MASM and NASM directives sourced from the [asm-dude](https://github.com/HJLebbink/asm-dude)
     Visual Studio extension project. Additions sourced from [Microsoft](https://learn.microsoft.com/en-us/cpp/assembler/masm/directives-reference?view=msvc-170)
-    and [NASM](https://www.nasm.us/xdoc/2.13.03/html/nasmdoc0.html) documentation.
+    and other [NASM](https://www.nasm.us/xdoc/2.13.03/html/nasmdoc0.html) [documentation](https://www.nasm.us/xdoc/2.16.03/html/nasmdoc7.html).
 
 - ARM instruction documentation builds on top of ARM's official [Exploration tools documentation](https://developer.arm.com/Architectures/A-Profile%20Architecture#Downloads)
 
