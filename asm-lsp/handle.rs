@@ -546,7 +546,7 @@ pub fn handle_diagnostics(
 
     let source_entries = compile_cmds.iter().filter(|entry| match entry.file {
         SourceFile::File(ref file) => {
-            file.canonicalize().map_or(false, |source_path| {
+            file.canonicalize().is_ok_and(|source_path| {
                 // HACK: See comment inside `process_uri`
                 let cleaned_path = if cfg!(windows) {
                     #[allow(clippy::option_if_let_else)]
