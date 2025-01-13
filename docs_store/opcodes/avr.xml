@@ -1,0 +1,4226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionSet name="AVR">
+ <Instruction name="ADC">
+  <Version value="All">
+   <InstructionForm mnemonic="ADC" summary="Add with Carry">
+    <Operand type="Rd"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="⇔"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0001"/>
+     <Opcode nibble="11rd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="rrrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="ADD">
+  <Version value="All">
+   <InstructionForm mnemonic="ADD" summary="Add without Carry">
+    <Operand type="Rd"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="⇔"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="11rd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="rrrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="ADIW">
+  <Version value="All">
+   <InstructionForm mnemonic="ADIW" summary="Add Immediate to Word">
+    <Operand type="Rd"/>
+    <Operand type="K"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0110"/>
+     <Opcode nibble="KKdd"/>
+     <Opcode nibble="KKKK"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="AND">
+  <Version value="All">
+   <InstructionForm mnemonic="AND" summary="Logical AND">
+    <Operand type="Rd"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="0"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0010"/>
+     <Opcode nibble="00rd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="rrrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="ANDI">
+  <Version value="All">
+   <InstructionForm mnemonic="ANDI" summary="Logical AND with Immediate">
+    <Operand type="Rd"/>
+    <Operand type="K"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="0"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0111"/>
+     <Opcode nibble="KKKK"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="KKKK"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="ASR">
+  <Version value="All">
+   <InstructionForm mnemonic="ASR" summary="Arithmetic Shift Right">
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="010d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0101"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BCLR">
+  <Version value="All">
+   <InstructionForm mnemonic="BCLR" summary="Flag Clear">
+    <Operand type="s"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="⇔"/>
+     <T value="⇔"/>
+     <H value="⇔"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="1sss"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BLD">
+  <Version value="All">
+   <InstructionForm mnemonic="BLD" summary="Bit load from T to Register">
+    <Operand type="Rd"/>
+    <Operand type="b"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="100d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0bbb"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRBC">
+  <Version value="All">
+   <InstructionForm mnemonic="BRBC" summary="Branch if Status Flag Cleared">
+    <Operand type="s"/>
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="01kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="ksss"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRBS">
+  <Version value="All">
+   <InstructionForm mnemonic="BRBS" summary="Branch if Status Flag Set">
+    <Operand type="s"/>
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="00kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="ksss"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRCC">
+  <Version value="All">
+   <InstructionForm mnemonic="BRCC" summary="Branch if Carry Cleared">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="01kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRCS">
+  <Version value="All">
+   <InstructionForm mnemonic="BRCS" summary="Branch if Carry Set">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="00kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BREAK">
+  <Version value="All">
+   <InstructionForm mnemonic="BREAK" summary="Break">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BREQ">
+  <Version value="All">
+   <InstructionForm mnemonic="BREQ" summary="Branch if Equal">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="00kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k001"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRGE">
+  <Version value="All">
+   <InstructionForm mnemonic="BRGE" summary="Branch if Greater or Equal,
+Signed">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 /2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="01kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k100"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRHC">
+  <Version value="All">
+   <InstructionForm mnemonic="BRHC" summary="Branch if Half Carry Flag Cleared">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="01kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k101"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRHS">
+  <Version value="All">
+   <InstructionForm mnemonic="BRHS" summary="Branch if Half Carry Flag Set">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 /2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="00kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k101"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRID">
+  <Version value="All">
+   <InstructionForm mnemonic="BRID" summary="Branch if Interrupt Disabled">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="01kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k111"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRIE">
+  <Version value="All">
+   <InstructionForm mnemonic="BRIE" summary="Branch if Interrupt Enabled">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="00kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k111"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRLO">
+  <Version value="All">
+   <InstructionForm mnemonic="BRLO" summary="Branch if Lower">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="00kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRLT">
+  <Version value="All">
+   <InstructionForm mnemonic="BRLT" summary="Branch if Less Than, Signed">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="00kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k100"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRMI">
+  <Version value="All">
+   <InstructionForm mnemonic="BRMI" summary="Branch if Minus">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="00kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k010"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRNE">
+  <Version value="All">
+   <InstructionForm mnemonic="BRNE" summary="Branch if Not Equal">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="01kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k001"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRPL">
+  <Version value="All">
+   <InstructionForm mnemonic="BRPL" summary="Branch if Plus">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="01kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k010"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRSH">
+  <Version value="All">
+   <InstructionForm mnemonic="BRSH" summary="Branch if Same or Higher">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="01kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRTC">
+  <Version value="All">
+   <InstructionForm mnemonic="BRTC" summary="Branch if T Bit Cleared">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="01kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k110"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRTS">
+  <Version value="All">
+   <InstructionForm mnemonic="BRTS" summary="Branch if T Bit Set">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="00kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k110"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRVC">
+  <Version value="All">
+   <InstructionForm mnemonic="BRVC" summary="Branch if Overflow Flag is
+Cleared">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="01kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k011"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BRVS">
+  <Version value="All">
+   <InstructionForm mnemonic="BRVS" summary="Branch if Overflow Flag is Set">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="1 / 2"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="1 / 2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="00kk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="k011"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BSET">
+  <Version value="All">
+   <InstructionForm mnemonic="BSET" summary="Flag Set">
+    <Operand type="s"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="⇔"/>
+     <T value="⇔"/>
+     <H value="⇔"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="0sss"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="BST">
+  <Version value="All">
+   <InstructionForm mnemonic="BST" summary="Bit Store from Register to T">
+    <Operand type="Rr"/>
+    <Operand type="b"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="⇔"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="101d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0bbb"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CALL">
+  <Version value="All">
+   <InstructionForm mnemonic="CALL" summary="Call Subroutine">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="4 / 5"/>
+     <AVRxm value="3/ 4"/>
+     <AVRxt value="3 /4"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="010k"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="111k"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CBI">
+  <Version value="All">
+   <InstructionForm mnemonic="CBI" summary="Clear Bit in I/O Register">
+    <Operand type="A"/>
+    <Operand type="b"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="1000"/>
+     <Opcode nibble="AAAA"/>
+     <Opcode nibble="Abbb"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CBR">
+  <Version value="All">
+   <InstructionForm mnemonic="CBR" summary="Clear Bit(s) in Register">
+    <Operand type="Rd,K"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="0"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="?"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CLC">
+  <Version value="All">
+   <InstructionForm mnemonic="CLC" summary="Clear Carry">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="0"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="1000"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CLH">
+  <Version value="All">
+   <InstructionForm mnemonic="CLH" summary="Clear Half Carry Flag in SREG">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="0"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="1101"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CLI">
+  <Version value="All">
+   <InstructionForm mnemonic="CLI" summary="Global Interrupt Disable">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="0"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CLN">
+  <Version value="All">
+   <InstructionForm mnemonic="CLN" summary="Clear Negative Flag">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="0"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="1010"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CLR">
+  <Version value="All">
+   <InstructionForm mnemonic="CLR" summary="Clear Register">
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="0"/>
+     <V value="0"/>
+     <N value="0"/>
+     <Z value="1"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0010"/>
+     <Opcode nibble="01dd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="dddd"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CLS">
+  <Version value="All">
+   <InstructionForm mnemonic="CLS" summary="Clear Sign Bit">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="0"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="1100"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CLT">
+  <Version value="All">
+   <InstructionForm mnemonic="CLT" summary="Clear T in SREG">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="0"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="1110"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CLV">
+  <Version value="All">
+   <InstructionForm mnemonic="CLV" summary="Clear Two’s Complement
+Overflow">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="0"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="1011"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CLZ">
+  <Version value="All">
+   <InstructionForm mnemonic="CLZ" summary="Clear Zero Flag">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="0"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="COM">
+  <Version value="All">
+   <InstructionForm mnemonic="COM" summary="One’s Complement">
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="0"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="1"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="010d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CP">
+  <Version value="All">
+   <InstructionForm mnemonic="CP" summary="Compare">
+    <Operand type="Rd,Rr"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="⇔"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0001"/>
+     <Opcode nibble="01rd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="rrrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CPC">
+  <Version value="All">
+   <InstructionForm mnemonic="CPC" summary="Compare with Carry">
+    <Operand type="Rd,Rr"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="⇔"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="01rd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="rrrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CPI">
+  <Version value="All">
+   <InstructionForm mnemonic="CPI" summary="Compare with Immediate">
+    <Operand type="Rd,K"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="⇔"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0011"/>
+     <Opcode nibble="KKKK"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="KKKK"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="CPSE">
+  <Version value="All">
+   <InstructionForm mnemonic="CPSE" summary="Compare, skip if Equal">
+    <Operand type="Rd,Rr"/>
+    <Clocks>
+     <AVRe value="1 / 2 / 3"/>
+     <AVRxm value="1 / 2 / 3"/>
+     <AVRxt value="1 / 2 / 3"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0001"/>
+     <Opcode nibble="00rd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="rrrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="DEC">
+  <Version value="All">
+   <InstructionForm mnemonic="DEC" summary="Decrement">
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="010d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="1010"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="DES">
+  <Version value="All">
+   <InstructionForm mnemonic="DES" summary="Data Encryption">
+    <Operand type="K"/>
+    <Clocks>
+     <AVRe value="N/A"/>
+     <AVRxm value="1 / 2"/>
+     <AVRxt value="N/A"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="KKKK"/>
+     <Opcode nibble="1011"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="EICALL">
+  <Version value="All">
+   <InstructionForm mnemonic="EICALL" summary="Extended Indirect Call to (Z)">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="4"/>
+     <AVRxm value="3"/>
+     <AVRxt value="3"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="0001"/>
+     <Opcode nibble="1001"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="EIJMP">
+  <Version value="All">
+   <InstructionForm mnemonic="EIJMP" summary="Extended Indirect Jump to (Z)">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="0001"/>
+     <Opcode nibble="1001"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="ELPM">
+  <Version value="All">
+   <InstructionForm mnemonic="ELPM" summary="Extended Load Program Memory">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="3"/>
+     <AVRxm value="3"/>
+     <AVRxt value="3"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="1101"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="ELPM" summary="Extended Load Program Memory">
+    <Operand type="Rd"/>
+    <Operand type="Z"/>
+    <Clocks>
+     <AVRe value="3"/>
+     <AVRxm value="3"/>
+     <AVRxt value="3"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0110"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="ELPM" summary="Extended Load Program Memory
+and Post-Increment">
+    <Operand type="Rd"/>
+    <Operand type="Z+"/>
+    <Clocks>
+     <AVRe value="3"/>
+     <AVRxm value="3"/>
+     <AVRxt value="3"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0111"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="EOR">
+  <Version value="All">
+   <InstructionForm mnemonic="EOR" summary="Exclusive OR">
+    <Operand type="Rd"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="0"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0010"/>
+     <Opcode nibble="01rd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="rrrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="FMUL">
+  <Version value="All">
+   <InstructionForm mnemonic="FMUL" summary="Fractional Multiply Unsigned">
+    <Operand type="Rd,Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="0011"/>
+     <Opcode nibble="0ddd"/>
+     <Opcode nibble="1rrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="FMULS">
+  <Version value="All">
+   <InstructionForm mnemonic="FMULS" summary="Fractional Multiply Signed">
+    <Operand type="Rd,Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="0011"/>
+     <Opcode nibble="1ddd"/>
+     <Opcode nibble="0rrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="FMULSU">
+  <Version value="All">
+   <InstructionForm mnemonic="FMULSU" summary="Fractional Multiply Signed with
+Unsigned">
+    <Operand type="Rd,Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="0011"/>
+     <Opcode nibble="1ddd"/>
+     <Opcode nibble="1rrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="ICALL">
+  <Version value="All">
+   <InstructionForm mnemonic="ICALL" summary="Indirect Call to (Z)">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="3 / 4"/>
+     <AVRxm value="2 / 3"/>
+     <AVRxt value="2 / 3"/>
+     <AVRrc value="3"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="1001"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="IJMP">
+  <Version value="All">
+   <InstructionForm mnemonic="IJMP" summary="Indirect Jump to (Z)">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="1001"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="IN">
+  <Version value="All">
+   <InstructionForm mnemonic="IN" summary="In From I/O Location">
+    <Operand type="Rd"/>
+    <Operand type="A"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1011"/>
+     <Opcode nibble="0AAd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="AAAA"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="INC">
+  <Version value="All">
+   <InstructionForm mnemonic="INC" summary="Increment">
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="010d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0011"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="JMP">
+  <Version value="All">
+   <InstructionForm mnemonic="JMP" summary="Jump">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="3"/>
+     <AVRxm value="3"/>
+     <AVRxt value="3"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="010k"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="110k"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="LAC">
+  <Version value="All">
+   <InstructionForm mnemonic="LAC" summary="Load and Clear">
+    <Operand type="Z"/>
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="N/A"/>
+     <AVRxm value="2"/>
+     <AVRxt value="N/A"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="001r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="0110"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="LAS">
+  <Version value="All">
+   <InstructionForm mnemonic="LAS" summary="Load and Set">
+    <Operand type="Z"/>
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="N/A"/>
+     <AVRxm value="2"/>
+     <AVRxt value="N/A"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="001r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="0101"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="LAT">
+  <Version value="All">
+   <InstructionForm mnemonic="LAT" summary="Load and Toggle">
+    <Operand type="Z"/>
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="N/A"/>
+     <AVRxm value="2"/>
+     <AVRxt value="N/A"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="001r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="0111"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="LD">
+  <Version value="All">
+   <InstructionForm mnemonic="LD" summary="Load Indirect">
+    <Operand type="Rd"/>
+    <Operand type="X"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="1100"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="LD" summary="Load Indirect and Post-Increment">
+    <Operand type="Rd"/>
+    <Operand type="X+"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="2 / 3"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="1101"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="LD" summary="Load Indirect and Pre-Decrement">
+    <Operand type="Rd"/>
+    <Operand type="-X"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="3"/>
+     <AVRxt value="2"/>
+     <AVRrc value="2 / 3"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="1110"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="LD" summary="Load Indirect">
+    <Operand type="Rd"/>
+    <Operand type="Y"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1000"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="LD" summary="Load Indirect and Post-Increment">
+    <Operand type="Rd"/>
+    <Operand type="Y+"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="2 / 3"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="1001"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="LD" summary="Load Indirect and Pre-Decrement">
+    <Operand type="Rd"/>
+    <Operand type="-Y"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="3"/>
+     <AVRxt value="2"/>
+     <AVRrc value="2 / 3"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="1010"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="LD" summary="Load Indirect">
+    <Operand type="Rd"/>
+    <Operand type="Z"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1000"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0000"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="LD" summary="Load Indirect and Post-Increment">
+    <Operand type="Rd"/>
+    <Operand type="Z+"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="2 / 3"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0001"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="LD" summary="Load Indirect and Pre-Decrement">
+    <Operand type="Rd"/>
+    <Operand type="-Z"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="3"/>
+     <AVRxt value="2"/>
+     <AVRrc value="2 / 3"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0010"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="LDD" summary="Load Indirect with Displacement">
+    <Operand type="Rd"/>
+    <Operand type="Y+q"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="3"/>
+     <AVRxt value="2"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="10q0"/>
+     <Opcode nibble="qq0d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="1qqq"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="LDD" summary="Load Indirect with Displacement">
+    <Operand type="Rd"/>
+    <Operand type="Z+q"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="3"/>
+     <AVRxt value="2"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="10q0"/>
+     <Opcode nibble="qq0d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0qqq"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="LDI">
+  <Version value="All">
+   <InstructionForm mnemonic="LDI" summary="Load Immediate">
+    <Operand type="Rd"/>
+    <Operand type="K"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1110"/>
+     <Opcode nibble="KKKK"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="KKKK"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="LDS">
+  <Version value="AVRrc">
+   <InstructionForm mnemonic="LDS" summary="Load Direct from Data Space">
+    <Operand type="Rd"/>
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="3"/>
+     <AVRxt value="3"/>
+     <AVRrc value="2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1010"/>
+     <Opcode nibble="0kkk"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="kkkk"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+  <Version value="All">
+   <InstructionForm mnemonic="LDS" summary="Load Direct from Data Space">
+    <Operand type="Rd"/>
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="3"/>
+     <AVRxt value="3"/>
+     <AVRrc value="2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="LPM">
+  <Version value="All">
+   <InstructionForm mnemonic="LPM" summary="Load Program Memory">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="3"/>
+     <AVRxm value="3"/>
+     <AVRxt value="3"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="1100"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="LPM" summary="Load Program Memory">
+    <Operand type="Rd"/>
+    <Operand type="Z"/>
+    <Clocks>
+     <AVRe value="3"/>
+     <AVRxm value="3"/>
+     <AVRxt value="3"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0100"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="LPM" summary="Load Program Memory and Post-
+Increment">
+    <Operand type="Rd"/>
+    <Operand type="Z+"/>
+    <Clocks>
+     <AVRe value="3"/>
+     <AVRxm value="3"/>
+     <AVRxt value="3"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0101"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="LSL">
+  <Version value="All">
+   <InstructionForm mnemonic="LSL" summary="Logical Shift Left">
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="⇔"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="11dd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="dddd"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="LSR">
+  <Version value="All">
+   <InstructionForm mnemonic="LSR" summary="Logical Shift Right">
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="0"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="010d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0110"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="MOV">
+  <Version value="All">
+   <InstructionForm mnemonic="MOV" summary="Copy Register">
+    <Operand type="Rd"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0010"/>
+     <Opcode nibble="11rd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="rrrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="MOVW">
+  <Version value="All">
+   <InstructionForm mnemonic="MOVW" summary="Copy Register Pair">
+    <Operand type="Rd"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="0001"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="rrrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="MUL">
+  <Version value="All">
+   <InstructionForm mnemonic="MUL" summary="Multiply Unsigned">
+    <Operand type="Rd,Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="11rd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="rrrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="MULS">
+  <Version value="All">
+   <InstructionForm mnemonic="MULS" summary="Multiply Signed">
+    <Operand type="Rd,Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="0010"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="rrrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="MULSU">
+  <Version value="All">
+   <InstructionForm mnemonic="MULSU" summary="Multiply Signed with Unsigned">
+    <Operand type="Rd,Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="0011"/>
+     <Opcode nibble="0ddd"/>
+     <Opcode nibble="0rrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="NEG">
+  <Version value="All">
+   <InstructionForm mnemonic="NEG" summary="Two’s Complement">
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="⇔"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="010d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0001"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="NOP">
+  <Version value="All">
+   <InstructionForm mnemonic="NOP" summary="No Operation">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="0000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="OR">
+  <Version value="All">
+   <InstructionForm mnemonic="OR" summary="Logical OR">
+    <Operand type="Rd"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="0"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0010"/>
+     <Opcode nibble="10rd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="rrrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="ORI">
+  <Version value="All">
+   <InstructionForm mnemonic="ORI" summary="Logical OR with Immediate">
+    <Operand type="Rd"/>
+    <Operand type="K"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="0"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0110"/>
+     <Opcode nibble="KKKK"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="KKKK"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="OUT">
+  <Version value="All">
+   <InstructionForm mnemonic="OUT" summary="Out To I/O Location">
+    <Operand type="A"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1011"/>
+     <Opcode nibble="1AAr"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="AAAA"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="POP">
+  <Version value="All">
+   <InstructionForm mnemonic="POP" summary="Pop Register from Stack">
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="3"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="000d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="1111"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="PUSH">
+  <Version value="All">
+   <InstructionForm mnemonic="PUSH" summary="Push Register on Stack">
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="001d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="1111"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="RCALL">
+  <Version value="All">
+   <InstructionForm mnemonic="RCALL" summary="Relative Call Subroutine">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="3 / 4"/>
+     <AVRxm value="2 / 3"/>
+     <AVRxt value="2 / 3"/>
+     <AVRrc value="3"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1101"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="RET">
+  <Version value="All">
+   <InstructionForm mnemonic="RET" summary="Subroutine Return">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="4 / 5"/>
+     <AVRxm value="4 / 5"/>
+     <AVRxt value="4 / 5"/>
+     <AVRrc value="6"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="RETI">
+  <Version value="All">
+   <InstructionForm mnemonic="RETI" summary="Interrupt Return">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="4 / 5"/>
+     <AVRxm value="4 / 5"/>
+     <AVRxt value="4 / 5"/>
+     <AVRrc value="6"/>
+    </Clocks>
+    <SREG>
+     <I value="1"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="0001"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="RJMP">
+  <Version value="All">
+   <InstructionForm mnemonic="RJMP" summary="Relative Jump">
+    <Operand type="k"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1100"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="ROL">
+  <Version value="All">
+   <InstructionForm mnemonic="ROL" summary="Rotate Left Through Carry">
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="⇔"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0001"/>
+     <Opcode nibble="11dd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="dddd"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="ROR">
+  <Version value="All">
+   <InstructionForm mnemonic="ROR" summary="Rotate Right Through Carry">
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="010d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0111"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SBC">
+  <Version value="All">
+   <InstructionForm mnemonic="SBC" summary="Subtract with Carry">
+    <Operand type="Rd"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="⇔"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="10rd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="rrrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SBCI">
+  <Version value="All">
+   <InstructionForm mnemonic="SBCI" summary="Subtract Immediate with Carry">
+    <Operand type="Rd"/>
+    <Operand type="K"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="⇔"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="KKKK"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="KKKK"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SBI">
+  <Version value="All">
+   <InstructionForm mnemonic="SBI" summary="Set Bit in I/O Register">
+    <Operand type="A"/>
+    <Operand type="b"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="1010"/>
+     <Opcode nibble="AAAA"/>
+     <Opcode nibble="Abbb"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SBIC">
+  <Version value="All">
+   <InstructionForm mnemonic="SBIC" summary="Skip if Bit in I/O Register Cleared">
+    <Operand type="A"/>
+    <Operand type="b"/>
+    <Clocks>
+     <AVRe value="1 / 2 / 3"/>
+     <AVRxm value="2 / 3 / 4"/>
+     <AVRxt value="1 / 2 / 3"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="AAAA"/>
+     <Opcode nibble="Abbb"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SBIS">
+  <Version value="All">
+   <InstructionForm mnemonic="SBIS" summary="Skip if Bit in I/O Register Set">
+    <Operand type="A"/>
+    <Operand type="b"/>
+    <Clocks>
+     <AVRe value="1 / 2 / 3"/>
+     <AVRxm value="2 / 3 / 4"/>
+     <AVRxt value="1 / 2 / 3"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="1011"/>
+     <Opcode nibble="AAAA"/>
+     <Opcode nibble="Abbb"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SBIW">
+  <Version value="All">
+   <InstructionForm mnemonic="SBIW" summary="Subtract Immediate from Word">
+    <Operand type="Rd"/>
+    <Operand type="K"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0111"/>
+     <Opcode nibble="KKdd"/>
+     <Opcode nibble="KKKK"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SBR">
+  <Version value="All">
+   <InstructionForm mnemonic="SBR" summary="Set Bit(s) in Register">
+    <Operand type="Rd,K"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="0"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0110"/>
+     <Opcode nibble="KKKK"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="KKKK"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SBRC">
+  <Version value="All">
+   <InstructionForm mnemonic="SBRC" summary="Skip if Bit in Register Cleared">
+    <Operand type="Rr"/>
+    <Operand type="b"/>
+    <Clocks>
+     <AVRe value="1 / 2 / 3"/>
+     <AVRxm value="1 / 2 / 3"/>
+     <AVRxt value="1 / 2 / 3"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="110r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="0bbb"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SBRS">
+  <Version value="All">
+   <InstructionForm mnemonic="SBRS" summary="Skip if Bit in Register Set">
+    <Operand type="Rr"/>
+    <Operand type="b"/>
+    <Clocks>
+     <AVRe value="1 / 2 / 3"/>
+     <AVRxm value="1 / 2 / 3"/>
+     <AVRxt value="1 / 2 / 3"/>
+     <AVRrc value="1 / 2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="111r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="0bbb"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SEC">
+  <Version value="All">
+   <InstructionForm mnemonic="SEC" summary="Set Carry">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="1"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SEH">
+  <Version value="All">
+   <InstructionForm mnemonic="SEH" summary="Set Half Carry Flag in SREG">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="1"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SEI">
+  <Version value="All">
+   <InstructionForm mnemonic="SEI" summary="Global Interrupt Enable">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="1"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="0111"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SEN">
+  <Version value="All">
+   <InstructionForm mnemonic="SEN" summary="Set Negative Flag">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="1"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="0010"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SER">
+  <Version value="All">
+   <InstructionForm mnemonic="SER" summary="Set Register">
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1110"/>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="1111"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SES">
+  <Version value="All">
+   <InstructionForm mnemonic="SES" summary="Set Sign Bit">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="1"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SET">
+  <Version value="All">
+   <InstructionForm mnemonic="SET" summary="Set T in SREG">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="1"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="0110"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SEV">
+  <Version value="All">
+   <InstructionForm mnemonic="SEV" summary="Set Two’s Complement Overflow">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="1"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="0011"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SEZ">
+  <Version value="All">
+   <InstructionForm mnemonic="SEZ" summary="Set Zero Flag">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="1"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0100"/>
+     <Opcode nibble="0001"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SLEEP">
+  <Version value="All">
+   <InstructionForm mnemonic="SLEEP" summary="Sleep">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="1000"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SPM">
+  <Version value="AVRxm">
+   <InstructionForm mnemonic="SPM" summary="Store Program Memory">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="-"/>
+     <AVRxm value="-"/>
+     <AVRxt value="-"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="1110"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="SPM" summary="Store Program Memory and Post-
+Increment by 2">
+    <Operand type="Z+"/>
+    <Clocks>
+     <AVRe value="N/A"/>
+     <AVRxm value="- "/>
+     <AVRxt value="-"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+  <Version value="AVRxt">
+   <InstructionForm mnemonic="SPM" summary="Store Program Memory">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="-"/>
+     <AVRxm value="-"/>
+     <AVRxt value="-"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="1110"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="SPM" summary="Store Program Memory and Post-
+Increment by 2">
+    <Operand type="Z+"/>
+    <Clocks>
+     <AVRe value="N/A"/>
+     <AVRxm value="- "/>
+     <AVRxt value="-"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="1111"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+  <Version value="All">
+   <InstructionForm mnemonic="SPM" summary="Store Program Memory">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="-"/>
+     <AVRxm value="-"/>
+     <AVRxt value="-"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="1110"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="ST">
+  <Version value="All">
+   <InstructionForm mnemonic="ST" summary="Store Indirect">
+    <Operand type="X"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="001r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="1100"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="ST" summary="Store Indirect and Post-Increment">
+    <Operand type="X+"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="001r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="1101"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="ST" summary="Store Indirect and Pre-Decrement">
+    <Operand type="-X"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="1"/>
+     <AVRrc value="2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="001r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="1110"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="ST" summary="Store Indirect">
+    <Operand type="Y"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1000"/>
+     <Opcode nibble="001r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="ST" summary="Store Indirect and Post-Increment">
+    <Operand type="Y+"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="001r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="1001"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="ST" summary="Store Indirect and Pre-Decrement">
+    <Operand type="-Y"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="1"/>
+     <AVRrc value="2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="001r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="1010"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="ST" summary="Store Indirect">
+    <Operand type="Z"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1000"/>
+     <Opcode nibble="001r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="0000"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="ST" summary="Store Indirect and Post-Increment">
+    <Operand type="Z+"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="001r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="0001"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="ST" summary="Store Indirect and Pre-Decrement">
+    <Operand type="-Z"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="1"/>
+     <AVRrc value="2"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="001r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="0010"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="STD" summary="Store Indirect with Displacement">
+    <Operand type="Y+q"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="1"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="10q0"/>
+     <Opcode nibble="qq1r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="1qqq"/>
+    </Encoding>
+   </InstructionForm>
+   <InstructionForm mnemonic="STD" summary="Store Indirect with Displacement">
+    <Operand type="Z+q,Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="1"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="10q0"/>
+     <Opcode nibble="qq1r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="0qqq"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="STS">
+  <Version value="AVRrc">
+   <InstructionForm mnemonic="STS" summary="Store Direct to Data Space">
+    <Operand type="k"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1010"/>
+     <Opcode nibble="1kkk"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="kkkk"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+  <Version value="All">
+   <InstructionForm mnemonic="STS" summary="Store Direct to Data Space">
+    <Operand type="k"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="2"/>
+     <AVRxm value="2"/>
+     <AVRxt value="2"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="001d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0000"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+     <Opcode nibble="kkkk"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SUB">
+  <Version value="All">
+   <InstructionForm mnemonic="SUB" summary="Subtract without Carry">
+    <Operand type="Rd"/>
+    <Operand type="Rr"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="⇔"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0001"/>
+     <Opcode nibble="10rd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="rrrr"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SUBI">
+  <Version value="All">
+   <InstructionForm mnemonic="SUBI" summary="Subtract Immediate">
+    <Operand type="Rd"/>
+    <Operand type="K"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="⇔"/>
+     <S value="⇔"/>
+     <V value="⇔"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="⇔"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="KKKK"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="KKKK"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="SWAP">
+  <Version value="All">
+   <InstructionForm mnemonic="SWAP" summary="Swap Nibbles">
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="010d"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="0010"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="TST">
+  <Version value="All">
+   <InstructionForm mnemonic="TST" summary="Test for Zero or Minus">
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="⇔"/>
+     <V value="0"/>
+     <N value="⇔"/>
+     <Z value="⇔"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="0010"/>
+     <Opcode nibble="00dd"/>
+     <Opcode nibble="dddd"/>
+     <Opcode nibble="dddd"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="WDR">
+  <Version value="All">
+   <InstructionForm mnemonic="WDR" summary="Watchdog Reset">
+    <Operand type=""/>
+    <Clocks>
+     <AVRe value="1"/>
+     <AVRxm value="1"/>
+     <AVRxt value="1"/>
+     <AVRrc value="1"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="0101"/>
+     <Opcode nibble="1010"/>
+     <Opcode nibble="1000"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+ <Instruction name="XCH">
+  <Version value="All">
+   <InstructionForm mnemonic="XCH" summary="Exchange">
+    <Operand type="Z"/>
+    <Operand type="Rd"/>
+    <Clocks>
+     <AVRe value="N/A"/>
+     <AVRxm value="2"/>
+     <AVRxt value="N/A"/>
+     <AVRrc value="N/A"/>
+    </Clocks>
+    <SREG>
+     <I value="–"/>
+     <T value="–"/>
+     <H value="–"/>
+     <S value="–"/>
+     <V value="–"/>
+     <N value="–"/>
+     <Z value="–"/>
+     <C value="–"/>
+    </SREG>
+    <Encoding>
+     <Opcode nibble="1001"/>
+     <Opcode nibble="001r"/>
+     <Opcode nibble="rrrr"/>
+     <Opcode nibble="0100"/>
+    </Encoding>
+   </InstructionForm>
+  </Version>
+ </Instruction>
+</InstructionSet>
