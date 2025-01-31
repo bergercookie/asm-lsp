@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<InstructionSet name="avr">
+<InstructionSet name="AVR">
     <Register name="r0" description="General purpose register 0. Mapped to address 0x00." type="General Purpose Register" width = "8 bits">
     </Register>
     <Register name="r1" description="General purpose register 1. Mapped to address 0x01." type="General Purpose Register" width = "8 bits">

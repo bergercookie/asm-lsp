@@ -236,6 +236,8 @@ git repository.
 - PowerISA instruction documentation sourced from the [open-power-sdk](https://github.com/open-power-sdk)
     PowerISA [documentation](https://github.com/open-power-sdk/PowerISA?tab=Apache-2.0-1-ov-file)*
 
+- AVR instruction documentation sourced from the [AVR documentation](https://ww1.microchip.com/downloads/en/DeviceDoc/AVR-InstructionSet-Manual-DS40002198.pdf)
+
 - AVR assembler documentation sourced from the [AVR documentation](https://ww1.microchip.com/downloads/en/DeviceDoc/40001917A.pdf)
 
 - AVR register documentation sourced from the [AVR documentation](https://developerhelp.microchip.com/xwiki/bin/view/products/mcu-mpu/8-bit-avr/structure/gpr/)

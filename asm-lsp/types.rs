@@ -149,6 +149,7 @@ impl<'own> Instruction {
     }
 }
 
+// TODO: Rework this to use a tagged union...
 // InstructionForm
 #[derive(Default, Eq, PartialEq, Hash, Debug, Clone, Serialize, Deserialize)]
 pub struct InstructionForm {
@@ -160,14 +161,20 @@ pub struct InstructionForm {
     pub cancelling_inputs: Option<bool>,
     pub nacl_version: Option<u8>,
     pub nacl_zero_extends_outputs: Option<bool>,
-    pub operands: Vec<Operand>,
     // --- Z80-Specific Information ---
     pub z80_name: Option<String>,
     pub z80_form: Option<String>,
     pub z80_opcode: Option<String>,
     pub z80_timing: Option<Z80Timing>,
+    // --- Avr-Specific Information ---
+    pub avr_mneumonic: Option<String>,
+    pub avr_summary: Option<String>,
+    pub avr_version: Option<String>,
+    pub avr_timing: Option<AvrTiming>,
+    pub avr_status_register: Option<AvrStatusRegister>,
     // --- Assembler/Architecture Agnostic Info ---
     pub isa: Option<ISA>,
+    pub operands: Vec<Operand>,
     pub urls: Vec<String>,
 }
 
@@ -182,6 +189,13 @@ impl std::fmt::Display for InstructionForm {
         }
         if let Some(val) = &self.z80_form {
             s += &format!("*Z80*: {val} | ");
+        }
+        if let Some(val) = &self.avr_mneumonic {
+            let version_str = self
+                .avr_version
+                .as_ref()
+                .map_or_else(String::new, |version| format!(" ({version})"));
+            s += &format!("*AVR*: {val}{version_str} | ",);
         }
 
         if let Some(val) = &self.mmx_mode {
@@ -239,6 +253,16 @@ impl std::fmt::Display for InstructionForm {
 
         if let Some(ref timing) = self.z80_timing {
             s += &format!("\n  + {timing}");
+        }
+
+        if let Some(summary) = &self.avr_summary {
+            s += &format!("\n\n{summary}");
+        }
+        if let Some(sreg) = &self.avr_status_register {
+            s += &format!("\n\n{sreg}");
+        }
+        if let Some(ref timing) = self.avr_timing {
+            s += &format!("\n\n{timing}\n");
         }
 
         for url in &self.urls {
@@ -383,6 +407,71 @@ impl Display for Z80Timing {
             f,
             "Z80: {}, Z80 + M1: {}, R800: {}, R800 + Wait: {}",
             self.z80, self.z80_plus_m1, self.r800, self.z80_plus_m1
+        )?;
+        Ok(())
+    }
+}
+
+#[derive(Default, Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
+pub struct AvrTiming {
+    pub avre: Option<String>,
+    pub avrxm: Option<String>,
+    pub avrxt: Option<String>,
+    pub avrrc: Option<String>,
+}
+
+impl Display for AvrTiming {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Timing: ")?;
+        let mut has_prev = false;
+        if let Some(ref cycles) = self.avre {
+            write!(f, "AVRE: {cycles}")?;
+            has_prev = true;
+        }
+        if let Some(ref cycles) = self.avrxm {
+            if has_prev {
+                write!(f, " | ")?;
+            }
+            write!(f, "AVRXM: {cycles}")?;
+            has_prev = true;
+        }
+        if let Some(ref cycles) = self.avrxt {
+            if has_prev {
+                write!(f, " | ")?;
+            }
+            write!(f, "AVRXT: {cycles}")?;
+            has_prev = true;
+        }
+        if let Some(ref cycles) = self.avrrc {
+            if has_prev {
+                write!(f, " | ")?;
+            }
+            write!(f, "AVRRC: {cycles}")?;
+        }
+
+        Ok(())
+    }
+}
+
+#[derive(Default, Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
+pub struct AvrStatusRegister {
+    pub i: char,
+    pub t: char,
+    pub h: char,
+    pub s: char,
+    pub v: char,
+    pub n: char,
+    pub c: char,
+    pub z: char,
+}
+
+impl std::fmt::Display for AvrStatusRegister {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "I T H S V N Z C")?;
+        writeln!(
+            f,
+            "{} {} {} {} {} {} {} {}",
+            self.i, self.t, self.h, self.s, self.v, self.n, self.c, self.z
         )?;
         Ok(())
     }
@@ -669,8 +758,8 @@ pub enum Arch {
     #[strum(serialize = "power-isa")]
     #[serde(rename = "power-isa")]
     PowerISA,
-    #[strum(serialize = "avr")]
-    #[serde(rename = "avr")]
+    #[strum(serialize = "AVR")]
+    #[serde(rename = "AVR")] // TODO: lower-case this in the generation code
     Avr,
     /// For testing purposes *only*. This is not a valid config option
     #[serde(skip)]
@@ -766,7 +855,7 @@ impl Arch {
             Self::PowerISA => {
                 load_instructions_with_path!(Self::PowerISA, "serialized/opcodes/power-isa");
             }
-            Self::Avr => warn!("AVR opcodes are not supported"),
+            Self::Avr => load_instructions_with_path!(Self::Avr, "serialized/opcodes/avr"),
             Self::None => unreachable!(),
         }
     }
@@ -1520,6 +1609,34 @@ pub enum OperandType {
     sae,
     sibmem,
     tmm,
+
+    // Avr operand types
+    Rd,
+    Rr,
+    X,
+    Y,
+    Z,
+    #[strum(serialize = "-X")]
+    NegX,
+    #[strum(serialize = "-Y")]
+    NegY,
+    #[strum(serialize = "-Z")]
+    NegZ,
+    #[strum(serialize = "X+")]
+    XPlus,
+    #[strum(serialize = "Y+")]
+    YPlus,
+    #[strum(serialize = "Z+")]
+    ZPlus,
+    #[strum(serialize = "Y+q")]
+    YPlusQ,
+    #[strum(serialize = "Z+q")]
+    ZPlusQ,
+    A,
+    K,
+    // `k` is already covered
+    s,
+    b,
 }
 
 // lsp types
