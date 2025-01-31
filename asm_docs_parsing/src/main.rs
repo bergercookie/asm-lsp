@@ -6,7 +6,7 @@ use ::asm_lsp::parser::{
     populate_registers, populate_riscv_instructions, populate_riscv_registers,
 };
 use asm_lsp::{
-    parser::{populate_avr_directives, populate_power_isa_instructions},
+    parser::{populate_avr_directives, populate_avr_instructions, populate_power_isa_instructions},
     Arch, Assembler, Directive, Instruction, Register,
 };
 
@@ -90,6 +90,9 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                         }
                         Some(Arch::PowerISA) => {
                             instrs = populate_power_isa_instructions(&conts)?;
+                        }
+                        Some(Arch::Avr) => {
+                            instrs = populate_avr_instructions(&conts)?;
                         }
                         _ => {
                             instrs = populate_instructions(&conts)?;

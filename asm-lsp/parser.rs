@@ -1,4 +1,4 @@
-use crate::ustr;
+use crate::{ustr, AvrStatusRegister, AvrTiming};
 use std::collections::HashMap;
 use std::env::args;
 use std::fs;
@@ -19,7 +19,7 @@ use htmlentity::entity::ICodedDataTrait;
 use log::{debug, error, info, warn};
 use quick_xml::escape::unescape;
 use quick_xml::events::attributes::Attribute;
-use quick_xml::events::Event;
+use quick_xml::events::{BytesStart, Event};
 use quick_xml::name::QName;
 use quick_xml::Reader;
 use regex::Regex;
@@ -1303,6 +1303,259 @@ pub fn populate_name_to_instruction_map(
                 .or_insert_with(|| instruction.clone());
         }
     }
+}
+
+fn process_sreg_value(
+    e: &BytesStart,
+    curr_instruction_form: &mut InstructionForm,
+    field_setter: impl FnOnce(&mut AvrStatusRegister, char),
+) {
+    for attr in e.attributes() {
+        let Attribute { key, value } = attr.unwrap();
+        if key.into_inner() == b"value" {
+            let val = ustr::get_str(&value);
+            let status = if val.eq("–") {
+                '-'
+            } else {
+                ustr::get_str(&value)
+                    .chars()
+                    .next()
+                    .expect("Empty status register value")
+            };
+            if let Some(ref mut sreg_entry) = curr_instruction_form.avr_status_register {
+                field_setter(sreg_entry, status);
+            } else {
+                let mut sreg = AvrStatusRegister::default();
+                field_setter(&mut sreg, status);
+                curr_instruction_form.avr_status_register = Some(sreg);
+            }
+            break;
+        }
+    }
+}
+
+fn process_clock_value(
+    e: &BytesStart,
+    curr_instruction_form: &mut InstructionForm,
+    field_setter: impl FnOnce(&mut AvrTiming, Option<String>),
+) {
+    for attr in e.attributes() {
+        let Attribute { key, value } = attr.unwrap();
+        if key.into_inner() == b"value" {
+            let cycles = Some(ustr::get_str(&value).to_string());
+            if let Some(ref mut timing_entry) = curr_instruction_form.avr_timing {
+                field_setter(timing_entry, cycles);
+            } else {
+                let mut timing = AvrTiming::default();
+                field_setter(&mut timing, cycles);
+                curr_instruction_form.avr_timing = Some(timing);
+            }
+            break;
+        }
+    }
+}
+
+/// Parse the provided XML contents and return a vector of all the instructions based on that.
+/// If parsing fails, the appropriate error will be returned instead.
+///
+/// Current function assumes that the XML file is already read and that it's been given a reference
+/// to its contents (`&str`).
+///
+/// # Errors
+///
+/// This function is highly specialized to parse a handful of files and will panic or return
+/// `Err` for most mal-formed inputs
+///
+/// # Panics
+///
+/// This function is highly specialized to parse a handful of files and will panic or return
+/// `Err` for most mal-formed/unexpected inputs
+pub fn populate_avr_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
+    // initialise the instruction set
+    let mut instructions_map = HashMap::<String, Instruction>::new();
+
+    // iterate through the XML
+    let mut reader = Reader::from_str(xml_contents);
+
+    // ref to the instruction that's currently under construction
+    let mut curr_instruction = Instruction::default();
+    let mut curr_instruction_form = InstructionForm::default();
+    let mut arch: Arch = Arch::None;
+    let mut curr_version: Option<String> = None;
+
+    debug!("Parsing avr instruction XML contents...");
+    loop {
+        match reader.read_event() {
+            // start event
+            Ok(Event::Start(ref e)) => {
+                match e.name() {
+                    QName(b"InstructionSet") => {
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            if b"name" == key.into_inner() {
+                                arch = Arch::from_str(ustr::get_str(&value)).unwrap_or_else(|e| {
+                                    panic!("Failed parse Arch {} -- {e}", ustr::get_str(&value))
+                                });
+                                assert!(arch == Arch::Avr);
+                            } else {
+                                warn!("Failed to parse architecture name");
+                            }
+                        }
+                    }
+                    QName(b"Instruction") => {
+                        // start of a new instruction
+                        curr_instruction = Instruction::default();
+                        curr_instruction.arch = arch;
+
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            match ustr::get_str(key.into_inner()) {
+                                "name" => {
+                                    let name = ustr::get_str(&value);
+                                    curr_instruction.name = name.to_ascii_lowercase();
+                                }
+                                "summary" => {
+                                    ustr::get_str(&value).clone_into(&mut curr_instruction.summary);
+                                }
+                                _ => {}
+                            }
+                        }
+                    }
+                    // Versions are defined a per-instruction form basis
+                    QName(b"Version") => {
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            if "value" == ustr::get_str(key.into_inner()) {
+                                curr_version = Some(ustr::get_str(&value).to_string());
+                            }
+                        }
+                    }
+                    QName(b"InstructionForm") => {
+                        assert!(curr_version.is_some());
+                        // new instruction form
+                        curr_instruction_form = InstructionForm::default();
+                        curr_instruction_form.avr_version.clone_from(&curr_version);
+
+                        // iterate over the attributes
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            match ustr::get_str(key.into_inner()) {
+                                "mnemonic" => {
+                                    curr_instruction_form.avr_mneumonic =
+                                        Some(ustr::get_str(&value).to_owned());
+                                }
+                                "summary" => {
+                                    curr_instruction_form.avr_summary =
+                                        Some(ustr::get_str(&value).to_owned());
+                                }
+                                _ => {}
+                            }
+                        }
+                    }
+                    // NOTE: Intentionally leaving out encoding nibbles unless that's desired...
+                    // QName(b"Encoding") => {}
+                    _ => {} // unknown event
+                }
+            }
+            Ok(Event::Empty(ref e)) => {
+                match e.name() {
+                    QName(b"Operand") => {
+                        for attr in e.attributes() {
+                            let Attribute { key, value } = attr.unwrap();
+                            if key.into_inner() == b"type" {
+                                let val = ustr::get_str(&value);
+                                for oper in val.split(',') {
+                                    if oper.is_empty() {
+                                        continue;
+                                    }
+                                    let Ok(type_) = OperandType::from_str(oper) else {
+                                        return Err(anyhow!(
+                                            "Unknown value for operand type -- Variant: {}",
+                                            ustr::get_str(&value)
+                                        ));
+                                    };
+                                    curr_instruction_form.operands.push(Operand {
+                                        type_,
+                                        input: None,
+                                        output: None,
+                                        extended_size: None,
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    // Status register values
+                    QName(b"I") => {
+                        process_sreg_value(e, &mut curr_instruction_form, |sreg, val| sreg.i = val);
+                    }
+                    QName(b"T") => {
+                        process_sreg_value(e, &mut curr_instruction_form, |sreg, val| sreg.t = val);
+                    }
+                    QName(b"H") => {
+                        process_sreg_value(e, &mut curr_instruction_form, |sreg, val| sreg.h = val);
+                    }
+                    QName(b"S") => {
+                        process_sreg_value(e, &mut curr_instruction_form, |sreg, val| sreg.s = val);
+                    }
+                    QName(b"V") => {
+                        process_sreg_value(e, &mut curr_instruction_form, |sreg, val| sreg.v = val);
+                    }
+                    QName(b"Z") => {
+                        process_sreg_value(e, &mut curr_instruction_form, |sreg, val| sreg.z = val);
+                    }
+                    QName(b"C") => {
+                        process_sreg_value(e, &mut curr_instruction_form, |sreg, val| sreg.c = val);
+                    }
+                    QName(b"N") => {
+                        process_sreg_value(e, &mut curr_instruction_form, |sreg, val| sreg.n = val);
+                    }
+                    // Clocks
+                    QName(b"AVRe") => {
+                        process_clock_value(e, &mut curr_instruction_form, |timing, val| {
+                            timing.avre = val;
+                        });
+                    }
+                    QName(b"AVRxm") => {
+                        process_clock_value(e, &mut curr_instruction_form, |timing, val| {
+                            timing.avrxm = val;
+                        });
+                    }
+                    QName(b"AVRxt") => {
+                        process_clock_value(e, &mut curr_instruction_form, |timing, val| {
+                            timing.avrxt = val;
+                        });
+                    }
+                    QName(b"AVRrc") => {
+                        process_clock_value(e, &mut curr_instruction_form, |timing, val| {
+                            timing.avrrc = val;
+                        });
+                    }
+                    _ => {} // unknown event
+                }
+            }
+            // end event
+            Ok(Event::End(ref e)) => {
+                match e.name() {
+                    QName(b"Instruction") => {
+                        // finish instruction
+                        assert!(curr_instruction.arch != Arch::None);
+                        instructions_map
+                            .insert(curr_instruction.name.clone(), curr_instruction.clone());
+                        curr_version = None;
+                    }
+                    QName(b"InstructionForm") => {
+                        curr_instruction.push_form(curr_instruction_form.clone());
+                    }
+                    _ => {} // unknown event
+                }
+            }
+            Ok(Event::Eof) => break,
+            Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
+            _ => {} // rest of events that we don't consider
+        }
+    }
+
+    Ok(instructions_map.into_values().collect())
 }
 
 /// Parse the provided XML contents and return a vector of all the registers based on that.

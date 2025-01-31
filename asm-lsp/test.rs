@@ -18,7 +18,7 @@ mod tests {
         instr_filter_targets,
         parser::{
             populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
-            populate_ca65_directives, populate_masm_nasm_directives,
+            populate_avr_instructions, populate_ca65_directives, populate_masm_nasm_directives,
             populate_power_isa_instructions, populate_riscv_instructions, populate_riscv_registers,
         },
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
@@ -185,6 +185,7 @@ mod tests {
         z80_registers: Vec<Register>,
         mos6502_registers: Vec<Register>,
         power_isa_registers: Vec<Register>,
+        avr_instructions: Vec<Instruction>,
         avr_registers: Vec<Register>,
         gas_directives: Vec<Directive>,
         masm_directives: Vec<Directive>,
@@ -212,6 +213,7 @@ mod tests {
                 z80_registers: Vec::new(),
                 mos6502_instructions: Vec::new(),
                 mos6502_registers: Vec::new(),
+                avr_instructions: Vec::new(),
                 avr_registers: Vec::new(),
                 gas_directives: Vec::new(),
                 masm_directives: Vec::new(),
@@ -291,6 +293,13 @@ mod tests {
         info.power_isa_instructions = if config.is_isa_enabled(Arch::PowerISA) {
             let power_isa_instrs = include_bytes!("serialized/opcodes/power-isa");
             bincode::deserialize::<Vec<Instruction>>(power_isa_instrs)?
+        } else {
+            Vec::new()
+        };
+
+        info.avr_instructions = if config.is_isa_enabled(Arch::Avr) {
+            let avr_instrs = include_bytes!("serialized/opcodes/avr");
+            bincode::deserialize::<Vec<Instruction>>(avr_instrs)?
         } else {
             Vec::new()
         };
@@ -444,6 +453,12 @@ mod tests {
         populate_name_to_instruction_map(
             Arch::PowerISA,
             &info.power_isa_instructions,
+            &mut store.names_to_info.instructions,
+        );
+
+        populate_name_to_instruction_map(
+            Arch::Avr,
+            &info.avr_instructions,
             &mut store.names_to_info.instructions,
         );
 
@@ -781,7 +796,7 @@ mod tests {
     fn handle_hover_avr_arch_it_provides_reg_info_1() {
         test_hover(
             "ldi     r1<cursor>6,0xC0",
-            "R16 [avr]
+            "R16 [AVR]
 General purpose register 16. Mapped to address 0x10.
 
 Type: General Purpose Register
@@ -793,7 +808,7 @@ Width: 8 bits",
     fn handle_hover_avr_arch_it_provides_reg_info_2() {
         test_hover(
             "clr r<cursor>17",
-            "R17 [avr]
+            "R17 [AVR]
 General purpose register 17. Mapped to address 0x11.
 
 Type: General Purpose Register
@@ -805,11 +820,79 @@ Width: 8 bits",
     fn handle_hover_avr_arch_it_provides_reg_info_3() {
         test_hover(
             "x<cursor>",
-            "X [avr]
+            "X [AVR]
 General purpose X-register. Low byte is r26 and high byte is r27.
 
 Type: General Purpose Register
 Width: 16 bits",
+            &avr_arch_test_config(),
+        );
+    }
+    #[test]
+    fn handle_hover_avr_arch_it_provides_instr_info_1() {
+        test_hover(
+            "ld<cursor>i     r16,0xC0",
+            "ldi [AVR]
+
+## Forms
+
+- *AVR*: LDI (All)
+
+  + [Rd]
+  + [K]
+
+Load Immediate
+
+I T H S V N Z C
+- - - - - - - -
+
+Timing: AVRE: 1 | AVRXM: 1 | AVRXT: 1 | AVRRC: 1
+",
+            &avr_arch_test_config(),
+        );
+    }
+    #[test]
+    fn handle_hover_avr_arch_it_provides_instr_info_2() {
+        test_hover(
+            "c<cursor>lr r17",
+            "clr [AVR]
+
+## Forms
+
+- *AVR*: CLR (All)
+
+  + [Rd]
+
+Clear Register
+
+I T H S V N Z C
+- - - 0 0 0 - 1
+
+Timing: AVRE: 1 | AVRXM: 1 | AVRXT: 1 | AVRRC: 1
+",
+            &avr_arch_test_config(),
+        );
+    }
+    #[test]
+    fn handle_hover_avr_arch_it_provides_instr_info_3() {
+        test_hover(
+            "   ou<cursor>t 0x25,r16",
+            "out [AVR]
+
+## Forms
+
+- *AVR*: OUT (All)
+
+  + [A]
+  + [Rr]
+
+Out To I/O Location
+
+I T H S V N Z C
+- - - - - - - -
+
+Timing: AVRE: 1 | AVRXM: 1 | AVRXT: 1 | AVRRC: 1
+",
             &avr_arch_test_config(),
         );
     }
@@ -835,6 +918,33 @@ Width: 16 bits",
     fn handle_autocomplete_avr_arch_it_provides_reg_comps_3() {
         test_register_autocomplete(
             "fmuls	r16,r1<cursor>",
+            &avr_arch_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_avr_arch_it_provides_instr_comps_1() {
+        test_instruction_autocomplete(
+            "l<cursor>	r1",
+            &avr_arch_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_avr_arch_it_provides_instr_comps_2() {
+        test_instruction_autocomplete(
+            "ld<cursor>	r1,0xC0",
+            &avr_arch_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_avr_arch_it_provides_instr_comps_3() {
+        test_instruction_autocomplete(
+            "f<cursor>	r16,r1",
             &avr_arch_test_config(),
             CompletionTriggerKind::INVOKED,
             None,
@@ -2683,6 +2793,14 @@ Width: 8 bits",
             "serialized/opcodes/power-isa",
             "../docs_store/opcodes/power-isa.json",
             populate_power_isa_instructions
+        );
+    }
+    #[test]
+    fn serialized_avr_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/avr",
+            "../docs_store/opcodes/avr.xml",
+            populate_avr_instructions
         );
     }
     // TODO: Consolidate this into `serialized_instruction_test!`
