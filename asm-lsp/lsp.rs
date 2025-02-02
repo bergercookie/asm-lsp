@@ -1297,9 +1297,8 @@ pub fn get_comp_resp(
                 if cap.node.end_byte() >= curr_doc.len() {
                     continue;
                 }
-                match cap.node.utf8_text(curr_doc) {
-                    Ok(text) => _ = labels.insert(text),
-                    Err(_) => continue,
+                if let Ok(text) = cap.node.utf8_text(curr_doc) {
+                    labels.insert(text);
                 }
             }
         }
