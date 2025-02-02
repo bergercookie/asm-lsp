@@ -16,7 +16,6 @@ use crate::InstructionAlias;
 
 use anyhow::{anyhow, Result};
 use htmlentity::entity::ICodedDataTrait;
-use log::{debug, error, info, warn};
 use quick_xml::escape::unescape;
 use quick_xml::events::attributes::Attribute;
 use quick_xml::events::{BytesStart, Event};
@@ -575,7 +574,6 @@ fn parse_arm_instruction(xml_contents: &str) -> Option<Instruction> {
     let mut in_para = false;
     let mut in_template = false;
 
-    debug!("Parsing instruction XML contents...");
     loop {
         match reader.read_event() {
             Ok(Event::Start(ref e)) => match e.name() {
@@ -951,7 +949,6 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
     let mut curr_instruction_form = InstructionForm::default();
     let mut arch: Arch = Arch::None;
 
-    debug!("Parsing instruction XML contents...");
     loop {
         match reader.read_event() {
             // start event
@@ -965,7 +962,7 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                                     panic!("Failed parse Arch {} -- {e}", ustr::get_str(&value))
                                 });
                             } else {
-                                warn!("Failed to parse architecture name");
+                                panic!("Failed to parse architecture name -- no name value");
                             }
                         }
                     }
@@ -1094,17 +1091,16 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                         for attr in e.attributes() {
                             let Attribute { key, value } = attr.unwrap();
                             if key.into_inner() == b"id" {
-                                {
-                                    curr_instruction_form.isa = Some(
-                                        ISA::from_str(ustr::get_str(value.as_ref()))
-                                            .unwrap_or_else(|_| {
-                                                panic!(
-                                                    "Unexpected ISA variant {}",
-                                                    ustr::get_str(&value)
-                                                )
-                                            }),
-                                    );
-                                }
+                                curr_instruction_form.isa = Some(
+                                    ISA::from_str(ustr::get_str(value.as_ref())).unwrap_or_else(
+                                        |_| {
+                                            panic!(
+                                                "Unexpected ISA variant {}",
+                                                ustr::get_str(&value)
+                                            )
+                                        },
+                                    ),
+                                );
                             }
                         }
                     }
@@ -1383,7 +1379,6 @@ pub fn populate_avr_instructions(xml_contents: &str) -> Result<Vec<Instruction>>
     let mut arch: Arch = Arch::None;
     let mut curr_version: Option<String> = None;
 
-    debug!("Parsing avr instruction XML contents...");
     loop {
         match reader.read_event() {
             // start event
@@ -1398,7 +1393,7 @@ pub fn populate_avr_instructions(xml_contents: &str) -> Result<Vec<Instruction>>
                                 });
                                 assert!(arch == Arch::Avr);
                             } else {
-                                warn!("Failed to parse architecture name");
+                                panic!("Failed parse Arch -- no name value");
                             }
                         }
                     }
@@ -1584,7 +1579,6 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
     let mut curr_bit_flag = RegisterBitInfo::default();
     let mut arch: Arch = Arch::None;
 
-    debug!("Parsing register XML contents...");
     loop {
         match reader.read_event() {
             // start event
@@ -1728,7 +1722,6 @@ pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive
     let mut curr_directive = Directive::default();
     let mut in_desc = false;
 
-    debug!("Parsing directive XML contents...");
     loop {
         match reader.read_event() {
             // start event
@@ -1815,7 +1808,6 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     let mut curr_directive = Directive::default();
     let mut assembler = Assembler::None;
 
-    debug!("Parsing directive XML contents...");
     loop {
         match reader.read_event() {
             // start event
@@ -1922,7 +1914,6 @@ pub fn populate_avr_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     let mut curr_directive = Directive::default();
     let mut assembler = Assembler::None;
 
-    debug!("Parsing directive XML contents...");
     loop {
         match reader.read_event() {
             // start event
@@ -2148,7 +2139,7 @@ fn get_docs_body(x86_online_docs: &str) -> Option<String> {
     let mut x86_cache_path = match get_cache_dir() {
         Ok(cache_path) => Some(cache_path),
         Err(e) => {
-            warn!("Failed to resolve the cache file path - Error: {e}.");
+            eprintln!("Failed to resolve the cache file path - Error: {e}.");
             None
         }
     };
@@ -2172,7 +2163,7 @@ fn get_docs_body(x86_online_docs: &str) -> Option<String> {
                 docs
             }
             Err(e) => {
-                error!("Failed to fetch documentation from {x86_online_docs} - Error: {e}.");
+                eprintln!("Failed to fetch documentation from {x86_online_docs} - Error: {e}.");
                 return None;
             }
         }
@@ -2180,7 +2171,7 @@ fn get_docs_body(x86_online_docs: &str) -> Option<String> {
         match get_x86_docs_cache(path) {
             Ok(docs) => docs,
             Err(e) => {
-                error!(
+                eprintln!(
                     "Failed to fetch documentation from the cache: {} - Error: {e}.",
                     path.display()
                 );
@@ -2188,26 +2179,26 @@ fn get_docs_body(x86_online_docs: &str) -> Option<String> {
             }
         }
     } else {
-        error!("Failed to fetch documentation from the cache - Invalid path.");
+        eprintln!("Failed to fetch documentation from the cache - Invalid path.");
         return None;
     };
 
     // try to create the iterator to check if the data is valid
     // if the body produces an empty iterator, we attempt to clear the cache
     if body.split("<td>").skip(1).step_by(2).next().is_none() {
-        error!("Invalid docs contents.");
+        eprintln!("Invalid docs contents.");
         if let Some(ref path) = x86_cache_path {
-            error!("Attempting to remove the cache file {}...", path.display());
+            eprintln!("Attempting to remove the cache file {}...", path.display());
             match std::fs::remove_file(path) {
                 Ok(()) => {
-                    error!("Cache file removed.");
+                    eprintln!("Cache file removed.");
                 }
                 Err(e) => {
-                    error!("Failed to remove the cache file - Error: {e}.",);
+                    eprintln!("Failed to remove the cache file - Error: {e}.",);
                 }
             }
         } else {
-            error!("Unable to clear the cache, invalid path.");
+            eprintln!("Unable to clear the cache, invalid path.");
         }
         return None;
     }
@@ -2258,14 +2249,14 @@ fn get_x86_docs_url() -> String {
 }
 
 fn get_x86_docs_web(x86_online_docs: &str) -> Result<String> {
-    info!("Fetching further documentation from the web -> {x86_online_docs}...");
+    println!("Fetching further documentation from the web -> {x86_online_docs}...");
     // grab the info from the web
     let contents = reqwest::blocking::get(x86_online_docs)?.text()?;
     Ok(contents)
 }
 
 fn get_x86_docs_cache(x86_cache_path: &PathBuf) -> Result<String, std::io::Error> {
-    info!(
+    println!(
         "Fetching html page containing further documentation, from the cache -> {}...",
         x86_cache_path.display()
     );
@@ -2273,16 +2264,16 @@ fn get_x86_docs_cache(x86_cache_path: &PathBuf) -> Result<String, std::io::Error
 }
 
 fn set_x86_docs_cache(contents: &str, x86_cache_path: &PathBuf) {
-    info!("Writing to the cache file {}...", x86_cache_path.display());
+    println!("Writing to the cache file {}...", x86_cache_path.display());
     match fs::File::create(x86_cache_path) {
         Ok(mut cache_file) => {
-            info!("Created the cache file {} .", x86_cache_path.display());
+            println!("Created the cache file {} .", x86_cache_path.display());
             match cache_file.write_all(contents.as_bytes()) {
                 Ok(()) => {
-                    info!("Populated the cache.");
+                    println!("Populated the cache.");
                 }
                 Err(e) => {
-                    error!(
+                    eprintln!(
                         "Failed to write to the cache file {} - Error: {e}.",
                         x86_cache_path.display()
                     );
@@ -2290,7 +2281,7 @@ fn set_x86_docs_cache(contents: &str, x86_cache_path: &PathBuf) {
             }
         }
         Err(e) => {
-            error!(
+            eprintln!(
                 "Failed to create the cache file {} - Error: {e}.",
                 x86_cache_path.display()
             );
