@@ -2726,6 +2726,18 @@ Width: 8 bits",
             let instrs_raw = include_str!($raw_path);
             let mut raw_vec = $populate_fn(instrs_raw).unwrap();
 
+            // HACK: Windows line endings...
+            if cfg!(target_os = "windows") {
+                for instr in &mut raw_vec {
+                    instr.summary = instr.summary.replace('\r', "");
+                    for form in &mut instr.forms {
+                        if let Some(descr) = &form.avr_summary {
+                            form.avr_summary = Some(descr.replace('\r', ""));
+                        }
+                    }
+                }
+            }
+
             // HACK: To work around the difference in extra info urls between testing
             // and production
             for instr in &mut ser_vec {
