@@ -4,7 +4,7 @@ members = ["asm-lsp", "asm_docs_parsing"]
 default-members = ["asm-lsp"]
 
 [workspace.package]
-version = "0.9.0"
+version = "0.10.0"
 authors = ["Nikos Koukis <nickkouk@gmail.com>"]
 edition = "2021"
 description = "Language Server for x86/x86_64, ARM, RISCV, and z80 Assembly Code"
