@@ -1,5 +1,6 @@
 [package]
 name = "asm_docs_parsing"
+publish = false
 version = "0.1.0"
 description = "Parse and Serialize asm xml files"
 categories.workspace = true
