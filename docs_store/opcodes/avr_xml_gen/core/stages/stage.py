@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import tkinter as tk
 import logging
-from ..data_processing import Context, DataManager
+from core.data_processing import Context, DataManager
 
 
 logger=logging.getLogger(__name__)

@@ -1,9 +1,7 @@
-#internal
-from .stage import BidirectionalStage, StageGUI, StageTask
-
 #external
-from ..data_processing import InstructionDataMarkers, Context, DataManager, SourceInfo
-from ..gui import BackNextButtons, PDFRegionSelector
+from core.stages import BidirectionalStage, StageGUI, StageTask
+from core.data_processing import InstructionDataMarkers, Context, DataManager, SourceInfo
+from core.gui import BackNextButtons, PDFRegionSelector
 import tkinter as tk
 
 

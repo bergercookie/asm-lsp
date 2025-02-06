@@ -1,0 +1,99 @@
+It is programm for generating avr instructions xml
+
+Programm uses datasheet, which you can find under AVR-Instruction-Set-Manual-DS40002198A.pdf
+
+Whole programm is splitted into 4 stages 
+1 Data markers
+2 Data extraction
+3 Data analysis
+4 Xml generation
+
+For gui used tkinter
+
+
+- - - - - - - - - - - - - - - - -
+1 Data managinig and structuring
+- - - - - - - - - - - - - - - - -
+Stored in core/data_processing. 
+There a series of unfortunate titles as data_processing or data_processing.data_management because they don't point exact purpose of classes. I should change it in future, but so far, fate has decided.
+
+-------------------------------------
+1.1 Storing instruction and its forms
+
+Each instruction form has aspects. Aspects are:
+1 Mnemonic ('name' in xml)
+2 Version (version of avr architecture)
+3 Description ('summary' in xml)
+4 Operands
+5 SREG (status registers)
+6 Opcode
+
+I extracted 1, 3, 4 from tables and 1, 2, 5, 6 from chapters (datasheet, chapter 5). Then merged and now 3, 4 is stored as 'table data', 5, 6 as 'chapter data'. Sometimes you can see subchapter instead of chapter because at the vety beginning I wanted name it 'subchapter'. In some cases division into the chapter and subchapter has sence (in data extraction stage). Even thought 2 (version) is extracted from chapter, the version is chapter data independent, and it was just convenient to extract versions from chapter.
+There are class data_namagement.InstructionForm for storing mneminc, version, table_data and chapter_data. It inherits data_management.StrictDictionary witch is the same as default dictionary, but with fixed keys. It is helpful for me so python points me if there are wrong key or key missing.
+
+Instruction is stored as dictionary str -> list[InstructionForm], where str is instruction name.
+
+-----------
+1.2 Context
+
+data_management.Context stores all data that could be used by stages. It stores instruction data markers, instruction data extracted from datasheet, parsed instruction data (instruction forms), even datasheet file name.
+Context has dictionary and works in the key-value concept, but with one feature: keys are data type. So it could store only one copy of particular data. It was handful for me make it instead of dictionary with str names or something else. As I was working with it, I realized it needed to be changed for Aliases. 
+Some unique data (e.g ExtractedInstructionData, ProcessedInstructionData) could be just Alias, but they would have been the same key of type Alias if I I have left as it was. I should make context distinguish different aliases as keys
+
+------------------
+1.3 Ambiguous data
+
+In ambiguous_data.py you could see several default data types analogs (dict, list, forzenset) but with 'Ambiguous' prefix.
+During the data extraction I realized, that it is useful to determine if list or set has more than one object. It was too often so I decided to create the same classes but with is_ambiguous() method and special output: it prints 'Ambiguous' if data is ambiguous. Dictionary is ambiguous if it has ambiguous value or key
+Whole extracted instruction data is AmbiguousDict[AmbiguousFrozen, AmbiguousList]
+
+------------------------
+1.4 Other random classes
+
+Obserber and Subject:
+I used observer pattern for stages, so I just shoved these classes here :)
+
+DataManager:
+Is used by stages (2). It has request() method. Implementation depends on particular class. The biggest example of realization is placed in core/stages/data_analysis/instruction_forms_manager.py
+
+
+- - - - -
+2 Stages
+- - - - -
+All related to stages is stored in core/stages
+
+--------------------------------
+2.1 The main tasks of the stages
+
+1 Data markers stage customizes the instruciton data markers that determine what is usefull data in datasheet. It isn't used at this time because data extraction stage isn't completed. Details are written in '2 Data extraction'. If you want to see what is created for data markers, replace 'app.after(100, stage2.execute)' with 'app.after(100, stage1.execute)'. It is just demonstration of field selector. It can catch pdf objects like images, tables and words and access to all their attributes.
+2 Data extraction stage uses data markers created in first stage to extract instruction data from datasheet. Even though it's one of the most important things into programm, I unfortunately didn't finish it properly. It works, but doesn't have modular structure and doesn't use markers. I should remake it.
+A
+3 Data analysis convert extracted data for direct xml compilation. This data is dictionary whith instruction names as keys and lists of instruction forms as values. Datasheet data isn't always ambiguous, which can be resolved by two ways: manually by selecting needed options or programmatically by adding code to handle specific cases. I preferred the first option.
+4 Xml generation speaks for itself. It uses processed data from data analysis stage.
+
+------------------------
+2.2 Stage concept itself
+Basic stage classes strored in stage.py
+
+Summary:
+Whole programm is splitted into Stages. Each stage has next stage (it could be None), execute() and try_complete() methods. It require Context (1.2) for initializarion. 
+At the very beginning we execute() the first stage. By default stage tryes to be completed by try_complete() after the <<Complete>> event. If it completed, stage executes the next stage. Otherwise it continue it's work.
+Also Stage has permanently_completed variant. It is needed for BidirectionStage, witch could go back. If Stage is permanently completed, it can't be executed()
+
+More details:
+In additional to the Stage class the are StageTask, StageGUI and BidirectionalStage
+StageTask is used by try_complete() to check if completion conditions are satisfied by method is_completed(). It also requires Context
+StageGUI is used if we need gui :). It hase enble() and disable methods. Requires DataManager (1.4) Stage execute() calls StageGUIStageGUI generates <<Complete>> event. After generating this event, Stage executes try_complete().
+In fact, StageTask and StageGUI are optional. See xml_generation.py
+
+BidirectionalStage is the same as default stage, except that it has previous_stage. It inherits Stage
+
+-------------------------
+2.3 Stages implementation
+
+1 Data markers has one stage SettingHeader. It determines height of pdf header. It is just demonstration. For gui it uses PDFRegionSelector
+2 Data extraction has one big process of data extraction, no more. As I mentioned in 2.1, it isn't completed properly. It has gui with 'waiting' caption
+3 Data analysis has InstructionBuilding class. It is BidirectionalStage. There are created InstructionBuilding instance for each instruction. It automatically generates one singular instruction form and completes itself, if instruction data isn't ambiguous (not is_ambiguous(), see AmbiguousData in 1.3), otherwise opens it's GUI. In GUI user creates forms and selects correct form aspects. 
+I should add saves for selected options in future.
+In app.py you can see InstructionBuildingInitializing. It is needed for creating InstructionBuilding instances
+4 Xml generation has XMLGeneration which uses InstructionXMLBuilder. It is realy simple stage even without GUI and Task (but task should be added to check if all is good, I was too lazy)

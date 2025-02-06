@@ -1,8 +1,8 @@
 #intermal
-from ..stage import Stage, StageGUI, StageTask 
 from .data_extraction_manager import DataExtractionManager
 
 #external
+from core.stages import Stage, StageGUI, StageTask 
 from core.data_processing.data_management import DataManager, Context
 from core.gui import NextButton
 import tkinter as tk

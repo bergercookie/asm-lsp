@@ -107,19 +107,18 @@ class Observer(ABC):
 
 class Subject:
     def __init__(self):
-        self._observers: list[weakref.ReferenceType[Observer]] = []
+        self._observers_ref: list[weakref.ReferenceType[Observer]] = []
 
     def notify(self, message=None):
-        for observer in self._observers:
+        for observer in self._observers_ref:
             observer().update(message)
 
     def attach(self, observer: Observer):
-        if all(observer != wr() for wr in self._observers):
-            self._observers.append(weakref.ref(observer))
+        if all(observer != wr() for wr in self._observers_ref):
+            self._observers_ref.append(weakref.ref(observer))
 
     def detach(self, observer: Observer):
-        if observer in self._observers:
-            self._observers.remove(observer)
+        self._observers_ref[:] = [wr for wr in self._observers_ref if wr() is not observer]
 
 
 #Stores objects of any type. Type itself is access key to the object
@@ -131,7 +130,7 @@ class Context:
     def record(self, data): 
         data_type = type(data)
         if data_type in self._data_dict.keys():
-            logger.info(f'Data overwriting: {self._data_dict[data_type]} -> {data}')
+            logger.debug(f'Data overwriting: {self._data_dict[data_type]} -> {data}')
         self._data_dict[data_type] = data
 
     #returns value with data_type type. e.g value = require(data_type), type(value) == data_type
