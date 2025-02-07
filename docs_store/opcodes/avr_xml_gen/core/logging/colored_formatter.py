@@ -1,11 +1,11 @@
 import logging
 from colorama import Fore, init
 
-#I wanted simple colored output for logs
-#I found out answers in stack owerflow, but didn't like them
-#Their Formatter modifications seemed crooked to me. 
-#I saw library coloredlogs, but didn't realise how to carefully use it
-#So I opened logging module source code and slightly overloaded format function
+# I wanted simple colored output for logs
+# I found out answers in stack owerflow, but didn't like them
+# Their Formatter modifications seemed crooked to me.
+# I saw library coloredlogs, but didn't realise how to carefully use it
+# So I opened logging module source code and slightly overloaded format function
 class ColoredFormatter(logging.Formatter):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -7,27 +7,27 @@ logger = logging.getLogger(__name__)
 class ScrollListbox(tk.Listbox):
     def __init__(self, master=None, cnf={}, **kwargs):
         # super().__init__(master, cnf, **kwargs)
-        #make some trick
+        # make some trick
         self._frame = tk.Frame(master)
         super().__init__(self._frame, cnf, selectmode=tk.SINGLE, **kwargs)
         super().pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        #setup scrollbar
+        # setup scrollbar
         self._vscrollbar = tk.Scrollbar(self._frame, orient=tk.VERTICAL, command=self.yview)
         self._vscrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         super().config(yscrollcommand=self._vscrollbar.set)
-        #call custom events
+        # call custom events
         self.bind('<KeyPress-j>', lambda event: self.event_generate('<<Down>>'), add='+')
         self.bind('<Down>', lambda event: self.event_generate('<<Down>>'), add='+')
         self.bind('<KeyPress-k>', lambda event: self.event_generate('<<Up>>'), add='+')
         self.bind('<Up>', lambda event: self.event_generate('<<Up>>'), add='+')
-        #init default events
+        # init default events
         self.bind('<<ListboxSelect>>', self.__on_item_click, add='+')
         self.bind('<<Down>>', self.__select_next, add='+')
         self.bind('<<Up>>', self.__select_previous, add='+')
-        #init ind
+        # init ind
         self.current_ind = None
 
-    #for correct work
+    # for correct work
     def pack_configure(self, cnf={}, **kwargs):
         self._frame.pack_configure(cnf, **kwargs)
 
@@ -43,7 +43,7 @@ class ScrollListbox(tk.Listbox):
 
 
     info = pack_info
-    #magic is complete
+    # magic is complete
 
     def __on_item_click(self, event):
         selection = event.widget.curselection()
@@ -53,7 +53,7 @@ class ScrollListbox(tk.Listbox):
 
     def __select_next(self, event):
         if self.current_ind is None:
-            self.current_ind = 0 
+            self.current_ind = 0
         else:
             self.current_ind = (self.current_ind + 1) % self.size()
         self.select_line(self.current_ind)
@@ -77,7 +77,7 @@ class ScrollListbox(tk.Listbox):
         if not self.current_ind is None:
             self.set_line_highlight(self.current_ind, enable)
 
-    def set_line_highlight(self, line_ind: int, enable: bool): 
+    def set_line_highlight(self, line_ind: int, enable: bool):
         if (line_ind < 0 or
             line_ind >= self.size()):
             return
@@ -151,7 +151,7 @@ class OptionSelector(tk.Frame):
             self._scroll_listbox.set_line_highlight(self._selected_line_ind, True)
 
     def __on_focus_out(self, event=None):
-        self._scroll_listbox.current_ind = self._selected_line_ind 
+        self._scroll_listbox.current_ind = self._selected_line_ind
 
 
 class InfoDisplay(tk.Frame):
@@ -186,22 +186,22 @@ class InfoDisplay(tk.Frame):
 
 #Button for changing stage
 class NextButton(tk.Button):
-    #epoint - event point
-    #Button generates event <<Complete>> to point Stage to change Stage
-    #But Stage listens StageGUI, not concrete button. Stage couldn't hear <<Complete>> event
-    #if it is generated only inside button, due tkinter events logic. 
-    #So Event needs to be gereated inside StageGUI. And there are two options:
-    #1 StageGUI listens buttons <<Complete>> and generates <<Complete>> itself
-    #2 Button generate <<Complete>> directly inside Stage (epoint is needed)
-    #I choose 2 because I liked it more.
+    # `epoint` - event point
+    # Button generates event `<<Complete>>` to point `Stage` to change `Stage`
+    # But `Stage` listens to `StageGUI`, not concrete button. Stage couldn't hear `<<Complete>>` event
+    # if it is generated only inside button, due `tkinter` events logic.
+    # So Event needs to be generated inside `StageGUI`. And there are two options:
+    # 1. `StageGUI` listens to buttons `<<Complete>>` and generates `<<Complete>>` itself
+    # 2. Button generates `<<Complete>>` directly inside `Stage` (`epoint` is needed)
+    # I chose 2 because I liked it more.
     def __init__(self, master=None, epoint=None, **kwargs):
         self._epoint = self if epoint is None else epoint
         super().__init__(master, text='next', command=lambda: self._epoint.event_generate('<<Complete>>'), **kwargs)
 
 
-#The same as NextButton, but with additional 'direction': back (<<GoBack>> event)
-#It might seem weird to get event <<Complete>> for the NextButton,
-#but <<GoBack>> for the PreviousButton. But fate decided so...
+# The same as `NextButton`, but with additional 'direction': back (`<<GoBack>>` event)
+# It might seem weird to get event `<<Complete>>` for the `NextButton`,
+# but `<<GoBack>>` for the `PreviousButton`. But fate decided so...
 class BackNextButtons(tk.Frame):
     def __init__(self, master=None, epoint=None, **kwargs):
         super().__init__(master, **kwargs)

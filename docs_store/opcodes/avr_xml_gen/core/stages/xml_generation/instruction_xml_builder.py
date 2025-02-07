@@ -6,7 +6,7 @@ from core.data_processing import InstructionForm
 
 
 class InstructionXMLBuilder:
-    status_registers = ['I', 'T', 'H', 'S', 'V', 'N', 'Z', 'C'] 
+    status_registers = ['I', 'T', 'H', 'S', 'V', 'N', 'Z', 'C']
 
     @classmethod
     def create_instruction_xml(cls, instruction_name: str, instruction_forms: list[InstructionForm]) -> ET.Element:
@@ -29,14 +29,14 @@ class InstructionXMLBuilder:
 
             instruction_version.append(instruction_form_content)
 
-        #sorting mnemonics
+        # sorting mnemonics
         for version in root:
             sorted_instruction_forms = sorted(version, key=lambda instruction_form: str(instruction_form.get('mnemonic')))
             for elem in version.findall('*'):
                 version.remove(elem)
             version.extend(sorted_instruction_forms)
 
-        #sorting versions
+        # sorting versions
         sorted_versions = sorted(root, key=lambda version: str(version.get('value')))
         for version in root.findall('*'):
             root.remove(version)
@@ -54,28 +54,28 @@ class InstructionXMLBuilder:
         version = form['version']
         if version:
             root.set('value', version)
-        
+
         form_et = ET.SubElement(root, 'InstructionForm')
         mnemonic = form['mnemonic']
         if mnemonic:
             form_et.set('mnemonic', mnemonic)
-        
+
         table_sections = form['table_data']
         if table_sections:
             if table_sections['Description']:
                 form_et.set('summary', str(table_sections['Description']))
-    
+
             if table_sections['Operands']:
                 for operand in table_sections['Operands']:
                     operand_et = ET.SubElement(form_et, 'Operand')
                     operand_et.set('type', operand)
-    
+
             if table_sections['Clocks']:
                 clocks_et = ET.SubElement(form_et, 'Clocks')
                 for key, value in table_sections['Clocks'].items():
                     clock_et = ET.SubElement(clocks_et, str(key))
                     clock_et.set('value', value)
-    
+
         chapter_sections = form['chapter_data']
         if chapter_sections:
             if chapter_sections['SREG']:
@@ -150,4 +150,3 @@ class InstructionXMLBuilder:
         instruction_tree = ET.ElementTree(instruction)
         instruction_str = cls.format_et_to_str(instruction_tree)
         return instruction_str
-

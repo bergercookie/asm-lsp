@@ -1,13 +1,13 @@
-#intermal
+# internal
 from .data_extraction_manager import DataExtractionManager
 
-#external
-from core.stages import Stage, StageGUI, StageTask 
+# external
+from core.stages import Stage, StageGUI, StageTask
 from core.data_processing.data_management import DataManager, Context
 from core.gui import NextButton
 import tkinter as tk
 
-#It has no sence, but I am tired to make it seriously
+# It has no sence, but I am tired to make it seriously
 class DataExtractionTask(StageTask):
     def is_completed(self) -> bool:
         return True
@@ -39,7 +39,6 @@ class DataExtraction(Stage):
     def execute(self):
         super().execute()
         self._data_manager.request({'type': 'start'})
-        #This error is described in data_markers.py Settingheader.execute()
+        # This error is described in data_markers.py Settingheader.execute()
         self._gui.set_completed()
         self.permanently_completed = True
-

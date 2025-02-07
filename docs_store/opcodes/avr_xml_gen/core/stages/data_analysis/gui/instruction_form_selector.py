@@ -1,7 +1,7 @@
-#internal
+# internal
 from ..instruction_building_manager import InstructionBuildingManager
 
-#external
+# external
 from core.data_processing.data_management import InstructionForm, Observer
 from core.gui.common_gui import OptionSelector, InfoDisplay
 from core.stages.xml_generation import InstructionXMLBuilder
@@ -44,10 +44,10 @@ class InstructionFormSelector(tk.Frame, Observer):
 
 
     def __setup_bindings(self) -> None:
-        #i don't know how to make it properly without accessing to the internal object of aspect_selector
+        # i don't know how to make it properly without accessing to the internal object of aspect_selector
         self._form_selector._scroll_listbox.bind('<Return>', self._select_form, add='+')
         self._form_selector._scroll_listbox.bind('<Double-Button-1>', self._select_form, add='+')
-        self._form_selector._scroll_listbox.bind('<<Down>>', self._show_preliminar_info, add='+') 
+        self._form_selector._scroll_listbox.bind('<<Down>>', self._show_preliminar_info, add='+')
         self._form_selector._scroll_listbox.bind('<<Up>>', self._show_preliminar_info, add='+')
         self._form_selector._scroll_listbox.bind('<<ListboxSelect>>', self._show_preliminar_info, add='+')
         self._add_button.config(command=self.add_form)

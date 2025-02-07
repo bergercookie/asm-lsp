@@ -111,7 +111,7 @@ class InstructionFormsManager(DataManager):
     # 2. 'target': 'form'
     # [3]. 'form_ind': any integer within forms list lentgh if type is record, get, delete
     # [4]. 'aspects' key is needed for record, add and optional for get
-    # 4.1. type is record: 
+    # 4.1. type is record:
     #      'aspects': {aspect_name: aspect_data, ...}
     #      aspects item specifies which aspects of the form to change.
     # [4.2]. type is get:
@@ -155,7 +155,7 @@ class InstructionFormsManager(DataManager):
     def is_request_valid(self, request: dict, log=True) -> bool:
         if not self._is_request_key_valided(request, 'type', log):
             return False
-        if not self._is_request_key_valided(request, 'target', log): 
+        if not self._is_request_key_valided(request, 'target', log):
             return False
         match request['type']:
             case 'record':
@@ -308,4 +308,3 @@ class InstructionFormsManager(DataManager):
 
     def is_instruction_ambiguous(self) -> bool:
         return self._instruction_parser.is_instruction_ambiguous()
-

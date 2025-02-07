@@ -1,8 +1,8 @@
-#internal
+# internal
 from .instruction_xml_builder import InstructionXMLBuilder
 
-#external
-from core.stages import Stage 
+# external
+from core.stages import Stage
 from core.data_processing.data_management import Context, ProcessedInstructionsData
 import xml.etree.ElementTree as ET
 from bs4 import BeautifulSoup

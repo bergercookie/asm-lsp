@@ -1,6 +1,5 @@
-#this code is a complete MESS
-#it needs to be redone
-
+# this code is a complete MESS
+# it needs to be redone
 
 from core.data_processing import AmbiguousList, AmbiguousDict, AmbiguousFrozen, ExtractedInstructionsData, Context, SourceInfo
 
@@ -23,14 +22,14 @@ class DataExtractionManager(DataManager):
     def __init__(self, context: Context) -> None:
         self._context = context
 
-    #Plug for interface implementation
-    #Not all managers needs data for request, so ambiguity of the class should be eliminated
+    # Plug for interface implementation
+    # Not all managers needs data for request, so ambiguity of the class should be eliminated
     def is_request_valid(self, request: dict) -> bool:
         return True
 
     def request(self, request) -> Any:
         if not self.is_request_valid(request):
-            return 
+            return
         match request['type']:
             case 'start':
                 self.__start()
@@ -55,14 +54,13 @@ class DataExtractionManager(DataManager):
         with open('intermediate_data/avr_instructions_data.pkl', 'wb') as data_file:
             pickle.dump(final_data, data_file)
 
-
-#MESS
-#Unsafe to read
+# MESS
+# Unsafe to read
 
 init(autoreset=True)
 
 PartialInstructionsData: TypeAlias = AmbiguousDict[AmbiguousFrozen[str], AmbiguousList]
-RawInstructionsData: TypeAlias = dict[AmbiguousFrozen[str], AmbiguousDict] #naming dead
+RawInstructionsData: TypeAlias = dict[AmbiguousFrozen[str], AmbiguousDict] # naming dead
 ProcessedInstructionsData: TypeAlias = OrderedDict[str, AmbiguousDict]
 TextTable: TypeAlias = list[list[str]]
 
@@ -73,7 +71,7 @@ def extract_needed_tables(pdf_path: str, first_page: int, last_page: int) -> lis
     needed_headers = ['Mnemonic',
                       'Operands',
                       'Description',
-                      '#Clocks'] #there are several values
+                      '# Clocks'] #there are several values
     tables = []
     with pdfplumber.open(pdf_path) as pdf:
         for page in pdf.pages[first_page - 1:last_page]:
@@ -81,14 +79,14 @@ def extract_needed_tables(pdf_path: str, first_page: int, last_page: int) -> lis
             for table in page.extract_tables():
                 headers = table[0]
 
-                 #specific of this datasheet
+                 # specific of this datasheet
                 if headers[0] is not None and re.search('continued', headers[0].lower()):
                     del table[0]
                     headers = table[0]
 
                 fits = all(
-                    #we use re.search because of #Clocks have several values
-                    any(re.search(needed_header, header) for header in headers if header is not None) 
+                    # we use re.search because of #Clocks have several values
+                    any(re.search(needed_header, header) for header in headers if header is not None)
                     for needed_header in needed_headers
                 )
                 if (fits):
@@ -106,7 +104,7 @@ def extract_table_data(table: TextTable) -> PartialInstructionsData:
         mnemonic_ind = headers.index('Mnemonic')
         operands_ind = headers.index('Operands')
         description_ind = headers.index('Description')
-        clocks_inds = [i for i in range(len(headers)) if "#Clocks" in headers[i]]
+        clocks_inds = [i for i in range(len(headers)) if "# Clocks" in headers[i]]
 
     except ValueError as e:
         raise ValueError(e)
@@ -133,7 +131,7 @@ def extract_table_data(table: TextTable) -> PartialInstructionsData:
 
         mnemonic = AmbiguousFrozen([row[mnemonic_ind]])
 
-        #checking for errors
+        # checking for errors
         mnemonic_data_error = check_table_row_data(mnemonic_data)
         if mnemonic_data_error:
             print(Fore.RED + f'{'-'*8}{mnemonic}{'-'*8}')
@@ -147,7 +145,6 @@ def extract_table_data(table: TextTable) -> PartialInstructionsData:
             table_data[mnemonic].append(mnemonic_data)
     
     return table_data
-
 
 def check_table_row_data(table_row_data: dict) -> list[str]:
     error_message: list[str] = []
@@ -180,8 +177,7 @@ def extract_tables_data(tables: list[TextTable]) -> PartialInstructionsData :
     print(Fore.BLUE + f'[PROCESS]: Completes tables data extracting')
     return data_map
 
-
-def get_subchapters_pages(pdf_path: str, chapter_number: int, first_page: int, last_page: int, first_subchapter: int = 1) -> list[list[Page]]: #list of subchapters pages
+def get_subchapters_pages(pdf_path: str, chapter_number: int, first_page: int, last_page: int, first_subchapter: int = 1) -> list[list[Page]]: # list of subchapters pages
     subchapters_pages: list[list[Page]] = []
 
     print(Fore.BLUE + f'[PROCESS]: Starting subchapters pages extracting from pdf')
@@ -194,7 +190,7 @@ def get_subchapters_pages(pdf_path: str, chapter_number: int, first_page: int, l
         subchapter_regex = fr'{chapter_number}\.{subchapter_number}'
         next_subchapter_beginning = None
 
-        #find beginning of first subchapter
+        # find beginning of first subchapter
         while not next_subchapter_beginning and page_ind < last_page:
 
             for word in page.extract_words():
@@ -208,7 +204,7 @@ def get_subchapters_pages(pdf_path: str, chapter_number: int, first_page: int, l
                 page_ind += 1
                 page = pdf.pages[page_ind]
 
-        #creating subchapterS_list
+        # creating subchapterS_list
         while page_ind < last_page:
 
             if not next_subchapter_beginning:
@@ -216,12 +212,12 @@ def get_subchapters_pages(pdf_path: str, chapter_number: int, first_page: int, l
 
             page = pdf.pages[page_ind]
             page = page.crop((0, next_subchapter_beginning, page.width, page.height))
-            subchapter_number += 1 
-            subchapter_regex = fr'{chapter_number}\.{subchapter_number}' 
+            subchapter_number += 1
+            subchapter_regex = fr'{chapter_number}\.{subchapter_number}'
             subchapter_pages = []
             next_subchapter_beginning = None
 
-            #creating subchapter_pages
+            # creating subchapter_pages
             while not next_subchapter_beginning and page_ind < last_page:
                 for word in page.extract_words():
 
@@ -251,7 +247,7 @@ def extract_chapter_data(pdf_path: str, chapter_number: int, first_page: int, la
     chapter_data: PartialInstructionsData = AmbiguousDict()
     subchapters_pages: list[list[Page]] = get_subchapters_pages(pdf_path, chapter_number, first_page, last_page, first_subchapter)
     roman_numbers_regex = r'\(([iv]+)\)(-\(([iv]+)\))?'
-    status_registers = ['I', 'T', 'H', 'S', 'V', 'N', 'Z', 'C'] 
+    status_registers = ['I', 'T', 'H', 'S', 'V', 'N', 'Z', 'C']
 
     print(Fore.BLUE + f'[PROCESS]: Starting chapter data extracting')
 
@@ -261,7 +257,7 @@ def extract_chapter_data(pdf_path: str, chapter_number: int, first_page: int, la
             'Opcode': AmbiguousList(),
             'SREG': AmbiguousList(),
         }
-        interrupted_flag = False #special for 67 page. Why didn't you make ....continued???
+        interrupted_flag = False # special for 67 page. Why didn't you make ....continued???
 
         for page in subchapter_pages:
             for table in page.extract_tables():
@@ -270,7 +266,7 @@ def extract_chapter_data(pdf_path: str, chapter_number: int, first_page: int, la
                     continue
 
                 headers = table[0]
-                if headers[0] is not None and re.search('continued', headers[0].lower()): #finding continuation of table
+                if headers[0] is not None and re.search('continued', headers[0].lower()): # finding continuation of table
                     del table[0]
                     headers = table[0]
 
@@ -289,10 +285,10 @@ def extract_chapter_data(pdf_path: str, chapter_number: int, first_page: int, la
                         for i in range(first_roman - 1, second_roman):
                             raw_data['Opcode'].append(row[1:])
 
-                elif (len(headers) == 4 
+                elif (len(headers) == 4
                       and all(len(header) == 4 for header in headers)):
 
-                    #if 32-bit opcode
+                    # if 32-bit opcode
                     if(len(table) == 2):
                         headers.extend(table[1])
                     raw_data['Opcode'].append(headers)
@@ -308,7 +304,7 @@ def extract_chapter_data(pdf_path: str, chapter_number: int, first_page: int, la
                     else:
                         interrupted_flag = True
 
-        #parse subchapter mnemonic
+        # parse subchapter mnemonic
         title = subchapter_pages[0].extract_text().split('\n')[0]
         match_title = re.match(r'^\s*\d+\.\d+\s+([A-Z]+)\s*(\(([^()]+)\))?.*', title)
 
@@ -321,25 +317,25 @@ def extract_chapter_data(pdf_path: str, chapter_number: int, first_page: int, la
             main_mnemonic.extend(other_mnemonics)
         mnemonic = AmbiguousFrozen[str](main_mnemonic)
         
-        #check raw data
+        # check raw data
         subchapter_error = check_subchapter_data(raw_data)
-        if subchapter_error: 
+        if subchapter_error:
             print(Fore.RED + f'{'-'*8}{mnemonic}{'-'*8}')
             print(raw_data)
             for line in subchapter_error:
                 print(line)
 
-            if not raw_data['Opcode']: #it should be redone to noral function with user input
-                raw_data['Opcode'] = AmbiguousList(['?']) 
+            if not raw_data['Opcode']: # it should be redone to normal function with user input
+                raw_data['Opcode'] = AmbiguousList(['?'])
 
-        #parse subchapter data
+        # parse subchapter data
         if raw_data['SREG'].is_ambiguous():
             raise RuntimeError(f'chapter {chapter_number}, format error in SREG table: {raw_data['SREG']}')
 
         for opcode in raw_data['Opcode']:
             subchapter_data.append({'SREG': raw_data['SREG'], 'Opcode': opcode})
 
-        #adding subchapter data
+        # adding subchapter data
         for chapter_key in chapter_data.keys():
             intersection = chapter_key & mnemonic
             if (intersection and
@@ -379,9 +375,9 @@ def merge_instructions_data(tables_data: PartialInstructionsData, chapter_data: 
         merged_data[mnemonics] = AmbiguousDict()
         merged_data[mnemonics]['Chapter'] = data
 
-    #key is AmbiguousFrozen
+    # key is `AmbiguousFrozen`
     for mnemonics, data in merged_data.items():
-        #table_key is AmbiguousFrozen but has only one element
+        # table_key is `AmbiguousFrozen` but has only one element
         for table_mnemonic, table_data in tables_data.items():
             if table_mnemonic & mnemonics:
                 if 'Table' in data:
@@ -399,12 +395,12 @@ def roman_to_int(roman):
     roman_dict = {
         'i': 1,
         'v': 5,
-        'x': 10, #I assume that it is enough.
+        'x': 10, # I assume that it is enough.
     }
 
     result = 0
 
-    for i in range(len(roman) - 1): #we will add last in the end
+    for i in range(len(roman) - 1): # we will add last in the end
 
         if (roman_dict[roman[i]] >= roman_dict[roman[i + 1]]):
             result += roman_dict[roman[i]]
@@ -472,8 +468,8 @@ def parse_cpu_version(unprocessed_instructions_data: RawInstructionsData):
     return parsed_instructions_data
 
 
-def replace_incorrect_xml_characters(unprocessed_instructions_data: RawInstructionsData): #unused
-    incorrect_xml_chars = ('⇔', #it isn't needed
+def replace_incorrect_xml_characters(unprocessed_instructions_data: RawInstructionsData): # unused
+    incorrect_xml_chars = ('⇔', # it isn't needed
                             )
     for instruction_data in unprocessed_instructions_data.values():
 
@@ -491,10 +487,10 @@ def name_instruction_data(unprocessed_instructions_data: RawInstructionsData) ->
     named_instructions_data: ProcessedInstructionsData = OrderedDict()
 
     for mnemonics in unprocessed_instructions_data.keys():
-        sorted_mnemonics = sorted(list(mnemonics)) 
+        sorted_mnemonics = sorted(list(mnemonics))
         instruction_name = str(sorted_mnemonics[0])
 
-        new_instruction_data = AmbiguousDict() #naming DEAD
+        new_instruction_data = AmbiguousDict() # naming DEAD
         new_instruction_data['Mnemonics'] = mnemonics
         new_instruction_data.update(unprocessed_instructions_data[mnemonics])
 
@@ -510,5 +506,3 @@ def process_instructions_data(unprocessed_instructions_data: RawInstructionsData
 
     processed_instruction_data = name_instruction_data(unprocessed_instructions_data)
     return processed_instruction_data
-
-

@@ -93,9 +93,9 @@ class Stage(ABC):
                 self.set_next(self._next_stage.get_next())
 
 
-#there is two direcitons: forward and backward
-#forward is 'complete', backward is 'go_back'
-#naming may seem weird, I commented it in core.gui.common_ui.BackNextButton
+# there is two direcitons: forward and backward
+# forward is 'complete', backward is 'go_back'
+# naming may seem weird, I commented it in `core.gui.common_ui.BackNextButton`
 class BidirectionalStage(Stage):
     def __init__(self, context: Context, master=None, cnf={}, **kwargs) -> None:
         super().__init__(context, master, cnf, **kwargs)
@@ -119,8 +119,8 @@ class BidirectionalStage(Stage):
     def get_previous(self) -> 'BidirectionalStage | Stage | None':
         return self._previous_stage
 
-    #In fact I could just make one function instead of two (try_go_back, _go_back)
-    #But I created two functions for the sake of symmetry with try_complete, _complete
+    # In fact I could just make one function instead of two (try_go_back, _go_back)
+    # But I created two functions for the sake of symmetry with try_complete, _complete
     def try_go_back(self, event=None) -> None:
         self._go_back(event)
 

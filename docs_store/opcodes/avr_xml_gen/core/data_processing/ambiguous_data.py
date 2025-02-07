@@ -90,4 +90,3 @@ class AmbiguousFrozen[T](frozenset[T], AmbiguousData):
 
     def __sub__(self, other) -> 'AmbiguousFrozen[T]':
         return AmbiguousFrozen(super().__sub__(other))
-

@@ -1,9 +1,9 @@
-#internal
+# internal
 from .gui.instruction_form_selector import InstructionFormSelector
 from .gui.form_aspects_selector import FormAspectsSelector
 from .instruction_building_manager import InstructionBuildingManager
 
-#external
+# external
 from core.stages import BidirectionalStage, StageGUI, StageTask
 from core.gui.common_gui import BackNextButtons
 from core.data_processing.data_management import Context, ExtractedInstructionsData, InstructionForm, ProcessedInstructionsData
@@ -51,7 +51,7 @@ class InstructionBuilding(BidirectionalStage):
     def __init__(self, instruction_name: str, context: Context, master=None, cnf={}, **kwargs) -> None:
         super().__init__(context, cnf, **kwargs)
         self._context[ProcessedInstructionsData][instruction_name] = []
-        storage_location: list[InstructionForm] = self._context[ProcessedInstructionsData][instruction_name] 
+        storage_location: list[InstructionForm] = self._context[ProcessedInstructionsData][instruction_name]
         instruction_data: AmbiguousDict = self._context[ExtractedInstructionsData][instruction_name]
         self._instruction_manager = InstructionBuildingManager(storage_location, instruction_name, instruction_data)
         self.set_gui(InstructionBuildingGUI(self._instruction_manager, master, cnf, **kwargs))

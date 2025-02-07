@@ -84,3 +84,4 @@ def test_request_get():
     form = manager.request({'type': 'get', 'target': 'form', 'form_ind': 0})
     expected_form = manager._forms[0]
     assert form == expected_form
+

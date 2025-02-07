@@ -5,12 +5,12 @@ import pdfplumber
 from typing import Iterable
 
 
-#The name speaks for itself.
-#Selected items stores in _selected_elements
-#Pdf page should be centered, but I frogot make it
+# The name speaks for itself.
+# Selected items stores in _selected_elements
+# Pdf page should be centered, but I forgot to make it
 class PDFRegionSelector(tk.Frame):
-    #There is added mt own key: pdf_selection
-    #It determines if pdf choosing button will be created
+    # There is added my own key: `pdf_selection`
+    # It determines if pdf choosing button will be created
     def __init__(self, master=None, cnf={}, pdf_selection=True, **kwargs):
         super().__init__(master, cnf, **kwargs)
 
@@ -24,7 +24,7 @@ class PDFRegionSelector(tk.Frame):
         self._selected_elements = {e: [] for e in elements}
 
         self._current_page_ind = 0
-        # pdf page heigh / image height
+        # pdf page height / image height
         self._scale_factor = 1
         self._highlight_color = 'blue'
 
@@ -44,7 +44,7 @@ class PDFRegionSelector(tk.Frame):
             self._load_button.pack(button_pack)
         self._prev_page_button = tk.Button(self._button_frame, text='Previous Page')
         self._prev_page_button.pack(button_pack)
-        self._next_page_button = tk.Button(self._button_frame, text='Next Page') 
+        self._next_page_button = tk.Button(self._button_frame, text='Next Page')
         self._next_page_button.pack(button_pack)
 
 
@@ -175,4 +175,3 @@ class PDFRegionSelector(tk.Frame):
 
     def get_selected_elements(self):
         return self._selected_elements
-

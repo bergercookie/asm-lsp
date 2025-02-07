@@ -6,10 +6,10 @@ import weakref
 
 logger=logging.getLogger(__name__)
 
-#Dictionaty wich could have only particular keys
-#This keys are placed in valid_keys
-#Class guarantees setting all keys from valid_keys even if they weren't passed in __init__
-#Also it has unique id. It is used for core/stages/data_analysis/instruction_building_manager
+# Dictionary which could have only particular keys
+# These keys are placed in `valid_keys`
+# Class guarantees setting all keys from valid_keys even if they weren't passed in `__init__`
+# Also it has unique id. It is used for `core/stages/data_analysis/instruction_building_manager`
 class StrictDictionary(dict):
     valid_keys = ()
 
@@ -46,12 +46,10 @@ class StrictDictionary(dict):
 
 
 class SourceInfo(StrictDictionary):
-    valid_keys = ('pdf_path',
-                  )
+    valid_keys = ('pdf_path',)
 
 class InstructionDataMarkers(StrictDictionary):
-    valid_keys = ('header_height',
-                  )
+    valid_keys = ('header_height',)
 
 class InstructionForm(StrictDictionary):
     valid_keys = ('mnemonic',
@@ -68,22 +66,22 @@ class ProcessedInstructionsData(OrderedDict[str, list[InstructionForm]]):
 
 
 class DataManager(ABC):
-    #Request is dictionary
-    #By default 'type':... is mandaotry item of request
-    #Valid values for 'type' are in valid_request_keys
+    # Request is dictionary
+    # By default 'type':... is mandaotry item of request
+    # Valid values for 'type' are in valid_request_keys
     valid_request_keys: dict = {'type': ()}
 
-    #log parameter determines whether to log or not to log
+    # log parameter determines whether to log or not to log
     def _is_key_in_request(self, request: dict, request_key: str, log=True) -> bool:
         if request_key not in request.keys():
             if log: logger.error(f'Invalid request {request}; expected key {request_key}')
             return False
         return True
 
-    #it is named with 'valided' word instead of 'valid' due to the problems wit aspects key in InstructionFormsManager
-    #i should change logic someday...
+    # it is named with 'valided' word instead of 'valid' due to the problems wit aspects key in InstructionFormsManager
+    # i should change logic someday...
     def _is_request_key_valided(self, request: dict, request_key: str, log=True) -> bool:
-        if not self._is_key_in_request(request, request_key, log): 
+        if not self._is_key_in_request(request, request_key, log):
             return False
         if request[request_key] not in self.valid_request_keys[request_key]:
             if log: logger.error(f'Invalid request {request}; {request_key}: {request[request_key]} is invalid')
@@ -121,19 +119,19 @@ class Subject:
         self._observers_ref[:] = [wr for wr in self._observers_ref if wr() is not observer]
 
 
-#Stores objects of any type. Type itself is access key to the object
-#e.g. require(int) returns variable with type int
+# Stores objects of any type. Type itself is access key to the object
+# e.g. require(int) returns variable with type int
 class Context:
     def __init__(self):
         self._data_dict: dict = {}
 
-    def record(self, data): 
+    def record(self, data):
         data_type = type(data)
         if data_type in self._data_dict.keys():
             logger.debug(f'Data overwriting: {self._data_dict[data_type]} -> {data}')
         self._data_dict[data_type] = data
 
-    #returns value with data_type type. e.g value = require(data_type), type(value) == data_type
+    # returns value with data_type type. e.g `value = require(data_type), type(value) == data_type`
     def __getitem__(self, data_type: type) -> Any:
         if not data_type in self._data_dict.keys():
             logger.debug(f'Data acess failed: {data_type}')

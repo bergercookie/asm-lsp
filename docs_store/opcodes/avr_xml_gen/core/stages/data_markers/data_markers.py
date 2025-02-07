@@ -1,18 +1,18 @@
-#external
+# external
 from core.stages import BidirectionalStage, StageGUI, StageTask
 from core.data_processing import InstructionDataMarkers, Context, DataManager, SourceInfo
 from core.gui import BackNextButtons, PDFRegionSelector
 import tkinter as tk
 
 
-#There should be several Stages related to the data markers with common DataManagaer
-#But in reality I didn't use data markers
-#I decided to create example of using Stage (only one: Settingheader)
+# There should be several Stages related to the data markers with common DataManagaer
+# But in reality I didn't use data markers
+# I decided to create example of using `Stage` (only one: `Settingheader`)
 
 class DataMarkersManager(DataManager):
-    #request is structured like {'type': set_height, 'elements': {...}}
-    #could look like overkill, but check InstructionFromsManager in core/stages/data_analysis
-    #this class is just a plug for demostratoin
+    # request is structured like {'type': set_height, 'elements': {...}}
+    # could look like overkill, but check `InstructionFromsManager` in `core/stages/data_analysis`
+    # this class is just a plug for demonstration
     valid_request_keys = {'type': ('set_height', 'get_height')}
     expected_elements = {'word', 'line', 'curve'}
 
@@ -30,7 +30,7 @@ class DataMarkersManager(DataManager):
         return True
 
     def __get_max_height(self, elements: dict) -> int:
-        #there is 0 because I have no idea about using negative height in pdf
+        # there is 0 because I have no idea about using negative height in pdf
         max_height = 0
         for group in elements.values():
             for e in group:
@@ -51,9 +51,9 @@ class DataMarkersManager(DataManager):
 class SettingHeaderTask(StageTask):
     def __init__(self, context: Context) -> None:
         super().__init__(context)
-        #there is IDE error due to the declaraion of get_data
-        #I vould like to point that get_data(data) returns type(data), but syntax f(v) -> g(v): pass incorrect
-        #This nuance will pop in all get_data() calls
+        # there is IDE error due to the declaraion of get_data
+        # I vould like to point that `get_data(data)` returns `type(data)`, but syntax `f(v) -> g(v): pass` incorrect
+        # This nuance will pop in all `get_data()` calls
         self._instruction_data_markers: InstructionDataMarkers = self._context[InstructionDataMarkers]
 
     def is_completed(self) -> bool:
@@ -94,16 +94,15 @@ class SettingHeaderGUI(StageGUI):
 class SettingHeader(BidirectionalStage):
     def __init__(self, context: Context, master=None, cnf={}, **kwargs) -> None:
         super().__init__(context, master, cnf, **kwargs)
-        #The same as in SettingHeaderTask.__init__()
+        # The same as in `SettingHeaderTask.__init__()`
         self._data_manager = DataMarkersManager(self._context[InstructionDataMarkers])
         self.set_gui(SettingHeaderGUI(self._data_manager, master, cnf,**kwargs))
         self.set_task(SettingHeaderTask(self._context))
 
     def execute(self) -> None:
         super().execute()
-        #The same as in SettingHeaderTask __init__()
+        # The same as in `SettingHeaderTask __init__()`
         pdf_path = self._context[SourceInfo]['pdf_path']
-        #I don't know how to fix warnings '_gui has no set_pdf function
-        #It is raised because _gui is declared as StageGUI type in parent class
+        # I don't know how to fix warnings '_gui has no set_pdf function
+        # It is raised because _gui is declared as StageGUI type in parent class
         self._gui.set_pdf(pdf_path)
-
