@@ -1,0 +1,3 @@
+intermediate_data/
+*.log
+__pycache__
