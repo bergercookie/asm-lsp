@@ -1,0 +1,5 @@
+beautifulsoup4==4.13.3
+colorama==0.4.6
+numpy==2.2.2
+pdfplumber==0.11.4
+Pillow==11.1.0
