@@ -7,8 +7,8 @@
 
 Provide hovering, autocompletion, signature help, go to definition, and view
 references for assembly files written in the GAS/NASM or GO assembly flavors. It
-supports assembly files for the x86, x86_64, ARM, RISCV, z80, and 6502 instruction
-sets.
+supports assembly files for the x86, x86_64, ARM, RISCV, z80, AVR, and 6502 instruction
+sets. Supported assemblers include the Gas, Go, Masm, Nasm, ca65, and AVR assemblers.
 
 This tool can serve as reference when reading the assembly output of a program.
 This way you can query what each command exactly does and deliberate about
@@ -63,7 +63,7 @@ created for different sub-directories or files within your project as `project`s
 Source files not contained within any `project` configs will use the default configuration
 if provided.
 
-#### Config Builder (MASTER BRANCH ONLY)
+#### Config Builder
 
 Creating a `.asm-lsp.toml` file manually is fine, but can be error-prone as projects
 grow in complexity. Running `asm-lsp gen-config` will walk you through the creation
