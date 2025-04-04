@@ -142,7 +142,6 @@ dependencies = [
  "lsp-textdocument",
  "lsp-types",
  "mockito",
- "once_cell",
  "quick-xml",
  "regex",
  "reqwest",

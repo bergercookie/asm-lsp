@@ -1,6 +1,6 @@
 use std::{
     collections::{BTreeMap, HashMap, HashSet},
-    fmt::Display,
+    fmt::{Display, Write as _},
     path::PathBuf,
     str::FromStr,
 };
@@ -182,33 +182,33 @@ impl std::fmt::Display for InstructionForm {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut s = String::new();
         if let Some(val) = &self.gas_name {
-            s += &format!("*GAS*: {val} | ");
+            write!(s, "*GAS*: {val} | ")?;
         }
         if let Some(val) = &self.go_name {
-            s += &format!("*GO*: {val} | ");
+            write!(s, "*GO*: {val} | ")?;
         }
         if let Some(val) = &self.z80_form {
-            s += &format!("*Z80*: {val} | ");
+            write!(s, "*Z80*: {val} | ")?;
         }
         if let Some(val) = &self.avr_mneumonic {
             let version_str = self
                 .avr_version
                 .as_ref()
                 .map_or_else(String::new, |version| format!(" ({version})"));
-            s += &format!("*AVR*: {val}{version_str} | ",);
+            write!(s, "*AVR*: {val}{version_str} | ")?;
         }
 
         if let Some(val) = &self.mmx_mode {
-            s += &(format!("*MMX*: {} | ", val.as_ref()));
+            write!(s, "*MMX*: {} | ", val.as_ref())?;
         }
         if let Some(val) = &self.xmm_mode {
-            s += &(format!("*XMM*: {} | ", val.as_ref()));
+            write!(s, "*XMM*: {} | ", val.as_ref())?;
         }
         if let Some(val) = &self.z80_opcode {
             if val.contains(',') {
-                s += &format!("*Opcodes*: {val} | ");
+                write!(s, "*Opcodes*: {val} | ")?;
             } else {
-                s += &format!("*Opcode*: {val} | ");
+                write!(s, "*Opcode*: {val} | ")?;
             }
         }
 
@@ -218,7 +218,7 @@ impl std::fmt::Display for InstructionForm {
 
         // ISA
         if let Some(val) = &self.isa {
-            s += &format!("*ISA*: {} | ", val.as_ref());
+            write!(s, "*ISA*: {} | ", val.as_ref())?;
         }
 
         if !s.is_empty() {
@@ -234,13 +234,13 @@ impl std::fmt::Display for InstructionForm {
                 .map(|op| {
                     let mut s = format!("  + {:<8}", format!("[{}]", op.type_.as_ref()));
                     if let Some(input) = op.input {
-                        s += &format!(" input = {input:<5} ");
+                        write!(s, " input = {input:<5} ").unwrap();
                     }
                     if let Some(output) = op.output {
-                        s += &format!(" output = {output:<5}");
+                        write!(s, " output = {output:<5}").unwrap();
                     }
                     if let Some(extended_size) = op.extended_size {
-                        s += &format!(" extended-size = {extended_size}");
+                        write!(s, " extended-size = {extended_size}").unwrap();
                     }
 
                     s.trim_end().to_owned()
@@ -252,21 +252,21 @@ impl std::fmt::Display for InstructionForm {
         s += &operands_str;
 
         if let Some(ref timing) = self.z80_timing {
-            s += &format!("\n  + {timing}");
+            write!(s, "\n  + {timing}")?;
         }
 
         if let Some(summary) = &self.avr_summary {
-            s += &format!("\n\n{summary}");
+            write!(s, "\n\n{summary}")?;
         }
         if let Some(sreg) = &self.avr_status_register {
-            s += &format!("\n\n{sreg}");
+            write!(s, "\n\n{sreg}")?;
         }
         if let Some(ref timing) = self.avr_timing {
-            s += &format!("\n\n{timing}\n");
+            writeln!(s, "\n\n{timing}")?;
         }
 
         for url in &self.urls {
-            s += &format!("\n  + More info: {url}\n");
+            writeln!(s, "\n  + More info: {url}")?;
         }
 
         write!(f, "{s}")?;
@@ -287,11 +287,11 @@ impl std::fmt::Display for InstructionAlias {
         let mut s = self.title.clone();
 
         if !self.summary.is_empty() {
-            s += &format!("\n {}", self.summary);
+            write!(s, "\n {}", self.summary)?;
         }
 
         for template in &self.asm_templates {
-            s += &format!("\n + `{template}`");
+            write!(s, "\n + `{template}`")?;
         }
 
         write!(f, "{s}")?;
@@ -531,7 +531,7 @@ impl std::fmt::Display for Directive {
         // signature(s)
         let mut sigs = String::new();
         for sig in &self.signatures {
-            sigs += &format!("- {sig}\n");
+            writeln!(sigs, "- {sig}")?;
         }
         v.push(&sigs);
 
@@ -1066,10 +1066,10 @@ impl std::fmt::Display for RegisterBitInfo {
             format!("{:2}: {} - {}", self.bit, self.label, self.description)
         };
         if !self.pae.is_empty() {
-            s += &format!(", PAE: {}", self.pae);
+            write!(s, ", PAE: {}", self.pae)?;
         }
         if !self.long_mode.is_empty() {
-            s += &format!(", Long Mode: {}", self.long_mode);
+            write!(s, " , Long Mode: {}", self.long_mode)?;
         }
 
         write!(f, "{s}")?;
@@ -1277,6 +1277,7 @@ impl Default for Config {
 }
 
 impl Config {
+    #[allow(clippy::missing_const_for_fn)]
     #[must_use]
     pub fn get_compiler(&self) -> Option<&str> {
         match self.opts {
