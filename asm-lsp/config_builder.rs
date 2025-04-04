@@ -4,11 +4,10 @@ use std::{env::current_dir, path::PathBuf};
 
 use anyhow::{anyhow, Result};
 use clap::{arg, Args};
+use dialoguer::{theme::ColorfulTheme, Confirm, FuzzySelect, Input};
 use dirs::config_dir;
 
 use crate::types::{Arch, Assembler, Config, ConfigOptions, ProjectConfig, RootConfig};
-
-use dialoguer::{theme::ColorfulTheme, Confirm, FuzzySelect, Input};
 
 const ARCH_LIST: [Arch; 10] = [
     Arch::X86,

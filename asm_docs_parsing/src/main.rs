@@ -1,18 +1,18 @@
 use std::path::PathBuf;
 
-use ::asm_lsp::parser::{
-    populate_6502_instructions, populate_arm_instructions, populate_ca65_directives,
-    populate_gas_directives, populate_instructions, populate_masm_nasm_directives,
-    populate_registers, populate_riscv_instructions, populate_riscv_registers,
-};
-use asm_lsp::{
-    parser::{populate_avr_directives, populate_avr_instructions, populate_power_isa_instructions},
-    Arch, Assembler, Directive, Instruction, Register,
-};
-
 use anyhow::{anyhow, Result};
 use clap::{Parser, Subcommand};
 use serde::{Deserialize, Serialize};
+
+use asm_lsp::{
+    parser::{
+        populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
+        populate_avr_instructions, populate_ca65_directives, populate_gas_directives,
+        populate_instructions, populate_masm_nasm_directives, populate_power_isa_instructions,
+        populate_registers, populate_riscv_instructions, populate_riscv_registers,
+    },
+    Arch, Assembler, Directive, Instruction, Register,
+};
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, clap::ValueEnum)]
 enum DocType {

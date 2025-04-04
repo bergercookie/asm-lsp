@@ -1,18 +1,12 @@
-use crate::{ustr, AvrStatusRegister, AvrTiming};
-use std::collections::HashMap;
-use std::env::args;
-use std::fs;
-use std::io::Write;
-use std::iter::Peekable;
-use std::path::PathBuf;
-use std::str::{FromStr, Lines};
-
-use crate::types::{
-    Arch, Assembler, Directive, Instruction, InstructionForm, MMXMode, NameToDirectiveMap,
-    NameToInstructionMap, NameToRegisterMap, Operand, OperandType, Register, RegisterBitInfo,
-    RegisterType, RegisterWidth, XMMMode, Z80Timing, Z80TimingInfo, ISA,
+use std::{
+    collections::HashMap,
+    env::args,
+    fs,
+    io::Write as _,
+    iter::Peekable,
+    path::PathBuf,
+    str::{FromStr, Lines},
 };
-use crate::InstructionAlias;
 
 use anyhow::{anyhow, Result};
 use htmlentity::entity::ICodedDataTrait;
@@ -25,6 +19,15 @@ use regex::Regex;
 use reqwest;
 use serde::Deserialize;
 use url_escape::encode_www_form_urlencoded;
+
+use crate::{
+    types::{
+        Arch, Assembler, Directive, Instruction, InstructionForm, MMXMode, NameToDirectiveMap,
+        NameToInstructionMap, NameToRegisterMap, Operand, OperandType, Register, RegisterBitInfo,
+        RegisterType, RegisterWidth, XMMMode, Z80Timing, Z80TimingInfo, ISA,
+    },
+    ustr, AvrStatusRegister, AvrTiming, InstructionAlias,
+};
 
 /// Parse all of the register information witin the documentation file
 ///
