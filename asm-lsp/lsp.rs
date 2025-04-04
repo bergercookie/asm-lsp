@@ -3,12 +3,14 @@ use std::borrow::ToOwned;
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 use std::convert::TryFrom;
+use std::fmt::Write as _;
 use std::fs::{create_dir_all, File};
 use std::io::BufRead;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::str::FromStr;
 use std::string::ToString;
+use std::sync::LazyLock;
 
 use anyhow::{anyhow, Result};
 use compile_commands::{CompilationDatabase, CompileArgs, CompileCommand, SourceFile};
@@ -25,7 +27,6 @@ use lsp_types::{
     SignatureHelpParams, SignatureInformation, SymbolKind, TextDocumentContentChangeEvent,
     TextDocumentPositionParams, Uri,
 };
-use once_cell::sync::Lazy;
 use regex::Regex;
 use symbolic::common::{Language, Name, NameMangling};
 use symbolic_demangle::{Demangle, DemangleOptions};
@@ -617,7 +618,7 @@ pub fn apply_compile_cmd(
                         Err(e) => {
                             warn!("Failed to launch compile command process with {compiler} -- Error: {e}");
                         }
-                    };
+                    }
                 }
             }
             CompileArgs::Arguments(arguments) => {
@@ -662,10 +663,10 @@ pub fn apply_compile_cmd(
 ///
 /// # Panics
 fn get_diagnostics(diagnostics: &mut Vec<Diagnostic>, tool_output: &str) {
-    static DIAG_REG_LINE_COLUMN: Lazy<Regex> =
-        Lazy::new(|| Regex::new(r"^.*:(\d+):(\d+):\s+(.*)$").unwrap());
-    static DIAG_REG_LINE_ONLY: Lazy<Regex> =
-        Lazy::new(|| Regex::new(r"^.*:(\d+):\s+(.*)$").unwrap());
+    static DIAG_REG_LINE_COLUMN: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^.*:(\d+):(\d+):\s+(.*)$").unwrap());
+    static DIAG_REG_LINE_ONLY: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^.*:(\d+):\s+(.*)$").unwrap());
 
     // TODO: Consolidate/ clean this up...regexes are hard
     for line in tool_output.lines() {
@@ -978,7 +979,7 @@ fn get_label_resp(word: &str, uri: &Uri, doc_store: &mut DocumentStore) -> Optio
         if let Some(ref mut tree_entry) = doc_store.tree_store.get_mut(uri) {
             tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
             if let Some(ref tree) = tree_entry.tree {
-                static QUERY_LABEL_DATA: Lazy<tree_sitter::Query> = Lazy::new(|| {
+                static QUERY_LABEL_DATA: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
                     tree_sitter::Query::new(
                         &tree_sitter_asm::language(),
                         "(
@@ -1075,7 +1076,7 @@ fn get_include_resp(
                     match file {
                         Ok(f) => {
                             if f.file_name() == filename {
-                                paths += &format!("file://{}\n", f.path().display());
+                                writeln!(&mut paths, "file://{}", f.path().display()).unwrap();
                             }
                         }
                         Err(e) => {
@@ -1084,7 +1085,7 @@ fn get_include_resp(
                                 dir.as_path().display()
                             );
                         }
-                    };
+                    }
                 }
             }
             Err(e) => {
@@ -1243,7 +1244,7 @@ pub fn get_comp_resp(
     // TODO: filter register completions by width allowed by corresponding instruction
     tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
     if let Some(ref tree) = tree_entry.tree {
-        static QUERY_DIRECTIVE: Lazy<tree_sitter::Query> = Lazy::new(|| {
+        static QUERY_DIRECTIVE: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
             tree_sitter::Query::new(
                 &tree_sitter_asm::language(),
                 "(meta kind: (meta_ident) @directive)",
@@ -1284,7 +1285,7 @@ pub fn get_comp_resp(
         // tree-sitter-asm currently parses label arguments to instructions as *registers*
         // We'll collect all of labels in the document (that are being parsed as labels, at least)
         // and suggest those along with the register completions
-        static QUERY_LABEL: Lazy<tree_sitter::Query> = Lazy::new(|| {
+        static QUERY_LABEL: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
             tree_sitter::Query::new(&tree_sitter_asm::language(), "(label (ident) @label)").unwrap()
         });
 
@@ -1303,7 +1304,7 @@ pub fn get_comp_resp(
             }
         }
 
-        static QUERY_INSTR_ANY: Lazy<tree_sitter::Query> = Lazy::new(|| {
+        static QUERY_INSTR_ANY: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
             tree_sitter::Query::new(
                 &tree_sitter_asm::language(),
                 "[
@@ -1403,10 +1404,10 @@ fn explore_node(
     curr_doc: &str,
     node: tree_sitter::Node,
     res: &mut Vec<DocumentSymbol>,
-    label_kind_id: &Lazy<u16>,
-    ident_kind_id: &Lazy<u16>,
+    label_kind_id: u16,
+    ident_kind_id: u16,
 ) {
-    if node.kind_id() == **label_kind_id {
+    if node.kind_id() == label_kind_id {
         let mut children = vec![];
         let mut cursor = node.walk();
 
@@ -1416,7 +1417,7 @@ fn explore_node(
         if cursor.goto_first_child() {
             loop {
                 let sub_node = cursor.node();
-                if sub_node.kind_id() == **ident_kind_id {
+                if sub_node.kind_id() == ident_kind_id {
                     if let Ok(text) = sub_node.utf8_text(curr_doc.as_bytes()) {
                         descr = text.to_string();
                     }
@@ -1476,10 +1477,10 @@ pub fn get_document_symbols(
     tree_entry: &mut TreeEntry,
     _params: &DocumentSymbolParams,
 ) -> Option<Vec<DocumentSymbol>> {
-    static LABEL_KIND_ID: Lazy<u16> =
-        Lazy::new(|| tree_sitter_asm::language().id_for_node_kind("label", true));
-    static IDENT_KIND_ID: Lazy<u16> =
-        Lazy::new(|| tree_sitter_asm::language().id_for_node_kind("ident", true));
+    static LABEL_KIND_ID: LazyLock<u16> =
+        LazyLock::new(|| tree_sitter_asm::language().id_for_node_kind("label", true));
+    static IDENT_KIND_ID: LazyLock<u16> =
+        LazyLock::new(|| tree_sitter_asm::language().id_for_node_kind("ident", true));
     tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
 
     tree_entry.tree.as_ref().map(|tree| {
@@ -1490,8 +1491,8 @@ pub fn get_document_symbols(
                 curr_doc,
                 cursor.node(),
                 &mut res,
-                &LABEL_KIND_ID,
-                &IDENT_KIND_ID,
+                *LABEL_KIND_ID,
+                *IDENT_KIND_ID,
             );
             if !cursor.goto_next_sibling() {
                 break;
@@ -1515,7 +1516,7 @@ pub fn get_sig_help_resp(
     tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
     if let Some(ref tree) = tree_entry.tree {
         // Instruction with any (including zero) argument(s)
-        static QUERY_INSTR_ANY_ARGS: Lazy<tree_sitter::Query> = Lazy::new(|| {
+        static QUERY_INSTR_ANY_ARGS: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
             tree_sitter::Query::new(
                 &tree_sitter_asm::language(),
                 "(instruction kind: (word) @instr_name)",
@@ -1553,11 +1554,13 @@ pub fn get_sig_help_resp(
                                 Arch::X86 | Arch::X86_64 => {
                                     if let Some(ref gas_name) = form.gas_name {
                                         if instr_name.eq_ignore_ascii_case(gas_name) {
-                                            value += &format!("**{}**\n{form}\n", instr.arch);
+                                            writeln!(&mut value, "**{}**\n{form}", instr.arch)
+                                                .unwrap();
                                         }
                                     } else if let Some(ref go_name) = form.go_name {
                                         if instr_name.eq_ignore_ascii_case(go_name) {
-                                            value += &format!("**{}**\n{form}\n", instr.arch);
+                                            writeln!(&mut value, "**{}**\n{form}", instr.arch)
+                                                .unwrap();
                                         }
                                     }
                                 }
@@ -1565,14 +1568,14 @@ pub fn get_sig_help_resp(
                                     for form in &instr.forms {
                                         if let Some(ref z80_name) = form.z80_name {
                                             if instr_name.eq_ignore_ascii_case(z80_name) {
-                                                value += &format!("{form}\n");
+                                                writeln!(&mut value, "{form}").unwrap();
                                             }
                                         }
                                     }
                                 }
                                 Arch::ARM | Arch::RISCV => {
                                     for form in &instr.asm_templates {
-                                        value += &format!("{form}\n");
+                                        writeln!(&mut value, "{form}").unwrap();
                                     }
                                 }
                                 _ => {}
@@ -1611,7 +1614,7 @@ pub fn get_goto_def_resp(
     tree_entry.tree = tree_entry.parser.parse(doc, tree_entry.tree.as_ref());
 
     if let Some(ref tree) = tree_entry.tree {
-        static QUERY_LABEL: Lazy<tree_sitter::Query> = Lazy::new(|| {
+        static QUERY_LABEL: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
             tree_sitter::Query::new(&tree_sitter_asm::language(), "(label) @label").unwrap()
         });
 
@@ -1665,7 +1668,7 @@ pub fn get_ref_resp(
     tree_entry.tree = tree_entry.parser.parse(doc, tree_entry.tree.as_ref());
 
     if let Some(ref tree) = tree_entry.tree {
-        static QUERY_LABEL: Lazy<tree_sitter::Query> = Lazy::new(|| {
+        static QUERY_LABEL: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
             tree_sitter::Query::new(
                 &tree_sitter_asm::language(),
                 "(label (ident (reg (word)))) @label",
@@ -1673,7 +1676,7 @@ pub fn get_ref_resp(
             .unwrap()
         });
 
-        static QUERY_WORD: Lazy<tree_sitter::Query> = Lazy::new(|| {
+        static QUERY_WORD: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
             tree_sitter::Query::new(&tree_sitter_asm::language(), "(ident) @ident").unwrap()
         });
 

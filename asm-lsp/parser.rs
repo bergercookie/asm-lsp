@@ -704,7 +704,7 @@ pub fn populate_6502_instructions(html_conts: &str) -> Result<Vec<Instruction>> 
             match c {
                 '<' => {
                     if prev_idx != 0 {
-                        let bytes: Vec<u8> = synopsis_line[prev_idx..i].as_bytes().to_vec();
+                        let bytes: Vec<u8> = synopsis_line.as_bytes()[prev_idx..i].to_vec();
                         let decoded = htmlentity::entity::decode(&bytes).to_string().unwrap();
                         synopsis += &decoded;
                     }
@@ -2062,6 +2062,7 @@ pub fn populate_ca65_directives(html_conts: &str) -> Result<Vec<Directive>> {
             for (i, c) in description_line.chars().enumerate() {
                 match c {
                     '<' => {
+                        #[allow(clippy::sliced_string_as_bytes)]
                         let bytes: Vec<u8> = description_line[prev_idx..i].as_bytes().to_vec();
                         let decoded = htmlentity::entity::decode(&bytes).to_string().unwrap();
                         description += &decoded;
@@ -2073,10 +2074,9 @@ pub fn populate_ca65_directives(html_conts: &str) -> Result<Vec<Directive>> {
             let line_len = description_line.len();
             // Not all lines end with a closing tag...
             if prev_idx < line_len - 1 {
-                let bytes: Vec<u8> = description_line[prev_idx..description_line.len()]
-                    .as_bytes()
-                    .to_vec();
-                let decoded = htmlentity::entity::decode(&bytes).to_string().unwrap();
+                #[allow(clippy::sliced_string_as_bytes)]
+                let bytes = description_line[prev_idx..description_line.len()].as_bytes();
+                let decoded = htmlentity::entity::decode(bytes).to_string().unwrap();
                 description += &decoded;
             }
             if description.len() != len_before {
