@@ -1,16 +1,17 @@
-use crate::{ustr, CompletionItems, DocumentStore, Hoverable, ServerStore};
-use std::borrow::ToOwned;
-use std::cmp::Ordering;
-use std::collections::{HashMap, HashSet};
-use std::convert::TryFrom;
-use std::fmt::Write as _;
-use std::fs::{create_dir_all, File};
-use std::io::BufRead;
-use std::path::{Path, PathBuf};
-use std::process::Command;
-use std::str::FromStr;
-use std::string::ToString;
-use std::sync::LazyLock;
+use std::{
+    borrow::ToOwned,
+    cmp::Ordering,
+    collections::{HashMap, HashSet},
+    convert::TryFrom as _,
+    fmt::Write as _,
+    fs::{create_dir_all, File},
+    io::BufRead,
+    path::{Path, PathBuf},
+    process::Command,
+    str::FromStr as _,
+    string::ToString as _,
+    sync::LazyLock,
+};
 
 use anyhow::{anyhow, Result};
 use compile_commands::{CompilationDatabase, CompileArgs, CompileCommand, SourceFile};
@@ -32,10 +33,10 @@ use symbolic::common::{Language, Name, NameMangling};
 use symbolic_demangle::{Demangle, DemangleOptions};
 use tree_sitter::InputEdit;
 
-use crate::types::Column;
 use crate::{
-    Arch, ArchOrAssembler, Assembler, Completable, Config, ConfigOptions, Directive, Instruction,
-    LspClient, NameToInstructionMap, RootConfig, TreeEntry,
+    types::Column, ustr, Arch, ArchOrAssembler, Assembler, Completable, CompletionItems, Config,
+    ConfigOptions, Directive, DocumentStore, Hoverable, Instruction, LspClient,
+    NameToInstructionMap, RootConfig, ServerStore, TreeEntry,
 };
 
 /// Prints information about the server

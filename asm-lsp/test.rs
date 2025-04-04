@@ -1,6 +1,5 @@
 #[cfg(test)]
 mod tests {
-    use core::panic;
     use std::{collections::HashMap, path::PathBuf, str::FromStr};
 
     use anyhow::Result;
