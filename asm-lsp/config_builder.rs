@@ -230,7 +230,9 @@ fn prompt_project_path(opts: &GenerateOpts) -> PathBuf {
                     .default(false)
                     .interact()
                     .unwrap() {
-                       continue;
+                path_entries.clear();
+                display_entries.clear();
+                continue;
             }
             break;
         }
