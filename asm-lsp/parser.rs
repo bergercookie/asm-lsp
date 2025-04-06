@@ -1715,7 +1715,7 @@ pub fn populate_name_to_register_map(
 ///
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
-pub fn populate_masm_nasm_directives(xml_contents: &str) -> Result<Vec<Directive>> {
+pub fn populate_masm_nasm_fasm_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     let mut directives_map = HashMap::<String, Directive>::new();
 
     // iterate through the XML

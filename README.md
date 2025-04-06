@@ -8,7 +8,8 @@
 Provide hovering, autocompletion, signature help, go to definition, and view
 references for assembly files written in the GAS/NASM or GO assembly flavors. It
 supports assembly files for the x86, x86_64, ARM, RISCV, z80, AVR, and 6502 instruction
-sets. Supported assemblers include the Gas, Go, Masm, Nasm, ca65, and AVR assemblers.
+sets. Supported assemblers include the Gas, Go, Masm, Nasm, ca65, AVR, and FASM
+assemblers.
 
 This tool can serve as reference when reading the assembly output of a program.
 This way you can query what each command exactly does and deliberate about
@@ -152,6 +153,7 @@ Valid options for the `assembler` field include:
 - `"nasm"`
 - `"ca65"`
 - `"avr"`
+- `"fasm"`
 
 Don't see an architecture and/or assembler that you'd like to work with? File an
 [issue](https://github.com/bergercookie/asm-lsp/issues/new/choose)! We would be

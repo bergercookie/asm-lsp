@@ -22,13 +22,14 @@ const ARCH_LIST: [Arch; 10] = [
     Arch::Avr,
 ];
 
-const ASSEMBLER_LIST: [Assembler; 6] = [
+const ASSEMBLER_LIST: [Assembler; 7] = [
     Assembler::Gas,
     Assembler::Go,
     Assembler::Masm,
     Assembler::Nasm,
     Assembler::Ca65,
     Assembler::Avr,
+    Assembler::Fasm,
 ];
 
 #[derive(Args, Debug, Clone)]
