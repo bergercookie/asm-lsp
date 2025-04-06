@@ -829,6 +829,7 @@ pub fn get_hover_resp(
             || config.is_assembler_enabled(Assembler::Masm)
             || config.is_assembler_enabled(Assembler::Ca65)
             || config.is_assembler_enabled(Assembler::Avr)
+            || config.is_assembler_enabled(Assembler::Fasm)
         {
             // all gas and AVR directives have a '.' prefix, some masm directives do
             let directive_lookup =

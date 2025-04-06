@@ -17,8 +17,9 @@ mod tests {
         instr_filter_targets,
         parser::{
             populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
-            populate_avr_instructions, populate_ca65_directives, populate_masm_nasm_directives,
-            populate_power_isa_instructions, populate_riscv_instructions, populate_riscv_registers,
+            populate_avr_instructions, populate_ca65_directives,
+            populate_masm_nasm_fasm_directives, populate_power_isa_instructions,
+            populate_riscv_instructions, populate_riscv_registers,
         },
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
@@ -166,6 +167,16 @@ mod tests {
         }
     }
 
+    fn fasm_test_config() -> Config {
+        Config {
+            version: None,
+            assembler: Assembler::Fasm,
+            instruction_set: Arch::None,
+            opts: Some(ConfigOptions::default()),
+            client: None,
+        }
+    }
+
     #[derive(Debug)]
     struct GlobalInfo {
         x86_instructions: Vec<Instruction>,
@@ -191,6 +202,7 @@ mod tests {
         nasm_directives: Vec<Directive>,
         ca65_directives: Vec<Directive>,
         avr_directives: Vec<Directive>,
+        fasm_directives: Vec<Directive>,
     }
 
     impl GlobalInfo {
@@ -219,6 +231,7 @@ mod tests {
                 nasm_directives: Vec::new(),
                 ca65_directives: Vec::new(),
                 avr_directives: Vec::new(),
+                fasm_directives: Vec::new(),
             }
         }
     }
@@ -401,6 +414,13 @@ mod tests {
             Vec::new()
         };
 
+        info.fasm_directives = if config.is_assembler_enabled(Assembler::Fasm) {
+            let fasm_dirs = include_bytes!("serialized/directives/fasm");
+            bincode::deserialize(fasm_dirs)?
+        } else {
+            Vec::new()
+        };
+
         Ok(info)
     }
 
@@ -542,6 +562,12 @@ mod tests {
         populate_name_to_directive_map(
             Assembler::Avr,
             &info.avr_directives,
+            &mut store.names_to_info.directives,
+        );
+
+        populate_name_to_directive_map(
+            Assembler::Fasm,
+            &info.fasm_directives,
             &mut store.names_to_info.directives,
         );
 
@@ -785,6 +811,64 @@ mod tests {
             expected_kind,
             trigger_kind,
             trigger_character,
+        );
+    }
+
+    /**************************************************************************
+     * Fasm Tests
+     *************************************************************************/
+    #[test]
+    fn handle_hover_fasm_it_provides_dir_info_1() {
+        test_hover(
+            "for<cursor>mat ELF64 executable 3",
+            "format [fasm]
+The format directive followed by the format identifier allows to select the output format. This directive should be put at the beginning of the source. It can always be followed in the same line by the as keyword and the quoted string specifying the default file extension for the output file. Unless the output file name was specified from the command line, assembler will use this extension when generating the output file.",
+            &fasm_test_config()
+        );
+    }
+    #[test]
+    fn handle_hover_fasm_it_provides_dir_info_2() {
+        test_hover(
+            "segm<cursor>ent readable executable",
+            "segment [fasm]
+The segment directive defines a new segment, it should be followed by label, which value will be the number of defined segment, optionally use16 or use32 word can follow to specify whether code in this segment should be 16-bit or 32-bit. The origin of segment is aligned to paragraph (16 bytes). All the labels defined then will have values relative to the beginning of this segment.",
+            &fasm_test_config()
+        );
+    }
+    #[test]
+    fn handle_hover_fasm_it_provides_dir_info_3() {
+        test_hover(
+            "segm<ent readable execu<cursor>table",
+            "executable [fasm]
+Flag for the section directive.",
+            &fasm_test_config(),
+        );
+    }
+    #[test]
+    fn handle_autocomplete_fasm_it_provides_dir_comps_1() {
+        test_directive_autocomplete(
+            "for<cursor>",
+            &fasm_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_fasm_it_provides_dir_comps_2() {
+        test_directive_autocomplete(
+            "ent<cursor>",
+            &fasm_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_fasm_it_provides_dir_comps_3() {
+        test_directive_autocomplete(
+            "seg<cursor>",
+            &fasm_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
         );
     }
 
@@ -2923,7 +3007,7 @@ Width: 8 bits",
         serialized_directives_test!(
             "serialized/directives/masm",
             "../docs_store/directives/masm.xml",
-            populate_masm_nasm_directives
+            populate_masm_nasm_fasm_directives
         );
     }
     #[test]
@@ -2931,7 +3015,7 @@ Width: 8 bits",
         serialized_directives_test!(
             "serialized/directives/nasm",
             "../docs_store/directives/nasm.xml",
-            populate_masm_nasm_directives
+            populate_masm_nasm_fasm_directives
         );
     }
     #[test]
