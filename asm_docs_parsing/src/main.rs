@@ -8,7 +8,7 @@ use asm_lsp::{
     parser::{
         populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
         populate_avr_instructions, populate_ca65_directives, populate_gas_directives,
-        populate_instructions, populate_masm_nasm_directives, populate_power_isa_instructions,
+        populate_instructions, populate_masm_nasm_fasm_directives, populate_power_isa_instructions,
         populate_registers, populate_riscv_instructions, populate_riscv_registers,
     },
     Arch, Assembler, Directive, Instruction, Register,
@@ -146,7 +146,9 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                 }
                 (false, Some(assembler_in)) => match assembler_in {
                     Assembler::Gas | Assembler::Go => populate_gas_directives(&conts)?,
-                    Assembler::Masm | Assembler::Nasm => populate_masm_nasm_directives(&conts)?,
+                    Assembler::Masm | Assembler::Nasm | Assembler::Fasm => {
+                        populate_masm_nasm_fasm_directives(&conts)?
+                    }
                     Assembler::Ca65 => populate_ca65_directives(&conts)?,
                     Assembler::Avr => populate_avr_directives(&conts)?,
                     Assembler::None => unreachable!(),
