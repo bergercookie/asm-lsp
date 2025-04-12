@@ -17,6 +17,11 @@ tweak your code for optimisation.
 
 ## Installation
 
+[![MSRV](https://img.shields.io/badge/MSRV-1.82.0-blue)](https://www.rust-lang.org/)
+
+**Note**: The minimum supported Rust version (MSRV) is **1.82.0**, but this may change on the `master` branch.
+...
+
 ### Using cargo
 
 Install using the cargo package manager, either from `crates.io` or from github:
