@@ -17,7 +17,7 @@ jobs:
     name: Build Cargo Workspace
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions-rs/toolchain@v1
         with:
@@ -32,3 +32,24 @@ jobs:
         with:
           command: build
           args: --workspace --verbose --all-features
+
+  generate-schema:
+    name: Generate schema
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Check schema generation
+        run: |
+          # Generate schema
+          cargo xtask schema
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo '❌ Uncommitted changes detected after running `cargo xtask schema`:'
+            git --no-pager diff
+            exit 1
+          fi
