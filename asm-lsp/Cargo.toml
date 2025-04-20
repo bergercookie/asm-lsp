@@ -28,6 +28,8 @@ serde.workspace = true
 dirs.workspace = true
 toml.workspace = true
 clap.workspace = true
+serde_json.workspace = true
+schemars.workspace = true
 # write to stderr instead of stdout
 flexi_logger = "0.30.1"
 log = { version = "0.4.17" }
@@ -37,7 +39,6 @@ regex = "1.7.2"
 reqwest = { version = "0.12.8", features = ["blocking"] }
 strum = "0.27.1"
 strum_macros = "0.27.1"
-serde_json = "1.0.94"
 home = "0.5.5"
 symbolic = { version = "12.8.0", features = ["demangle"] }
 symbolic-demangle = "12.8.0"

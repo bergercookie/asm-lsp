@@ -10,6 +10,7 @@ use compile_commands::{CompilationDatabase, SourceFile};
 use log::{info, warn};
 use lsp_textdocument::TextDocuments;
 use lsp_types::{CompletionItem, Uri};
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use strum_macros::{AsRefStr, Display, EnumString};
 use tree_sitter::{Parser, Tree};
@@ -780,6 +781,7 @@ pub enum MMXMode {
     Deserialize,
     Encode,
     BorrowDecode,
+    JsonSchema,
 )]
 pub enum Arch {
     #[strum(serialize = "x86")]
@@ -983,6 +985,7 @@ impl std::fmt::Display for Arch {
     Deserialize,
     Encode,
     BorrowDecode,
+    JsonSchema,
 )]
 pub enum Assembler {
     #[default]
@@ -1163,7 +1166,7 @@ impl std::fmt::Display for RegisterBitInfo {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 pub struct RootConfig {
     pub default_config: Option<Config>,
     #[serde(rename = "project")]
@@ -1329,7 +1332,7 @@ impl RootConfig {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 pub struct ProjectConfig {
     // Path to a directory or source file on which this config applies
     // Can be relative to the server's root directory, or absolute
@@ -1340,7 +1343,7 @@ pub struct ProjectConfig {
     pub config: Config,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 pub struct Config {
     pub version: Option<String>,
     pub assembler: Assembler,
@@ -1403,7 +1406,7 @@ impl Config {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 pub struct ConfigOptions {
     // Specify compiler to generate diagnostics via `compile_flags.txt`
     pub compiler: Option<String>,

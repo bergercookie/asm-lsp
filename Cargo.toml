@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["asm-lsp", "asm_docs_parsing"]
+members = ["asm-lsp", "asm_docs_parsing", "xtask"]
 default-members = ["asm-lsp"]
 
 [workspace.package]
@@ -24,6 +24,8 @@ dirs = "6.0.0"
 toml = "0.8.1"
 clap = { version = "4.5.8", features = ["derive", "cargo"] }
 serde = { version = "1.0.204", features = ["derive"] }
+schemars = "0.8.22"
+serde_json = "1.0.94"
 
 [workspace.lints.clippy]
 dbg_macro = "deny"
