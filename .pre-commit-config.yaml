@@ -11,7 +11,8 @@ repos:
           (?x)^(
              asm-lsp/serialized/opcodes/.*|
              asm-lsp/serialized/registers/.*|
-             asm-lsp/serialized/directives/.*
+             asm-lsp/serialized/directives/.*|
+             asm-lsp_config_schema.json
           )$
       - id: mixed-line-ending
       - id: trailing-whitespace
