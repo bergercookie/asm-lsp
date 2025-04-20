@@ -2,9 +2,9 @@ use std::path::Path;
 use std::string::ToString;
 use std::{env::current_dir, path::PathBuf};
 
-use anyhow::{anyhow, Result};
-use clap::{arg, Args};
-use dialoguer::{theme::ColorfulTheme, Confirm, FuzzySelect, Input};
+use anyhow::{Result, anyhow};
+use clap::{Args, arg};
+use dialoguer::{Confirm, FuzzySelect, Input, theme::ColorfulTheme};
 use dirs::config_dir;
 
 use crate::types::{Arch, Assembler, Config, ConfigOptions, ProjectConfig, RootConfig};
@@ -299,7 +299,9 @@ fn is_executable(path: &Path) -> bool {
                 };
                 let ext_path = PathBuf::from(format!("{path}.{ext}"));
                 if ext_path.exists() && ext_path.is_file() {
-                    println!("Warning: Extended provided path with \".{ext}\" in order to find valid compiler");
+                    println!(
+                        "Warning: Extended provided path with \".{ext}\" in order to find valid compiler"
+                    );
                     return true;
                 }
             }

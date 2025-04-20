@@ -1,8 +1,11 @@
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 use compile_commands::{CompilationDatabase, SourceFile};
 use log::{error, info, warn};
 use lsp_server::{Connection, Message, Notification, Request, RequestId, Response};
 use lsp_types::{
+    CompletionParams, Diagnostic, DidChangeTextDocumentParams, DidCloseTextDocumentParams,
+    DidOpenTextDocumentParams, DocumentSymbolParams, DocumentSymbolResponse, GotoDefinitionParams,
+    HoverParams, PublishDiagnosticsParams, ReferenceParams, SignatureHelpParams, Uri,
     notification::{
         DidChangeTextDocument, DidCloseTextDocument, DidOpenTextDocument, DidSaveTextDocument,
         Notification as _, PublishDiagnostics,
@@ -11,18 +14,15 @@ use lsp_types::{
         Completion, DocumentDiagnosticRequest, DocumentSymbolRequest, GotoDefinition, HoverRequest,
         References, Request as RequestMessage, SignatureHelpRequest,
     },
-    CompletionParams, Diagnostic, DidChangeTextDocumentParams, DidCloseTextDocumentParams,
-    DidOpenTextDocumentParams, DocumentSymbolParams, DocumentSymbolResponse, GotoDefinitionParams,
-    HoverParams, PublishDiagnosticsParams, ReferenceParams, SignatureHelpParams, Uri,
 };
 use tree_sitter::Parser;
 
 use crate::{
-    apply_compile_cmd, get_comp_resp, get_compile_cmd_for_req, get_default_compile_cmd,
-    get_document_symbols, get_goto_def_resp, get_hover_resp, get_ref_resp, get_sig_help_resp,
-    get_word_from_pos_params, process_uri, send_empty_resp, text_doc_change_to_ts_edit,
     CompletionItems, Config, ConfigOptions, DocumentStore, NameToInstructionMap, RootConfig,
-    ServerStore, TreeEntry, UriConversion,
+    ServerStore, TreeEntry, UriConversion, apply_compile_cmd, get_comp_resp,
+    get_compile_cmd_for_req, get_default_compile_cmd, get_document_symbols, get_goto_def_resp,
+    get_hover_resp, get_ref_resp, get_sig_help_resp, get_word_from_pos_params, process_uri,
+    send_empty_resp, text_doc_change_to_ts_edit,
 };
 
 /// Handles `Request`s from the lsp client
