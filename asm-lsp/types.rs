@@ -5,6 +5,7 @@ use std::{
     str::FromStr,
 };
 
+use bincode::{BorrowDecode, Encode};
 use compile_commands::{CompilationDatabase, SourceFile};
 use log::{info, warn};
 use lsp_textdocument::TextDocuments;
@@ -18,8 +19,10 @@ use crate::{
     populate_name_to_register_map, process_uri, UriConversion,
 };
 
+pub const BINCODE_CFG: bincode::config::Configuration = bincode::config::standard().with_no_limit();
+
 // Instruction
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Encode, BorrowDecode)]
 pub struct Instruction {
     pub name: String,
     pub summary: String,
@@ -151,7 +154,9 @@ impl<'own> Instruction {
 
 // TODO: Rework this to use a tagged union...
 // InstructionForm
-#[derive(Default, Eq, PartialEq, Hash, Debug, Clone, Serialize, Deserialize)]
+#[derive(
+    Default, Eq, PartialEq, Hash, Debug, Clone, Serialize, Deserialize, Encode, BorrowDecode,
+)]
 pub struct InstructionForm {
     // --- Gas/Go-Specific Information ---
     pub gas_name: Option<String>,
@@ -275,7 +280,9 @@ impl std::fmt::Display for InstructionForm {
 }
 
 // InstructionAlias
-#[derive(Default, Eq, PartialEq, Hash, Debug, Clone, Serialize, Deserialize)]
+#[derive(
+    Default, Eq, PartialEq, Hash, Debug, Clone, Serialize, Deserialize, Encode, BorrowDecode,
+)]
 pub struct InstructionAlias {
     pub title: String,
     pub summary: String,
@@ -299,7 +306,9 @@ impl std::fmt::Display for InstructionAlias {
     }
 }
 
-#[derive(Debug, Default, PartialEq, Eq, Hash, Clone, Copy, Serialize, Deserialize)]
+#[derive(
+    Debug, Default, PartialEq, Eq, Hash, Clone, Copy, Serialize, Deserialize, Encode, BorrowDecode,
+)]
 pub enum Z80TimingValue {
     #[default]
     Unknown,
@@ -335,7 +344,7 @@ impl FromStr for Z80TimingValue {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Copy, Serialize, Deserialize, Encode, BorrowDecode)]
 pub enum Z80TimingInfo {
     OneNum(Z80TimingValue), // better names here?
     TwoNum((Z80TimingValue, Z80TimingValue)),
@@ -393,7 +402,9 @@ impl FromStr for Z80TimingInfo {
     }
 }
 
-#[derive(Default, Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
+#[derive(
+    Default, Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize, Encode, BorrowDecode,
+)]
 pub struct Z80Timing {
     pub z80: Z80TimingInfo,
     pub z80_plus_m1: Z80TimingInfo,
@@ -412,7 +423,9 @@ impl Display for Z80Timing {
     }
 }
 
-#[derive(Default, Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
+#[derive(
+    Default, Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize, Encode, BorrowDecode,
+)]
 pub struct AvrTiming {
     pub avre: Option<String>,
     pub avrxm: Option<String>,
@@ -453,7 +466,9 @@ impl Display for AvrTiming {
     }
 }
 
-#[derive(Default, Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
+#[derive(
+    Default, Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize, Encode, BorrowDecode,
+)]
 pub struct AvrStatusRegister {
     pub i: char,
     pub t: char,
@@ -478,7 +493,7 @@ impl std::fmt::Display for AvrStatusRegister {
 }
 
 // Directive
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, Encode, BorrowDecode)]
 pub struct Directive {
     pub name: String,
     pub signatures: Vec<String>,
@@ -596,7 +611,7 @@ impl<'own> Directive {
 }
 
 // Register
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, Encode, BorrowDecode)]
 pub struct Register {
     pub name: String,
     pub description: Option<String>,
@@ -715,20 +730,57 @@ pub trait Hoverable: Display + Clone {}
 pub trait Completable: Display {}
 pub trait ArchOrAssembler: Clone + Copy {}
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash, EnumString, AsRefStr, Serialize, Deserialize)]
+#[derive(
+    Debug,
+    Clone,
+    PartialEq,
+    Eq,
+    Hash,
+    EnumString,
+    AsRefStr,
+    Serialize,
+    Deserialize,
+    Encode,
+    BorrowDecode,
+)]
 pub enum XMMMode {
     SSE,
     AVX,
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Hash, EnumString, AsRefStr, Serialize, Deserialize)]
+#[derive(
+    Debug,
+    Clone,
+    Eq,
+    PartialEq,
+    Hash,
+    EnumString,
+    AsRefStr,
+    Serialize,
+    Deserialize,
+    Encode,
+    BorrowDecode,
+)]
 pub enum MMXMode {
     FPU,
     MMX,
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Serialize, Deserialize)]
+#[derive(
+    Debug,
+    Hash,
+    PartialEq,
+    Eq,
+    Clone,
+    Copy,
+    EnumString,
+    AsRefStr,
+    Serialize,
+    Deserialize,
+    Encode,
+    BorrowDecode,
+)]
 pub enum Arch {
     #[strum(serialize = "x86")]
     #[serde(rename = "x86")]
@@ -779,8 +831,8 @@ impl Arch {
             ($arch:expr, $path:literal) => {{
                 let start = std::time::Instant::now();
                 let serialized_regs = include_bytes!($path);
-                let registers = bincode::deserialize::<Vec<Register>>(serialized_regs)
-                    .unwrap_or_else(|e| panic!("Error deserializing {} registers -- {}\nRegenerate serialized data with regenerate.sh", $arch, e));
+                let registers = bincode::borrow_decode_from_slice::<Vec<Register>, _>(serialized_regs, BINCODE_CFG)
+                    .unwrap_or_else(|e| panic!("Error deserializing {} registers -- {}\nRegenerate serialized data with regenerate.sh", $arch, e)).0;
 
                 info!(
                     "{} register set loaded in {}ms",
@@ -825,8 +877,9 @@ impl Arch {
             ($arch:expr, $path:literal) => {{
                 let start = std::time::Instant::now();
                 let serialized_instrs = include_bytes!($path);
-                let instructions = bincode::deserialize::<Vec<Instruction>>(serialized_instrs)
-                    .unwrap_or_else(|e| panic!("Error deserializing {} instructions -- {}\nRegenerate serialized data with regenerate.sh", $arch, e));
+                let instructions = bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(serialized_instrs, BINCODE_CFG)
+                    .unwrap_or_else(|e| panic!("Error deserializing {} instructions -- {}\nRegenerate serialized data with regenerate.sh", $arch, e))
+                    .0;
 
                 info!(
                     "{} instruction set loaded in {}ms",
@@ -928,6 +981,8 @@ impl std::fmt::Display for Arch {
     AsRefStr,
     Serialize,
     Deserialize,
+    Encode,
+    BorrowDecode,
 )]
 pub enum Assembler {
     #[default]
@@ -969,8 +1024,9 @@ impl Assembler {
             ($assembler:expr, $path:literal) => {{
                 let start = std::time::Instant::now();
                 let serialized_dirs = include_bytes!($path);
-                let directives = bincode::deserialize::<Vec<Directive>>(serialized_dirs)
-                    .unwrap_or_else(|e| panic!("Error deserializing {} directives -- {}\nRegenerate serialized data with regenerate.sh", $assembler, e));
+                let directives = bincode::borrow_decode_from_slice::<Vec<Directive>, _>(serialized_dirs, BINCODE_CFG)
+                    .unwrap_or_else(|e| panic!("Error deserializing {} directives -- {}\nRegenerate serialized data with regenerate.sh", $assembler, e))
+                    .0;
 
                 info!(
                     "{} directive set loaded in {}ms",
@@ -996,7 +1052,19 @@ impl Assembler {
 }
 
 #[derive(
-    Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Display, Serialize, Deserialize,
+    Debug,
+    Hash,
+    PartialEq,
+    Eq,
+    Clone,
+    Copy,
+    EnumString,
+    AsRefStr,
+    Display,
+    Serialize,
+    Deserialize,
+    Encode,
+    BorrowDecode,
 )]
 pub enum RegisterType {
     #[strum(serialize = "General Purpose Register")]
@@ -1026,7 +1094,19 @@ pub enum RegisterType {
 }
 
 #[derive(
-    Debug, Hash, PartialEq, Eq, Clone, Copy, EnumString, AsRefStr, Display, Serialize, Deserialize,
+    Debug,
+    Hash,
+    PartialEq,
+    Eq,
+    Clone,
+    Copy,
+    EnumString,
+    AsRefStr,
+    Display,
+    Serialize,
+    Deserialize,
+    Encode,
+    BorrowDecode,
 )]
 pub enum RegisterWidth {
     #[strum(serialize = "512 bits")]
@@ -1053,7 +1133,9 @@ pub enum RegisterWidth {
     Lower8Lower16,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Default, Deserialize)]
+#[derive(
+    Debug, Clone, PartialEq, Eq, Hash, Serialize, Default, Deserialize, Encode, BorrowDecode,
+)]
 pub struct RegisterBitInfo {
     pub bit: u32,
     pub label: String,
@@ -1352,7 +1434,20 @@ pub enum LspClient {
 }
 
 // Instruction Set Architecture
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, EnumString, AsRefStr, Serialize, Deserialize)]
+#[derive(
+    Debug,
+    Copy,
+    Clone,
+    PartialEq,
+    Eq,
+    Hash,
+    EnumString,
+    AsRefStr,
+    Serialize,
+    Deserialize,
+    Encode,
+    BorrowDecode,
+)]
 pub enum ISA {
     #[strum(serialize = "RAO-INT")]
     RAOINT,
@@ -1477,7 +1572,7 @@ pub enum ISA {
 }
 
 // Operand
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize, Encode, BorrowDecode)]
 pub struct Operand {
     pub type_: OperandType,
     pub input: Option<bool>,
@@ -1486,7 +1581,19 @@ pub struct Operand {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Debug, Clone, PartialEq, Eq, Hash, EnumString, AsRefStr, Serialize, Deserialize)]
+#[derive(
+    Debug,
+    Clone,
+    PartialEq,
+    Eq,
+    Hash,
+    EnumString,
+    AsRefStr,
+    Serialize,
+    Deserialize,
+    Encode,
+    BorrowDecode,
+)]
 pub enum OperandType {
     #[strum(serialize = "1")]
     _1,

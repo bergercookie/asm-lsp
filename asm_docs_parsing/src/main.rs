@@ -1,17 +1,17 @@
 use std::path::PathBuf;
 
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 use clap::{Parser, Subcommand};
 use serde::{Deserialize, Serialize};
 
 use asm_lsp::{
+    Arch, Assembler, BINCODE_CFG, Directive, Instruction, Register,
     parser::{
         populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
         populate_avr_instructions, populate_ca65_directives, populate_gas_directives,
         populate_instructions, populate_masm_nasm_fasm_directives, populate_power_isa_instructions,
         populate_registers, populate_riscv_instructions, populate_riscv_registers,
     },
-    Arch, Assembler, Directive, Instruction, Register,
 };
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, clap::ValueEnum)]
@@ -103,7 +103,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
             if instrs.is_empty() {
                 return Err(anyhow!("Zero instructions read in"));
             }
-            let serialized = bincode::serialize(&instrs)?;
+            let serialized = bincode::encode_to_vec(&instrs, BINCODE_CFG)?;
             std::fs::write(&opts.output_path, serialized)?;
         }
         DocType::Register => {
@@ -129,7 +129,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
             if regs.is_empty() {
                 return Err(anyhow!("Zero registers read in"));
             }
-            let serialized = bincode::serialize(&regs)?;
+            let serialized = bincode::encode_to_vec(&regs, BINCODE_CFG)?;
             std::fs::write(&opts.output_path, serialized)?;
         }
         DocType::Directive => {
@@ -157,7 +157,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
             if directives.is_empty() {
                 return Err(anyhow!("Zero directives read in"));
             }
-            let serialized = bincode::serialize(&directives)?;
+            let serialized = bincode::encode_to_vec(&directives, BINCODE_CFG)?;
             std::fs::write(&opts.output_path, serialized)?;
         }
     }
