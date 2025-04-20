@@ -3052,4 +3052,12 @@ Width: 8 bits",
             populate_avr_directives
         );
     }
+    #[test]
+    fn serialized_fasm_directives_are_up_to_date() {
+        serialized_directives_test!(
+            "serialized/directives/fasm",
+            "../docs_store/directives/fasm.xml",
+            populate_masm_nasm_fasm_directives
+        );
+    }
 }
