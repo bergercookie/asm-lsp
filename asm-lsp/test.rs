@@ -13,8 +13,9 @@ mod tests {
     use tree_sitter::Parser;
 
     use crate::{
-        get_comp_resp, get_completes, get_hover_resp, get_word_from_pos_params,
-        instr_filter_targets,
+        Arch, Assembler, BINCODE_CFG, Config, ConfigOptions, Directive, DocumentStore, Instruction,
+        Register, ServerStore, TreeEntry, get_comp_resp, get_completes, get_hover_resp,
+        get_word_from_pos_params, instr_filter_targets,
         parser::{
             populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
             populate_avr_instructions, populate_ca65_directives,
@@ -241,7 +242,8 @@ mod tests {
 
         info.x86_instructions = if config.is_isa_enabled(Arch::X86) {
             let x86_instrs = include_bytes!("serialized/opcodes/x86");
-            bincode::deserialize::<Vec<Instruction>>(x86_instrs)?
+            bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(x86_instrs, BINCODE_CFG)?
+                .0
                 .into_iter()
                 .map(|instruction| {
                     // filter out assemblers by user config
@@ -255,7 +257,8 @@ mod tests {
 
         info.x86_64_instructions = if config.is_isa_enabled(Arch::X86_64) {
             let x86_64_instrs = include_bytes!("serialized/opcodes/x86_64");
-            bincode::deserialize::<Vec<Instruction>>(x86_64_instrs)?
+            bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(x86_64_instrs, BINCODE_CFG)?
+                .0
                 .into_iter()
                 .map(|instruction| {
                     // filter out assemblers by user config
@@ -269,154 +272,155 @@ mod tests {
 
         info.z80_instructions = if config.is_isa_enabled(Arch::Z80) {
             let z80_instrs = include_bytes!("serialized/opcodes/z80");
-            bincode::deserialize::<Vec<Instruction>>(z80_instrs)?
+            bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(z80_instrs, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.arm_instructions = if config.is_isa_enabled(Arch::ARM) {
             let arm_instrs = include_bytes!("serialized/opcodes/arm");
-            bincode::deserialize::<Vec<Instruction>>(arm_instrs)?
+            bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(arm_instrs, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.arm64_instructions = if config.is_isa_enabled(Arch::ARM64) {
             let arm64_instrs = include_bytes!("serialized/opcodes/arm64");
-            bincode::deserialize::<Vec<Instruction>>(arm64_instrs)?
+            bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(arm64_instrs, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.riscv_instructions = if config.is_isa_enabled(Arch::RISCV) {
             let riscv_instrs = include_bytes!("serialized/opcodes/riscv");
-            bincode::deserialize::<Vec<Instruction>>(riscv_instrs)?
+            bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(riscv_instrs, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.mos6502_instructions = if config.is_isa_enabled(Arch::MOS6502) {
             let mos6502_instrs = include_bytes!("serialized/opcodes/6502");
-            bincode::deserialize::<Vec<Instruction>>(mos6502_instrs)?
+            bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(mos6502_instrs, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.power_isa_instructions = if config.is_isa_enabled(Arch::PowerISA) {
             let power_isa_instrs = include_bytes!("serialized/opcodes/power-isa");
-            bincode::deserialize::<Vec<Instruction>>(power_isa_instrs)?
+            bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(power_isa_instrs, BINCODE_CFG)?
+                .0
         } else {
             Vec::new()
         };
 
         info.avr_instructions = if config.is_isa_enabled(Arch::Avr) {
             let avr_instrs = include_bytes!("serialized/opcodes/avr");
-            bincode::deserialize::<Vec<Instruction>>(avr_instrs)?
+            bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(avr_instrs, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.x86_registers = if config.is_isa_enabled(Arch::X86) {
             let regs_x86 = include_bytes!("serialized/registers/x86");
-            bincode::deserialize(regs_x86)?
+            bincode::borrow_decode_from_slice(regs_x86, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.x86_64_registers = if config.is_isa_enabled(Arch::X86_64) {
             let regs_x86_64 = include_bytes!("serialized/registers/x86_64");
-            bincode::deserialize(regs_x86_64)?
+            bincode::borrow_decode_from_slice(regs_x86_64, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.z80_registers = if config.is_isa_enabled(Arch::Z80) {
             let regs_z80 = include_bytes!("serialized/registers/z80");
-            bincode::deserialize(regs_z80)?
+            bincode::borrow_decode_from_slice(regs_z80, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.arm_registers = if config.is_isa_enabled(Arch::ARM) {
             let regs_arm = include_bytes!("serialized/registers/arm");
-            bincode::deserialize(regs_arm)?
+            bincode::borrow_decode_from_slice(regs_arm, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.arm64_registers = if config.is_isa_enabled(Arch::ARM64) {
             let regs_arm64 = include_bytes!("serialized/registers/arm64");
-            bincode::deserialize(regs_arm64)?
+            bincode::borrow_decode_from_slice(regs_arm64, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.riscv_registers = if config.is_isa_enabled(Arch::RISCV) {
             let regs_riscv = include_bytes!("serialized/registers/riscv");
-            bincode::deserialize(regs_riscv)?
+            bincode::borrow_decode_from_slice(regs_riscv, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.mos6502_registers = if config.is_isa_enabled(Arch::MOS6502) {
             let regs_mos6502 = include_bytes!("serialized/registers/6502");
-            bincode::deserialize(regs_mos6502)?
+            bincode::borrow_decode_from_slice(regs_mos6502, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.power_isa_registers = if config.is_isa_enabled(Arch::PowerISA) {
             let regs_power_isa = include_bytes!("serialized/registers/power-isa");
-            bincode::deserialize(regs_power_isa)?
+            bincode::borrow_decode_from_slice(regs_power_isa, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.avr_registers = if config.is_isa_enabled(Arch::Avr) {
             let regs_avr = include_bytes!("serialized/registers/avr");
-            bincode::deserialize(regs_avr)?
+            bincode::borrow_decode_from_slice(regs_avr, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.gas_directives = if config.is_assembler_enabled(Assembler::Gas) {
             let gas_dirs = include_bytes!("serialized/directives/gas");
-            bincode::deserialize(gas_dirs)?
+            bincode::borrow_decode_from_slice(gas_dirs, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.masm_directives = if config.is_assembler_enabled(Assembler::Masm) {
             let masm_dirs = include_bytes!("serialized/directives/masm");
-            bincode::deserialize(masm_dirs)?
+            bincode::borrow_decode_from_slice(masm_dirs, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.nasm_directives = if config.is_assembler_enabled(Assembler::Nasm) {
             let nasm_dirs = include_bytes!("serialized/directives/nasm");
-            bincode::deserialize(nasm_dirs)?
+            bincode::borrow_decode_from_slice(nasm_dirs, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.ca65_directives = if config.is_assembler_enabled(Assembler::Ca65) {
             let ca65_dirs = include_bytes!("serialized/directives/ca65");
-            bincode::deserialize(ca65_dirs)?
+            bincode::borrow_decode_from_slice(ca65_dirs, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.avr_directives = if config.is_assembler_enabled(Assembler::Avr) {
             let avr_dirs = include_bytes!("serialized/directives/avr");
-            bincode::deserialize(avr_dirs)?
+            bincode::borrow_decode_from_slice(avr_dirs, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
 
         info.fasm_directives = if config.is_assembler_enabled(Assembler::Fasm) {
             let fasm_dirs = include_bytes!("serialized/directives/fasm");
-            bincode::deserialize(fasm_dirs)?
+            bincode::borrow_decode_from_slice(fasm_dirs, BINCODE_CFG)?.0
         } else {
             Vec::new()
         };
@@ -2694,7 +2698,10 @@ Width: 8 bits",
         ($serialized_path:literal, $raw_path:literal, $populate_fn:expr) => {
             let mut cmp_map = HashMap::new();
             let regs_ser = include_bytes!($serialized_path);
-            let ser_vec = bincode::deserialize::<Vec<Register>>(regs_ser).unwrap();
+            let ser_vec =
+                bincode::borrow_decode_from_slice::<Vec<Register>, _>(regs_ser, BINCODE_CFG)
+                    .unwrap()
+                    .0;
 
             let regs_raw = include_str!($raw_path);
             let mut raw_vec = $populate_fn(regs_raw).unwrap();
@@ -2804,8 +2811,10 @@ Width: 8 bits",
         ($serialized_path:literal, $raw_path:literal, $populate_fn:expr) => {
             let mut cmp_map = HashMap::new();
             let instrs_ser = include_bytes!($serialized_path);
-            let mut ser_vec = bincode::deserialize::<Vec<Instruction>>(instrs_ser).unwrap();
-
+            let mut ser_vec =
+                bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(instrs_ser, BINCODE_CFG)
+                    .unwrap()
+                    .0;
             let instrs_raw = include_str!($raw_path);
             let mut raw_vec = $populate_fn(instrs_raw).unwrap();
 
@@ -2904,7 +2913,10 @@ Width: 8 bits",
     fn serialized_arm_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
         let arm_instrs_ser = include_bytes!("serialized/opcodes/arm");
-        let mut ser_vec = bincode::deserialize::<Vec<Instruction>>(arm_instrs_ser).unwrap();
+        let mut ser_vec =
+            bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(arm_instrs_ser, BINCODE_CFG)
+                .unwrap()
+                .0;
         ser_vec.sort_by(|a, b| a.name.cmp(&b.name));
 
         let mut raw_vec =
@@ -2935,7 +2947,10 @@ Width: 8 bits",
     fn serialized_riscv_instructions_are_up_to_date() {
         let mut cmp_map = HashMap::new();
         let riscv_instrs_ser = include_bytes!("serialized/opcodes/riscv");
-        let ser_vec = bincode::deserialize::<Vec<Instruction>>(riscv_instrs_ser).unwrap();
+        let ser_vec =
+            bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(riscv_instrs_ser, BINCODE_CFG)
+                .unwrap()
+                .0;
 
         let raw_vec =
             populate_riscv_instructions(&PathBuf::from("../docs_store/opcodes/RISCV/")).unwrap();
@@ -2963,7 +2978,10 @@ Width: 8 bits",
         ($serialized_path:literal, $raw_path:literal, $populate_fn:expr) => {
             let mut cmp_map = HashMap::new();
             let dirs_ser = include_bytes!($serialized_path);
-            let ser_vec = bincode::deserialize::<Vec<Directive>>(dirs_ser).unwrap();
+            let ser_vec =
+                bincode::borrow_decode_from_slice::<Vec<Directive>, _>(dirs_ser, BINCODE_CFG)
+                    .unwrap()
+                    .0;
 
             let dirs_raw = include_str!($raw_path);
             let mut raw_vec = $populate_fn(dirs_raw).unwrap();
