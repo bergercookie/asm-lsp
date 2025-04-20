@@ -8,25 +8,26 @@ use std::{
     str::{FromStr, Lines},
 };
 
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 use htmlentity::entity::ICodedDataTrait;
+use quick_xml::Reader;
 use quick_xml::escape::unescape;
 use quick_xml::events::attributes::Attribute;
 use quick_xml::events::{BytesStart, Event};
 use quick_xml::name::QName;
-use quick_xml::Reader;
 use regex::Regex;
 use reqwest;
 use serde::Deserialize;
 use url_escape::encode_www_form_urlencoded;
 
 use crate::{
+    AvrStatusRegister, AvrTiming, InstructionAlias,
     types::{
-        Arch, Assembler, Directive, Instruction, InstructionForm, MMXMode, NameToDirectiveMap,
+        Arch, Assembler, Directive, ISA, Instruction, InstructionForm, MMXMode, NameToDirectiveMap,
         NameToInstructionMap, NameToRegisterMap, Operand, OperandType, Register, RegisterBitInfo,
-        RegisterType, RegisterWidth, XMMMode, Z80Timing, Z80TimingInfo, ISA,
+        RegisterType, RegisterWidth, XMMMode, Z80Timing, Z80TimingInfo,
     },
-    ustr, AvrStatusRegister, AvrTiming, InstructionAlias,
+    ustr,
 };
 
 /// Parse all of the register information witin the documentation file
@@ -86,8 +87,10 @@ pub fn populate_riscv_registers(rst_contents: &str) -> Result<Vec<Register>> {
                 let top = lines.next().unwrap();
                 assert!(top.starts_with('+'));
                 let column_headers = lines.next().unwrap();
-                assert!(column_headers
-                    .eq("|Register | ABI Name | Description                       | Saver  |"));
+                assert!(
+                    column_headers
+                        .eq("|Register | ABI Name | Description                       | Saver  |")
+                );
                 parse_state = ParseState::TableSeparator;
             }
             ParseState::TableSeparator => {
@@ -1051,8 +1054,8 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                                     }
                                     val => {
                                         return Err(anyhow!(
-                                                "Unknown value '{val}' for XML attribute nacl-zero-extends-outputs",
-                                            ));
+                                            "Unknown value '{val}' for XML attribute nacl-zero-extends-outputs",
+                                        ));
                                     }
                                 },
                                 "z80name" => {

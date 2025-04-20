@@ -4,7 +4,7 @@ use std::{
     collections::{HashMap, HashSet},
     convert::TryFrom as _,
     fmt::Write as _,
-    fs::{create_dir_all, File},
+    fs::{File, create_dir_all},
     io::BufRead,
     path::{Path, PathBuf},
     process::Command,
@@ -13,7 +13,7 @@ use std::{
     sync::LazyLock,
 };
 
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 use compile_commands::{CompilationDatabase, CompileArgs, CompileCommand, SourceFile};
 use dirs::config_dir;
 use log::{error, info, log, log_enabled, warn};
@@ -34,9 +34,9 @@ use symbolic_demangle::{Demangle, DemangleOptions};
 use tree_sitter::InputEdit;
 
 use crate::{
-    types::Column, ustr, Arch, ArchOrAssembler, Assembler, Completable, CompletionItems, Config,
-    ConfigOptions, Directive, DocumentStore, Hoverable, Instruction, LspClient,
-    NameToInstructionMap, RootConfig, ServerStore, TreeEntry,
+    Arch, ArchOrAssembler, Assembler, Completable, CompletionItems, Config, ConfigOptions,
+    Directive, DocumentStore, Hoverable, Instruction, LspClient, NameToInstructionMap, RootConfig,
+    ServerStore, TreeEntry, types::Column, ustr,
 };
 
 /// Prints information about the server
@@ -377,7 +377,9 @@ fn get_additional_include_dirs(compile_cmds: &CompilationDatabase) -> Vec<(Sourc
                                     additional_dirs.push((source_file.clone(), full_include_path));
                                 }
                             } else {
-                                warn!("Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'");
+                                warn!(
+                                    "Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'"
+                                );
                             }
                             check_dir = false;
                         } else if arg.eq("-I") {
@@ -394,7 +396,9 @@ fn get_additional_include_dirs(compile_cmds: &CompilationDatabase) -> Vec<(Sourc
                                     additional_dirs.push((source_file.clone(), full_include_path));
                                 }
                             } else {
-                                warn!("Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'");
+                                warn!(
+                                    "Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'"
+                                );
                             }
                         }
                     }
@@ -617,7 +621,9 @@ pub fn apply_compile_cmd(
                             get_diagnostics(diagnostics, &output_str);
                         }
                         Err(e) => {
-                            warn!("Failed to launch compile command process with {compiler} -- Error: {e}");
+                            warn!(
+                                "Failed to launch compile command process with {compiler} -- Error: {e}"
+                            );
                         }
                     }
                 }

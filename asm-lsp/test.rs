@@ -23,9 +23,7 @@ mod tests {
             populate_riscv_instructions, populate_riscv_registers,
         },
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
-        populate_name_to_instruction_map, populate_name_to_register_map, populate_registers, Arch,
-        Assembler, Config, ConfigOptions, Directive, DocumentStore, Instruction, Register,
-        ServerStore, TreeEntry,
+        populate_name_to_instruction_map, populate_name_to_register_map, populate_registers,
     };
 
     const fn empty_test_config() -> Config {
@@ -1591,10 +1589,11 @@ bar:
     // Demangling
     #[test]
     fn handle_hover_it_demangles_cpp_1() {
-        test_hover("	call	<cursor>_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@PLT",
+        test_hover(
+            "	call	<cursor>_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@PLT",
             "std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)",
             &empty_test_config(),
-            );
+        );
     }
 
     #[test]
@@ -1608,10 +1607,11 @@ bar:
 
     #[test]
     fn handle_hover_it_demangles_cpp_3() {
-        test_hover("	movq	_ZSt4endlIcSt<cursor>11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@GOTPCREL(%rip), %rax",
-        "std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)",
+        test_hover(
+            "	movq	_ZSt4endlIcSt<cursor>11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@GOTPCREL(%rip), %rax",
+            "std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)",
             &empty_test_config(),
-            );
+        );
     }
 
     /**************************************************************************

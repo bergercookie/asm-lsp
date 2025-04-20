@@ -1,14 +1,14 @@
 use std::thread::sleep;
 use std::time::Duration;
 
-use asm_lsp::config_builder::{gen_config, GenerateArgs, GenerateOpts};
+use asm_lsp::config_builder::{GenerateArgs, GenerateOpts, gen_config};
 use asm_lsp::run_info;
 use asm_lsp::types::LspClient;
 
 use asm_lsp::handle::{handle_notification, handle_request};
 use asm_lsp::{
-    get_compile_cmds_from_file, get_completes, get_include_dirs, get_root_config,
-    send_notification, DocumentStore, RootConfig, ServerStore,
+    DocumentStore, RootConfig, ServerStore, get_compile_cmds_from_file, get_completes,
+    get_include_dirs, get_root_config, send_notification,
 };
 
 use clap::{Command, FromArgMatches as _, Subcommand};

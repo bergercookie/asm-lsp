@@ -15,8 +15,8 @@ use strum_macros::{AsRefStr, Display, EnumString};
 use tree_sitter::{Parser, Tree};
 
 use crate::{
-    populate_name_to_directive_map, populate_name_to_instruction_map,
-    populate_name_to_register_map, process_uri, UriConversion,
+    UriConversion, populate_name_to_directive_map, populate_name_to_instruction_map,
+    populate_name_to_register_map, process_uri,
 };
 
 pub const BINCODE_CFG: bincode::config::Configuration = bincode::config::standard().with_no_limit();
