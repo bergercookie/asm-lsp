@@ -1,3 +1,4 @@
+mod regnerate_docs;
 mod schema;
 
 use anyhow::Result;
@@ -7,10 +8,16 @@ use clap::{Args, Command, FromArgMatches as _, Subcommand};
 enum Commands {
     /// Generate a JSON schema for `.asm-lsp.toml` files
     Schema(Schema),
+    /// Regenerate the serialized document stores for asm-lsp
+    #[clap(alias = "regen")]
+    RegenerateDocs(RegenerateDocs),
 }
 
 #[derive(Args)]
 struct Schema;
+
+#[derive(Args)]
+struct RegenerateDocs;
 
 #[allow(clippy::missing_errors_doc)]
 pub fn main() -> Result<()> {
@@ -22,6 +29,7 @@ pub fn main() -> Result<()> {
 
     match command {
         Commands::Schema(_) => Schema::run()?,
+        Commands::RegenerateDocs(_) => RegenerateDocs::run()?,
     }
 
     Ok(())
