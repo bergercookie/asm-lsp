@@ -5,8 +5,8 @@ default-members = ["asm-lsp"]
 
 [workspace.package]
 version = "0.10.0"
-authors = ["Nikos Koukis <nickkouk@gmail.com>"]
-edition = "2021"
+authors = ["Nikos Koukis <nickkouk@gmail.com>", "Will Lillis <wlillis24@gmail.com>"]
+edition = "2024"
 description = "Language Server for x86/x86_64, ARM, RISCV, and z80 Assembly Code"
 documentation = "https://docs.rs/asm-lsp/latest/asm_lsp/"
 homepage = "https://github.com/bergercookie/asm-lsp"
