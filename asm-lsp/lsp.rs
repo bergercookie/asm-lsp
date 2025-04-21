@@ -675,6 +675,9 @@ fn get_diagnostics(diagnostics: &mut Vec<Diagnostic>, tool_output: &str) {
     static DIAG_REG_LINE_ONLY: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^.*:(\d+):\s+(.*)$").unwrap());
 
+    static ALT_DIAG_REG_LINE_ONLY: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^.*\((\d+)\):\s+(.*)$").unwrap());
+
     // TODO: Consolidate/ clean this up...regexes are hard
     for line in tool_output.lines() {
         // first check if we have an error message of the form:
@@ -710,6 +713,33 @@ fn get_diagnostics(diagnostics: &mut Vec<Diagnostic>, tool_output: &str) {
         // have an error message of the form:
         // :<line>: <error message here>
         if let Some(caps) = DIAG_REG_LINE_ONLY.captures(line) {
+            if caps.len() < 3 {
+                // the entire capture is always at the 0th index,
+                // then we have 2 more explicit capture groups
+                continue;
+            }
+            let Ok(line_number) = caps[1].parse::<u32>() else {
+                continue;
+            };
+            let err_msg = &caps[2];
+            diagnostics.push(Diagnostic::new_simple(
+                Range {
+                    start: Position {
+                        line: line_number - 1,
+                        character: 0,
+                    },
+                    end: Position {
+                        line: line_number - 1,
+                        character: 0,
+                    },
+                },
+                String::from(err_msg),
+            ));
+        }
+
+        // the  ca65 has a light different format
+        // file(<line>): <error message here>
+        if let Some(caps) = ALT_DIAG_REG_LINE_ONLY.captures(line) {
             if caps.len() < 3 {
                 // the entire capture is always at the 0th index,
                 // then we have 2 more explicit capture groups
