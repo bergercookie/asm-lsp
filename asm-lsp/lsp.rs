@@ -736,7 +736,7 @@ fn get_diagnostics(diagnostics: &mut Vec<Diagnostic>, tool_output: &str) {
             ));
         }
 
-        // the  ca65 has a light different format
+        // ca65 has a slightly different format
         // file(<line>): <error message here>
         if let Some(caps) = ALT_DIAG_REG_LINE_ONLY.captures(line) {
             if caps.len() < 3 {
