@@ -674,7 +674,6 @@ fn get_diagnostics(diagnostics: &mut Vec<Diagnostic>, tool_output: &str) {
         LazyLock::new(|| Regex::new(r"^.*:(\d+):(\d+):\s+(.*)$").unwrap());
     static DIAG_REG_LINE_ONLY: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^.*:(\d+):\s+(.*)$").unwrap());
-
     static ALT_DIAG_REG_LINE_ONLY: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^.*\((\d+)\):\s+(.*)$").unwrap());
 
