@@ -647,6 +647,98 @@ fn parse_arm_instruction(xml_contents: &str) -> Option<Instruction> {
     Some(instruction)
 }
 
+/// Parse all of the MARS mips pseudo-ops from the `mips.txt` file
+///
+/// # Errors
+///
+/// This function will return `Err` if `docs_path` cannot be read or its contents cannot be parsed
+///
+/// # Panics
+///
+/// This function is highly specialized to parse a single file and will panic if the file is not
+/// in the expected format or if it contains unexpected content
+///
+/// <https://github.com/dpetersanderson/MARS/blob/main/PseudoOps.txt>
+pub fn populate_mars_sudo_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>> {
+    let mut prev_instr: Option<&mut Instruction> = None;
+    let mut instructions = Vec::new();
+
+    let contents = fs::read_to_string(docs_path)?;
+    for line in contents
+        .lines()
+        .filter(|l| !l.is_empty() && !l.trim_start().starts_with('#'))
+        .map(str::trim)
+    {
+        let name = line.split_once(' ').unwrap().0;
+        let (_, description) = line.split_once('#').unwrap();
+        let template = line.replace('\t', " ");
+        match prev_instr {
+            Some(ref mut prev) if prev.name == name => {
+                prev.asm_templates.push(template);
+                continue;
+            }
+            _ => {}
+        }
+
+        let mut summary = description.trim().replace('\t', " ");
+        if let Some(colon_idx) = summary.find(':') {
+            // Only keep common description between psuedo op definitions
+            summary = summary[..colon_idx].trim().to_string();
+        }
+
+        instructions.push(Instruction {
+            name: name.to_string(),
+            summary: format!("{summary}\n\nPseudo-op provided by the MARS assembler",),
+            asm_templates: vec![template],
+            arch: Arch::Mips,
+            forms: Vec::new(),
+            aliases: Vec::new(),
+            url: None,
+        });
+
+        prev_instr = instructions.last_mut();
+    }
+
+    Ok(instructions)
+}
+
+/// Parse all of the mips instruction in the `mips.json` file
+///
+/// # Errors
+///
+/// This function will return `Err` if `docs_path` cannot be read or its contents cannot be parsed
+pub fn populate_mips_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>> {
+    #[derive(Deserialize, Debug)]
+    struct MipsInstruction {
+        pub name: String,
+        pub summary: String,
+        pub asm_templates: Vec<String>,
+    }
+
+    impl From<MipsInstruction> for Instruction {
+        fn from(instr: MipsInstruction) -> Self {
+            Self {
+                name: instr.name.to_ascii_lowercase(),
+                summary: instr.summary,
+                asm_templates: instr.asm_templates,
+                arch: Arch::Mips,
+                forms: Vec::new(),
+                aliases: Vec::new(),
+                url: Some(
+                    "https://www.cs.cornell.edu/courses/cs3410/2008fa/MIPS_Vol2.pdf".to_string(),
+                ),
+            }
+        }
+    }
+
+    let json_contents = fs::read_to_string(docs_path)?;
+    let raw_instrs: Vec<MipsInstruction> =
+        serde_json::from_str(&json_contents).map_err(|e| anyhow!("Failed to parse JSON: {e}"))?;
+    let instructions: Vec<Instruction> = raw_instrs.into_iter().map(Instruction::from).collect();
+
+    Ok(instructions)
+}
+
 /// Parse the provided HTML contents and return a vector of all the instructions based on that.
 /// <https://www.masswerk.at/6502/6502_instruction_set.html>
 ///
@@ -1718,7 +1810,7 @@ pub fn populate_name_to_register_map(
 ///
 /// This function is highly specialized to parse a handful of files and will panic or return
 /// `Err` for most mal-formed/unexpected inputs
-pub fn populate_masm_nasm_fasm_directives(xml_contents: &str) -> Result<Vec<Directive>> {
+pub fn populate_masm_nasm_fasm_mars_directives(xml_contents: &str) -> Result<Vec<Directive>> {
     let mut directives_map = HashMap::<String, Directive>::new();
 
     // iterate through the XML

@@ -37,7 +37,8 @@
             "z80",
             "6502",
             "power-isa",
-            "AVR"
+            "AVR",
+            "mips"
           ]
         },
         {
@@ -52,13 +53,14 @@
     "Assembler": {
       "type": "string",
       "enum": [
+        "avr",
+        "ca65",
+        "fasm",
         "gas",
         "go",
+        "mars",
         "masm",
-        "nasm",
-        "ca65",
-        "avr",
-        "fasm"
+        "nasm"
       ]
     },
     "Config": {

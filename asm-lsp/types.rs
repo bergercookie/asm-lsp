@@ -815,6 +815,9 @@ pub enum Arch {
     #[strum(serialize = "AVR")]
     #[serde(rename = "AVR")] // TODO: lower-case this in the generation code
     Avr,
+    #[strum(serialize = "mips")]
+    #[serde(rename = "mips")]
+    Mips,
     /// For testing purposes *only*. This is not a valid config option
     #[serde(skip)]
     None,
@@ -847,21 +850,22 @@ impl Arch {
         }
 
         match self {
+            Self::ARM => load_registers_with_path!(Self::ARM, "serialized/registers/arm"),
+            Self::ARM64 => load_registers_with_path!(Self::ARM64, "serialized/registers/arm"),
+            Self::Avr => load_registers_with_path!(Self::Avr, "serialized/registers/avr"),
+            Self::Mips => load_registers_with_path!(Self::Mips, "serialized/registers/mips"),
+            Self::MOS6502 => load_registers_with_path!(Self::MOS6502, "serialized/registers/6502"),
+            Self::PowerISA => {
+                load_registers_with_path!(Self::PowerISA, "serialized/registers/power-isa");
+            }
+            Self::RISCV => load_registers_with_path!(Self::RISCV, "serialized/registers/riscv"),
             Self::X86 => load_registers_with_path!(Self::X86, "serialized/registers/x86"),
             Self::X86_64 => load_registers_with_path!(Self::X86_64, "serialized/registers/x86_64"),
             Self::X86_AND_X86_64 => {
                 load_registers_with_path!(Self::X86, "serialized/registers/x86");
                 load_registers_with_path!(Self::X86_64, "serialized/registers/x86_64");
             }
-            Self::ARM => load_registers_with_path!(Self::ARM, "serialized/registers/arm"),
-            Self::ARM64 => load_registers_with_path!(Self::ARM64, "serialized/registers/arm"),
-            Self::RISCV => load_registers_with_path!(Self::RISCV, "serialized/registers/riscv"),
             Self::Z80 => load_registers_with_path!(Self::Z80, "serialized/registers/z80"),
-            Self::MOS6502 => load_registers_with_path!(Self::MOS6502, "serialized/registers/6502"),
-            Self::PowerISA => {
-                load_registers_with_path!(Self::PowerISA, "serialized/registers/power-isa");
-            }
-            Self::Avr => load_registers_with_path!(Self::Avr, "serialized/registers/avr"),
             Self::None => unreachable!(),
         }
     }
@@ -873,6 +877,7 @@ impl Arch {
     /// Panics if unable to deserialize `Instruction`s
     pub fn setup_instructions(
         self,
+        assembler: Option<Assembler>,
         names_to_instructions: &mut HashMap<(Self, String), Instruction>,
     ) {
         macro_rules! load_instructions_with_path {
@@ -894,23 +899,29 @@ impl Arch {
         }
 
         match self {
+            Self::ARM => load_instructions_with_path!(Self::ARM, "serialized/opcodes/arm"),
+            // NOTE: Actually, the arm file are all arm64 so we needed to get
+            // the arm32 versions then do the below
+            Self::ARM64 => load_instructions_with_path!(Self::ARM64, "serialized/opcodes/arm"),
+            Self::Avr => load_instructions_with_path!(Self::Avr, "serialized/opcodes/avr"),
+            Self::MOS6502 => load_instructions_with_path!(Self::MOS6502, "serialized/opcodes/6502"),
+            Self::Mips => {
+                load_instructions_with_path!(Self::Mips, "serialized/opcodes/mips");
+                if Some(Assembler::Mars) == assembler {
+                    load_instructions_with_path!(Self::Mips, "serialized/opcodes/mars");
+                }
+            }
+            Self::PowerISA => {
+                load_instructions_with_path!(Self::PowerISA, "serialized/opcodes/power-isa");
+            }
+            Self::RISCV => load_instructions_with_path!(Self::RISCV, "serialized/opcodes/riscv"),
             Self::X86 => load_instructions_with_path!(Self::X86, "serialized/opcodes/x86"),
             Self::X86_64 => load_instructions_with_path!(Self::X86_64, "serialized/opcodes/x86_64"),
             Self::X86_AND_X86_64 => {
                 load_instructions_with_path!(Self::X86, "serialized/opcodes/x86");
                 load_instructions_with_path!(Self::X86_64, "serialized/opcodes/x86_64");
             }
-            Self::ARM => load_instructions_with_path!(Self::ARM, "serialized/opcodes/arm"),
-            // NOTE: Actually, the arm file are all arm64 so we needed to get
-            // the arm32 versions then do the below
-            Self::ARM64 => load_instructions_with_path!(Self::ARM64, "serialized/opcodes/arm"),
-            Self::RISCV => load_instructions_with_path!(Self::RISCV, "serialized/opcodes/riscv"),
             Self::Z80 => load_instructions_with_path!(Self::Z80, "serialized/opcodes/z80"),
-            Self::MOS6502 => load_instructions_with_path!(Self::MOS6502, "serialized/opcodes/6502"),
-            Self::PowerISA => {
-                load_instructions_with_path!(Self::PowerISA, "serialized/opcodes/power-isa");
-            }
-            Self::Avr => load_instructions_with_path!(Self::Avr, "serialized/opcodes/avr"),
             Self::None => unreachable!(),
         }
     }
@@ -954,16 +965,17 @@ impl Default for Arch {
 impl std::fmt::Display for Arch {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            Self::ARM => write!(f, "arm")?,
+            Self::ARM64 => write!(f, "arm64")?,
+            Self::Avr => write!(f, "avr")?,
+            Self::Mips => write!(f, "mips")?,
+            Self::MOS6502 => write!(f, "6502")?,
+            Self::PowerISA => write!(f, "power-isa")?,
+            Self::RISCV => write!(f, "riscv")?,
             Self::X86 => write!(f, "x86")?,
             Self::X86_64 => write!(f, "x86-64")?,
             Self::X86_AND_X86_64 => write!(f, "x86/x86-64")?,
-            Self::ARM => write!(f, "arm")?,
-            Self::ARM64 => write!(f, "arm64")?,
-            Self::RISCV => write!(f, "riscv")?,
             Self::Z80 => write!(f, "z80")?,
-            Self::MOS6502 => write!(f, "6502")?,
-            Self::PowerISA => write!(f, "power-isa")?,
-            Self::Avr => write!(f, "avr")?,
             Self::None => write!(f, "None")?,
         }
         Ok(())
@@ -988,6 +1000,15 @@ impl std::fmt::Display for Arch {
     JsonSchema,
 )]
 pub enum Assembler {
+    #[strum(serialize = "avr")]
+    #[serde(rename = "avr")]
+    Avr,
+    #[strum(serialize = "ca65")]
+    #[serde(rename = "ca65")]
+    Ca65,
+    #[strum(serialize = "fasm")]
+    #[serde(rename = "fasm")]
+    Fasm,
     #[default]
     #[strum(serialize = "gas")]
     #[serde(rename = "gas")]
@@ -995,21 +1016,15 @@ pub enum Assembler {
     #[strum(serialize = "go")]
     #[serde(rename = "go")]
     Go,
+    #[strum(serialize = "mars")]
+    #[serde(rename = "mars")]
+    Mars,
     #[strum(serialize = "masm")]
     #[serde(rename = "masm")]
     Masm,
     #[strum(serialize = "nasm")]
     #[serde(rename = "nasm")]
     Nasm,
-    #[strum(serialize = "ca65")]
-    #[serde(rename = "ca65")]
-    Ca65,
-    #[strum(serialize = "avr")]
-    #[serde(rename = "avr")]
-    Avr,
-    #[strum(serialize = "fasm")]
-    #[serde(rename = "fasm")]
-    Fasm,
     #[serde(skip)]
     None,
 }
@@ -1042,13 +1057,14 @@ impl Assembler {
         }
 
         match self {
+            Self::Avr => load_directives_with_path!(Self::Avr, "serialized/directives/avr"),
+            Self::Ca65 => load_directives_with_path!(Self::Ca65, "serialized/directives/ca65"),
+            Self::Fasm => load_directives_with_path!(Self::Fasm, "serialized/directives/fasm"),
             Self::Gas => load_directives_with_path!(Self::Gas, "serialized/directives/gas"),
+            Self::Go => warn!("There is currently no Go-specific assembler documentation"),
+            Self::Mars => load_directives_with_path!(Self::Mars, "serialized/directives/mars"),
             Self::Masm => load_directives_with_path!(Self::Masm, "serialized/directives/masm"),
             Self::Nasm => load_directives_with_path!(Self::Nasm, "serialized/directives/nasm"),
-            Self::Go => warn!("There is currently no Go-specific assembler documentation"),
-            Self::Ca65 => load_directives_with_path!(Self::Ca65, "serialized/directives/ca65"),
-            Self::Avr => load_directives_with_path!(Self::Avr, "serialized/directives/avr"),
-            Self::Fasm => load_directives_with_path!(Self::Fasm, "serialized/directives/fasm"),
             Self::None => unreachable!(),
         }
     }

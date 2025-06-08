@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<directives>
+	<directive name=".macro" tool="mars">
+		<description>A pattern-matching and replacement facility that provides a simple mechanism to name a frequently used sequence of instructions</description>
+	</directive>
+	<directive name=".eqv" tool="mars">
+		<description>The .eqv directive (short for "equivalence") is similar to #define in C or C++. It is used to substitute an arbitrary string for an identifier. Using .eqv, you can specify simple substitutions that provide "define once, use many times" capability at assembly pre-processing time.</description>
+	</directive>
+	<directive name=".include" tool="mars">
+		<description>The .include directive has one operand, a quoted filename. When the directive is carried out, the contents of the specified file are substituted for the directive. This occurs during assembly preprocessing. It is like #include in C or C++.</description>
+	</directive>
+</directives>

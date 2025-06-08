@@ -2,8 +2,8 @@ use std::thread::sleep;
 use std::time::Duration;
 
 use asm_lsp::config_builder::{GenerateArgs, GenerateOpts, gen_config};
-use asm_lsp::run_info;
 use asm_lsp::types::LspClient;
+use asm_lsp::{Arch, Assembler, run_info};
 
 use asm_lsp::handle::{handle_notification, handle_request};
 use asm_lsp::{
@@ -112,7 +112,11 @@ pub fn run_lsp() -> Result<()> {
         completion_item: Some(CompletionOptionsCompletionItem {
             label_details_support: Some(true),
         }),
-        trigger_characters: Some(vec![String::from("%"), String::from(".")]),
+        trigger_characters: Some(vec![
+            String::from("%"),
+            String::from("."),
+            String::from("$"),
+        ]),
         ..Default::default()
     });
 
@@ -184,12 +188,16 @@ pub fn run_lsp() -> Result<()> {
     let mut store = ServerStore::default();
     // Populate names to `Instruction`/`Register`/`Directive` maps
     for isa in config.effective_arches() {
-        isa.setup_instructions(&mut store.names_to_info.instructions);
+        isa.setup_instructions(None, &mut store.names_to_info.instructions);
         isa.setup_registers(&mut store.names_to_info.registers);
     }
 
     for assembler in config.effective_assemblers() {
         assembler.setup_directives(&mut store.names_to_info.directives);
+        if assembler == Assembler::Mars {
+            Arch::Mips
+                .setup_instructions(Some(Assembler::Mars), &mut store.names_to_info.instructions);
+        }
     }
 
     // Use the maps we populated above to generate completion items
