@@ -1,0 +1,1190 @@
+[
+    {
+        "name": "abs.s",
+        "summary": "fd ← abs(fs)\nTo compute the absolute value of a single precision FP value\nThe absolute value of the value in FPR fs is placed in FPR fd. The operand and result are values in format fmt. Cause bits are ORed into the Flag bits if no exception is taken.This operation is arithmetic; a NaN operand signals invalid operation.",
+        "asm_templates": [
+            "abs.s fd, fs"
+        ]
+    },
+    {
+        "name": "abs.s",
+        "summary": "fd ← abs(fs)\nTo compute the absolute value of a double precision FP value\nThe absolute value of the value in FPR fs is placed in FPR fd. The operand and result are values in format fmt. Cause bits are ORed into the Flag bits if no exception is taken.This operation is arithmetic; a NaN operand signals invalid operation.",
+        "asm_templates": [
+            "abs.s fd, fs"
+        ]
+    },
+    {
+        "name": "add",
+        "summary": "rd ← rs + rt\nThe 32-bit word value in GPR rt is added to the 32-bit value in GPR rs to produce a 32-bit result.\n\t-If the addition results in 32-bit 2’s complement arithmetic overflow, the destination register is not modified and an Integer Overflow exception occurs.\n\tIf the addition does not overflow, the 32-bit result is placed into GPR rd.",
+        "asm_templates": [
+            "ADD rd, rs, rt"
+        ]
+    },
+    {
+        "name": "add.s",
+        "summary": "fd ← fs + ft\nTo add single precision floating point values\nThe value in FPR ft is added to the value in FPR fs. The result is calculated to infinite precision, rounded by using to the current rounding mode in FCSR, and placed into FPR fd. The operands and result are values in format fmt. Cause bits are ORed into the Flag bits if no exception is taken.",
+        "asm_templates": [
+            "ADD.S fd, fs, ft"
+        ]
+    },
+    {
+        "name": "add.d",
+        "summary": "fd ← fs + ft\nTo add double precision floating point values\nThe value in FPR ft is added to the value in FPR fs. The result is calculated to infinite precision, rounded by using to the current rounding mode in FCSR, and placed into FPR fd. The operands and result are values in format fmt. Cause bits are ORed into the Flag bits if no exception is taken.",
+        "asm_templates": [
+            "ADD.S fd, fs, ft"
+        ]
+    },
+    {
+        "name": "addi",
+        "summary": "rt ← rs + immediate\nTo add a constant to a 32-bit integer. If overflow occurs, then trap.\nThe 16-bit signed immediate is added to the 32-bit value in GPR rs to produce a 32-bit result.\n\tIf the addition results in 32-bit 2’s complement arithmetic overflow, the destination register is not modified and an Integer Overflow exception occurs.\n\tIf the addition does not overflow, the 32-bit result is placed into GPR rt.",
+        "asm_templates": [
+            "ADDI rt, rs, immediate"
+        ]
+    },
+    {
+        "name": "addiu",
+        "summary": "To add a constant to a 32-bit integer\nrt ← rs + immediate\nThe 16-bit signed immediate is added to the 32-bit value in GPR rs and the 32-bit arithmetic result is placed into GPR rt. No Integer Overflow exception occurs under any circumstances.",
+        "asm_templates": [
+            "ADDIU rt, rs, immediate"
+        ]
+    },
+    {
+        "name": "addu",
+        "summary": "To add 32-bit integers\nrd ← rs + rt\nThe 32-bit word value in GPR rt is added to the 32-bit value in GPR rs and the 32-bit arithmetic result is placed into GPR rd. No Integer Overflow exception occurs under any circumstances.",
+        "asm_templates": [
+            "ADDU rd, rs, rt"
+        ]
+    },
+    {
+        "name": "and",
+        "summary": "To do a bitwise logical AND\nrd ← rs AND r\nThe contents of GPR rs are combined with the contents of GPR rt in a bitwise logical AND operation. The result is placed into GPR rd",
+        "asm_templates": [
+            "AND rd, rs, rt"
+        ]
+    },
+    {
+        "name": "andi",
+        "summary": "To do a bitwise logical AND with a constant\nrt ← rs AND immediate\nThe 16-bit immediate is zero-extended to the left and combined with the contents of GPR rs in a bitwise logical AND operation. The result is placed into GPR rt.",
+        "asm_templates": [
+            "ANDI rt, rs, immediate"
+        ]
+    },
+    {
+        "name": "b",
+        "summary": "To do an unconditional branch\nbranch\nB offset is the assembly idiom used to denote an unconditional branch. The actual instruction is interpreted by the hardware as BEQ r0, r0, offset.\n\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.",
+        "asm_templates": [
+            "B offset"
+        ]
+    },
+    {
+        "name": "bal",
+        "summary": "To do an unconditional PC-relative procedure call\nprocedure_call\nBAL offset is the assembly idiom used to denote an unconditional branch. The actual instruction is iterpreted by the hardware as BGEZAL r0, offset.\n\nPlace the return address link in GPR 31. The return link is the address of the second instruction following the branch, where execution continues after a procedure call.\n\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.",
+        "asm_templates": [
+            "BAL rs, offset"
+        ]
+    },
+    {
+        "name": "bc1f",
+        "summary": "To test an FP condition code and do a PC-relative conditional branch\nif cc = 0 then branch\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself) in the branch delay slot to form a PC-relative effective target address. If the FP condition code bit CC is false (0), the program branches to the effective target address after the instruction in the delay slot is executed. An FP condition code is set by the FP compare instruction, C.cond.fmt.",
+        "asm_templates": [
+            "BC1F offset (cc = 0 implied)",
+            "BC1F cc, offset"
+        ]
+    },
+    {
+        "name": "bc1fl",
+        "summary": "To test an FP condition code and make a PC-relative conditional branch; execute the instruction in the delay slot only if the branch is taken.\nif cc = 0 then branch_likely\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself) in the branch delay slot to form a PC-relative effective target address. If the FP Condition Code bit CC is false (0), the program branches to the effective target address after the instruction in the delay slot is executed. If the branch is not taken, the instruction in the delay slot is not executed. An FP condition code is set by the FP compare instruction, C.cond.fmt.",
+        "asm_templates": [
+            "BC1FL offset (cc = 0 implied)",
+            "BC1FL cc, offset"
+        ]
+    },
+    {
+        "name": "bc1t",
+        "summary": "To test an FP condition code and do a PC-relative conditional branch\nif cc = 1 then branch\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself) in the branch delay slot to form a PC-relative effective target address. If the FP condition code bit CC is true (1), the program branches to the effective target address after the instruction in the delay slot is executed. An FP condition code is set by the FP compare instruction, C.cond.fmt.",
+        "asm_templates": [
+            "BC1T offset (cc = 0 implied)",
+            "BC1T cc, offset"
+        ]
+    },
+    {
+        "name": "bc1tl",
+        "summary": "To test an FP condition code and do a PC-relative conditional branch; execute the instruction in the delay slot only if the branch is taken.\nif cc = 1 then branch_likely\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself) in the branch delay slot to form a PC-relative effective target address. If the FP Condition Code bit CC is true (1), the program branches to the effective target address after the instruction in the delay slot is executed. If the branch is not taken, the instruction in the delay slot is not executed. An FP condition code is set by the FP compare instruction, C.cond.fmt.",
+        "asm_templates": [
+            "BC1TL offset (cc = 0 implied)",
+            "BC1TL cc, offset"
+        ]
+    },
+    {
+        "name": "bc2f",
+        "summary": "To test a COP2 condition code and do a PC-relative conditional branch\nif cc = 0 then branchAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself) in the branch delay slot to form a PC-relative effective target address. If the COP2 condition specified by CC is false (0), the program branches to the effective target address after the instruction in the delay slot is executed.",
+        "asm_templates": [
+            "BC2F offset (cc = 0 implied)",
+            "BC2F cc, offset"
+        ]
+    },
+    {
+        "name": "bc2fl",
+        "summary": "To test a COP2 condition code and make a PC-relative conditional branch; execute the instruction in the delay slot only if the branch is taken.\nif cc = 0 then branch_likely\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself) in the branch delay slot to form a PC-relative effective target address. If the COP2 condition specified by CC is false (0), the program branches to the effective target address after the instruction in the delay slot is executed. If the branch is not taken, the instruction in the delay slot is not executed.",
+        "asm_templates": [
+            "BC2FL offset (cc = 0 implied)",
+            "BC2FL cc, offset"
+        ]
+    },
+    {
+        "name": "bc2t",
+        "summary": "To test a COP2 condition code and do a PC-relative conditional branch\nif cc = 1 then branch\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself) in the branch delay slot to form a PC-relative effective target address. If the COP2 condition specified by CC is true (1), the program branches to the effective target address after the instruction in the delay slot is executed.",
+        "asm_templates": [
+            "BC2T offset (cc = 0 implied)",
+            "BC2T cc, offset"
+        ]
+    },
+    {
+        "name": "bc2tl",
+        "summary": "To test a COP2 condition code and do a PC-relative conditional branch; execute the instruction in the delay slot only if the branch is taken.\nif cc = 1 then branch_likely\nn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself) in the branch delay slot to form a PC-relative effective target address. If the COP2 condition specified by CC is true (1), the program branches to the effective target address after the instruction in the delay slot is executed. If the branch is not taken, the instruction in the delay slot is not executed.",
+        "asm_templates": [
+            "BC2TL offset (cc = 0 implied)",
+            "BC2TL cc, offset"
+        ]
+    },
+    {
+        "name": "beq",
+        "summary": "To compare GPRs then do a PC-relative conditional branch\nif rs = rt then branch\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address. If the contents of GPR rs and GPR rt are equal, branch to the effective target address after the instruction in the delay slot is executed.",
+        "asm_templates": [
+            "BEQ rs, rt, offset"
+        ]
+    },
+    {
+        "name": "beql",
+        "summary": "To compare GPRs then do a PC-relative conditional branch; execute the delay slot only if the branch is taken.\nif rs = rt then branch_likely\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.\n\nIf the contents of GPR rs and GPR rt are equal, branch to the target address after the instruction in the delay slot is executed. If the branch is not taken, the instruction in the delay slot is not executed.",
+        "asm_templates": [
+            "BEQL rs, rt, offset"
+        ]
+    },
+    {
+        "name": "bgez",
+        "summary": "To test a GPR then do a PC-relative conditional branch\nif rs ≥ 0 then branch\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address. If the contents of GPR rs are greater than or equal to zero (sign bit is 0), branch to the effective target address after the instruction in the delay slot is executed.",
+        "asm_templates": [
+            "BGEZ rs, offset"
+        ]
+    },
+    {
+        "name": "bgezal",
+        "summary": "To test a GPR then do a PC-relative conditional procedure call\nif rs ≥ 0 then procedure_call\nPlace the return address link in GPR 31. The return link is the address of the second instruction following the branch, where execution continues after a procedure call.\n\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.\n\nIf the contents of GPR rs are greater than or equal to zero (sign bit is 0), branch to the effective target address after the instruction in the delay slot is executed.",
+        "asm_templates": [
+            "BGEZAL rs, offset"
+        ]
+    },
+    {
+        "name": "bgezall",
+        "summary": "To test a GPR then do a PC-relative conditional procedure call; execute the delay slot only if the branch is taken.\nif rs ≥ 0 then procedure_call_likely\nPlace the return address link in GPR 31. The return link is the address of the second instruction following the branch, where execution continues after a procedure call.\n\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.\n\nIf the contents of GPR rs are greater than or equal to zero (sign bit is 0), branch to the effective target address after the instruction in the delay slot is executed. If the branch is not taken, the instruction in the delay slot is not executed.",
+        "asm_templates": [
+            "BGEZALL rs, offset"
+        ]
+    },
+    {
+        "name": "bgezl",
+        "summary": "To test a GPR then do a PC-relative conditional branch; execute the delay slot only if the branch is taken.\nif rs ≥ 0 then branch_likely\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.\n\nIf the contents of GPR rs are greater than or equal to zero (sign bit is 0), branch to the effective target address after the instruction in the delay slot is executed. If the branch is not taken, the instruction in the delay slot is not executed.",
+        "asm_templates": [
+            "BGEZL rs, offset "
+        ]
+    },
+    {
+        "name": "bgtz",
+        "summary": "To test a GPR then do a PC-relative conditional branch\nif rs > 0 then branch\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.\n\nIf the contents of GPR rs are greater than zero (sign bit is 0 but value not zero), branch to the effective target address after the instruction in the delay slot is executed.",
+        "asm_templates": [
+            "BGTZ rs, offset"
+        ]
+    },
+    {
+        "name": "bgtzl",
+        "summary": "To test a GPR then do a PC-relative conditional branch; execute the delay slot only if the branch is taken.\nif rs > 0 then branch_likely\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.\n\nIf the contents of GPR rs are greater than zero (sign bit is 0 but value not zero), branch to the effective target address after the instruction in the delay slot is executed. If the branch is not taken, the instruction in the delay slot is not executed.",
+        "asm_templates": [
+            "BGTZL rs, offset"
+        ]
+    },
+    {
+        "name": "blez",
+        "summary": "To test a GPR then do a PC-relative conditional branch\nif rs ≤ 0 then branch\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.\n\nIf the contents of GPR rs are less than or equal to zero (sign bit is 1 or value is zero), branch to the effective target address after the instruction in the delay slot is executed.",
+        "asm_templates": [
+            "BLEZ rs, offset"
+        ]
+    },
+    {
+        "name": "blezl",
+        "summary": "To test a GPR then do a PC-relative conditional branch; execute the delay slot only if the branch is taken.\nif rs ≤ 0 then branch_likely\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.\n\nIf the contents of GPR rs are less than or equal to zero (sign bit is 1 or value is zero), branch to the effective target address after the instruction in the delay slot is executed. If the branch is not taken, the instruction in the delay slot is not executed.",
+        "asm_templates": [
+            "BLEZL rs, offset"
+        ]
+    },
+    {
+        "name": "bltz",
+        "summary": "To test a GPR then do a PC-relative conditional branch\nif rs < 0 then branch\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.\n\nIf the contents of GPR rs are less than zero (sign bit is 1), branch to the effective target address after the instruction in the delay slot is executed.",
+        "asm_templates": [
+            "BLTZ rs, offset"
+        ]
+    },
+    {
+        "name": "bltzal",
+        "summary": "To test a GPR then do a PC-relative conditional procedure call\nif rs < 0 then procedure_call\nPlace the return address link in GPR 31. The return link is the address of the second instruction following the branch, where execution continues after a procedure call.\n\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.\n\nIf the contents of GPR rs are less than zero (sign bit is 1), branch to the effective target address after the instruction in the delay slot is executed.",
+        "asm_templates": [
+            "BLTZAL rs, offset"
+        ]
+    },
+    {
+        "name": "bltzall",
+        "summary": "To test a GPR then do a PC-relative conditional procedure call; execute the delay slot only if the branch is taken.\nif rs < 0 then procedure_call_likely\nPlace the return address link in GPR 31. The return link is the address of the second instruction following the branch, where execution continues after a procedure call.\n\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.\n\nIf the contents of GPR rs are less than zero (sign bit is 1), branch to the effective target address after the instruction in the delay slot is executed. If the branch is not taken, the instruction in the delay slot is not executed.",
+        "asm_templates": [
+            "BLTZALL rs, offset"
+        ]
+    },
+    {
+        "name": "bltzl",
+        "summary": "To test a GPR then do a PC-relative conditional branch; execute the delay slot only if the branch is taken.\nif rs < 0 then branch_likely\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.\n\nIf the contents of GPR rs are less than zero (sign bit is 1), branch to the effective target address after the instruction in the delay slot is executed. If the branch is not taken, the instruction in the delay slot is not executed.",
+        "asm_templates": [
+            "BLTZL rs, offset"
+        ]
+    },
+    {
+        "name": "bne",
+        "summary": "To compare GPRs then do a PC-relative conditional branch\nif rs ≠ rt then branch\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.\n\nIf the contents of GPR rs and GPR rt are not equal, branch to the effective target address after the instruction in the delay slot is executed.",
+        "asm_templates": [
+            "BNE rs, rt, offset"
+        ]
+    },
+    {
+        "name": "bnel",
+        "summary": "To compare GPRs then do a PC-relative conditional branch; execute the delay slot only if the branch is taken.\nif rs ≠ rt then branch_likely\nAn 18-bit signed offset (the 16-bit offset field shifted left 2 bits) is added to the address of the instruction following the branch (not the branch itself), in the branch delay slot, to form a PC-relative effective target address.\n\nIf the contents of GPR rs and GPR rt are not equal, branch to the effective target address after the instruction in the delay slot is executed. If the branch is not taken, the instruction in the delay slot is not executed.",
+        "asm_templates": [
+            "BNEL rs, rt, offset"
+        ]
+    },
+    {
+        "name": "break",
+        "summary": "To cause a Breakpoint exception\nA breakpoint exception occurs, immediately and unconditionally transferring control to the exception handler. The code field is available for use as software parameters, but is retrieved by the exception handler only by loading the contents of the memory word containing the instruction.",
+        "asm_templates": [
+            "BREAK "
+        ]
+    },
+    {
+        "name": "c",
+        "summary": "To compare FP values and record the Boolean result in a condition code\ncc ← fs compare_cond ft\nThe value in FPR fs is compared to the value in FPR ft; the values are in format fmt. The comparison is exact and neither overflows nor underflows.\n\nIf the comparison specified by cond 2..1 is true for the operand values, the result is true; otherwise, the result is false. If no exception is taken, the result is written into condition code CC; true is 1 and false is 0.\n\nIf one of the values is an SNaN, or cond 3 is set and at least one of the values is a QNaN, an Invalid Operation condition is raised and the Invalid Operation flag is set in the FCSR. If the Invalid Operation Enable bit is set in the FCSR, no result is written and an Invalid Operation exception is taken immediately. Otherwise, the Boolean result is written into condition code CC.\n\nThere are four mutually exclusive ordering relations for comparing floating point values; one relation is always true and the others are false. The familiar relations are greater than, less than, and equal. In addition, the IEEE floating point standard defines the relation unordered, which is true when at least one operand value is NaN; NaN compares unordered with everything, including itself. Comparisons ignore the sign of zero, so +0 equals -0.\n\nThe comparison condition is a logical predicate, or equation, of the ordering relations such as less than or equal, equal, not less than, or unordered or equal. Compare distinguishes among the 16 comparison predicates. The Boolean result of the instruction is obtained by substituting the Boolean value of each ordering relation for the two FP values in the equation. If the equal relation is true, for example, then all four example predicates above yield a true result. If the unordered relation is true then only the final predicate, unordered or equal, yields a true result.\n\nLogical negation of a compare result allows eight distinct comparisons to test for the 16 predicates as shown in . Each mnemonic tests for both a predicate and its logical negation. For each mnemonic, compare tests the truth of the first predicate. When the first predicate is true, the result is true as shown in the “If Predicate Is True” column, and the second predicate must be false, and vice versa. (Note that the False predicate is never true and False/True do not follow the normal pattern.)\n\nThe truth of the second predicate is the logical negation of the instruction result. After a compare instruction, test for the truth of the first predicate can be made with the Branch on FP True (BC1T) instruction and the truth of the second can be made with Branch on FP False (BC1F).",
+        "asm_templates": [
+            "C.cond.S fs, ft (cc = 0 implied)",
+            "C.cond.D fs, ft (cc = 0 implied) MIPS32 (MIPS I)",
+            "C.cond.S cc, fs, ft",
+            "C.cond.D cc, fs, ft"
+        ]
+    },
+    {
+        "name": "cache",
+        "summary": "To perform the cache operation specified by op.\nThe 16-bit offset is sign-extended and added to the contents of the base register to form an effective address. The effective address is used in one of the following ways based on the operation to be performed and the type of cache as described in the following table.",
+        "asm_templates": [
+            "CACHE op, offset(base)"
+        ]
+    },
+    {
+        "name": "ceil.w.s",
+        "summary": "To convert a single precision FP value to 32-bit fixed point, rounding up\nfd ← convert_and_round(fs)\nThe value in FPR fs, in format fmt, is converted to a value in 32-bit word fixed point format and rounding toward +∞ (rounding mode 2). The result is placed in FPR fd.\n\nWhen the source value is Infinity, NaN, or rounds to an integer outside the range -2 31 to 231-1, the result cannot be represented correctly, an IEEE Invalid Operation condition exists, and the Invalid Operation flag is set in the FCSR. If the Invalid Operation Enable bit is set in the FCSR, no result is written to fd and an Invalid Operation exception is taken immediately. Otherwise, the default result, 2 31–1, is written to fd",
+        "asm_templates": [
+            "CEIL.W.S fd, fs"
+        ]
+    },
+    {
+        "name": "ceil.w.d",
+        "summary": "To convert a double precision FP value to 32-bit fixed point, rounding up\nfd ← convert_and_round(fs)\nThe value in FPR fs, in format fmt, is converted to a value in 32-bit word fixed point format and rounding toward +∞ (rounding mode 2). The result is placed in FPR fd.\n\nWhen the source value is Infinity, NaN, or rounds to an integer outside the range -2 31 to 231-1, the result cannot be represented correctly, an IEEE Invalid Operation condition exists, and the Invalid Operation flag is set in the FCSR. If the Invalid Operation Enable bit is set in the FCSR, no result is written to fd and an Invalid Operation exception is taken immediately. Otherwise, the default result, 2 31–1, is written to fd",
+        "asm_templates": [
+            "CEIL.W.S fd, fs"
+        ]
+    },
+    {
+        "name": "cfc1",
+        "summary": "To copy a word from an FPU control register to a GPR\nrt ← FP_Control[fs]\nCopy the 32-bit word from FP (coprocessor 1) control register fs into GPR rt.",
+        "asm_templates": [
+            "CFC1 rt, fs"
+        ]
+    },
+    {
+        "name": "cfc2",
+        "summary": "To copy a word from a Coprocessor 2 control register to a GPR\nrt ← CCR[2,rd]\nCopy the 32-bit word from Coprocessor 2 control register rd into GPR rt.",
+        "asm_templates": [
+            "CFC2 rt, rd"
+        ]
+    },
+    {
+        "name": "clo",
+        "summary": "To Count the number of leading ones in a word\nrd ← count_leading_ones rs\nBits 31..0 of GPR rs are scanned from most significant to least significant bit. The number of leading ones is counted and the result is written to GPR rd. If all of bits 31..0 were set in GPR rs, the result written to GPR rd is 32.",
+        "asm_templates": [
+            "CLO rd, rs"
+        ]
+    },
+    {
+        "name": "clz",
+        "summary": "Count the number of leading zeros in a word\nrd ← count_leading_zeros rs\nBits 31..0 of GPR rs are scanned from most significant to least significant bit. The number of leading zeros is counted and the result is written to GPR rd. If no bits were set in GPR rs, the result written to GPR rt is 32.",
+        "asm_templates": [
+            "CLZ rd, rs"
+        ]
+    },
+    {
+        "name": "cop2",
+        "summary": "To performan operation to Coprocessor 2\nCoprocessorOperation(2, cofun)\nAn implementation-dependent operation is performance to Coprocessor 2, with the cofun value passed as an argument. The operation may specify and reference internal coprocessor registers, and may change the state of the coprocessor conditions, but does not modify state within the processor. Details of coprocessor operation and internal state are described in the documentation for each Coprocessor 2 implementation.",
+        "asm_templates": [
+            "COP2 func"
+        ]
+    },
+    {
+        "name": "ctc1",
+        "summary": "To copy a word from a GPR to an FPU control register\nFP_Control[fs] ← rt\nCopy the low word from GPR rt into the FP (coprocessor 1) control register indicated by fs.\n\nWriting to the floating point Control/Status register, the FCSR, causes the appropriate exception if any Cause bit and its corresponding Enable bit are both set. The register is written before the exception occurs. Writing to FEXR to set a cause bit whose enable bit is already set, or writing to FENR to set an enable bit whose cause bit is already set causes the appropriate exception. The register is written before the exception occurs.",
+        "asm_templates": [
+            "CTC1 rt, fs"
+        ]
+    },
+    {
+        "name": "ctc2",
+        "summary": "To copy a word from a GPR to a Coprocessor 2 control register\nCCR[2,rd] ← rt\nCopy the low word from GPR rt into the Coprocessor 2control register indicated by rd.",
+        "asm_templates": [
+            "CTC2 rt, rd"
+        ]
+    },
+    {
+        "name": "cvt.d",
+        "summary": "To convert an FP or fixed point value to double FP\nfd ← convert_and_round(fs)\nThe value in FPR fs, in format fmt, is converted to a value in double floating point format and rounded according to the current rounding mode in FCSR. The result is placed in FPR fd. If fmt is S or W, then the operation is always exact.",
+        "asm_templates": [
+            "CVT.D.S fd, fs",
+            "CVT.D.W fd, fs",
+            "CVT.D.L fd, fs"
+        ]
+    },
+    {
+        "name": "cvt.s",
+        "summary": "To convert an FP or fixed point value to single FP\nfd ← convert_and_round(fs)\nThe value in FPR fs, in format fmt, is converted to a value in single floating point format and rounded according to the current rounding mode in FCSR. The result is placed in FPR fd.",
+        "asm_templates": [
+            "CVT.S.D fd, fs",
+            "CVT.S.W fd, fs",
+            "CVT.S.L fd, fs"
+
+        ]
+    },
+    {
+        "name": "cvt.w.s",
+        "summary": "To convert a single precision FP value to 32-bit fixed point\nfd ← convert_and_round(fs)\nThe value in FPR fs, in format fmt, is converted to a value in 32-bit word fixed point format and rounded according to the current rounding mode in FCSR. The result is placed in FPR fd.\n\nWhen the source value is Infinity, NaN, or rounds to an integer outside the range -2 31 to 231-1, the result cannot be represented correctly, an IEEE Invalid Operation condition exists, and the Invalid Operation flag is set in the FCSR. If the Invalid Operation Enable bit is set in the FCSR, no result is written to fd and an Invalid Operation exception is taken immediately. Otherwise, the default result, 2 31–1, is written to fd.",
+        "asm_templates": [
+            "CVT.W.S fd, fs"
+        ]
+    },
+    {
+        "name": "cvt.w.d",
+        "summary": "To convert a double precision FP value to 32-bit fixed point\nfd ← convert_and_round(fs)\nThe value in FPR fs, in format fmt, is converted to a value in 32-bit word fixed point format and rounded according to the current rounding mode in FCSR. The result is placed in FPR fd.\n\nWhen the source value is Infinity, NaN, or rounds to an integer outside the range -2 31 to 231-1, the result cannot be represented correctly, an IEEE Invalid Operation condition exists, and the Invalid Operation flag is set in the FCSR. If the Invalid Operation Enable bit is set in the FCSR, no result is written to fd and an Invalid Operation exception is taken immediately. Otherwise, the default result, 2 31–1, is written to fd.",
+        "asm_templates": [
+            "CVT.W.S fd, fs"
+        ]
+    },
+    {
+        "name": "deret",
+        "summary": "To Return from a debug exception.\nDERET returns from Debug Mode and resumes non-debug execution at the instruction whose address is contained in the DEPC register. DERET does not execute the next instruction (i.e. it has no delay slot).",
+        "asm_templates": [
+            "DERET"
+        ]
+    },
+    {
+        "name": "div",
+        "summary": "To divide a 32-bit signed integers\n(LO, HI) ← rs / rt\nThe 32-bit word value in GPR rs is divided by the 32-bit value in GPR rt, treating both operands as signed values.\n\nThe 32-bit quotient is placed into special register LO and the 32-bit remainder isplaced into special register HI.\n\nNo arithmetic exception occurs under any circumstances.",
+        "asm_templates": [
+            "DIV rs, rt"
+        ]
+    },
+    {
+        "name": "div.s",
+        "summary": "To divide single precision FP values\nfd ← fs / ft\nThe value in FPR fs is divided by the value in FPR ft. The result is calculated to infinite precision, rounded according to the current rounding mode in FCSR, and placed into FPR fd. The operands and result are values in format fmt.",
+        "asm_templates": [
+            "DIV.S fd, fs, ft"
+        ]
+    },
+    {
+        "name": "div.d",
+        "summary": "To divide double precision FP values\nfd ← fs / ft\nThe value in FPR fs is divided by the value in FPR ft. The result is calculated to infinite precision, rounded according to the current rounding mode in FCSR, and placed into FPR fd. The operands and result are values in format fmt.",
+        "asm_templates": [
+            "DIV.S fd, fs, ft"
+        ]
+    },
+    {
+        "name": "divu",
+        "summary": "To divide a 32-bit unsigned integers\n(LO, HI) ← rs / rt\nThe 32-bit word value in GPR rs is divided by the 32-bit value in GPR rt, treating both operands as unsigned values.\n\nThe 32-bit quotient is placed into special register LO and the 32-bit remainder is placed into special register HI.\nNo arithmetic exception occurs under any circumstances.",
+        "asm_templates": [
+            "DIVU rs, rt"
+        ]
+    },
+    {
+        "name": "eret",
+        "summary": "To return from interrupt, exception, or error trap.\nERET returns to the interrupted instruction at the completion of interrupt, exception, or error trap processing. ERET does not execute the next instruction (i.e., it has no delay slot).",
+        "asm_templates": [
+            "ERET"
+        ]
+    },
+    {
+        "name": "floor.w.s",
+        "summary": "To convert an FP value to 32-bit fixed point, rounding down\nfd ← convert_and_round(fs)\nThe value in FPR fs, in format fmt, is converted to a value in 32-bit word fixed point format and rounded toward –∞ (rounding mode 3). The result is placed in FPR fd.\n\nWhen the source value is Infinity, NaN, or rounds to an integer outside the range -2 31 to 231-1, the result cannot be represented correctly, an IEEE Invalid Operation condition exists, and the Invalid Operation flag is set in the FCSR. If the Invalid Operation Enable bit is set in the FCSR, no result is written to fd and an Invalid Operation exception is taken immediately. Otherwise, the default result, 2 31–1, is written to fd.",
+        "asm_templates": [
+            "FLOOR.W.S fd, fs"
+        ]
+    },
+    {
+        "name": "j",
+        "summary": "To branch within the current 256 MB-aligned region\nThis is a PC-region branch (not PC-relative); the effective target address is in the “current” 256 MB-aligned region. The low 28 bits of the target address is the instr_index field shifted left 2 bits. The remaining upper bits are the corresponding bits of the address of the instruction in the delay slot (not the branch itself).\n\nJump to the effective target address. Execute the instruction that follows the jump, in the branch delay slot, before executing the jump itself.",
+        "asm_templates": [
+            "J target"
+        ]
+    },
+    {
+        "name": "jal",
+        "summary": "To execute a procedure call within the current 256 MB-aligned region\nPlace the return address link in GPR 31. The return link is the address of the second instruction following the branch, at which location execution continues after a procedure call.\n\nThis is a PC-region branch (not PC-relative); the effective target address is in the “current” 256 MB-aligned region. The low 28 bits of the target address is the instr_index field shifted left 2 bits. The remaining upper bits are the corresponding bits of the address of the instruction in the delay slot (not the branch itself).\n\nJump to the effective target address. Execute the instruction that follows the jump, in the branch delay slot, before executing the jump itself.",
+        "asm_templates": [
+            "JAL target"
+        ]
+    },
+    {
+        "name": "jalr",
+        "summary": "To execute a procedure call to an instruction address in a register\n rd ← return_addr, PC ← rs\nPlace the return address link in GPR rd. The return link is the address of the second instruction following the branch, where execution continues after a procedure call.\nFor processors that do not implement the MIPS16 ASE:\n- Jump to the effective target address in GPR rs. Execute the instruction that follows the jump, in the branch delay slot, before executing the jump itself.\n\nFor processors that do implement the MIPS16 ASE:\n- Jump to the effective target address in GPR rs. Set the ISA Mode bit to the value in GPR rs bit 0. Bit 0 of the target address is always zero so that no Address Exceptions occur when bit 0 of the source register is one\n\nAt this time the only defined hint field value is 0, which sets default handling of JALR. Future versions of the architecture may define additional hint values.",
+        "asm_templates": [
+            "JALR rs (rd = 31 implied)",
+            "JALR rd, rs"
+        ]
+    },
+    {
+        "name": "jr",
+        "summary": "To execute a branch to an instruction address in a register\n PC ← rs\nJump to the effective target address in GPR rs. Execute the instruction following the jump, in the branch delay slot, before jumping.\n\nFor processors that implement the MIPS16 ASE, set the ISA Mode bit to the value in GPR rs bit 0. Bit 0 of the target address is always zero so that no Address Exceptions occur when bit 0 of the source register is one",
+        "asm_templates": [
+            "JR rs"
+        ]
+    },
+    {
+        "name": "lb",
+        "summary": "To load a byte from memory as a signed value\n rt ← memory[base+offset]\nThe contents of the 8-bit byte at the memory location specified by the effective address are fetched, sign-extended, and placed in GPR rt. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "LB rt, offset(base)"
+        ]
+    },
+    {
+        "name": "lbu",
+        "summary": "To load a byte from memory as an unsigned value\nrt ← memory[base+offset]\nThe contents of the 8-bit byte at the memory location specified by the effective address are fetched, zero-extended, and placed in GPR rt. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "LBU rt, offset(base)"
+        ]
+    },
+    {
+        "name": "lcd1",
+        "summary": "To load a doubleword from memory to an FPR\n ft ← memory[base+offset]\nThe contents of the 64-bit doubleword at the memory location specified by the aligned effective address are fetched and placed in FPR ft. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "LDC1 ft, offset(base)"
+        ]
+    },
+    {
+        "name": "ldc2",
+        "summary": "To load a doubleword from memory to a Coprocessor 2 register\nrt ← memory[base+offset]\nThe contents of the 64-bit doubleword at the memory location specified by the aligned effective address are fetched and placed in Coprocessor 2 register rt. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "LDC2 rt, offset(base)"
+        ]
+    },
+    {
+        "name": "lh",
+        "summary": "To load a halfword from memory as a signed value\nrt ← memory[base+offset]\nThe contents of the 16-bit halfword at the memory location specified by the aligned effective address are fetched, sign-extended, and placed in GPR rt. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "LH rt, offset(base)"
+        ]
+    },
+    {
+        "name": "lhu",
+        "summary": "To load a halfword from memory as an unsigned value\nrt ← memory[base+offset]\nThe contents of the 16-bit halfword at the memory location specified by the aligned effective address are fetched, zero-extended, and placed in GPR rt. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "LHU rt, offset(base)"
+        ]
+    },
+    {
+        "name": "ll",
+        "summary": "To load a word from memory for an atomic read-modify-write\nrt ← memory[base+offset]\nThe LL and SC instructions provide the primitives to implement atomic read-modify-write (RMW) operations for cached memory locations.\n\nThe 16-bit signed offset is added to the contents of GPR base to form an effective address. The contents of the 32-bit word at the memory location specified by the aligned effective address are fetched, sign-extended to the GPR register length if necessary, and written into GPR rt.\n\nThis begins a RMW sequence on the current processor. There can be only one active RMW sequence per processor.\n\nWhen an LL is executed it starts an active RMW sequence replacing any other sequence that was active.\n\nThe RMW sequence is completed by a subsequent SC instruction that either completes the RMW sequence atomically and succeeds, or does not and fails.\n\nExecuting LL on one processor does not cause an action that, by itself, causes an SC for the same block to fail on another processor.\n\nAn execution of LL does not have to be followed by execution of SC; a program is free to abandon the RMW sequence without attempting a write.",
+        "asm_templates": [
+            "LL rt, offset(base)"
+        ]
+    },
+    {
+        "name": "lui",
+        "summary": "To load a constant into the upper half of a word\nrt ← immediate || 016\nThe 16-bit immediate is shifted left 16 bits and concatenated with 16 bits of low-order zeros. The 32-bit result is placed into GPR rt.",
+        "asm_templates": [
+            "LUI rt, immediate"
+        ]
+    },
+    {
+        "name": "lw",
+        "summary": "To load a word from memory as a signed value\nrt ← memory[base+offset]\nThe contents of the 32-bit word at the memory location specified by the aligned effective address are fetched, sign-extended to the GPR register length if necessary, and placed in GPR rt. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "LW rt, offset(base)"
+        ]
+    },
+    {
+        "name": "lwc1",
+        "summary": "To load a word from memory to an FPR\nft ← memory[base+offset]\nThe contents of the 32-bit word at the memory location specified by the aligned effective address are fetched and placed into the low word of coprocessor 1 general register ft. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "LWC1 ft, offset(base)"
+        ]
+    },
+    {
+        "name": "lwc2",
+        "summary": "To load a word from memory to a COP2 register\nrt ← memory[base+offset]\nThe contents of the 32-bit word at the memory location specified by the aligned effective address are fetched and placed into the low word of COP2 (Coprocessor 2) general register rt. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "LWC2 rt, offset(base)"
+        ]
+    },
+    {
+        "name": "lwl",
+        "summary": "To load the most-significant part of a word as a signed value from an unaligned memory address\nrt ← rt MERGE memory[base+offset]\nThe 16-bit signed offset is added to the contents of GPR base to form an effective address (EffAddr). EffAddr is the address of the most-significant of 4 consecutive bytes forming a word (W) in memory starting at an arbitrary byte boundary.\n\nThe most-significant 1 to 4 bytes of W is in the aligned word containing the EffAddr. This part of W is loaded into the most-significant (left) part of the word in GPR rt. The remaining least-significant part of the word in GPR rt is unchanged.\n\nThe figure below illustrates this operation using big-endian byte ordering for 32-bit and 64-bit registers. The 4 consecutive bytes in 2..5 form an unaligned word starting at location 2. A part of W, 2 bytes, is in the aligned word containing the most-significant byte at 2. First, LWL loads these 2 bytes into the left part of the destination register word and leaves the right part of the destination word unchanged. Next, the complementary LWR loads the remainder of the unaligned word",
+        "asm_templates": [
+            "LWL rt, offset(base)"
+        ]
+    },
+    {
+        "name": "lwr",
+        "summary": "To load the least-significant part of a word from an unaligned memory address as a signed value\nrt ← rt MERGE memory[base+offset]\nThe 16-bit signed offset is added to the contents of GPR base to form an effective address (EffAddr). EffAddr is the address of the least-significant of 4 consecutive bytes forming a word (W) in memory starting at an arbitrary byte boundary.\n\nA part of W, the least-significant 1 to 4 bytes, is in the aligned word containing EffAddr. This part of W is loaded into the least-significant (right) part of the word in GPR rt. The remaining most-significant part of the word in GPR rt is unchanged.\n\nExecuting both LWR and LWL, in either order, delivers a sign-extended word value in the destination register. The figure below illustrates this operation using big-endian byte ordering for 32-bit and 64-bit registers. The 4 consecutive bytes in 2..5 form an unaligned word starting at location 2. A part of W, 2 bytes, is in the aligned word containing the least-significant byte at 5. First, LWR loads these 2 bytes into the right part of the destination register. Next, the complementary LWL loads the remainder of the unaligned word.",
+        "asm_templates": [
+            "LWR rt, offset(base)"
+        ]
+    },
+    {
+        "name": "madd",
+        "summary": "To multiply two words and add the result to Hi, Lo\n(LO,HI) ← (rs x rt) + (LO,HI)The 32-bit word value in GPR rs is multiplied by the 32-bit word value in GPR rt, treating both operands as signed values, to produce a 64-bit result. The product is added to the 64-bit concatenated values of HI and LO.. The most significant 32 bits of the result are written into HI and the least signficant 32 bits are written into LO. No arithmetic exception occurs under any circumstances.",
+        "asm_templates": [
+            "MADD rs, rt"
+        ]
+    },
+    {
+        "name": "maddu",
+        "summary": "To multiply two unsigned words and add the result to Hi, Lo.\n(LO,HI) ← (rs x rt) + (LO,HI)\nThe 32-bit word value in GPR rs is multiplied by the 32-bit word value in GPR rt, treating both operands as unsigned values, to produce a 64-bit result. The product is added to the 64-bit concatenated values of HI and LO.. The most significant 32 bits of the result are written into HI and the least signficant 32 bits are written into LO. No arithmetic exception occurs under any circumstances.",
+        "asm_templates": [
+            "MADDU rs, rt"
+        ]
+    },
+    {
+        "name": "mfc0",
+        "summary": "To move the contents of a coprocessor 0 register to a general register.\nrt ← CPR[0,rd,sel]\nThe contents of the coprocessor 0 register specified by the combination of rd and sel are loaded into general registe rt. Note that not all coprocessor 0 registers support the sel field. In those instances, the sel field must be zero.",
+        "asm_templates": [
+            "MFC0 rt, rd"
+        ]
+    },
+    {
+        "name": "mfc1",
+        "summary": "To copy a word from an FPU (CP1) general register to a GPR\nrt ← fs\nThe contents of FPR fs are loaded into general register rt.",
+        "asm_templates": [
+            "MFC1 rt, fs"
+        ]
+    },
+    {
+        "name": "mfc2",
+        "summary": "To copy a word from a COP2 general register to a GPR\nrt ← rd\nThe contents of GPR rt are and placed into the coprocessor 2 register specified by the rd and sel fields. Note that not all coprocessor 2 registers may support the sel field. In those instances, the sel field must be zero.",
+        "asm_templates": [
+            "MFC2 rt, rd",
+            "MFC2, rt, rd, sel"
+        ]
+    },
+    {
+        "name": "mfhi",
+        "summary": "To copy the special purpose HI register to a GPR\nrd ← HI\nThe contents of special register HI are loaded into GPR rd.",
+        "asm_templates": [
+            "MFHI rd"
+        ]
+    },
+    {
+        "name": "mflo",
+        "summary": "To copy the special purpose LO register to a GPR\nrd ← LO\nThe contents of special register LO are loaded into GPR rd.",
+        "asm_templates": [
+            "MFLO rd"
+        ]
+    },
+    {
+        "name": "mov.s",
+        "summary": "To move a single precision FP value between FPRs\nfd ← fs\nThe value in FPR fs is placed into FPR fd. The source and destination are values in format fmt. The move is non-arithmetic; it causes no IEEE 754 exceptions.",
+        "asm_templates": [
+            "MOV.S fd, fs"
+        ]
+    },
+    {
+        "name": "mov.d",
+        "summary": "To move a double precision FP value between FPRs\nfd ← fs\nThe value in FPR fs is placed into FPR fd. The source and destination are values in format fmt. The move is non-arithmetic; it causes no IEEE 754 exceptions.",
+        "asm_templates": [
+            "MOV.S fd, fs"
+        ]
+    },
+    {
+        "name": "movf",
+        "summary": "To test an FP condition code then conditionally move a GPR\nif cc = 0 then rd ← rs\nIf the floating point condition code specified by CC is zero, then the contents of GPR rs are placed into GPR rd.",
+        "asm_templates": [
+            "MOVF rd, rs, cc"
+        ]
+    },
+    {
+        "name": "movf.s",
+        "summary": "To test an FP condition code then conditionally move an FP value\nif cc = 0 then fd ← fs\nIf the floating point condition code specified by CC is zero, then the value in FPR fs is placed into FPR fd. The source and destination are values in format fmt.\n\nIf the condition code is not zero, then FPR fs is not copied and FPR fd retains its previous value in format fmt. If fd did not contain a value either in format fmt or previously unused data from a load or move-to operation that could be interpreted in format fmt, then the value of fd becomes UNPREDICTABLE.\n\nThe move is non-arithmetic; it causes no IEEE 754 exceptions.",
+        "asm_templates": [
+            "MOVF.S fd, fs, cc"
+        ]
+    },
+    {
+        "name": "movn",
+        "summary": "To conditionally move a GPR after testing a GPR value\nif rt ≠ 0 then rd ← rs\nIf the value in GPR rt is not equal to zero, then the contents of GPR rs are placed into GPR rd.",
+        "asm_templates": [
+            "MOVN rd, rs, rt"
+        ]
+    },
+    {
+        "name": "movn.s",
+        "summary": "To test a GPR then conditionally move a single precision FP value\nif rt ≠ 0 then fd ← fs\nIf the value in GPR rt is not equal to zero, then the value in FPR fs is placed in FPR fd. The source and destination are values in format fmt.\n\nIf GPR rt contains zero, then FPR fs is not copied and FPR fd contains its previous value in format fmt. If fd did not contain a value either in format fmt or previously unused data from a load or move-to operation that could be interpreted in format fmt, then the value of fd becomes UNPREDICTABLE.\n\nThe move is non-arithmetic; it causes no IEEE 754 exceptions.",
+        "asm_templates": [
+            "MOVN.S fd, fs, rt "
+        ]
+    },
+    {
+        "name": "movn.d",
+        "summary": "To test a GPR then conditionally move a double precision FP value\nif rt ≠ 0 then fd ← fs\nIf the value in GPR rt is not equal to zero, then the value in FPR fs is placed in FPR fd. The source and destination are values in format fmt.\n\nIf GPR rt contains zero, then FPR fs is not copied and FPR fd contains its previous value in format fmt. If fd did not contain a value either in format fmt or previously unused data from a load or move-to operation that could be interpreted in format fmt, then the value of fd becomes UNPREDICTABLE.\n\nThe move is non-arithmetic; it causes no IEEE 754 exceptions.",
+        "asm_templates": [
+            "MOVN.S fd, fs, rt "
+        ]
+    },
+    {
+        "name": "movt",
+        "summary": "To test an FP condition code then conditionally move a GPR\nif cc = 1 then rd ← rs\nIf the floating point condition code specified by CC is one, then the contents of GPR rs are placed into GPR rd.",
+        "asm_templates": [
+            "MOVT rd, rs, cc"
+        ]
+    },
+    {
+        "name": "movt.s",
+        "summary": "To test an FP condition code then conditionally move a single precision FP value\nif cc = 1 then fd ← fs\nIf the floating point condition code specified by CC is one, then the value in FPR fs is placed into FPR fd. The source and destination are values in format fmt.\n\nIf the condition code is not one, then FPR fs is not copied and FPR fd contains its previous value in format fmt. If fd did not contain a value either in format fmt or previously unused data from a load or move-to operation that could be interpreted in format fmt, then the value of fd becomes undefined.\n\nThe move is non-arithmetic; it causes no IEEE 754 exceptions.",
+        "asm_templates": [
+            "MOVT.S fd, fs, cc"
+        ]
+    },
+    {
+        "name": "movt.d",
+        "summary": "To test an FP condition code then conditionally move a single precision FP value\nif cc = 1 then fd ← fs\nIf the floating point condition code specified by CC is one, then the value in FPR fs is placed into FPR fd. The source and destination are values in format fmt.\n\nIf the condition code is not one, then FPR fs is not copied and FPR fd contains its previous value in format fmt. If fd did not contain a value either in format fmt or previously unused data from a load or move-to operation that could be interpreted in format fmt, then the value of fd becomes undefined.\n\nThe move is non-arithmetic; it causes no IEEE 754 exceptions.",
+        "asm_templates": [
+            "MOVT.D fd, fs, cc"
+        ]
+    },
+    {
+        "name": "movz",
+        "summary": "To conditionally move a GPR after testing a GPR value\nif rt = 0 then rd ← rs\nIf the value in GPR rt is equal to zero, then the contents of GPR rs are placed into GPR rd.",
+        "asm_templates": [
+            "MOVZ rd, rs, rt"
+        ]
+    },
+    {
+        "name": "movz.s",
+        "summary": "To test a GPR then conditionally move a single precision FP value\nif rt = 0 then fd ← fs\nIf the value in GPR rt is equal to zero then the value in FPR fs is placed in FPR fd. The source and destination are values in format fmt.\n\nIf GPR rt is not zero, then FPR fs is not copied and FPR fd contains its previous value in format fmt. If fd did not contain a value either in format fmt or previously unused data from a load or move-to operation that could be interpreted in format fmt, then the value of fd becomes UNPREDICTABLE.\n\nThe move is non-arithmetic; it causes no IEEE 754 exceptions.",
+        "asm_templates": [
+            "MOVZ.S fd, fs, rt"
+        ]
+    },
+    {
+        "name": "movz.d",
+        "summary": "To test a GPR then conditionally move a double precision FP value\nif rt = 0 then fd ← fs\nIf the value in GPR rt is equal to zero then the value in FPR fs is placed in FPR fd. The source and destination are values in format fmt.\n\nIf GPR rt is not zero, then FPR fs is not copied and FPR fd contains its previous value in format fmt. If fd did not contain a value either in format fmt or previously unused data from a load or move-to operation that could be interpreted in format fmt, then the value of fd becomes UNPREDICTABLE.\n\nThe move is non-arithmetic; it causes no IEEE 754 exceptions.",
+        "asm_templates": [
+            "MOVZ.D fd, fs, rt"
+        ]
+    },
+    {
+        "name": "msub",
+        "summary": "To multiply two words and subtract the result from Hi, Lo\n(LO,HI) ← (rs x rt) - (LO,HI)\nThe 32-bit word value in GPR rs is multiplied by the 32-bit value in GPR rt, treating both operands as signed values, to produce a 64-bit result. The product is subtracted from the 64-bit concatenated values of HI and LO.. The most significant 32 bits of the result are written into HI and the least signficant 32 bits are written into LO. No arithmetic exception occurs under any circumstances.",
+        "asm_templates": [
+            "MSUB rs, rt"
+        ]
+    },
+    {
+        "name": "msubu",
+        "summary": "To multiply two words and subtract the result from Hi, Lo\n(LO,HI) ← (rs x rt) - (LO,HI)\nThe 32-bit word value in GPR rs is multiplied by the 32-bit word value in GPR rt, treating both operands as unsigned values, to produce a 64-bit result. The product is subtracted from the 64-bit concatenated values of HI and LO.. The most significant 32 bits of the result are written into HI and the least signficant 32 bits are written into LO. No arithmetic exception occurs under any circumstances.",
+        "asm_templates": [
+            "MSUBU rs, rt"
+        ]
+    },
+    {
+        "name": "mtc0",
+        "summary": "To move the contents of a general register to a coprocessor 0 register.\nCPR[r0, rd, sel] ← rt\nThe contents of general register rt are loaded into the coprocessor 0 register specified by the combination of rd and sel. Not all coprocessor 0 registers support the the sel field. In those instances, the sel field must be set to zero.",
+        "asm_templates": [
+            "MTC0 rt, rd"
+        ]
+    },
+    {
+        "name": "mtc1",
+        "summary": "To copy a word from a GPR to an FPU (CP1) general register\nfs ← rt\nThe low word in GPR rt is placed into the low word of floating point (Coprocessor 1) general register fs",
+        "asm_templates": [
+            "MTC1 rt, fs"
+        ]
+    },
+    {
+        "name": "mtc2",
+        "summary": "To copy a word from a GPR to a COP2 general register\nrd ← rt\nThe low word in GPR rt is placed into the low word of coprocessor 2 general register specified by the rd and sel fields. Note that not all coprocessor 2 registers may support the sel field. In those instances, the sel field must be zero.",
+        "asm_templates": [
+            "MTC2 rt, rd",
+            "MTC2 rt, rd, sel"
+        ]
+    },
+    {
+        "name": "mthi",
+        "summary": "To copy a GPR to the special purpose HI register\n HI ← rs\nThe contents of GPR rs are loaded into special register HI.",
+        "asm_templates": [
+            "MTHI rs"
+        ]
+    },
+    {
+        "name": "mtlo",
+        "summary": "To copy a GPR to the special purpose LO register\nLO ← rs\nThe contents of GPR rs are loaded into special register LO.",
+        "asm_templates": [
+            "MTLO rs"
+        ]
+    },
+    {
+        "name": "mul",
+        "summary": "To multiply two words and write the result to a GPR.\nrd ← rs × rt\nThe 32-bit word value in GPR rs is multiplied by the 32-bit value in GPR rt, treating both operands as signed values, to produce a 64-bit result. The least significant 32 bits of the product are written to GPR rd. The contents of HI and LO are UNPREDICTABLE after the operation. No arithmetic exception occurs under any circumstances.",
+        "asm_templates": [
+            "MUL rd, rs, rt"
+        ]
+    },
+    {
+        "name": "mul.s",
+        "summary": "To multiply single precision FP values\nfd ← fs × ft\nThe value in FPR fs is multiplied by the value in FPR ft. The result is calculated to infinite precision, rounded according to the current rounding mode in FCSR, and placed into FPR fd. The operands and result are values in format fmt.",
+        "asm_templates": [
+            "MUL.S fd, fs, ft"
+        ]
+    },
+    {
+        "name": "mul.d",
+        "summary": "To multiply single precision FP values\nfd ← fs × ft\nThe value in FPR fs is multiplied by the value in FPR ft. The result is calculated to infinite precision, rounded according to the current rounding mode in FCSR, and placed into FPR fd. The operands and result are values in format fmt.",
+        "asm_templates": [
+            "MUL.D fd, fs, ft"
+        ]
+    },
+    {
+        "name": "mult",
+        "summary": "To multiply 32-bit signed integers\n(LO, HI) ← rs × rt\nThe 32-bit word value in GPR rt is multiplied by the 32-bit value in GPR rs, treating both operands as signed values, to produce a 64-bit result. The low-order 32-bit word of the result is placed into special register LO, and the high-order 32-bit word is splaced into special register HI.\n\nNo arithmetic exception occurs under any circumstances.",
+        "asm_templates": [
+            "MULT rs, rt"
+        ]
+    },
+    {
+        "name": "multu",
+        "summary": "To multiply 32-bit unsigned integers\n(LO, HI) ← rs × rt\nThe 32-bit word value in GPR rt is multiplied by the 32-bit value in GPR rs, treating both operands as unsigned values, to produce a 64-bit result. The low-order 32-bit word of the result is placed into special register LO, and the high-order 32-bit word is placed into special register HI. No arithmetic exception occurs under any circumstances.",
+        "asm_templates": [
+            "MULTU rs, rt"
+        ]
+    },
+    {
+        "name": "neg.s",
+        "summary": "To negate an FP value\nfd ← −fs\nThe value in FPR fs is negated and placed into FPR fd. The value is negated by changing the sign bit value. The operand and result are values in format fmt. This operation is arithmetic; a NaN operand signals invalid operation.",
+        "asm_templates": [
+            "NEG.S fd, fs"
+        ]
+    },
+    {
+        "name": "neg.d",
+        "summary": "To negate an FP value\nfd ← −fs\nThe value in FPR fs is negated and placed into FPR fd. The value is negated by changing the sign bit value. The operand and result are values in format fmt. This operation is arithmetic; a NaN operand signals invalid operation.",
+        "asm_templates": [
+            "NEG.D fd, fs"
+        ]
+    },
+    {
+        "name": "nop",
+        "summary": "To perform no operation.\nNOP is the assembly idiom used to denote no operation. The actual instruction is interpreted by the hardware as SLL r0, r0, 0.",
+        "asm_templates": [
+            "NOP"
+        ]
+    },
+    {
+        "name": "nor",
+        "summary": "To do a bitwise logical NOT OR\nrd ← rs NOR rt\nThe contents of GPR rs are combined with the contents of GPR rt in a bitwise logical NOR operation. The result is placed into GPR rd.",
+        "asm_templates": [
+            "NOR rd, rs, rt"
+        ]
+    },
+    {
+        "name": "or",
+        "summary": "To do a bitwise logical OR\nrd ← rs or rt\nThe contents of GPR rs are combined with the contents of GPR rt in a bitwise logical OR operation. The result is placed into GPR rd.",
+        "asm_templates": [
+            "OR rd, rs, rt"
+        ]
+    },
+    {
+        "name": "ori",
+        "summary": "To do a bitwise logical OR with a constant\nrt ← rs or immediate\nThe 16-bit immediate is zero-extended to the left and combined with the contents of GPR rs in a bitwise logical OR operation. The result is placed into GPR rt.",
+        "asm_templates": [
+            "ORI rt, rs, immediate"
+        ]
+    },
+    {
+        "name": "pref",
+        "summary": "To move data between memory and cache.\nprefetch_memory(base+offset)\nPREF adds the 16-bit signed offset to the contents of GPR base to form an effective byte address. The hint field supplies information about the way that the data is expected to be used.\n\nPREF enables the processor to take some action, typically prefetching the data into cache, to improve program performance. The action taken for a specific PREF instruction is both system and context dependent. Any action, including doing nothing, is permitted as long as it does not change architecturally visible state or alter the meaning of a program. Implementations are expected either to do nothing, or to take an action that increases the performance of the program.\n\nPREF does not cause addressing-related exceptions. If the address specified would cause an addressing exception, the exception condition is ignored and no data movement occurs.However even if no data is prefetched, some action that is not architecturally visible, such as writeback of a dirty cache line, can take place.\n\nPREF never generates a memory operation for a location with an uncached memory access type.\n\nIf PREF results in a memory operation, the memory access type used for the operation is determined by the memory access type of the effective address, just as it would be if the memory operation had been caused by a load or store to the effective address.\n\nFor a cached location, the expected and useful action for the processor is to prefetch a block of data that includes the effective address. The size of the block and the level of the memory hierarchy it is fetched into are implementation specific.\n\nThe hint field supplies information about the way the data is expected to be used. A hint value cannot cause an action to modify architecturally visible state. A processor may use a hint value to improve the effectiveness of the prefetch action.",
+        "asm_templates": [
+            "PREF hint,offset(base)"
+        ]
+    },
+    {
+        "name": "round.w.s",
+        "summary": "To convert a single precision FP value to 32-bit fixed point, rounding to nearest\nfd ← convert_and_round(fs)\nThe value in FPR fs, in format fmt, is converted to a value in 32-bit word fixed point format rounding to nearest/even (rounding mode 0). The result is placed in FPR fd.\n\nWhen the source value is Infinity, NaN, or rounds to an integer outside the range -2 31 to 231-1, the result cannot be represented correctly and an IEEE Invalid Operation condition exists. In this case the Invalid Operation flag is set in the FCSR. If the Invalid Operation Enable bit is set in the FCSR, no result is written to fd and an Invalid Operation exception is taken immediately. Otherwise, the default result, 2 31–1, is written to fd.",
+        "asm_templates": [
+            "ROUND.W.S fd, fs"
+        ]
+    },
+    {
+        "name": "round.w.d",
+        "summary": "To convert a double precision FP value to 32-bit fixed point, rounding to nearest\nfd ← convert_and_round(fs)\nThe value in FPR fs, in format fmt, is converted to a value in 32-bit word fixed point format rounding to nearest/even (rounding mode 0). The result is placed in FPR fd.\n\nWhen the source value is Infinity, NaN, or rounds to an integer outside the range -2 31 to 231-1, the result cannot be represented correctly and an IEEE Invalid Operation condition exists. In this case the Invalid Operation flag is set in the FCSR. If the Invalid Operation Enable bit is set in the FCSR, no result is written to fd and an Invalid Operation exception is taken immediately. Otherwise, the default result, 2 31–1, is written to fd.",
+        "asm_templates": [
+            "ROUND.W.D fd, fs"
+        ]
+    },
+    {
+        "name": "sb",
+        "summary": "To store a byte to memory\nmemory[base+offset] ← rt\nThe least-significant 8-bit byte of GPR rt is stored in memory at the location specified by the effective address. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "SB rt, offset(base)"
+        ]
+    },
+    {
+        "name": "sc",
+        "summary": "To store a word to memory to complete an atomic read-modify-write\nif atomic_update then memory[base+offset] ← rt, rt ← 1 else rt ← 0\nThe LL and SC instructions provide primitives to implement atomic read-modify-write (RMW) operations for cached memory locations.\n\nThe 16-bit signed offset is added to the contents of GPR base to form an effective address. The SC completes the RMW sequence begun by the preceding LL instruction executed on the processor. To complete the RMW sequence atomically, the following occur:\n\t- The least-significant 32-bit word of GPR rt is stored into memory at the location specified by the aligned effective address.\n\tA 1, indicating success, is written into GPR rt.\n\t\tOtherwise, memory is not modified and a 0, indicating failure, is written into GPR rt.\n\t\tIf either of the following events occurs between the execution of LL and SC, the SC fails:\n\t- A coherent store is completed by another processor or coherent I/O module into the block of physical memory containing the word. The size and alignment of the block is implementation dependent, but it is at least one word and at most the minimum page size.\n\t- An exception occurs on the processor executing the LL/SC.\n\t\tIf either of the following events occurs between the execution of LL and SC, the SC may succeed or it may fail; the success or failure is not predictable. Portable programs should not cause one of these events.\n\t- A load, store, or prefetch is executed on the processor executing the LL/SC.\n\t- The instructions executed starting with the LL and ending with the SC do not lie in a 2048-byte contiguous region of virtual memory. The region does not have to be aligned, other than the alignment required for instruction words.\nThe following conditions must be true or the result of the SC is undefined:\n\t- Execution of SC must have been preceded by execution of an LL instruction.\n\t- A RMW sequence executed without intervening exceptions must use the same address in the LL and SC. The address is the same if the virtual address, physical address, and cache-coherence algorithm are identical.\n\t\tAtomic RMW is provided only for cached memory locations. The extent to which the detection of atomicity operates correctly depends on the system implementation and the memory access type used for the location:\n\n\tMP atomicity: To provide atomic RMW among multiple processors, all accesses to the location must be made with a memory access type of cached coherent.\n\tUniprocessor atomicity: To provide atomic RMW on a single processor, all accesses to the location must be made with memory access type of either cached noncoherent or cached coherent. All accesses must be to one or the other access type, and they may not be mixed.\nI/O System: To provide atomic RMW with a coherent I/O system, all accesses to the location must be made with a memory access type of cached coherent. If the I/O system does not use coherent memory operations, then atomic RMW cannot be provided with respect to the I/O reads and writes.",
+        "asm_templates": [
+            "SC rt, offset(base)"
+        ]
+    },
+    {
+        "name": "sdbbp",
+        "summary": "To cause a debug breakpoint exception\nThis instruction causes a debug exception, passing control to the debug exception handler. The code field can be used for passing information to the debug exception handler, and is retrieved by the debug exception handler only by loading the contents of the memory word containing the instruction, using the DEPC register. The CODE field is not used in any way by the hardware.",
+        "asm_templates": [
+            "SDBBP code"
+        ]
+    },
+    {
+        "name": "sdc1",
+        "summary": "To store a doubleword from an FPR to memory\nmemory[base+offset] ← ft\nThe 64-bit doubleword in FPR ft is stored in memory at the location specified by the aligned effective address. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "SDC1 ft, offset(base)"
+        ]
+    },
+    {
+        "name": "sdc2",
+        "summary": "To store a doubleword from a Coprocessor 2 register to memory\n memory[base+offset] ← rt\nThe 64-bit doubleword in Coprocessor 2 register rt is stored in memory at the location specified by the aligned effective address. The 16-bit signed offset is added to the contents of GPR base to form the effective address",
+        "asm_templates": [
+            "SDC2 rt, offset(base)"
+        ]
+    },
+    {
+        "name": "sh",
+        "summary": "To store a halfword to memory\nmemory[base+offset] ← rt\nThe least-significant 16-bit halfword of register rt is stored in memory at the location specified by the aligned effective address. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "SH rt, offset(base)"
+        ]
+    },
+    {
+        "name": "sll",
+        "summary": "To left-shift a word by a fixed number of bits\nrd ← rt << sa\nThe contents of the low-order 32-bit word of GPR rt are shifted left, inserting zeros into the emptied bits; the word result is placed in GPR rd. The bit-shift amount is specified by sa.",
+        "asm_templates": [
+            "SLL rd, rt, sa"
+        ]
+    },
+    {
+        "name": "slt",
+        "summary": "To record the result of a less-than comparison\n rd ← (rs < rt)\nCompare the contents of GPR rs and GPR rt as signed integers and record the Boolean result of the comparison in GPR rd. If GPR rs is less than GPR rt, the result is 1 (true); otherwise, it is 0 (false).\n\nThe arithmetic comparison does not cause an Integer Overflow exception.",
+        "asm_templates": [
+            "SLT rd, rs, rt"
+        ]
+    },
+    {
+        "name": "slti",
+        "summary": "To record the result of a less-than comparison with a constant\nrt ← (rs < immediate)\nCompare the contents of GPR rs and the 16-bit signed immediate as signed integers and record the Boolean result of the comparison in GPR rt. If GPR rs is less than immediate, the result is 1 (true); otherwise, it is 0 (false).\n\nThe arithmetic comparison does not cause an Integer Overflow exception.",
+        "asm_templates": [
+            "SLTI rt, rs, immediate"
+        ]
+    },
+    {
+        "name": "sltiu",
+        "summary": "To record the result of an unsigned less-than comparison with a constant\nrt ← (rs < immediate)\nCompare the contents of GPR rs and the sign-extended 16-bit immediate as unsigned integers and record the Boolean result of the comparison in GPR rt. If GPR rs is less than immediate, the result is 1 (true); otherwise, it is 0 (false).\n\nBecause the 16-bit immediate is sign-extended before comparison, the instruction can represent the smallest or largest unsigned numbers. The representable values are at the minimum [0, 32767] or maximum [max_unsigned-32767, max_unsigned] end of the unsigned range. The arithmetic comparison does not cause an Integer Overflow exception.",
+        "asm_templates": [
+            "SLTIU rt, rs, immediate"
+        ]
+    },
+    {
+        "name": "sltu",
+        "summary": "To record the result of an unsigned less-than comparison\nrd ← (rs < rt)\nCompare the contents of GPR rs and GPR rt as unsigned integers and record the Boolean result of the comparison in GPR rd. If GPR rs is less than GPR rt, the result is 1 (true); otherwise, it is 0 (false).\n\nThe arithmetic comparison does not cause an Integer Overflow exception.",
+        "asm_templates": [
+            "SLTU rd, rs, rt"
+        ]
+    },
+    {
+        "name": "sqrt.s",
+        "summary": "To compute the square root of a single precision FP value\nfd ← SQRT(fs)\nThe square root of the value in FPR fs is calculated to infinite precision, rounded according to the current rounding mode in FCSR, and placed into FPR fd. The operand and result are values in format fmt.\n\nIf the value in FPR fs corresponds to – 0, the result is – 0.",
+        "asm_templates": [
+            "SQRT.S fd, fs"
+        ]
+    },
+    {
+        "name": "sqrt.d",
+        "summary": "To compute the square root of a single precision FP value\nfd ← SQRT(fs)\nThe square root of the value in FPR fs is calculated to infinite precision, rounded according to the current rounding mode in FCSR, and placed into FPR fd. The operand and result are values in format fmt.\n\nIf the value in FPR fs corresponds to – 0, the result is – 0.",
+        "asm_templates": [
+            "SQRT.D fd, fs"
+        ]
+    },
+    {
+        "name": "sra",
+        "summary": "To execute an arithmetic right-shift of a word by a fixed number of bits\nrd ← rt >> sa (arithmetic)\nThe contents of the low-order 32-bit word of GPR rt are shifted right, duplicating the sign-bit (bit 31) in the emptied bits; the word result is placed in GPR rd. The bit-shift amount is specified by sa.",
+        "asm_templates": [
+            "SRA rd, rt, sa"
+        ]
+    },
+    {
+        "name": "srav",
+        "summary": "To execute an arithmetic right-shift of a word by a variable number of bits\n rd ← rt >> rs (arithmetic)\nThe contents of the low-order 32-bit word of GPR rt are shifted right, duplicating the sign-bit (bit 31) in the emptied bits; the word result is placed in GPR rd. The bit-shift amount is specified by the low-order 5 bits of GPR rs.",
+        "asm_templates": [
+            "SRAV rd, rt, rs"
+        ]
+    },
+    {
+        "name": "srl",
+        "summary": "To execute a logical right-shift of a word by a fixed number of bits\nrd ← rt >> sa (logical)\nThe contents of the low-order 32-bit word of GPR rt are shifted right, inserting zeros into the emptied bits; the word result is placed in GPR rd. The bit-shift amount is specified by sa.",
+        "asm_templates": [
+            "SRL rd, rt, sa"
+        ]
+    },
+    {
+        "name": "srlv",
+        "summary": "To execute a logical right-shift of a word by a variable number of bits\n rd ← rt >> rs (logical)\nThe contents of the low-order 32-bit word of GPR rt are shifted right, inserting zeros into the emptied bits; the word result is placed in GPR rd. The bit-shift amount is specified by the low-order 5 bits of GPR rs.",
+        "asm_templates": [
+            "SRLV rd, rt, rs"
+        ]
+    },
+    {
+        "name": "ssnop",
+        "summary": "Break superscalar issue on a superscalar processor.\nSSNOP is the assembly idiom used to denote superscalar no operation. The actual instruction is interpreted by the hardware as SLL r0, r0, 1.\n\nThis instruction alters the instruction issue behavior on a superscalar processor by forcing the SSNOP instruction to single-issue. The processor must then end the current instruction issue between the instruction previous to the SSNOP and the SSNOP. The SSNOP then issues alone in the next issue slot.\n\nOn a single-issue processor, this instruction is a NOP that takes an issue slot.",
+        "asm_templates": [
+            "SSNOP"
+        ]
+    },
+    {
+        "name": "sub",
+        "summary": "To subtract 32-bit integers. If overflow occurs, then trap\nrd ← rs - rt\nThe 32-bit word value in GPR rt is subtracted from the 32-bit value in GPR rs to produce a 32-bit result. If the subtraction results in 32-bit 2’s complement arithmetic overflow, then the destination register is not modified and an Integer Overflow exception occurs. If it does not overflow, the 32-bit result is placed into GPR rd",
+        "asm_templates": [
+            "SUB rd, rs, rt"
+        ]
+    },
+    {
+        "name": "sub.s",
+        "summary": "To subtract FP values\n fd ← fs - ft\nThe value in FPR ft is subtracted from the value in FPR fs. The result is calculated to infinite precision, rounded according to the current rounding mode in FCSR, and placed into FPR fd. The operands and result are values in format fmt. Restrictions:\n\t- The fields fs, ft, and fd must specify FPRs valid for operands of type fmt. If they are not valid, the result is UNPREDICTABLE.\n\t- The operands must be values in format fmt; if they are not, the result is UNPREDICTABLE and the value of the operand FPRs becomes UNPREDICTABLE.",
+        "asm_templates": [
+            "SUB.S fd, fs, ft"
+        ]
+    },
+    {
+        "name": "sub.d",
+        "summary": "To subtract FP values\n fd ← fs - ft\nThe value in FPR ft is subtracted from the value in FPR fs. The result is calculated to infinite precision, rounded according to the current rounding mode in FCSR, and placed into FPR fd. The operands and result are values in format fmt. Restrictions:\n\t- The fields fs, ft, and fd must specify FPRs valid for operands of type fmt. If they are not valid, the result is UNPREDICTABLE.\n\t- The operands must be values in format fmt; if they are not, the result is UNPREDICTABLE and the value of the operand FPRs becomes UNPREDICTABLE.",
+        "asm_templates": [
+            "SUB.D fd, fs, ft"
+        ]
+    },
+    {
+        "name": "subu",
+        "summary": "To subtract 32-bit integers\nrd ← rs - rt\nThe 32-bit word value in GPR rt is subtracted from the 32-bit value in GPR rs and the 32-bit arithmetic result is and placed into GPR rd.\n\nNo integer overflow exception occurs under any circumstances.",
+        "asm_templates": [
+            "SUBU rd, rs, rt"
+        ]
+    },
+    {
+        "name": "sw",
+        "summary": "To store a word to memory\nmemory[base+offset] ← rt\nThe least-significant 32-bit word of register rt is stored in memory at the location specified by the aligned effective address. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "SW rt, offset(base)"
+        ]
+    },
+    {
+        "name": "swc1",
+        "summary": "To store a word from an FPR to memory\nmemory[base+offset] ← ft\nThe low 32-bit word from FPR ft is stored in memory at the location specified by the aligned effective address. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "SWC1 ft, offset(base)"
+        ]
+    },
+    {
+        "name": "swc2",
+        "summary": "To store a word from a COP2 register to memory\n memory[base+offset] ← ft\nThe low 32-bit word from COP2 (Coprocessor 2) register rt is stored in memory at the location specified by the aligned effective address. The 16-bit signed offset is added to the contents of GPR base to form the effective address.",
+        "asm_templates": [
+            "SWC2 rt, offset(base)"
+        ]
+    },
+    {
+        "name": "swl",
+        "summary": "To store the most-significant part of a word to an unaligned memory address\nmemory[base+offset] ← rt\nThe 16-bit signed offset is added to the contents of GPR base to form an effective address (EffAddr). EffAddr is the address of the most-significant of 4 consecutive bytes forming a word (W) in memory starting at an arbitrary byte boundary.\n\nA part of W, the most-significant 1 to 4 bytes, is in the aligned word containing EffAddr. The same number of the most-significant (left) bytes from the word in GPR rt are stored into these bytes of W.\n\nThe following figure illustrates this operation using big-endian byte ordering for 32-bit and 64-bit registers. The 4 consecutive bytes in 2..5 form an unaligned word starting at location 2. A part of W, 2 bytes, is located in the aligned word containing the most-significant byte at 2. First, SWL stores the most-significant 2 bytes of the low word from the source register into these 2 bytes in memory. Next, the complementary SWR stores the remainder of the unaligned word.The bytes stored from the source register to memory depend on both the offset of the effective address within an aligned word—that is, the low 2 bits of the address (vAddr1..0)—and the current byte-ordering mode of the processor (big- or little-endian). The following figure shows the bytes stored for every combination of offset and byte ordering.",
+        "asm_templates": [
+            "SWL rt, offset(base)"
+        ]
+    },
+    {
+        "name": "swr",
+        "summary": "To store the least-significant part of a word to an unaligned memory address\n memory[base+offset] ← rt\nThe 16-bit signed offset is added to the contents of GPR base to form an effective address (EffAddr). EffAddr is the address of the least-significant of 4 consecutive bytes forming a word (W) in memory starting at an arbitrary byte boundary.\n\nA part of W, the least-significant 1 to 4 bytes, is in the aligned word containing EffAddr. The same number of the least-significant (right) bytes from the word in GPR rt are stored into these bytes of W.\n\nThe following figure illustrates this operation using big-endian byte ordering for 32-bit and 64-bit registers. The 4 consecutive bytes in 2..5 form an unaligned word starting at location 2. A part of W, 2 bytes, is contained in the aligned word containing the least-significant byte at 5. First, SWR stores the least-significant 2 bytes of the low word from the source register into these 2 bytes in memory. Next, the complementary SWL stores the remainder of the unaligned word.The bytes stored from the source register to memory depend on both the offset of the effective address within an aligned word—that is, the low 2 bits of the address (vAddr1..0)—and the current byte-ordering mode of the processor (big- or little-endian). The following figure shows the bytes stored for every combination of offset and byte-ordering.",
+        "asm_templates": [
+            "SWR rt, offset(base)"
+        ]
+    },
+    {
+        "name": "sync",
+        "summary": "To order loads and stores\nSimple Description:\n\t- SYNC affects only uncached and cached coherent loads and stores. The loads and stores that occur before the SYNC must be completed before the loads and stores after the SYNC are allowed to start.\n\t- Loads are completed when the destination register is written. Stores are completed when the stored value is visible to every other processor in the system.\n\t- SYNC is required, potentially in conjunction with SSNOP, to guarantee that memory reference results are visible across operating mode changes. For example, a SYNC is required on some implementations on entry to and exit from Debug Mode to guarantee that memory affects are handled correctly.\nDetailed Description:\n\t- When the stype field has a value of zero, every synchronizable load and store that occurs in the instruction stream before the SYNC instruction must be globally performed before any synchronizable load or store that occurs after the SYNC can be performed, with respect to any other processor or coherent I/O module.\n\t- SYNC does not guarantee the order in which instruction fetches are performed. The stype values 1-31 are reserved; they produce the same result as the value zero.",
+        "asm_templates": [
+            "SYNC (stype = 0 implied)"
+        ]
+    },
+    {
+        "name": "syscall",
+        "summary": "To cause a System Call exception\nA system call exception occurs, immediately and unconditionally transferring control to the exception handler.\nThe code field is available for use as software parameters, but is retrieved by the exception handler only by loading the contents of the memory word containing the instruction.",
+        "asm_templates": [
+            "SYSCALL "
+        ]
+    },
+    {
+        "name": "teq",
+        "summary": "To compare GPRs and do a conditional trap\nif rs = rt then Trap\nCompare the contents of GPR rs and GPR rt as signed integers; if GPR rs is equal to GPR rt, then take a Trap excep- tion.\n\nThe contents of the code field are ignored by hardware and may be used to encode information for system software. To retrieve the information, system software must load the instruction word from memory.",
+        "asm_templates": [
+            "TEQ rs, rt"
+        ]
+    },
+    {
+        "name": "teqi",
+        "summary": "To compare a GPR to a constant and do a conditional trap\nif rs = immediate then Trap\nCompare the contents of GPR rs and the 16-bit signed immediate as signed integers; if GPR rs is equal to immediate, then take a Trap exception.",
+        "asm_templates": [
+            "TEQI rs, immediate"
+        ]
+    },
+    {
+        "name": "tge",
+        "summary": "To compare GPRs and do a conditional trap\nif rs ≥ rt then Trap\nCompare the contents of GPR rs and GPR rt as signed integers; if GPR rs is greater than or equal to GPR rt, then take a Trap exception.\n\nThe contents of the code field are ignored by hardware and may be used to encode information for system software. To retrieve the information, system software must load the instruction word from memory.",
+        "asm_templates": [
+            "TGE rs, rt"
+        ]
+    },
+    {
+        "name": "tgei",
+        "summary": "To compare a GPR to a constant and do a conditional trap\nif rs ≥ immediate then Trap\nCompare the contents of GPR rs and the 16-bit signed immediate as signed integers; if GPR rs is greater than or equal to immediate, then take a Trap exception.",
+        "asm_templates": [
+            "TGEI rs, immediate"
+        ]
+    },
+    {
+        "name": "tgeiu",
+        "summary": "To compare a GPR to a constant and do a conditional trap\nif rs ≥ immediate then Trap\nCompare the contents of GPR rs and the 16-bit sign-extended immediate as unsigned integers; if GPR rs is greater than or equal to immediate, then take a Trap exception.\n\nBecause the 16-bit immediate is sign-extended before comparison, the instruction can represent the smallest or largest unsigned numbers. The representable values are at the minimum [0, 32767] or maximum [max_unsigned-32767, max_unsigned] end of the unsigned range.",
+        "asm_templates": [
+            "TGEIU rs, immediate"
+        ]
+    },
+    {
+        "name": "tgeu",
+        "summary": "To compare GPRs and do a conditional trap if rs ≥ rt then Trap\nCompare the contents of GPR rs and GPR rt as unsigned integers; if GPR rs is greater than or equal to GPR rt, then take a Trap exception.\n\nThe contents of the code field are ignored by hardware and may be used to encode information for system software. To retrieve the information, system software must load the instruction word from memory.",
+        "asm_templates": [
+            "TGEU rs, rt "
+        ]
+    },
+    {
+        "name": "tlbp",
+        "summary": "To find a matching entry in the TLB.\nThe Index register is loaded with the address of the TLB entry whose contents match the contents of the EntryHi register. If no TLB entry matches, the high-order bit of the Index register is set.",
+        "asm_templates": [
+            "TLBP"
+        ]
+    },
+    {
+        "name": "tlbr",
+        "summary": "To read an entry from the TLB\nThe EntryHi, EntryLo0, EntryLo1, and PageMask registers are loaded with the contents of the TLB entry pointed to by the Index register. Note that the value written to the EntryHi, EntryLo0, and EntryLo1 registers may be different from that originally written to the TLB via these registers in that:\n\t-The value returned in the VPN2 field of the EntryHi register may havethose bits set to zero corresponding to the one bits in the Mask field of the TLB entry (the least significant bit of VPN2 corresponds to the least significant bit of the Mask field). It is implementation dependent whether these bits are preserved or zeroed after a TLB entry is written and then read.\n\t- The value returned in the PFN field of the EntryLo0 and EntryLo1 registers may havethose bits set to zero corresponding to the one bits in the Mask field of the TLB entry (the least significant bit of PFN corresponds to the least significant bit of the Mask field). It is implementation dependent whether these bits are preserved or zeroed after a TLB entry is written and then read.\n\t- The value returned in the G bit in both the EntryLo0 and EntryLo1 registers comes from the single G bit in the TLB entry. Recall that this bit was set from the logical AND of the two G bits in EntryLo0 and EntryLo1 when the TLB was written.",
+        "asm_templates": [
+            "TLBR"
+        ]
+    },
+    {
+        "name": "tlbwi",
+        "summary": "To write a TLB entry indexed by the Index register.\nThe TLB entry pointed to by the Index register is written from the contents of the EntryHi, EntryLo0, EntryLo1, and PageMask registers. The information written to the TLB entry may be different from that in the EntryHi, EntryLo0, and EntryLo1 registers, in that:\n\t- The value written to the VPN2 field of the TLB entry may have those bits set to zero corresponding to the one bits in the Mask field of the PageMask register (the least significant bit of VPN2 corresponds to the least significant bit of the Mask field). It is implementation dependent whether these bits are preserved or zeroed during a TLB write.\n\t- The value written to the PFN0 and PFN1 fields of the TLB entry may have those bits set to zero corresponding to the one bits in the Mask field of PageMask register (the least significant bit of PFN corresponds to the least significant bit of the Mask field). It is implementation dependent whether these bits are preserved or zeroed during a TLB write. \n\t- The single G bit in the TLB entry is set from the logical AND of the G bits in the EntryLo0 and EntryLo1 registers.",
+        "asm_templates": [
+            "TLBWI"
+        ]
+    },
+    {
+        "name": "tlbwr",
+        "summary": "To write a TLB entry indexed by the Random register.\nThe TLB entry pointed to by the Random register is written from the contents of the EntryHi, EntryLo0, EntryLo1, and PageMask registers. The information written to the TLB entry may be different from that in the EntryHi, EntryLo0, and EntryLo1 registers, in that:\n\t- The value written to the VPN2 field of the TLB entry may have those bits set to zero corresponding to the one bits in the Mask field of the PageMask register (the least significant bit of VPN2 corresponds to the least significant bit of the Mask field). It is implementation dependent whether these bits are preserved or zeroed during a TLB write.\n\t- The value written to the PFN0 and PFN1 fields of the TLB entry may have those bits set to zero corresponding to the one bits in the Mask field of PageMask register (the least significant bit of PFN corresponds to the least significant bit of the Mask field). It is implementation dependent whether these bits are preserved or zeroed during a TLB write.\n\t- The value returned in the G bit in both the EntryLo0 and EntryLo1 registers comes from the single G bit in the TLB entry. Recall that this bit was set from the logical AND of the two G bits in EntryLo0 and EntryLo1 when the TLB was written.",
+        "asm_templates": [
+            "TLBWR"
+        ]
+    },
+    {
+        "name": "tlt",
+        "summary": "To compare GPRs and do a conditional trap\nif rs < rt then Trap\nCompare the contents of GPR rs and GPR rt as signed integers; if GPR rs is less than GPR rt, then take a Trap exception.\n\nThe contents of the code field are ignored by hardware and may be used to encode information for system software. To retrieve the information, system software must load the instruction word from memory.",
+        "asm_templates": [
+            "TLT rs, rt"
+        ]
+    },
+    {
+        "name": "tlti",
+        "summary": "To compare a GPR to a constant and do a conditional trap\nif rs < immediate then Trap\nCompare the contents of GPR rs and the 16-bit signed immediate as signed integers; if GPR rs is less than immediate, then take a Trap exception.",
+        "asm_templates": [
+            "TLTI rs, immediate"
+        ]
+    },
+    {
+        "name": "tltiu",
+        "summary": "To compare a GPR to a constant and do a conditional trap\nif rs < immediate then Trap\nCompare the contents of GPR rs and the 16-bit sign-extended immediate as unsigned integers; if GPR rs is less than immediate, then take a Trap exception.\n\nBecause the 16-bit immediate is sign-extended before comparison, the instruction can represent the smallest or largest unsigned numbers. The representable values are at the minimum [0, 32767] or maximum [max_unsigned-32767, max_unsigned] end of the unsigned range.",
+        "asm_templates": [
+            "TLTIU rs, immediate"
+        ]
+    },
+    {
+        "name": "tltu",
+        "summary": "To compare GPRs and do a conditional trap\nif rs < rt then Trap\nCompare the contents of GPR rs and GPR rt as unsigned integers; if GPR rs is less than GPR rt, then take a Trap exception.\n\nThe contents of the code field are ignored by hardware and may be used to encode information for system software. To retrieve the information, system software must load the instruction word from memory.",
+        "asm_templates": [
+            "TLTU rs, rt"
+        ]
+    },
+    {
+        "name": "TNE",
+        "summary": "To compare GPRs and do a conditional trap\nif rs ≠ rt then Trap\nCompare the contents of GPR rs and GPR rt as signed integers; if GPR rs is not equal to GPR rt, then take a Trap exception.\n\nThe contents of the code field are ignored by hardware and may be used to encode information for system software. To retrieve the information, system software must load the instruction word from memory.",
+        "asm_templates": [
+            "TNE rs, rt"
+        ]
+    },
+    {
+        "name": "tnei",
+        "summary": "To compare a GPR to a constant and do a conditional trap\nif rs ≠ immediate then Trap\nCompare the contents of GPR rs and the 16-bit signed immediate as signed integers; if GPR rs is not equal to immediate, then take a Trap exception.",
+        "asm_templates": [
+            "TNEI rs, immediate"
+        ]
+    },
+    {
+        "name": "trunc.w.s",
+        "summary": "To convert a single precision FP value to 32-bit fixed point, rounding toward zero\nfd ← convert_and_round(fs)\nThe value in FPR fs, in format fmt, is converted to a value in 32-bit word fixed point format using rounding toward zero (rounding mode 1). The result is placed in FPR fd.\n\nWhen the source value is Infinity, NaN, or rounds to an integer outside the range -2 31 to 231-1, the result cannot be represented correctly and an IEEE Invalid Operation condition exists. In this case the Invalid Operation flag is set in the FCSR. If the Invalid Operation Enable bit is set in the FCSR, no result is written to fd and an Invalid Operation exception is taken immediately. Otherwise, the default result, 2 31–1, is written to fd.",
+        "asm_templates": [
+            "TRUNC.W.S fd, fs"
+        ]
+    },
+    {
+        "name": "trunc.w.d",
+        "summary": "To convert a double precision FP value to 32-bit fixed point, rounding toward zero\nfd ← convert_and_round(fs)\nThe value in FPR fs, in format fmt, is converted to a value in 32-bit word fixed point format using rounding toward zero (rounding mode 1). The result is placed in FPR fd.\n\nWhen the source value is Infinity, NaN, or rounds to an integer outside the range -2 31 to 231-1, the result cannot be represented correctly and an IEEE Invalid Operation condition exists. In this case the Invalid Operation flag is set in the FCSR. If the Invalid Operation Enable bit is set in the FCSR, no result is written to fd and an Invalid Operation exception is taken immediately. Otherwise, the default result, 2 31–1, is written to fd.",
+        "asm_templates": [
+            "TRUNC.W.D fd, fs"
+        ]
+    },
+    {
+        "name": "wait",
+        "summary": "Wait for Event\nThe WAIT instruction performs an implementation-dependent operation, usually involving a lower power mode.\nSoftware may use bits 24:6 of the instruction to communicate additional information to the processor, and the processor may use this information as control for the lower power mode. A value of zero for bits 24:6 is the default and must be valid in all implementations.\n\nThe WAIT instruction is typically implemented by stalling the pipeline at the completion of the instruction and entering a lower power mode. The pipeline is restarted when an external event, such as an interrupt or external request occurs, and execution continues with the instruction following the WAIT instruction. It is implementation-dependent whether the pipeline restarts when a non-enabled interrupt is requested. In this case, software must poll for the cause of the restart. If the pipeline restarts as the result of an enabled interrupt, that interrupt is taken between the WAIT instruction and the following instruction (EPC for the interrupt points at the instruction following the WAIT instruction).\n\nThe assertion of any reset or NMI must restart the pipelihne and the corresponding exception myust be taken.",
+        "asm_templates": [
+            "WAIT"
+        ]
+    },
+    {
+        "name": "xor",
+        "summary": "To do a bitwise logical Exclusive OR\n rd ← rs XOR rt\nCombine the contents of GPR rs and GPR rt in a bitwise logical Exclusive OR operation and place the result into GPR rd.",
+        "asm_templates": [
+            "XOR rd, rs, rt"
+        ]
+    },
+    {
+        "name": "xori",
+        "summary": "To do a bitwise logical Exclusive OR with a constant\nrt ← rs XOR immediate\nCombine the contents of GPR rs and the 16-bit zero-extended immediate in a bitwise logical Exclusive OR operation and place the result into GPR rt.",
+        "asm_templates": [
+            "XORI rt, rs, immediate"
+        ]
+    }
+]

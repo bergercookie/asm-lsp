@@ -19,7 +19,7 @@ mod tests {
         parser::{
             populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
             populate_avr_instructions, populate_ca65_directives,
-            populate_masm_nasm_fasm_directives, populate_power_isa_instructions,
+            populate_masm_nasm_fasm_mars_directives, populate_power_isa_instructions,
             populate_riscv_instructions, populate_riscv_registers,
         },
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
@@ -3025,7 +3025,7 @@ Width: 8 bits",
         serialized_directives_test!(
             "serialized/directives/masm",
             "../docs_store/directives/masm.xml",
-            populate_masm_nasm_fasm_directives
+            populate_masm_nasm_fasm_mars_directives
         );
     }
     #[test]
@@ -3033,7 +3033,7 @@ Width: 8 bits",
         serialized_directives_test!(
             "serialized/directives/nasm",
             "../docs_store/directives/nasm.xml",
-            populate_masm_nasm_fasm_directives
+            populate_masm_nasm_fasm_mars_directives
         );
     }
     #[test]
@@ -3057,7 +3057,7 @@ Width: 8 bits",
         serialized_directives_test!(
             "serialized/directives/fasm",
             "../docs_store/directives/fasm.xml",
-            populate_masm_nasm_fasm_directives
+            populate_masm_nasm_fasm_mars_directives
         );
     }
 }

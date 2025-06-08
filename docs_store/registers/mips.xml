@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='utf-8'?>
+<InstructionSet name="mips">
+    <Register name="r0" description="The zero register ($zero or $0) always contains a value of 0. It is built into the hardware and therefore cannot be modified. " type="Special Purpose Register">
+    </Register>
+    <Register name="0" description="The zero register ($r0 or $zero) always contains a value of 0. It is built into the hardware and therefore cannot be modified." type="Special Purpose Register">
+    </Register>
+    <Register name="zero" description="The zero register ($r0 or $0) always contains a value of 0. It is built into the hardware and therefore cannot be modified. " type="Special Purpose Register">
+    </Register>
+    <Register name="1" description="The $at (Assembler Temporary) register is used for temporary values within pseudo commands. It is not preserved across function calls. For example, with the (slt $at, $a0, $s2) command, $at is set to one if $a0 is less than $s2, otherwise it is set to zero." type="Special Purpose Register">
+    </Register>
+    <Register name="at" description="The $at (Assembler Temporary) register is used for temporary values within pseudo commands. It is not preserved across function calls. For example, with the (slt $at, $a0, $s2) command, $at is set to one if $a0 is less than $s2, otherwise it is set to zero." type="Special Purpose Register">
+    </Register>
+    <Register name="$2" description= "The $v Registers are used for returning values from functions. They are not preserved across function calls. Aliased to $v0" type="Special Purpose Register">
+    </Register>
+    <Register name="$2" description= "The $v Registers are used for returning values from functions. They are not preserved across function calls. Aliased to $v0" type="Special Purpose Register">
+    </Register>
+    <Register name="$v0" description= "The $v Registers are used for returning values from functions. They are not preserved across function calls. Aliased to $2" type="Special Purpose Register">
+    </Register>
+    <Register name="$3" description= "The $v Registers are used for returning values from functions. They are not preserved across function calls. Aliased to $v1" type="Special Purpose Register">
+    </Register>
+    <Register name="$v1" description= "The $v Registers are used for returning values from functions. They are not preserved across function calls. Aliased to $3" type="Special Purpose Register">
+    </Register>
+    <Register name="$4" description= "The $a registers are used for passing arguments to functions. They are not preserved across function calls. Aliased to $a0" type="Special Purpose Register">
+    </Register>
+    <Register name="$a0" description= "The $a registers are used for passing arguments to functions. They are not preserved across function calls. Aliased to $4" type="Special Purpose Register">
+    </Register>
+    <Register name="$5" description= "The $a registers are used for passing arguments to functions. They are not preserved across function calls. Aliased to $a1" type="Special Purpose Register">
+    </Register>
+    <Register name="$a1" description= "The $a registers are used for passing arguments to functions. They are not preserved across function calls. Aliased to $5" type="Special Purpose Register">
+    </Register>
+    <Register name="$6" description= "The $a registers are used for passing arguments to functions. They are not preserved across function calls. Aliased to $a2" type="Special Purpose Register">
+    </Register>
+    <Register name="$a2" description= "The $a registers are used for passing arguments to functions. They are not preserved across function calls. Aliased to $6" type="Special Purpose Register">
+    </Register>
+    <Register name="$7" description= "The $a registers are used for passing arguments to functions. They are not preserved across function calls. Aliased to $a3" type="General Purpose Register">
+    </Register>
+    <Register name="$a3" description= "The $a registers are used for passing arguments to functions. They are not preserved across function calls. Aliased to $7" type="General Purpose Register">
+    </Register>
+    <Register name="$8" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $t0" type="General Purpose Register">
+    </Register>
+    <Register name="$t0" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $8" type="General Purpose Register">
+    </Register>
+    <Register name="$9" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $t1" type="General Purpose Register">
+    </Register>
+    <Register name="$t1" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $9" type="General Purpose Register">
+    </Register>
+    <Register name="$10" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $t2" type="General Purpose Register">
+    </Register>
+    <Register name="$t2" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $10" type="General Purpose Register">
+    </Register>
+    <Register name="$11" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $t3" type="General Purpose Register">
+    </Register>
+    <Register name="$t3" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $11" type="General Purpose Register">
+    </Register>
+    <Register name="$12" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $t4" type="General Purpose Register">
+    </Register>
+    <Register name="$t4" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $12" type="General Purpose Register">
+    </Register>
+    <Register name="$13" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $t5" type="General Purpose Register">
+    </Register>
+    <Register name="$t5" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $13" type="General Purpose Register">
+    </Register>
+    <Register name="$14" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $t6" type="General Purpose Register">
+    </Register>
+    <Register name="$t6" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $14" type="General Purpose Register">
+    </Register>
+    <Register name="$15" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $t7" type="General Purpose Register">
+    </Register>
+    <Register name="$t7" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $15" type="General Purpose Register">
+    </Register>
+    <Register name="$16" description= "Saved Temporary registers are used to store longer lasting values. They are preserved across function calls. Aliased to $s0" type="General Purpose Register">
+    </Register>
+    <Register name="$17" description= "Saved Temporary registers are used to store longer lasting values. They are preserved across function calls. Aliased to $s1" type="General Purpose Register">
+    </Register>
+    <Register name="$18" description= "Saved Temporary registers are used to store longer lasting values. They are preserved across function calls. Aliased to $s2" type="General Purpose Register">
+    </Register>
+    <Register name="$19" description= "Saved Temporary registers are used to store longer lasting values. They are preserved across function calls. Aliased to $s3" type="General Purpose Register">
+    </Register>
+    <Register name="$20" description= "Saved Temporary registers are used to store longer lasting values. They are preserved across function calls. Aliased to $s4" type="General Purpose Register">
+    </Register>
+    <Register name="$21" description= "Saved Temporary registers are used to store longer lasting values. They are preserved across function calls. Aliased to $s5" type="General Purpose Register">
+    </Register>
+    <Register name="$22" description= "Saved Temporary registers are used to store longer lasting values. They are preserved across function calls. Aliased to $s6" type="General Purpose Register">
+    </Register>
+    <Register name="$23" description= "Saved Temporary registers are used to store longer lasting values. They are preserved across function calls. Aliased to $s7" type="General Purpose Register">
+    </Register>
+    <Register name="$24" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $t8" type="General Purpose Register">
+    </Register>
+    <Register name="$t8" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $24" type="General Purpose Register">
+    </Register>
+    <Register name="$25" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $t9" type="General Purpose Register">
+    </Register>
+    <Register name="$t9" description= "The temporary registers are used by the assembler or assembly language programmer to store intermediate values. They are not preserved across function calls. Aliased to $25" type="General Purpose Register">
+    </Register>
+    <Register name="$26" description= "The k registers are reserved for use by the OS kernel. They may change randomly at any time as they are used by interrupt handlers. Aliased to $k0" type="Special Purpose Register">
+    </Register>
+    <Register name="$k0" description= "The k registers are reserved for use by the OS kernel. They may change randomly at any time as they are used by interrupt handlers. Aliased to $26" type="Special Purpose Register">
+    </Register>
+    <Register name="$27" description= "The k registers are reserved for use by the OS kernel. They may change randomly at any time as they are used by interrupt handlers. Aliased to $k1" type="Special Purpose Register">
+    </Register>
+    <Register name="$k1" description= "The k registers are reserved for use by the OS kernel. They may change randomly at any time as they are used by interrupt handlers. Aliased to $27" type="Special Purpose Register">
+    </Register>
+    <Register name="$28" description= "Usually stores a pointer to the global data area (such that it can be accessed with memory offset addressing). Preserved across function calls. Aliased to $gp" type="Special Purpose Register">
+    </Register>
+    <Register name="$gp" description= "Usually stores a pointer to the global data area (such that it can be accessed with memory offset addressing). Preserved across function calls. Aliased to $28" type="Special Purpose Register">
+    </Register>
+    <Register name="$29" description= "Used to store the value of the stack pointer. Preserved across function calls. Aliased to $sp" type="Special Purpose Register">
+    </Register>
+    <Register name="$sp" description= "Used to store the value of the stack pointer. Preserved across function calls. Aliased to $29" type="Special Purpose Register">
+    </Register>
+    <Register name="$30" description= "Used to store the value of the frame pointer. Preserved across function calls. Aliased to $fp" type="Special Purpose Register">
+    </Register>
+    <Register name="$fp" description= "Used to store the value of the frame pointer. Preserved across function calls. Aliased to $30" type="Special Purpose Register">
+    </Register>
+    <Register name="$31" description= "Stores the return address (the location in the program that a function needs to return to). Preserved across function calls. Aliased to $ra" type="Special Purpose Register">
+    </Register>
+    <Register name="$ra" description= "Stores the return address (the location in the program that a function needs to return to). Preserved across function calls. Aliased to $31" type="Special Purpose Register">
+    </Register>
+</InstructionSet>

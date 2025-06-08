@@ -9,8 +9,10 @@ use asm_lsp::{
     parser::{
         populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
         populate_avr_instructions, populate_ca65_directives, populate_gas_directives,
-        populate_instructions, populate_masm_nasm_fasm_directives, populate_power_isa_instructions,
-        populate_registers, populate_riscv_instructions, populate_riscv_registers,
+        populate_instructions, populate_mars_sudo_instructions,
+        populate_masm_nasm_fasm_mars_directives, populate_mips_instructions,
+        populate_power_isa_instructions, populate_registers, populate_riscv_instructions,
+        populate_riscv_registers,
     },
 };
 
@@ -61,7 +63,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
             let path = opts.input_path.canonicalize()?;
             let instrs: Vec<Instruction>;
             match (path.is_dir(), opts.arch) {
-                (true, Some(arch)) => match arch {
+                (true, Some(arch_in)) => match arch_in {
                     Arch::ARM => {
                         instrs = populate_arm_instructions(&opts.input_path)?;
                     }
@@ -73,7 +75,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                     }
                     _ => {
                         return Err(anyhow!(
-                            "Directory parsing for {arch} instructions is not supported"
+                            "Directory parsing for {arch_in} instructions is not supported"
                         ));
                     }
                 },
@@ -84,18 +86,25 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                 }
                 (false, arch_in) => {
                     let conts = std::fs::read_to_string(&path)?;
-                    match arch_in {
-                        Some(Arch::MOS6502) => {
-                            instrs = populate_6502_instructions(&conts)?;
-                        }
-                        Some(Arch::PowerISA) => {
-                            instrs = populate_power_isa_instructions(&conts)?;
-                        }
-                        Some(Arch::Avr) => {
-                            instrs = populate_avr_instructions(&conts)?;
-                        }
-                        _ => {
-                            instrs = populate_instructions(&conts)?;
+                    if opts.assembler == Some(Assembler::Mars) {
+                        instrs = populate_mars_sudo_instructions(&opts.input_path)?;
+                    } else {
+                        match arch_in {
+                            Some(Arch::Mips) => {
+                                instrs = populate_mips_instructions(&opts.input_path)?;
+                            }
+                            Some(Arch::MOS6502) => {
+                                instrs = populate_6502_instructions(&conts)?;
+                            }
+                            Some(Arch::PowerISA) => {
+                                instrs = populate_power_isa_instructions(&conts)?;
+                            }
+                            Some(Arch::Avr) => {
+                                instrs = populate_avr_instructions(&conts)?;
+                            }
+                            _ => {
+                                instrs = populate_instructions(&conts)?;
+                            }
                         }
                     }
                 }
@@ -146,8 +155,8 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                 }
                 (false, Some(assembler_in)) => match assembler_in {
                     Assembler::Gas | Assembler::Go => populate_gas_directives(&conts)?,
-                    Assembler::Masm | Assembler::Nasm | Assembler::Fasm => {
-                        populate_masm_nasm_fasm_directives(&conts)?
+                    Assembler::Masm | Assembler::Nasm | Assembler::Fasm | Assembler::Mars => {
+                        populate_masm_nasm_fasm_mars_directives(&conts)?
                     }
                     Assembler::Ca65 => populate_ca65_directives(&conts)?,
                     Assembler::Avr => populate_avr_directives(&conts)?,
