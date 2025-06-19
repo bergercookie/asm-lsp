@@ -116,11 +116,16 @@ pub fn send_notification(message: String, typ: MessageType, connection: &Connect
 #[must_use]
 pub fn find_word_at_pos(line: &str, col: Column) -> ((Column, Column), usize) {
     let line_ = format!("{line} ");
+    // TODO: Let's just pass in a config, this could get messy
     // NOTE: '*' is added as an allowed character to account for the the program
     // counter pseudo variable of the Ca65 assembler. It's included unconditionally
     // here for simplicity, but if this proves to be an issue we can pass in a `config`
     // and only use it if the Ca65 assembler is enabled
-    let is_ident_char = |c: char| c.is_alphanumeric() || c == '_' || c == '.' || c == '*';
+    //
+    // NOTE: In a similar manner to above, '$' is added as an allowed character to account
+    // for mips registers
+    let is_ident_char =
+        |c: char| c.is_alphanumeric() || c == '_' || c == '.' || c == '*' || c == '$';
 
     let start = line_
         .chars()
