@@ -1819,7 +1819,7 @@ impl CompletionItems {
 }
 
 /// Struct to store all documentation the server uses to service user requests
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct ServerStore {
     /// Links names of instructions, registers, and directives to their documentation
     pub names_to_info: NameToInfoMaps,
