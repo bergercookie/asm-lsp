@@ -41,6 +41,16 @@ mod tests {
         }
     }
 
+    fn mips_arch_test_config() -> Config {
+        Config {
+            version: None,
+            assembler: Assembler::None,
+            instruction_set: Arch::Mips,
+            opts: Some(ConfigOptions::default()),
+            client: None,
+        }
+    }
+
     fn avr_arch_test_config() -> Config {
         Config {
             version: None,
@@ -176,6 +186,18 @@ mod tests {
         }
     }
 
+    fn mars_test_config() -> Config {
+        Config {
+            version: None,
+            assembler: Assembler::Mars,
+            // NOTE: Mars only targets Mips, and we need the ISA enabled to access
+            // Mars's pseudo instructions
+            instruction_set: Arch::Mips,
+            opts: Some(ConfigOptions::default()),
+            client: None,
+        }
+    }
+
     #[derive(Debug)]
     struct GlobalInfo {
         x86_instructions: Vec<Instruction>,
@@ -196,12 +218,15 @@ mod tests {
         power_isa_registers: Vec<Register>,
         avr_instructions: Vec<Instruction>,
         avr_registers: Vec<Register>,
+        mips_instructions: Vec<Instruction>,
+        mips_registers: Vec<Register>,
         gas_directives: Vec<Directive>,
         masm_directives: Vec<Directive>,
         nasm_directives: Vec<Directive>,
         ca65_directives: Vec<Directive>,
         avr_directives: Vec<Directive>,
         fasm_directives: Vec<Directive>,
+        mars_directives: Vec<Directive>,
     }
 
     impl GlobalInfo {
@@ -225,12 +250,15 @@ mod tests {
                 mos6502_registers: Vec::new(),
                 avr_instructions: Vec::new(),
                 avr_registers: Vec::new(),
+                mips_instructions: Vec::new(),
+                mips_registers: Vec::new(),
                 gas_directives: Vec::new(),
                 masm_directives: Vec::new(),
                 nasm_directives: Vec::new(),
                 ca65_directives: Vec::new(),
                 avr_directives: Vec::new(),
                 fasm_directives: Vec::new(),
+                mars_directives: Vec::new(),
             }
         }
     }
@@ -318,6 +346,19 @@ mod tests {
             Vec::new()
         };
 
+        info.mips_instructions = if config.is_isa_enabled(Arch::Mips) {
+            let mips_instrs = include_bytes!("serialized/opcodes/mips");
+            bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(mips_instrs, BINCODE_CFG)?.0
+        } else {
+            Vec::new()
+        };
+
+        if config.is_assembler_enabled(Assembler::Mars) {
+            let mars_pseudo_instrs = include_bytes!("serialized/opcodes/mars");
+            info.mips_instructions
+                .append(&mut bincode::borrow_decode_from_slice(mars_pseudo_instrs, BINCODE_CFG)?.0);
+        }
+
         info.x86_registers = if config.is_isa_enabled(Arch::X86) {
             let regs_x86 = include_bytes!("serialized/registers/x86");
             bincode::borrow_decode_from_slice(regs_x86, BINCODE_CFG)?.0
@@ -381,6 +422,13 @@ mod tests {
             Vec::new()
         };
 
+        info.mips_registers = if config.is_isa_enabled(Arch::Mips) {
+            let regs_mips = include_bytes!("serialized/registers/mips");
+            bincode::borrow_decode_from_slice(regs_mips, BINCODE_CFG)?.0
+        } else {
+            Vec::new()
+        };
+
         info.gas_directives = if config.is_assembler_enabled(Assembler::Gas) {
             let gas_dirs = include_bytes!("serialized/directives/gas");
             bincode::borrow_decode_from_slice(gas_dirs, BINCODE_CFG)?.0
@@ -418,6 +466,13 @@ mod tests {
 
         info.fasm_directives = if config.is_assembler_enabled(Assembler::Fasm) {
             let fasm_dirs = include_bytes!("serialized/directives/fasm");
+            bincode::borrow_decode_from_slice(fasm_dirs, BINCODE_CFG)?.0
+        } else {
+            Vec::new()
+        };
+
+        info.mars_directives = if config.is_assembler_enabled(Assembler::Mars) {
+            let fasm_dirs = include_bytes!("serialized/directives/mars");
             bincode::borrow_decode_from_slice(fasm_dirs, BINCODE_CFG)?.0
         } else {
             Vec::new()
@@ -483,6 +538,12 @@ mod tests {
             &mut store.names_to_info.instructions,
         );
 
+        populate_name_to_instruction_map(
+            Arch::Mips,
+            &info.mips_instructions,
+            &mut store.names_to_info.instructions,
+        );
+
         populate_name_to_register_map(
             Arch::X86,
             &info.x86_registers,
@@ -537,6 +598,12 @@ mod tests {
             &mut store.names_to_info.registers,
         );
 
+        populate_name_to_register_map(
+            Arch::Mips,
+            &info.mips_registers,
+            &mut store.names_to_info.registers,
+        );
+
         populate_name_to_directive_map(
             Assembler::Gas,
             &info.gas_directives,
@@ -570,6 +637,12 @@ mod tests {
         populate_name_to_directive_map(
             Assembler::Fasm,
             &info.fasm_directives,
+            &mut store.names_to_info.directives,
+        );
+
+        populate_name_to_directive_map(
+            Assembler::Mars,
+            &info.mars_directives,
             &mut store.names_to_info.directives,
         );
 
@@ -661,7 +734,7 @@ mod tests {
             &mut doc_store,
             &store,
         )
-        .unwrap();
+        .expect("Received empty hover response");
 
         if let HoverContents::Markup(MarkupContent {
             kind: MarkupKind::Markdown,
@@ -735,7 +808,7 @@ mod tests {
             config,
             &globals.completion_items,
         )
-        .unwrap();
+        .expect("Received empty completion response");
 
         // - We currently have a very course-grained approach to completions,
         // - We just send all of the appropriate items (e.g. all instructions, all
@@ -813,6 +886,152 @@ mod tests {
             expected_kind,
             trigger_kind,
             trigger_character,
+        );
+    }
+
+    /**************************************************************************
+     * Mips Tests
+     *************************************************************************/
+    #[test]
+    fn handle_hover_mips_arch_it_provides_reg_info_1() {
+        test_hover(
+            "li $<cursor>v0, 4 # system call code for printing string = 4",
+            "$V0 [mips]
+The $v Registers are used for returning values from functions. They are not preserved across function calls. Aliased to $2
+
+Type: Special Purpose Register",
+            &mips_arch_test_config(),
+        );
+    }
+    #[test]
+    fn handle_hover_mips_arch_it_provides_reg_info_2() {
+        test_hover(
+            "la <cursor>$4, out_string # load address of string to be printed into $a0",
+            "$4 [mips]
+The $a registers are used for passing arguments to functions. They are not preserved across function calls. Aliased to $a0
+
+Type: Special Purpose Register",
+            &mips_arch_test_config(),
+        );
+    }
+    #[test]
+    fn handle_hover_mips_arch_it_provides_instr_info_1() {
+        test_hover(
+            "sysca<cursor>ll # call operating system to perform operation",
+            "syscall [mips]
+To cause a System Call exception
+A system call exception occurs, immediately and unconditionally transferring control to the exception handler.
+The code field is available for use as software parameters, but is retrieved by the exception handler only by loading the contents of the memory word containing the instruction.
+
+## Templates
+
+ + `SYSCALL `
+
+More info: https://www.cs.cornell.edu/courses/cs3410/2008fa/MIPS_Vol2.pdf",
+            &mips_arch_test_config(),
+        );
+    }
+    #[test]
+    fn handle_autocomplete_mips_arch_it_provides_reg_comps_1() {
+        test_register_autocomplete(
+            "li $<cursor>",
+            &mips_arch_test_config(),
+            CompletionTriggerKind::TRIGGER_CHARACTER,
+            Some("$".to_string()),
+        );
+    }
+    #[test]
+    fn handle_autocomplete_mips_arch_it_provides_reg_comps_2() {
+        test_register_autocomplete(
+            "li $1<cursor>",
+            &mips_arch_test_config(),
+            CompletionTriggerKind::TRIGGER_CHARACTER,
+            Some("$".to_string()),
+        );
+    }
+    #[test]
+    fn handle_autocomplete_mips_arch_it_provides_instr_comps_1() {
+        test_instruction_autocomplete(
+            "sys<cursor>",
+            &mips_arch_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_mips_arch_it_provides_instr_comps_2() {
+        test_instruction_autocomplete(
+            "add<cursor>",
+            &mips_arch_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+
+    /**************************************************************************
+     * Mars Tests
+     *************************************************************************/
+    #[test]
+    fn handle_hover_mars_it_provides_dir_info_1() {
+        test_hover(
+            ".mac<cursor>ro foo",
+            ".macro [mars]
+A pattern-matching and replacement facility that provides a simple mechanism to name a frequently used sequence of instructions",
+            &mars_test_config()
+        );
+    }
+    #[test]
+    fn handle_hover_mars_it_provides_dir_info_2() {
+        test_hover(
+            ".eq<cursor>v FOO 1",
+            ".eqv [mars]
+The .eqv directive (short for \"equivalence\") is similar to #define in C or C++. It is used to substitute an arbitrary string for an identifier. Using .eqv, you can specify simple substitutions that provide \"define once, use many times\" capability at assembly pre-processing time.",
+            &mars_test_config()
+        );
+    }
+    #[test]
+    fn handle_hover_mars_it_provides_dir_info_3() {
+        test_hover(
+            ".inclu<cursor>de \"foo.s\"",
+            ".include [mars]
+The .include directive has one operand, a quoted filename. When the directive is carried out, the contents of the specified file are substituted for the directive. This occurs during assembly preprocessing. It is like #include in C or C++.",
+            &mars_test_config()
+        );
+    }
+    #[test]
+    fn handle_autocomplete_mars_it_provides_dir_comps_1() {
+        test_directive_autocomplete(
+            ".m<cursor>",
+            &mars_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_mars_it_provides_dir_comps_2() {
+        test_directive_autocomplete(
+            ".<cursor>",
+            &mars_test_config(),
+            CompletionTriggerKind::TRIGGER_CHARACTER,
+            Some(".".to_string()),
+        );
+    }
+    #[test]
+    fn handle_autocomplete_mars_it_provides_pseudo_op_comps_1() {
+        test_directive_autocomplete(
+            "l<cursor>",
+            &mars_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
+        );
+    }
+    #[test]
+    fn handle_autocomplete_mars_it_provides_pseudo_op_comps_2() {
+        test_directive_autocomplete(
+            "ad<cursor>",
+            &mars_test_config(),
+            CompletionTriggerKind::INVOKED,
+            None,
         );
     }
 
