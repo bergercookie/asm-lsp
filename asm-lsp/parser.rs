@@ -651,7 +651,7 @@ fn parse_arm_instruction(xml_contents: &str) -> Option<Instruction> {
 ///
 /// # Errors
 ///
-/// This function will return `Err` if `docs_path` cannot be read or its contents cannot be parsed
+/// This function will return `Err` if `contents` cannot be parsed
 ///
 /// # Panics
 ///
@@ -659,11 +659,10 @@ fn parse_arm_instruction(xml_contents: &str) -> Option<Instruction> {
 /// in the expected format or if it contains unexpected content
 ///
 /// <https://github.com/dpetersanderson/MARS/blob/main/PseudoOps.txt>
-pub fn populate_mars_sudo_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>> {
+pub fn populate_mars_pseudo_instructions(contents: &str) -> Result<Vec<Instruction>> {
     let mut prev_instr: Option<&mut Instruction> = None;
     let mut instructions = Vec::new();
 
-    let contents = fs::read_to_string(docs_path)?;
     for line in contents
         .lines()
         .filter(|l| !l.is_empty() && !l.trim_start().starts_with('#'))
@@ -706,8 +705,8 @@ pub fn populate_mars_sudo_instructions(docs_path: &PathBuf) -> Result<Vec<Instru
 ///
 /// # Errors
 ///
-/// This function will return `Err` if `docs_path` cannot be read or its contents cannot be parsed
-pub fn populate_mips_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>> {
+/// This function will return `Err` if `json_contents` cannot be parsed
+pub fn populate_mips_instructions(json_contents: &str) -> Result<Vec<Instruction>> {
     #[derive(Deserialize, Debug)]
     struct MipsInstruction {
         pub name: String,
@@ -731,9 +730,8 @@ pub fn populate_mips_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction
         }
     }
 
-    let json_contents = fs::read_to_string(docs_path)?;
     let raw_instrs: Vec<MipsInstruction> =
-        serde_json::from_str(&json_contents).map_err(|e| anyhow!("Failed to parse JSON: {e}"))?;
+        serde_json::from_str(json_contents).map_err(|e| anyhow!("Failed to parse JSON: {e}"))?;
     let instructions: Vec<Instruction> = raw_instrs.into_iter().map(Instruction::from).collect();
 
     Ok(instructions)
