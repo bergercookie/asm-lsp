@@ -18,9 +18,9 @@ mod tests {
         get_word_from_pos_params, instr_filter_targets,
         parser::{
             populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
-            populate_avr_instructions, populate_ca65_directives,
-            populate_masm_nasm_fasm_mars_directives, populate_power_isa_instructions,
-            populate_riscv_instructions, populate_riscv_registers,
+            populate_avr_instructions, populate_ca65_directives, populate_mars_pseudo_instructions,
+            populate_masm_nasm_fasm_mars_directives, populate_mips_instructions,
+            populate_power_isa_instructions, populate_riscv_instructions, populate_riscv_registers,
         },
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers,
@@ -3025,6 +3025,14 @@ Width: 8 bits",
             populate_registers
         );
     }
+    #[test]
+    fn serialized_mips_registers_are_up_to_date() {
+        serialized_registers_test!(
+            "serialized/registers/mips",
+            "../docs_store/registers/mips.xml",
+            populate_registers
+        );
+    }
 
     macro_rules! serialized_instructions_test {
         ($serialized_path:literal, $raw_path:literal, $populate_fn:expr) => {
@@ -3124,6 +3132,22 @@ Width: 8 bits",
             "serialized/opcodes/avr",
             "../docs_store/opcodes/avr.xml",
             populate_avr_instructions
+        );
+    }
+    #[test]
+    fn serialized_mips_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/mips",
+            "../docs_store/opcodes/mips.json",
+            populate_mips_instructions
+        );
+    }
+    #[test]
+    fn serialized_mars_pseudo_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/mars",
+            "../docs_store/opcodes/mars.txt",
+            populate_mars_pseudo_instructions
         );
     }
     // TODO: Consolidate this into `serialized_instruction_test!`
@@ -3276,6 +3300,14 @@ Width: 8 bits",
         serialized_directives_test!(
             "serialized/directives/fasm",
             "../docs_store/directives/fasm.xml",
+            populate_masm_nasm_fasm_mars_directives
+        );
+    }
+    #[test]
+    fn serialized_mars_directives_are_up_to_date() {
+        serialized_directives_test!(
+            "serialized/directives/mars",
+            "../docs_store/directives/mars.xml",
             populate_masm_nasm_fasm_mars_directives
         );
     }

@@ -9,7 +9,7 @@ use asm_lsp::{
     parser::{
         populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
         populate_avr_instructions, populate_ca65_directives, populate_gas_directives,
-        populate_instructions, populate_mars_sudo_instructions,
+        populate_instructions, populate_mars_pseudo_instructions,
         populate_masm_nasm_fasm_mars_directives, populate_mips_instructions,
         populate_power_isa_instructions, populate_registers, populate_riscv_instructions,
         populate_riscv_registers,
@@ -87,11 +87,11 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                 (false, arch_in) => {
                     let conts = std::fs::read_to_string(&path)?;
                     if opts.assembler == Some(Assembler::Mars) {
-                        instrs = populate_mars_sudo_instructions(&opts.input_path)?;
+                        instrs = populate_mars_pseudo_instructions(&conts)?;
                     } else {
                         match arch_in {
                             Some(Arch::Mips) => {
-                                instrs = populate_mips_instructions(&opts.input_path)?;
+                                instrs = populate_mips_instructions(&conts)?;
                             }
                             Some(Arch::MOS6502) => {
                                 instrs = populate_6502_instructions(&conts)?;
