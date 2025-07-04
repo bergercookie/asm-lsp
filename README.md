@@ -144,6 +144,7 @@ Valid options for the `instruction_set` field include:
 - `"z80"`
 - `"6502"`
 - `"avr"`
+- `"mips"`
 
 Valid options for the `assembler` field include:
 
@@ -154,6 +155,7 @@ Valid options for the `assembler` field include:
 - `"ca65"`
 - `"avr"`
 - `"fasm"`
+- `"mars"`
 
 Don't see an architecture and/or assembler that you'd like to work with? File an
 [issue](https://github.com/bergercookie/asm-lsp/issues/new/choose)! We would be
