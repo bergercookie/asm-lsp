@@ -2160,7 +2160,10 @@ pub fn populate_ca65_directives(html_conts: &str) -> Result<Vec<Directive>> {
             for (i, c) in description_line.chars().enumerate() {
                 match c {
                     '<' => {
-                        #[allow(clippy::sliced_string_as_bytes)]
+                        #[allow(
+                            clippy::sliced_string_as_bytes,
+                            clippy::char_indices_as_byte_indices
+                        )]
                         let bytes: Vec<u8> = description_line[prev_idx..i].as_bytes().to_vec();
                         let decoded = htmlentity::entity::decode(&bytes).to_string().unwrap();
                         description += &decoded;
