@@ -623,7 +623,7 @@ pub fn apply_compile_cmd(
                     {
                         Ok(result) => {
                             let output_str = ustr::get_string(result.stderr);
-                            get_diagnostics(diagnostics, &output_str);
+                            get_diagnostics(diagnostics, &output_str, cfg);
                         }
                         Err(e) => {
                             warn!(
@@ -645,7 +645,7 @@ pub fn apply_compile_cmd(
                     }
                 };
                 let output_str = ustr::get_string(output.stderr);
-                get_diagnostics(diagnostics, &output_str);
+                get_diagnostics(diagnostics, &output_str, cfg);
             }
         }
     } else if let Some(args) = compile_cmd.args_from_cmd() {
@@ -660,7 +660,7 @@ pub fn apply_compile_cmd(
             }
         };
         let output_str = ustr::get_string(output.stderr);
-        get_diagnostics(diagnostics, &output_str);
+        get_diagnostics(diagnostics, &output_str, cfg);
     }
 }
 
@@ -674,98 +674,155 @@ pub fn apply_compile_cmd(
 /// As more assemblers are incorporated, this can be updated
 ///
 /// # Panics
-fn get_diagnostics(diagnostics: &mut Vec<Diagnostic>, tool_output: &str) {
-    static DIAG_REG_LINE_COLUMN: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"^.*:(\d+):(\d+):\s+(.*)$").unwrap());
-    static DIAG_REG_LINE_ONLY: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"^.*:(\d+):\s+(.*)$").unwrap());
-    static ALT_DIAG_REG_LINE_ONLY: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"^.*\((\d+)\):\s+(.*)$").unwrap());
+fn get_diagnostics(diagnostics: &mut Vec<Diagnostic>, tool_output: &str, cfg: &Config) {
+    // Special handingling for FASM assembler diagnostics
+    if cfg.is_assembler_enabled(Assembler::Fasm) {
+        // https://flatassembler.net/docs.php?article=manual - 1.1.3 Compile messages
+        static FASM_SOURCE_LOC: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^(.+) \[(\d+)\]:$").unwrap());
+        // TODO: Look into including macro defintion locations as related information
+        // static FASM_MACRO_INSTR_LOC: LazyLock<Regex> =
+        //     LazyLock::new(|| Regex::new(r"^(.+) \[(\d+)\]: .+ \[(\d+\)]:$").unwrap());
+        static FASM_ERR_MSG: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^error: (.+)").unwrap());
 
-    // TODO: Consolidate/ clean this up...regexes are hard
-    for line in tool_output.lines() {
-        // first check if we have an error message of the form:
-        // :<line>:<column>: <error message here>
-        if let Some(caps) = DIAG_REG_LINE_COLUMN.captures(line) {
-            // the entire capture is always at the 0th index,
-            // then we have 3 more explicit capture groups
-            if caps.len() == 4 {
+        let mut source_line: Option<u32> = None;
+        let mut source_start_col: Option<u32> = None;
+        let mut source_end_col: Option<u32> = None;
+        let mut lines = tool_output.lines();
+        while let Some(line) = lines.next() {
+            // for line in tool_output.lines() {
+            if let Some(caps) = FASM_SOURCE_LOC.captures(line) {
+                // the entire capture is always at the 0th index,
+                // then we have 2 more explicit capture groups
+                if caps.len() == 3 {
+                    let Ok(line_number) = caps[2].parse::<u32>() else {
+                        continue;
+                    };
+                    source_line = Some(line_number);
+                    if let Some(src) = lines.next() {
+                        let len = src.len() as u32;
+                        source_start_col = Some(len - src.trim_start().len() as u32);
+                        source_end_col = Some(len);
+                    }
+                }
+            } else if let Some(caps) = FASM_ERR_MSG.captures(line) {
+                if caps.len() != 2 {
+                    continue;
+                }
+                if let Some(line_number) = source_line {
+                    let err_msg = caps[1].to_string();
+                    let start_col = source_start_col.unwrap_or(0);
+                    let end_col = source_end_col.unwrap_or(0);
+                    diagnostics.push(Diagnostic::new_simple(
+                        Range {
+                            start: Position {
+                                line: line_number - 1,
+                                character: start_col,
+                            },
+                            end: Position {
+                                line: line_number - 1,
+                                character: end_col,
+                            },
+                        },
+                        err_msg,
+                    ));
+                }
+                source_line = None;
+            }
+        }
+    } else {
+        // TODO: Consolidate/ clean this up...regexes are hard
+        static DIAG_REG_LINE_COLUMN: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^.*:(\d+):(\d+):\s+(.*)$").unwrap());
+        static DIAG_REG_LINE_ONLY: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^.*:(\d+):\s+(.*)$").unwrap());
+        static ALT_DIAG_REG_LINE_ONLY: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^.*\((\d+)\):\s+(.*)$").unwrap());
+        for line in tool_output.lines() {
+            // first check if we have an error message of the form:
+            // :<line>:<column>: <error message here>
+            if let Some(caps) = DIAG_REG_LINE_COLUMN.captures(line) {
+                // the entire capture is always at the 0th index,
+                // then we have 3 more explicit capture groups
+                if caps.len() == 4 {
+                    let Ok(line_number) = caps[1].parse::<u32>() else {
+                        continue;
+                    };
+                    let Ok(column_number) = caps[2].parse::<u32>() else {
+                        continue;
+                    };
+                    let err_msg = &caps[3];
+                    diagnostics.push(Diagnostic::new_simple(
+                        Range {
+                            start: Position {
+                                line: line_number - 1,
+                                character: column_number,
+                            },
+                            end: Position {
+                                line: line_number - 1,
+                                character: column_number,
+                            },
+                        },
+                        String::from(err_msg),
+                    ));
+                    continue;
+                }
+            }
+            // if the above check for lines *and* columns didn't match, see if we
+            // have an error message of the form:
+            // :<line>: <error message here>
+            if let Some(caps) = DIAG_REG_LINE_ONLY.captures(line) {
+                if caps.len() < 3 {
+                    // the entire capture is always at the 0th index,
+                    // then we have 2 more explicit capture groups
+                    continue;
+                }
                 let Ok(line_number) = caps[1].parse::<u32>() else {
                     continue;
                 };
-                let Ok(column_number) = caps[2].parse::<u32>() else {
-                    continue;
-                };
-                let err_msg = &caps[3];
+                let err_msg = &caps[2];
                 diagnostics.push(Diagnostic::new_simple(
                     Range {
                         start: Position {
                             line: line_number - 1,
-                            character: column_number,
+                            character: 0,
                         },
                         end: Position {
                             line: line_number - 1,
-                            character: column_number,
+                            character: 0,
                         },
                     },
                     String::from(err_msg),
                 ));
-                continue;
             }
-        }
-        // if the above check for lines *and* columns didn't match, see if we
-        // have an error message of the form:
-        // :<line>: <error message here>
-        if let Some(caps) = DIAG_REG_LINE_ONLY.captures(line) {
-            if caps.len() < 3 {
-                // the entire capture is always at the 0th index,
-                // then we have 2 more explicit capture groups
-                continue;
-            }
-            let Ok(line_number) = caps[1].parse::<u32>() else {
-                continue;
-            };
-            let err_msg = &caps[2];
-            diagnostics.push(Diagnostic::new_simple(
-                Range {
-                    start: Position {
-                        line: line_number - 1,
-                        character: 0,
-                    },
-                    end: Position {
-                        line: line_number - 1,
-                        character: 0,
-                    },
-                },
-                String::from(err_msg),
-            ));
-        }
 
-        // ca65 has a slightly different format
-        // file(<line>): <error message here>
-        if let Some(caps) = ALT_DIAG_REG_LINE_ONLY.captures(line) {
-            if caps.len() < 3 {
-                // the entire capture is always at the 0th index,
-                // then we have 2 more explicit capture groups
-                continue;
+            // ca65 has a slightly different format
+            // file(<line>): <error message here>
+            if let Some(caps) = ALT_DIAG_REG_LINE_ONLY.captures(line) {
+                if caps.len() < 3 {
+                    // the entire capture is always at the 0th index,
+                    // then we have 2 more explicit capture groups
+                    continue;
+                }
+                let Ok(line_number) = caps[1].parse::<u32>() else {
+                    continue;
+                };
+                let err_msg = &caps[2];
+                diagnostics.push(Diagnostic::new_simple(
+                    Range {
+                        start: Position {
+                            line: line_number - 1,
+                            character: 0,
+                        },
+                        end: Position {
+                            line: line_number - 1,
+                            character: 0,
+                        },
+                    },
+                    String::from(err_msg),
+                ));
             }
-            let Ok(line_number) = caps[1].parse::<u32>() else {
-                continue;
-            };
-            let err_msg = &caps[2];
-            diagnostics.push(Diagnostic::new_simple(
-                Range {
-                    start: Position {
-                        line: line_number - 1,
-                        character: 0,
-                    },
-                    end: Position {
-                        line: line_number - 1,
-                        character: 0,
-                    },
-                },
-                String::from(err_msg),
-            ));
         }
     }
 }
