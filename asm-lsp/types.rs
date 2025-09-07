@@ -1352,8 +1352,6 @@ pub struct Config {
     pub assembler: Assembler,
     pub instruction_set: Arch,
     pub opts: Option<ConfigOptions>,
-    #[serde(skip)]
-    pub client: Option<LspClient>,
 }
 
 impl Default for Config {
@@ -1363,7 +1361,6 @@ impl Default for Config {
             assembler: Assembler::default(),
             instruction_set: Arch::default(),
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 }
@@ -1432,11 +1429,6 @@ impl Default for ConfigOptions {
             default_diagnostics: Some(true),
         }
     }
-}
-
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub enum LspClient {
-    Helix,
 }
 
 // Instruction Set Architecture
