@@ -35,7 +35,7 @@ use tree_sitter::InputEdit;
 
 use crate::{
     Arch, ArchOrAssembler, Assembler, Completable, CompletionItems, Config, ConfigOptions,
-    Directive, DocumentStore, Hoverable, Instruction, LspClient, NameToInstructionMap, RootConfig,
+    Directive, DocumentStore, Hoverable, Instruction, NameToInstructionMap, RootConfig,
     ServerStore, TreeEntry, types::Column, ustr,
 };
 
@@ -67,25 +67,24 @@ pub fn run_info() {
     }
 }
 
-/// Sends an empty, non-error response to the lsp client via `connection`
+/// Sends an  response indicating no information was available to
+/// the lsp client via `connection`
 ///
 /// # Errors
 ///
 /// Returns `Err` if the response fails to send via `connection`
-pub fn send_empty_resp(connection: &Connection, id: RequestId, config: &Config) -> Result<()> {
+pub fn send_empty_resp(connection: &Connection, id: RequestId) -> Result<()> {
     let empty_resp = Response {
         id,
         result: None,
-        error: None,
+        error: Some(lsp_server::ResponseError {
+            code: lsp_server::ErrorCode::RequestFailed as i32,
+            message: "No information available".to_string(),
+            data: None,
+        }),
     };
 
-    // Helix shuts the server down when the above empty response is sent,
-    // so send nothing in its case
-    if config.client == Some(LspClient::Helix) {
-        Ok(())
-    } else {
-        Ok(connection.sender.send(Message::Response(empty_resp))?)
-    }
+    Ok(connection.sender.send(Message::Response(empty_resp))?)
 }
 
 /// Sends a notification with to the client

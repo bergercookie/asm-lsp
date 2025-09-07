@@ -81,13 +81,7 @@ pub fn handle_request(
         GotoDefinition::METHOD => {
             let (id, params) =
                 cast_req::<GotoDefinition>(req).expect("Failed to cast completion request");
-            handle_goto_def_request(
-                connection,
-                id,
-                &params,
-                config.get_config(&params.text_document_position_params.text_document.uri),
-                doc_store,
-            )?;
+            handle_goto_def_request(connection, id, &params, doc_store)?;
             info!(
                 "{} request serviced in {}ms",
                 GotoDefinition::METHOD,
@@ -97,13 +91,7 @@ pub fn handle_request(
         DocumentSymbolRequest::METHOD => {
             let (id, params) =
                 cast_req::<DocumentSymbolRequest>(req).expect("Failed to cast completion request");
-            handle_document_symbols_request(
-                connection,
-                id,
-                &params,
-                config.get_config(&params.text_document.uri),
-                doc_store,
-            )?;
+            handle_document_symbols_request(connection, id, &params, doc_store)?;
             info!(
                 "{} request serviced in {}ms",
                 DocumentSymbolRequest::METHOD,
@@ -130,13 +118,7 @@ pub fn handle_request(
         References::METHOD => {
             let (id, params) =
                 cast_req::<References>(req).expect("Failed to cast completion request");
-            handle_references_request(
-                connection,
-                id,
-                &params,
-                config.get_config(&params.text_document_position.text_document.uri),
-                doc_store,
-            )?;
+            handle_references_request(connection, id, &params, doc_store)?;
             info!(
                 "{} request serviced in {}ms",
                 References::METHOD,
@@ -305,7 +287,7 @@ pub fn handle_hover_request(
     {
         get_word_from_pos_params(doc, &params.text_document_position_params)
     } else {
-        return send_empty_resp(connection, id, config);
+        return send_empty_resp(connection, id);
     };
 
     // needed to appease the borrow checker, since `word` is a reference to owned
@@ -322,7 +304,7 @@ pub fn handle_hover_request(
         return Ok(connection.sender.send(Message::Response(result))?);
     }
 
-    send_empty_resp(connection, id, config)
+    send_empty_resp(connection, id)
 }
 
 /// Handles completion requests
@@ -363,7 +345,7 @@ pub fn handle_completion_request(
         }
     }
 
-    send_empty_resp(connection, id, config)
+    send_empty_resp(connection, id)
 }
 
 /// Handles go to definition requests
@@ -379,7 +361,6 @@ pub fn handle_goto_def_request(
     connection: &Connection,
     id: RequestId,
     params: &GotoDefinitionParams,
-    config: &Config,
     doc_store: &mut DocumentStore,
 ) -> Result<()> {
     let uri = &params.text_document_position_params.text_document.uri;
@@ -398,7 +379,7 @@ pub fn handle_goto_def_request(
         }
     }
 
-    send_empty_resp(connection, id, config)
+    send_empty_resp(connection, id)
 }
 
 /// Handles document symbols requests
@@ -414,7 +395,6 @@ pub fn handle_document_symbols_request(
     connection: &Connection,
     id: RequestId,
     params: &DocumentSymbolParams,
-    config: &Config,
     doc_store: &mut DocumentStore,
 ) -> Result<()> {
     let uri = &params.text_document.uri;
@@ -433,7 +413,7 @@ pub fn handle_document_symbols_request(
         }
     }
 
-    send_empty_resp(connection, id, config)
+    send_empty_resp(connection, id)
 }
 
 /// Handles signature help requests
@@ -477,7 +457,7 @@ pub fn handle_signature_help_request(
         }
     }
 
-    send_empty_resp(connection, id, config)
+    send_empty_resp(connection, id)
 }
 
 /// Handles reference requests
@@ -493,7 +473,6 @@ pub fn handle_references_request(
     connection: &Connection,
     id: RequestId,
     params: &ReferenceParams,
-    config: &Config,
     doc_store: &mut DocumentStore,
 ) -> Result<()> {
     let uri = &params.text_document_position.text_document.uri;
@@ -513,7 +492,7 @@ pub fn handle_references_request(
         }
     }
 
-    send_empty_resp(connection, id, config)
+    send_empty_resp(connection, id)
 }
 
 /// Produces diagnostics and sends a `PublishDiagnostics` notification to the client
