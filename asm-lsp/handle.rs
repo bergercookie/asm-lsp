@@ -469,8 +469,6 @@ pub fn handle_references_request(
     doc_store: &mut DocumentStore,
 ) -> Result<()> {
     let uri = &params.text_document_position.text_document.uri;
-            if !ref_resp.is_empty() {
-            }
     if let Some(doc) = doc_store.text_store.get_document(uri)
         && let Some(tree_entry) = doc_store.tree_store.get_mut(uri)
     {
