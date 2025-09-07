@@ -20,7 +20,7 @@ tweak your code for optimisation.
 
 [![MSRV](https://img.shields.io/badge/MSRV-1.82.0-blue)](https://www.rust-lang.org/)
 
-**Note**: The minimum supported Rust version (MSRV) is **1.82.0**, but this may change on the `master` branch.
+**Note**: The minimum supported Rust version (MSRV) is **1.88.0**, but this may change on the `master` branch.
 ...
 
 ### Using cargo
