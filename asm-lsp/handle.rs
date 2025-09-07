@@ -325,24 +325,23 @@ pub fn handle_completion_request(
     completion_items: &CompletionItems,
 ) -> Result<()> {
     let uri = &params.text_document_position.text_document.uri;
-    if let Some(doc) = doc_store.text_store.get_document(uri) {
-        if let Some(ref mut tree_entry) = doc_store.tree_store.get_mut(uri) {
-            if let Some(comp_resp) = get_comp_resp(
-                doc.get_content(None),
-                tree_entry,
-                params,
-                config,
-                completion_items,
-            ) {
-                let result = serde_json::to_value(comp_resp).unwrap();
-                let result = Response {
-                    id,
-                    result: Some(result),
-                    error: None,
-                };
-                return Ok(connection.sender.send(Message::Response(result))?);
-            }
-        }
+    if let Some(doc) = doc_store.text_store.get_document(uri)
+        && let Some(ref mut tree_entry) = doc_store.tree_store.get_mut(uri)
+        && let Some(comp_resp) = get_comp_resp(
+            doc.get_content(None),
+            tree_entry,
+            params,
+            config,
+            completion_items,
+        )
+    {
+        let result = serde_json::to_value(comp_resp).unwrap();
+        let result = Response {
+            id,
+            result: Some(result),
+            error: None,
+        };
+        return Ok(connection.sender.send(Message::Response(result))?);
     }
 
     send_empty_resp(connection, id)
@@ -364,19 +363,18 @@ pub fn handle_goto_def_request(
     doc_store: &mut DocumentStore,
 ) -> Result<()> {
     let uri = &params.text_document_position_params.text_document.uri;
-    if let Some(doc) = doc_store.text_store.get_document(uri) {
-        if let Some(tree_entry) = doc_store.tree_store.get_mut(uri) {
-            if let Some(def_resp) = get_goto_def_resp(doc, tree_entry, params) {
-                let result = serde_json::to_value(def_resp).unwrap();
-                let result = Response {
-                    id,
-                    result: Some(result),
-                    error: None,
-                };
+    if let Some(doc) = doc_store.text_store.get_document(uri)
+        && let Some(tree_entry) = doc_store.tree_store.get_mut(uri)
+        && let Some(def_resp) = get_goto_def_resp(doc, tree_entry, params)
+    {
+        let result = serde_json::to_value(def_resp).unwrap();
+        let result = Response {
+            id,
+            result: Some(result),
+            error: None,
+        };
 
-                return Ok(connection.sender.send(Message::Response(result))?);
-            }
-        }
+        return Ok(connection.sender.send(Message::Response(result))?);
     }
 
     send_empty_resp(connection, id)
@@ -398,19 +396,18 @@ pub fn handle_document_symbols_request(
     doc_store: &mut DocumentStore,
 ) -> Result<()> {
     let uri = &params.text_document.uri;
-    if let Some(doc) = doc_store.text_store.get_document(uri) {
-        if let Some(tree_entry) = doc_store.tree_store.get_mut(uri) {
-            if let Some(symbols) = get_document_symbols(doc.get_content(None), tree_entry, params) {
-                let resp = DocumentSymbolResponse::Nested(symbols);
-                let result = serde_json::to_value(resp).unwrap();
-                let result = Response {
-                    id,
-                    result: Some(result),
-                    error: None,
-                };
-                return Ok(connection.sender.send(Message::Response(result))?);
-            }
-        }
+    if let Some(doc) = doc_store.text_store.get_document(uri)
+        && let Some(tree_entry) = doc_store.tree_store.get_mut(uri)
+        && let Some(symbols) = get_document_symbols(doc.get_content(None), tree_entry, params)
+    {
+        let resp = DocumentSymbolResponse::Nested(symbols);
+        let result = serde_json::to_value(resp).unwrap();
+        let result = Response {
+            id,
+            result: Some(result),
+            error: None,
+        };
+        return Ok(connection.sender.send(Message::Response(result))?);
     }
 
     send_empty_resp(connection, id)
@@ -434,27 +431,23 @@ pub fn handle_signature_help_request(
     names_to_instructions: &NameToInstructionMap,
 ) -> Result<()> {
     let uri = &params.text_document_position_params.text_document.uri;
-    if let Some(doc) = doc_store.text_store.get_document(uri) {
-        if let Some(tree_entry) = doc_store.tree_store.get_mut(uri) {
-            let sig_resp = get_sig_help_resp(
-                doc.get_content(None),
-                params,
-                config,
-                tree_entry,
-                names_to_instructions,
-            );
-
-            if let Some(sig) = sig_resp {
-                let result = serde_json::to_value(sig).unwrap();
-                let result = Response {
-                    id,
-                    result: Some(result),
-                    error: None,
-                };
-
-                return Ok(connection.sender.send(Message::Response(result))?);
-            }
-        }
+    if let Some(doc) = doc_store.text_store.get_document(uri)
+        && let Some(tree_entry) = doc_store.tree_store.get_mut(uri)
+        && let Some(sig_resp) = get_sig_help_resp(
+            doc.get_content(None),
+            params,
+            config,
+            tree_entry,
+            names_to_instructions,
+        )
+    {
+        let result = serde_json::to_value(sig_resp).unwrap();
+        let result = Response {
+            id,
+            result: Some(result),
+            error: None,
+        };
+        return Ok(connection.sender.send(Message::Response(result))?);
     }
 
     send_empty_resp(connection, id)
@@ -476,20 +469,20 @@ pub fn handle_references_request(
     doc_store: &mut DocumentStore,
 ) -> Result<()> {
     let uri = &params.text_document_position.text_document.uri;
-    if let Some(doc) = doc_store.text_store.get_document(uri) {
-        if let Some(tree_entry) = doc_store.tree_store.get_mut(uri) {
-            let ref_resp = get_ref_resp(params, doc, tree_entry);
             if !ref_resp.is_empty() {
-                let result = serde_json::to_value(&ref_resp).unwrap();
-
-                let result = Response {
-                    id,
-                    result: Some(result),
-                    error: None,
-                };
-                return Ok(connection.sender.send(Message::Response(result))?);
             }
-        }
+    if let Some(doc) = doc_store.text_store.get_document(uri)
+        && let Some(tree_entry) = doc_store.tree_store.get_mut(uri)
+    {
+        let ref_resp = get_ref_resp(params, doc, tree_entry);
+        let result = serde_json::to_value(&ref_resp).unwrap();
+
+        let result = Response {
+            id,
+            result: Some(result),
+            error: None,
+        };
+        return Ok(connection.sender.send(Message::Response(result))?);
     }
 
     send_empty_resp(connection, id)
@@ -642,18 +635,15 @@ pub fn handle_did_change_text_document_notification(
         .listen(DidChangeTextDocument::METHOD, &raw_params);
 
     let uri = &params.text_document.uri;
-    if let Some(ref mut doc) = doc_store.text_store.get_document(uri) {
-        if let Some(tree_entry) = doc_store.tree_store.get_mut(uri) {
-            if let Some(ref mut curr_tree) = tree_entry.tree {
-                for change in &params.content_changes {
-                    match text_doc_change_to_ts_edit(change, doc) {
-                        Ok(edit) => {
-                            curr_tree.edit(&edit);
-                        }
-                        Err(e) => {
-                            return Err(anyhow!("Bad edit info, failed to edit tree - Error: {e}"));
-                        }
-                    }
+    if let Some(ref mut doc) = doc_store.text_store.get_document(uri)
+        && let Some(tree_entry) = doc_store.tree_store.get_mut(uri)
+        && let Some(ref mut curr_tree) = tree_entry.tree
+    {
+        for change in &params.content_changes {
+            match text_doc_change_to_ts_edit(change, doc) {
+                Ok(edit) => curr_tree.edit(&edit),
+                Err(e) => {
+                    return Err(anyhow!("Bad edit info, failed to edit tree - Error: {e}"));
                 }
             }
         }

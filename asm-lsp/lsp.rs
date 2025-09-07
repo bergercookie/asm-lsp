@@ -304,33 +304,32 @@ fn get_default_include_dirs() -> Vec<PathBuf> {
             .args(args)
             .stderr(std::process::Stdio::piped())
             .output()
+            && cmd_output.status.success()
         {
-            if cmd_output.status.success() {
-                let output_str: String = ustr::get_string(cmd_output.stderr);
+            let output_str: String = ustr::get_string(cmd_output.stderr);
 
-                output_str
-                    .lines()
-                    .skip_while(|line| !line.contains("#include \"...\" search starts here:"))
-                    .skip(1)
-                    .take_while(|line| {
-                        !(line.contains("End of search list.")
-                            || line.contains("#include <...> search starts here:"))
-                    })
-                    .filter_map(|line| PathBuf::from(line.trim()).canonicalize().ok())
-                    .for_each(|path| {
-                        include_dirs.insert(path);
-                    });
+            output_str
+                .lines()
+                .skip_while(|line| !line.contains("#include \"...\" search starts here:"))
+                .skip(1)
+                .take_while(|line| {
+                    !(line.contains("End of search list.")
+                        || line.contains("#include <...> search starts here:"))
+                })
+                .filter_map(|line| PathBuf::from(line.trim()).canonicalize().ok())
+                .for_each(|path| {
+                    include_dirs.insert(path);
+                });
 
-                output_str
-                    .lines()
-                    .skip_while(|line| !line.contains("#include <...> search starts here:"))
-                    .skip(1)
-                    .take_while(|line| !line.contains("End of search list."))
-                    .filter_map(|line| PathBuf::from(line.trim()).canonicalize().ok())
-                    .for_each(|path| {
-                        include_dirs.insert(path);
-                    });
-            }
+            output_str
+                .lines()
+                .skip_while(|line| !line.contains("#include <...> search starts here:"))
+                .skip(1)
+                .take_while(|line| !line.contains("End of search list."))
+                .filter_map(|line| PathBuf::from(line.trim()).canonicalize().ok())
+                .for_each(|path| {
+                    include_dirs.insert(path);
+                });
         }
     }
 
@@ -408,19 +407,19 @@ fn get_additional_include_dirs(compile_cmds: &CompilationDatabase) -> Vec<(Sourc
                     }
                 }
             }
-        } else if entry.command.is_some() {
-            if let Some(args) = entry.args_from_cmd() {
-                for arg in args {
-                    if arg.starts_with("-I") && arg.len() > 2 {
-                        // "All paths specified in the `command` or `file` fields must be either absolute or relative to..." the `directory` field
-                        let incl_path = PathBuf::from(&arg[2..]);
-                        if incl_path.is_absolute() {
-                            additional_dirs.push((source_file.clone(), incl_path));
-                        } else {
-                            let dir = entry_dir.join(incl_path);
-                            if let Ok(full_include_path) = dir.canonicalize() {
-                                additional_dirs.push((source_file.clone(), full_include_path));
-                            }
+        } else if entry.command.is_some()
+            && let Some(args) = entry.args_from_cmd()
+        {
+            for arg in args {
+                if arg.starts_with("-I") && arg.len() > 2 {
+                    // "All paths specified in the `command` or `file` fields must be either absolute or relative to..." the `directory` field
+                    let incl_path = PathBuf::from(&arg[2..]);
+                    if incl_path.is_absolute() {
+                        additional_dirs.push((source_file.clone(), incl_path));
+                    } else {
+                        let dir = entry_dir.join(incl_path);
+                        if let Ok(full_include_path) = dir.canonicalize() {
+                            additional_dirs.push((source_file.clone(), full_include_path));
                         }
                     }
                 }
@@ -459,10 +458,10 @@ pub fn get_compile_cmds_from_file(params: &InitializeParams) -> Option<Compilati
 fn get_compilation_db_files(path: &Path) -> Option<CompilationDatabase> {
     // first check for compile_commands.json
     let cmp_cmd_path = path.join("compile_commands.json");
-    if let Ok(conts) = std::fs::read_to_string(cmp_cmd_path) {
-        if let Ok(cmds) = serde_json::from_str(&conts) {
-            return Some(cmds);
-        }
+    if let Ok(conts) = std::fs::read_to_string(cmp_cmd_path)
+        && let Ok(cmds) = serde_json::from_str(&conts)
+    {
+        return Some(cmds);
     }
     // then check for compile_flags.txt
     let cmp_flag_path = path.join("compile_flags.txt");
@@ -528,14 +527,13 @@ pub fn get_compile_cmd_for_req(
             // Check if we have flags as the first compile command from files,
             // `compile_flags.txt` files get loaded as a single `CompileCommand`
             // object as structured in the below `if` block
-            if compile_cmds.len() == 1 {
-                if let CompileCommand {
+            if compile_cmds.len() == 1
+                && let CompileCommand {
                     arguments: Some(CompileArgs::Flags(flags)),
                     ..
                 } = &compile_cmds[0]
-                {
-                    args.append(&mut flags.clone());
-                }
+            {
+                args.append(&mut flags.clone());
             }
             args.push(request_path.to_str().unwrap_or_default().to_string());
             vec![CompileCommand {
@@ -1162,10 +1160,10 @@ fn get_include_resp(
         |dirs| Box::new(dirs.iter()) as DirIter,
     );
 
-    if let Ok(src_path) = PathBuf::from(source_file.as_str()).canonicalize() {
-        if let Some(dirs) = include_dirs.get(&SourceFile::File(src_path)) {
-            dir_iter = Box::new(dir_iter.chain(dirs.iter()));
-        }
+    if let Ok(src_path) = PathBuf::from(source_file.as_str()).canonicalize()
+        && let Some(dirs) = include_dirs.get(&SourceFile::File(src_path))
+    {
+        dir_iter = Box::new(dir_iter.chain(dirs.iter()));
     }
 
     for dir in dir_iter {
@@ -1250,10 +1248,10 @@ fn filtered_comp_list_assem(
             if !config.is_assembler_enabled(*assem) {
                 return false;
             }
-            if let Some(c) = prefix {
-                if !comp_item.label.starts_with(c) {
-                    return false;
-                }
+            if let Some(c) = prefix
+                && !comp_item.label.starts_with(c)
+            {
+                return false;
             }
             if seen.contains(&comp_item.label) {
                 false
@@ -1286,67 +1284,67 @@ pub fn get_comp_resp(
     let cursor_line = params.text_document_position.position.line as usize;
     let cursor_char = params.text_document_position.position.character as usize;
 
-    if let Some(ctx) = params.context.as_ref() {
-        if ctx.trigger_kind == CompletionTriggerKind::TRIGGER_CHARACTER {
-            match ctx
-                .trigger_character
-                .as_ref()
-                .map(std::convert::AsRef::as_ref)
-            {
-                // prepend GAS registers, some NASM directives with "%"
-                Some("%") => {
-                    let mut items = Vec::new();
-                    if config.is_isa_enabled(Arch::X86) || config.is_isa_enabled(Arch::X86_64) {
-                        items.append(&mut filtered_comp_list_arch(
-                            &completion_items.registers,
-                            config,
-                        ));
-                    }
-                    if config.is_assembler_enabled(Assembler::Nasm) {
-                        items.append(&mut filtered_comp_list_assem(
+    if let Some(ctx) = params.context.as_ref()
+        && ctx.trigger_kind == CompletionTriggerKind::TRIGGER_CHARACTER
+    {
+        match ctx
+            .trigger_character
+            .as_ref()
+            .map(std::convert::AsRef::as_ref)
+        {
+            // prepend GAS registers, some NASM directives with "%"
+            Some("%") => {
+                let mut items = Vec::new();
+                if config.is_isa_enabled(Arch::X86) || config.is_isa_enabled(Arch::X86_64) {
+                    items.append(&mut filtered_comp_list_arch(
+                        &completion_items.registers,
+                        config,
+                    ));
+                }
+                if config.is_assembler_enabled(Assembler::Nasm) {
+                    items.append(&mut filtered_comp_list_assem(
+                        &completion_items.directives,
+                        config,
+                        Some('%'),
+                    ));
+                }
+
+                if !items.is_empty() {
+                    return Some(CompletionList {
+                        is_incomplete: true,
+                        items,
+                    });
+                }
+            }
+            // prepend all GAS, all Ca65, all AVR, all Mars, some MASM, some NASM directives with "."
+            Some(".") => {
+                if config.is_assembler_enabled(Assembler::Gas)
+                    || config.is_assembler_enabled(Assembler::Masm)
+                    || config.is_assembler_enabled(Assembler::Nasm)
+                    || config.is_assembler_enabled(Assembler::Ca65)
+                    || config.is_assembler_enabled(Assembler::Avr)
+                    || config.is_assembler_enabled(Assembler::Mars)
+                {
+                    return Some(CompletionList {
+                        is_incomplete: true,
+                        items: filtered_comp_list_assem(
                             &completion_items.directives,
                             config,
-                            Some('%'),
-                        ));
-                    }
-
-                    if !items.is_empty() {
-                        return Some(CompletionList {
-                            is_incomplete: true,
-                            items,
-                        });
-                    }
+                            Some('.'),
+                        ),
+                    });
                 }
-                // prepend all GAS, all Ca65, all AVR, all Mars, some MASM, some NASM directives with "."
-                Some(".") => {
-                    if config.is_assembler_enabled(Assembler::Gas)
-                        || config.is_assembler_enabled(Assembler::Masm)
-                        || config.is_assembler_enabled(Assembler::Nasm)
-                        || config.is_assembler_enabled(Assembler::Ca65)
-                        || config.is_assembler_enabled(Assembler::Avr)
-                        || config.is_assembler_enabled(Assembler::Mars)
-                    {
-                        return Some(CompletionList {
-                            is_incomplete: true,
-                            items: filtered_comp_list_assem(
-                                &completion_items.directives,
-                                config,
-                                Some('.'),
-                            ),
-                        });
-                    }
-                }
-                // prepend all Mips registers with "$"
-                Some("$") => {
-                    if config.is_isa_enabled(Arch::Mips) {
-                        return Some(CompletionList {
-                            is_incomplete: true,
-                            items: filtered_comp_list_arch(&completion_items.registers, config),
-                        });
-                    }
-                }
-                _ => {}
             }
+            // prepend all Mips registers with "$"
+            Some("$") => {
+                if config.is_isa_enabled(Arch::Mips) {
+                    return Some(CompletionList {
+                        is_incomplete: true,
+                        items: filtered_comp_list_arch(&completion_items.registers, config),
+                    });
+                }
+            }
+            _ => {}
         }
     }
 
@@ -1526,10 +1524,10 @@ fn explore_node(
         if cursor.goto_first_child() {
             loop {
                 let sub_node = cursor.node();
-                if sub_node.kind_id() == ident_kind_id {
-                    if let Ok(text) = sub_node.utf8_text(curr_doc.as_bytes()) {
-                        descr = text.to_string();
-                    }
+                if sub_node.kind_id() == ident_kind_id
+                    && let Ok(text) = sub_node.utf8_text(curr_doc.as_bytes())
+                {
+                    descr = text.to_string();
                 }
 
                 explore_node(
@@ -1651,61 +1649,59 @@ pub fn get_sig_help_resp(
             .collect();
         if let Some(match_) = matches.first() {
             let caps = match_.captures;
-            if caps.len() == 1 && caps[0].node.end_byte() < curr_doc.len() {
-                if let Ok(instr_name) = caps[0].node.utf8_text(curr_doc) {
-                    let mut value = String::new();
-                    let (instr1, instr2) =
-                        search_for_hoverable_by_arch(instr_name, instr_info, config);
-                    let instructions = vec![instr1, instr2];
-                    for instr in instructions.into_iter().flatten() {
-                        for form in &instr.forms {
-                            match instr.arch {
-                                Arch::X86 | Arch::X86_64 => {
-                                    if let Some(ref gas_name) = form.gas_name {
-                                        if instr_name.eq_ignore_ascii_case(gas_name) {
-                                            writeln!(&mut value, "**{}**\n{form}", instr.arch)
-                                                .unwrap();
-                                        }
-                                    } else if let Some(ref go_name) = form.go_name {
-                                        if instr_name.eq_ignore_ascii_case(go_name) {
-                                            writeln!(&mut value, "**{}**\n{form}", instr.arch)
-                                                .unwrap();
-                                        }
-                                    }
+            if caps.len() == 1
+                && caps[0].node.end_byte() < curr_doc.len()
+                && let Ok(instr_name) = caps[0].node.utf8_text(curr_doc)
+            {
+                let mut value = String::new();
+                let (instr1, instr2) = search_for_hoverable_by_arch(instr_name, instr_info, config);
+                let instructions = vec![instr1, instr2];
+                for instr in instructions.into_iter().flatten() {
+                    for form in &instr.forms {
+                        match instr.arch {
+                            Arch::X86 | Arch::X86_64 => {
+                                if let Some(ref gas_name) = form.gas_name
+                                    && instr_name.eq_ignore_ascii_case(gas_name)
+                                {
+                                    writeln!(&mut value, "**{}**\n{form}", instr.arch).unwrap();
+                                } else if let Some(ref go_name) = form.go_name
+                                    && instr_name.eq_ignore_ascii_case(go_name)
+                                {
+                                    writeln!(&mut value, "**{}**\n{form}", instr.arch).unwrap();
                                 }
-                                Arch::Z80 => {
-                                    for form in &instr.forms {
-                                        if let Some(ref z80_name) = form.z80_name {
-                                            if instr_name.eq_ignore_ascii_case(z80_name) {
-                                                writeln!(&mut value, "{form}").unwrap();
-                                            }
-                                        }
-                                    }
-                                }
-                                Arch::ARM | Arch::RISCV => {
-                                    for form in &instr.asm_templates {
+                            }
+                            Arch::Z80 => {
+                                for form in &instr.forms {
+                                    if let Some(ref z80_name) = form.z80_name
+                                        && instr_name.eq_ignore_ascii_case(z80_name)
+                                    {
                                         writeln!(&mut value, "{form}").unwrap();
                                     }
                                 }
-                                _ => {}
                             }
+                            Arch::ARM | Arch::RISCV => {
+                                for form in &instr.asm_templates {
+                                    writeln!(&mut value, "{form}").unwrap();
+                                }
+                            }
+                            _ => {}
                         }
                     }
-                    if !value.is_empty() {
-                        return Some(SignatureHelp {
-                            signatures: vec![SignatureInformation {
-                                label: instr_name.to_string(),
-                                documentation: Some(Documentation::MarkupContent(MarkupContent {
-                                    kind: MarkupKind::Markdown,
-                                    value,
-                                })),
-                                parameters: None,
-                                active_parameter: None,
-                            }],
-                            active_signature: None,
+                }
+                if !value.is_empty() {
+                    return Some(SignatureHelp {
+                        signatures: vec![SignatureInformation {
+                            label: instr_name.to_string(),
+                            documentation: Some(Documentation::MarkupContent(MarkupContent {
+                                kind: MarkupKind::Markdown,
+                                value,
+                            })),
+                            parameters: None,
                             active_parameter: None,
-                        });
-                    }
+                        }],
+                        active_signature: None,
+                        active_parameter: None,
+                    });
                 }
             }
         }

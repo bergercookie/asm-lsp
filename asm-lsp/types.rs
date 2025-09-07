@@ -1296,25 +1296,12 @@ impl RootConfig {
         assembler_set.into_iter().collect()
     }
 
-    /// Sets the `client` field of the default config and all project configs
-    pub fn set_client(&mut self, client: LspClient) {
-        if let Some(ref mut root) = self.default_config {
-            root.client = Some(client);
-        }
-
-        if let Some(ref mut projects) = self.projects {
-            for project in projects {
-                project.config.client = Some(client);
-            }
-        }
-    }
-
     #[must_use]
     pub fn is_isa_enabled(&self, isa: Arch) -> bool {
-        if let Some(ref root) = self.default_config {
-            if root.is_isa_enabled(isa) {
-                return true;
-            }
+        if let Some(ref root) = self.default_config
+            && root.is_isa_enabled(isa)
+        {
+            return true;
         }
 
         if let Some(ref projects) = self.projects {
@@ -1330,10 +1317,10 @@ impl RootConfig {
 
     #[must_use]
     pub fn is_assembler_enabled(&self, assembler: Assembler) -> bool {
-        if let Some(ref root) = self.default_config {
-            if root.is_assembler_enabled(assembler) {
-                return true;
-            }
+        if let Some(ref root) = self.default_config
+            && root.is_assembler_enabled(assembler)
+        {
+            return true;
         }
 
         if let Some(ref projects) = self.projects {
