@@ -483,7 +483,6 @@ fn prompt_config() -> Config {
         instruction_set,
         assembler,
         opts,
-        client: None,
     }
 }
 

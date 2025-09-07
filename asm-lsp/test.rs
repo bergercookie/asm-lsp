@@ -37,7 +37,6 @@ mod tests {
                 diagnostics: None,
                 default_diagnostics: None,
             }),
-            client: None,
         }
     }
 
@@ -47,7 +46,6 @@ mod tests {
             assembler: Assembler::None,
             instruction_set: Arch::Mips,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 
@@ -57,7 +55,6 @@ mod tests {
             assembler: Assembler::None,
             instruction_set: Arch::Avr,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 
@@ -67,7 +64,6 @@ mod tests {
             assembler: Assembler::Avr,
             instruction_set: Arch::None,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 
@@ -77,7 +73,6 @@ mod tests {
             assembler: Assembler::None,
             instruction_set: Arch::PowerISA,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 
@@ -87,7 +82,6 @@ mod tests {
             assembler: Assembler::None,
             instruction_set: Arch::MOS6502,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 
@@ -97,7 +91,6 @@ mod tests {
             assembler: Assembler::None,
             instruction_set: Arch::Z80,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 
@@ -107,7 +100,6 @@ mod tests {
             assembler: Assembler::None,
             instruction_set: Arch::ARM,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 
@@ -117,7 +109,6 @@ mod tests {
             assembler: Assembler::None,
             instruction_set: Arch::RISCV,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 
@@ -132,7 +123,6 @@ mod tests {
             assembler: Assembler::Gas,
             instruction_set: Arch::X86_AND_X86_64,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 
@@ -142,7 +132,6 @@ mod tests {
             assembler: Assembler::Gas,
             instruction_set: Arch::None,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 
@@ -152,7 +141,6 @@ mod tests {
             assembler: Assembler::Masm,
             instruction_set: Arch::None,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 
@@ -162,7 +150,6 @@ mod tests {
             assembler: Assembler::Nasm,
             instruction_set: Arch::None,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 
@@ -172,7 +159,6 @@ mod tests {
             assembler: Assembler::Ca65,
             instruction_set: Arch::None,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 
@@ -182,7 +168,6 @@ mod tests {
             assembler: Assembler::Fasm,
             instruction_set: Arch::None,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 
@@ -194,7 +179,6 @@ mod tests {
             // Mars's pseudo instructions
             instruction_set: Arch::Mips,
             opts: Some(ConfigOptions::default()),
-            client: None,
         }
     }
 

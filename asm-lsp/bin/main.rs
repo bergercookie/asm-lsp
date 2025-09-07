@@ -2,7 +2,6 @@ use std::thread::sleep;
 use std::time::Duration;
 
 use asm_lsp::config_builder::{GenerateArgs, GenerateOpts, gen_config};
-use asm_lsp::types::LspClient;
 use asm_lsp::{Arch, Assembler, run_info};
 
 use asm_lsp::handle::{handle_notification, handle_request};
@@ -162,7 +161,7 @@ pub fn run_lsp() -> Result<()> {
 
     let params: InitializeParams = serde_json::from_value(initialization_params).unwrap();
     info!("Client initialization params: {:?}", params);
-    let mut config = match get_root_config(&params) {
+    let config = match get_root_config(&params) {
         Ok(cfg) => cfg,
         Err(e) => {
             let msg = format!("{e}. Please make corrections and restart asm-lsp.");
@@ -178,12 +177,6 @@ pub fn run_lsp() -> Result<()> {
         send_notification(msg, MessageType::WARNING, &connection)?;
     }
     info!("Server Configuration: {:?}", config);
-    if let Some(ref client_info) = params.client_info {
-        if client_info.name.eq("helix") {
-            info!("Helix LSP client detected");
-            config.set_client(LspClient::Helix);
-        }
-    }
 
     let mut store = ServerStore::default();
     // Populate names to `Instruction`/`Register`/`Directive` maps
