@@ -7,6 +7,9 @@ import {
   Middleware,
 } from "vscode-languageclient/node";
 
+const path = require('path');
+const fs = require('fs');
+
 const middleware: Middleware = {
   provideCompletionItem: async (document, position, context, token, next) => {
     await new Promise((r) => setTimeout(r, 1));
@@ -40,8 +43,38 @@ const middleware: Middleware = {
 };
 let client: LanguageClient;
 
+
+export function findExecutablePath(command) {
+  const paths = process.env.PATH.split(path.delimiter);
+  
+  for (const dir of paths) {
+    const fullPath = path.join(dir, command);
+    const exists = fs.existsSync(fullPath) && fs.statSync(fullPath).isFile();
+    
+    if (exists)
+      return fullPath;
+  
+  }
+
+  return null;
+}
+
+export function findServerPath(cmd: String) {
+  var serverPath = null;
+
+  serverPath = findExecutablePath(cmd);
+  if(serverPath)
+    return serverPath;
+
+  serverPath = process.env.SERVER_PATH;
+  if(serverPath)
+    return serverPath;
+
+  return serverPath;
+}
+
 export function activate(_: vscode.ExtensionContext) {
-  const serverPath = process.env.SERVER_PATH;
+  const serverPath = findServerPath("asm-lsp");
 
   if (!serverPath) {
     vscode.window.showErrorMessage(
