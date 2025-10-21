@@ -15,5 +15,13 @@ npm install
 
 ### Debugging
 
-In VSCoode, go to the `Run & Debug` sidebar (Ctrl + Shft + D) and click the `Run Extension (Debug Build)`
+In VSCode, go to the `Run & Debug` sidebar (Ctrl + Shft + D) and click the `Run Extension (Debug Build)`
 button. This will open a new VSCode instance with the lsp server installed.
+
+### Adding the binary inside VSIX
+
+Copy the asm-lsp binary into `editors/code/bin/{platform}-{arch}/`.
+
+```console
+npm run package
+```
