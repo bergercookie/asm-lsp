@@ -1,3 +1,4 @@
+import path = require("path");
 import * as vscode from "vscode";
 import {
   Executable,
@@ -40,8 +41,15 @@ const middleware: Middleware = {
 };
 let client: LanguageClient;
 
+function serverExecutable() {
+  const platform = process.platform;
+  const arch = process.arch;
+  const exe = platform === 'win32' ? 'asm-lsp.exe' : 'asm-lsp';
+  return path.join(__dirname, '..', 'bin', `${platform}-${arch}`, exe);
+}
+
 export function activate(_: vscode.ExtensionContext) {
-  const serverPath = process.env.SERVER_PATH;
+  const serverPath = process.env.SERVER_PATH || serverExecutable();
 
   if (!serverPath) {
     vscode.window.showErrorMessage(
