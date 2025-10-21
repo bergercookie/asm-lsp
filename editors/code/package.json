@@ -45,6 +45,7 @@
             }
         ]
     },
+    "publisher": "asm-lsp",
     "devDependencies": {
         "@types/node": "^18.14.6",
         "@types/vscode": "^1.75.1",
