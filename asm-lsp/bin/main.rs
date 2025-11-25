@@ -234,7 +234,7 @@ fn main_loop(connection: &Connection, config: &RootConfig, store: &ServerStore) 
         match msg {
             Message::Request(req) => {
                 if connection.handle_shutdown(&req)? {
-                    info!("Recieved shutdown request");
+                    info!("Received shutdown request");
                     return Ok(());
                 }
                 handle_request(req, connection, config, &mut doc_store, store)?;
