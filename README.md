@@ -496,3 +496,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
 </p></details>
+
+- z80 instructions and registers sourced from the [MSX documentation page](https://map.grauw.nl/resources/z80instr.php)
+    and the [zilog user manual](https://www.zilog.com/docs/z80/z80cpu_um.pdf)
