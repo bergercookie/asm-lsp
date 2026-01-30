@@ -25,6 +25,28 @@ use crate::{
     send_empty_resp, text_doc_change_to_ts_edit,
 };
 
+// A bug in Neovim can cause client->server RPC messages to be corrupted. If this
+// happens, log the error and return instead of panicking.
+macro_rules! cast_req {
+    ($req:expr, $r:ty) => {{
+        let Ok(request) = cast_req::<$r>($req) else {
+            error!("Failed to cast request of type {}", <$r>::METHOD);
+            return Ok(());
+        };
+        request
+    }};
+}
+
+macro_rules! cast_notif {
+    ($notif:expr, $r:ty) => {{
+        let Ok(notification) = cast_notif::<$r>($notif) else {
+            error!("Failed to cast notification of type {}", <$r>::METHOD);
+            return Ok(());
+        };
+        notification
+    }};
+}
+
 /// Handles `Request`s from the lsp client
 ///
 /// # Errors
@@ -46,7 +68,7 @@ pub fn handle_request(
     let start = std::time::Instant::now();
     match req.method.as_str() {
         HoverRequest::METHOD => {
-            let (id, params) = cast_req::<HoverRequest>(req).expect("Failed to cast hover request");
+            let (id, params) = cast_req!(req, HoverRequest);
             handle_hover_request(
                 connection,
                 id,
@@ -62,8 +84,7 @@ pub fn handle_request(
             );
         }
         Completion::METHOD => {
-            let (id, params) =
-                cast_req::<Completion>(req).expect("Failed to cast completion request");
+            let (id, params) = cast_req!(req, Completion);
             handle_completion_request(
                 connection,
                 id,
@@ -79,8 +100,7 @@ pub fn handle_request(
             );
         }
         GotoDefinition::METHOD => {
-            let (id, params) =
-                cast_req::<GotoDefinition>(req).expect("Failed to cast completion request");
+            let (id, params) = cast_req!(req, GotoDefinition);
             handle_goto_def_request(connection, id, &params, doc_store)?;
             info!(
                 "{} request serviced in {}ms",
@@ -89,8 +109,7 @@ pub fn handle_request(
             );
         }
         DocumentSymbolRequest::METHOD => {
-            let (id, params) =
-                cast_req::<DocumentSymbolRequest>(req).expect("Failed to cast completion request");
+            let (id, params) = cast_req!(req, DocumentSymbolRequest);
             handle_document_symbols_request(connection, id, &params, doc_store)?;
             info!(
                 "{} request serviced in {}ms",
@@ -99,8 +118,7 @@ pub fn handle_request(
             );
         }
         SignatureHelpRequest::METHOD => {
-            let (id, params) =
-                cast_req::<SignatureHelpRequest>(req).expect("Failed to cast completion request");
+            let (id, params) = cast_req!(req, SignatureHelpRequest);
             handle_signature_help_request(
                 connection,
                 id,
@@ -116,8 +134,7 @@ pub fn handle_request(
             );
         }
         References::METHOD => {
-            let (id, params) =
-                cast_req::<References>(req).expect("Failed to cast completion request");
+            let (id, params) = cast_req!(req, References);
             handle_references_request(connection, id, &params, doc_store)?;
             info!(
                 "{} request serviced in {}ms",
@@ -126,8 +143,7 @@ pub fn handle_request(
             );
         }
         DocumentDiagnosticRequest::METHOD => {
-            let (_id, params) = cast_req::<DocumentDiagnosticRequest>(req)
-                .expect("Failed to cast completion request");
+            let (_id, params) = cast_req!(req, DocumentDiagnosticRequest);
             let project_config = config.get_config(&params.text_document.uri);
             // Ok to unwrap, this should never be `None`
             if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
@@ -179,8 +195,7 @@ pub fn handle_notification(
     let start = std::time::Instant::now();
     match notif.method.as_str() {
         DidOpenTextDocument::METHOD => {
-            let params = cast_notif::<DidOpenTextDocument>(notif)
-                .expect("Failed to cast did open text document notification");
+            let params = cast_notif!(notif, DidOpenTextDocument);
             handle_did_open_text_document_notification(&params, doc_store);
             info!(
                 "{} notification serviced in {}ms",
@@ -189,8 +204,7 @@ pub fn handle_notification(
             );
         }
         DidChangeTextDocument::METHOD => {
-            let params = cast_notif::<DidChangeTextDocument>(notif)
-                .expect("Failed to cast did change text document notification");
+            let params = cast_notif!(notif, DidChangeTextDocument);
             handle_did_change_text_document_notification(&params, doc_store)?;
             info!(
                 "{} notification serviced in {}ms",
@@ -199,8 +213,7 @@ pub fn handle_notification(
             );
         }
         DidCloseTextDocument::METHOD => {
-            let params = cast_notif::<DidCloseTextDocument>(notif)
-                .expect("Failed to cast did close text document notification");
+            let params = cast_notif!(notif, DidCloseTextDocument);
             handle_did_close_text_document_notification(&params, doc_store);
             info!(
                 "{} notification serviced in {}ms",
@@ -209,8 +222,7 @@ pub fn handle_notification(
             );
         }
         DidSaveTextDocument::METHOD => {
-            let params = cast_notif::<DidSaveTextDocument>(notif)
-                .expect("Failed to cast did save text document notification");
+            let params = cast_notif!(notif, DidSaveTextDocument);
             let project_config = config.get_config(&params.text_document.uri);
             // Ok to unwrap, this should never be `None`
             if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
