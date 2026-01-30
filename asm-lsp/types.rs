@@ -437,11 +437,12 @@ pub struct AvrTiming {
 impl Display for AvrTiming {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "Timing: ")?;
-        let mut has_prev = false;
-        if let Some(ref cycles) = self.avre {
+        let mut has_prev = if let Some(ref cycles) = self.avre {
             write!(f, "AVRE: {cycles}")?;
-            has_prev = true;
-        }
+            true
+        } else {
+            false
+        };
         if let Some(ref cycles) = self.avrxm {
             if has_prev {
                 write!(f, " | ")?;

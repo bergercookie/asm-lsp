@@ -762,11 +762,8 @@ pub fn populate_6502_instructions(html_conts: &str) -> Result<Vec<Instruction>> 
         section_start + start_marker.len() + 1 // + 1 for '\n'
     };
     let mut lines = html_conts[start..].lines().peekable();
-    loop {
-        // opcode id
-        let Some(name_line) = lines.next() else {
-            break;
-        };
+    // opcode id
+    while let Some(name_line) = lines.next() {
         if name_line.is_empty() {
             continue;
         }

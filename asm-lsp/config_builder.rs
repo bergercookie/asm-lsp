@@ -3,7 +3,7 @@ use std::string::ToString;
 use std::{env::current_dir, path::PathBuf};
 
 use anyhow::{Result, anyhow};
-use clap::{Args, arg};
+use clap::Args;
 use dialoguer::{Confirm, FuzzySelect, Input, theme::ColorfulTheme};
 use dirs::config_dir;
 

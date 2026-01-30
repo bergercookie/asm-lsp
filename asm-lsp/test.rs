@@ -679,7 +679,7 @@ mod tests {
                 uri: uri.clone(),
                 language_id: "asm".to_string(),
                 version: 0,
-                text: source_code.to_string(),
+                text: source_code.clone(),
             },
         };
         let params = serde_json::to_value(did_open_params).unwrap();

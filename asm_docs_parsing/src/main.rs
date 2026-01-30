@@ -64,10 +64,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
             let instrs: Vec<Instruction>;
             match (path.is_dir(), opts.arch) {
                 (true, Some(arch_in)) => match arch_in {
-                    Arch::ARM => {
-                        instrs = populate_arm_instructions(&opts.input_path)?;
-                    }
-                    Arch::ARM64 => {
+                    Arch::ARM | Arch::ARM64 => {
                         instrs = populate_arm_instructions(&opts.input_path)?;
                     }
                     Arch::RISCV => {
