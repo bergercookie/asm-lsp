@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["asm-lsp", "asm_docs_parsing", "xtask"]
+members = ["asm-lsp", "asm_docs_parsing", "xtask", "asm-lsp/tools"]
 default-members = ["asm-lsp"]
 
 [workspace.package]

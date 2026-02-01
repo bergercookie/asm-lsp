@@ -1529,6 +1529,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "process_riscv_yaml"
+version = "0.10.1"
+dependencies = [
+ "anyhow",
+ "asm-lsp",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "tempfile",
+]
+
+[[package]]
 name = "quick-xml"
 version = "0.37.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"

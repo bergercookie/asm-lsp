@@ -131,7 +131,7 @@ fn gen_opcodes(root_path: &Path) -> Result<()> {
     // Try unified database format first, fall back to legacy RST format
     let riscv_instr_result = Command::new(PARSE_EXE)
         .args([
-            "docs_store/riscv_unified_db.json",
+            "docs_store/riscv_consolidated.json",
             "-o",
             "asm-lsp/serialized/opcodes/riscv",
         ])
@@ -289,7 +289,7 @@ fn gen_registers(root_path: &Path) -> Result<()> {
     // Try unified database format first, fall back to legacy RST format
     let riscv_reg_result = Command::new(PARSE_EXE)
         .args([
-            "docs_store/riscv_unified_db.json",
+            "docs_store/riscv_consolidated.json",
             "-o",
             "asm-lsp/serialized/registers/riscv",
         ])
