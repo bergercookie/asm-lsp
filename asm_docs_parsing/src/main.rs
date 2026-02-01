@@ -108,6 +108,9 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                             Some(Arch::Avr) => {
                                 instrs = populate_avr_instructions(&conts)?;
                             }
+                            Some(Arch::RISCV) if opts.unified_db => {
+                                instrs = populate_riscv_unified_instructions(&path.to_str().unwrap())?;
+                            }
                             _ => {
                                 instrs = populate_instructions(&conts)?;
                             }
