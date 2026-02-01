@@ -1,9 +1,9 @@
 // ARM/ARM64 Architecture Parser
 // This module handles all ARM and ARM64 specific parsing
 
-use std::path::PathBuf;
-use anyhow::Result;
 use crate::types::Instruction;
+use anyhow::Result;
+use std::path::PathBuf;
 
 /// Parse ARM/ARM64 instructions from XML files
 pub fn parse_arm_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>> {

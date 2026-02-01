@@ -3,11 +3,11 @@
 
 use std::path::PathBuf;
 
-use anyhow::Result;
 use crate::{
     riscv_unified::{load_unified_instructions, load_unified_registers},
     types::{Instruction, Register},
 };
+use anyhow::Result;
 
 /// Parse RISC-V registers from RST format (legacy)
 /// This function is kept for backward compatibility
@@ -43,7 +43,7 @@ mod tests {
     fn test_unified_instruction_parsing() {
         let result = parse_riscv_instructions_unified("../asm-lsp/test_riscv_instructions.json");
         assert!(result.is_ok());
-        
+
         let instructions = result.unwrap();
         assert_eq!(instructions.len(), 2);
         assert_eq!(instructions[0].name, "addi");
@@ -53,7 +53,7 @@ mod tests {
     fn test_unified_register_parsing() {
         let result = parse_riscv_registers_unified("../asm-lsp/test_riscv_registers.json");
         assert!(result.is_ok());
-        
+
         let registers = result.unwrap();
         assert_eq!(registers.len(), 3);
         assert_eq!(registers[0].name, "x0");

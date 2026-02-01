@@ -142,7 +142,7 @@ fn gen_opcodes(root_path: &Path) -> Result<()> {
         .arg("--unified-db")
         .current_dir(root_path)
         .status();
-    
+
     if riscv_instr_result.is_err() || !riscv_instr_result?.success() {
         // Fall back to legacy RST format
         Command::new(PARSE_EXE)
@@ -300,7 +300,7 @@ fn gen_registers(root_path: &Path) -> Result<()> {
         .arg("--unified-db")
         .current_dir(root_path)
         .status();
-    
+
     if riscv_reg_result.is_err() || !riscv_reg_result?.success() {
         // Fall back to legacy RST format
         Command::new(PARSE_EXE)

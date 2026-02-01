@@ -1,8 +1,8 @@
 // x86/x86_64 Architecture Parser
 // This module handles all x86 and x86_64 specific parsing
 
-use anyhow::Result;
 use crate::types::{Instruction, Register};
+use anyhow::Result;
 
 /// Parse x86/x86_64 instructions from XML format
 pub fn parse_x86_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {

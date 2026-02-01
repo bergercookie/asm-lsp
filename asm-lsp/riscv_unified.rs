@@ -1,7 +1,7 @@
 // RISC-V Unified Database Conversion Layer
 // This module handles conversion between riscv-unified-db format and asm-lsp's internal types
 
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize};
 
 use crate::types::{
     Arch, Instruction, InstructionForm, Operand, OperandType, Register, RegisterType, RegisterWidth,
@@ -24,7 +24,10 @@ pub struct UnifiedRiscvInstruction {
     pub access: Option<Access>,
     pub data_independent_timing: Option<bool>,
     pub pseudoinstructions: Option<Vec<Pseudoinstruction>>,
+    /// Operation field - handles both "operation" and "operation()" formats
     pub operation: Option<String>,
+
+    /// Sail field - handles both "sail" and "sail()" formats
     pub sail: Option<String>,
     // Legacy fields for backward compatibility with test data
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -47,11 +50,45 @@ pub struct UnifiedRiscvInstruction {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DefinedBy {
-    pub extension: Extension,
+    /// Extension definition - can be simple or complex (allOf/oneOf)
+    pub extension: Option<Extension>,
+
+    /// For allOf structures - multiple conditions
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allOf: Option<Vec<DefinedByCondition>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DefinedByCondition {
+    #[serde(flatten)]
+    pub condition: DefinedByConditionType,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum DefinedByConditionType {
+    Extension(Extension),
+    Xlen(XlenCondition),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct XlenCondition {
+    pub xlen: u32,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Extension {
+    /// Extension name - can be a simple string or part of oneOf structure
+    #[serde(alias = "name")]
+    pub name: String,
+
+    /// For oneOf structures - alternative extension names
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub oneOf: Option<Vec<ExtensionName>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ExtensionName {
     pub name: String,
 }
 
@@ -107,9 +144,10 @@ pub struct UnifiedRiscvRegister {
 /// Convert a unified RISC-V instruction to asm-lsp's Instruction format
 pub fn convert_unified_instruction(unified: &UnifiedRiscvInstruction) -> Instruction {
     // Extract extension information
-    let _extension_name = unified.defined_by
+    let _extension_name = unified
+        .defined_by
         .as_ref()
-        .and_then(|db| Some(db.extension.name.clone()))
+        .and_then(|db| db.extension.as_ref().map(|ext| ext.name.clone()))
         .unwrap_or_else(|| "I".to_string());
 
     // Create assembly template from assembly field, format field (legacy), or construct from name
@@ -133,7 +171,7 @@ pub fn convert_unified_instruction(unified: &UnifiedRiscvInstruction) -> Instruc
 
     // Convert operands from encoding variables (new format) or operands field (legacy format)
     let mut operands = Vec::new();
-    
+
     if let Some(encoding) = &unified.encoding {
         // New format: parse from encoding variables
         for var in &encoding.variables {
@@ -226,7 +264,12 @@ pub fn convert_unified_instruction(unified: &UnifiedRiscvInstruction) -> Instruc
             instruction.aliases.push(crate::types::InstructionAlias {
                 title: alias.clone(),
                 summary: format!("Alias for {}", unified.name),
-                asm_templates: vec![unified.format.clone().unwrap_or_else(|| unified.name.to_lowercase())],
+                asm_templates: vec![
+                    unified
+                        .format
+                        .clone()
+                        .unwrap_or_else(|| unified.name.to_lowercase()),
+                ],
             });
         }
     }
@@ -271,7 +314,7 @@ pub fn load_unified_instructions(
     path: &str,
 ) -> Result<Vec<Instruction>, Box<dyn std::error::Error>> {
     let data = std::fs::read_to_string(path)?;
-    
+
     // Try JSON format first
     let unified_instructions: Vec<UnifiedRiscvInstruction> = match serde_json::from_str(&data) {
         Ok(instrs) => instrs,
@@ -292,7 +335,7 @@ pub fn load_unified_instructions(
 /// Load and convert RISC-V registers from unified database format
 pub fn load_unified_registers(path: &str) -> Result<Vec<Register>, Box<dyn std::error::Error>> {
     let data = std::fs::read_to_string(path)?;
-    
+
     // Try JSON format first
     let unified_registers: Vec<UnifiedRiscvRegister> = match serde_json::from_str(&data) {
         Ok(regs) => regs,
@@ -352,12 +395,10 @@ mod tests {
                 vu: "always".to_string(),
             }),
             data_independent_timing: Some(true),
-            pseudoinstructions: Some(vec![
-                Pseudoinstruction {
-                    when: "imm == 0".to_string(),
-                    to: "mv xd,xs1".to_string(),
-                }
-            ]),
+            pseudoinstructions: Some(vec![Pseudoinstruction {
+                when: "imm == 0".to_string(),
+                to: "mv xd,xs1".to_string(),
+            }]),
             operation: Some("X[xd] = X[xs1] + $signed(imm)".to_string()),
             sail: None,
             // Legacy fields
@@ -447,7 +488,9 @@ mod tests {
     }
 
     /// Helper function for testing YAML parsing directly
-    fn load_unified_instructions_from_yaml(yaml_data: &str) -> Result<Vec<Instruction>, Box<dyn std::error::Error>> {
+    fn load_unified_instructions_from_yaml(
+        yaml_data: &str,
+    ) -> Result<Vec<Instruction>, Box<dyn std::error::Error>> {
         let unified_instructions: Vec<UnifiedRiscvInstruction> = serde_saphyr::from_str(yaml_data)?;
 
         let mut instructions = Vec::new();
@@ -457,4 +500,12 @@ mod tests {
 
         Ok(instructions)
     }
+}
+use std::fs;
+
+fn main() {
+    let yaml_content =
+        fs::read_to_string("docs_store/riscv-unified-db/riscv_yaml/Zaamo/amoadd.d.yaml").unwrap();
+
+    // Try parsing as raw YAML first
 }

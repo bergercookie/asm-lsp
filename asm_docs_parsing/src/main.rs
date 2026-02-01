@@ -12,7 +12,8 @@ use asm_lsp::{
         populate_instructions, populate_mars_pseudo_instructions,
         populate_masm_nasm_fasm_mars_directives, populate_mips_instructions,
         populate_power_isa_instructions, populate_registers, populate_riscv_instructions,
-        populate_riscv_registers, populate_riscv_unified_instructions, populate_riscv_unified_registers,
+        populate_riscv_registers, populate_riscv_unified_instructions,
+        populate_riscv_unified_registers,
     },
 };
 
@@ -74,7 +75,9 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                     }
                     Arch::RISCV => {
                         if opts.unified_db {
-                            instrs = populate_riscv_unified_instructions(&opts.input_path.to_str().unwrap())?;
+                            instrs = populate_riscv_unified_instructions(
+                                &opts.input_path.to_str().unwrap(),
+                            )?;
                         } else {
                             instrs = populate_riscv_instructions(&opts.input_path)?;
                         }
@@ -109,7 +112,8 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                                 instrs = populate_avr_instructions(&conts)?;
                             }
                             Some(Arch::RISCV) if opts.unified_db => {
-                                instrs = populate_riscv_unified_instructions(&path.to_str().unwrap())?;
+                                instrs =
+                                    populate_riscv_unified_instructions(&path.to_str().unwrap())?;
                             }
                             _ => {
                                 instrs = populate_instructions(&conts)?;
