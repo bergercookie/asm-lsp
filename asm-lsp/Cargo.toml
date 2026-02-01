@@ -29,6 +29,7 @@ dirs.workspace = true
 toml.workspace = true
 clap.workspace = true
 serde_json.workspace = true
+serde-saphyr.workspace = true
 schemars.workspace = true
 # write to stderr instead of stdout
 flexi_logger = "0.30.1"

@@ -128,9 +128,10 @@ fn gen_opcodes(root_path: &Path) -> Result<()> {
         .status()
         .with_context(|| anyhow!("Failed to regenerate serialized power-isa opcodes"))?;
     println!("\triscv");
-    Command::new(PARSE_EXE)
+    // Try unified database format first, fall back to legacy RST format
+    let riscv_instr_result = Command::new(PARSE_EXE)
         .args([
-            "docs_store/opcodes/RISCV/",
+            "docs_store/riscv_unified_db.json",
             "-o",
             "asm-lsp/serialized/opcodes/riscv",
         ])
@@ -138,9 +139,26 @@ fn gen_opcodes(root_path: &Path) -> Result<()> {
         .arg("instruction")
         .arg("--arch")
         .arg("riscv")
+        .arg("--unified-db")
         .current_dir(root_path)
-        .status()
-        .with_context(|| anyhow!("Failed to regenerate serialized riscv opcodes"))?;
+        .status();
+    
+    if riscv_instr_result.is_err() || !riscv_instr_result?.success() {
+        // Fall back to legacy RST format
+        Command::new(PARSE_EXE)
+            .args([
+                "docs_store/opcodes/RISCV/",
+                "-o",
+                "asm-lsp/serialized/opcodes/riscv",
+            ])
+            .arg("--doc-type")
+            .arg("instruction")
+            .arg("--arch")
+            .arg("riscv")
+            .current_dir(root_path)
+            .status()
+            .with_context(|| anyhow!("Failed to regenerate serialized riscv opcodes"))?;
+    }
     println!("\tx86");
     Command::new(PARSE_EXE)
         .args([
@@ -268,9 +286,10 @@ fn gen_registers(root_path: &Path) -> Result<()> {
         .status()
         .with_context(|| anyhow!("Failed to regenerate serialized power-isa registers"))?;
     println!("\triscv");
-    Command::new(PARSE_EXE)
+    // Try unified database format first, fall back to legacy RST format
+    let riscv_reg_result = Command::new(PARSE_EXE)
         .args([
-            "docs_store/registers/riscv.rst.txt",
+            "docs_store/riscv_unified_db.json",
             "-o",
             "asm-lsp/serialized/registers/riscv",
         ])
@@ -278,9 +297,26 @@ fn gen_registers(root_path: &Path) -> Result<()> {
         .arg("register")
         .arg("--arch")
         .arg("riscv")
+        .arg("--unified-db")
         .current_dir(root_path)
-        .status()
-        .with_context(|| anyhow!("Failed to regenerate serialized riscv registers"))?;
+        .status();
+    
+    if riscv_reg_result.is_err() || !riscv_reg_result?.success() {
+        // Fall back to legacy RST format
+        Command::new(PARSE_EXE)
+            .args([
+                "docs_store/registers/riscv.rst.txt",
+                "-o",
+                "asm-lsp/serialized/registers/riscv",
+            ])
+            .arg("--doc-type")
+            .arg("register")
+            .arg("--arch")
+            .arg("riscv")
+            .current_dir(root_path)
+            .status()
+            .with_context(|| anyhow!("Failed to regenerate serialized riscv registers"))?;
+    }
     println!("\tx86");
     Command::new(PARSE_EXE)
         .args([

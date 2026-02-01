@@ -161,7 +161,15 @@ pub fn load_unified_instructions(
     path: &str,
 ) -> Result<Vec<Instruction>, Box<dyn std::error::Error>> {
     let data = std::fs::read_to_string(path)?;
-    let unified_instructions: Vec<UnifiedRiscvInstruction> = serde_json::from_str(&data)?;
+    
+    // Try JSON format first
+    let unified_instructions: Vec<UnifiedRiscvInstruction> = match serde_json::from_str(&data) {
+        Ok(instrs) => instrs,
+        Err(_) => {
+            // If JSON fails, try YAML format
+            serde_saphyr::from_str(&data)?
+        }
+    };
 
     let mut instructions = Vec::new();
     for unified_instr in unified_instructions {
@@ -174,7 +182,15 @@ pub fn load_unified_instructions(
 /// Load and convert RISC-V registers from unified database format
 pub fn load_unified_registers(path: &str) -> Result<Vec<Register>, Box<dyn std::error::Error>> {
     let data = std::fs::read_to_string(path)?;
-    let unified_registers: Vec<UnifiedRiscvRegister> = serde_json::from_str(&data)?;
+    
+    // Try JSON format first
+    let unified_registers: Vec<UnifiedRiscvRegister> = match serde_json::from_str(&data) {
+        Ok(regs) => regs,
+        Err(_) => {
+            // If JSON fails, try YAML format
+            serde_saphyr::from_str(&data)?
+        }
+    };
 
     let mut registers = Vec::new();
     for unified_reg in unified_registers {
@@ -248,5 +264,43 @@ mod tests {
         assert_eq!(register.arch, Arch::RISCV);
         assert!(register.description.is_some());
         assert_eq!(register.reg_type, Some(RegisterType::GeneralPurpose));
+    }
+
+    #[test]
+    fn test_yaml_parsing() {
+        let yaml_data = r#"
+- name: ADDI
+  description: Add immediate
+  format: "addi rd, rs1, imm"
+  opcode: "0010011"
+  extensions:
+    - I
+  operands:
+    - name: rd
+      description: "Destination register"
+      direction: "output"
+      width: 32
+"#;
+
+        let result = load_unified_instructions_from_yaml(yaml_data);
+        if let Err(e) = &result {
+            eprintln!("YAML parsing error: {}", e);
+        }
+        assert!(result.is_ok());
+        let instructions = result.unwrap();
+        assert_eq!(instructions.len(), 1);
+        assert_eq!(instructions[0].name, "addi");
+    }
+
+    /// Helper function for testing YAML parsing directly
+    fn load_unified_instructions_from_yaml(yaml_data: &str) -> Result<Vec<Instruction>, Box<dyn std::error::Error>> {
+        let unified_instructions: Vec<UnifiedRiscvInstruction> = serde_saphyr::from_str(yaml_data)?;
+
+        let mut instructions = Vec::new();
+        for unified_instr in unified_instructions {
+            instructions.push(convert_unified_instruction(&unified_instr));
+        }
+
+        Ok(instructions)
     }
 }
