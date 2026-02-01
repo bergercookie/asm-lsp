@@ -8,21 +8,81 @@ use crate::types::{
 };
 
 /// RISC-V Unified Database Instruction Format
-/// This represents the typical structure found in riscv-unified-db
+/// This represents both the actual riscv-unified-db format and legacy test format
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UnifiedRiscvInstruction {
+    #[serde(rename = "$schema")]
+    pub schema: Option<String>,
+    pub kind: Option<String>,
     pub name: String,
+    pub long_name: Option<String>,
     pub description: String,
-    pub format: String,
-    pub opcode: String,
+    #[serde(rename = "definedBy")]
+    pub defined_by: Option<DefinedBy>,
+    pub assembly: Option<String>,
+    pub encoding: Option<Encoding>,
+    pub access: Option<Access>,
+    pub data_independent_timing: Option<bool>,
+    pub pseudoinstructions: Option<Vec<Pseudoinstruction>>,
+    pub operation: Option<String>,
+    pub sail: Option<String>,
+    // Legacy fields for backward compatibility with test data
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub format: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub opcode: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pseudo_code: Option<String>,
-    pub extensions: Vec<String>,
-    pub operands: Vec<UnifiedOperand>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extensions: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub isa: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub aliases: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operands: Option<Vec<UnifiedOperand>>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DefinedBy {
+    pub extension: Extension,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Extension {
+    pub name: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Encoding {
+    #[serde(rename = "match")]
+    pub match_pattern: String,
+    pub variables: Vec<Variable>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Variable {
+    pub name: String,
+    pub location: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Access {
+    pub s: String,
+    pub u: String,
+    pub vs: String,
+    pub vu: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Pseudoinstruction {
+    pub when: String,
+    pub to: String,
+}
+
+/// Legacy operand format for backward compatibility with test data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UnifiedOperand {
     pub name: String,
@@ -46,43 +106,82 @@ pub struct UnifiedRiscvRegister {
 
 /// Convert a unified RISC-V instruction to asm-lsp's Instruction format
 pub fn convert_unified_instruction(unified: &UnifiedRiscvInstruction) -> Instruction {
+    // Extract extension information
+    let _extension_name = unified.defined_by
+        .as_ref()
+        .and_then(|db| Some(db.extension.name.clone()))
+        .unwrap_or_else(|| "I".to_string());
+
+    // Create assembly template from assembly field, format field (legacy), or construct from name
+    let asm_template = if let Some(assembly) = &unified.assembly {
+        assembly.replace(",", " ")
+    } else if let Some(format) = &unified.format {
+        format.to_string()
+    } else {
+        unified.name.to_lowercase()
+    };
+
     let mut instruction = Instruction {
         name: unified.name.to_lowercase(),
         summary: unified.description.clone(),
         forms: vec![],
-        asm_templates: vec![unified.format.clone()],
+        asm_templates: vec![format!("{}", asm_template)],
         aliases: vec![],
-        url: unified.url.clone(),
+        url: None, // URL not available in unified format
         arch: Arch::RISCV,
     };
 
-    // Convert operands to asm-lsp format
+    // Convert operands from encoding variables (new format) or operands field (legacy format)
     let mut operands = Vec::new();
-    for op in &unified.operands {
-        let operand_type = match op.name.as_str() {
-            "rd" | "rs1" | "rs2" | "rs3" => OperandType::r32, // Default to 32-bit, will be adjusted
-            "imm" => OperandType::imm32,                      // Default immediate type
-            _ => OperandType::_1,                             // Fallback
-        };
+    
+    if let Some(encoding) = &unified.encoding {
+        // New format: parse from encoding variables
+        for var in &encoding.variables {
+            let operand_type = match var.name.as_str() {
+                "xd" | "xs1" | "xs2" | "xs3" | "rs1" | "rs2" | "rs3" | "rd" => OperandType::r32,
+                "imm" => OperandType::imm32,
+                _ => OperandType::_1, // Fallback
+            };
 
-        let input = match op.direction.as_str() {
-            "input" | "inout" => Some(true),
-            "output" => Some(false),
-            _ => None,
-        };
+            // Determine input/output based on variable name
+            let is_output = var.name.starts_with("xd") || var.name == "rd";
+            let is_input = !is_output || var.name.contains("imm");
 
-        let output = match op.direction.as_str() {
-            "output" | "inout" => Some(true),
-            "input" => Some(false),
-            _ => None,
-        };
+            operands.push(Operand {
+                type_: operand_type,
+                input: Some(is_input),
+                output: Some(is_output),
+                extended_size: None,
+            });
+        }
+    } else if let Some(operands_data) = &unified.operands {
+        // Legacy format: parse from operands field
+        for op in operands_data {
+            let operand_type = match op.name.as_str() {
+                "rd" | "rs1" | "rs2" | "rs3" => OperandType::r32,
+                "imm" => OperandType::imm32,
+                _ => OperandType::_1, // Fallback
+            };
 
-        operands.push(Operand {
-            type_: operand_type,
-            input,
-            output,
-            extended_size: None,
-        });
+            let input = match op.direction.as_str() {
+                "input" | "inout" => Some(true),
+                "output" => Some(false),
+                _ => None,
+            };
+
+            let output = match op.direction.as_str() {
+                "output" | "inout" => Some(true),
+                "input" => Some(false),
+                _ => None,
+            };
+
+            operands.push(Operand {
+                type_: operand_type,
+                input,
+                output,
+                extended_size: None,
+            });
+        }
     }
 
     // Create instruction form
@@ -110,13 +209,24 @@ pub fn convert_unified_instruction(unified: &UnifiedRiscvInstruction) -> Instruc
 
     instruction.forms.push(form);
 
-    // Handle aliases if present
+    // Handle pseudoinstructions as aliases
+    if let Some(pseudoinstructions) = &unified.pseudoinstructions {
+        for pseudo in pseudoinstructions {
+            instruction.aliases.push(crate::types::InstructionAlias {
+                title: pseudo.to.clone(),
+                summary: format!("Pseudoinstruction for {}: {}", unified.name, pseudo.when),
+                asm_templates: vec![pseudo.to.clone()],
+            });
+        }
+    }
+
+    // Handle legacy aliases field for backward compatibility
     if let Some(aliases) = &unified.aliases {
         for alias in aliases {
             instruction.aliases.push(crate::types::InstructionAlias {
                 title: alias.clone(),
                 summary: format!("Alias for {}", unified.name),
-                asm_templates: vec![unified.format.clone()],
+                asm_templates: vec![unified.format.clone().unwrap_or_else(|| unified.name.to_lowercase())],
             });
         }
     }
@@ -207,35 +317,58 @@ mod tests {
     #[test]
     fn test_instruction_conversion() {
         let unified_instr = UnifiedRiscvInstruction {
-            name: "ADDI".to_string(),
+            schema: Some("inst_schema.json#".to_string()),
+            kind: Some("instruction".to_string()),
+            name: "addi".to_string(),
+            long_name: Some("Add immediate".to_string()),
             description: "Add immediate".to_string(),
-            format: "addi rd, rs1, imm".to_string(),
-            opcode: "0010011".to_string(),
-            pseudo_code: Some("x[rd] = x[rs1] + sext(immediate)".to_string()),
-            extensions: vec!["I".to_string()],
-            operands: vec![
-                UnifiedOperand {
-                    name: "rd".to_string(),
-                    description: "Destination register".to_string(),
-                    direction: "output".to_string(),
-                    width: Some(32),
+            defined_by: Some(DefinedBy {
+                extension: Extension {
+                    name: "I".to_string(),
                 },
-                UnifiedOperand {
-                    name: "rs1".to_string(),
-                    description: "Source register".to_string(),
-                    direction: "input".to_string(),
-                    width: Some(32),
-                },
-                UnifiedOperand {
-                    name: "imm".to_string(),
-                    description: "Immediate value".to_string(),
-                    direction: "input".to_string(),
-                    width: Some(12),
-                },
-            ],
-            isa: Some("RV32I".to_string()),
-            url: Some("https://riscv.org/specs/".to_string()),
-            aliases: Some(vec!["addi_alias".to_string()]),
+            }),
+            assembly: Some("xd, xs1, imm".to_string()),
+            encoding: Some(Encoding {
+                match_pattern: "-----------------000-----0010011".to_string(),
+                variables: vec![
+                    Variable {
+                        name: "imm".to_string(),
+                        location: "31-20".to_string(),
+                    },
+                    Variable {
+                        name: "xs1".to_string(),
+                        location: "19-15".to_string(),
+                    },
+                    Variable {
+                        name: "xd".to_string(),
+                        location: "11-7".to_string(),
+                    },
+                ],
+            }),
+            access: Some(Access {
+                s: "always".to_string(),
+                u: "always".to_string(),
+                vs: "always".to_string(),
+                vu: "always".to_string(),
+            }),
+            data_independent_timing: Some(true),
+            pseudoinstructions: Some(vec![
+                Pseudoinstruction {
+                    when: "imm == 0".to_string(),
+                    to: "mv xd,xs1".to_string(),
+                }
+            ]),
+            operation: Some("X[xd] = X[xs1] + $signed(imm)".to_string()),
+            sail: None,
+            // Legacy fields
+            format: None,
+            opcode: None,
+            pseudo_code: None,
+            extensions: None,
+            isa: None,
+            url: None,
+            aliases: None,
+            operands: None,
         };
 
         let instruction = convert_unified_instruction(&unified_instr);
@@ -243,7 +376,9 @@ mod tests {
         assert_eq!(instruction.arch, Arch::RISCV);
         assert_eq!(instruction.asm_templates.len(), 1);
         assert_eq!(instruction.forms.len(), 1);
+        // Check that pseudoinstructions were converted to aliases
         assert_eq!(instruction.aliases.len(), 1);
+        assert_eq!(instruction.aliases[0].title, "mv xd,xs1");
     }
 
     #[test]
@@ -268,18 +403,33 @@ mod tests {
 
     #[test]
     fn test_yaml_parsing() {
+        // Note: The real riscv-unified-db format uses individual files for each instruction
+        // For testing, we'll use a list format that matches our expected input
         let yaml_data = r#"
-- name: ADDI
-  description: Add immediate
-  format: "addi rd, rs1, imm"
-  opcode: "0010011"
-  extensions:
-    - I
-  operands:
-    - name: rd
-      description: "Destination register"
-      direction: "output"
-      width: 32
+- $schema: "inst_schema.json#"
+  kind: instruction
+  name: addi
+  long_name: Add immediate
+  description: Adds an immediate value to the value in xs1, and store the result in xd
+  definedBy:
+    extension:
+      name: I
+  assembly: xd, xs1, imm
+  encoding:
+    match: "-----------------000-----0010011"
+    variables:
+      - name: imm
+        location: 31-20
+      - name: xs1
+        location: 19-15
+      - name: xd
+        location: 11-7
+  access:
+    s: always
+    u: always
+    vs: always
+    vu: always
+  data_independent_timing: true
 "#;
 
         let result = load_unified_instructions_from_yaml(yaml_data);
@@ -290,6 +440,10 @@ mod tests {
         let instructions = result.unwrap();
         assert_eq!(instructions.len(), 1);
         assert_eq!(instructions[0].name, "addi");
+        assert_eq!(instructions[0].asm_templates.len(), 1);
+        assert_eq!(instructions[0].forms.len(), 1);
+        // Check that operands were parsed
+        assert_eq!(instructions[0].forms[0].operands.len(), 3);
     }
 
     /// Helper function for testing YAML parsing directly
