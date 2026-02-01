@@ -1,0 +1,31 @@
+# Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+# SPDX-License-Identifier: BSD-3-Clause-Clear
+
+# yaml-language-server: $schema=../../../../schemas/inst_schema.json
+
+$schema: inst_schema.json#
+kind: instruction
+name: vsseg5e8.v
+long_name: Vector segmented store 5 elements of 8 bits
+description: |
+  Stores 5 segments of 8-bit elements from vector register vs2 to memory starting at address in xs1 register, using vector mask vm. The effective element width is 8 bits regardless of SEW setting.
+definedBy:
+  extension:
+    name: Zvl32b
+assembly: vs3, (xs1), vm
+encoding:
+  match: 100000-00000-----000-----0100111
+  variables:
+    - name: vm
+      location: 25-25
+    - name: xs1
+      location: 19-15
+    - name: vs3
+      location: 11-7
+access:
+  s: always
+  u: always
+  vs: always
+  vu: always
+data_independent_timing: false
+operation(): |

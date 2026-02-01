@@ -1,0 +1,33 @@
+# Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+# SPDX-License-Identifier: BSD-3-Clause-Clear
+
+# yaml-language-server: $schema=../../../../schemas/inst_schema.json
+
+$schema: inst_schema.json#
+kind: instruction
+name: vloxseg4ei16.v
+long_name: Vector ordered load 4 elements of 16 bits with index
+description: |
+  Loads 4 segments of 16-bit elements from memory using ordered access pattern with index register vs1, starting at address in xs1 register, using vector mask vm, and stores results in vector register vd. The effective element width is 16 bits.
+definedBy:
+  extension:
+    name: Zvl32b
+assembly: vd, (xs1), vs2, vm
+encoding:
+  match: 011011-----------101-----0000111
+  variables:
+    - name: vm
+      location: 25-25
+    - name: vs2
+      location: 24-20
+    - name: xs1
+      location: 19-15
+    - name: vd
+      location: 11-7
+access:
+  s: always
+  u: always
+  vs: always
+  vu: always
+data_independent_timing: false
+operation(): |

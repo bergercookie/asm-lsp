@@ -15,17 +15,11 @@ use asm_lsp::riscv_unified::UnifiedRiscvInstruction;
 pub fn process_riscv_directory(input_dir: &Path, output_file: &Path) -> Result<()> {
     println!("Processing RISC-V YAML files from: {}", input_dir.display());
     
-    // Find all YAML files in the directory
+    // Find all YAML files in the directory (recursively)
     let mut yaml_files = Vec::new();
     
     if input_dir.is_dir() {
-        for entry in fs::read_dir(input_dir)? {
-            let entry = entry?;
-            let path = entry.path();
-            if path.extension().and_then(|s| s.to_str()) == Some("yaml") {
-                yaml_files.push(path);
-            }
-        }
+        find_yaml_files_recursive(input_dir, &mut yaml_files)?;
     }
     
     println!("Found {} YAML files", yaml_files.len());
@@ -64,6 +58,25 @@ pub fn process_riscv_directory(input_dir: &Path, output_file: &Path) -> Result<(
     
     println!("Successfully wrote consolidated data to: {}", output_file.display());
     
+    Ok(())
+}
+
+/// Recursively find all YAML files in a directory
+fn find_yaml_files_recursive(dir: &Path, yaml_files: &mut Vec<PathBuf>) -> Result<()> {
+    if dir.is_dir() {
+        for entry in fs::read_dir(dir)? {
+            let entry = entry?;
+            let path = entry.path();
+            
+            if path.is_dir() {
+                // Recursively search subdirectories
+                find_yaml_files_recursive(&path, yaml_files)?;
+            } else if path.extension().and_then(|s| s.to_str()) == Some("yaml") {
+                // Add YAML files to the list
+                yaml_files.push(path);
+            }
+        }
+    }
     Ok(())
 }
 
