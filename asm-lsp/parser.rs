@@ -2428,3 +2428,89 @@ mod tests {
         }
     }
 }
+
+/// Parse RISC-V instructions from unified database format
+/// This is the new preferred method for RISC-V instruction parsing
+/// that uses the riscv-unified-db format instead of RST files
+pub fn populate_riscv_unified_instructions(path: &str) -> Result<Vec<Instruction>> {
+    crate::riscv_parser::parse_riscv_instructions_unified(path)
+}
+
+/// Parse RISC-V registers from unified database format
+/// This is the new preferred method for RISC-V register parsing
+/// that uses the riscv-unified-db format instead of RST files
+pub fn populate_riscv_unified_registers(path: &str) -> Result<Vec<Register>> {
+    crate::riscv_parser::parse_riscv_registers_unified(path)
+}
+
+#[cfg(test)]
+mod riscv_unified_tests {
+    use super::*;
+
+    #[test]
+    fn test_unified_instruction_parsing() {
+        // Test with actual test data files
+        let result = populate_riscv_unified_instructions("../asm-lsp/test_riscv_instructions.json");
+        if let Err(e) = &result {
+            eprintln!("Error: {}", e);
+        }
+        assert!(result.is_ok());
+
+        let instructions = result.unwrap();
+        assert_eq!(instructions.len(), 2);
+
+        // Test ADDI instruction
+        let addi = &instructions[0];
+        assert_eq!(addi.name, "addi");
+        assert_eq!(addi.arch, Arch::RISCV);
+        assert!(addi.summary.contains("Add immediate"));
+        assert_eq!(addi.asm_templates.len(), 1);
+        assert_eq!(addi.asm_templates[0], "addi rd, rs1, imm");
+        assert_eq!(addi.forms.len(), 1);
+        assert_eq!(addi.aliases.len(), 1);
+        assert_eq!(addi.aliases[0].title, "addi_alias");
+
+        // Test operands
+        let form = &addi.forms[0];
+        assert_eq!(form.operands.len(), 3);
+        assert!(form.operands[0].output.unwrap()); // rd is output
+        assert!(form.operands[1].input.unwrap()); // rs1 is input
+        assert!(form.operands[2].input.unwrap()); // imm is input
+    }
+
+    #[test]
+    fn test_unified_register_parsing() {
+        // Test with actual test data files
+        let result = populate_riscv_unified_registers("../asm-lsp/test_riscv_registers.json");
+        assert!(result.is_ok());
+
+        let registers = result.unwrap();
+        assert_eq!(registers.len(), 3);
+
+        // Test x0 register (zero)
+        let x0 = &registers[0];
+        assert_eq!(x0.name, "x0");
+        assert_eq!(x0.arch, Arch::RISCV);
+        assert_eq!(
+            x0.reg_type,
+            Some(crate::types::RegisterType::GeneralPurpose)
+        );
+        assert_eq!(x0.width, Some(crate::types::RegisterWidth::Bits64));
+        assert!(x0.description.as_ref().unwrap().contains("Hard-wired zero"));
+
+        // Test x1 register (ra)
+        let x1 = &registers[1];
+        assert_eq!(x1.name, "x1");
+        assert_eq!(
+            x1.reg_type,
+            Some(crate::types::RegisterType::GeneralPurpose)
+        );
+        assert!(x1.description.as_ref().unwrap().contains("Caller saved"));
+
+        // Test f0 register (ft0)
+        let f0 = &registers[2];
+        assert_eq!(f0.name, "f0");
+        assert_eq!(f0.reg_type, Some(crate::types::RegisterType::FloatingPoint));
+        assert!(f0.description.as_ref().unwrap().contains("Caller saved"));
+    }
+}
