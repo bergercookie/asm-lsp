@@ -1127,8 +1127,7 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                                     }
                                 },
                                 "nacl-version" => {
-                                    curr_instruction_form.nacl_version =
-                                        value.as_ref().first().copied();
+                                    curr_instruction_form.nacl_version = value.first().copied();
                                 }
                                 "nacl-zero-extends-outputs" => match ustr::get_str(&value) {
                                     "true" => {
@@ -1217,12 +1216,12 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                                         }
                                     }
                                 }
-                                b"input" => match value.as_ref() {
+                                b"input" => match value.iter().as_slice() {
                                     b"true" => input = Some(true),
                                     b"false" => input = Some(false),
                                     _ => return Err(anyhow!("Unknown value for operand type")),
                                 },
-                                b"output" => match value.as_ref() {
+                                b"output" => match value.iter().as_slice() {
                                     b"true" => output = Some(true),
                                     b"false" => output = Some(false),
                                     _ => return Err(anyhow!("Unknown value for operand type")),
