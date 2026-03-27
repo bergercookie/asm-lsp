@@ -2794,9 +2794,19 @@
     "operation": "declare in : 32'F[3];\ndeclare S : 32'B[3];\nfor i in 0 : 2 do\nif !OPSEL_HI.u3[i] then\nin[i] = S[i].f\nelsif OPSEL.u3[i] then\nin[i] = f16_to_f32(S[i][31 : 16].f16)\nelse\nin[i] = f16_to_f32(S[i][15 : 0].f16)\nendif\nendfor;\nD0[31 : 16].f16 = f32_to_f16(fma(in[0], in[1], in[2]))",
     "notes": ""
   },
+  "v_wmma_f32_16x16x16f16": {
+    "description": "WMMA matrix multiplication with F16 multiplicands and single precision result.",
+    "operation": "saved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.f16(16x16) * S1.f16(16x16) + S2.f32(16x16)\";\nEXEC = saved_exec",
+    "notes": ""
+  },
   "v_wmma_f32_16x16x16_f16": {
     "description": "WMMA matrix multiplication with F16 multiplicands and single precision result.",
     "operation": "saved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.f16(16x16) * S1.f16(16x16) + S2.f32(16x16)\";\nEXEC = saved_exec",
+    "notes": ""
+  },
+  "v_wmma_f32_16x16x16bf16": {
+    "description": "WMMA matrix multiplication with brain float multiplicands and single precision result.",
+    "operation": "saved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.bf16(16x16) * S1.bf16(16x16) + S2.f32(16x16)\";\nEXEC = saved_exec",
     "notes": ""
   },
   "v_wmma_f32_16x16x16_bf16": {
@@ -2809,9 +2819,24 @@
     "operation": "saved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f16(16x16) = S0.f16(16x16) * S1.f16(16x16) + S2.f16(16x16)\";\nEXEC = saved_exec",
     "notes": ""
   },
+  "v_wmma_f16_16x16x16f16": {
+    "description": "WMMA matrix multiplication with F16 multiplicands and F16 result.",
+    "operation": "saved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f16(16x16) = S0.f16(16x16) * S1.f16(16x16) + S2.f16(16x16)\";\nEXEC = saved_exec",
+    "notes": ""
+  },
+  "v_wmma_bf16_16x16x16bf16": {
+    "description": "WMMA matrix multiplication with brain float multiplicands and brain float result.",
+    "operation": "saved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.bf16(16x16) = S0.bf16(16x16) * S1.bf16(16x16) + S2.bf16(16x16)\";\nEXEC = saved_exec",
+    "notes": ""
+  },
   "v_wmma_bf16_16x16x16_bf16": {
     "description": "WMMA matrix multiplication with brain float multiplicands and brain float result.",
     "operation": "saved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.bf16(16x16) = S0.bf16(16x16) * S1.bf16(16x16) + S2.bf16(16x16)\";\nEXEC = saved_exec",
+    "notes": ""
+  },
+  "v_wmma_i32_16x16x16iu8": {
+    "description": "WMMA matrix multiplication with 8-bit integer multiplicands and signed 32-bit integer result.",
+    "operation": "saved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.i32(16x16) = S0.iu8(16x16) * S1.iu8(16x16) + S2.i32(16x16)\";\nEXEC = saved_exec",
     "notes": ""
   },
   "v_wmma_i32_16x16x16_iu8": {
@@ -2820,6 +2845,11 @@
     "notes": ""
   },
   "v_wmma_i32_16x16x16_iu4": {
+    "description": "WMMA matrix multiplication with 4-bit integer multiplicands and signed 32-bit integer result.",
+    "operation": "saved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.i32(16x16) = S0.iu4(16x16) * S1.iu4(16x16) + S2.i32(16x16)\";\nEXEC = saved_exec",
+    "notes": "The VOPD encoded describes two VALU opcodes that are executed in parallel.\nFor instruction definitions, refer to the VOP1, VOP2 and VOP3 sections."
+  },
+  "v_wmma_i32_16x16x16iu4": {
     "description": "WMMA matrix multiplication with 4-bit integer multiplicands and signed 32-bit integer result.",
     "operation": "saved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.i32(16x16) = S0.iu4(16x16) * S1.iu4(16x16) + S2.i32(16x16)\";\nEXEC = saved_exec",
     "notes": "The VOPD encoded describes two VALU opcodes that are executed in parallel.\nFor instruction definitions, refer to the VOP1, VOP2 and VOP3 sections."

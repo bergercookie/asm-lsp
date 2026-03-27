@@ -27,6 +27,26 @@ from argparse import ArgumentParser
 
 
 # ---------------------------------------------------------------------------
+# MFMA name normalisation
+# ---------------------------------------------------------------------------
+# AMD ISA PDFs use names like V_MFMA_F32_16x16x1_4b_F32 where the optional
+# _Nb multiplier suffix (4b, 2b, 16b) and the separating underscore before the
+# data-type component are absent from LLVM TableGen mnemonic names
+# (v_mfma_f32_16x16x1f32).  Apply this normalisation so PDF annotations map
+# onto the correct tblgen-derived keys.
+_MFMA_NORM_RE = re.compile(
+    r'(_\d+[xX]\d+[xX]\d+)'    # dimension block e.g. _16x16x1
+    r'(?:_\d+b)?'               # optional _Nb multiplier
+    r'_([a-z])',                 # underscore + first char of dtype
+)
+
+
+def _normalize_mfma_key(name: str) -> str:
+    """Normalise an MFMA/SMFMAC mnemonic from PDF naming to tblgen naming."""
+    return _MFMA_NORM_RE.sub(lambda m: m.group(1) + m.group(2), name)
+
+
+# ---------------------------------------------------------------------------
 # Instruction name detection
 # ---------------------------------------------------------------------------
 
@@ -201,23 +221,30 @@ def parse_pdf(pdf_path: str) -> dict:
     current_name: str | None = None
     body_lines: list[str] = []
 
+    def _save(name: str, body: list[str]) -> None:
+        ann = parse_body(body)
+        if not (ann['description'] or ann['operation']):
+            return
+        raw_key = name.lower()
+        # Apply MFMA dimension-suffix normalisation so PDF names
+        # (v_mfma_f32_16x16x1_4b_f32) map to tblgen names (v_mfma_f32_16x16x1f32).
+        key = _normalize_mfma_key(raw_key)
+        # Store both the raw key (in case PDF and tblgen names already match) and
+        # the normalised key, keeping the richer annotation on conflict.
+        for k in ({key, raw_key} if key != raw_key else {key}):
+            prev = annotations.get(k)
+            if prev is None or (
+                len(ann['description']) + len(ann['operation'])
+                > len(prev['description']) + len(prev['operation'])
+            ):
+                annotations[k] = ann
+
     for line in lines:
         m = INSTR_NAME_RE.match(line)
         if m and is_instruction_name(m.group(1)):
             # Save the previous instruction's body
             if current_name and body_lines:
-                ann = parse_body(body_lines)
-                if ann['description'] or ann['operation']:
-                    key = current_name.lower()
-                    # If we've seen this mnemonic before (e.g. once in a summary
-                    # table and once in the detail section), prefer the entry
-                    # that has richer content.
-                    prev = annotations.get(key)
-                    if prev is None or (
-                        len(ann['description']) + len(ann['operation'])
-                        > len(prev['description']) + len(prev['operation'])
-                    ):
-                        annotations[key] = ann
+                _save(current_name, body_lines)
             current_name = m.group(1)
             body_lines = []
         elif current_name is not None:
@@ -225,15 +252,7 @@ def parse_pdf(pdf_path: str) -> dict:
 
     # Flush the last instruction
     if current_name and body_lines:
-        ann = parse_body(body_lines)
-        if ann['description'] or ann['operation']:
-            key = current_name.lower()
-            prev = annotations.get(key)
-            if prev is None or (
-                len(ann['description']) + len(ann['operation'])
-                > len(prev['description']) + len(prev['operation'])
-            ):
-                annotations[key] = ann
+        _save(current_name, body_lines)
 
     return annotations
 

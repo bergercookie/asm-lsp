@@ -3164,30 +3164,60 @@
     "operation": "tmp0.u32 = S0.u32[OPSEL[0].i32 * 32 + 31 : OPSEL[0].i32 * 32];\ntmp1.u32 = S1.u32[OPSEL[1].i32 * 32 + 31 : OPSEL[1].i32 * 32];\nD0.u32[31 : 0] = tmp0.u32;\nD0.u32[63 : 32] = tmp1.u32",
     "notes": "The source operands are treated as 64 bit and are subject to alignment restrictions for both SGPR and VGPR.\nFor two VGPR inputs this opcode can be used as an arbitrary gather by using OP_SEL to select either the even\nVGPR specified or the next odd VGPR.\nv_pk_mov_b32 v0, v2, v4 op_sel:[0,1] // evaluates v0 <- v2 and v1 <- v5.\nDue to scalar broadcast restrictions if two SGPRs are specified as operands, they must be the same SGPR.\nv_pk_mov_b32 v0, s6, s6 op_sel:[0,1] // 64-bit move from scalar s[6:7]."
   },
+  "v_mfma_f32_16x16x8xf32": {
+    "description": "Multiply the 16x8 matrix in the first input by the 8x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x8) * B (8x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are single-precision float format. Matrices C and D are single-precision float format. XF32 is a\nFP32 operation with FP32 inputs and outputs but implemented at reduced intermediate precision where\nmantissa is truncated to 10 bits (not including leading 1 for non-zero values) and results are accumulated into\nFP32 value with 23 bit mantissa.\nThis instruction performs 4 passes."
+  },
   "v_mfma_f32_16x16x8_xf32": {
     "description": "Multiply the 16x8 matrix in the first input by the 8x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (16x8) * B (8x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are single-precision float format. Matrices C and D are single-precision float format. XF32 is a\nFP32 operation with FP32 inputs and outputs but implemented at reduced intermediate precision where\nmantissa is truncated to 10 bits (not including leading 1 for non-zero values) and results are accumulated into\nFP32 value with 23 bit mantissa.\nThis instruction performs 4 passes."
+  },
+  "v_mfma_f32_32x32x4xf32": {
+    "description": "Multiply the 32x4 matrix in the first input by the 4x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (32x4) * B (4x32) + C (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are single-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
   },
   "v_mfma_f32_32x32x4_xf32": {
     "description": "Multiply the 32x4 matrix in the first input by the 4x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (32x4) * B (4x32) + C (32x32)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are single-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
   },
+  "v_mfma_f32_32x32x1f32": {
+    "description": "Multiply the 32x1 matrix in the first input by the 1x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (32x1) * B (1x32) + C (32x32)",
+    "notes": "This instruction performs 2 matrix multiplies. Each operand contains 2 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are single-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 16 passes."
+  },
   "v_mfma_f32_32x32x1_2b_f32": {
     "description": "Multiply the 32x1 matrix in the first input by the 1x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (32x1) * B (1x32) + C (32x32)",
     "notes": "This instruction performs 2 matrix multiplies. Each operand contains 2 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are single-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 16 passes."
+  },
+  "v_mfma_f32_16x16x1f32": {
+    "description": "Multiply the 16x1 matrix in the first input by the 1x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x1) * B (1x16) + C (16x16)",
+    "notes": "This instruction performs 4 matrix multiplies. Each operand contains 4 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are single-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
   },
   "v_mfma_f32_16x16x1_4b_f32": {
     "description": "Multiply the 16x1 matrix in the first input by the 1x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (16x1) * B (1x16) + C (16x16)",
     "notes": "This instruction performs 4 matrix multiplies. Each operand contains 4 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are single-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
   },
+  "v_mfma_f32_4x4x1f32": {
+    "description": "Multiply the 4x1 matrix in the first input by the 1x4 matrix in the second input and add the 4x4 matrix in the\nthird input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (4x1) * B (1x4) + C (4x4)",
+    "notes": "This instruction performs 16 matrix multiplies. Each operand contains 16 matrices back to back, and each\nmatrix has elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-\ncolumn dot products are distributed across the vector ALU for higher performance. The result matrices are\nstored back-to-back in the destination vector registers.\nMatrices A and B are single-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 2 passes."
+  },
   "v_mfma_f32_4x4x1_16b_f32": {
     "description": "Multiply the 4x1 matrix in the first input by the 1x4 matrix in the second input and add the 4x4 matrix in the\nthird input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (4x1) * B (1x4) + C (4x4)",
     "notes": "This instruction performs 16 matrix multiplies. Each operand contains 16 matrices back to back, and each\nmatrix has elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-\ncolumn dot products are distributed across the vector ALU for higher performance. The result matrices are\nstored back-to-back in the destination vector registers.\nMatrices A and B are single-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 2 passes."
+  },
+  "v_mfma_f32_32x32x2f32": {
+    "description": "Multiply the 32x2 matrix in the first input by the 2x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (32x2) * B (2x32) + C (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are single-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 16 passes."
   },
   "v_mfma_f32_32x32x2_f32": {
     "description": "Multiply the 32x2 matrix in the first input by the 2x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
@@ -3199,6 +3229,16 @@
     "operation": "D = A (16x4) * B (4x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are single-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
   },
+  "v_mfma_f32_16x16x4f32": {
+    "description": "Multiply the 16x4 matrix in the first input by the 4x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x4) * B (4x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are single-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
+  },
+  "v_mfma_f32_32x32x4f16": {
+    "description": "Multiply the 32x4 matrix in the first input by the 4x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (32x4) * B (4x32) + C (32x32)",
+    "notes": "This instruction performs 2 matrix multiplies. Each operand contains 2 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are half-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 16 passes."
+  },
   "v_mfma_f32_32x32x4_2b_f16": {
     "description": "Multiply the 32x4 matrix in the first input by the 4x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (32x4) * B (4x32) + C (32x32)",
@@ -3208,6 +3248,16 @@
     "description": "Multiply the 16x4 matrix in the first input by the 4x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (16x4) * B (4x16) + C (16x16)",
     "notes": "This instruction performs 4 matrix multiplies. Each operand contains 4 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are half-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
+  },
+  "v_mfma_f32_16x16x4f16": {
+    "description": "Multiply the 16x4 matrix in the first input by the 4x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x4) * B (4x16) + C (16x16)",
+    "notes": "This instruction performs 4 matrix multiplies. Each operand contains 4 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are half-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
+  },
+  "v_mfma_f32_4x4x4f16": {
+    "description": "Multiply the 4x4 matrix in the first input by the 4x4 matrix in the second input and add the 4x4 matrix in the\nthird input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (4x4) * B (4x4) + C (4x4)",
+    "notes": "This instruction performs 16 matrix multiplies. Each operand contains 16 matrices back to back, and each\nmatrix has elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-\ncolumn dot products are distributed across the vector ALU for higher performance. The result matrices are\nstored back-to-back in the destination vector registers.\nMatrices A and B are half-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 2 passes."
   },
   "v_mfma_f32_4x4x4_16b_f16": {
     "description": "Multiply the 4x4 matrix in the first input by the 4x4 matrix in the second input and add the 4x4 matrix in the\nthird input using fused multiply add. Store the resulting matrix into vector registers.",
@@ -3219,7 +3269,17 @@
     "operation": "D = A (32x8) * B (8x32) + C (32x32)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are half-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
   },
+  "v_mfma_f32_32x32x8f16": {
+    "description": "Multiply the 32x8 matrix in the first input by the 8x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (32x8) * B (8x32) + C (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are half-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
+  },
   "v_mfma_f32_16x16x16_f16": {
+    "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x16) * B (16x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are half-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 4 passes."
+  },
+  "v_mfma_f32_16x16x16f16": {
     "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (16x16) * B (16x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are half-precision float format. Matrices C and D are single-precision float format.\nThis instruction performs 4 passes."
@@ -3229,10 +3289,25 @@
     "operation": "D = A (32x4) * B (4x32) + C (32x32)",
     "notes": "This instruction performs 2 matrix multiplies. Each operand contains 2 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are signed 8-bit integer format. Matrices C and D are signed 32-bit integer format.\nThis instruction performs 16 passes."
   },
+  "v_mfma_i32_32x32x4i8": {
+    "description": "Multiply the 32x4 matrix in the first input by the 4x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (32x4) * B (4x32) + C (32x32)",
+    "notes": "This instruction performs 2 matrix multiplies. Each operand contains 2 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are signed 8-bit integer format. Matrices C and D are signed 32-bit integer format.\nThis instruction performs 16 passes."
+  },
+  "v_mfma_i32_16x16x4i8": {
+    "description": "Multiply the 16x4 matrix in the first input by the 4x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x4) * B (4x16) + C (16x16)",
+    "notes": "This instruction performs 4 matrix multiplies. Each operand contains 4 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are signed 8-bit integer format. Matrices C and D are signed 32-bit integer format.\nThis instruction performs 8 passes."
+  },
   "v_mfma_i32_16x16x4_4b_i8": {
     "description": "Multiply the 16x4 matrix in the first input by the 4x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (16x4) * B (4x16) + C (16x16)",
     "notes": "This instruction performs 4 matrix multiplies. Each operand contains 4 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are signed 8-bit integer format. Matrices C and D are signed 32-bit integer format.\nThis instruction performs 8 passes."
+  },
+  "v_mfma_i32_4x4x4i8": {
+    "description": "Multiply the 4x4 matrix in the first input by the 4x4 matrix in the second input and add the 4x4 matrix in the\nthird input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (4x4) * B (4x4) + C (4x4)",
+    "notes": "This instruction performs 16 matrix multiplies. Each operand contains 16 matrices back to back, and each\nmatrix has elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-\ncolumn dot products are distributed across the vector ALU for higher performance. The result matrices are\nstored back-to-back in the destination vector registers.\nMatrices A and B are signed 8-bit integer format. Matrices C and D are signed 32-bit integer format.\nThis instruction performs 2 passes."
   },
   "v_mfma_i32_4x4x4_16b_i8": {
     "description": "Multiply the 4x4 matrix in the first input by the 4x4 matrix in the second input and add the 4x4 matrix in the\nthird input using fused multiply add. Store the resulting matrix into vector registers.",
@@ -3244,7 +3319,17 @@
     "operation": "D = A (32x16) * B (16x32) + C (32x32)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are signed 8-bit integer format. Matrices C and D are signed 32-bit integer format.\nThis instruction performs 8 passes."
   },
+  "v_mfma_i32_32x32x16i8": {
+    "description": "Multiply the 32x16 matrix in the first input by the 16x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (32x16) * B (16x32) + C (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are signed 8-bit integer format. Matrices C and D are signed 32-bit integer format.\nThis instruction performs 8 passes."
+  },
   "v_mfma_i32_16x16x32_i8": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x32) * B (32x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are signed 8-bit integer format. Matrices C and D are signed 32-bit integer format.\nThis instruction performs 4 passes."
+  },
+  "v_mfma_i32_16x16x32i8": {
     "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (16x32) * B (32x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are signed 8-bit integer format. Matrices C and D are signed 32-bit integer format.\nThis instruction performs 4 passes."
@@ -3264,15 +3349,35 @@
     "operation": "D = A (32x4) * B (4x32) + C (32x32)",
     "notes": "This instruction performs 2 matrix multiplies. Each operand contains 2 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are BF16 float format. Matrices C and D are single-precision float format.\nThis instruction performs 16 passes."
   },
+  "v_mfma_f32_32x32x4bf16": {
+    "description": "Multiply the 32x4 matrix in the first input by the 4x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (32x4) * B (4x32) + C (32x32)",
+    "notes": "This instruction performs 2 matrix multiplies. Each operand contains 2 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are BF16 float format. Matrices C and D are single-precision float format.\nThis instruction performs 16 passes."
+  },
+  "v_mfma_f32_16x16x4bf16": {
+    "description": "Multiply the 16x4 matrix in the first input by the 4x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x4) * B (4x16) + C (16x16)",
+    "notes": "This instruction performs 4 matrix multiplies. Each operand contains 4 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are BF16 float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
+  },
   "v_mfma_f32_16x16x4_4b_bf16": {
     "description": "Multiply the 16x4 matrix in the first input by the 4x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (16x4) * B (4x16) + C (16x16)",
     "notes": "This instruction performs 4 matrix multiplies. Each operand contains 4 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are BF16 float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
   },
+  "v_mfma_f32_4x4x4bf16": {
+    "description": "Multiply the 4x4 matrix in the first input by the 4x4 matrix in the second input and add the 4x4 matrix in the\nthird input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (4x4) * B (4x4) + C (4x4)",
+    "notes": "This instruction performs 16 matrix multiplies. Each operand contains 16 matrices back to back, and each\nmatrix has elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-\ncolumn dot products are distributed across the vector ALU for higher performance. The result matrices are\nstored back-to-back in the destination vector registers.\nMatrices A and B are BF16 float format. Matrices C and D are single-precision float format.\nThis instruction performs 2 passes."
+  },
   "v_mfma_f32_4x4x4_16b_bf16": {
     "description": "Multiply the 4x4 matrix in the first input by the 4x4 matrix in the second input and add the 4x4 matrix in the\nthird input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (4x4) * B (4x4) + C (4x4)",
     "notes": "This instruction performs 16 matrix multiplies. Each operand contains 16 matrices back to back, and each\nmatrix has elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-\ncolumn dot products are distributed across the vector ALU for higher performance. The result matrices are\nstored back-to-back in the destination vector registers.\nMatrices A and B are BF16 float format. Matrices C and D are single-precision float format.\nThis instruction performs 2 passes."
+  },
+  "v_mfma_f32_32x32x8bf16": {
+    "description": "Multiply the 32x8 matrix in the first input by the 8x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (32x8) * B (8x32) + C (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are BF16 float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
   },
   "v_mfma_f32_32x32x8_bf16": {
     "description": "Multiply the 32x8 matrix in the first input by the 8x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
@@ -3284,6 +3389,16 @@
     "operation": "D = A (16x16) * B (16x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are BF16 float format. Matrices C and D are single-precision float format.\nThis instruction performs 4 passes."
   },
+  "v_mfma_f32_16x16x16bf16": {
+    "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x16) * B (16x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are BF16 float format. Matrices C and D are single-precision float format.\nThis instruction performs 4 passes."
+  },
+  "v_smfmac_f32_16x16x32f16": {
+    "description": "Multiply the 16x32 sparse matrix in the first input by the 32x16 matrix in the second input and accumulate the\nresult into the 16x16 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
+    "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in half-precision float format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in half-precision float format. Matrix D is single-\nprecision float format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 4 passes."
+  },
   "v_smfmac_f32_16x16x32_f16": {
     "description": "Multiply the 16x32 sparse matrix in the first input by the 32x16 matrix in the second input and accumulate the\nresult into the 16x16 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
     "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
@@ -3294,7 +3409,17 @@
     "operation": "D = A (sparse 32x16) * B (16x32) + D (32x32)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in half-precision float format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in half-precision float format. Matrix D is single-\nprecision float format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 8 passes."
   },
+  "v_smfmac_f32_32x32x16f16": {
+    "description": "Multiply the 32x16 sparse matrix in the first input by the 16x32 matrix in the second input and accumulate the\nresult into the 32x32 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
+    "operation": "D = A (sparse 32x16) * B (16x32) + D (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in half-precision float format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in half-precision float format. Matrix D is single-\nprecision float format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 8 passes."
+  },
   "v_smfmac_f32_16x16x32_bf16": {
+    "description": "Multiply the 16x32 sparse matrix in the first input by the 32x16 matrix in the second input and accumulate the\nresult into the 16x16 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
+    "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF16 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF16 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 4 passes."
+  },
+  "v_smfmac_f32_16x16x32bf16": {
     "description": "Multiply the 16x32 sparse matrix in the first input by the 32x16 matrix in the second input and accumulate the\nresult into the 16x16 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
     "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF16 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF16 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 4 passes."
@@ -3304,15 +3429,35 @@
     "operation": "D = A (sparse 32x16) * B (16x32) + D (32x32)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF16 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF16 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 8 passes."
   },
+  "v_smfmac_f32_32x32x16bf16": {
+    "description": "Multiply the 32x16 sparse matrix in the first input by the 16x32 matrix in the second input and accumulate the\nresult into the 32x32 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
+    "operation": "D = A (sparse 32x16) * B (16x32) + D (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF16 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF16 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 8 passes."
+  },
   "v_smfmac_i32_16x16x64_i8": {
     "description": "Multiply the 16x64 sparse matrix in the first input by the 64x16 matrix in the second input and accumulate the\nresult into the 16x16 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
     "operation": "D = A (sparse 16x64) * B (64x16) + D (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in signed 8-bit integer format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in signed 8-bit integer format. Matrix D is signed 32-\nbit integer format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 4 passes."
   },
+  "v_smfmac_i32_16x16x64i8": {
+    "description": "Multiply the 16x64 sparse matrix in the first input by the 64x16 matrix in the second input and accumulate the\nresult into the 16x16 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
+    "operation": "D = A (sparse 16x64) * B (64x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in signed 8-bit integer format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in signed 8-bit integer format. Matrix D is signed 32-\nbit integer format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 4 passes."
+  },
+  "v_smfmac_i32_32x32x32i8": {
+    "description": "Multiply the 32x32 sparse matrix in the first input by the 32x32 matrix in the second input and accumulate the\nresult into the 32x32 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
+    "operation": "D = A (sparse 32x32) * B (32x32) + D (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in signed 8-bit integer format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in signed 8-bit integer format. Matrix D is signed 32-\nbit integer format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 8 passes."
+  },
   "v_smfmac_i32_32x32x32_i8": {
     "description": "Multiply the 32x32 sparse matrix in the first input by the 32x32 matrix in the second input and accumulate the\nresult into the 32x32 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
     "operation": "D = A (sparse 32x32) * B (32x32) + D (32x32)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in signed 8-bit integer format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in signed 8-bit integer format. Matrix D is signed 32-\nbit integer format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 8 passes."
+  },
+  "v_mfma_f64_16x16x4f64": {
+    "description": "Multiply the 16x4 matrix in the first input by the 4x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x4) * B (4x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are double-precision float format. Matrices C and D are double-precision float format.\nThis instruction performs 8 passes."
   },
   "v_mfma_f64_16x16x4_f64": {
     "description": "Multiply the 16x4 matrix in the first input by the 4x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
@@ -3324,7 +3469,17 @@
     "operation": "D = A (4x4) * B (4x4) + C (4x4)",
     "notes": "This instruction performs 4 matrix multiplies. Each operand contains 4 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are double-precision float format. Matrices C and D are double-precision float format.\nThis instruction performs 4 passes."
   },
+  "v_mfma_f64_4x4x4f64": {
+    "description": "Multiply the 4x4 matrix in the first input by the 4x4 matrix in the second input and add the 4x4 matrix in the\nthird input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (4x4) * B (4x4) + C (4x4)",
+    "notes": "This instruction performs 4 matrix multiplies. Each operand contains 4 matrices back to back, and each matrix\nhas elements distributed across all lanes of the wave. Each matrix multiple is computed and the row-column\ndot products are distributed across the vector ALU for higher performance. The result matrices are stored\nback-to-back in the destination vector registers.\nMatrices A and B are double-precision float format. Matrices C and D are double-precision float format.\nThis instruction performs 4 passes."
+  },
   "v_mfma_f32_16x16x32_bf8_bf8": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x32) * B (32x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is BF8 float format. Matrix B is BF8 float format. Matrices C and D are single-precision float format.\nThis instruction performs 4 passes."
+  },
+  "v_mfma_f32_16x16x32bf8_bf8": {
     "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (16x32) * B (32x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is BF8 float format. Matrix B is BF8 float format. Matrices C and D are single-precision float format.\nThis instruction performs 4 passes."
@@ -3333,6 +3488,16 @@
     "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (16x32) * B (32x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is BF8 float format. Matrix B is FP8 float format. Matrices C and D are single-precision float format.\nThis instruction performs 4 passes."
+  },
+  "v_mfma_f32_16x16x32bf8_fp8": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x32) * B (32x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is BF8 float format. Matrix B is FP8 float format. Matrices C and D are single-precision float format.\nThis instruction performs 4 passes."
+  },
+  "v_mfma_f32_16x16x32fp8_bf8": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x32) * B (32x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is FP8 float format. Matrix B is BF8 float format. Matrices C and D are single-precision float format.\nThis instruction performs 4 passes."
   },
   "v_mfma_f32_16x16x32_fp8_bf8": {
     "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
@@ -3344,10 +3509,25 @@
     "operation": "D = A (16x32) * B (32x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is FP8 float format. Matrix B is FP8 float format. Matrices C and D are single-precision float format.\nThis instruction performs 4 passes."
   },
+  "v_mfma_f32_16x16x32fp8_fp8": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x32) * B (32x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is FP8 float format. Matrix B is FP8 float format. Matrices C and D are single-precision float format.\nThis instruction performs 4 passes."
+  },
+  "v_mfma_f32_32x32x16bf8_bf8": {
+    "description": "Multiply the 32x16 matrix in the first input by the 16x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (32x16) * B (16x32) + C (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is BF8 float format. Matrix B is BF8 float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
+  },
   "v_mfma_f32_32x32x16_bf8_bf8": {
     "description": "Multiply the 32x16 matrix in the first input by the 16x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (32x16) * B (16x32) + C (32x32)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is BF8 float format. Matrix B is BF8 float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
+  },
+  "v_mfma_f32_32x32x16bf8_fp8": {
+    "description": "Multiply the 32x16 matrix in the first input by the 16x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (32x16) * B (16x32) + C (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is BF8 float format. Matrix B is FP8 float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
   },
   "v_mfma_f32_32x32x16_bf8_fp8": {
     "description": "Multiply the 32x16 matrix in the first input by the 16x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
@@ -3359,15 +3539,35 @@
     "operation": "D = A (32x16) * B (16x32) + C (32x32)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is FP8 float format. Matrix B is BF8 float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
   },
+  "v_mfma_f32_32x32x16fp8_bf8": {
+    "description": "Multiply the 32x16 matrix in the first input by the 16x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (32x16) * B (16x32) + C (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is FP8 float format. Matrix B is BF8 float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
+  },
   "v_mfma_f32_32x32x16_fp8_fp8": {
     "description": "Multiply the 32x16 matrix in the first input by the 16x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (32x16) * B (16x32) + C (32x32)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is FP8 float format. Matrix B is FP8 float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
   },
+  "v_mfma_f32_32x32x16fp8_fp8": {
+    "description": "Multiply the 32x16 matrix in the first input by the 16x32 matrix in the second input and add the 32x32 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (32x16) * B (16x32) + C (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is FP8 float format. Matrix B is FP8 float format. Matrices C and D are single-precision float format.\nThis instruction performs 8 passes."
+  },
+  "v_smfmac_f32_16x16x64bf8_bf8": {
+    "description": "Multiply the 16x64 sparse matrix in the first input by the 64x16 matrix in the second input and accumulate the\nresult into the 16x16 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
+    "operation": "D = A (sparse 16x64) * B (64x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 4 passes."
+  },
   "v_smfmac_f32_16x16x64_bf8_bf8": {
     "description": "Multiply the 16x64 sparse matrix in the first input by the 64x16 matrix in the second input and accumulate the\nresult into the 16x16 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
     "operation": "D = A (sparse 16x64) * B (64x16) + D (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 4 passes."
+  },
+  "v_smfmac_f32_16x16x64bf8_fp8": {
+    "description": "Multiply the 16x64 sparse matrix in the first input by the 64x16 matrix in the second input and accumulate the\nresult into the 16x16 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
+    "operation": "D = A (sparse 16x64) * B (64x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in FP8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 4 passes."
   },
   "v_smfmac_f32_16x16x64_bf8_fp8": {
     "description": "Multiply the 16x64 sparse matrix in the first input by the 64x16 matrix in the second input and accumulate the\nresult into the 16x16 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
@@ -3379,10 +3579,25 @@
     "operation": "D = A (sparse 16x64) * B (64x16) + D (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in FP8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 4 passes."
   },
+  "v_smfmac_f32_16x16x64fp8_bf8": {
+    "description": "Multiply the 16x64 sparse matrix in the first input by the 64x16 matrix in the second input and accumulate the\nresult into the 16x16 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
+    "operation": "D = A (sparse 16x64) * B (64x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in FP8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 4 passes."
+  },
+  "v_smfmac_f32_16x16x64fp8_fp8": {
+    "description": "Multiply the 16x64 sparse matrix in the first input by the 64x16 matrix in the second input and accumulate the\nresult into the 16x16 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
+    "operation": "D = A (sparse 16x64) * B (64x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in FP8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in FP8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 4 passes."
+  },
   "v_smfmac_f32_16x16x64_fp8_fp8": {
     "description": "Multiply the 16x64 sparse matrix in the first input by the 64x16 matrix in the second input and accumulate the\nresult into the 16x16 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
     "operation": "D = A (sparse 16x64) * B (64x16) + D (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in FP8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in FP8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 4 passes."
+  },
+  "v_smfmac_f32_32x32x32bf8_bf8": {
+    "description": "Multiply the 32x32 sparse matrix in the first input by the 32x32 matrix in the second input and accumulate the\nresult into the 32x32 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
+    "operation": "D = A (sparse 32x32) * B (32x32) + D (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 8 passes."
   },
   "v_smfmac_f32_32x32x32_bf8_bf8": {
     "description": "Multiply the 32x32 sparse matrix in the first input by the 32x32 matrix in the second input and accumulate the\nresult into the 32x32 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
@@ -3394,12 +3609,27 @@
     "operation": "D = A (sparse 32x32) * B (32x32) + D (32x32)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in FP8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 8 passes."
   },
+  "v_smfmac_f32_32x32x32bf8_fp8": {
+    "description": "Multiply the 32x32 sparse matrix in the first input by the 32x32 matrix in the second input and accumulate the\nresult into the 32x32 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
+    "operation": "D = A (sparse 32x32) * B (32x32) + D (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in FP8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 8 passes."
+  },
   "v_smfmac_f32_32x32x32_fp8_bf8": {
     "description": "Multiply the 32x32 sparse matrix in the first input by the 32x32 matrix in the second input and accumulate the\nresult into the 32x32 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
     "operation": "D = A (sparse 32x32) * B (32x32) + D (32x32)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in FP8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 8 passes."
   },
+  "v_smfmac_f32_32x32x32fp8_bf8": {
+    "description": "Multiply the 32x32 sparse matrix in the first input by the 32x32 matrix in the second input and accumulate the\nresult into the 32x32 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
+    "operation": "D = A (sparse 32x32) * B (32x32) + D (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in FP8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 8 passes."
+  },
   "v_smfmac_f32_32x32x32_fp8_fp8": {
+    "description": "Multiply the 32x32 sparse matrix in the first input by the 32x32 matrix in the second input and accumulate the\nresult into the 32x32 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
+    "operation": "D = A (sparse 32x32) * B (32x32) + D (32x32)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in FP8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in FP8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 8 passes.\nVOP3 instructions use one of two encodings:\nVOP3B       this encoding allows specifying a unique scalar destination, and is used only for:\nV_ADD_CO_U32\nV_SUB_CO_U32\nV_SUBREV_CO_U32\nV_ADDC_CO_U32\nV_SUBB_CO_U32\nV_SUBBREV_CO_U32\nV_DIV_SCALE_F32\nV_DIV_SCALE_F64\nV_MAD_U64_U32\nV_MAD_I64_I32\nVOP3A       all other VALU instructions use this encoding"
+  },
+  "v_smfmac_f32_32x32x32fp8_fp8": {
     "description": "Multiply the 32x32 sparse matrix in the first input by the 32x32 matrix in the second input and accumulate the\nresult into the 32x32 matrix stored in the destination registers using fused multiply add. Sparse indexes for the\nfirst matrix are given in the third input.",
     "operation": "D = A (sparse 32x32) * B (32x32) + D (32x32)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in FP8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in FP8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nThis instruction performs 8 passes.\nVOP3 instructions use one of two encodings:\nVOP3B       this encoding allows specifying a unique scalar destination, and is used only for:\nV_ADD_CO_U32\nV_SUB_CO_U32\nV_SUBREV_CO_U32\nV_ADDC_CO_U32\nV_SUBB_CO_U32\nV_SUBBREV_CO_U32\nV_DIV_SCALE_F32\nV_DIV_SCALE_F64\nV_MAD_U64_U32\nV_MAD_I64_I32\nVOP3A       all other VALU instructions use this encoding"

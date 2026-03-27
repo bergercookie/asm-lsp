@@ -179,10 +179,13 @@ def is_real_instruction(rec: dict) -> bool:
 
 
 def extract_by_suffix(d: dict, instr_keys: set, suffix: str,
-                      annotations: dict | None = None) -> list:
+                      annotations: dict | None = None,
+                      fallback_annotations: dict | None = None) -> list:
     """Extract real instructions whose record name ends with _{suffix}."""
     if annotations is None:
         annotations = {}
+    if fallback_annotations is None:
+        fallback_annotations = {}
     results = {}
     for key in instr_keys:
         if not (key.endswith(f'_{suffix}') or f'_{suffix}_' in key):
@@ -196,7 +199,8 @@ def extract_by_suffix(d: dict, instr_keys: set, suffix: str,
             continue
         template = build_asm_template(rec)
         brief = describe_instruction(key, rec, suffix)
-        summary = build_summary(brief, annotations.get(mnemonic))
+        ann = annotations.get(mnemonic) or fallback_annotations.get(mnemonic)
+        summary = build_summary(brief, ann)
         # Deduplicate: keep the first seen template per mnemonic
         if mnemonic not in results:
             results[mnemonic] = {
@@ -210,10 +214,13 @@ def extract_by_suffix(d: dict, instr_keys: set, suffix: str,
 
 
 def extract_by_predicate(d: dict, instr_keys: set, predicate_name: str, gen: str,
-                         annotations: dict | None = None) -> list:
+                         annotations: dict | None = None,
+                         fallback_annotations: dict | None = None) -> list:
     """Extract real instructions that match a specific SubtargetPredicate."""
     if annotations is None:
         annotations = {}
+    if fallback_annotations is None:
+        fallback_annotations = {}
     results = {}
     for key in instr_keys:
         rec = d.get(key, {})
@@ -229,7 +236,8 @@ def extract_by_predicate(d: dict, instr_keys: set, predicate_name: str, gen: str
             continue
         template = build_asm_template(rec)
         brief = describe_instruction(key, rec, gen)
-        summary = build_summary(brief, annotations.get(mnemonic))
+        ann = annotations.get(mnemonic) or fallback_annotations.get(mnemonic)
+        summary = build_summary(brief, ann)
         if mnemonic not in results:
             results[mnemonic] = {
                 'name': mnemonic,
@@ -381,9 +389,29 @@ def main():
     print(f"Loaded annotations: gfx11={len(ann_gfx11)}, gfx950={len(ann_gfx950)}, "
           f"gfx12={len(ann_gfx12)}, gfx1250={len(ann_gfx1250)}")
 
+    # Build a merged pool: for any mnemonic appearing in multiple PDFs, keep the
+    # entry with the richest description.  This lets GFX950 entries borrow from
+    # the CDNA4 PDF (which documents shared MFMA variants in more detail) and
+    # vice-versa, improving coverage without mixing generation-specific notes.
+    def _merge_ann(*dicts):
+        merged: dict = {}
+        for d in dicts:
+            for k, v in d.items():
+                if k not in merged or (
+                    len(v.get('description', '')) + len(v.get('operation', ''))
+                    > len(merged[k].get('description', '')) + len(merged[k].get('operation', ''))
+                ):
+                    merged[k] = v
+        return merged
+
+    ann_all = _merge_ann(ann_gfx11, ann_gfx950, ann_gfx12, ann_gfx1250)
+    print(f"Merged annotation pool: {len(ann_all)} unique mnemonics")
+
     # ----- GFX11 (RDNA3 / CDNA2-3) -----
     print("Extracting GFX11 instructions ...")
-    gfx11_instrs = extract_by_suffix(d, instr_keys, 'gfx11', annotations=ann_gfx11)
+    gfx11_instrs = extract_by_suffix(d, instr_keys, 'gfx11',
+                                     annotations=ann_gfx11,
+                                     fallback_annotations=ann_all)
     out_path = os.path.join(opcodes_dir, 'amdgpu-gfx11.json')
     with open(out_path, 'w') as f:
         json.dump(gfx11_instrs, f, indent=2)
@@ -393,10 +421,15 @@ def main():
     # GFX950 is a GFX9-family chip with extra MFMA instructions.
     # Base: GFX9/vi instructions + unique GFX950 predicate instructions.
     print("Extracting GFX950 instructions ...")
-    gfx9_instrs = extract_by_suffix(d, instr_keys, 'gfx9', annotations=ann_gfx950)
-    vi_instrs   = extract_by_suffix(d, instr_keys, 'vi',   annotations=ann_gfx950)
+    gfx9_instrs = extract_by_suffix(d, instr_keys, 'gfx9',
+                                    annotations=ann_gfx950,
+                                    fallback_annotations=ann_all)
+    vi_instrs   = extract_by_suffix(d, instr_keys, 'vi',
+                                    annotations=ann_gfx950,
+                                    fallback_annotations=ann_all)
     gfx950_specific = extract_by_predicate(d, instr_keys, 'HasGFX950Insts', 'gfx950',
-                                           annotations=ann_gfx950)
+                                           annotations=ann_gfx950,
+                                           fallback_annotations=ann_all)
     gfx950_instrs = merge_instrs(gfx9_instrs, vi_instrs, gfx950_specific)
     # For instructions without annotations, add GFX950 availability note
     gfx950_names = {i['name'] for i in gfx950_specific}
@@ -424,7 +457,9 @@ def main():
 
     # ----- GFX12 (RDNA4) -----
     print("Extracting GFX12 instructions ...")
-    gfx12_instrs = extract_by_suffix(d, instr_keys, 'gfx12', annotations=ann_gfx12)
+    gfx12_instrs = extract_by_suffix(d, instr_keys, 'gfx12',
+                                     annotations=ann_gfx12,
+                                     fallback_annotations=ann_all)
     out_path = os.path.join(opcodes_dir, 'amdgpu-gfx12.json')
     with open(out_path, 'w') as f:
         json.dump(gfx12_instrs, f, indent=2)
@@ -434,9 +469,12 @@ def main():
     # GFX1250 is a GFX12-family chip with additional CDNA4-specific instructions.
     # Include all GFX12 base instructions plus GFX1250-specific ones.
     print("Extracting GFX1250 instructions ...")
-    gfx1250_specific = extract_by_suffix(d, instr_keys, 'gfx1250', annotations=ann_gfx1250)
+    gfx1250_specific = extract_by_suffix(d, instr_keys, 'gfx1250',
+                                         annotations=ann_gfx1250,
+                                         fallback_annotations=ann_all)
     gfx1250_pred_instrs = extract_by_predicate(d, instr_keys, 'GFX125x', 'gfx1250',
-                                               annotations=ann_gfx1250)
+                                               annotations=ann_gfx1250,
+                                               fallback_annotations=ann_all)
     gfx1250_instrs = merge_instrs(gfx12_instrs, gfx1250_specific, gfx1250_pred_instrs)
     # Update summaries for GFX1250-specific ones without annotations
     gfx1250_names = {i['name'] for i in gfx1250_specific} | {i['name'] for i in gfx1250_pred_instrs}

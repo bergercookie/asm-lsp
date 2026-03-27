@@ -3094,15 +3094,30 @@
     "operation": "tmp = S2.f32;\ntmp += 32'F(S0[7 : 0].bf8) * 32'F(S1[7 : 0].bf8);\ntmp += 32'F(S0[15 : 8].bf8) * 32'F(S1[15 : 8].bf8);\ntmp += 32'F(S0[23 : 16].bf8) * 32'F(S1[23 : 16].bf8);\ntmp += 32'F(S0[31 : 24].bf8) * 32'F(S1[31 : 24].bf8);\nD0.f32 = tmp",
     "notes": ""
   },
+  "v_wmma_f32_16x16x16f16": {
+    "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x16) * B (16x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are half-precision float format. Matrices C and D are single-precision float format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.f16(16x16) * S1.f16(16x16) + S2.f32(16x16)\";\nEXEC = saved_exec"
+  },
   "v_wmma_f32_16x16x16_f16": {
     "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (16x16) * B (16x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are half-precision float format. Matrices C and D are single-precision float format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.f16(16x16) * S1.f16(16x16) + S2.f32(16x16)\";\nEXEC = saved_exec"
   },
+  "v_wmma_f32_16x16x16bf16": {
+    "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x16) * B (16x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are BF16 float format. Matrices C and D are single-precision float format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.bf16(16x16) * S1.bf16(16x16) + S2.f32(16x16)\";\nEXEC = saved_exec"
+  },
   "v_wmma_f32_16x16x16_bf16": {
     "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (16x16) * B (16x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are BF16 float format. Matrices C and D are single-precision float format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.bf16(16x16) * S1.bf16(16x16) + S2.f32(16x16)\";\nEXEC = saved_exec"
+  },
+  "v_wmma_f16_16x16x16f16": {
+    "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x16) * B (16x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are half-precision float format. Matrices C and D are half-precision float format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f16(16x16) = S0.f16(16x16) * S1.f16(16x16) + S2.f16(16x16)\";\nEXEC = saved_exec"
   },
   "v_wmma_f16_16x16x16_f16": {
     "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
@@ -3114,7 +3129,17 @@
     "operation": "D = A (16x16) * B (16x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are BF16 float format. Matrices C and D are BF16 float format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.bf16(16x16) = S0.bf16(16x16) * S1.bf16(16x16) + S2.bf16(16x16)\";\nEXEC = saved_exec"
   },
+  "v_wmma_bf16_16x16x16bf16": {
+    "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x16) * B (16x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are BF16 float format. Matrices C and D are BF16 float format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.bf16(16x16) = S0.bf16(16x16) * S1.bf16(16x16) + S2.bf16(16x16)\";\nEXEC = saved_exec"
+  },
   "v_wmma_i32_16x16x16_iu8": {
+    "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x16) * B (16x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are unsigned 8-bit integer format. Matrices C and D are signed 32-bit integer format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.i32(16x16) = S0.iu8(16x16) * S1.iu8(16x16) + S2.i32(16x16)\";\nEXEC = saved_exec"
+  },
+  "v_wmma_i32_16x16x16iu8": {
     "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (16x16) * B (16x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are unsigned 8-bit integer format. Matrices C and D are signed 32-bit integer format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.i32(16x16) = S0.iu8(16x16) * S1.iu8(16x16) + S2.i32(16x16)\";\nEXEC = saved_exec"
@@ -3124,7 +3149,17 @@
     "operation": "D = A (16x16) * B (16x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are unsigned 4-bit integer format. Matrices C and D are signed 32-bit integer format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.i32(16x16) = S0.iu4(16x16) * S1.iu4(16x16) + S2.i32(16x16)\";\nEXEC = saved_exec"
   },
+  "v_wmma_i32_16x16x16iu4": {
+    "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x16) * B (16x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are unsigned 4-bit integer format. Matrices C and D are signed 32-bit integer format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.i32(16x16) = S0.iu4(16x16) * S1.iu4(16x16) + S2.i32(16x16)\";\nEXEC = saved_exec"
+  },
   "v_wmma_f32_16x16x16_fp8_fp8": {
+    "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x16) * B (16x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are FP8 float format. Matrices C and D are single-precision float format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.fp8(16x16) * S1.fp8(16x16) + S2.f32(16x16)\";\nEXEC = saved_exec"
+  },
+  "v_wmma_f32_16x16x16fp8_fp8": {
     "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (16x16) * B (16x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are FP8 float format. Matrices C and D are single-precision float format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.fp8(16x16) * S1.fp8(16x16) + S2.f32(16x16)\";\nEXEC = saved_exec"
@@ -3134,10 +3169,25 @@
     "operation": "D = A (16x16) * B (16x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is FP8 float format. Matrix B is BF8 float format. Matrices C and D are single-precision float format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.fp8(16x16) * S1.bf8(16x16) + S2.f32(16x16)\";\nEXEC = saved_exec"
   },
+  "v_wmma_f32_16x16x16fp8_bf8": {
+    "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x16) * B (16x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is FP8 float format. Matrix B is BF8 float format. Matrices C and D are single-precision float format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.fp8(16x16) * S1.bf8(16x16) + S2.f32(16x16)\";\nEXEC = saved_exec"
+  },
   "v_wmma_f32_16x16x16_bf8_fp8": {
     "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
     "operation": "D = A (16x16) * B (16x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is BF8 float format. Matrix B is FP8 float format. Matrices C and D are single-precision float format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.bf8(16x16) * S1.fp8(16x16) + S2.f32(16x16)\";\nEXEC = saved_exec"
+  },
+  "v_wmma_f32_16x16x16bf8_fp8": {
+    "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x16) * B (16x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is BF8 float format. Matrix B is FP8 float format. Matrices C and D are single-precision float format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.bf8(16x16) * S1.fp8(16x16) + S2.f32(16x16)\";\nEXEC = saved_exec"
+  },
+  "v_wmma_f32_16x16x16bf8_bf8": {
+    "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x16) * B (16x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are BF8 float format. Matrices C and D are single-precision float format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.bf8(16x16) * S1.bf8(16x16) + S2.f32(16x16)\";\nEXEC = saved_exec"
   },
   "v_wmma_f32_16x16x16_bf8_bf8": {
     "description": "Multiply the 16x16 matrix in the first input by the 16x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
@@ -3149,7 +3199,17 @@
     "operation": "D = A (16x32) * B (32x16) + C (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are unsigned 4-bit integer format. Matrices C and D are signed 32-bit integer format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.i32(16x16) = S0.iu4(16x32) * S1.iu4(32x16) + S2.i32(16x16)\";\nEXEC = saved_exec"
   },
+  "v_wmma_i32_16x16x32iu4": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and add the 16x16 matrix in\nthe third input using fused multiply add. Store the resulting matrix into vector registers.",
+    "operation": "D = A (16x32) * B (32x16) + C (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrices A and B are unsigned 4-bit integer format. Matrices C and D are signed 32-bit integer format.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.i32(16x16) = S0.iu4(16x32) * S1.iu4(32x16) + S2.i32(16x16)\";\nEXEC = saved_exec"
+  },
   "v_swmmac_f32_16x16x32_f16": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
+    "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in half-precision float format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in half-precision float format. Matrix D is single-\nprecision float format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.f16(16x16) * S1.f16(32x16, index set from S2) + D0.f32(16x16)\";\nEXEC = saved_exec"
+  },
+  "v_swmmac_f32_16x16x32f16": {
     "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
     "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in half-precision float format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in half-precision float format. Matrix D is single-\nprecision float format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.f16(16x16) * S1.f16(32x16, index set from S2) + D0.f32(16x16)\";\nEXEC = saved_exec"
@@ -3159,7 +3219,17 @@
     "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF16 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF16 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.bf16(16x16) * S1.bf16(32x16, index set from S2) + D0.f32(16x16)\";\nEXEC = saved_exec"
   },
+  "v_swmmac_f32_16x16x32bf16": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
+    "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF16 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF16 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.bf16(16x16) * S1.bf16(32x16, index set from S2) + D0.f32(16x16)\";\nEXEC = saved_exec"
+  },
   "v_swmmac_f16_16x16x32_f16": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
+    "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in half-precision float format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in half-precision float format. Matrix D is half-\nprecision float format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f16(16x16) = S0.f16(16x16) * S1.f16(32x16, index set from S2) + D0.f16(16x16)\";\nEXEC = saved_exec"
+  },
+  "v_swmmac_f16_16x16x32f16": {
     "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
     "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in half-precision float format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in half-precision float format. Matrix D is half-\nprecision float format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f16(16x16) = S0.f16(16x16) * S1.f16(32x16, index set from S2) + D0.f16(16x16)\";\nEXEC = saved_exec"
@@ -3168,6 +3238,16 @@
     "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
     "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF16 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF16 float format. Matrix D is BF16 float format and is both the\noutput and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.bf16(16x16) = S0.bf16(16x16) * S1.bf16(32x16, index set from S2) + D0.bf16(16x16)\";\nEXEC = saved_exec"
+  },
+  "v_swmmac_bf16_16x16x32bf16": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
+    "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF16 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF16 float format. Matrix D is BF16 float format and is both the\noutput and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.bf16(16x16) = S0.bf16(16x16) * S1.bf16(32x16, index set from S2) + D0.bf16(16x16)\";\nEXEC = saved_exec"
+  },
+  "v_swmmac_i32_16x16x32iu8": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
+    "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in unsigned 8-bit integer format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in unsigned 8-bit integer format. Matrix D is signed\n32-bit integer format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.i32(16x16) = S0.iu8(16x16) * S1.iu8(32x16, index set from S2) + D0.i32(16x16)\";\nEXEC = saved_exec"
   },
   "v_swmmac_i32_16x16x32_iu8": {
     "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
@@ -3179,6 +3259,16 @@
     "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in unsigned 4-bit integer format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in unsigned 4-bit integer format. Matrix D is signed\n32-bit integer format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.i32(16x16) = S0.iu4(16x16) * S1.iu4(32x16, index set from S2) + D0.i32(16x16)\";\nEXEC = saved_exec"
   },
+  "v_swmmac_i32_16x16x32iu4": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
+    "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in unsigned 4-bit integer format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in unsigned 4-bit integer format. Matrix D is signed\n32-bit integer format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.i32(16x16) = S0.iu4(16x16) * S1.iu4(32x16, index set from S2) + D0.i32(16x16)\";\nEXEC = saved_exec"
+  },
+  "v_swmmac_i32_16x16x64iu4": {
+    "description": "Multiply the 16x64 matrix in the first input by the 64x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
+    "operation": "D = A (sparse 16x64) * B (64x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in unsigned 4-bit integer format, consuming half the physical storage of a dense\nmatrix with same dimensions. Matrix B is a dense matrix in unsigned 4-bit integer format. Matrix D is signed\n32-bit integer format and is both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.i32(16x16) = S0.iu4(16x32) * S1.iu4(64x16, index set from S2) + D0.i32(16x16)\";\nEXEC = saved_exec"
+  },
   "v_swmmac_i32_16x16x64_iu4": {
     "description": "Multiply the 16x64 matrix in the first input by the 64x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
     "operation": "D = A (sparse 16x64) * B (64x16) + D (16x16)",
@@ -3189,10 +3279,25 @@
     "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in FP8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in FP8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.fp8(16x16) * S1.fp8(32x16, index set from S2) + D0.f32(16x16)\";\nEXEC = saved_exec"
   },
+  "v_swmmac_f32_16x16x32fp8_fp8": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
+    "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in FP8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in FP8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.fp8(16x16) * S1.fp8(32x16, index set from S2) + D0.f32(16x16)\";\nEXEC = saved_exec"
+  },
+  "v_swmmac_f32_16x16x32fp8_bf8": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
+    "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in FP8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.fp8(16x16) * S1.bf8(32x16, index set from S2) + D0.f32(16x16)\";\nEXEC = saved_exec"
+  },
   "v_swmmac_f32_16x16x32_fp8_bf8": {
     "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
     "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in FP8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.fp8(16x16) * S1.bf8(32x16, index set from S2) + D0.f32(16x16)\";\nEXEC = saved_exec"
+  },
+  "v_swmmac_f32_16x16x32bf8_fp8": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
+    "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in FP8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.bf8(16x16) * S1.fp8(32x16, index set from S2) + D0.f32(16x16)\";\nEXEC = saved_exec"
   },
   "v_swmmac_f32_16x16x32_bf8_fp8": {
     "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
@@ -3200,6 +3305,11 @@
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in FP8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.bf8(16x16) * S1.fp8(32x16, index set from S2) + D0.f32(16x16)\";\nEXEC = saved_exec"
   },
   "v_swmmac_f32_16x16x32_bf8_bf8": {
+    "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
+    "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
+    "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.bf8(16x16) * S1.bf8(32x16, index set from S2) + D0.f32(16x16)\";\nEXEC = saved_exec\nThe VOPD encoded describes two VALU opcodes that are executed in parallel.\nFor instruction definitions, refer to the VOP1, VOP2 and VOP3 sections."
+  },
+  "v_swmmac_f32_16x16x32bf8_bf8": {
     "description": "Multiply the 16x32 matrix in the first input by the 32x16 matrix in the second input and accumulate the result\ninto the 16x16 matrix in the destination registers using fused multiply add. Sparse indexes for the first matrix\nare given in the third input.",
     "operation": "D = A (sparse 16x32) * B (32x16) + D (16x16)",
     "notes": "Each operand contains a single matrix whose elements are distributed across all lanes of the wave. A single\nmatrix multiply is computed and the row-column dot products are distributed across the vector ALU for higher\nperformance.\nMatrix A is a sparse matrix in BF8 float format, consuming half the physical storage of a dense matrix with\nsame dimensions. Matrix B is a dense matrix in BF8 float format. Matrix D is single-precision float format and\nis both the output and the accumulate input.\n2 out of every 4 elements on the K axis of matrix A are zero. The sparse indexes are used to determine which 2\nelements are zero.\nsaved_exec = EXEC;\nEXEC = 64'B(-1);\neval \"D0.f32(16x16) = S0.bf8(16x16) * S1.bf8(32x16, index set from S2) + D0.f32(16x16)\";\nEXEC = saved_exec\nThe VOPD encoded describes two VALU opcodes that are executed in parallel.\nFor instruction definitions, refer to the VOP1, VOP2 and VOP3 sections."
