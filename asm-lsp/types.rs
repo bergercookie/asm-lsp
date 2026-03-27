@@ -819,6 +819,18 @@ pub enum Arch {
     #[strum(serialize = "mips")]
     #[serde(rename = "mips")]
     Mips,
+    #[strum(serialize = "amdgpu-gfx11")]
+    #[serde(rename = "amdgpu-gfx11")]
+    AmdgpuGfx11,
+    #[strum(serialize = "amdgpu-gfx950")]
+    #[serde(rename = "amdgpu-gfx950")]
+    AmdgpuGfx950,
+    #[strum(serialize = "amdgpu-gfx12")]
+    #[serde(rename = "amdgpu-gfx12")]
+    AmdgpuGfx12,
+    #[strum(serialize = "amdgpu-gfx1250")]
+    #[serde(rename = "amdgpu-gfx1250")]
+    AmdgpuGfx1250,
     /// For testing purposes *only*. This is not a valid config option
     #[serde(skip)]
     None,
@@ -867,6 +879,12 @@ impl Arch {
                 load_registers_with_path!(Self::X86_64, "serialized/registers/x86_64");
             }
             Self::Z80 => load_registers_with_path!(Self::Z80, "serialized/registers/z80"),
+            Self::AmdgpuGfx11
+            | Self::AmdgpuGfx950
+            | Self::AmdgpuGfx12
+            | Self::AmdgpuGfx1250 => {
+                load_registers_with_path!(self, "serialized/registers/amdgpu");
+            }
             Self::None => unreachable!(),
         }
     }
@@ -923,6 +941,18 @@ impl Arch {
                 load_instructions_with_path!(Self::X86_64, "serialized/opcodes/x86_64");
             }
             Self::Z80 => load_instructions_with_path!(Self::Z80, "serialized/opcodes/z80"),
+            Self::AmdgpuGfx11 => {
+                load_instructions_with_path!(Self::AmdgpuGfx11, "serialized/opcodes/amdgpu-gfx11");
+            }
+            Self::AmdgpuGfx950 => {
+                load_instructions_with_path!(Self::AmdgpuGfx950, "serialized/opcodes/amdgpu-gfx950");
+            }
+            Self::AmdgpuGfx12 => {
+                load_instructions_with_path!(Self::AmdgpuGfx12, "serialized/opcodes/amdgpu-gfx12");
+            }
+            Self::AmdgpuGfx1250 => {
+                load_instructions_with_path!(Self::AmdgpuGfx1250, "serialized/opcodes/amdgpu-gfx1250");
+            }
             Self::None => unreachable!(),
         }
     }
@@ -977,6 +1007,10 @@ impl std::fmt::Display for Arch {
             Self::X86_64 => write!(f, "x86-64")?,
             Self::X86_AND_X86_64 => write!(f, "x86/x86-64")?,
             Self::Z80 => write!(f, "z80")?,
+            Self::AmdgpuGfx11 => write!(f, "amdgpu-gfx11")?,
+            Self::AmdgpuGfx950 => write!(f, "amdgpu-gfx950")?,
+            Self::AmdgpuGfx12 => write!(f, "amdgpu-gfx12")?,
+            Self::AmdgpuGfx1250 => write!(f, "amdgpu-gfx1250")?,
             Self::None => write!(f, "None")?,
         }
         Ok(())

@@ -17,10 +17,11 @@ mod tests {
         Register, ServerStore, TreeEntry, get_comp_resp, get_completes, get_hover_resp,
         get_word_from_pos_params, instr_filter_targets,
         parser::{
-            populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
-            populate_avr_instructions, populate_ca65_directives, populate_mars_pseudo_instructions,
-            populate_masm_nasm_fasm_mars_directives, populate_mips_instructions,
-            populate_power_isa_instructions, populate_riscv_instructions, populate_riscv_registers,
+            populate_6502_instructions, populate_amdgpu_instructions, populate_arm_instructions,
+            populate_avr_directives, populate_avr_instructions, populate_ca65_directives,
+            populate_mars_pseudo_instructions, populate_masm_nasm_fasm_mars_directives,
+            populate_mips_instructions, populate_power_isa_instructions,
+            populate_riscv_instructions, populate_riscv_registers,
         },
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers,
@@ -3293,6 +3294,42 @@ Width: 8 bits",
             "serialized/directives/mars",
             "../docs_store/directives/mars.xml",
             populate_masm_nasm_fasm_mars_directives
+        );
+    }
+
+    /**************************************************************************
+     * AMDGPU serialization freshness tests
+     *************************************************************************/
+    #[test]
+    fn serialized_amdgpu_gfx11_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/amdgpu-gfx11",
+            "../docs_store/opcodes/amdgpu-gfx11.json",
+            |s| populate_amdgpu_instructions(Arch::AmdgpuGfx11, s)
+        );
+    }
+    #[test]
+    fn serialized_amdgpu_gfx950_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/amdgpu-gfx950",
+            "../docs_store/opcodes/amdgpu-gfx950.json",
+            |s| populate_amdgpu_instructions(Arch::AmdgpuGfx950, s)
+        );
+    }
+    #[test]
+    fn serialized_amdgpu_gfx12_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/amdgpu-gfx12",
+            "../docs_store/opcodes/amdgpu-gfx12.json",
+            |s| populate_amdgpu_instructions(Arch::AmdgpuGfx12, s)
+        );
+    }
+    #[test]
+    fn serialized_amdgpu_gfx1250_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/amdgpu-gfx1250",
+            "../docs_store/opcodes/amdgpu-gfx1250.json",
+            |s| populate_amdgpu_instructions(Arch::AmdgpuGfx1250, s)
         );
     }
 }

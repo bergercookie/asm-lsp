@@ -9,7 +9,7 @@ use dirs::config_dir;
 
 use crate::types::{Arch, Assembler, Config, ConfigOptions, ProjectConfig, RootConfig};
 
-const ARCH_LIST: [Arch; 11] = [
+const ARCH_LIST: [Arch; 15] = [
     Arch::X86,
     Arch::X86_64,
     Arch::X86_AND_X86_64,
@@ -21,6 +21,10 @@ const ARCH_LIST: [Arch; 11] = [
     Arch::PowerISA,
     Arch::Avr,
     Arch::Mips,
+    Arch::AmdgpuGfx11,
+    Arch::AmdgpuGfx950,
+    Arch::AmdgpuGfx12,
+    Arch::AmdgpuGfx1250,
 ];
 
 const ASSEMBLER_LIST: [Assembler; 8] = [

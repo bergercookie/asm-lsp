@@ -737,6 +737,43 @@ pub fn populate_mips_instructions(json_contents: &str) -> Result<Vec<Instruction
     Ok(instructions)
 }
 
+/// Parse the provided JSON contents and return a vector of AMD GPU instructions.
+///
+/// The JSON format matches the simple array format used for MIPS:
+/// `[{"name": "v_add_f32", "summary": "...", "asm_templates": ["V_ADD_F32 VDST, SRC0, SRC1"]}, ...]`
+///
+/// The `arch` parameter specifies which AMD GPU generation these instructions belong to
+/// (e.g. `Arch::AmdgpuGfx11`, `Arch::AmdgpuGfx12`, etc.).
+///
+/// # Errors
+///
+/// Returns an error if the JSON is malformed or cannot be deserialized.
+pub fn populate_amdgpu_instructions(arch: Arch, json_contents: &str) -> Result<Vec<Instruction>> {
+    #[derive(Deserialize, Debug)]
+    struct AmdgpuInstruction {
+        pub name: String,
+        pub summary: String,
+        pub asm_templates: Vec<String>,
+    }
+
+    let raw_instrs: Vec<AmdgpuInstruction> =
+        serde_json::from_str(json_contents).map_err(|e| anyhow!("Failed to parse JSON: {e}"))?;
+    let instructions: Vec<Instruction> = raw_instrs
+        .into_iter()
+        .map(|instr| Instruction {
+            name: instr.name.to_ascii_lowercase(),
+            summary: instr.summary,
+            asm_templates: instr.asm_templates,
+            arch,
+            forms: Vec::new(),
+            aliases: Vec::new(),
+            url: None,
+        })
+        .collect();
+
+    Ok(instructions)
+}
+
 /// Parse the provided HTML contents and return a vector of all the instructions based on that.
 /// <https://www.masswerk.at/6502/6502_instruction_set.html>
 ///
