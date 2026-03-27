@@ -18,6 +18,41 @@ from collections import defaultdict
 
 
 # ---------------------------------------------------------------------------
+# Annotation helpers
+# ---------------------------------------------------------------------------
+
+def load_annotations(path: str) -> dict:
+    """Load instruction annotations JSON; return {} if file absent."""
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+
+def build_summary(brief: str, annotation: dict | None) -> str:
+    """Combine the auto-generated brief with PDF-extracted annotation.
+
+    Returns markdown-formatted summary with description, operation pseudocode
+    block, and notes sections when available; falls back to brief if not.
+    """
+    if not annotation:
+        return brief
+    desc = (annotation.get('description') or '').strip()
+    op   = (annotation.get('operation')   or '').strip()
+    notes = (annotation.get('notes')      or '').strip()
+    # Require at least a meaningful description
+    if len(desc) < 10:
+        return brief
+    parts = [desc]
+    if op:
+        parts.append('**Operation:**\n```\n' + op + '\n```')
+    if notes:
+        parts.append('**Notes:**\n' + notes)
+    return '\n\n'.join(parts)
+
+
+# ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
@@ -143,8 +178,11 @@ def is_real_instruction(rec: dict) -> bool:
     return True
 
 
-def extract_by_suffix(d: dict, instr_keys: set, suffix: str) -> list:
+def extract_by_suffix(d: dict, instr_keys: set, suffix: str,
+                      annotations: dict | None = None) -> list:
     """Extract real instructions whose record name ends with _{suffix}."""
+    if annotations is None:
+        annotations = {}
     results = {}
     for key in instr_keys:
         if not (key.endswith(f'_{suffix}') or f'_{suffix}_' in key):
@@ -157,12 +195,13 @@ def extract_by_suffix(d: dict, instr_keys: set, suffix: str) -> list:
         if not mnemonic:
             continue
         template = build_asm_template(rec)
-        desc = describe_instruction(key, rec, suffix)
+        brief = describe_instruction(key, rec, suffix)
+        summary = build_summary(brief, annotations.get(mnemonic))
         # Deduplicate: keep the first seen template per mnemonic
         if mnemonic not in results:
             results[mnemonic] = {
                 'name': mnemonic,
-                'summary': desc,
+                'summary': summary,
                 'asm_templates': [template] if template else [],
             }
         elif template and template not in results[mnemonic]['asm_templates']:
@@ -170,8 +209,11 @@ def extract_by_suffix(d: dict, instr_keys: set, suffix: str) -> list:
     return sorted(results.values(), key=lambda x: x['name'])
 
 
-def extract_by_predicate(d: dict, instr_keys: set, predicate_name: str, gen: str) -> list:
+def extract_by_predicate(d: dict, instr_keys: set, predicate_name: str, gen: str,
+                         annotations: dict | None = None) -> list:
     """Extract real instructions that match a specific SubtargetPredicate."""
+    if annotations is None:
+        annotations = {}
     results = {}
     for key in instr_keys:
         rec = d.get(key, {})
@@ -186,11 +228,12 @@ def extract_by_predicate(d: dict, instr_keys: set, predicate_name: str, gen: str
         if not mnemonic:
             continue
         template = build_asm_template(rec)
-        desc = describe_instruction(key, rec, gen)
+        brief = describe_instruction(key, rec, gen)
+        summary = build_summary(brief, annotations.get(mnemonic))
         if mnemonic not in results:
             results[mnemonic] = {
                 'name': mnemonic,
-                'summary': desc,
+                'summary': summary,
                 'asm_templates': [template] if template else [],
             }
         elif template and template not in results[mnemonic]['asm_templates']:
@@ -329,9 +372,18 @@ def main():
     instr_keys = set(instanceof.get('Instruction', []))
     print(f"Total TableGen Instruction records: {len(instr_keys)}")
 
+    # Load PDF-extracted annotations (gracefully absent)
+    ann_dir = os.path.join(repo_root, 'docs_store', 'annotations')
+    ann_gfx11   = load_annotations(os.path.join(ann_dir, 'amdgpu-gfx11-annotations.json'))
+    ann_gfx950  = load_annotations(os.path.join(ann_dir, 'amdgpu-gfx950-annotations.json'))
+    ann_gfx12   = load_annotations(os.path.join(ann_dir, 'amdgpu-gfx12-annotations.json'))
+    ann_gfx1250 = load_annotations(os.path.join(ann_dir, 'amdgpu-gfx1250-annotations.json'))
+    print(f"Loaded annotations: gfx11={len(ann_gfx11)}, gfx950={len(ann_gfx950)}, "
+          f"gfx12={len(ann_gfx12)}, gfx1250={len(ann_gfx1250)}")
+
     # ----- GFX11 (RDNA3 / CDNA2-3) -----
     print("Extracting GFX11 instructions ...")
-    gfx11_instrs = extract_by_suffix(d, instr_keys, 'gfx11')
+    gfx11_instrs = extract_by_suffix(d, instr_keys, 'gfx11', annotations=ann_gfx11)
     out_path = os.path.join(opcodes_dir, 'amdgpu-gfx11.json')
     with open(out_path, 'w') as f:
         json.dump(gfx11_instrs, f, indent=2)
@@ -341,19 +393,30 @@ def main():
     # GFX950 is a GFX9-family chip with extra MFMA instructions.
     # Base: GFX9/vi instructions + unique GFX950 predicate instructions.
     print("Extracting GFX950 instructions ...")
-    gfx9_instrs = extract_by_suffix(d, instr_keys, 'gfx9')
-    vi_instrs   = extract_by_suffix(d, instr_keys, 'vi')
-    gfx950_specific = extract_by_predicate(d, instr_keys, 'HasGFX950Insts', 'gfx950')
+    gfx9_instrs = extract_by_suffix(d, instr_keys, 'gfx9', annotations=ann_gfx950)
+    vi_instrs   = extract_by_suffix(d, instr_keys, 'vi',   annotations=ann_gfx950)
+    gfx950_specific = extract_by_predicate(d, instr_keys, 'HasGFX950Insts', 'gfx950',
+                                           annotations=ann_gfx950)
     gfx950_instrs = merge_instrs(gfx9_instrs, vi_instrs, gfx950_specific)
-    # Override summary for GFX950-specific ones
+    # For instructions without annotations, add GFX950 availability note
     gfx950_names = {i['name'] for i in gfx950_specific}
     for instr in gfx950_instrs:
-        if instr['name'] in gfx950_names:
-            instr['summary'] = describe_instruction(instr['name'], {}, 'gfx950')
-        elif 'gfx950' not in instr['summary']:
-            instr['summary'] = instr['summary'].replace(
-                'Available on', 'Available on GFX950 (CDNA3.5/MI350); originally'
+        summary = instr['summary']
+        # Only rewrite if it's the terse auto-generated brief (starts with a class label
+        # or "Available on") — annotated summaries start with prose description.
+        is_brief = summary.startswith('Available on') or any(
+            summary.startswith(h) for h in (
+                'Scalar', 'Vector', 'Buffer', 'Image', 'LDS', 'Flat',
+                'Export', 'Matrix', 'Dot', 'WMMA', 'Dual',
             )
+        )
+        if is_brief:
+            if instr['name'] in gfx950_names:
+                instr['summary'] = describe_instruction(instr['name'], {}, 'gfx950')
+            elif 'gfx950' not in summary:
+                instr['summary'] = summary.replace(
+                    'Available on', 'Available on GFX950 (CDNA3.5/MI350); originally'
+                )
     out_path = os.path.join(opcodes_dir, 'amdgpu-gfx950.json')
     with open(out_path, 'w') as f:
         json.dump(gfx950_instrs, f, indent=2)
@@ -361,7 +424,7 @@ def main():
 
     # ----- GFX12 (RDNA4) -----
     print("Extracting GFX12 instructions ...")
-    gfx12_instrs = extract_by_suffix(d, instr_keys, 'gfx12')
+    gfx12_instrs = extract_by_suffix(d, instr_keys, 'gfx12', annotations=ann_gfx12)
     out_path = os.path.join(opcodes_dir, 'amdgpu-gfx12.json')
     with open(out_path, 'w') as f:
         json.dump(gfx12_instrs, f, indent=2)
@@ -371,13 +434,21 @@ def main():
     # GFX1250 is a GFX12-family chip with additional CDNA4-specific instructions.
     # Include all GFX12 base instructions plus GFX1250-specific ones.
     print("Extracting GFX1250 instructions ...")
-    gfx1250_specific = extract_by_suffix(d, instr_keys, 'gfx1250')
-    gfx1250_pred_instrs = extract_by_predicate(d, instr_keys, 'GFX125x', 'gfx1250')
+    gfx1250_specific = extract_by_suffix(d, instr_keys, 'gfx1250', annotations=ann_gfx1250)
+    gfx1250_pred_instrs = extract_by_predicate(d, instr_keys, 'GFX125x', 'gfx1250',
+                                               annotations=ann_gfx1250)
     gfx1250_instrs = merge_instrs(gfx12_instrs, gfx1250_specific, gfx1250_pred_instrs)
-    # Update summaries for GFX1250-specific ones
+    # Update summaries for GFX1250-specific ones without annotations
     gfx1250_names = {i['name'] for i in gfx1250_specific} | {i['name'] for i in gfx1250_pred_instrs}
     for instr in gfx1250_instrs:
-        if instr['name'] in gfx1250_names:
+        summary = instr['summary']
+        is_brief = summary.startswith('Available on') or any(
+            summary.startswith(h) for h in (
+                'Scalar', 'Vector', 'Buffer', 'Image', 'LDS', 'Flat',
+                'Export', 'Matrix', 'Dot', 'WMMA', 'Dual',
+            )
+        )
+        if is_brief and instr['name'] in gfx1250_names:
             instr['summary'] = describe_instruction(instr['name'], {}, 'gfx1250')
     out_path = os.path.join(opcodes_dir, 'amdgpu-gfx1250.json')
     with open(out_path, 'w') as f:
