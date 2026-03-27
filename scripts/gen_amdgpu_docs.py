@@ -145,7 +145,7 @@ def describe_instruction(key: str, rec: dict, gen: str) -> str:
 
     gen_label = {
         'gfx11': 'GFX11 (RDNA3/CDNA2-3)',
-        'gfx950': 'GFX950 (CDNA3.5/MI350)',
+        'gfx950': 'GFX950 (CDNA4/MI350)',
         'gfx12': 'GFX12 (RDNA4)',
         'gfx1250': 'GFX1250 (CDNA4)',
     }.get(gen, gen)
@@ -417,8 +417,8 @@ def main():
         json.dump(gfx11_instrs, f, indent=2)
     print(f"  -> {len(gfx11_instrs)} unique mnemonics written to {out_path}")
 
-    # ----- GFX950 (CDNA3.5 / MI350) -----
-    # GFX950 is a GFX9-family chip with extra MFMA instructions.
+    # ----- GFX950 (CDNA4 / MI350) -----
+    # GFX950 is the CDNA4 GPU for Instinct MI350 (ISA 9.5.0, GFX9-family encoding).
     # Base: GFX9/vi instructions + unique GFX950 predicate instructions.
     print("Extracting GFX950 instructions ...")
     gfx9_instrs = extract_by_suffix(d, instr_keys, 'gfx9',
@@ -448,7 +448,7 @@ def main():
                 instr['summary'] = describe_instruction(instr['name'], {}, 'gfx950')
             elif 'gfx950' not in summary:
                 instr['summary'] = summary.replace(
-                    'Available on', 'Available on GFX950 (CDNA3.5/MI350); originally'
+                    'Available on', 'Available on GFX950 (CDNA4/MI350); originally'
                 )
     out_path = os.path.join(opcodes_dir, 'amdgpu-gfx950.json')
     with open(out_path, 'w') as f:
