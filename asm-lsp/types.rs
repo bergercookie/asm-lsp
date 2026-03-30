@@ -879,10 +879,7 @@ impl Arch {
                 load_registers_with_path!(Self::X86_64, "serialized/registers/x86_64");
             }
             Self::Z80 => load_registers_with_path!(Self::Z80, "serialized/registers/z80"),
-            Self::AmdgpuGfx11
-            | Self::AmdgpuGfx950
-            | Self::AmdgpuGfx12
-            | Self::AmdgpuGfx1250 => {
+            Self::AmdgpuGfx11 | Self::AmdgpuGfx950 | Self::AmdgpuGfx12 | Self::AmdgpuGfx1250 => {
                 load_registers_with_path!(self, "serialized/registers/amdgpu");
             }
             Self::None => unreachable!(),
@@ -945,13 +942,19 @@ impl Arch {
                 load_instructions_with_path!(Self::AmdgpuGfx11, "serialized/opcodes/amdgpu-gfx11");
             }
             Self::AmdgpuGfx950 => {
-                load_instructions_with_path!(Self::AmdgpuGfx950, "serialized/opcodes/amdgpu-gfx950");
+                load_instructions_with_path!(
+                    Self::AmdgpuGfx950,
+                    "serialized/opcodes/amdgpu-gfx950"
+                );
             }
             Self::AmdgpuGfx12 => {
                 load_instructions_with_path!(Self::AmdgpuGfx12, "serialized/opcodes/amdgpu-gfx12");
             }
             Self::AmdgpuGfx1250 => {
-                load_instructions_with_path!(Self::AmdgpuGfx1250, "serialized/opcodes/amdgpu-gfx1250");
+                load_instructions_with_path!(
+                    Self::AmdgpuGfx1250,
+                    "serialized/opcodes/amdgpu-gfx1250"
+                );
             }
             Self::None => unreachable!(),
         }
