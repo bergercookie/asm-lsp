@@ -925,6 +925,7 @@ pub fn get_hover_resp(
             || config.is_assembler_enabled(Assembler::Avr)
             || config.is_assembler_enabled(Assembler::Fasm)
             || config.is_assembler_enabled(Assembler::Mars)
+            || config.instruction_set.is_amdgpu()
         {
             // all gas, AVR, and Mars directives have a '.' prefix, some masm directives do
             let directive_lookup =
@@ -1024,6 +1025,11 @@ fn search_for_dir_by_assembler<'a>(
     dir_map: &'a HashMap<(Assembler, String), Directive>,
     config: &Config,
 ) -> Option<&'a Directive> {
+    if config.instruction_set.is_amdgpu()
+        && let Some(dir) = dir_map.get(&(Assembler::Amdgpu, word.to_string()))
+    {
+        return Some(dir);
+    }
     dir_map.get(&(config.assembler, word.to_string()))
 }
 
@@ -1049,10 +1055,11 @@ fn get_hover_resp_by_arch<T: Hoverable>(
 
     // For AMDGPU: if the exact mnemonic wasn't found, strip encoding suffixes
     // (_e32, _e64, _dpp, _sdwa, ...) and retry with the base mnemonic.
-    if matches!(instr_resp, (None, None)) && config.instruction_set.is_amdgpu() {
-        if let Some(base) = strip_amdgpu_encoding_suffix(&hovered_word) {
-            instr_resp = search_for_hoverable_by_arch(base, map, config);
-        }
+    if matches!(instr_resp, (None, None))
+        && config.instruction_set.is_amdgpu()
+        && let Some(base) = strip_amdgpu_encoding_suffix(&hovered_word)
+    {
+        instr_resp = search_for_hoverable_by_arch(base, map, config);
     }
 
     let value = match instr_resp {
@@ -1336,7 +1343,7 @@ pub fn get_comp_resp(
                     });
                 }
             }
-            // prepend all GAS, all Ca65, all AVR, all Mars, some MASM, some NASM directives with "."
+            // prepend all GAS, all Ca65, all AVR, all Mars, some MASM, some NASM, all AMD GPU directives with "."
             Some(".") => {
                 if config.is_assembler_enabled(Assembler::Gas)
                     || config.is_assembler_enabled(Assembler::Masm)
@@ -1344,6 +1351,7 @@ pub fn get_comp_resp(
                     || config.is_assembler_enabled(Assembler::Ca65)
                     || config.is_assembler_enabled(Assembler::Avr)
                     || config.is_assembler_enabled(Assembler::Mars)
+                    || config.is_assembler_enabled(Assembler::Amdgpu)
                 {
                     return Some(CompletionList {
                         is_incomplete: true,

@@ -163,6 +163,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                     }
                     Assembler::Ca65 => populate_ca65_directives(&conts)?,
                     Assembler::Avr => populate_avr_directives(&conts)?,
+                    Assembler::Amdgpu => populate_gas_directives(&conts)?,
                     Assembler::None => unreachable!(),
                 },
             };

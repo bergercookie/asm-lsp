@@ -462,6 +462,20 @@ fn gen_directives(root_path: &Path) -> Result<()> {
         .current_dir(root_path)
         .status()
         .with_context(|| anyhow!("Failed to regenerate serialized nasm directives"))?;
+    println!("\tamdgpu");
+    Command::new(PARSE_EXE)
+        .args([
+            "docs_store/directives/amdgpu.xml",
+            "-o",
+            "asm-lsp/serialized/directives/amdgpu",
+        ])
+        .arg("--doc-type")
+        .arg("directive")
+        .arg("--assembler")
+        .arg("amdgpu")
+        .current_dir(root_path)
+        .status()
+        .with_context(|| anyhow!("Failed to regenerate serialized amdgpu directives"))?;
 
     Ok(())
 }

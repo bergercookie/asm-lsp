@@ -1069,6 +1069,9 @@ pub enum Assembler {
     #[strum(serialize = "nasm")]
     #[serde(rename = "nasm")]
     Nasm,
+    #[strum(serialize = "amdgpu")]
+    #[serde(rename = "amdgpu")]
+    Amdgpu,
     #[serde(skip)]
     None,
 }
@@ -1109,6 +1112,7 @@ impl Assembler {
             Self::Mars => load_directives_with_path!(Self::Mars, "serialized/directives/mars"),
             Self::Masm => load_directives_with_path!(Self::Masm, "serialized/directives/masm"),
             Self::Nasm => load_directives_with_path!(Self::Nasm, "serialized/directives/nasm"),
+            Self::Amdgpu => load_directives_with_path!(Self::Amdgpu, "serialized/directives/amdgpu"),
             Self::None => unreachable!(),
         }
     }
@@ -1330,10 +1334,17 @@ impl RootConfig {
         // NOTE: `self.default_config` is assumed to be set to `Some` in
         // `get_root_config`
         assert!(self.default_config.is_some());
-        assembler_set.insert(self.default_config.as_ref().unwrap().assembler);
+        let root = self.default_config.as_ref().unwrap();
+        assembler_set.insert(root.assembler);
+        if root.instruction_set.is_amdgpu() {
+            assembler_set.insert(Assembler::Amdgpu);
+        }
         if let Some(ref projects) = self.projects {
             for project in projects {
                 assembler_set.insert(project.config.assembler);
+                if project.config.instruction_set.is_amdgpu() {
+                    assembler_set.insert(Assembler::Amdgpu);
+                }
             }
         }
 
@@ -1446,6 +1457,9 @@ impl Config {
 
     #[must_use]
     pub fn is_assembler_enabled(&self, assembler: Assembler) -> bool {
+        if assembler == Assembler::Amdgpu && self.instruction_set.is_amdgpu() {
+            return true;
+        }
         self.assembler == assembler
     }
 }
