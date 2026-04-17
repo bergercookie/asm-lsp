@@ -839,6 +839,12 @@ pub enum Arch {
 impl ArchOrAssembler for Arch {}
 
 impl Arch {
+    pub const fn is_amdgpu(self) -> bool {
+        matches!(
+            self,
+            Self::AmdgpuGfx11 | Self::AmdgpuGfx950 | Self::AmdgpuGfx12 | Self::AmdgpuGfx1250
+        )
+    }
     /// Setup registers for a particular architecture
     ///
     /// # Panics

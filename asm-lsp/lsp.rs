@@ -1027,6 +1027,17 @@ fn search_for_dir_by_assembler<'a>(
     dir_map.get(&(config.assembler, word.to_string()))
 }
 
+/// AMDGPU encoding suffixes that can be stripped to find the base mnemonic.
+/// Order matters: longer suffixes must come first to avoid partial matches.
+const AMDGPU_ENCODING_SUFFIXES: &[&str] = &["_dpp16", "_dpp8", "_sdwa", "_dpp", "_e64", "_e32"];
+
+/// If `word` ends with an AMDGPU encoding suffix, return the base mnemonic.
+fn strip_amdgpu_encoding_suffix(word: &str) -> Option<&str> {
+    AMDGPU_ENCODING_SUFFIXES
+        .iter()
+        .find_map(|suffix| word.strip_suffix(suffix))
+}
+
 fn get_hover_resp_by_arch<T: Hoverable>(
     word: &str,
     map: &HashMap<(Arch, String), T>,
@@ -1034,7 +1045,16 @@ fn get_hover_resp_by_arch<T: Hoverable>(
 ) -> Option<Hover> {
     // ensure hovered text is always lowercase
     let hovered_word = word.to_ascii_lowercase();
-    let instr_resp = search_for_hoverable_by_arch(&hovered_word, map, config);
+    let mut instr_resp = search_for_hoverable_by_arch(&hovered_word, map, config);
+
+    // For AMDGPU: if the exact mnemonic wasn't found, strip encoding suffixes
+    // (_e32, _e64, _dpp, _sdwa, ...) and retry with the base mnemonic.
+    if matches!(instr_resp, (None, None)) && config.instruction_set.is_amdgpu() {
+        if let Some(base) = strip_amdgpu_encoding_suffix(&hovered_word) {
+            instr_resp = search_for_hoverable_by_arch(base, map, config);
+        }
+    }
+
     let value = match instr_resp {
         (Some(resp1), Some(resp2)) => {
             format!("{resp1}\n\n{resp2}")
