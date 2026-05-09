@@ -144,10 +144,17 @@ def describe_instruction(key: str, rec: dict, gen: str) -> str:
         desc = "WMMA matrix instruction"
 
     gen_label = {
-        'gfx11': 'GFX11 (RDNA3/CDNA2-3)',
-        'gfx950': 'GFX950 (CDNA4/MI350)',
-        'gfx12': 'GFX12 (RDNA4)',
-        'gfx1250': 'GFX1250 (CDNA4)',
+        'gfx908':   'GFX908 (CDNA1/MI100)',
+        'gfx90a':   'GFX90A (CDNA2/MI200/MI250)',
+        'gfx942':   'GFX942 (CDNA3/MI300)',
+        'gfx950':   'GFX950 (CDNA4/MI350)',
+        'gfx10':    'GFX10 (RDNA1/Navi1x)',
+        'gfx10-3':  'GFX10.3 (RDNA2/Navi2x)',
+        'gfx11':    'GFX11 (RDNA3)',
+        'gfx11-5':  'GFX11.5 (RDNA3.5/Strix)',
+        'gfx12':    'GFX12 (RDNA4)',
+        'gfx1250':  'GFX1250 (CDNA4)',
+        'gfx1251':  'GFX1251 (CDNA4)',
     }.get(gen, gen)
 
     if desc:
@@ -492,6 +499,112 @@ def main():
     with open(out_path, 'w') as f:
         json.dump(gfx1250_instrs, f, indent=2)
     print(f"  -> {len(gfx1250_instrs)} unique mnemonics written to {out_path}")
+
+    # ----- GFX908 (CDNA1 / MI100) -----
+    # gfx908 = GFX9 base ISA + MAI/MFMA instructions (gfx908 was first to add MFMA).
+    # tblgen does not gate gfx908-specific records by a dedicated suffix or
+    # predicate; the CDNA1 ISA is the union of GFX9-suffixed records plus the
+    # MAI ones whose predicate string mentions HasMAIInsts (without requiring
+    # GFX90APlus/GFX940Plus, which would mean a newer chip).
+    print("Extracting GFX908 instructions ...")
+    vi_for_908 = extract_by_suffix(d, instr_keys, 'vi',
+                                   annotations={}, fallback_annotations=ann_all)
+    gfx9_for_908 = extract_by_suffix(d, instr_keys, 'gfx9',
+                                     annotations={}, fallback_annotations=ann_all)
+    mai_instrs = extract_by_predicate(d, instr_keys, 'HasMAIInsts', 'gfx908',
+                                      annotations={}, fallback_annotations=ann_all)
+    gfx908_instrs = merge_instrs(vi_for_908, gfx9_for_908, mai_instrs)
+    out_path = os.path.join(opcodes_dir, 'amdgpu-gfx908.json')
+    with open(out_path, 'w') as f:
+        json.dump(gfx908_instrs, f, indent=2)
+    print(f"  -> {len(gfx908_instrs)} unique mnemonics written to {out_path}")
+
+    # ----- GFX90A (CDNA2 / MI200/MI250) -----
+    # gfx90a inherits gfx908 and adds packed FP ops + extra MFMA variants.
+    print("Extracting GFX90A instructions ...")
+    gfx90a_suffix = extract_by_suffix(d, instr_keys, 'gfx90a',
+                                      annotations={}, fallback_annotations=ann_all)
+    gfx90a_only_pred = extract_by_predicate(d, instr_keys, 'isGFX90AOnly', 'gfx90a',
+                                            annotations={}, fallback_annotations=ann_all)
+    gfx90a_instrs = merge_instrs(gfx908_instrs, gfx90a_suffix, gfx90a_only_pred)
+    out_path = os.path.join(opcodes_dir, 'amdgpu-gfx90a.json')
+    with open(out_path, 'w') as f:
+        json.dump(gfx90a_instrs, f, indent=2)
+    print(f"  -> {len(gfx90a_instrs)} unique mnemonics written to {out_path}")
+
+    # ----- GFX942 (CDNA3 / MI300) -----
+    # gfx942 inherits gfx90a and adds gfx940-suffixed records and isGFX940Plus
+    # ones. We exclude GFX950-only records to keep gfx942 distinct from gfx950.
+    print("Extracting GFX942 instructions ...")
+    gfx940_suffix = extract_by_suffix(d, instr_keys, 'gfx940',
+                                      annotations={}, fallback_annotations=ann_all)
+    gfx940plus_pred = extract_by_predicate(d, instr_keys, 'isGFX940Plus', 'gfx942',
+                                           annotations={}, fallback_annotations=ann_all)
+    # Filter out GFX950-only items from the predicate sweep
+    gfx950_only_names = {i['name'] for i in extract_by_predicate(
+        d, instr_keys, 'HasGFX950Insts', 'gfx950',
+        annotations={}, fallback_annotations=ann_all)}
+    gfx940plus_pred = [i for i in gfx940plus_pred if i['name'] not in gfx950_only_names]
+    gfx942_instrs = merge_instrs(gfx90a_instrs, gfx940_suffix, gfx940plus_pred)
+    out_path = os.path.join(opcodes_dir, 'amdgpu-gfx942.json')
+    with open(out_path, 'w') as f:
+        json.dump(gfx942_instrs, f, indent=2)
+    print(f"  -> {len(gfx942_instrs)} unique mnemonics written to {out_path}")
+
+    # ----- GFX10 (RDNA1 / Navi1x: gfx1010-1013) -----
+    # tblgen does not differentiate RDNA1 vs RDNA2 base ISA at the record
+    # level (everything sits under isGFX10Only / suffix _gfx10), so RDNA1 and
+    # RDNA2 share the same extraction. We still emit two separate JSON files
+    # so users can pick the family-correct ISA name in their config.
+    print("Extracting GFX10 instructions ...")
+    gfx10_instrs = extract_by_suffix(d, instr_keys, 'gfx10',
+                                     annotations={}, fallback_annotations=ann_all)
+    out_path = os.path.join(opcodes_dir, 'amdgpu-gfx10.json')
+    with open(out_path, 'w') as f:
+        json.dump(gfx10_instrs, f, indent=2)
+    print(f"  -> {len(gfx10_instrs)} unique mnemonics written to {out_path}")
+
+    # ----- GFX10.3 (RDNA2 / Navi2x: gfx1030-1036) -----
+    print("Extracting GFX10.3 instructions ...")
+    gfx10_3_instrs = list(gfx10_instrs)
+    # Re-tag the gen label in any auto-generated brief summaries
+    for instr in gfx10_3_instrs:
+        if 'GFX10 (RDNA1' in instr['summary']:
+            instr['summary'] = instr['summary'].replace(
+                'GFX10 (RDNA1/Navi1x)', 'GFX10.3 (RDNA2/Navi2x)'
+            )
+    out_path = os.path.join(opcodes_dir, 'amdgpu-gfx10-3.json')
+    with open(out_path, 'w') as f:
+        json.dump(gfx10_3_instrs, f, indent=2)
+    print(f"  -> {len(gfx10_3_instrs)} unique mnemonics written to {out_path}")
+
+    # ----- GFX11.5 (RDNA3.5 / Strix: gfx1150-1153) -----
+    # No dedicated tblgen predicate; share the GFX11 instruction set.
+    print("Extracting GFX11.5 instructions ...")
+    gfx11_5_instrs = list(gfx11_instrs)
+    for instr in gfx11_5_instrs:
+        if 'GFX11 (RDNA3' in instr['summary']:
+            instr['summary'] = instr['summary'].replace(
+                'GFX11 (RDNA3)', 'GFX11.5 (RDNA3.5/Strix)'
+            )
+    out_path = os.path.join(opcodes_dir, 'amdgpu-gfx11-5.json')
+    with open(out_path, 'w') as f:
+        json.dump(gfx11_5_instrs, f, indent=2)
+    print(f"  -> {len(gfx11_5_instrs)} unique mnemonics written to {out_path}")
+
+    # ----- GFX1251 (CDNA4 sibling of gfx1250) -----
+    # tblgen treats gfx1250 and gfx1251 as the same instruction set
+    # (isGFX125xOnly / FeatureGFX1250Insts). Emit a parallel JSON so the
+    # Arch::AmdgpuGfx1251 variant can carry its own bincode.
+    print("Extracting GFX1251 instructions ...")
+    gfx1251_instrs = list(gfx1250_instrs)
+    for instr in gfx1251_instrs:
+        if 'GFX1250' in instr['summary']:
+            instr['summary'] = instr['summary'].replace('GFX1250', 'GFX1251')
+    out_path = os.path.join(opcodes_dir, 'amdgpu-gfx1251.json')
+    with open(out_path, 'w') as f:
+        json.dump(gfx1251_instrs, f, indent=2)
+    print(f"  -> {len(gfx1251_instrs)} unique mnemonics written to {out_path}")
 
     # ----- Shared register XML -----
     print("Generating register definitions ...")

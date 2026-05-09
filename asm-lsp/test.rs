@@ -3332,4 +3332,60 @@ Width: 8 bits",
             |s| populate_amdgpu_instructions(Arch::AmdgpuGfx1250, s)
         );
     }
+    #[test]
+    fn serialized_amdgpu_gfx908_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/amdgpu-gfx908",
+            "../docs_store/opcodes/amdgpu-gfx908.json",
+            |s| populate_amdgpu_instructions(Arch::AmdgpuGfx908, s)
+        );
+    }
+    #[test]
+    fn serialized_amdgpu_gfx90a_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/amdgpu-gfx90a",
+            "../docs_store/opcodes/amdgpu-gfx90a.json",
+            |s| populate_amdgpu_instructions(Arch::AmdgpuGfx90a, s)
+        );
+    }
+    #[test]
+    fn serialized_amdgpu_gfx942_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/amdgpu-gfx942",
+            "../docs_store/opcodes/amdgpu-gfx942.json",
+            |s| populate_amdgpu_instructions(Arch::AmdgpuGfx942, s)
+        );
+    }
+    #[test]
+    fn serialized_amdgpu_gfx10_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/amdgpu-gfx10",
+            "../docs_store/opcodes/amdgpu-gfx10.json",
+            |s| populate_amdgpu_instructions(Arch::AmdgpuGfx10, s)
+        );
+    }
+    #[test]
+    fn serialized_amdgpu_gfx10_3_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/amdgpu-gfx10-3",
+            "../docs_store/opcodes/amdgpu-gfx10-3.json",
+            |s| populate_amdgpu_instructions(Arch::AmdgpuGfx10_3, s)
+        );
+    }
+    #[test]
+    fn serialized_amdgpu_gfx11_5_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/amdgpu-gfx11-5",
+            "../docs_store/opcodes/amdgpu-gfx11-5.json",
+            |s| populate_amdgpu_instructions(Arch::AmdgpuGfx11_5, s)
+        );
+    }
+    #[test]
+    fn serialized_amdgpu_gfx1251_instructions_are_up_to_date() {
+        serialized_instructions_test!(
+            "serialized/opcodes/amdgpu-gfx1251",
+            "../docs_store/opcodes/amdgpu-gfx1251.json",
+            |s| populate_amdgpu_instructions(Arch::AmdgpuGfx1251, s)
+        );
+    }
 }

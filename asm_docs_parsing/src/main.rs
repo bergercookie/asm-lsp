@@ -99,10 +99,17 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                             Some(Arch::Avr) => {
                                 instrs = populate_avr_instructions(&conts)?;
                             }
-                            Some(arch @ Arch::AmdgpuGfx11)
+                            Some(arch @ Arch::AmdgpuGfx908)
+                            | Some(arch @ Arch::AmdgpuGfx90a)
+                            | Some(arch @ Arch::AmdgpuGfx942)
+                            | Some(arch @ Arch::AmdgpuGfx10)
+                            | Some(arch @ Arch::AmdgpuGfx10_3)
+                            | Some(arch @ Arch::AmdgpuGfx11)
+                            | Some(arch @ Arch::AmdgpuGfx11_5)
                             | Some(arch @ Arch::AmdgpuGfx950)
                             | Some(arch @ Arch::AmdgpuGfx12)
-                            | Some(arch @ Arch::AmdgpuGfx1250) => {
+                            | Some(arch @ Arch::AmdgpuGfx1250)
+                            | Some(arch @ Arch::AmdgpuGfx1251) => {
                                 instrs = populate_amdgpu_instructions(arch, &conts)?;
                             }
                             _ => {

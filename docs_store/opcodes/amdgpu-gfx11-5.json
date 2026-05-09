@@ -1767,7 +1767,7 @@
   },
   {
     "name": "exp",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "EXP TGT SRC0, SRC1, SRC2, SRC3 ROW_EN",
       "EXP TGT SRC0, SRC1, SRC2, SRC3",
@@ -3672,14 +3672,14 @@
   },
   {
     "name": "lds_direct_load",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "LDS_DIRECT_LOAD VDST WAITVDST"
     ]
   },
   {
     "name": "lds_param_load",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "LDS_PARAM_LOAD VDST, ATTR ATTRCHAN WAITVDST"
     ]
@@ -3854,7 +3854,7 @@
   },
   {
     "name": "s_atc_probe",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "S_ATC_PROBE SDATA, SBASE, SOFFSET",
       "S_ATC_PROBE SDATA, SBASE"
@@ -3862,7 +3862,7 @@
   },
   {
     "name": "s_atc_probe_buffer",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "S_ATC_PROBE_BUFFER SDATA, SBASE",
       "S_ATC_PROBE_BUFFER SDATA, SBASE, SOFFSET"
@@ -4909,14 +4909,14 @@
   },
   {
     "name": "s_max_f16",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "S_MAX_F16 SDST, SRC0, SRC1"
     ]
   },
   {
     "name": "s_max_f32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "S_MAX_F32 SDST, SRC0, SRC1"
     ]
@@ -4937,14 +4937,14 @@
   },
   {
     "name": "s_min_f16",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "S_MIN_F16 SDST, SRC0, SRC1"
     ]
   },
   {
     "name": "s_min_f32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "S_MIN_F32 SDST, SRC0, SRC1"
     ]
@@ -5413,14 +5413,14 @@
   },
   {
     "name": "s_subvector_loop_begin",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "S_SUBVECTOR_LOOP_BEGIN SDST, SIMM16"
     ]
   },
   {
     "name": "s_subvector_loop_end",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "S_SUBVECTOR_LOOP_END SDST, SIMM16"
     ]
@@ -5462,7 +5462,7 @@
   },
   {
     "name": "s_ttracedata_imm",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "S_TTRACEDATA_IMM SIMM16"
     ]
@@ -5497,7 +5497,7 @@
   },
   {
     "name": "s_waitcnt_depctr",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "S_WAITCNT_DEPCTR SIMM16"
     ]
@@ -6255,7 +6255,7 @@
   },
   {
     "name": "v_cmp_class_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_CLASS_F16_E32 SRC0, SRC1"
     ]
@@ -6276,7 +6276,7 @@
   },
   {
     "name": "v_cmp_class_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_CLASS_F32_E32 SRC0, SRC1"
     ]
@@ -6290,7 +6290,7 @@
   },
   {
     "name": "v_cmp_class_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_CLASS_F64_E32 SRC0, SRC1"
     ]
@@ -6311,7 +6311,7 @@
   },
   {
     "name": "v_cmp_eq_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_EQ_F16_E32 SRC0, SRC1"
     ]
@@ -6332,7 +6332,7 @@
   },
   {
     "name": "v_cmp_eq_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_EQ_F32_E32 SRC0, SRC1"
     ]
@@ -6346,7 +6346,7 @@
   },
   {
     "name": "v_cmp_eq_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_EQ_F64_E32 SRC0, SRC1"
     ]
@@ -6370,7 +6370,7 @@
   },
   {
     "name": "v_cmp_eq_i16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_EQ_I16_E32 SRC0, SRC1"
     ]
@@ -6391,7 +6391,7 @@
   },
   {
     "name": "v_cmp_eq_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_EQ_I32_E32 SRC0, SRC1"
     ]
@@ -6405,7 +6405,7 @@
   },
   {
     "name": "v_cmp_eq_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_EQ_I64_E32 SRC0, SRC1"
     ]
@@ -6429,7 +6429,7 @@
   },
   {
     "name": "v_cmp_eq_u16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_EQ_U16_E32 SRC0, SRC1"
     ]
@@ -6450,7 +6450,7 @@
   },
   {
     "name": "v_cmp_eq_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_EQ_U32_E32 SRC0, SRC1"
     ]
@@ -6464,14 +6464,14 @@
   },
   {
     "name": "v_cmp_eq_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_EQ_U64_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_f_f16",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_F_F16 VCC_LO, SRC0_MODIFIERS, SRC1_MODIFIERS",
       "V_CMP_F_F16 SRC0, SRC1 DPP8",
@@ -6485,14 +6485,14 @@
   },
   {
     "name": "v_cmp_f_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_F_F16_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_f_f32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_F_F32 VCC_LO, SRC0_MODIFIERS, SRC1_MODIFIERS",
       "V_CMP_F_F32 VCC, SRC0_MODIFIERS, SRC1_MODIFIERS",
@@ -6506,28 +6506,28 @@
   },
   {
     "name": "v_cmp_f_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_F_F32_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_f_f64",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_F_F64 SDST, SRC0_MODIFIERS, SRC1_MODIFIERS"
     ]
   },
   {
     "name": "v_cmp_f_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_F_F64_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_f_i32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_F_I32 VCC_LO, SRC0, SRC1 DPP8",
       "V_CMP_F_I32 SDST, SRC0, SRC1",
@@ -6541,28 +6541,28 @@
   },
   {
     "name": "v_cmp_f_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_F_I32_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_f_i64",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_F_I64 SDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_f_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_F_I64_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_f_u32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_F_U32 VCC_LO, SRC0, SRC1",
       "V_CMP_F_U32 SRC0, SRC1 DPP8",
@@ -6576,21 +6576,21 @@
   },
   {
     "name": "v_cmp_f_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_F_U32_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_f_u64",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_F_U64 SDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_f_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_F_U64_E32 SRC0, SRC1"
     ]
@@ -6611,7 +6611,7 @@
   },
   {
     "name": "v_cmp_ge_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GE_F16_E32 SRC0, SRC1"
     ]
@@ -6632,7 +6632,7 @@
   },
   {
     "name": "v_cmp_ge_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GE_F32_E32 SRC0, SRC1"
     ]
@@ -6646,7 +6646,7 @@
   },
   {
     "name": "v_cmp_ge_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GE_F64_E32 SRC0, SRC1"
     ]
@@ -6670,7 +6670,7 @@
   },
   {
     "name": "v_cmp_ge_i16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GE_I16_E32 SRC0, SRC1"
     ]
@@ -6691,7 +6691,7 @@
   },
   {
     "name": "v_cmp_ge_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GE_I32_E32 SRC0, SRC1"
     ]
@@ -6705,7 +6705,7 @@
   },
   {
     "name": "v_cmp_ge_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GE_I64_E32 SRC0, SRC1"
     ]
@@ -6729,7 +6729,7 @@
   },
   {
     "name": "v_cmp_ge_u16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GE_U16_E32 SRC0, SRC1"
     ]
@@ -6750,7 +6750,7 @@
   },
   {
     "name": "v_cmp_ge_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GE_U32_E32 SRC0, SRC1"
     ]
@@ -6764,7 +6764,7 @@
   },
   {
     "name": "v_cmp_ge_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GE_U64_E32 SRC0, SRC1"
     ]
@@ -6785,7 +6785,7 @@
   },
   {
     "name": "v_cmp_gt_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GT_F16_E32 SRC0, SRC1"
     ]
@@ -6806,7 +6806,7 @@
   },
   {
     "name": "v_cmp_gt_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GT_F32_E32 SRC0, SRC1"
     ]
@@ -6820,7 +6820,7 @@
   },
   {
     "name": "v_cmp_gt_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GT_F64_E32 SRC0, SRC1"
     ]
@@ -6844,7 +6844,7 @@
   },
   {
     "name": "v_cmp_gt_i16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GT_I16_E32 SRC0, SRC1"
     ]
@@ -6865,7 +6865,7 @@
   },
   {
     "name": "v_cmp_gt_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GT_I32_E32 SRC0, SRC1"
     ]
@@ -6879,7 +6879,7 @@
   },
   {
     "name": "v_cmp_gt_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GT_I64_E32 SRC0, SRC1"
     ]
@@ -6903,7 +6903,7 @@
   },
   {
     "name": "v_cmp_gt_u16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GT_U16_E32 SRC0, SRC1"
     ]
@@ -6924,7 +6924,7 @@
   },
   {
     "name": "v_cmp_gt_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GT_U32_E32 SRC0, SRC1"
     ]
@@ -6938,7 +6938,7 @@
   },
   {
     "name": "v_cmp_gt_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_GT_U64_E32 SRC0, SRC1"
     ]
@@ -6959,7 +6959,7 @@
   },
   {
     "name": "v_cmp_le_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LE_F16_E32 SRC0, SRC1"
     ]
@@ -6980,7 +6980,7 @@
   },
   {
     "name": "v_cmp_le_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LE_F32_E32 SRC0, SRC1"
     ]
@@ -6994,7 +6994,7 @@
   },
   {
     "name": "v_cmp_le_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LE_F64_E32 SRC0, SRC1"
     ]
@@ -7018,7 +7018,7 @@
   },
   {
     "name": "v_cmp_le_i16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LE_I16_E32 SRC0, SRC1"
     ]
@@ -7039,7 +7039,7 @@
   },
   {
     "name": "v_cmp_le_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LE_I32_E32 SRC0, SRC1"
     ]
@@ -7053,7 +7053,7 @@
   },
   {
     "name": "v_cmp_le_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LE_I64_E32 SRC0, SRC1"
     ]
@@ -7077,7 +7077,7 @@
   },
   {
     "name": "v_cmp_le_u16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LE_U16_E32 SRC0, SRC1"
     ]
@@ -7098,7 +7098,7 @@
   },
   {
     "name": "v_cmp_le_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LE_U32_E32 SRC0, SRC1"
     ]
@@ -7112,7 +7112,7 @@
   },
   {
     "name": "v_cmp_le_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LE_U64_E32 SRC0, SRC1"
     ]
@@ -7133,7 +7133,7 @@
   },
   {
     "name": "v_cmp_lg_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LG_F16_E32 SRC0, SRC1"
     ]
@@ -7154,7 +7154,7 @@
   },
   {
     "name": "v_cmp_lg_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LG_F32_E32 SRC0, SRC1"
     ]
@@ -7168,7 +7168,7 @@
   },
   {
     "name": "v_cmp_lg_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LG_F64_E32 SRC0, SRC1"
     ]
@@ -7189,7 +7189,7 @@
   },
   {
     "name": "v_cmp_lt_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LT_F16_E32 SRC0, SRC1"
     ]
@@ -7210,7 +7210,7 @@
   },
   {
     "name": "v_cmp_lt_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LT_F32_E32 SRC0, SRC1"
     ]
@@ -7224,7 +7224,7 @@
   },
   {
     "name": "v_cmp_lt_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LT_F64_E32 SRC0, SRC1"
     ]
@@ -7248,7 +7248,7 @@
   },
   {
     "name": "v_cmp_lt_i16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LT_I16_E32 SRC0, SRC1"
     ]
@@ -7269,7 +7269,7 @@
   },
   {
     "name": "v_cmp_lt_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LT_I32_E32 SRC0, SRC1"
     ]
@@ -7283,7 +7283,7 @@
   },
   {
     "name": "v_cmp_lt_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LT_I64_E32 SRC0, SRC1"
     ]
@@ -7307,7 +7307,7 @@
   },
   {
     "name": "v_cmp_lt_u16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LT_U16_E32 SRC0, SRC1"
     ]
@@ -7328,7 +7328,7 @@
   },
   {
     "name": "v_cmp_lt_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LT_U32_E32 SRC0, SRC1"
     ]
@@ -7342,7 +7342,7 @@
   },
   {
     "name": "v_cmp_lt_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_LT_U64_E32 SRC0, SRC1"
     ]
@@ -7366,7 +7366,7 @@
   },
   {
     "name": "v_cmp_ne_i16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NE_I16_E32 SRC0, SRC1"
     ]
@@ -7387,7 +7387,7 @@
   },
   {
     "name": "v_cmp_ne_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NE_I32_E32 SRC0, SRC1"
     ]
@@ -7401,7 +7401,7 @@
   },
   {
     "name": "v_cmp_ne_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NE_I64_E32 SRC0, SRC1"
     ]
@@ -7425,7 +7425,7 @@
   },
   {
     "name": "v_cmp_ne_u16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NE_U16_E32 SRC0, SRC1"
     ]
@@ -7446,7 +7446,7 @@
   },
   {
     "name": "v_cmp_ne_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NE_U32_E32 SRC0, SRC1"
     ]
@@ -7460,7 +7460,7 @@
   },
   {
     "name": "v_cmp_ne_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NE_U64_E32 SRC0, SRC1"
     ]
@@ -7481,7 +7481,7 @@
   },
   {
     "name": "v_cmp_neq_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NEQ_F16_E32 SRC0, SRC1"
     ]
@@ -7502,7 +7502,7 @@
   },
   {
     "name": "v_cmp_neq_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NEQ_F32_E32 SRC0, SRC1"
     ]
@@ -7516,7 +7516,7 @@
   },
   {
     "name": "v_cmp_neq_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NEQ_F64_E32 SRC0, SRC1"
     ]
@@ -7537,7 +7537,7 @@
   },
   {
     "name": "v_cmp_nge_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NGE_F16_E32 SRC0, SRC1"
     ]
@@ -7558,7 +7558,7 @@
   },
   {
     "name": "v_cmp_nge_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NGE_F32_E32 SRC0, SRC1"
     ]
@@ -7572,7 +7572,7 @@
   },
   {
     "name": "v_cmp_nge_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NGE_F64_E32 SRC0, SRC1"
     ]
@@ -7593,7 +7593,7 @@
   },
   {
     "name": "v_cmp_ngt_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NGT_F16_E32 SRC0, SRC1"
     ]
@@ -7614,7 +7614,7 @@
   },
   {
     "name": "v_cmp_ngt_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NGT_F32_E32 SRC0, SRC1"
     ]
@@ -7628,7 +7628,7 @@
   },
   {
     "name": "v_cmp_ngt_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NGT_F64_E32 SRC0, SRC1"
     ]
@@ -7649,7 +7649,7 @@
   },
   {
     "name": "v_cmp_nle_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NLE_F16_E32 SRC0, SRC1"
     ]
@@ -7670,7 +7670,7 @@
   },
   {
     "name": "v_cmp_nle_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NLE_F32_E32 SRC0, SRC1"
     ]
@@ -7684,7 +7684,7 @@
   },
   {
     "name": "v_cmp_nle_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NLE_F64_E32 SRC0, SRC1"
     ]
@@ -7705,7 +7705,7 @@
   },
   {
     "name": "v_cmp_nlg_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NLG_F16_E32 SRC0, SRC1"
     ]
@@ -7726,7 +7726,7 @@
   },
   {
     "name": "v_cmp_nlg_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NLG_F32_E32 SRC0, SRC1"
     ]
@@ -7740,7 +7740,7 @@
   },
   {
     "name": "v_cmp_nlg_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NLG_F64_E32 SRC0, SRC1"
     ]
@@ -7761,7 +7761,7 @@
   },
   {
     "name": "v_cmp_nlt_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NLT_F16_E32 SRC0, SRC1"
     ]
@@ -7782,7 +7782,7 @@
   },
   {
     "name": "v_cmp_nlt_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NLT_F32_E32 SRC0, SRC1"
     ]
@@ -7796,7 +7796,7 @@
   },
   {
     "name": "v_cmp_nlt_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_NLT_F64_E32 SRC0, SRC1"
     ]
@@ -7817,7 +7817,7 @@
   },
   {
     "name": "v_cmp_o_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_O_F16_E32 SRC0, SRC1"
     ]
@@ -7838,7 +7838,7 @@
   },
   {
     "name": "v_cmp_o_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_O_F32_E32 SRC0, SRC1"
     ]
@@ -7852,14 +7852,14 @@
   },
   {
     "name": "v_cmp_o_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_O_F64_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_t_f16",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_T_F16 VCC, SRC0, SRC1 DPP8",
       "V_CMP_T_F16 VCC_LO, SRC0_MODIFIERS, SRC1_MODIFIERS",
@@ -7873,14 +7873,14 @@
   },
   {
     "name": "v_cmp_t_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_T_F16_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_t_f32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_T_F32 SRC0_MODIFIERS, SRC1_MODIFIERS",
       "V_CMP_T_F32 VCC, SRC0, SRC1 DPP8",
@@ -7894,28 +7894,28 @@
   },
   {
     "name": "v_cmp_t_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_T_F32_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_t_f64",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_T_F64 SDST, SRC0_MODIFIERS, SRC1_MODIFIERS"
     ]
   },
   {
     "name": "v_cmp_t_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_T_F64_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_t_i32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_T_I32 SDST, SRC0, SRC1",
       "V_CMP_T_I32 VCC, SRC0, SRC1 DPP8",
@@ -7929,28 +7929,28 @@
   },
   {
     "name": "v_cmp_t_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_T_I32_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_t_i64",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_T_I64 SDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_t_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_T_I64_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_t_u32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_T_U32 SDST, SRC0, SRC1",
       "V_CMP_T_U32 VCC_LO, SRC0, SRC1",
@@ -7964,21 +7964,21 @@
   },
   {
     "name": "v_cmp_t_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_T_U32_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_t_u64",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_T_U64 SDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmp_t_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_T_U64_E32 SRC0, SRC1"
     ]
@@ -7999,7 +7999,7 @@
   },
   {
     "name": "v_cmp_u_f16_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_U_F16_E32 SRC0, SRC1"
     ]
@@ -8020,7 +8020,7 @@
   },
   {
     "name": "v_cmp_u_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_U_F32_E32 SRC0, SRC1"
     ]
@@ -8034,7 +8034,7 @@
   },
   {
     "name": "v_cmp_u_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMP_U_F64_E32 SRC0, SRC1"
     ]
@@ -8061,7 +8061,7 @@
   },
   {
     "name": "v_cmpx_class_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_CLASS_F32_E32 SRC0, SRC1"
     ]
@@ -8075,7 +8075,7 @@
   },
   {
     "name": "v_cmpx_class_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_CLASS_F64_E32 SRC0, SRC1"
     ]
@@ -8101,7 +8101,7 @@
   },
   {
     "name": "v_cmpx_eq_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_EQ_F32_E32 SRC0, SRC1"
     ]
@@ -8115,7 +8115,7 @@
   },
   {
     "name": "v_cmpx_eq_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_EQ_F64_E32 SRC0, SRC1"
     ]
@@ -8139,7 +8139,7 @@
   },
   {
     "name": "v_cmpx_eq_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_EQ_I32_E32 SRC0, SRC1"
     ]
@@ -8153,7 +8153,7 @@
   },
   {
     "name": "v_cmpx_eq_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_EQ_I64_E32 SRC0, SRC1"
     ]
@@ -8177,7 +8177,7 @@
   },
   {
     "name": "v_cmpx_eq_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_EQ_U32_E32 SRC0, SRC1"
     ]
@@ -8191,14 +8191,14 @@
   },
   {
     "name": "v_cmpx_eq_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_EQ_U64_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmpx_f_f16",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_F_F16 SRC0, SRC1 DPP8",
       "V_CMPX_F_F16 SRC0_MODIFIERS, SRC1_MODIFIERS",
@@ -8208,7 +8208,7 @@
   },
   {
     "name": "v_cmpx_f_f32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_F_F32 SRC0_MODIFIERS, SRC1_MODIFIERS",
       "V_CMPX_F_F32 SRC0, SRC1 DPP8",
@@ -8217,28 +8217,28 @@
   },
   {
     "name": "v_cmpx_f_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_F_F32_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmpx_f_f64",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_F_F64 SRC0_MODIFIERS, SRC1_MODIFIERS"
     ]
   },
   {
     "name": "v_cmpx_f_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_F_F64_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmpx_f_i32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_F_I32 SRC0, SRC1 DPP8",
       "V_CMPX_F_I32 SRC0, SRC1"
@@ -8246,28 +8246,28 @@
   },
   {
     "name": "v_cmpx_f_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_F_I32_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmpx_f_i64",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_F_I64 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmpx_f_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_F_I64_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmpx_f_u32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_F_U32 SRC0, SRC1",
       "V_CMPX_F_U32 SRC0, SRC1 DPP8"
@@ -8275,21 +8275,21 @@
   },
   {
     "name": "v_cmpx_f_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_F_U32_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmpx_f_u64",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_F_U64 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmpx_f_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_F_U64_E32 SRC0, SRC1"
     ]
@@ -8315,7 +8315,7 @@
   },
   {
     "name": "v_cmpx_ge_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_GE_F32_E32 SRC0, SRC1"
     ]
@@ -8329,7 +8329,7 @@
   },
   {
     "name": "v_cmpx_ge_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_GE_F64_E32 SRC0, SRC1"
     ]
@@ -8353,7 +8353,7 @@
   },
   {
     "name": "v_cmpx_ge_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_GE_I32_E32 SRC0, SRC1"
     ]
@@ -8367,7 +8367,7 @@
   },
   {
     "name": "v_cmpx_ge_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_GE_I64_E32 SRC0, SRC1"
     ]
@@ -8391,7 +8391,7 @@
   },
   {
     "name": "v_cmpx_ge_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_GE_U32_E32 SRC0, SRC1"
     ]
@@ -8405,7 +8405,7 @@
   },
   {
     "name": "v_cmpx_ge_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_GE_U64_E32 SRC0, SRC1"
     ]
@@ -8431,7 +8431,7 @@
   },
   {
     "name": "v_cmpx_gt_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_GT_F32_E32 SRC0, SRC1"
     ]
@@ -8445,7 +8445,7 @@
   },
   {
     "name": "v_cmpx_gt_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_GT_F64_E32 SRC0, SRC1"
     ]
@@ -8469,7 +8469,7 @@
   },
   {
     "name": "v_cmpx_gt_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_GT_I32_E32 SRC0, SRC1"
     ]
@@ -8483,7 +8483,7 @@
   },
   {
     "name": "v_cmpx_gt_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_GT_I64_E32 SRC0, SRC1"
     ]
@@ -8507,7 +8507,7 @@
   },
   {
     "name": "v_cmpx_gt_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_GT_U32_E32 SRC0, SRC1"
     ]
@@ -8521,7 +8521,7 @@
   },
   {
     "name": "v_cmpx_gt_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_GT_U64_E32 SRC0, SRC1"
     ]
@@ -8547,7 +8547,7 @@
   },
   {
     "name": "v_cmpx_le_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_LE_F32_E32 SRC0, SRC1"
     ]
@@ -8561,7 +8561,7 @@
   },
   {
     "name": "v_cmpx_le_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_LE_F64_E32 SRC0, SRC1"
     ]
@@ -8585,7 +8585,7 @@
   },
   {
     "name": "v_cmpx_le_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_LE_I32_E32 SRC0, SRC1"
     ]
@@ -8599,7 +8599,7 @@
   },
   {
     "name": "v_cmpx_le_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_LE_I64_E32 SRC0, SRC1"
     ]
@@ -8623,7 +8623,7 @@
   },
   {
     "name": "v_cmpx_le_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_LE_U32_E32 SRC0, SRC1"
     ]
@@ -8637,7 +8637,7 @@
   },
   {
     "name": "v_cmpx_le_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_LE_U64_E32 SRC0, SRC1"
     ]
@@ -8663,7 +8663,7 @@
   },
   {
     "name": "v_cmpx_lg_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_LG_F32_E32 SRC0, SRC1"
     ]
@@ -8677,7 +8677,7 @@
   },
   {
     "name": "v_cmpx_lg_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_LG_F64_E32 SRC0, SRC1"
     ]
@@ -8703,7 +8703,7 @@
   },
   {
     "name": "v_cmpx_lt_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_LT_F32_E32 SRC0, SRC1"
     ]
@@ -8717,7 +8717,7 @@
   },
   {
     "name": "v_cmpx_lt_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_LT_F64_E32 SRC0, SRC1"
     ]
@@ -8741,7 +8741,7 @@
   },
   {
     "name": "v_cmpx_lt_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_LT_I32_E32 SRC0, SRC1"
     ]
@@ -8755,7 +8755,7 @@
   },
   {
     "name": "v_cmpx_lt_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_LT_I64_E32 SRC0, SRC1"
     ]
@@ -8779,7 +8779,7 @@
   },
   {
     "name": "v_cmpx_lt_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_LT_U32_E32 SRC0, SRC1"
     ]
@@ -8793,7 +8793,7 @@
   },
   {
     "name": "v_cmpx_lt_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_LT_U64_E32 SRC0, SRC1"
     ]
@@ -8817,7 +8817,7 @@
   },
   {
     "name": "v_cmpx_ne_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NE_I32_E32 SRC0, SRC1"
     ]
@@ -8831,7 +8831,7 @@
   },
   {
     "name": "v_cmpx_ne_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NE_I64_E32 SRC0, SRC1"
     ]
@@ -8855,7 +8855,7 @@
   },
   {
     "name": "v_cmpx_ne_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NE_U32_E32 SRC0, SRC1"
     ]
@@ -8869,7 +8869,7 @@
   },
   {
     "name": "v_cmpx_ne_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NE_U64_E32 SRC0, SRC1"
     ]
@@ -8895,7 +8895,7 @@
   },
   {
     "name": "v_cmpx_neq_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NEQ_F32_E32 SRC0, SRC1"
     ]
@@ -8909,7 +8909,7 @@
   },
   {
     "name": "v_cmpx_neq_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NEQ_F64_E32 SRC0, SRC1"
     ]
@@ -8935,7 +8935,7 @@
   },
   {
     "name": "v_cmpx_nge_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NGE_F32_E32 SRC0, SRC1"
     ]
@@ -8949,7 +8949,7 @@
   },
   {
     "name": "v_cmpx_nge_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NGE_F64_E32 SRC0, SRC1"
     ]
@@ -8975,7 +8975,7 @@
   },
   {
     "name": "v_cmpx_ngt_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NGT_F32_E32 SRC0, SRC1"
     ]
@@ -8989,7 +8989,7 @@
   },
   {
     "name": "v_cmpx_ngt_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NGT_F64_E32 SRC0, SRC1"
     ]
@@ -9015,7 +9015,7 @@
   },
   {
     "name": "v_cmpx_nle_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NLE_F32_E32 SRC0, SRC1"
     ]
@@ -9029,7 +9029,7 @@
   },
   {
     "name": "v_cmpx_nle_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NLE_F64_E32 SRC0, SRC1"
     ]
@@ -9055,7 +9055,7 @@
   },
   {
     "name": "v_cmpx_nlg_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NLG_F32_E32 SRC0, SRC1"
     ]
@@ -9069,7 +9069,7 @@
   },
   {
     "name": "v_cmpx_nlg_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NLG_F64_E32 SRC0, SRC1"
     ]
@@ -9095,7 +9095,7 @@
   },
   {
     "name": "v_cmpx_nlt_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NLT_F32_E32 SRC0, SRC1"
     ]
@@ -9109,7 +9109,7 @@
   },
   {
     "name": "v_cmpx_nlt_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_NLT_F64_E32 SRC0, SRC1"
     ]
@@ -9135,7 +9135,7 @@
   },
   {
     "name": "v_cmpx_o_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_O_F32_E32 SRC0, SRC1"
     ]
@@ -9149,14 +9149,14 @@
   },
   {
     "name": "v_cmpx_o_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_O_F64_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmpx_t_f16",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_T_F16 SRC0_MODIFIERS, SRC1_MODIFIERS DPP8",
       "V_CMPX_T_F16 SRC0_MODIFIERS, SRC1_MODIFIERS",
@@ -9166,7 +9166,7 @@
   },
   {
     "name": "v_cmpx_t_f32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_T_F32 SRC0_MODIFIERS, SRC1_MODIFIERS",
       "V_CMPX_T_F32 SRC0_MODIFIERS, SRC1_MODIFIERS DPP8",
@@ -9176,7 +9176,7 @@
   },
   {
     "name": "v_cmpx_t_f64",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_T_F64 SRC0, SRC1",
       "V_CMPX_T_F64 SRC0_MODIFIERS, SRC1_MODIFIERS"
@@ -9184,7 +9184,7 @@
   },
   {
     "name": "v_cmpx_t_i32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_T_I32 SRC0, SRC1 DPP8",
       "V_CMPX_T_I32 SRC0, SRC1"
@@ -9192,28 +9192,28 @@
   },
   {
     "name": "v_cmpx_t_i32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_T_I32_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmpx_t_i64",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_T_I64 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmpx_t_i64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_T_I64_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmpx_t_u32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_T_U32 SRC0, SRC1",
       "V_CMPX_T_U32 SRC0, SRC1 DPP8"
@@ -9221,21 +9221,21 @@
   },
   {
     "name": "v_cmpx_t_u32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_T_U32_E32 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmpx_t_u64",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_T_U64 SRC0, SRC1"
     ]
   },
   {
     "name": "v_cmpx_t_u64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_T_U64_E32 SRC0, SRC1"
     ]
@@ -9261,7 +9261,7 @@
   },
   {
     "name": "v_cmpx_u_f32_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_U_F32_E32 SRC0, SRC1"
     ]
@@ -9275,7 +9275,7 @@
   },
   {
     "name": "v_cmpx_u_f64_e32",
-    "summary": "Available on GFX11 (RDNA3).",
+    "summary": "Available on GFX11.5 (RDNA3.5/Strix).",
     "asm_templates": [
       "V_CMPX_U_F64_E32 SRC0, SRC1"
     ]

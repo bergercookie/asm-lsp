@@ -921,7 +921,7 @@
   },
   {
     "name": "cluster_load_async_to_lds_b128",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "CLUSTER_LOAD_ASYNC_TO_LDS_B128 VDST, VADDR, SADDR",
       "CLUSTER_LOAD_ASYNC_TO_LDS_B128 VDST, VADDR, OFF"
@@ -929,7 +929,7 @@
   },
   {
     "name": "cluster_load_async_to_lds_b32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "CLUSTER_LOAD_ASYNC_TO_LDS_B32 VDST, VADDR, OFF",
       "CLUSTER_LOAD_ASYNC_TO_LDS_B32 VDST, VADDR, SADDR"
@@ -937,7 +937,7 @@
   },
   {
     "name": "cluster_load_async_to_lds_b64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "CLUSTER_LOAD_ASYNC_TO_LDS_B64 VDST, VADDR, OFF",
       "CLUSTER_LOAD_ASYNC_TO_LDS_B64 VDST, VADDR, SADDR"
@@ -945,7 +945,7 @@
   },
   {
     "name": "cluster_load_async_to_lds_b8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "CLUSTER_LOAD_ASYNC_TO_LDS_B8 VDST, VADDR, OFF",
       "CLUSTER_LOAD_ASYNC_TO_LDS_B8 VDST, VADDR, SADDR"
@@ -953,7 +953,7 @@
   },
   {
     "name": "cluster_load_b128",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "CLUSTER_LOAD_B128 VDST, VADDR, OFF",
       "CLUSTER_LOAD_B128 VDST, VADDR, SADDR"
@@ -961,7 +961,7 @@
   },
   {
     "name": "cluster_load_b32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "CLUSTER_LOAD_B32 VDST, VADDR, SADDR",
       "CLUSTER_LOAD_B32 VDST, VADDR, OFF"
@@ -969,7 +969,7 @@
   },
   {
     "name": "cluster_load_b64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "CLUSTER_LOAD_B64 VDST, VADDR, OFF",
       "CLUSTER_LOAD_B64 VDST, VADDR, SADDR"
@@ -2078,7 +2078,7 @@
   },
   {
     "name": "flat_atomic_max_num_f64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "FLAT_ATOMIC_MAX_NUM_F64 VDST, VADDR, VDATA, SADDR",
       "FLAT_ATOMIC_MAX_NUM_F64 VDST, VADDR, VDATA",
@@ -2138,7 +2138,7 @@
   },
   {
     "name": "flat_atomic_min_num_f64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "FLAT_ATOMIC_MIN_NUM_F64 VADDR, VDATA, SADDR",
       "FLAT_ATOMIC_MIN_NUM_F64 VDST, VADDR, VDATA",
@@ -2374,7 +2374,7 @@
   },
   {
     "name": "flat_load_monitor_b128",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "FLAT_LOAD_MONITOR_B128 VDST, VADDR",
       "FLAT_LOAD_MONITOR_B128 VDST, VADDR, SADDR"
@@ -2382,7 +2382,7 @@
   },
   {
     "name": "flat_load_monitor_b32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "FLAT_LOAD_MONITOR_B32 VDST, VADDR, SADDR",
       "FLAT_LOAD_MONITOR_B32 VDST, VADDR"
@@ -2390,7 +2390,7 @@
   },
   {
     "name": "flat_load_monitor_b64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "FLAT_LOAD_MONITOR_B64 VDST, VADDR, SADDR",
       "FLAT_LOAD_MONITOR_B64 VDST, VADDR"
@@ -2414,7 +2414,7 @@
   },
   {
     "name": "flat_prefetch_b8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "FLAT_PREFETCH_B8 VADDR",
       "FLAT_PREFETCH_B8 VADDR, SADDR"
@@ -2646,7 +2646,7 @@
   },
   {
     "name": "global_atomic_max_num_f64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_ATOMIC_MAX_NUM_F64 VADDR, VDATA, OFF",
       "GLOBAL_ATOMIC_MAX_NUM_F64 VDST, VADDR, VDATA, SADDR",
@@ -2706,7 +2706,7 @@
   },
   {
     "name": "global_atomic_min_num_f64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_ATOMIC_MIN_NUM_F64 VDST, VADDR, VDATA, SADDR",
       "GLOBAL_ATOMIC_MIN_NUM_F64 VADDR, VDATA, SADDR",
@@ -2871,7 +2871,7 @@
   },
   {
     "name": "global_load_async_to_lds_b128",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_LOAD_ASYNC_TO_LDS_B128 VDST, VADDR, OFF",
       "GLOBAL_LOAD_ASYNC_TO_LDS_B128 VDST, VADDR, SADDR"
@@ -2879,7 +2879,7 @@
   },
   {
     "name": "global_load_async_to_lds_b32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_LOAD_ASYNC_TO_LDS_B32 VDST, VADDR, OFF",
       "GLOBAL_LOAD_ASYNC_TO_LDS_B32 VDST, VADDR, SADDR"
@@ -2887,7 +2887,7 @@
   },
   {
     "name": "global_load_async_to_lds_b64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_LOAD_ASYNC_TO_LDS_B64 VDST, VADDR, OFF",
       "GLOBAL_LOAD_ASYNC_TO_LDS_B64 VDST, VADDR, SADDR"
@@ -2895,7 +2895,7 @@
   },
   {
     "name": "global_load_async_to_lds_b8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_LOAD_ASYNC_TO_LDS_B8 VDST, VADDR, SADDR",
       "GLOBAL_LOAD_ASYNC_TO_LDS_B8 VDST, VADDR, OFF"
@@ -3007,7 +3007,7 @@
   },
   {
     "name": "global_load_monitor_b128",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_LOAD_MONITOR_B128 VDST, VADDR, SADDR",
       "GLOBAL_LOAD_MONITOR_B128 VDST, VADDR, OFF"
@@ -3015,7 +3015,7 @@
   },
   {
     "name": "global_load_monitor_b32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_LOAD_MONITOR_B32 VDST, VADDR, SADDR",
       "GLOBAL_LOAD_MONITOR_B32 VDST, VADDR, OFF"
@@ -3023,7 +3023,7 @@
   },
   {
     "name": "global_load_monitor_b64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_LOAD_MONITOR_B64 VDST, VADDR, SADDR",
       "GLOBAL_LOAD_MONITOR_B64 VDST, VADDR, OFF"
@@ -3031,7 +3031,7 @@
   },
   {
     "name": "global_load_tr16_b128",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_LOAD_TR16_B128 VDST, VADDR, SADDR",
       "GLOBAL_LOAD_TR16_B128 VDST, VADDR, OFF"
@@ -3039,7 +3039,7 @@
   },
   {
     "name": "global_load_tr4_b64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_LOAD_TR4_B64 VDST, VADDR, SADDR",
       "GLOBAL_LOAD_TR4_B64 VDST, VADDR, OFF"
@@ -3047,7 +3047,7 @@
   },
   {
     "name": "global_load_tr6_b96",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_LOAD_TR6_B96 VDST, VADDR, OFF",
       "GLOBAL_LOAD_TR6_B96 VDST, VADDR, SADDR"
@@ -3055,7 +3055,7 @@
   },
   {
     "name": "global_load_tr8_b64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_LOAD_TR8_B64 VDST, VADDR, OFF",
       "GLOBAL_LOAD_TR8_B64 VDST, VADDR, SADDR"
@@ -3095,7 +3095,7 @@
   },
   {
     "name": "global_prefetch_b8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_PREFETCH_B8 VADDR, OFF",
       "GLOBAL_PREFETCH_B8 VADDR, SADDR"
@@ -3111,7 +3111,7 @@
   },
   {
     "name": "global_store_async_from_lds_b128",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_STORE_ASYNC_FROM_LDS_B128 VADDR, VDATA, OFF",
       "GLOBAL_STORE_ASYNC_FROM_LDS_B128 VADDR, VDATA, SADDR"
@@ -3119,7 +3119,7 @@
   },
   {
     "name": "global_store_async_from_lds_b32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_STORE_ASYNC_FROM_LDS_B32 VADDR, VDATA, OFF",
       "GLOBAL_STORE_ASYNC_FROM_LDS_B32 VADDR, VDATA, SADDR"
@@ -3127,7 +3127,7 @@
   },
   {
     "name": "global_store_async_from_lds_b64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_STORE_ASYNC_FROM_LDS_B64 VADDR, VDATA, OFF",
       "GLOBAL_STORE_ASYNC_FROM_LDS_B64 VADDR, VDATA, SADDR"
@@ -3135,7 +3135,7 @@
   },
   {
     "name": "global_store_async_from_lds_b8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "GLOBAL_STORE_ASYNC_FROM_LDS_B8 VADDR, VDATA, SADDR",
       "GLOBAL_STORE_ASYNC_FROM_LDS_B8 VADDR, VDATA, OFF"
@@ -4638,7 +4638,7 @@
   },
   {
     "name": "s_call_i64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "S_CALL_I64 SDST, SIMM16"
     ]
@@ -5234,7 +5234,7 @@
   },
   {
     "name": "s_get_pc_i64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "S_GET_PC_I64 SDST"
     ]
@@ -5832,7 +5832,7 @@
   },
   {
     "name": "s_rfe_i64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "S_RFE_I64 SRC0"
     ]
@@ -5888,7 +5888,7 @@
   },
   {
     "name": "s_set_pc_i64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "S_SET_PC_I64 SRC0"
     ]
@@ -6021,7 +6021,7 @@
   },
   {
     "name": "s_swap_pc_i64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "S_SWAP_PC_I64 SDST, SRC0"
     ]
@@ -6666,7 +6666,7 @@
   },
   {
     "name": "tensor_load_to_lds",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "TENSOR_LOAD_TO_LDS VADDR0, VADDR1, VADDR2, VADDR3",
       "TENSOR_LOAD_TO_LDS VADDR0, VADDR1"
@@ -6674,21 +6674,21 @@
   },
   {
     "name": "tensor_save",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "TENSOR_SAVE SADDR"
     ]
   },
   {
     "name": "tensor_stop",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "TENSOR_STOP"
     ]
   },
   {
     "name": "tensor_store_from_lds",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "TENSOR_STORE_FROM_LDS VADDR0, VADDR1, VADDR2, VADDR3",
       "TENSOR_STORE_FROM_LDS VADDR0, VADDR1"
@@ -6762,7 +6762,7 @@
   },
   {
     "name": "v_add_max_i32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_ADD_MAX_I32 VDST, SRC0, SRC1, SRC2",
       "V_ADD_MAX_I32 VDST, SRC0, SRC1, SRC2 DPP8"
@@ -6770,7 +6770,7 @@
   },
   {
     "name": "v_add_max_u32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_ADD_MAX_U32 VDST, SRC0, SRC1, SRC2 DPP8",
       "V_ADD_MAX_U32 VDST, SRC0, SRC1, SRC2"
@@ -6778,7 +6778,7 @@
   },
   {
     "name": "v_add_min_i32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_ADD_MIN_I32 VDST, SRC0, SRC1, SRC2",
       "V_ADD_MIN_I32 VDST, SRC0, SRC1, SRC2 DPP8"
@@ -6786,7 +6786,7 @@
   },
   {
     "name": "v_add_min_u32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_ADD_MIN_U32 VDST, SRC0, SRC1, SRC2",
       "V_ADD_MIN_U32 VDST, SRC0, SRC1, SRC2 DPP8"
@@ -6826,7 +6826,7 @@
   },
   {
     "name": "v_add_nc_u64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_ADD_NC_U64 VDST, SRC0, SRC1"
     ]
@@ -9648,7 +9648,7 @@
   },
   {
     "name": "v_cos_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_COS_BF16 VDST, SRC0",
       "V_COS_BF16 VDST, SRC0_MODIFIERS",
@@ -9718,7 +9718,7 @@
   },
   {
     "name": "v_cvt_f16_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_F16_BF8 VDST, SRC0 DPP8",
       "V_CVT_F16_BF8 VDST, SRC0_MODIFIERS",
@@ -9739,7 +9739,7 @@
   },
   {
     "name": "v_cvt_f16_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_F16_FP8 VDST, SRC0 BYTE_SEL DPP8",
       "V_CVT_F16_FP8 VDST, SRC0 BYTE_SEL",
@@ -9979,7 +9979,7 @@
   },
   {
     "name": "v_cvt_pk_bf8_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_PK_BF8_F16 VDST, SRC0_MODIFIERS",
       "V_CVT_PK_BF8_F16 VDST, SRC0_MODIFIERS DPP8"
@@ -9995,7 +9995,7 @@
   },
   {
     "name": "v_cvt_pk_f16_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_PK_F16_BF8 VDST, SRC0 DPP8",
       "V_CVT_PK_F16_BF8 VDST, SRC0_MODIFIERS",
@@ -10012,7 +10012,7 @@
   },
   {
     "name": "v_cvt_pk_f16_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_PK_F16_FP8 VDST, SRC0_MODIFIERS",
       "V_CVT_PK_F16_FP8 VDST, SRC0",
@@ -10037,7 +10037,7 @@
   },
   {
     "name": "v_cvt_pk_fp8_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_PK_FP8_F16 VDST, SRC0_MODIFIERS",
       "V_CVT_PK_FP8_F16 VDST, SRC0_MODIFIERS DPP8"
@@ -10135,322 +10135,322 @@
   },
   {
     "name": "v_cvt_scale_pk16_bf16_bf6",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK16_BF16_BF6 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scale_pk16_bf16_fp6",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK16_BF16_FP6 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scale_pk16_f16_bf6",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK16_F16_BF6 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scale_pk16_f16_fp6",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK16_F16_FP6 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scale_pk16_f32_bf6",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK16_F32_BF6 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scale_pk16_f32_fp6",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK16_F32_FP6 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scale_pk8_bf16_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK8_BF16_BF8 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scale_pk8_bf16_fp4",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK8_BF16_FP4 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scale_pk8_bf16_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK8_BF16_FP8 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scale_pk8_f16_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK8_F16_BF8 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scale_pk8_f16_fp4",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK8_F16_FP4 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scale_pk8_f16_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK8_F16_FP8 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scale_pk8_f32_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK8_F32_BF8 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scale_pk8_f32_fp4",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK8_F32_FP4 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scale_pk8_f32_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALE_PK8_F32_FP8 VDST, SRC0, SRC1 SCALE_SEL"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk16_bf6_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK16_BF6_BF16 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk16_bf6_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK16_BF6_F16 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk16_bf6_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK16_BF6_F32 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk16_fp6_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK16_FP6_BF16 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk16_fp6_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK16_FP6_F16 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk16_fp6_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK16_FP6_F32 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk8_bf8_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK8_BF8_BF16 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk8_bf8_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK8_BF8_F16 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk8_bf8_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK8_BF8_F32 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk8_fp4_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK8_FP4_BF16 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk8_fp4_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK8_FP4_F16 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk8_fp4_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK8_FP4_F32 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk8_fp8_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK8_FP8_BF16 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk8_fp8_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK8_FP8_F16 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_pk8_fp8_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_PK8_FP8_F32 VDST, SRC0, SRC1"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk16_bf6_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK16_BF6_BF16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk16_bf6_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK16_BF6_F16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk16_bf6_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK16_BF6_F32 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk16_fp6_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK16_FP6_BF16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk16_fp6_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK16_FP6_F16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk16_fp6_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK16_FP6_F32 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk8_bf8_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK8_BF8_BF16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk8_bf8_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK8_BF8_F16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk8_bf8_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK8_BF8_F32 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk8_fp4_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK8_FP4_BF16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk8_fp4_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK8_FP4_F16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk8_fp4_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK8_FP4_F32 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk8_fp8_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK8_FP8_BF16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk8_fp8_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK8_FP8_F16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_scalef32_sr_pk8_fp8_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SCALEF32_SR_PK8_FP8_F32 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_cvt_sr_bf8_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SR_BF8_F16 VDST, SRC0_MODIFIERS, SRC1 BYTE_SEL",
       "V_CVT_SR_BF8_F16 VDST, SRC0_MODIFIERS, SRC1 BYTE_SEL DPP8"
@@ -10466,7 +10466,7 @@
   },
   {
     "name": "v_cvt_sr_fp8_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SR_FP8_F16 VDST, SRC0_MODIFIERS, SRC1 BYTE_SEL",
       "V_CVT_SR_FP8_F16 VDST, SRC0_MODIFIERS, SRC1 BYTE_SEL DPP8"
@@ -10482,7 +10482,7 @@
   },
   {
     "name": "v_cvt_sr_pk_bf16_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SR_PK_BF16_F32 VDST, SRC0_MODIFIERS, SRC1_MODIFIERS, SRC2",
       "V_CVT_SR_PK_BF16_F32 VDST, SRC0_MODIFIERS, SRC1_MODIFIERS, SRC2 DPP8"
@@ -10490,7 +10490,7 @@
   },
   {
     "name": "v_cvt_sr_pk_f16_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_CVT_SR_PK_F16_F32 VDST, SRC0_MODIFIERS, SRC1_MODIFIERS, SRC2 DPP8",
       "V_CVT_SR_PK_F16_F32 VDST, SRC0_MODIFIERS, SRC1_MODIFIERS, SRC2"
@@ -10726,7 +10726,7 @@
   },
   {
     "name": "v_dual_add_f64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_DUAL_ADD_F64 VDSTX, SRC0X_MODIFIERS, VSRC1X_MODIFIERS :: V_DUAL_SUB_NC_U32 VDSTY, SRC0Y, VSRC1Y",
       "V_DUAL_ADD_F64 VDSTX, SRC0X_MODIFIERS, VSRC1X_MODIFIERS :: V_DUAL_SUB_F32 VDSTY, SRC0Y_MODIFIERS, VSRC1Y_MODIFIERS",
@@ -10780,7 +10780,7 @@
   },
   {
     "name": "v_dual_ashrrev_i32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_DUAL_ASHRREV_I32 VDSTX, SRC0X, VSRC1X :: V_DUAL_MUL_DX9_ZERO_F32 VDSTY, SRC0Y_MODIFIERS, VSRC1Y_MODIFIERS",
       "V_DUAL_ASHRREV_I32 VDSTX, SRC0X, VSRC1X :: V_DUAL_ADD_F32 VDSTY, SRC0Y_MODIFIERS, VSRC1Y_MODIFIERS",
@@ -10856,7 +10856,7 @@
   },
   {
     "name": "v_dual_dot2acc_f32_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_DUAL_DOT2ACC_F32_BF16 VDSTX, SRC0X, VSRC1X :: V_DUAL_MAX_NUM_F32 VDSTY, SRC0Y, VSRC1Y",
       "V_DUAL_DOT2ACC_F32_BF16 VDSTX, SRC0X, VSRC1X :: V_DUAL_DOT2ACC_F32_F16 VDSTY, SRC0Y, VSRC1Y",
@@ -10954,7 +10954,7 @@
   },
   {
     "name": "v_dual_fma_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_DUAL_FMA_F32 VDSTX, SRC0X_MODIFIERS, VSRC1X_MODIFIERS, VSRC2X_MODIFIERS :: V_DUAL_SUB_NC_U32 VDSTY, SRC0Y, VSRC1Y",
       "V_DUAL_FMA_F32 VDSTX, SRC0X_MODIFIERS, VSRC1X_MODIFIERS, VSRC2X_MODIFIERS :: V_DUAL_LSHLREV_B32 VDSTY, SRC0Y, VSRC1Y",
@@ -10981,7 +10981,7 @@
   },
   {
     "name": "v_dual_fma_f64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_DUAL_FMA_F64 VDSTX, SRC0X_MODIFIERS, VSRC1X_MODIFIERS, VSRC2X_MODIFIERS :: V_DUAL_SUB_NC_U32 VDSTY, SRC0Y, VSRC1Y",
       "V_DUAL_FMA_F64 VDSTX, SRC0X_MODIFIERS, VSRC1X_MODIFIERS, VSRC2X_MODIFIERS :: V_DUAL_ADD_F32 VDSTY, SRC0Y_MODIFIERS, VSRC1Y_MODIFIERS",
@@ -11140,7 +11140,7 @@
   },
   {
     "name": "v_dual_lshrrev_b32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_DUAL_LSHRREV_B32 VDSTX, SRC0X, VSRC1X :: V_DUAL_MOV_B32 VDSTY, SRC0Y",
       "V_DUAL_LSHRREV_B32 VDSTX, SRC0X, VSRC1X :: V_DUAL_LSHLREV_B32 VDSTY, SRC0Y, VSRC1Y",
@@ -11216,7 +11216,7 @@
   },
   {
     "name": "v_dual_max_num_f64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_DUAL_MAX_NUM_F64 VDSTX, SRC0X_MODIFIERS, VSRC1X_MODIFIERS :: V_DUAL_FMA_F32 VDSTY, SRC0Y_MODIFIERS, VSRC1Y_MODIFIERS, VSRC2Y_MODIFIERS",
       "V_DUAL_MAX_NUM_F64 VDSTX, SRC0X_MODIFIERS, VSRC1X_MODIFIERS :: V_DUAL_SUB_F32 VDSTY, SRC0Y_MODIFIERS, VSRC1Y_MODIFIERS",
@@ -11292,7 +11292,7 @@
   },
   {
     "name": "v_dual_min_num_f64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_DUAL_MIN_NUM_F64 VDSTX, SRC0X_MODIFIERS, VSRC1X_MODIFIERS :: V_DUAL_SUB_NC_U32 VDSTY, SRC0Y, VSRC1Y",
       "V_DUAL_MIN_NUM_F64 VDSTX, SRC0X_MODIFIERS, VSRC1X_MODIFIERS :: V_DUAL_DOT2ACC_F32_F16 VDSTY, SRC0Y_MODIFIERS, VSRC1Y_MODIFIERS",
@@ -11458,7 +11458,7 @@
   },
   {
     "name": "v_dual_mul_f64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_DUAL_MUL_F64 VDSTX, SRC0X_MODIFIERS, VSRC1X_MODIFIERS :: V_DUAL_ASHRREV_I32 VDSTY, SRC0Y, VSRC1Y",
       "V_DUAL_MUL_F64 VDSTX, SRC0X_MODIFIERS, VSRC1X_MODIFIERS :: V_DUAL_SUB_F32 VDSTY, SRC0Y_MODIFIERS, VSRC1Y_MODIFIERS",
@@ -11534,7 +11534,7 @@
   },
   {
     "name": "v_dual_sub_nc_u32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_DUAL_SUB_NC_U32 VDSTX, SRC0X, VSRC1X :: V_DUAL_MUL_F32 VDSTY, SRC0Y_MODIFIERS, VSRC1Y_MODIFIERS",
       "V_DUAL_SUB_NC_U32 VDSTX, SRC0X, VSRC1X :: V_DUAL_BITOP2_B32 VDSTY, SRC0Y, VSRC1YBITOP3",
@@ -11610,7 +11610,7 @@
   },
   {
     "name": "v_exp_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_EXP_BF16 VDST, SRC0_MODIFIERS",
       "V_EXP_BF16 VDST, SRC0_MODIFIERS DPP8",
@@ -11706,7 +11706,7 @@
   },
   {
     "name": "v_fma_mix_f32_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_FMA_MIX_F32_BF16 VDST, SRC0_MODIFIERS, SRC1_MODIFIERS, SRC2_MODIFIERS DPP8",
       "V_FMA_MIX_F32_BF16 VDST, SRC0_MODIFIERS, SRC1_MODIFIERS, SRC2_MODIFIERS"
@@ -11714,7 +11714,7 @@
   },
   {
     "name": "v_fma_mixhi_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_FMA_MIXHI_BF16 VDST, SRC0_MODIFIERS, SRC1_MODIFIERS, SRC2_MODIFIERS DPP8",
       "V_FMA_MIXHI_BF16 VDST, SRC0_MODIFIERS, SRC1_MODIFIERS, SRC2_MODIFIERS"
@@ -11730,7 +11730,7 @@
   },
   {
     "name": "v_fma_mixlo_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_FMA_MIXLO_BF16 VDST, SRC0_MODIFIERS, SRC1_MODIFIERS, SRC2_MODIFIERS",
       "V_FMA_MIXLO_BF16 VDST, SRC0_MODIFIERS, SRC1_MODIFIERS, SRC2_MODIFIERS DPP8"
@@ -11760,7 +11760,7 @@
   },
   {
     "name": "v_fmaak_f64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_FMAAK_F64 VDST, SRC0, SRC1, IMM"
     ]
@@ -11809,7 +11809,7 @@
   },
   {
     "name": "v_fmamk_f64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_FMAMK_F64 VDST, SRC0, IMM, SRC1"
     ]
@@ -11975,7 +11975,7 @@
   },
   {
     "name": "v_log_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_LOG_BF16 VDST, SRC0_MODIFIERS",
       "V_LOG_BF16 VDST, SRC0_MODIFIERS DPP8",
@@ -12112,14 +12112,14 @@
   },
   {
     "name": "v_mad_nc_i64_i32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_MAD_NC_I64_I32 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_mad_nc_u64_u32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_MAD_NC_U64_U32 VDST, SRC0, SRC1, SRC2"
     ]
@@ -12134,7 +12134,7 @@
   },
   {
     "name": "v_mad_u32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_MAD_U32 VDST, SRC0, SRC1, SRC2"
     ]
@@ -12221,7 +12221,7 @@
   },
   {
     "name": "v_max_i64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_MAX_I64 VDST, SRC0, SRC1"
     ]
@@ -12272,7 +12272,7 @@
   },
   {
     "name": "v_max_u64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_MAX_U64 VDST, SRC0, SRC1"
     ]
@@ -12494,7 +12494,7 @@
   },
   {
     "name": "v_min_i64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_MIN_I64 VDST, SRC0, SRC1"
     ]
@@ -12545,7 +12545,7 @@
   },
   {
     "name": "v_min_u64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_MIN_U64 VDST, SRC0, SRC1"
     ]
@@ -12816,7 +12816,7 @@
   },
   {
     "name": "v_mul_u64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_MUL_U64 VDST, SRC0, SRC1"
     ]
@@ -12895,21 +12895,21 @@
   },
   {
     "name": "v_perm_pk16_b4_u4",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PERM_PK16_B4_U4 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_perm_pk16_b6_u4",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PERM_PK16_B6_U4 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_perm_pk16_b8_u4",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PERM_PK16_B8_U4 VDST, SRC0, SRC1, SRC2"
     ]
@@ -13000,7 +13000,7 @@
   },
   {
     "name": "v_pk_add_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_ADD_BF16 VDST, SRC0, SRC1 NEG_LO NEG_HI"
     ]
@@ -13028,28 +13028,28 @@
   },
   {
     "name": "v_pk_add_max_i16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_ADD_MAX_I16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_pk_add_max_u16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_ADD_MAX_U16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_pk_add_min_i16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_ADD_MIN_I16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_pk_add_min_u16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_ADD_MIN_U16 VDST, SRC0, SRC1, SRC2"
     ]
@@ -13070,7 +13070,7 @@
   },
   {
     "name": "v_pk_fma_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_FMA_BF16 VDST, SRC0, SRC1, SRC2 NEG_LO NEG_HI"
     ]
@@ -13126,21 +13126,21 @@
   },
   {
     "name": "v_pk_max3_i16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_MAX3_I16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_pk_max3_num_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_MAX3_NUM_F16 VDST, SRC0, SRC1, SRC2 NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_pk_max3_u16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_MAX3_U16 VDST, SRC0, SRC1, SRC2"
     ]
@@ -13154,7 +13154,7 @@
   },
   {
     "name": "v_pk_max_num_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_MAX_NUM_BF16 VDST, SRC0, SRC1 NEG_LO NEG_HI"
     ]
@@ -13189,21 +13189,21 @@
   },
   {
     "name": "v_pk_min3_i16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_MIN3_I16 VDST, SRC0, SRC1, SRC2"
     ]
   },
   {
     "name": "v_pk_min3_num_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_MIN3_NUM_F16 VDST, SRC0, SRC1, SRC2 NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_pk_min3_u16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_MIN3_U16 VDST, SRC0, SRC1, SRC2"
     ]
@@ -13217,7 +13217,7 @@
   },
   {
     "name": "v_pk_min_num_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_MIN_NUM_BF16 VDST, SRC0, SRC1 NEG_LO NEG_HI"
     ]
@@ -13252,7 +13252,7 @@
   },
   {
     "name": "v_pk_mul_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_PK_MUL_BF16 VDST, SRC0, SRC1 NEG_LO NEG_HI"
     ]
@@ -13309,7 +13309,7 @@
   },
   {
     "name": "v_rcp_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_RCP_BF16 VDST, SRC0_MODIFIERS",
       "V_RCP_BF16 VDST, SRC0_MODIFIERS DPP8",
@@ -13399,7 +13399,7 @@
   },
   {
     "name": "v_rsq_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_RSQ_BF16 VDST, SRC0",
       "V_RSQ_BF16 VDST, SRC0 DPP8",
@@ -13539,7 +13539,7 @@
   },
   {
     "name": "v_sat_pk4_i4_i8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SAT_PK4_I4_I8 VDST, SRC0 DPP8",
       "V_SAT_PK4_I4_I8 VDST, SRC0",
@@ -13548,7 +13548,7 @@
   },
   {
     "name": "v_sat_pk4_u4_u8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SAT_PK4_U4_U8 VDST, SRC0 DPP8",
       "V_SAT_PK4_U4_U8 VDST, SRC0",
@@ -13566,7 +13566,7 @@
   },
   {
     "name": "v_sin_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SIN_BF16 VDST, SRC0_MODIFIERS",
       "V_SIN_BF16 VDST, SRC0 DPP8",
@@ -13596,7 +13596,7 @@
   },
   {
     "name": "v_sqrt_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SQRT_BF16 VDST, SRC0_MODIFIERS",
       "V_SQRT_BF16 VDST, SRC0_MODIFIERS DPP8",
@@ -13708,7 +13708,7 @@
   },
   {
     "name": "v_sub_nc_u64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SUB_NC_U64 VDST, SRC0, SRC1"
     ]
@@ -13794,42 +13794,42 @@
   },
   {
     "name": "v_swmmac_bf16_16x16x64_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SWMMAC_BF16_16X16X64_BF16 VDST, SRC0, SRC1, SRC2 INDEX_KEY_16BIT MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_swmmac_bf16f32_16x16x64_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SWMMAC_BF16F32_16X16X64_BF16 VDST, SRC0, SRC1, SRC2 INDEX_KEY_16BIT MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_swmmac_f16_16x16x128_bf8_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SWMMAC_F16_16X16X128_BF8_BF8 VDST, SRC0, SRC1, SRC2 INDEX_KEY_32BIT MATRIX_A_REUSE MATRIX_B_REUSE"
     ]
   },
   {
     "name": "v_swmmac_f16_16x16x128_bf8_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SWMMAC_F16_16X16X128_BF8_FP8 VDST, SRC0, SRC1, SRC2 INDEX_KEY_32BIT MATRIX_A_REUSE MATRIX_B_REUSE"
     ]
   },
   {
     "name": "v_swmmac_f16_16x16x128_fp8_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SWMMAC_F16_16X16X128_FP8_BF8 VDST, SRC0, SRC1, SRC2 INDEX_KEY_32BIT MATRIX_A_REUSE MATRIX_B_REUSE"
     ]
   },
   {
     "name": "v_swmmac_f16_16x16x128_fp8_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SWMMAC_F16_16X16X128_FP8_FP8 VDST, SRC0, SRC1, SRC2 INDEX_KEY_32BIT MATRIX_A_REUSE MATRIX_B_REUSE"
     ]
@@ -13844,35 +13844,35 @@
   },
   {
     "name": "v_swmmac_f16_16x16x64_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SWMMAC_F16_16X16X64_F16 VDST, SRC0, SRC1, SRC2 INDEX_KEY_16BIT MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_swmmac_f32_16x16x128_bf8_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SWMMAC_F32_16X16X128_BF8_BF8 VDST, SRC0, SRC1, SRC2 INDEX_KEY_32BIT MATRIX_A_REUSE MATRIX_B_REUSE"
     ]
   },
   {
     "name": "v_swmmac_f32_16x16x128_bf8_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SWMMAC_F32_16X16X128_BF8_FP8 VDST, SRC0, SRC1, SRC2 INDEX_KEY_32BIT MATRIX_A_REUSE MATRIX_B_REUSE"
     ]
   },
   {
     "name": "v_swmmac_f32_16x16x128_fp8_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SWMMAC_F32_16X16X128_FP8_BF8 VDST, SRC0, SRC1, SRC2 INDEX_KEY_32BIT MATRIX_A_REUSE MATRIX_B_REUSE"
     ]
   },
   {
     "name": "v_swmmac_f32_16x16x128_fp8_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SWMMAC_F32_16X16X128_FP8_FP8 VDST, SRC0, SRC1, SRC2 INDEX_KEY_32BIT MATRIX_A_REUSE MATRIX_B_REUSE"
     ]
@@ -13927,21 +13927,21 @@
   },
   {
     "name": "v_swmmac_f32_16x16x64_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SWMMAC_F32_16X16X64_BF16 VDST, SRC0, SRC1, SRC2 INDEX_KEY_16BIT MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_swmmac_f32_16x16x64_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SWMMAC_F32_16X16X64_F16 VDST, SRC0, SRC1, SRC2 INDEX_KEY_16BIT MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_swmmac_i32_16x16x128_iu8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_SWMMAC_I32_16X16X128_IU8 VDST, SRC0, SRC1, SRC2 INDEX_KEY_32BIT MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO"
     ]
@@ -13971,7 +13971,7 @@
   },
   {
     "name": "v_tanh_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_TANH_BF16 VDST, SRC0 DPP8",
       "V_TANH_BF16 VDST, SRC0_MODIFIERS",
@@ -13981,7 +13981,7 @@
   },
   {
     "name": "v_tanh_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_TANH_F16 VDST, SRC0",
       "V_TANH_F16 VDST, SRC0_MODIFIERS",
@@ -13991,7 +13991,7 @@
   },
   {
     "name": "v_tanh_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_TANH_F32 VDST, SRC0_MODIFIERS",
       "V_TANH_F32 VDST, SRC0",
@@ -14043,42 +14043,42 @@
   },
   {
     "name": "v_wmma_bf16_16x16x32_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_BF16_16X16X32_BF16 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_bf16f32_16x16x32_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_BF16F32_16X16X32_BF16 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f16_16x16x128_bf8_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F16_16X16X128_BF8_BF8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f16_16x16x128_bf8_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F16_16X16X128_BF8_FP8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f16_16x16x128_fp8_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F16_16X16X128_FP8_BF8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f16_16x16x128_fp8_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F16_16X16X128_FP8_FP8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
@@ -14092,70 +14092,70 @@
   },
   {
     "name": "v_wmma_f16_16x16x32_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F16_16X16X32_F16 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f16_16x16x64_bf8_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F16_16X16X64_BF8_BF8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f16_16x16x64_bf8_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F16_16X16X64_BF8_FP8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f16_16x16x64_fp8_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F16_16X16X64_FP8_BF8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f16_16x16x64_fp8_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F16_16X16X64_FP8_FP8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f32_16x16x128_bf8_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F32_16X16X128_BF8_BF8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f32_16x16x128_bf8_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F32_16X16X128_BF8_FP8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f32_16x16x128_f8f6f4",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F32_16X16X128_F8F6F4 VDST, SRC0, SRC1, SRC2 MATRIX_A_FMT MATRIX_B_FMT NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f32_16x16x128_fp8_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F32_16X16X128_FP8_BF8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f32_16x16x128_fp8_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F32_16X16X128_FP8_FP8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
@@ -14204,56 +14204,56 @@
   },
   {
     "name": "v_wmma_f32_16x16x32_bf16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F32_16X16X32_BF16 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f32_16x16x32_f16",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F32_16X16X32_F16 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f32_16x16x4_f32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F32_16X16X4_F32 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f32_16x16x64_bf8_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F32_16X16X64_BF8_BF8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f32_16x16x64_bf8_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F32_16X16X64_BF8_FP8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f32_16x16x64_fp8_bf8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F32_16X16X64_FP8_BF8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f32_16x16x64_fp8_fp8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F32_16X16X64_FP8_FP8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_f32_32x16x128_f4",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_F32_32X16X128_F4 VDST, SRC0, SRC1, SRC2 NEG_LO NEG_HI"
     ]
@@ -14281,49 +14281,49 @@
   },
   {
     "name": "v_wmma_i32_16x16x64_iu8",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_I32_16X16X64_IU8 VDST, SRC0, SRC1, SRC2 MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO"
     ]
   },
   {
     "name": "v_wmma_ld_scale16_paired_b64",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_LD_SCALE16_PAIRED_B64 SRC0, SRC1 MATRIX_A_SCALE MATRIX_B_SCALE MATRIX_A_SCALE_FMT MATRIX_B_SCALE_FMT MATRIX_A_REUSE MATRIX_B_REUSE"
     ]
   },
   {
     "name": "v_wmma_ld_scale_paired_b32",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_LD_SCALE_PAIRED_B32 SRC0, SRC1 MATRIX_A_SCALE MATRIX_B_SCALE MATRIX_A_SCALE_FMT MATRIX_B_SCALE_FMT MATRIX_A_REUSE MATRIX_B_REUSE"
     ]
   },
   {
     "name": "v_wmma_scale16_f32_16x16x128_f8f6f4",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_SCALE16_F32_16X16X128_F8F6F4 VDST, SRC0, SRC1, SRC2, SCALE_SRC0, SCALE_SRC1 MATRIX_A_FMT MATRIX_B_FMT MATRIX_A_SCALE MATRIX_B_SCALE MATRIX_A_SCALE_FMT MATRIX_B_SCALE_FMT MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_scale16_f32_32x16x128_f4",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_SCALE16_F32_32X16X128_F4 VDST, SRC0, SRC1, SRC2, SCALE_SRC0, SCALE_SRC1 MATRIX_A_SCALE MATRIX_B_SCALE MATRIX_A_SCALE_FMT MATRIX_B_SCALE_FMT MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_scale_f32_16x16x128_f8f6f4",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_SCALE_F32_16X16X128_F8F6F4 VDST, SRC0, SRC1, SRC2, SCALE_SRC0, SCALE_SRC1 MATRIX_A_FMT MATRIX_B_FMT MATRIX_A_SCALE MATRIX_B_SCALE MATRIX_A_SCALE_FMT MATRIX_B_SCALE_FMT MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]
   },
   {
     "name": "v_wmma_scale_f32_32x16x128_f4",
-    "summary": "Available on GFX1250 (CDNA4).",
+    "summary": "Available on GFX1251 (CDNA4).",
     "asm_templates": [
       "V_WMMA_SCALE_F32_32X16X128_F4 VDST, SRC0, SRC1, SRC2, SCALE_SRC0, SCALE_SRC1 MATRIX_A_SCALE MATRIX_B_SCALE MATRIX_A_SCALE_FMT MATRIX_B_SCALE_FMT MATRIX_A_REUSE MATRIX_B_REUSE NEG_LO NEG_HI"
     ]

@@ -178,10 +178,17 @@ fn gen_opcodes(root_path: &Path) -> Result<()> {
         .status()
         .with_context(|| anyhow!("Failed to regenerate serialized z80 opcodes"))?;
     for (gpu_gen, arch_arg) in [
+        ("amdgpu-gfx908", "amdgpu-gfx908"),
+        ("amdgpu-gfx90a", "amdgpu-gfx90a"),
+        ("amdgpu-gfx942", "amdgpu-gfx942"),
+        ("amdgpu-gfx10", "amdgpu-gfx10"),
+        ("amdgpu-gfx10-3", "amdgpu-gfx10-3"),
         ("amdgpu-gfx11", "amdgpu-gfx11"),
+        ("amdgpu-gfx11-5", "amdgpu-gfx11-5"),
         ("amdgpu-gfx950", "amdgpu-gfx950"),
         ("amdgpu-gfx12", "amdgpu-gfx12"),
         ("amdgpu-gfx1250", "amdgpu-gfx1250"),
+        ("amdgpu-gfx1251", "amdgpu-gfx1251"),
     ] {
         println!("\t{gpu_gen}");
         Command::new(PARSE_EXE)
