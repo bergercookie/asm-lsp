@@ -1,0 +1,1309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionSet name="amdgpu-gfx11">
+  <Register name="v0" description="Vector General Purpose Register 0 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v1" description="Vector General Purpose Register 1 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v2" description="Vector General Purpose Register 2 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v3" description="Vector General Purpose Register 3 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v4" description="Vector General Purpose Register 4 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v5" description="Vector General Purpose Register 5 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v6" description="Vector General Purpose Register 6 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v7" description="Vector General Purpose Register 7 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v8" description="Vector General Purpose Register 8 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v9" description="Vector General Purpose Register 9 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v10" description="Vector General Purpose Register 10 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v11" description="Vector General Purpose Register 11 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v12" description="Vector General Purpose Register 12 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v13" description="Vector General Purpose Register 13 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v14" description="Vector General Purpose Register 14 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v15" description="Vector General Purpose Register 15 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v16" description="Vector General Purpose Register 16 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v17" description="Vector General Purpose Register 17 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v18" description="Vector General Purpose Register 18 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v19" description="Vector General Purpose Register 19 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v20" description="Vector General Purpose Register 20 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v21" description="Vector General Purpose Register 21 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v22" description="Vector General Purpose Register 22 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v23" description="Vector General Purpose Register 23 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v24" description="Vector General Purpose Register 24 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v25" description="Vector General Purpose Register 25 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v26" description="Vector General Purpose Register 26 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v27" description="Vector General Purpose Register 27 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v28" description="Vector General Purpose Register 28 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v29" description="Vector General Purpose Register 29 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v30" description="Vector General Purpose Register 30 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v31" description="Vector General Purpose Register 31 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v32" description="Vector General Purpose Register 32 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v33" description="Vector General Purpose Register 33 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v34" description="Vector General Purpose Register 34 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v35" description="Vector General Purpose Register 35 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v36" description="Vector General Purpose Register 36 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v37" description="Vector General Purpose Register 37 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v38" description="Vector General Purpose Register 38 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v39" description="Vector General Purpose Register 39 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v40" description="Vector General Purpose Register 40 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v41" description="Vector General Purpose Register 41 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v42" description="Vector General Purpose Register 42 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v43" description="Vector General Purpose Register 43 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v44" description="Vector General Purpose Register 44 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v45" description="Vector General Purpose Register 45 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v46" description="Vector General Purpose Register 46 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v47" description="Vector General Purpose Register 47 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v48" description="Vector General Purpose Register 48 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v49" description="Vector General Purpose Register 49 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v50" description="Vector General Purpose Register 50 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v51" description="Vector General Purpose Register 51 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v52" description="Vector General Purpose Register 52 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v53" description="Vector General Purpose Register 53 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v54" description="Vector General Purpose Register 54 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v55" description="Vector General Purpose Register 55 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v56" description="Vector General Purpose Register 56 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v57" description="Vector General Purpose Register 57 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v58" description="Vector General Purpose Register 58 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v59" description="Vector General Purpose Register 59 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v60" description="Vector General Purpose Register 60 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v61" description="Vector General Purpose Register 61 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v62" description="Vector General Purpose Register 62 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v63" description="Vector General Purpose Register 63 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v64" description="Vector General Purpose Register 64 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v65" description="Vector General Purpose Register 65 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v66" description="Vector General Purpose Register 66 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v67" description="Vector General Purpose Register 67 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v68" description="Vector General Purpose Register 68 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v69" description="Vector General Purpose Register 69 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v70" description="Vector General Purpose Register 70 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v71" description="Vector General Purpose Register 71 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v72" description="Vector General Purpose Register 72 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v73" description="Vector General Purpose Register 73 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v74" description="Vector General Purpose Register 74 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v75" description="Vector General Purpose Register 75 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v76" description="Vector General Purpose Register 76 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v77" description="Vector General Purpose Register 77 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v78" description="Vector General Purpose Register 78 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v79" description="Vector General Purpose Register 79 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v80" description="Vector General Purpose Register 80 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v81" description="Vector General Purpose Register 81 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v82" description="Vector General Purpose Register 82 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v83" description="Vector General Purpose Register 83 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v84" description="Vector General Purpose Register 84 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v85" description="Vector General Purpose Register 85 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v86" description="Vector General Purpose Register 86 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v87" description="Vector General Purpose Register 87 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v88" description="Vector General Purpose Register 88 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v89" description="Vector General Purpose Register 89 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v90" description="Vector General Purpose Register 90 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v91" description="Vector General Purpose Register 91 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v92" description="Vector General Purpose Register 92 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v93" description="Vector General Purpose Register 93 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v94" description="Vector General Purpose Register 94 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v95" description="Vector General Purpose Register 95 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v96" description="Vector General Purpose Register 96 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v97" description="Vector General Purpose Register 97 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v98" description="Vector General Purpose Register 98 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v99" description="Vector General Purpose Register 99 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v100" description="Vector General Purpose Register 100 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v101" description="Vector General Purpose Register 101 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v102" description="Vector General Purpose Register 102 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v103" description="Vector General Purpose Register 103 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v104" description="Vector General Purpose Register 104 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v105" description="Vector General Purpose Register 105 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v106" description="Vector General Purpose Register 106 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v107" description="Vector General Purpose Register 107 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v108" description="Vector General Purpose Register 108 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v109" description="Vector General Purpose Register 109 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v110" description="Vector General Purpose Register 110 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v111" description="Vector General Purpose Register 111 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v112" description="Vector General Purpose Register 112 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v113" description="Vector General Purpose Register 113 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v114" description="Vector General Purpose Register 114 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v115" description="Vector General Purpose Register 115 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v116" description="Vector General Purpose Register 116 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v117" description="Vector General Purpose Register 117 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v118" description="Vector General Purpose Register 118 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v119" description="Vector General Purpose Register 119 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v120" description="Vector General Purpose Register 120 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v121" description="Vector General Purpose Register 121 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v122" description="Vector General Purpose Register 122 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v123" description="Vector General Purpose Register 123 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v124" description="Vector General Purpose Register 124 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v125" description="Vector General Purpose Register 125 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v126" description="Vector General Purpose Register 126 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v127" description="Vector General Purpose Register 127 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v128" description="Vector General Purpose Register 128 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v129" description="Vector General Purpose Register 129 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v130" description="Vector General Purpose Register 130 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v131" description="Vector General Purpose Register 131 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v132" description="Vector General Purpose Register 132 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v133" description="Vector General Purpose Register 133 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v134" description="Vector General Purpose Register 134 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v135" description="Vector General Purpose Register 135 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v136" description="Vector General Purpose Register 136 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v137" description="Vector General Purpose Register 137 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v138" description="Vector General Purpose Register 138 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v139" description="Vector General Purpose Register 139 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v140" description="Vector General Purpose Register 140 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v141" description="Vector General Purpose Register 141 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v142" description="Vector General Purpose Register 142 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v143" description="Vector General Purpose Register 143 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v144" description="Vector General Purpose Register 144 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v145" description="Vector General Purpose Register 145 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v146" description="Vector General Purpose Register 146 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v147" description="Vector General Purpose Register 147 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v148" description="Vector General Purpose Register 148 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v149" description="Vector General Purpose Register 149 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v150" description="Vector General Purpose Register 150 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v151" description="Vector General Purpose Register 151 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v152" description="Vector General Purpose Register 152 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v153" description="Vector General Purpose Register 153 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v154" description="Vector General Purpose Register 154 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v155" description="Vector General Purpose Register 155 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v156" description="Vector General Purpose Register 156 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v157" description="Vector General Purpose Register 157 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v158" description="Vector General Purpose Register 158 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v159" description="Vector General Purpose Register 159 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v160" description="Vector General Purpose Register 160 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v161" description="Vector General Purpose Register 161 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v162" description="Vector General Purpose Register 162 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v163" description="Vector General Purpose Register 163 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v164" description="Vector General Purpose Register 164 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v165" description="Vector General Purpose Register 165 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v166" description="Vector General Purpose Register 166 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v167" description="Vector General Purpose Register 167 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v168" description="Vector General Purpose Register 168 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v169" description="Vector General Purpose Register 169 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v170" description="Vector General Purpose Register 170 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v171" description="Vector General Purpose Register 171 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v172" description="Vector General Purpose Register 172 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v173" description="Vector General Purpose Register 173 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v174" description="Vector General Purpose Register 174 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v175" description="Vector General Purpose Register 175 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v176" description="Vector General Purpose Register 176 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v177" description="Vector General Purpose Register 177 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v178" description="Vector General Purpose Register 178 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v179" description="Vector General Purpose Register 179 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v180" description="Vector General Purpose Register 180 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v181" description="Vector General Purpose Register 181 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v182" description="Vector General Purpose Register 182 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v183" description="Vector General Purpose Register 183 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v184" description="Vector General Purpose Register 184 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v185" description="Vector General Purpose Register 185 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v186" description="Vector General Purpose Register 186 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v187" description="Vector General Purpose Register 187 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v188" description="Vector General Purpose Register 188 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v189" description="Vector General Purpose Register 189 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v190" description="Vector General Purpose Register 190 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v191" description="Vector General Purpose Register 191 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v192" description="Vector General Purpose Register 192 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v193" description="Vector General Purpose Register 193 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v194" description="Vector General Purpose Register 194 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v195" description="Vector General Purpose Register 195 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v196" description="Vector General Purpose Register 196 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v197" description="Vector General Purpose Register 197 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v198" description="Vector General Purpose Register 198 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v199" description="Vector General Purpose Register 199 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v200" description="Vector General Purpose Register 200 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v201" description="Vector General Purpose Register 201 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v202" description="Vector General Purpose Register 202 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v203" description="Vector General Purpose Register 203 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v204" description="Vector General Purpose Register 204 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v205" description="Vector General Purpose Register 205 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v206" description="Vector General Purpose Register 206 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v207" description="Vector General Purpose Register 207 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v208" description="Vector General Purpose Register 208 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v209" description="Vector General Purpose Register 209 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v210" description="Vector General Purpose Register 210 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v211" description="Vector General Purpose Register 211 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v212" description="Vector General Purpose Register 212 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v213" description="Vector General Purpose Register 213 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v214" description="Vector General Purpose Register 214 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v215" description="Vector General Purpose Register 215 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v216" description="Vector General Purpose Register 216 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v217" description="Vector General Purpose Register 217 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v218" description="Vector General Purpose Register 218 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v219" description="Vector General Purpose Register 219 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v220" description="Vector General Purpose Register 220 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v221" description="Vector General Purpose Register 221 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v222" description="Vector General Purpose Register 222 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v223" description="Vector General Purpose Register 223 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v224" description="Vector General Purpose Register 224 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v225" description="Vector General Purpose Register 225 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v226" description="Vector General Purpose Register 226 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v227" description="Vector General Purpose Register 227 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v228" description="Vector General Purpose Register 228 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v229" description="Vector General Purpose Register 229 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v230" description="Vector General Purpose Register 230 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v231" description="Vector General Purpose Register 231 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v232" description="Vector General Purpose Register 232 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v233" description="Vector General Purpose Register 233 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v234" description="Vector General Purpose Register 234 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v235" description="Vector General Purpose Register 235 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v236" description="Vector General Purpose Register 236 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v237" description="Vector General Purpose Register 237 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v238" description="Vector General Purpose Register 238 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v239" description="Vector General Purpose Register 239 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v240" description="Vector General Purpose Register 240 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v241" description="Vector General Purpose Register 241 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v242" description="Vector General Purpose Register 242 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v243" description="Vector General Purpose Register 243 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v244" description="Vector General Purpose Register 244 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v245" description="Vector General Purpose Register 245 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v246" description="Vector General Purpose Register 246 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v247" description="Vector General Purpose Register 247 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v248" description="Vector General Purpose Register 248 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v249" description="Vector General Purpose Register 249 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v250" description="Vector General Purpose Register 250 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v251" description="Vector General Purpose Register 251 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v252" description="Vector General Purpose Register 252 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v253" description="Vector General Purpose Register 253 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v254" description="Vector General Purpose Register 254 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="v255" description="Vector General Purpose Register 255 (32-bit per lane, 64 lanes on wave64)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a0" description="Accumulation Vector GPR 0 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a1" description="Accumulation Vector GPR 1 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a2" description="Accumulation Vector GPR 2 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a3" description="Accumulation Vector GPR 3 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a4" description="Accumulation Vector GPR 4 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a5" description="Accumulation Vector GPR 5 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a6" description="Accumulation Vector GPR 6 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a7" description="Accumulation Vector GPR 7 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a8" description="Accumulation Vector GPR 8 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a9" description="Accumulation Vector GPR 9 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a10" description="Accumulation Vector GPR 10 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a11" description="Accumulation Vector GPR 11 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a12" description="Accumulation Vector GPR 12 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a13" description="Accumulation Vector GPR 13 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a14" description="Accumulation Vector GPR 14 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a15" description="Accumulation Vector GPR 15 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a16" description="Accumulation Vector GPR 16 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a17" description="Accumulation Vector GPR 17 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a18" description="Accumulation Vector GPR 18 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a19" description="Accumulation Vector GPR 19 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a20" description="Accumulation Vector GPR 20 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a21" description="Accumulation Vector GPR 21 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a22" description="Accumulation Vector GPR 22 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a23" description="Accumulation Vector GPR 23 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a24" description="Accumulation Vector GPR 24 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a25" description="Accumulation Vector GPR 25 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a26" description="Accumulation Vector GPR 26 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a27" description="Accumulation Vector GPR 27 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a28" description="Accumulation Vector GPR 28 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a29" description="Accumulation Vector GPR 29 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a30" description="Accumulation Vector GPR 30 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a31" description="Accumulation Vector GPR 31 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a32" description="Accumulation Vector GPR 32 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a33" description="Accumulation Vector GPR 33 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a34" description="Accumulation Vector GPR 34 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a35" description="Accumulation Vector GPR 35 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a36" description="Accumulation Vector GPR 36 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a37" description="Accumulation Vector GPR 37 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a38" description="Accumulation Vector GPR 38 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a39" description="Accumulation Vector GPR 39 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a40" description="Accumulation Vector GPR 40 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a41" description="Accumulation Vector GPR 41 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a42" description="Accumulation Vector GPR 42 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a43" description="Accumulation Vector GPR 43 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a44" description="Accumulation Vector GPR 44 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a45" description="Accumulation Vector GPR 45 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a46" description="Accumulation Vector GPR 46 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a47" description="Accumulation Vector GPR 47 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a48" description="Accumulation Vector GPR 48 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a49" description="Accumulation Vector GPR 49 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a50" description="Accumulation Vector GPR 50 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a51" description="Accumulation Vector GPR 51 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a52" description="Accumulation Vector GPR 52 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a53" description="Accumulation Vector GPR 53 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a54" description="Accumulation Vector GPR 54 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a55" description="Accumulation Vector GPR 55 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a56" description="Accumulation Vector GPR 56 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a57" description="Accumulation Vector GPR 57 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a58" description="Accumulation Vector GPR 58 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a59" description="Accumulation Vector GPR 59 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a60" description="Accumulation Vector GPR 60 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a61" description="Accumulation Vector GPR 61 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a62" description="Accumulation Vector GPR 62 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a63" description="Accumulation Vector GPR 63 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a64" description="Accumulation Vector GPR 64 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a65" description="Accumulation Vector GPR 65 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a66" description="Accumulation Vector GPR 66 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a67" description="Accumulation Vector GPR 67 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a68" description="Accumulation Vector GPR 68 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a69" description="Accumulation Vector GPR 69 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a70" description="Accumulation Vector GPR 70 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a71" description="Accumulation Vector GPR 71 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a72" description="Accumulation Vector GPR 72 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a73" description="Accumulation Vector GPR 73 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a74" description="Accumulation Vector GPR 74 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a75" description="Accumulation Vector GPR 75 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a76" description="Accumulation Vector GPR 76 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a77" description="Accumulation Vector GPR 77 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a78" description="Accumulation Vector GPR 78 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a79" description="Accumulation Vector GPR 79 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a80" description="Accumulation Vector GPR 80 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a81" description="Accumulation Vector GPR 81 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a82" description="Accumulation Vector GPR 82 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a83" description="Accumulation Vector GPR 83 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a84" description="Accumulation Vector GPR 84 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a85" description="Accumulation Vector GPR 85 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a86" description="Accumulation Vector GPR 86 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a87" description="Accumulation Vector GPR 87 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a88" description="Accumulation Vector GPR 88 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a89" description="Accumulation Vector GPR 89 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a90" description="Accumulation Vector GPR 90 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a91" description="Accumulation Vector GPR 91 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a92" description="Accumulation Vector GPR 92 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a93" description="Accumulation Vector GPR 93 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a94" description="Accumulation Vector GPR 94 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a95" description="Accumulation Vector GPR 95 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a96" description="Accumulation Vector GPR 96 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a97" description="Accumulation Vector GPR 97 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a98" description="Accumulation Vector GPR 98 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a99" description="Accumulation Vector GPR 99 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a100" description="Accumulation Vector GPR 100 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a101" description="Accumulation Vector GPR 101 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a102" description="Accumulation Vector GPR 102 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a103" description="Accumulation Vector GPR 103 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a104" description="Accumulation Vector GPR 104 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a105" description="Accumulation Vector GPR 105 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a106" description="Accumulation Vector GPR 106 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a107" description="Accumulation Vector GPR 107 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a108" description="Accumulation Vector GPR 108 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a109" description="Accumulation Vector GPR 109 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a110" description="Accumulation Vector GPR 110 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a111" description="Accumulation Vector GPR 111 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a112" description="Accumulation Vector GPR 112 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a113" description="Accumulation Vector GPR 113 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a114" description="Accumulation Vector GPR 114 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a115" description="Accumulation Vector GPR 115 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a116" description="Accumulation Vector GPR 116 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a117" description="Accumulation Vector GPR 117 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a118" description="Accumulation Vector GPR 118 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a119" description="Accumulation Vector GPR 119 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a120" description="Accumulation Vector GPR 120 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a121" description="Accumulation Vector GPR 121 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a122" description="Accumulation Vector GPR 122 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a123" description="Accumulation Vector GPR 123 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a124" description="Accumulation Vector GPR 124 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a125" description="Accumulation Vector GPR 125 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a126" description="Accumulation Vector GPR 126 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a127" description="Accumulation Vector GPR 127 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a128" description="Accumulation Vector GPR 128 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a129" description="Accumulation Vector GPR 129 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a130" description="Accumulation Vector GPR 130 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a131" description="Accumulation Vector GPR 131 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a132" description="Accumulation Vector GPR 132 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a133" description="Accumulation Vector GPR 133 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a134" description="Accumulation Vector GPR 134 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a135" description="Accumulation Vector GPR 135 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a136" description="Accumulation Vector GPR 136 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a137" description="Accumulation Vector GPR 137 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a138" description="Accumulation Vector GPR 138 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a139" description="Accumulation Vector GPR 139 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a140" description="Accumulation Vector GPR 140 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a141" description="Accumulation Vector GPR 141 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a142" description="Accumulation Vector GPR 142 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a143" description="Accumulation Vector GPR 143 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a144" description="Accumulation Vector GPR 144 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a145" description="Accumulation Vector GPR 145 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a146" description="Accumulation Vector GPR 146 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a147" description="Accumulation Vector GPR 147 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a148" description="Accumulation Vector GPR 148 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a149" description="Accumulation Vector GPR 149 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a150" description="Accumulation Vector GPR 150 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a151" description="Accumulation Vector GPR 151 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a152" description="Accumulation Vector GPR 152 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a153" description="Accumulation Vector GPR 153 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a154" description="Accumulation Vector GPR 154 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a155" description="Accumulation Vector GPR 155 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a156" description="Accumulation Vector GPR 156 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a157" description="Accumulation Vector GPR 157 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a158" description="Accumulation Vector GPR 158 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a159" description="Accumulation Vector GPR 159 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a160" description="Accumulation Vector GPR 160 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a161" description="Accumulation Vector GPR 161 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a162" description="Accumulation Vector GPR 162 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a163" description="Accumulation Vector GPR 163 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a164" description="Accumulation Vector GPR 164 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a165" description="Accumulation Vector GPR 165 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a166" description="Accumulation Vector GPR 166 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a167" description="Accumulation Vector GPR 167 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a168" description="Accumulation Vector GPR 168 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a169" description="Accumulation Vector GPR 169 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a170" description="Accumulation Vector GPR 170 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a171" description="Accumulation Vector GPR 171 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a172" description="Accumulation Vector GPR 172 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a173" description="Accumulation Vector GPR 173 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a174" description="Accumulation Vector GPR 174 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a175" description="Accumulation Vector GPR 175 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a176" description="Accumulation Vector GPR 176 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a177" description="Accumulation Vector GPR 177 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a178" description="Accumulation Vector GPR 178 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a179" description="Accumulation Vector GPR 179 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a180" description="Accumulation Vector GPR 180 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a181" description="Accumulation Vector GPR 181 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a182" description="Accumulation Vector GPR 182 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a183" description="Accumulation Vector GPR 183 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a184" description="Accumulation Vector GPR 184 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a185" description="Accumulation Vector GPR 185 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a186" description="Accumulation Vector GPR 186 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a187" description="Accumulation Vector GPR 187 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a188" description="Accumulation Vector GPR 188 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a189" description="Accumulation Vector GPR 189 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a190" description="Accumulation Vector GPR 190 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a191" description="Accumulation Vector GPR 191 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a192" description="Accumulation Vector GPR 192 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a193" description="Accumulation Vector GPR 193 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a194" description="Accumulation Vector GPR 194 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a195" description="Accumulation Vector GPR 195 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a196" description="Accumulation Vector GPR 196 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a197" description="Accumulation Vector GPR 197 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a198" description="Accumulation Vector GPR 198 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a199" description="Accumulation Vector GPR 199 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a200" description="Accumulation Vector GPR 200 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a201" description="Accumulation Vector GPR 201 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a202" description="Accumulation Vector GPR 202 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a203" description="Accumulation Vector GPR 203 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a204" description="Accumulation Vector GPR 204 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a205" description="Accumulation Vector GPR 205 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a206" description="Accumulation Vector GPR 206 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a207" description="Accumulation Vector GPR 207 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a208" description="Accumulation Vector GPR 208 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a209" description="Accumulation Vector GPR 209 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a210" description="Accumulation Vector GPR 210 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a211" description="Accumulation Vector GPR 211 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a212" description="Accumulation Vector GPR 212 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a213" description="Accumulation Vector GPR 213 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a214" description="Accumulation Vector GPR 214 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a215" description="Accumulation Vector GPR 215 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a216" description="Accumulation Vector GPR 216 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a217" description="Accumulation Vector GPR 217 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a218" description="Accumulation Vector GPR 218 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a219" description="Accumulation Vector GPR 219 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a220" description="Accumulation Vector GPR 220 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a221" description="Accumulation Vector GPR 221 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a222" description="Accumulation Vector GPR 222 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a223" description="Accumulation Vector GPR 223 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a224" description="Accumulation Vector GPR 224 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a225" description="Accumulation Vector GPR 225 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a226" description="Accumulation Vector GPR 226 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a227" description="Accumulation Vector GPR 227 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a228" description="Accumulation Vector GPR 228 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a229" description="Accumulation Vector GPR 229 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a230" description="Accumulation Vector GPR 230 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a231" description="Accumulation Vector GPR 231 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a232" description="Accumulation Vector GPR 232 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a233" description="Accumulation Vector GPR 233 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a234" description="Accumulation Vector GPR 234 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a235" description="Accumulation Vector GPR 235 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a236" description="Accumulation Vector GPR 236 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a237" description="Accumulation Vector GPR 237 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a238" description="Accumulation Vector GPR 238 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a239" description="Accumulation Vector GPR 239 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a240" description="Accumulation Vector GPR 240 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a241" description="Accumulation Vector GPR 241 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a242" description="Accumulation Vector GPR 242 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a243" description="Accumulation Vector GPR 243 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a244" description="Accumulation Vector GPR 244 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a245" description="Accumulation Vector GPR 245 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a246" description="Accumulation Vector GPR 246 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a247" description="Accumulation Vector GPR 247 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a248" description="Accumulation Vector GPR 248 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a249" description="Accumulation Vector GPR 249 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a250" description="Accumulation Vector GPR 250 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a251" description="Accumulation Vector GPR 251 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a252" description="Accumulation Vector GPR 252 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a253" description="Accumulation Vector GPR 253 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a254" description="Accumulation Vector GPR 254 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="a255" description="Accumulation Vector GPR 255 (32-bit per lane, used for MFMA/matrix instructions on CDNA hardware)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s0" description="Scalar General Purpose Register 0 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s1" description="Scalar General Purpose Register 1 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s2" description="Scalar General Purpose Register 2 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s3" description="Scalar General Purpose Register 3 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s4" description="Scalar General Purpose Register 4 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s5" description="Scalar General Purpose Register 5 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s6" description="Scalar General Purpose Register 6 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s7" description="Scalar General Purpose Register 7 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s8" description="Scalar General Purpose Register 8 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s9" description="Scalar General Purpose Register 9 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s10" description="Scalar General Purpose Register 10 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s11" description="Scalar General Purpose Register 11 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s12" description="Scalar General Purpose Register 12 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s13" description="Scalar General Purpose Register 13 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s14" description="Scalar General Purpose Register 14 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s15" description="Scalar General Purpose Register 15 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s16" description="Scalar General Purpose Register 16 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s17" description="Scalar General Purpose Register 17 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s18" description="Scalar General Purpose Register 18 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s19" description="Scalar General Purpose Register 19 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s20" description="Scalar General Purpose Register 20 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s21" description="Scalar General Purpose Register 21 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s22" description="Scalar General Purpose Register 22 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s23" description="Scalar General Purpose Register 23 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s24" description="Scalar General Purpose Register 24 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s25" description="Scalar General Purpose Register 25 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s26" description="Scalar General Purpose Register 26 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s27" description="Scalar General Purpose Register 27 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s28" description="Scalar General Purpose Register 28 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s29" description="Scalar General Purpose Register 29 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s30" description="Scalar General Purpose Register 30 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s31" description="Scalar General Purpose Register 31 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s32" description="Scalar General Purpose Register 32 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s33" description="Scalar General Purpose Register 33 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s34" description="Scalar General Purpose Register 34 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s35" description="Scalar General Purpose Register 35 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s36" description="Scalar General Purpose Register 36 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s37" description="Scalar General Purpose Register 37 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s38" description="Scalar General Purpose Register 38 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s39" description="Scalar General Purpose Register 39 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s40" description="Scalar General Purpose Register 40 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s41" description="Scalar General Purpose Register 41 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s42" description="Scalar General Purpose Register 42 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s43" description="Scalar General Purpose Register 43 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s44" description="Scalar General Purpose Register 44 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s45" description="Scalar General Purpose Register 45 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s46" description="Scalar General Purpose Register 46 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s47" description="Scalar General Purpose Register 47 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s48" description="Scalar General Purpose Register 48 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s49" description="Scalar General Purpose Register 49 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s50" description="Scalar General Purpose Register 50 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s51" description="Scalar General Purpose Register 51 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s52" description="Scalar General Purpose Register 52 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s53" description="Scalar General Purpose Register 53 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s54" description="Scalar General Purpose Register 54 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s55" description="Scalar General Purpose Register 55 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s56" description="Scalar General Purpose Register 56 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s57" description="Scalar General Purpose Register 57 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s58" description="Scalar General Purpose Register 58 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s59" description="Scalar General Purpose Register 59 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s60" description="Scalar General Purpose Register 60 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s61" description="Scalar General Purpose Register 61 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s62" description="Scalar General Purpose Register 62 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s63" description="Scalar General Purpose Register 63 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s64" description="Scalar General Purpose Register 64 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s65" description="Scalar General Purpose Register 65 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s66" description="Scalar General Purpose Register 66 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s67" description="Scalar General Purpose Register 67 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s68" description="Scalar General Purpose Register 68 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s69" description="Scalar General Purpose Register 69 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s70" description="Scalar General Purpose Register 70 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s71" description="Scalar General Purpose Register 71 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s72" description="Scalar General Purpose Register 72 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s73" description="Scalar General Purpose Register 73 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s74" description="Scalar General Purpose Register 74 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s75" description="Scalar General Purpose Register 75 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s76" description="Scalar General Purpose Register 76 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s77" description="Scalar General Purpose Register 77 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s78" description="Scalar General Purpose Register 78 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s79" description="Scalar General Purpose Register 79 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s80" description="Scalar General Purpose Register 80 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s81" description="Scalar General Purpose Register 81 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s82" description="Scalar General Purpose Register 82 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s83" description="Scalar General Purpose Register 83 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s84" description="Scalar General Purpose Register 84 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s85" description="Scalar General Purpose Register 85 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s86" description="Scalar General Purpose Register 86 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s87" description="Scalar General Purpose Register 87 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s88" description="Scalar General Purpose Register 88 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s89" description="Scalar General Purpose Register 89 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s90" description="Scalar General Purpose Register 90 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s91" description="Scalar General Purpose Register 91 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s92" description="Scalar General Purpose Register 92 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s93" description="Scalar General Purpose Register 93 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s94" description="Scalar General Purpose Register 94 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s95" description="Scalar General Purpose Register 95 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s96" description="Scalar General Purpose Register 96 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s97" description="Scalar General Purpose Register 97 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s98" description="Scalar General Purpose Register 98 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s99" description="Scalar General Purpose Register 99 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s100" description="Scalar General Purpose Register 100 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s101" description="Scalar General Purpose Register 101 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s102" description="Scalar General Purpose Register 102 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s103" description="Scalar General Purpose Register 103 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s104" description="Scalar General Purpose Register 104 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="s105" description="Scalar General Purpose Register 105 (32-bit, uniform across wavefront)" type="General Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp0" description="Trap Temporary Register 0 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp1" description="Trap Temporary Register 1 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp2" description="Trap Temporary Register 2 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp3" description="Trap Temporary Register 3 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp4" description="Trap Temporary Register 4 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp5" description="Trap Temporary Register 5 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp6" description="Trap Temporary Register 6 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp7" description="Trap Temporary Register 7 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp8" description="Trap Temporary Register 8 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp9" description="Trap Temporary Register 9 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp10" description="Trap Temporary Register 10 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp11" description="Trap Temporary Register 11 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp12" description="Trap Temporary Register 12 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp13" description="Trap Temporary Register 13 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp14" description="Trap Temporary Register 14 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="ttmp15" description="Trap Temporary Register 15 (32-bit, used during trap/exception handling)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="exec" description="Execution Mask (64-bit, controls which lanes are active in a wavefront)" type="Special Purpose Register" width="64 bits">
+  </Register>
+  <Register name="exec_lo" description="Execution Mask low 32 bits (alias for wave32 or explicit access)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="exec_hi" description="Execution Mask high 32 bits (wave64 upper half)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="vcc" description="Vector Condition Code (64-bit, result of VOPC comparisons on wave64)" type="Special Purpose Register" width="64 bits">
+  </Register>
+  <Register name="vcc_lo" description="Vector Condition Code low 32 bits (wave32 vcc, or lower half of wave64)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="vcc_hi" description="Vector Condition Code high 32 bits (wave64 upper half)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="m0" description="M0: multipurpose scalar register (LDS addressing, interpolation, indirect branch target)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="scc" description="Scalar Condition Code (1-bit, result of SOPC/SOP2 comparisons)" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="flat_scratch" description="Flat Scratch base address register (64-bit base for private/scratch memory)" type="Special Purpose Register" width="64 bits">
+  </Register>
+  <Register name="flat_scratch_lo" description="Flat Scratch base address low 32 bits" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="flat_scratch_hi" description="Flat Scratch base address high 32 bits" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="xnack_mask" description="XNACK retry mask (64-bit, tracks pending memory retry on XNACK-enabled hardware)" type="Special Purpose Register" width="64 bits">
+  </Register>
+  <Register name="xnack_mask_lo" description="XNACK retry mask low 32 bits" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="xnack_mask_hi" description="XNACK retry mask high 32 bits" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="src_shared_base" description="LDS/shared memory base address" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="src_shared_limit" description="LDS/shared memory limit address" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="src_private_base" description="Private/scratch memory base address" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="src_private_limit" description="Private/scratch memory limit address" type="Special Purpose Register" width="32 bits">
+  </Register>
+  <Register name="src_pops_exiting_wave_id" description="POPS (Primitive Ordered Pixel Shading) exiting wave ID" type="Special Purpose Register" width="32 bits">
+  </Register>
+</InstructionSet>

@@ -7,9 +7,9 @@ use serde::{Deserialize, Serialize};
 use asm_lsp::{
     Arch, Assembler, BINCODE_CFG, Directive, Instruction, Register,
     parser::{
-        populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
-        populate_avr_instructions, populate_ca65_directives, populate_gas_directives,
-        populate_instructions, populate_mars_pseudo_instructions,
+        populate_6502_instructions, populate_amdgpu_instructions, populate_arm_instructions,
+        populate_avr_directives, populate_avr_instructions, populate_ca65_directives,
+        populate_gas_directives, populate_instructions, populate_mars_pseudo_instructions,
         populate_masm_nasm_fasm_mars_directives, populate_mips_instructions,
         populate_power_isa_instructions, populate_registers, populate_riscv_instructions,
         populate_riscv_registers,
@@ -99,6 +99,19 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                             Some(Arch::Avr) => {
                                 instrs = populate_avr_instructions(&conts)?;
                             }
+                            Some(arch @ Arch::AmdgpuGfx908)
+                            | Some(arch @ Arch::AmdgpuGfx90a)
+                            | Some(arch @ Arch::AmdgpuGfx942)
+                            | Some(arch @ Arch::AmdgpuGfx10)
+                            | Some(arch @ Arch::AmdgpuGfx10_3)
+                            | Some(arch @ Arch::AmdgpuGfx11)
+                            | Some(arch @ Arch::AmdgpuGfx11_5)
+                            | Some(arch @ Arch::AmdgpuGfx950)
+                            | Some(arch @ Arch::AmdgpuGfx12)
+                            | Some(arch @ Arch::AmdgpuGfx1250)
+                            | Some(arch @ Arch::AmdgpuGfx1251) => {
+                                instrs = populate_amdgpu_instructions(arch, &conts)?;
+                            }
                             _ => {
                                 instrs = populate_instructions(&conts)?;
                             }
@@ -157,6 +170,7 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                     }
                     Assembler::Ca65 => populate_ca65_directives(&conts)?,
                     Assembler::Avr => populate_avr_directives(&conts)?,
+                    Assembler::Amdgpu => populate_gas_directives(&conts)?,
                     Assembler::None => unreachable!(),
                 },
             };

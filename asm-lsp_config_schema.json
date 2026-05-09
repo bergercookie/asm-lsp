@@ -38,7 +38,18 @@
             "6502",
             "power-isa",
             "AVR",
-            "mips"
+            "mips",
+            "amdgpu-gfx908",
+            "amdgpu-gfx90a",
+            "amdgpu-gfx942",
+            "amdgpu-gfx10",
+            "amdgpu-gfx10-3",
+            "amdgpu-gfx11",
+            "amdgpu-gfx11-5",
+            "amdgpu-gfx950",
+            "amdgpu-gfx12",
+            "amdgpu-gfx1250",
+            "amdgpu-gfx1251"
           ]
         },
         {

@@ -177,6 +177,34 @@ fn gen_opcodes(root_path: &Path) -> Result<()> {
         .current_dir(root_path)
         .status()
         .with_context(|| anyhow!("Failed to regenerate serialized z80 opcodes"))?;
+    for (gpu_gen, arch_arg) in [
+        ("amdgpu-gfx908", "amdgpu-gfx908"),
+        ("amdgpu-gfx90a", "amdgpu-gfx90a"),
+        ("amdgpu-gfx942", "amdgpu-gfx942"),
+        ("amdgpu-gfx10", "amdgpu-gfx10"),
+        ("amdgpu-gfx10-3", "amdgpu-gfx10-3"),
+        ("amdgpu-gfx11", "amdgpu-gfx11"),
+        ("amdgpu-gfx11-5", "amdgpu-gfx11-5"),
+        ("amdgpu-gfx950", "amdgpu-gfx950"),
+        ("amdgpu-gfx12", "amdgpu-gfx12"),
+        ("amdgpu-gfx1250", "amdgpu-gfx1250"),
+        ("amdgpu-gfx1251", "amdgpu-gfx1251"),
+    ] {
+        println!("\t{gpu_gen}");
+        Command::new(PARSE_EXE)
+            .args([
+                &format!("docs_store/opcodes/{gpu_gen}.json"),
+                "-o",
+                &format!("asm-lsp/serialized/opcodes/{gpu_gen}"),
+            ])
+            .arg("--doc-type")
+            .arg("instruction")
+            .arg("--arch")
+            .arg(arch_arg)
+            .current_dir(root_path)
+            .status()
+            .with_context(|| anyhow!("Failed to regenerate serialized {gpu_gen} opcodes"))?;
+    }
 
     Ok(())
 }
@@ -323,6 +351,20 @@ fn gen_registers(root_path: &Path) -> Result<()> {
         .current_dir(root_path)
         .status()
         .with_context(|| anyhow!("Failed to regenerate serialized z80 registers"))?;
+    println!("\tamdgpu");
+    Command::new(PARSE_EXE)
+        .args([
+            "docs_store/registers/amdgpu.xml",
+            "-o",
+            "asm-lsp/serialized/registers/amdgpu",
+        ])
+        .arg("--doc-type")
+        .arg("register")
+        .arg("--arch")
+        .arg("amdgpu-gfx11")
+        .current_dir(root_path)
+        .status()
+        .with_context(|| anyhow!("Failed to regenerate serialized amdgpu registers"))?;
 
     Ok(())
 }
@@ -427,6 +469,20 @@ fn gen_directives(root_path: &Path) -> Result<()> {
         .current_dir(root_path)
         .status()
         .with_context(|| anyhow!("Failed to regenerate serialized nasm directives"))?;
+    println!("\tamdgpu");
+    Command::new(PARSE_EXE)
+        .args([
+            "docs_store/directives/amdgpu.xml",
+            "-o",
+            "asm-lsp/serialized/directives/amdgpu",
+        ])
+        .arg("--doc-type")
+        .arg("directive")
+        .arg("--assembler")
+        .arg("amdgpu")
+        .current_dir(root_path)
+        .status()
+        .with_context(|| anyhow!("Failed to regenerate serialized amdgpu directives"))?;
 
     Ok(())
 }

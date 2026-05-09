@@ -1,0 +1,336 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Assembler name="amdgpu">
+    <!-- Code Object V2 directives (HSA) -->
+    <Directive name=".hsa_code_object_version" url_fragment="hsa-code-object-v2-directives"
+               md_description="Specifies the HSA code object version. Used in code object V2 only.">
+        <Signatures>
+            <Signature sig=".hsa_code_object_version *major*, *minor*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".hsa_code_object_isa" url_fragment="hsa-code-object-v2-directives"
+               md_description="Specifies the instruction set architecture for HSA code object V2. If no arguments are given, the ISA defined by the `-mcpu` option is used.">
+        <Signatures>
+            <Signature sig=".hsa_code_object_isa [*major*, *minor*, *stepping*, &quot;*vendor*&quot;, &quot;*arch*&quot;]"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdgpu_hsa_kernel" url_fragment="hsa-code-object-v2-directives"
+               md_description="Marks the associated symbol as an HSA kernel (code object V2). Creates metadata indicating the symbol is an AMD GPU kernel entry point.">
+        <Signatures>
+            <Signature sig=".amdgpu_hsa_kernel *name*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amd_kernel_code_t" url_fragment="amd-kernel-code-t"
+               md_description="Begins an AMD kernel code table entry block (code object V2). Contains key-value pairs that configure kernel execution parameters. Must end with `.end_amd_kernel_code_t`.">
+        <Signatures>
+            <Signature sig=".amd_kernel_code_t"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".end_amd_kernel_code_t" url_fragment="amd-kernel-code-t"
+               md_description="Ends an `.amd_kernel_code_t` block (code object V2).">
+        <Signatures>
+            <Signature sig=".end_amd_kernel_code_t"></Signature>
+        </Signatures>
+    </Directive>
+
+    <!-- Code Object V3+ directives (AMDHSA) -->
+    <Directive name=".amdgcn_target" url_fragment="code-object-v3-directives"
+               md_description="Specifies the target triple and target ID for the assembled code object V3+. The target ID includes the processor name and optional feature flags (e.g. `&quot;amdgcn-amd-amdhsa--gfx1100&quot;`).">
+        <Signatures>
+            <Signature sig=".amdgcn_target &quot;*target-triple*-*target-id*&quot;"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_code_object_version" url_fragment="code-object-v3-directives"
+               md_description="Declares the AMDHSA code object version (3, 4, 5, or 6). Must appear before any `.amdhsa_kernel` directives.">
+        <Signatures>
+            <Signature sig=".amdhsa_code_object_version *version*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_kernel" url_fragment="amdhsa-kernel-directives"
+               md_description="Begins a kernel descriptor block for a named kernel (code object V3+). Contains sub-directives that set kernel metadata. Must end with `.end_amdhsa_kernel`.">
+        <Signatures>
+            <Signature sig=".amdhsa_kernel *name*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".end_amdhsa_kernel" url_fragment="amdhsa-kernel-directives"
+               md_description="Ends an `.amdhsa_kernel` block (code object V3+).">
+        <Signatures>
+            <Signature sig=".end_amdhsa_kernel"></Signature>
+        </Signatures>
+    </Directive>
+
+    <!-- AMDHSA kernel sub-directives -->
+    <Directive name=".amdhsa_next_free_vgpr" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Specifies the first unused VGPR number for the kernel. The hardware uses this to allocate the VGPR block. Usually set to the result of the `.amdgcn.next_free_vgpr` predefined symbol.">
+        <Signatures>
+            <Signature sig=".amdhsa_next_free_vgpr *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_next_free_sgpr" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Specifies the first unused SGPR number for the kernel. Usually set to the result of the `.amdgcn.next_free_sgpr` predefined symbol.">
+        <Signatures>
+            <Signature sig=".amdhsa_next_free_sgpr *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_accum_offset" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="(GFX90A+) Specifies the VGPR offset at which AGPRs begin. Must be aligned to 4. Only valid when AGPRs are in use.">
+        <Signatures>
+            <Signature sig=".amdhsa_accum_offset *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_group_segment_fixed_size" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Specifies the fixed LDS (local data store / group memory) allocation in bytes for the kernel.">
+        <Signatures>
+            <Signature sig=".amdhsa_group_segment_fixed_size *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_private_segment_fixed_size" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Specifies the per-work-item private segment (scratch memory) size in bytes for the kernel.">
+        <Signatures>
+            <Signature sig=".amdhsa_private_segment_fixed_size *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_kernarg_size" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Specifies the kernel argument buffer size in bytes. Must match the total size of all kernel arguments.">
+        <Signatures>
+            <Signature sig=".amdhsa_kernarg_size *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_user_sgpr_count" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Specifies the number of user SGPRs that are set up by the hardware before the kernel starts executing.">
+        <Signatures>
+            <Signature sig=".amdhsa_user_sgpr_count *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_user_sgpr_private_segment_buffer" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Indicates whether the private segment buffer descriptor is passed in user SGPRs (0 or 1). Occupies 4 SGPRs when enabled.">
+        <Signatures>
+            <Signature sig=".amdhsa_user_sgpr_private_segment_buffer *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_user_sgpr_kernarg_segment_ptr" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Indicates whether a pointer to the kernel argument buffer is passed in user SGPRs (0 or 1). Occupies 2 SGPRs when enabled.">
+        <Signatures>
+            <Signature sig=".amdhsa_user_sgpr_kernarg_segment_ptr *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_user_sgpr_dispatch_ptr" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Indicates whether the dispatch packet pointer is passed in user SGPRs (0 or 1). Occupies 2 SGPRs when enabled.">
+        <Signatures>
+            <Signature sig=".amdhsa_user_sgpr_dispatch_ptr *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_user_sgpr_queue_ptr" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Indicates whether the queue pointer is passed in user SGPRs (0 or 1). Occupies 2 SGPRs when enabled.">
+        <Signatures>
+            <Signature sig=".amdhsa_user_sgpr_queue_ptr *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_user_sgpr_flat_scratch_init" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Indicates whether the flat scratch init value is passed in user SGPRs (0 or 1). Occupies 2 SGPRs when enabled.">
+        <Signatures>
+            <Signature sig=".amdhsa_user_sgpr_flat_scratch_init *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_user_sgpr_private_segment_size" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Indicates whether the private segment size is passed in a user SGPR (0 or 1).">
+        <Signatures>
+            <Signature sig=".amdhsa_user_sgpr_private_segment_size *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_system_sgpr_private_segment_wavefront_offset" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Indicates whether the private segment wavefront offset is passed via a system SGPR (0 or 1).">
+        <Signatures>
+            <Signature sig=".amdhsa_system_sgpr_private_segment_wavefront_offset *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_system_sgpr_workgroup_id_x" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Indicates whether the workgroup ID in the X dimension is passed via a system SGPR (0 or 1).">
+        <Signatures>
+            <Signature sig=".amdhsa_system_sgpr_workgroup_id_x *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_system_sgpr_workgroup_id_y" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Indicates whether the workgroup ID in the Y dimension is passed via a system SGPR (0 or 1).">
+        <Signatures>
+            <Signature sig=".amdhsa_system_sgpr_workgroup_id_y *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_system_sgpr_workgroup_id_z" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Indicates whether the workgroup ID in the Z dimension is passed via a system SGPR (0 or 1).">
+        <Signatures>
+            <Signature sig=".amdhsa_system_sgpr_workgroup_id_z *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_system_sgpr_workgroup_info" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Indicates whether workgroup info is passed via a system SGPR (0 or 1).">
+        <Signatures>
+            <Signature sig=".amdhsa_system_sgpr_workgroup_info *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_system_vgpr_workitem_id" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Specifies which work-item IDs are initialised in the first system VGPR: 0 = X only, 1 = X and Y, 2 = X, Y, and Z.">
+        <Signatures>
+            <Signature sig=".amdhsa_system_vgpr_workitem_id *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_float_round_mode_32" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Sets the rounding mode for 32-bit floating-point operations. Values: 0=nearest-even, 1=+inf, 2=-inf, 3=toward-zero.">
+        <Signatures>
+            <Signature sig=".amdhsa_float_round_mode_32 *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_float_round_mode_16_64" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Sets the rounding mode for 16-bit and 64-bit floating-point operations. Values: 0=nearest-even, 1=+inf, 2=-inf, 3=toward-zero.">
+        <Signatures>
+            <Signature sig=".amdhsa_float_round_mode_16_64 *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_float_denorm_mode_32" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Configures denormal number handling for 32-bit floating-point: 0=flush both, 1=flush output only, 2=flush input only, 3=no flush.">
+        <Signatures>
+            <Signature sig=".amdhsa_float_denorm_mode_32 *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_float_denorm_mode_16_64" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Configures denormal number handling for 16-bit and 64-bit floating-point: 0=flush both, 1=flush output only, 2=flush input only, 3=no flush.">
+        <Signatures>
+            <Signature sig=".amdhsa_float_denorm_mode_16_64 *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_dx10_clamp" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Enables (1) or disables (0) DX10 clamp mode. When enabled, NaN inputs to floating-point operations are clamped to 0.">
+        <Signatures>
+            <Signature sig=".amdhsa_dx10_clamp *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_ieee_mode" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Enables (1) or disables (0) IEEE 754 floating-point mode. When disabled, NaN and infinity results may differ from the standard.">
+        <Signatures>
+            <Signature sig=".amdhsa_ieee_mode *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_fp16_overflow" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Enables (1) or disables (0) FP16 overflow saturation. When enabled, FP16 operations that overflow clamp to ±infinity.">
+        <Signatures>
+            <Signature sig=".amdhsa_fp16_overflow *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_tg_split" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="(GFX90A+) Enables (1) or disables (0) thread-group split mode.">
+        <Signatures>
+            <Signature sig=".amdhsa_tg_split *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_workgroup_processor_mode" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="(GFX10+) Enables (1) or disables (0) workgroup processor (WGP) mode. WGP mode allows a workgroup to span two compute units.">
+        <Signatures>
+            <Signature sig=".amdhsa_workgroup_processor_mode *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_memory_ordered" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="(GFX10+) Enables (1) or disables (0) memory-ordered mode.">
+        <Signatures>
+            <Signature sig=".amdhsa_memory_ordered *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_forward_progress" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="(GFX10+) Indicates whether (1) or not (0) the kernel guarantees forward progress.">
+        <Signatures>
+            <Signature sig=".amdhsa_forward_progress *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_shared_vgpr_count" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="(GFX10+) Specifies the number of shared VGPRs used for wavefront sharing. Must be a multiple of 8.">
+        <Signatures>
+            <Signature sig=".amdhsa_shared_vgpr_count *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_exception_fp_ieee_invalid_op" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Enables (1) or disables (0) the IEEE invalid operation floating-point exception.">
+        <Signatures>
+            <Signature sig=".amdhsa_exception_fp_ieee_invalid_op *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_exception_fp_denorm_src" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Enables (1) or disables (0) the denormalized source floating-point exception.">
+        <Signatures>
+            <Signature sig=".amdhsa_exception_fp_denorm_src *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_exception_fp_ieee_div_zero" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Enables (1) or disables (0) the IEEE divide-by-zero floating-point exception.">
+        <Signatures>
+            <Signature sig=".amdhsa_exception_fp_ieee_div_zero *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_exception_fp_ieee_overflow" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Enables (1) or disables (0) the IEEE overflow floating-point exception.">
+        <Signatures>
+            <Signature sig=".amdhsa_exception_fp_ieee_overflow *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_exception_fp_ieee_underflow" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Enables (1) or disables (0) the IEEE underflow floating-point exception.">
+        <Signatures>
+            <Signature sig=".amdhsa_exception_fp_ieee_underflow *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_exception_fp_ieee_inexact" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Enables (1) or disables (0) the IEEE inexact result floating-point exception.">
+        <Signatures>
+            <Signature sig=".amdhsa_exception_fp_ieee_inexact *expr*"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdhsa_exception_int_div_zero" url_fragment="amdhsa-kernel-sub-directives"
+               md_description="Enables (1) or disables (0) the integer divide-by-zero exception.">
+        <Signatures>
+            <Signature sig=".amdhsa_exception_int_div_zero *expr*"></Signature>
+        </Signatures>
+    </Directive>
+
+    <!-- Metadata directive -->
+    <Directive name=".amdgpu_metadata" url_fragment="amdgpu-metadata"
+               md_description="Introduces an AMDGPU metadata block for code object V3+. The block contains YAML-encoded metadata describing kernels and the code object. Must end with `.end_amdgpu_metadata`.">
+        <Signatures>
+            <Signature sig=".amdgpu_metadata"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".end_amdgpu_metadata" url_fragment="amdgpu-metadata"
+               md_description="Ends an `.amdgpu_metadata` block.">
+        <Signatures>
+            <Signature sig=".end_amdgpu_metadata"></Signature>
+        </Signatures>
+    </Directive>
+
+    <!-- Predefined symbol directives (used as expressions, listed for completion) -->
+    <Directive name=".amdgcn.gfx_generation_number" url_fragment="predefined-symbols"
+               md_description="Predefined assembler symbol that expands to the GFX generation number of the target (e.g. 11 for GFX11, 12 for GFX12).">
+        <Signatures>
+            <Signature sig=".amdgcn.gfx_generation_number"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdgcn.gfx_generation_minor" url_fragment="predefined-symbols"
+               md_description="Predefined assembler symbol that expands to the minor generation version number of the target.">
+        <Signatures>
+            <Signature sig=".amdgcn.gfx_generation_minor"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdgcn.gfx_generation_stepping" url_fragment="predefined-symbols"
+               md_description="Predefined assembler symbol that expands to the stepping version number of the target.">
+        <Signatures>
+            <Signature sig=".amdgcn.gfx_generation_stepping"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdgcn.next_free_vgpr" url_fragment="predefined-symbols"
+               md_description="Predefined assembler symbol that tracks the highest VGPR number used so far plus one. Use in `.amdhsa_next_free_vgpr` to automatically set the correct value.">
+        <Signatures>
+            <Signature sig=".amdgcn.next_free_vgpr"></Signature>
+        </Signatures>
+    </Directive>
+    <Directive name=".amdgcn.next_free_sgpr" url_fragment="predefined-symbols"
+               md_description="Predefined assembler symbol that tracks the highest SGPR number used so far plus one. Use in `.amdhsa_next_free_sgpr` to automatically set the correct value.">
+        <Signatures>
+            <Signature sig=".amdgcn.next_free_sgpr"></Signature>
+        </Signatures>
+    </Directive>
+</Assembler>

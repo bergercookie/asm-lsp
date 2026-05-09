@@ -819,6 +819,39 @@ pub enum Arch {
     #[strum(serialize = "mips")]
     #[serde(rename = "mips")]
     Mips,
+    #[strum(serialize = "amdgpu-gfx908")]
+    #[serde(rename = "amdgpu-gfx908")]
+    AmdgpuGfx908,
+    #[strum(serialize = "amdgpu-gfx90a")]
+    #[serde(rename = "amdgpu-gfx90a")]
+    AmdgpuGfx90a,
+    #[strum(serialize = "amdgpu-gfx942")]
+    #[serde(rename = "amdgpu-gfx942")]
+    AmdgpuGfx942,
+    #[strum(serialize = "amdgpu-gfx10")]
+    #[serde(rename = "amdgpu-gfx10")]
+    AmdgpuGfx10,
+    #[strum(serialize = "amdgpu-gfx10-3")]
+    #[serde(rename = "amdgpu-gfx10-3")]
+    AmdgpuGfx10_3,
+    #[strum(serialize = "amdgpu-gfx11")]
+    #[serde(rename = "amdgpu-gfx11")]
+    AmdgpuGfx11,
+    #[strum(serialize = "amdgpu-gfx11-5")]
+    #[serde(rename = "amdgpu-gfx11-5")]
+    AmdgpuGfx11_5,
+    #[strum(serialize = "amdgpu-gfx950")]
+    #[serde(rename = "amdgpu-gfx950")]
+    AmdgpuGfx950,
+    #[strum(serialize = "amdgpu-gfx12")]
+    #[serde(rename = "amdgpu-gfx12")]
+    AmdgpuGfx12,
+    #[strum(serialize = "amdgpu-gfx1250")]
+    #[serde(rename = "amdgpu-gfx1250")]
+    AmdgpuGfx1250,
+    #[strum(serialize = "amdgpu-gfx1251")]
+    #[serde(rename = "amdgpu-gfx1251")]
+    AmdgpuGfx1251,
     /// For testing purposes *only*. This is not a valid config option
     #[serde(skip)]
     None,
@@ -827,6 +860,22 @@ pub enum Arch {
 impl ArchOrAssembler for Arch {}
 
 impl Arch {
+    pub const fn is_amdgpu(self) -> bool {
+        matches!(
+            self,
+            Self::AmdgpuGfx908
+                | Self::AmdgpuGfx90a
+                | Self::AmdgpuGfx942
+                | Self::AmdgpuGfx10
+                | Self::AmdgpuGfx10_3
+                | Self::AmdgpuGfx11
+                | Self::AmdgpuGfx11_5
+                | Self::AmdgpuGfx950
+                | Self::AmdgpuGfx12
+                | Self::AmdgpuGfx1250
+                | Self::AmdgpuGfx1251
+        )
+    }
     /// Setup registers for a particular architecture
     ///
     /// # Panics
@@ -867,6 +916,19 @@ impl Arch {
                 load_registers_with_path!(Self::X86_64, "serialized/registers/x86_64");
             }
             Self::Z80 => load_registers_with_path!(Self::Z80, "serialized/registers/z80"),
+            Self::AmdgpuGfx908
+            | Self::AmdgpuGfx90a
+            | Self::AmdgpuGfx942
+            | Self::AmdgpuGfx10
+            | Self::AmdgpuGfx10_3
+            | Self::AmdgpuGfx11
+            | Self::AmdgpuGfx11_5
+            | Self::AmdgpuGfx950
+            | Self::AmdgpuGfx12
+            | Self::AmdgpuGfx1250
+            | Self::AmdgpuGfx1251 => {
+                load_registers_with_path!(self, "serialized/registers/amdgpu");
+            }
             Self::None => unreachable!(),
         }
     }
@@ -923,6 +985,63 @@ impl Arch {
                 load_instructions_with_path!(Self::X86_64, "serialized/opcodes/x86_64");
             }
             Self::Z80 => load_instructions_with_path!(Self::Z80, "serialized/opcodes/z80"),
+            Self::AmdgpuGfx908 => {
+                load_instructions_with_path!(
+                    Self::AmdgpuGfx908,
+                    "serialized/opcodes/amdgpu-gfx908"
+                );
+            }
+            Self::AmdgpuGfx90a => {
+                load_instructions_with_path!(
+                    Self::AmdgpuGfx90a,
+                    "serialized/opcodes/amdgpu-gfx90a"
+                );
+            }
+            Self::AmdgpuGfx942 => {
+                load_instructions_with_path!(
+                    Self::AmdgpuGfx942,
+                    "serialized/opcodes/amdgpu-gfx942"
+                );
+            }
+            Self::AmdgpuGfx10 => {
+                load_instructions_with_path!(Self::AmdgpuGfx10, "serialized/opcodes/amdgpu-gfx10");
+            }
+            Self::AmdgpuGfx10_3 => {
+                load_instructions_with_path!(
+                    Self::AmdgpuGfx10_3,
+                    "serialized/opcodes/amdgpu-gfx10-3"
+                );
+            }
+            Self::AmdgpuGfx11 => {
+                load_instructions_with_path!(Self::AmdgpuGfx11, "serialized/opcodes/amdgpu-gfx11");
+            }
+            Self::AmdgpuGfx11_5 => {
+                load_instructions_with_path!(
+                    Self::AmdgpuGfx11_5,
+                    "serialized/opcodes/amdgpu-gfx11-5"
+                );
+            }
+            Self::AmdgpuGfx950 => {
+                load_instructions_with_path!(
+                    Self::AmdgpuGfx950,
+                    "serialized/opcodes/amdgpu-gfx950"
+                );
+            }
+            Self::AmdgpuGfx12 => {
+                load_instructions_with_path!(Self::AmdgpuGfx12, "serialized/opcodes/amdgpu-gfx12");
+            }
+            Self::AmdgpuGfx1250 => {
+                load_instructions_with_path!(
+                    Self::AmdgpuGfx1250,
+                    "serialized/opcodes/amdgpu-gfx1250"
+                );
+            }
+            Self::AmdgpuGfx1251 => {
+                load_instructions_with_path!(
+                    Self::AmdgpuGfx1251,
+                    "serialized/opcodes/amdgpu-gfx1251"
+                );
+            }
             Self::None => unreachable!(),
         }
     }
@@ -977,6 +1096,17 @@ impl std::fmt::Display for Arch {
             Self::X86_64 => write!(f, "x86-64")?,
             Self::X86_AND_X86_64 => write!(f, "x86/x86-64")?,
             Self::Z80 => write!(f, "z80")?,
+            Self::AmdgpuGfx908 => write!(f, "amdgpu-gfx908")?,
+            Self::AmdgpuGfx90a => write!(f, "amdgpu-gfx90a")?,
+            Self::AmdgpuGfx942 => write!(f, "amdgpu-gfx942")?,
+            Self::AmdgpuGfx10 => write!(f, "amdgpu-gfx10")?,
+            Self::AmdgpuGfx10_3 => write!(f, "amdgpu-gfx10-3")?,
+            Self::AmdgpuGfx11 => write!(f, "amdgpu-gfx11")?,
+            Self::AmdgpuGfx11_5 => write!(f, "amdgpu-gfx11-5")?,
+            Self::AmdgpuGfx950 => write!(f, "amdgpu-gfx950")?,
+            Self::AmdgpuGfx12 => write!(f, "amdgpu-gfx12")?,
+            Self::AmdgpuGfx1250 => write!(f, "amdgpu-gfx1250")?,
+            Self::AmdgpuGfx1251 => write!(f, "amdgpu-gfx1251")?,
             Self::None => write!(f, "None")?,
         }
         Ok(())
@@ -1026,6 +1156,9 @@ pub enum Assembler {
     #[strum(serialize = "nasm")]
     #[serde(rename = "nasm")]
     Nasm,
+    #[strum(serialize = "amdgpu")]
+    #[serde(rename = "amdgpu")]
+    Amdgpu,
     #[serde(skip)]
     None,
 }
@@ -1066,6 +1199,7 @@ impl Assembler {
             Self::Mars => load_directives_with_path!(Self::Mars, "serialized/directives/mars"),
             Self::Masm => load_directives_with_path!(Self::Masm, "serialized/directives/masm"),
             Self::Nasm => load_directives_with_path!(Self::Nasm, "serialized/directives/nasm"),
+            Self::Amdgpu => load_directives_with_path!(Self::Amdgpu, "serialized/directives/amdgpu"),
             Self::None => unreachable!(),
         }
     }
@@ -1287,10 +1421,17 @@ impl RootConfig {
         // NOTE: `self.default_config` is assumed to be set to `Some` in
         // `get_root_config`
         assert!(self.default_config.is_some());
-        assembler_set.insert(self.default_config.as_ref().unwrap().assembler);
+        let root = self.default_config.as_ref().unwrap();
+        assembler_set.insert(root.assembler);
+        if root.instruction_set.is_amdgpu() {
+            assembler_set.insert(Assembler::Amdgpu);
+        }
         if let Some(ref projects) = self.projects {
             for project in projects {
                 assembler_set.insert(project.config.assembler);
+                if project.config.instruction_set.is_amdgpu() {
+                    assembler_set.insert(Assembler::Amdgpu);
+                }
             }
         }
 
@@ -1403,6 +1544,9 @@ impl Config {
 
     #[must_use]
     pub fn is_assembler_enabled(&self, assembler: Assembler) -> bool {
+        if assembler == Assembler::Amdgpu && self.instruction_set.is_amdgpu() {
+            return true;
+        }
         self.assembler == assembler
     }
 }
