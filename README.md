@@ -172,6 +172,12 @@ the server will attempt to provide diagnostics with a default compile command.
 This feature can be disabled by setting the `default_diagnostics` config field
 to `false`.
 
+To generate a `compile_commands.json` for an assembly project, run your build
+under [Bear](https://github.com/rizsotto/Bear) (e.g. `bear -- make`). Bear
+recognizes the `nasm`, `yasm`, and `fasm` assemblers and records each file's
+include directories and defines, which is the same information asm-lsp reads for hover and
+diagnostics.
+
 ### VSCode Support
 
 The project has not published any VSCode extension package yet. However, there is
