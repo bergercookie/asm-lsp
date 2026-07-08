@@ -512,22 +512,20 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
                     ustr::get_str(txt).clone_into(&mut alias.summary);
                 }
             }
-            Ok(Event::Empty(ref e)) => {
-                if QName(b"docvar") == e.name() {
-                    let mut alias_next = false;
-                    for attr in e.attributes() {
-                        let Attribute { key, value } = attr.unwrap();
-                        // TODO: we can get the correct alias from the id of an alias mnemonic
-                        // else the actual alias is the last docvar in the docvars tag
-                        if alias_next && b"value" == key.into_inner() {
-                            aliased_instr = Some(ustr::get_str(&value).to_ascii_lowercase());
-                            break;
-                        }
-                        if b"key" == key.into_inner()
-                            && b"alias_mnemonic" == ustr::get_str(&value).as_bytes()
-                        {
-                            alias_next = true;
-                        }
+            Ok(Event::Empty(ref e)) if QName(b"docvar") == e.name() => {
+                let mut alias_next = false;
+                for attr in e.attributes() {
+                    let Attribute { key, value } = attr.unwrap();
+                    // TODO: we can get the correct alias from the id of an alias mnemonic
+                    // else the actual alias is the last docvar in the docvars tag
+                    if alias_next && b"value" == key.into_inner() {
+                        aliased_instr = Some(ustr::get_str(&value).to_ascii_lowercase());
+                        break;
+                    }
+                    if b"key" == key.into_inner()
+                        && b"alias_mnemonic" == ustr::get_str(&value).as_bytes()
+                    {
+                        alias_next = true;
                     }
                 }
             }
@@ -540,10 +538,8 @@ fn parse_arm_alias(xml_contents: &str) -> Result<Option<(InstructionAlias, Strin
                     }
                     in_template = false;
                 }
-                QName(b"docvars") => {
-                    if aliased_instr.is_none() {
-                        return Ok(None);
-                    }
+                QName(b"docvars") if aliased_instr.is_none() => {
+                    return Ok(None);
                 }
                 _ => {}
             },
@@ -589,23 +585,22 @@ fn parse_arm_instruction(xml_contents: &str) -> Option<Instruction> {
                 QName(b"alphaindex" | b"encodingindex") => return None,
                 _ => {}
             },
-            Ok(Event::Empty(ref e)) => {
-                // e.g. <docvar key="mnemonic" value="ABS"/>
-                if QName(b"docvar") == e.name() {
-                    // There are multiple entries like this in each opcode file, but
-                    // *all* of them are the same within each file, so it doesn't matter which
-                    // one we use
-                    if instruction.name.is_empty() {
-                        let mut mnemonic_next = false;
-                        for attr in e.attributes() {
-                            let Attribute { key: _, value } = attr.unwrap();
-                            if b"mnemonic" == ustr::get_str(&value).as_bytes() {
-                                mnemonic_next = true;
-                            } else if mnemonic_next {
-                                instruction.name = ustr::get_str(&value).to_ascii_lowercase();
-                                break;
-                            }
-                        }
+            // e.g. <docvar key="mnemonic" value="ABS"/>
+            Ok(Event::Empty(ref e))
+                if QName(b"docvar") == e.name()
+                // There are multiple entries like this in each opcode file, but
+                // *all* of them are the same within each file, so it doesn't matter which
+                // one we use
+                && instruction.name.is_empty() =>
+            {
+                let mut mnemonic_next = false;
+                for attr in e.attributes() {
+                    let Attribute { key: _, value } = attr.unwrap();
+                    if b"mnemonic" == ustr::get_str(&value).as_bytes() {
+                        mnemonic_next = true;
+                    } else if mnemonic_next {
+                        instruction.name = ustr::get_str(&value).to_ascii_lowercase();
+                        break;
                     }
                 }
             }
@@ -687,7 +682,7 @@ pub fn populate_mars_pseudo_instructions(contents: &str) -> Result<Vec<Instructi
 
         instructions.push(Instruction {
             name: name.to_string(),
-            summary: format!("{summary}\n\nPseudo-op provided by the MARS assembler",),
+            summary: format!("{summary}\n\nPseudo-op provided by the MARS assembler"),
             asm_templates: vec![template],
             arch: Arch::Mips,
             forms: Vec::new(),
@@ -795,12 +790,10 @@ pub fn populate_6502_instructions(html_conts: &str) -> Result<Vec<Instruction>> 
         let mut prev_idx = 0;
         for (i, c) in synopsis_line.chars().enumerate() {
             match c {
-                '<' => {
-                    if prev_idx != 0 {
-                        let bytes: Vec<u8> = synopsis_line.as_bytes()[prev_idx..i].to_vec();
-                        let decoded = htmlentity::entity::decode(&bytes).to_string().unwrap();
-                        synopsis += &decoded;
-                    }
+                '<' if prev_idx != 0 => {
+                    let bytes: Vec<u8> = synopsis_line.as_bytes()[prev_idx..i].to_vec();
+                    let decoded = htmlentity::entity::decode(&bytes).to_string().unwrap();
+                    synopsis += &decoded;
                 }
                 '>' => prev_idx = i + 1,
                 _ => {}
@@ -1845,12 +1838,10 @@ pub fn populate_masm_nasm_fasm_mars_directives(xml_contents: &str) -> Result<Vec
                     _ => {} // unknown event
                 }
             }
-            Ok(Event::Text(ref txt)) => {
-                if in_desc {
-                    ustr::get_str(txt)
-                        .trim_ascii()
-                        .clone_into(&mut curr_directive.description);
-                }
+            Ok(Event::Text(ref txt)) if in_desc => {
+                ustr::get_str(txt)
+                    .trim_ascii()
+                    .clone_into(&mut curr_directive.description);
             }
             // end event
             Ok(Event::End(ref e)) => {
@@ -1960,11 +1951,9 @@ pub fn populate_gas_directives(xml_contents: &str) -> Result<Vec<Directive>> {
                 }
             }
             // end event
-            Ok(Event::End(ref e)) => {
-                if QName(b"Directive") == e.name() {
-                    // finish directive
-                    directives_map.insert(curr_directive.name.clone(), curr_directive.clone());
-                }
+            Ok(Event::End(ref e)) if QName(b"Directive") == e.name() => {
+                // finish directive
+                directives_map.insert(curr_directive.name.clone(), curr_directive.clone());
             }
             Ok(Event::Eof) => break,
             Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
@@ -2056,11 +2045,9 @@ pub fn populate_avr_directives(xml_contents: &str) -> Result<Vec<Directive>> {
                 }
             }
             // end event
-            Ok(Event::End(ref e)) => {
-                if QName(b"Directive") == e.name() {
-                    // finish directive
-                    directives_map.insert(curr_directive.name.clone(), curr_directive.clone());
-                }
+            Ok(Event::End(ref e)) if QName(b"Directive") == e.name() => {
+                // finish directive
+                directives_map.insert(curr_directive.name.clone(), curr_directive.clone());
             }
             Ok(Event::Eof) => break,
             Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
@@ -2289,7 +2276,7 @@ fn get_docs_body(x86_online_docs: &str) -> Option<String> {
                     eprintln!("Cache file removed.");
                 }
                 Err(e) => {
-                    eprintln!("Failed to remove the cache file - Error: {e}.",);
+                    eprintln!("Failed to remove the cache file - Error: {e}.");
                 }
             }
         } else {

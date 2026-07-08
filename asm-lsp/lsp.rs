@@ -1317,32 +1317,29 @@ pub fn get_comp_resp(
                 }
             }
             // prepend all GAS, all Ca65, all AVR, all Mars, some MASM, some NASM directives with "."
-            Some(".") => {
+            Some(".")
                 if config.is_assembler_enabled(Assembler::Gas)
                     || config.is_assembler_enabled(Assembler::Masm)
                     || config.is_assembler_enabled(Assembler::Nasm)
                     || config.is_assembler_enabled(Assembler::Ca65)
                     || config.is_assembler_enabled(Assembler::Avr)
-                    || config.is_assembler_enabled(Assembler::Mars)
-                {
-                    return Some(CompletionList {
-                        is_incomplete: true,
-                        items: filtered_comp_list_assem(
-                            &completion_items.directives,
-                            config,
-                            Some('.'),
-                        ),
-                    });
-                }
+                    || config.is_assembler_enabled(Assembler::Mars) =>
+            {
+                return Some(CompletionList {
+                    is_incomplete: true,
+                    items: filtered_comp_list_assem(
+                        &completion_items.directives,
+                        config,
+                        Some('.'),
+                    ),
+                });
             }
             // prepend all Mips registers with "$"
-            Some("$") => {
-                if config.is_isa_enabled(Arch::Mips) {
-                    return Some(CompletionList {
-                        is_incomplete: true,
-                        items: filtered_comp_list_arch(&completion_items.registers, config),
-                    });
-                }
+            Some("$") if config.is_isa_enabled(Arch::Mips) => {
+                return Some(CompletionList {
+                    is_incomplete: true,
+                    items: filtered_comp_list_arch(&completion_items.registers, config),
+                });
             }
             _ => {}
         }
