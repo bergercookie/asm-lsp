@@ -335,7 +335,7 @@ fn validate_compiler(comp: &str) -> bool {
     if comp.contains(std::path::MAIN_SEPARATOR) {
         // Treat it as a path
         let Ok(path) = PathBuf::from(comp).canonicalize() else {
-            println!("Warning: Failed to canonicalize path \"{comp}\"",);
+            println!("Warning: Failed to canonicalize path \"{comp}\"");
             return false;
         };
         let exists = path.exists();
@@ -411,13 +411,11 @@ fn prompt_config_opts() -> ConfigOptions {
                     for (i, c) in input.chars().enumerate() {
                         match c {
                             '\"' => in_quotes = !in_quotes,
-                            ' ' => {
-                                if !in_quotes {
+                            ' ' if !in_quotes => {
                                     return Err(anyhow!(
                                         "\n{input}\n{}^\nUnquoted space found, specify each flag separately.",
                                         " ".repeat(i),
                                     ));
-                                }
                             }
                             _ => {}
                         }
