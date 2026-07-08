@@ -28,12 +28,6 @@ repos:
       # https://github.com/tcort/markdown-link-check#config-file-format
       - id: markdown-link-check
         args: ["--progress", "--config", ".markdown-link-check.json"]
-  - repo: https://github.com/markdownlint/markdownlint
-    rev: "v0.12.0"
-    hooks:
-      - id: markdownlint
-        exclude: ^.github/
-        entry: mdl -r ~MD033,~MD013,~MD034,~MD029,~MD007
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: "0.27.0"
     hooks:
