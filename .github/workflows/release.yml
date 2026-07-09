@@ -5,8 +5,8 @@ permissions:
 
 on:
   push:
-    tags:
-      - v[0-9]+.*
+    branches:
+      - "*"
 
 jobs:
   create-release:
@@ -24,28 +24,59 @@ jobs:
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
-          # - target: aarch64-unknown-linux-gnu
-          #   os: ubuntu-latest
           - target: x86_64-apple-darwin
             os: macos-latest
           - target: aarch64-apple-darwin
             os: macos-latest
-          # - target: x86_64-pc-windows-msvc
-          #   os: windows-latest
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+
     runs-on: ${{ matrix.os }}
+
     steps:
       - uses: actions/checkout@v4
 
-      # Install dependencies on Linux
-      - name: Install dependencies on Linux
-        if: startsWith(matrix.target, 'x86_64-unknown-linux') || startsWith(matrix.target, 'aarch64-unknown-linux')
-        run: sudo apt-get update && sudo apt-get install -y make openssl libssl-dev
+      # Install deps (Linux)
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y make openssl libssl-dev pkg-config
 
-      # Upload Rust binaries
-      - uses: taiki-e/upload-rust-binary-action@v1
+      # Install Rust target
+      - name: Install Rust target
+        run: rustup target add ${{ matrix.target }}
+
+      # Build REAL LSP binary
+      - name: Build asm-lsp (LSP server)
+        run: cargo build --release --bin asm-lsp --target ${{ matrix.target }}
+
+      # Package binary
+      - name: Package binary (unix)
+        if: runner.os != 'Windows'
+        run: |
+          mkdir dist
+          cp target/${{ matrix.target }}/release/asm-lsp dist/
+          tar -czf asm-lsp-${{ matrix.target }}.tar.gz -C dist asm-lsp
+
+      - name: Package binary (windows)
+        if: runner.os == 'Windows'
+        run: |
+          mkdir dist
+          copy target\${{ matrix.target }}\release\asm-lsp.exe dist\
+          powershell Compress-Archive dist\asm-lsp.exe asm-lsp-${{ matrix.target }}.zip
+
+      # Upload to release
+      - name: Upload (unix)
+        if: runner.os != 'Windows'
+        uses: softprops/action-gh-release@v1
         with:
-          bin: asm-lsp
-          target: ${{ matrix.target }}
-          tar: unix
-          # zip: windows
-          token: ${{ secrets.GITHUB_TOKEN }}
+          files: asm-lsp-${{ matrix.target }}.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload (windows)
+        if: runner.os == 'Windows'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: asm-lsp-${{ matrix.target }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

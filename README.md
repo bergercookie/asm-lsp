@@ -28,15 +28,15 @@ tweak your code for optimisation.
 Install using the cargo package manager, either from `crates.io` or from github:
 
 ```bash
-cargo install asm-lsp
+cargo install asm-lsp --locked
 # or to get the latest version from github
-cargo install --git https://github.com/bergercookie/asm-lsp asm-lsp
+cargo install --git https://github.com/bergercookie/asm-lsp asm-lsp --locked
 ```
 
 Install using the cargo from source:
 
 ```bash
-cargo install --path asm-lsp
+cargo install --path asm-lsp --locked
 ```
 
 ### Precompiled Binaries
