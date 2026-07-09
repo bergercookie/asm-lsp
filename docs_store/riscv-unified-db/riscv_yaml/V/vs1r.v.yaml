@@ -1,0 +1,29 @@
+# Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+# SPDX-License-Identifier: BSD-3-Clause-Clear
+
+# yaml-language-server: $schema=../../../../schemas/inst_schema.json
+
+$schema: "inst_schema.json#"
+kind: instruction
+name: vs1r.v
+long_name: Vector store 1 element with register stride
+description: |
+  Stores 1 segment of elements from vector register vs2 to memory starting at address in xs1 register with stride in xs2, using vector mask vm. The effective element width is determined by SEW setting.
+definedBy:
+  extension:
+    name: Zvl32b
+assembly: vs3, (xs1)
+encoding:
+  match: 000000101000-----000-----0100111
+  variables:
+    - name: xs1
+      location: 19-15
+    - name: vs3
+      location: 11-7
+access:
+  s: always
+  u: always
+  vs: always
+  vu: always
+data_independent_timing: false
+operation(): |

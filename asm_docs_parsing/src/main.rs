@@ -12,7 +12,8 @@ use asm_lsp::{
         populate_instructions, populate_mars_pseudo_instructions,
         populate_masm_nasm_fasm_mars_directives, populate_mips_instructions,
         populate_power_isa_instructions, populate_registers, populate_riscv_instructions,
-        populate_riscv_registers,
+        populate_riscv_registers, populate_riscv_unified_instructions,
+        populate_riscv_unified_registers,
     },
 };
 
@@ -49,6 +50,11 @@ struct SerializeDocs {
         help = "Assembler. Must be specified if parsing directive documentation, ignored otherwise"
     )]
     assembler: Option<Assembler>,
+    #[arg(
+        long,
+        help = "Use unified database format (JSON) instead of legacy format. Currently only supported for RISC-V"
+    )]
+    unified_db: bool,
 }
 
 #[derive(Subcommand)]
@@ -68,7 +74,13 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                         instrs = populate_arm_instructions(&opts.input_path)?;
                     }
                     Arch::RISCV => {
-                        instrs = populate_riscv_instructions(&opts.input_path)?;
+                        if opts.unified_db {
+                            instrs = populate_riscv_unified_instructions(
+                                &opts.input_path.to_str().unwrap(),
+                            )?;
+                        } else {
+                            instrs = populate_riscv_instructions(&opts.input_path)?;
+                        }
                     }
                     _ => {
                         return Err(anyhow!(
@@ -99,6 +111,10 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                             Some(Arch::Avr) => {
                                 instrs = populate_avr_instructions(&conts)?;
                             }
+                            Some(Arch::RISCV) if opts.unified_db => {
+                                instrs =
+                                    populate_riscv_unified_instructions(&path.to_str().unwrap())?;
+                            }
                             _ => {
                                 instrs = populate_instructions(&conts)?;
                             }
@@ -126,7 +142,11 @@ fn run(opts: &SerializeDocs) -> Result<()> {
                 }
                 (false, Some(arch_in)) => {
                     if arch_in == Arch::RISCV {
-                        populate_riscv_registers(&conts)?
+                        if opts.unified_db {
+                            populate_riscv_unified_registers(&opts.input_path.to_str().unwrap())?
+                        } else {
+                            populate_riscv_registers(&conts)?
+                        }
                     } else {
                         populate_registers(&conts)?
                     }

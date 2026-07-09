@@ -1,0 +1,33 @@
+# Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+# SPDX-License-Identifier: BSD-3-Clause-Clear
+
+# yaml-language-server: $schema=../../../../schemas/inst_schema.json
+
+$schema: inst_schema.json#
+kind: instruction
+name: vsoxseg4ei32.v
+long_name: Vector ordered store 4 elements of 32 bits with index
+description: |
+  Stores 4 segments of 32-bit elements from vector register vs2 to memory using ordered access pattern with index register vs1, starting at address in xs1 register, using vector mask vm. The effective element width is 32 bits.
+definedBy:
+  extension:
+    name: Zvl32b
+assembly: vs3, (xs1), vs2, vm
+encoding:
+  match: 011011-----------110-----0100111
+  variables:
+    - name: vm
+      location: 25-25
+    - name: vs2
+      location: 24-20
+    - name: xs1
+      location: 19-15
+    - name: vs3
+      location: 11-7
+access:
+  s: always
+  u: always
+  vs: always
+  vu: always
+data_independent_timing: false
+operation(): |

@@ -1,0 +1,98 @@
+# Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+# SPDX-License-Identifier: BSD-3-Clause-Clear
+
+# yaml-language-server: $schema=../../../../schemas/inst_schema.json
+
+$schema: "inst_schema.json#"
+kind: instruction
+name: vmv.v.i
+long_name: Vector move immediate to vector register
+description: |
+  Copies a sign-extended 5-bit immediate value to all body elements of the destination
+  vector register group. This is an unmasked instruction (vm=1).
+
+  The 5-bit immediate (simm[4:0]) is sign-extended to SEW bits and written to each
+  body element of the destination vector register group (elements from vstart to vl-1).
+  Prestart elements (indices less than vstart) are unchanged.
+  Tail elements (indices >= vl) are handled according to the tail agnostic/undisturbed policy.
+definedBy:
+  extension:
+    name: Zvl32b
+assembly: vd, imm
+encoding:
+  match: 010111100000-----011-----1010111
+  variables:
+    - name: imm
+      location: 19-15
+    - name: vd
+      location: 11-7
+access:
+  s: always
+  u: always
+  vs: always
+  vu: always
+data_independent_timing: false
+operation(): |
+  # Get current vector state
+  VectorState state = vector_state();
+  VectorLmulType lmul_type = state.lmul_type;
+
+  XReg vlen = VLEN;
+  XReg vlmax;
+  if (lmul_type == VectorLmulType::Multiply) {
+    vlmax = (vlen << state.log2_lmul) >> state.log2_sew;
+  } else {
+    # (lmul_type == VectorLmulType::Divide)
+    vlmax = (vlen >> state.log2_lmul) >> state.log2_sew;
+  }
+
+  # Sign-extend the 5-bit immediate to XLEN bits for use in loop
+  XReg sext_imm = $signed(imm);
+
+  # Iterate through elements from vstart to vl
+  for (U32 i = CSR[vstart].VALUE; i < CSR[vl].VALUE; i++) {
+    U32 start_bit_pos = i * state.sew;
+    U32 end_bit_pos = start_bit_pos + state.sew - 1;
+
+    # Write the sign-extended immediate (truncated to SEW bits) to the element
+    v[vd] = {
+      v[vd][VLEN-1:end_bit_pos + 1],
+      sext_imm[state.sew-1:0],
+      v[vd][start_bit_pos-1:0]
+    };
+  }
+
+  CSR[vstart].VALUE = 0;
+
+# SPDX-SnippetBegin
+# SPDX-FileCopyrightText: 2017-2025 Contributors to the RISCV Sail Model <https://github.com/riscv/sail-riscv/blob/master/LICENCE>
+# SPDX-License-Identifier: BSD-2-Clause
+sail(): |
+  {
+    let SEW      = get_sew();
+    let LMUL_pow = get_lmul_pow();
+    let num_elem = get_num_elem(LMUL_pow, SEW);
+
+    if illegal_vd_unmasked() then { handle_illegal(); return RETIRE_FAIL };
+
+    let 'n = num_elem;
+    let 'm = SEW;
+
+    let vm_val  : vector('n, dec, bool)     = read_vmask(num_elem, 0b1, 0b00000);
+    let imm_val : bits('m)                  = sign_extend(simm);
+    let vd_val  : vector('n, dec, bits('m)) = read_vreg(num_elem, SEW, LMUL_pow, vd);
+    result      : vector('n, dec, bits('m)) = undefined;
+    mask        : vector('n, dec, bool)     = undefined;
+
+    (result, mask) = init_masked_result(num_elem, SEW, LMUL_pow, vd_val, vm_val);
+
+    foreach (i from 0 to (num_elem - 1)) {
+      if mask[i] then result[i] = imm_val
+    };
+
+    write_vreg(num_elem, SEW, LMUL_pow, vd, result);
+    vstart = zeros();
+    RETIRE_SUCCESS
+  }
+
+# SPDX-SnippetEnd

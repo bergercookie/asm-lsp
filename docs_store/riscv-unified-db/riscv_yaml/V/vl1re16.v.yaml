@@ -1,0 +1,29 @@
+# Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+# SPDX-License-Identifier: BSD-3-Clause-Clear
+
+# yaml-language-server: $schema=../../../../schemas/inst_schema.json
+
+$schema: "inst_schema.json#"
+kind: instruction
+name: vl1re16.v
+long_name: Vector load 1 element of 16 bits with register stride
+description: |
+  Loads 1 segment of 16-bit elements from memory starting at address in xs1 register with stride in xs2, using vector mask vm, and stores results in vector register vd. The effective element width is 16 bits.
+definedBy:
+  extension:
+    name: Zvl32b
+assembly: vd, (xs1)
+encoding:
+  match: 000000101000-----101-----0000111
+  variables:
+    - name: xs1
+      location: 19-15
+    - name: vd
+      location: 11-7
+access:
+  s: always
+  u: always
+  vs: always
+  vu: always
+data_independent_timing: false
+operation(): |

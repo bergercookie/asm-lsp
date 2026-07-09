@@ -1,0 +1,32 @@
+[
+  {
+    "name": "x0",
+    "abi_name": "zero",
+    "description": "Hard-wired zero",
+    "reg_type": "integer",
+    "width": 64,
+    "number": 0,
+    "saved_by": null,
+    "url": "https://riscv.org/specs/"
+  },
+  {
+    "name": "x1",
+    "abi_name": "ra",
+    "description": "Return address",
+    "reg_type": "integer",
+    "width": 64,
+    "number": 1,
+    "saved_by": "Caller",
+    "url": "https://riscv.org/specs/"
+  },
+  {
+    "name": "f0",
+    "abi_name": "ft0",
+    "description": "FP temporaries",
+    "reg_type": "floating_point",
+    "width": 64,
+    "number": 0,
+    "saved_by": "Caller",
+    "url": "https://riscv.org/specs/"
+  }
+]
