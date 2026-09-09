@@ -76,12 +76,8 @@ pub fn run_info() {
 pub fn send_empty_resp(connection: &Connection, id: RequestId) -> Result<()> {
     let empty_resp = Response {
         id,
-        result: None,
-        error: Some(lsp_server::ResponseError {
-            code: lsp_server::ErrorCode::RequestFailed as i32,
-            message: "No information available".to_string(),
-            data: None,
-        }),
+        result: Some(serde_json::Value::Null),
+        error: None,
     };
 
     Ok(connection.sender.send(Message::Response(empty_resp))?)
