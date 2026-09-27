@@ -31,7 +31,7 @@ use lsp_types::{
 use regex::Regex;
 use symbolic::common::{Language, Name, NameMangling};
 use symbolic_demangle::{Demangle, DemangleOptions};
-use tree_sitter::InputEdit;
+use tree_sitter::{InputEdit, StreamingIterator};
 
 use crate::{
     Arch, ArchOrAssembler, Assembler, Completable, CompletionItems, Config, ConfigOptions,
@@ -76,8 +76,7 @@ pub fn run_info() {
 pub fn send_empty_resp(connection: &Connection, id: RequestId) -> Result<()> {
     let empty_resp = Response {
         id,
-        result: None,
-        error: Some(lsp_server::ResponseError {
+        response_result: Err(lsp_server::ResponseError {
             code: lsp_server::ErrorCode::RequestFailed as i32,
             message: "No information available".to_string(),
             data: None,
@@ -1078,7 +1077,7 @@ fn get_label_resp(word: &str, uri: &Uri, doc_store: &mut DocumentStore) -> Optio
             if let Some(ref tree) = tree_entry.tree {
                 static QUERY_LABEL_DATA: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
                     tree_sitter::Query::new(
-                        &tree_sitter_asm::language(),
+                        &tree_sitter_asm::LANGUAGE.into(),
                         "(
                             (label (ident) @label)
                             .
@@ -1096,10 +1095,11 @@ fn get_label_resp(word: &str, uri: &Uri, doc_store: &mut DocumentStore) -> Optio
                     .unwrap()
                 });
                 let mut cursor = tree_sitter::QueryCursor::new();
-                let matches_iter = cursor.matches(&QUERY_LABEL_DATA, tree.root_node(), curr_doc);
+                let mut matches_iter =
+                    cursor.matches(&QUERY_LABEL_DATA, tree.root_node(), curr_doc);
 
-                for match_ in matches_iter {
-                    let caps = match_.captures;
+                while let Some(match_) = matches_iter.next() {
+                    let caps = match_.captures();
                     if caps.len() != 2
                         || caps[0].node.end_byte() >= curr_doc.len()
                         || caps[1].node.end_byte() >= curr_doc.len()
@@ -1350,7 +1350,7 @@ pub fn get_comp_resp(
     if let Some(ref tree) = tree_entry.tree {
         static QUERY_DIRECTIVE: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
             tree_sitter::Query::new(
-                &tree_sitter_asm::language(),
+                &tree_sitter_asm::LANGUAGE.into(),
                 "(meta kind: (meta_ident) @directive)",
             )
             .unwrap()
@@ -1368,10 +1368,10 @@ pub fn get_comp_resp(
         });
         let curr_doc = curr_doc.as_bytes();
 
-        let matches_iter = line_cursor.matches(&QUERY_DIRECTIVE, tree.root_node(), curr_doc);
+        let mut matches_iter = line_cursor.matches(&QUERY_DIRECTIVE, tree.root_node(), curr_doc);
 
-        for match_ in matches_iter {
-            let caps = match_.captures;
+        while let Some(match_) = matches_iter.next() {
+            let caps = match_.captures();
             for cap in caps {
                 let arg_start = cap.node.range().start_point;
                 let arg_end = cap.node.range().end_point;
@@ -1390,15 +1390,16 @@ pub fn get_comp_resp(
         // We'll collect all of labels in the document (that are being parsed as labels, at least)
         // and suggest those along with the register completions
         static QUERY_LABEL: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
-            tree_sitter::Query::new(&tree_sitter_asm::language(), "(label (ident) @label)").unwrap()
+            tree_sitter::Query::new(&tree_sitter_asm::LANGUAGE.into(), "(label (ident) @label)")
+                .unwrap()
         });
 
         // need a separate cursor to search the entire document
         let mut doc_cursor = tree_sitter::QueryCursor::new();
-        let captures = doc_cursor.captures(&QUERY_LABEL, tree.root_node(), curr_doc);
+        let mut captures = doc_cursor.captures(&QUERY_LABEL, tree.root_node(), curr_doc);
         let mut labels = HashSet::new();
-        for caps in captures.map(|c| c.0) {
-            for cap in caps.captures {
+        while let Some(c) = captures.next() {
+            for cap in c.0.captures() {
                 if cap.node.end_byte() >= curr_doc.len() {
                     continue;
                 }
@@ -1410,7 +1411,7 @@ pub fn get_comp_resp(
 
         static QUERY_INSTR_ANY: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
             tree_sitter::Query::new(
-                &tree_sitter_asm::language(),
+                &tree_sitter_asm::LANGUAGE.into(),
                 "[
                     (instruction kind: (word) @instr_name)
                     (
@@ -1446,9 +1447,9 @@ pub fn get_comp_resp(
             .unwrap()
         });
 
-        let matches_iter = line_cursor.matches(&QUERY_INSTR_ANY, tree.root_node(), curr_doc);
-        for match_ in matches_iter {
-            let caps = match_.captures;
+        let mut matches_iter = line_cursor.matches(&QUERY_INSTR_ANY, tree.root_node(), curr_doc);
+        while let Some(match_) = matches_iter.next() {
+            let caps = match_.captures();
             for (cap_num, cap) in caps.iter().enumerate() {
                 let arg_start = cap.node.range().start_point;
                 let arg_end = cap.node.range().end_point;
@@ -1581,10 +1582,14 @@ pub fn get_document_symbols(
     tree_entry: &mut TreeEntry,
     _params: &DocumentSymbolParams,
 ) -> Option<Vec<DocumentSymbol>> {
-    static LABEL_KIND_ID: LazyLock<u16> =
-        LazyLock::new(|| tree_sitter_asm::language().id_for_node_kind("label", true));
-    static IDENT_KIND_ID: LazyLock<u16> =
-        LazyLock::new(|| tree_sitter_asm::language().id_for_node_kind("ident", true));
+    static LABEL_KIND_ID: LazyLock<u16> = LazyLock::new(|| {
+        let language: tree_sitter::Language = tree_sitter_asm::LANGUAGE.into();
+        language.id_for_node_kind("label", true)
+    });
+    static IDENT_KIND_ID: LazyLock<u16> = LazyLock::new(|| {
+        let language: tree_sitter::Language = tree_sitter_asm::LANGUAGE.into();
+        language.id_for_node_kind("ident", true)
+    });
     tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
 
     tree_entry.tree.as_ref().map(|tree| {
@@ -1622,7 +1627,7 @@ pub fn get_sig_help_resp(
         // Instruction with any (including zero) argument(s)
         static QUERY_INSTR_ANY_ARGS: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
             tree_sitter::Query::new(
-                &tree_sitter_asm::language(),
+                &tree_sitter_asm::LANGUAGE.into(),
                 "(instruction kind: (word) @instr_name)",
             )
             .unwrap()
@@ -1641,11 +1646,11 @@ pub fn get_sig_help_resp(
         });
         let curr_doc = curr_doc.as_bytes();
 
-        let matches: Vec<tree_sitter::QueryMatch<'_, '_>> = line_cursor
+        if let Some(match_) = line_cursor
             .matches(&QUERY_INSTR_ANY_ARGS, tree.root_node(), curr_doc)
-            .collect();
-        if let Some(match_) = matches.first() {
-            let caps = match_.captures;
+            .next()
+        {
+            let caps = match_.captures();
             if caps.len() == 1
                 && caps[0].node.end_byte() < curr_doc.len()
                 && let Ok(instr_name) = caps[0].node.utf8_text(curr_doc)
@@ -1717,17 +1722,17 @@ pub fn get_goto_def_resp(
 
     if let Some(ref tree) = tree_entry.tree {
         static QUERY_LABEL: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
-            tree_sitter::Query::new(&tree_sitter_asm::language(), "(label) @label").unwrap()
+            tree_sitter::Query::new(&tree_sitter_asm::LANGUAGE.into(), "(label) @label").unwrap()
         });
 
         let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
         let mut cursor = tree_sitter::QueryCursor::new();
-        let matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc);
+        let mut matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc);
 
         let (word, _) = get_word_from_pos_params(curr_doc, &params.text_document_position_params);
 
-        for match_ in matches {
-            for cap in match_.captures {
+        if let Some(match_) = matches.next() {
+            for cap in match_.captures() {
                 if cap.node.end_byte() >= doc.len() {
                     continue;
                 }
@@ -1772,14 +1777,14 @@ pub fn get_ref_resp(
     if let Some(ref tree) = tree_entry.tree {
         static QUERY_LABEL: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
             tree_sitter::Query::new(
-                &tree_sitter_asm::language(),
+                &tree_sitter_asm::LANGUAGE.into(),
                 "(label (ident (reg (word)))) @label",
             )
             .unwrap()
         });
 
         static QUERY_WORD: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
-            tree_sitter::Query::new(&tree_sitter_asm::language(), "(ident) @ident").unwrap()
+            tree_sitter::Query::new(&tree_sitter_asm::LANGUAGE.into(), "(ident) @ident").unwrap()
         });
 
         let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
@@ -1788,9 +1793,9 @@ pub fn get_ref_resp(
 
         let mut cursor = tree_sitter::QueryCursor::new();
         if params.context.include_declaration {
-            let label_matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc);
-            for match_ in label_matches {
-                for cap in match_.captures {
+            let mut label_matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc);
+            while let Some(match_) = label_matches.next() {
+                for cap in match_.captures() {
                     // HACK: Temporary solution for what I believe is a bug in tree-sitter core
                     if cap.node.end_byte() >= doc.len() {
                         continue;
@@ -1814,9 +1819,9 @@ pub fn get_ref_resp(
             }
         }
 
-        let word_matches = cursor.matches(&QUERY_WORD, tree.root_node(), doc);
-        for match_ in word_matches {
-            for cap in match_.captures {
+        let mut word_matches = cursor.matches(&QUERY_WORD, tree.root_node(), doc);
+        while let Some(match_) = word_matches.next() {
+            for cap in match_.captures() {
                 // HACK: Temporary solution for what I believe is a bug in tree-sitter core
                 if cap.node.end_byte() >= doc.len() {
                     continue;

@@ -310,8 +310,7 @@ pub fn handle_hover_request(
         let result = serde_json::to_value(hover_resp).unwrap();
         let result = Response {
             id,
-            result: Some(result),
-            error: None,
+            response_result: Ok(result),
         };
         return Ok(connection.sender.send(Message::Response(result))?);
     }
@@ -350,8 +349,7 @@ pub fn handle_completion_request(
         let result = serde_json::to_value(comp_resp).unwrap();
         let result = Response {
             id,
-            result: Some(result),
-            error: None,
+            response_result: Ok(result),
         };
         return Ok(connection.sender.send(Message::Response(result))?);
     }
@@ -382,8 +380,7 @@ pub fn handle_goto_def_request(
         let result = serde_json::to_value(def_resp).unwrap();
         let result = Response {
             id,
-            result: Some(result),
-            error: None,
+            response_result: Ok(result),
         };
 
         return Ok(connection.sender.send(Message::Response(result))?);
@@ -416,8 +413,7 @@ pub fn handle_document_symbols_request(
         let result = serde_json::to_value(resp).unwrap();
         let result = Response {
             id,
-            result: Some(result),
-            error: None,
+            response_result: Ok(result),
         };
         return Ok(connection.sender.send(Message::Response(result))?);
     }
@@ -456,8 +452,7 @@ pub fn handle_signature_help_request(
         let result = serde_json::to_value(sig_resp).unwrap();
         let result = Response {
             id,
-            result: Some(result),
-            error: None,
+            response_result: Ok(result),
         };
         return Ok(connection.sender.send(Message::Response(result))?);
     }
@@ -489,8 +484,7 @@ pub fn handle_references_request(
 
         let result = Response {
             id,
-            result: Some(result),
-            error: None,
+            response_result: Ok(result),
         };
         return Ok(connection.sender.send(Message::Response(result))?);
     }
@@ -614,7 +608,9 @@ pub fn handle_did_open_text_document_notification(
         .listen(DidOpenTextDocument::METHOD, &raw_params);
 
     let mut parser = Parser::new();
-    parser.set_language(&tree_sitter_asm::language()).unwrap();
+    parser
+        .set_language(&tree_sitter_asm::LANGUAGE.into())
+        .unwrap();
     doc_store.tree_store.insert(
         params.text_document.uri.clone(),
         TreeEntry {
