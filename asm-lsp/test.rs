@@ -14,8 +14,8 @@ mod tests {
 
     use crate::{
         Arch, Assembler, BINCODE_CFG, Config, ConfigOptions, Directive, DocumentStore, Instruction,
-        Register, ServerStore, TreeEntry, get_comp_resp, get_completes, get_hover_resp,
-        get_word_from_pos_params, instr_filter_targets,
+        Register, ServerStore, TreeEntry, find_word_at_pos, get_comp_resp, get_completes,
+        get_hover_resp, get_word_from_pos_params, instr_filter_targets,
         parser::{
             populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
             populate_avr_instructions, populate_ca65_directives, populate_mars_pseudo_instructions,
@@ -1742,6 +1742,23 @@ Type: General Purpose Register",
     /**************************************************************************
      * Misc Tests
      *************************************************************************/
+    // Unicode
+    #[test]
+    fn find_word_at_pos_it_finds_non_ascii_word_with_correct_pos() {
+        assert_eq!(
+            ((9, 19), 6),
+            find_word_at_pos("Name db 'Иосиф Бродский$' ;Строка для вывода", 12)
+        );
+    }
+
+    #[test]
+    fn find_word_at_pos_it_finds_word_after_non_ascii_separator() {
+        assert_eq!(
+            ((15, 19), 2),
+            find_word_at_pos("Citation db '«За гремучую доблесть грядущих веков»$'", 15)
+        );
+    }
+
     // Labels
     #[test]
     fn handle_autocomplete_it_provides_label_comps_as_instruction_arg() {
