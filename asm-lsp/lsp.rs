@@ -107,14 +107,21 @@ pub fn send_notification(message: String, typ: MessageType, connection: &Connect
     Ok(connection.sender.send(Message::Notification(err_notif))?)
 }
 
-/// Find the ([start], [end]) indices and the cursor's offset in a word
+/// Finds the ([start], [end]) indices and the cursor's offset in a word
 /// on the given line
+///
+/// `col` is the cursor position in utf16 code units as in lsp specification.
+///
+/// All returning values -- ((start, end), offset) represent bytes,
+/// not chars
 ///
 /// Borrowed from RLS
 /// characters besides the default alphanumeric and '_'
 #[must_use]
 pub fn find_word_at_pos(line: &str, col: Column) -> ((Column, Column), usize) {
+    // TODO: properly handle `col` -- now code works only with 16b wide symbols
     let line_ = format!("{line} ");
+
     // TODO: Let's just pass in a config, this could get messy
     // NOTE: '*' is added as an allowed character to account for the the program
     // counter pseudo variable of the Ca65 assembler. It's included unconditionally
@@ -127,21 +134,29 @@ pub fn find_word_at_pos(line: &str, col: Column) -> ((Column, Column), usize) {
         |c: char| c.is_alphanumeric() || c == '_' || c == '.' || c == '*' || c == '$';
 
     let start = line_
-        .chars()
-        .enumerate()
+        .char_indices()
         .take(col)
         .filter(|&(_, c)| !is_ident_char(c))
         .last()
-        .map_or(0, |(i, _)| i + 1);
+        // In case if separator char is not ascii. utf8 --- because rust strings are utf8 and
+        // one char encoded in utf8
+        .map_or(0, |(i, c)| i + c.len_utf8());
 
     let mut end = line_
-        .chars()
-        .enumerate()
+        .char_indices()
         .skip(col)
         .filter(|&(_, c)| !is_ident_char(c));
 
+    let col_in_bytes = line
+        .char_indices()
+        .nth(col)
+        .map_or_else(|| line.len(), |f| f.0);
+
     let end = end.next();
-    ((start, end.map_or(col, |(i, _)| i)), col - start)
+    (
+        (start, end.map_or(col_in_bytes, |(i, _)| i)),
+        col_in_bytes - start,
+    )
 }
 
 pub enum UriConversion {
