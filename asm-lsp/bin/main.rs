@@ -58,6 +58,10 @@ pub fn main() -> Result<()> {
     };
     match command {
         Commands::GenConfig(args) => {
+            if let Err(e) = ctrlc::set_handler(|| asm_lsp::config_builder::abort()) {
+                eprintln!("Warning: Failed to install Ctrl+C handler -- {e}");
+            }
+
             let opts: GenerateOpts = match args.try_into() {
                 Ok(opts) => opts,
                 Err(e) => {
