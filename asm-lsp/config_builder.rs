@@ -1,13 +1,34 @@
+use std::io::ErrorKind;
 use std::path::Path;
 use std::string::ToString;
 use std::{env::current_dir, path::PathBuf};
 
 use anyhow::{Result, anyhow};
 use clap::Args;
-use dialoguer::{Confirm, FuzzySelect, Input, theme::ColorfulTheme};
+use dialoguer::{Confirm, Error as DialoguerError, FuzzySelect, Input, theme::ColorfulTheme};
 use dirs::config_dir;
 
 use crate::types::{Arch, Assembler, Config, ConfigOptions, ProjectConfig, RootConfig};
+
+pub fn abort() -> ! {
+    let _ = dialoguer::console::Term::stderr().show_cursor();
+    eprintln!();
+    std::process::exit(130);
+}
+
+trait UnwrapOrAbort<T> {
+    fn unwrap_or_abort(self) -> T;
+}
+
+impl<T> UnwrapOrAbort<T> for dialoguer::Result<T> {
+    fn unwrap_or_abort(self) -> T {
+        match self {
+            Ok(value) => value,
+            Err(DialoguerError::IO(e)) if e.kind() == ErrorKind::Interrupted => abort(),
+            Err(e) => panic!("Failed to read user input: {e}"),
+        }
+    }
+}
 
 const ARCH_LIST: [Arch; 11] = [
     Arch::X86,
@@ -152,7 +173,7 @@ fn prompt_arch() -> Arch {
         .default(0)
         .items(&arch_choices[..])
         .interact()
-        .unwrap();
+        .unwrap_or_abort();
 
     ARCH_LIST[arch_selection]
 }
@@ -164,7 +185,7 @@ fn prompt_assembler() -> Assembler {
         .default(0)
         .items(&assem_choices[..])
         .interact()
-        .unwrap();
+        .unwrap_or_abort();
 
     ASSEMBLER_LIST[assem_selection]
 }
@@ -180,7 +201,7 @@ fn prompt_project_path(opts: &GenerateOpts) -> PathBuf {
             .with_prompt("Enter remaining path (Enter an empty string to use the current path)")
             .allow_empty(true)
             .interact_text()
-            .unwrap();
+            .unwrap_or_abort();
         true_path.push(remaining_path);
     };
     let mut true_path = opts.project_path.clone();
@@ -222,7 +243,7 @@ fn prompt_project_path(opts: &GenerateOpts) -> PathBuf {
             .default(0)
             .items(&display_entries[..])
             .interact()
-            .unwrap();
+            .unwrap_or_abort();
 
         // Select current value of `true_path`
         if path_selection == 0 {
@@ -230,8 +251,7 @@ fn prompt_project_path(opts: &GenerateOpts) -> PathBuf {
                 !Confirm::with_theme(&ColorfulTheme::default())
                     .with_prompt("Warning: Creating project config for the entire project. Keep this path selection?")
                     .default(false)
-                    .interact()
-                    .unwrap() {
+                    .interact().unwrap_or_abort() {
                 path_entries.clear();
                 display_entries.clear();
                 continue;
@@ -368,8 +388,7 @@ fn prompt_compiler() -> Option<String> {
     if !Confirm::with_theme(&ColorfulTheme::default())
         .with_prompt("Provide compiler to use with `compile_flags.txt` files or the following (optional) compile flags field")
         .default(true)
-        .interact()
-        .unwrap() {
+        .interact().unwrap_or_abort() {
         return None;
     }
     let mut comp: String;
@@ -377,7 +396,7 @@ fn prompt_compiler() -> Option<String> {
         comp = Input::with_theme(&ColorfulTheme::default())
             .with_prompt("Enter Compiler")
             .interact_text()
-            .unwrap();
+            .unwrap_or_abort();
 
         // Attempt to provide some soft validation, warn the user if something
         // looks fishy
@@ -386,7 +405,7 @@ fn prompt_compiler() -> Option<String> {
                 .with_prompt("Re-enter compiler?")
                 .default(true)
                 .interact()
-                .unwrap()
+                .unwrap_or_abort()
         {
             break;
         }
@@ -422,8 +441,7 @@ fn prompt_config_opts() -> ConfigOptions {
                     }
                     Ok(())
                 })
-                .interact_text()
-                .unwrap();
+                .interact_text().unwrap_or_abort();
             if flag.is_empty() {
                 break;
             }
@@ -438,7 +456,7 @@ fn prompt_config_opts() -> ConfigOptions {
         .with_prompt("Enable diagnostic features?")
         .default(true)
         .interact()
-        .unwrap();
+        .unwrap_or_abort();
 
     // only offer the `default_diagnostics` option if both
     //      A) diagnostics are enabled
@@ -447,8 +465,7 @@ fn prompt_config_opts() -> ConfigOptions {
     let default_diagnostics = if diagnostics && compiler.is_none() && Confirm::with_theme(&ColorfulTheme::default())
         .with_prompt("Attempt to provide diagnostics if no compilation information can be found for a source file?")
         .default(true)
-        .interact()
-        .unwrap() {
+        .interact().unwrap_or_abort() {
             Some(true)
     } else {
         Some(false)
@@ -469,7 +486,7 @@ fn prompt_config() -> Config {
         .with_prompt("Configure diagnostic related features?")
         .default(true)
         .interact()
-        .unwrap()
+        .unwrap_or_abort()
     {
         Some(prompt_config_opts())
     } else {
@@ -495,7 +512,7 @@ fn prompt_root_config(opts: &GenerateOpts) -> RootConfig {
     let default_config = if Confirm::with_theme(&ColorfulTheme::default())
         .with_prompt("Create default config?")
         .interact()
-        .unwrap()
+        .unwrap_or_abort()
     {
         Some(prompt_config())
     } else {
@@ -507,7 +524,7 @@ fn prompt_root_config(opts: &GenerateOpts) -> RootConfig {
         if !Confirm::with_theme(&ColorfulTheme::default())
             .with_prompt("Add a new project config?")
             .interact()
-            .unwrap()
+            .unwrap_or_abort()
         {
             break;
         }
@@ -537,7 +554,7 @@ fn prompt_root_config(opts: &GenerateOpts) -> RootConfig {
                     .default(0)
                     .items(&options[..])
                     .interact()
-                    .unwrap()
+                    .unwrap_or_abort()
                     .into();
                 break;
             }
