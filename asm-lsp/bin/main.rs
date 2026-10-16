@@ -179,15 +179,17 @@ pub fn run_lsp() -> Result<()> {
     info!("Server Configuration: {:?}", config);
 
     let mut store = ServerStore::default();
+    let effective_assemblers = config.effective_assemblers();
+    let instr_assembler = (effective_assemblers.len() == 1).then(|| effective_assemblers[0]);
     // Populate names to `Instruction`/`Register`/`Directive` maps
     for isa in config.effective_arches() {
-        isa.setup_instructions(None, &mut store.names_to_info.instructions);
+        isa.setup_instructions(instr_assembler, &mut store.names_to_info.instructions);
         isa.setup_registers(&mut store.names_to_info.registers);
     }
 
-    for assembler in config.effective_assemblers() {
+    for assembler in effective_assemblers {
         assembler.setup_directives(&mut store.names_to_info.directives);
-        if assembler == Assembler::Mars {
+        if assembler == Assembler::Mars && instr_assembler != Some(Assembler::Mars) {
             Arch::Mips
                 .setup_instructions(Some(Assembler::Mars), &mut store.names_to_info.instructions);
         }

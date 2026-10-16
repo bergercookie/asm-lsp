@@ -532,4 +532,232 @@
 	<directive name="TIMES" tool="masm">
 		<description>The TIMES prefix causes the instruction to be assembled multiple times.</description>
 	</directive>
+	<directive name="SQWORD" tool="masm">
+		<description>Pseudo-Instruction declaring initialized or uninitialized signed 64-bit integer data (8 bytes, 64 bit).</description>
+	</directive>
+	<directive name="STRUC" tool="masm">
+		<description>Declares a structure type having the specified fielddeclarations. Each field must be a valid data definition. Same as STRUCT.</description>
+	</directive>
+	<directive name="SUBTTL" tool="masm">
+		<description>Defines the listing subtitle. Same as SUBTITLE.</description>
+	</directive>
+	<directive name="SIZEOF" tool="masm">
+		<description>Operator returning the number of bytes in a variable, structure, or type.</description>
+	</directive>
+	<directive name="LENGTHOF" tool="masm">
+		<description>Operator returning the number of data elements allocated for a variable or array.</description>
+	</directive>
+	<directive name="TYPE" tool="masm">
+		<description>Operator returning a value representing the type (size in bytes for variables/structures, or distance for labels) of an expression.</description>
+	</directive>
+	<directive name=".TYPE" tool="masm">
+		<description>Operator returning a byte constant describing the mode and scope of an expression (the low byte of OPATTR).</description>
+	</directive>
+	<directive name="OPATTR" tool="masm">
+		<description>Operator returning a 16-bit constant bitmask describing the mode, language type, and scope of an expression.</description>
+	</directive>
+	<directive name="DUP" tool="masm">
+		<description>Operator used in data declarations (count DUP (initialvalue)) to repeat allocation count times.</description>
+	</directive>
+	<directive name="SHORT" tool="masm">
+		<description>Operator specifying that a jump target label is within -128 to +127 bytes of the end of the jump instruction.</description>
+	</directive>
+	<directive name="NEAR" tool="masm">
+		<description>Type qualifier specifying a near code pointer, label, or procedure within the same segment.</description>
+	</directive>
+	<directive name="FAR" tool="masm">
+		<description>Type qualifier specifying a far (segment:offset) code pointer, label, or procedure.</description>
+	</directive>
+	<directive name="FLAT" tool="masm">
+		<description>Specifies the flat 32-bit or 64-bit unsegmented memory model or group.</description>
+	</directive>
+	<directive name="USES" tool="masm">
+		<description>Clause in a PROC declaration specifying registers to automatically push in the prologue and pop in the epilogue.</description>
+	</directive>
+	<directive name="FRAME" tool="masm">
+		<description>MASM64 PROC attribute that generates .pdata and .xdata structured exception handling (SEH) unwind tables for the procedure.</description>
+	</directive>
+	<directive name="LOW" tool="masm">
+		<description>Operator returning the low 8 bits (bits 0-7) of an expression.</description>
+	</directive>
+	<directive name="HIGH" tool="masm">
+		<description>Operator returning bits 8-15 of the low 16 bits of an expression.</description>
+	</directive>
+	<directive name="LOWWORD" tool="masm">
+		<description>Operator returning the low 16 bits (bits 0-15) of an expression.</description>
+	</directive>
+	<directive name="HIGHWORD" tool="masm">
+		<description>Operator returning bits 16-31 of the low 32 bits of an expression.</description>
+	</directive>
+	<directive name="LOW32" tool="masm">
+		<description>Operator returning the low 32 bits (bits 0-31) of a 64-bit expression.</description>
+	</directive>
+	<directive name="HIGH32" tool="masm">
+		<description>Operator returning the high 32 bits (bits 32-63) of a 64-bit expression.</description>
+	</directive>
+	<directive name="IMAGEREL" tool="masm">
+		<description>Operator returning the image-relative offset (RVA) of a symbol from the image base.</description>
+	</directive>
+	<directive name="SECTIONREL" tool="masm">
+		<description>Operator returning the section-relative offset of a symbol from the start of its section.</description>
+	</directive>
+	<directive name="LROFFSET" tool="masm">
+		<description>Operator returning the offset of an expression with loader-resolved relocation.</description>
+	</directive>
+	<directive name="SEG" tool="masm">
+		<description>Operator returning the segment address of an expression.</description>
+	</directive>
+	<directive name="THIS" tool="masm">
+		<description>Operator returning an operand of the specified type at the current location counter ($).</description>
+	</directive>
+	<directive name="MASK" tool="masm">
+		<description>Operator returning a bitmask with 1s in the bit positions of the specified RECORD or record field.</description>
+	</directive>
+	<directive name="WIDTH" tool="masm">
+		<description>Operator returning the width in bits of the specified RECORD or record field.</description>
+	</directive>
+	<directive name="REPEAT" tool="masm">
+		<description>Marks a block of statements that will be repeated constexpr times, terminated by ENDM.</description>
+	</directive>
+	<directive name="REPT" tool="masm">
+		<description>Marks a block of statements that will be repeated constexpr times, terminated by ENDM. Synonym of REPEAT.</description>
+	</directive>
+	<directive name="IRP" tool="masm">
+		<description>Marks a block that will be repeated once for each argument in an angle-bracketed list, terminated by ENDM. Synonym of FOR.</description>
+	</directive>
+	<directive name="IRPC" tool="masm">
+		<description>Marks a block that will be repeated once for each character in string, terminated by ENDM. Synonym of FORC.</description>
+	</directive>
+	<directive name="WHILE" tool="masm">
+		<description>Marks an assembly-time loop block that repeats while expression is nonzero, terminated by ENDM.</description>
+	</directive>
+	<directive name="IF1" tool="masm">
+		<description>Grants assembly of the enclosed block on assembly pass 1.</description>
+	</directive>
+	<directive name="IFDIFI" tool="masm">
+		<description>Grants assembly if two text items are different, using a case-insensitive comparison.</description>
+	</directive>
+	<directive name="IFIDNI" tool="masm">
+		<description>Grants assembly if two text items are identical, using a case-insensitive comparison.</description>
+	</directive>
+	<directive name="ELSEIF1" tool="masm">
+		<description>Combines ELSE and IF1 into one statement.</description>
+	</directive>
+	<directive name="ELSEIFB" tool="masm">
+		<description>Combines ELSE and IFB; grants assembly if textitem is blank.</description>
+	</directive>
+	<directive name="ELSEIFNB" tool="masm">
+		<description>Combines ELSE and IFNB; grants assembly if textitem is not blank.</description>
+	</directive>
+	<directive name="ELSEIFDEF" tool="masm">
+		<description>Combines ELSE and IFDEF; grants assembly if name is defined.</description>
+	</directive>
+	<directive name="ELSEIFNDEF" tool="masm">
+		<description>Combines ELSE and IFNDEF; grants assembly if name is not defined.</description>
+	</directive>
+	<directive name="ELSEIFDIF" tool="masm">
+		<description>Combines ELSE and IFDIF; grants assembly if text items are different (case-sensitive).</description>
+	</directive>
+	<directive name="ELSEIFDIFI" tool="masm">
+		<description>Combines ELSE and IFDIFI; grants assembly if text items are different (case-insensitive).</description>
+	</directive>
+	<directive name="ELSEIFE" tool="masm">
+		<description>Combines ELSE and IFE; grants assembly if expression evaluates to zero.</description>
+	</directive>
+	<directive name="ELSEIFIDN" tool="masm">
+		<description>Combines ELSE and IFIDN; grants assembly if text items are identical (case-sensitive).</description>
+	</directive>
+	<directive name="ELSEIFIDNI" tool="masm">
+		<description>Combines ELSE and IFIDNI; grants assembly if text items are identical (case-insensitive).</description>
+	</directive>
+	<directive name=".ERRDIFI" tool="masm">
+		<description>Generates an error if the text items are different (case-insensitive).</description>
+	</directive>
+	<directive name=".ERRIDNI" tool="masm">
+		<description>Generates an error if the text items are identical (case-insensitive).</description>
+	</directive>
+	<directive name="CARRY?" tool="masm">
+		<description>Condition test operator for .IF, .WHILE, and .UNTIL that evaluates whether the Carry Flag (CF) is set.</description>
+	</directive>
+	<directive name="OVERFLOW?" tool="masm">
+		<description>Condition test operator for .IF, .WHILE, and .UNTIL that evaluates whether the Overflow Flag (OF) is set.</description>
+	</directive>
+	<directive name="PARITY?" tool="masm">
+		<description>Condition test operator for .IF, .WHILE, and .UNTIL that evaluates whether the Parity Flag (PF) is set.</description>
+	</directive>
+	<directive name="SIGN?" tool="masm">
+		<description>Condition test operator for .IF, .WHILE, and .UNTIL that evaluates whether the Sign Flag (SF) is set.</description>
+	</directive>
+	<directive name="ZERO?" tool="masm">
+		<description>Condition test operator for .IF, .WHILE, and .UNTIL that evaluates whether the Zero Flag (ZF) is set.</description>
+	</directive>
+	<directive name="@CATSTR" tool="masm">
+		<description>Macro function (@CatStr(string1 [, string2...])) that concatenates one or more text items and returns the resulting string.</description>
+	</directive>
+	<directive name="@INSTR" tool="masm">
+		<description>Macro function (@InStr([position], string1, string2)) that returns the 1-based character index of string2 within string1, or 0 if not found.</description>
+	</directive>
+	<directive name="@SIZESTR" tool="masm">
+		<description>Macro function (@SizeStr(string)) that returns the length in characters of string.</description>
+	</directive>
+	<directive name="@SUBSTR" tool="masm">
+		<description>Macro function (@SubStr(string, position [, length])) that returns a substring starting at 1-based position.</description>
+	</directive>
+	<directive name="@ENVIRON" tool="masm">
+		<description>Macro function (@Environ(envvar)) that returns the value of environment variable envvar at assembly time.</description>
+	</directive>
+	<directive name="@CODE" tool="masm">
+		<description>Predefined text macro representing the name of the current code segment.</description>
+	</directive>
+	<directive name="@DATA" tool="masm">
+		<description>Predefined text macro representing the name of the current data group or segment.</description>
+	</directive>
+	<directive name="@CODESIZE" tool="masm">
+		<description>Predefined numeric equate: 0 for near code models (small, compact, flat), 1 for far code models (medium, large, huge).</description>
+	</directive>
+	<directive name="@DATASIZE" tool="masm">
+		<description>Predefined numeric equate: 0 for near data models, 1 for far data models, 2 for huge data model.</description>
+	</directive>
+	<directive name="@WORDSIZE" tool="masm">
+		<description>Predefined numeric equate giving the current segment word size in bytes (2 for 16-bit, 4 for 32-bit, 8 for 64-bit).</description>
+	</directive>
+	<directive name="@CURSEG" tool="masm">
+		<description>Predefined text macro containing the name of the currently active segment.</description>
+	</directive>
+	<directive name="@FILENAME" tool="masm">
+		<description>Predefined text macro representing the base name of the main source file being assembled.</description>
+	</directive>
+	<directive name="@FILECUR" tool="masm">
+		<description>Predefined text macro representing the name of the current source or included file.</description>
+	</directive>
+	<directive name="@LINE" tool="masm">
+		<description>Predefined numeric equate giving the line number in the current source file.</description>
+	</directive>
+	<directive name="@DATE" tool="masm">
+		<description>Predefined text macro giving the system date in yy/mm/dd format.</description>
+	</directive>
+	<directive name="@TIME" tool="masm">
+		<description>Predefined text macro giving the system time in 24-hour hh:mm:ss format.</description>
+	</directive>
+	<directive name="@VERSION" tool="masm">
+		<description>Predefined text macro representing the MASM assembler version number.</description>
+	</directive>
+	<directive name="@CPU" tool="masm">
+		<description>Predefined bitmask equate indicating the enabled processor and instruction set features.</description>
+	</directive>
+	<directive name="@INTERFACE" tool="masm">
+		<description>Predefined bitmask equate containing information about the active language interface and calling convention.</description>
+	</directive>
+	<directive name="@MODEL" tool="masm">
+		<description>Predefined numeric equate representing the active .MODEL memory model (1=tiny, 2=small, 3=compact, 4=medium, 5=large, 6=huge, 7=flat).</description>
+	</directive>
+	<directive name="@@" tool="masm">
+		<description>Defines an anonymous code label (@@:). Reference the nearest preceding @@: with @B and the nearest following @@: with @F.</description>
+	</directive>
+	<directive name="@B" tool="masm">
+		<description>References the nearest preceding @@: anonymous code label.</description>
+	</directive>
+	<directive name="@F" tool="masm">
+		<description>References the nearest following @@: anonymous code label.</description>
+	</directive>
 </directives>
