@@ -1391,60 +1391,38 @@ fn get_directive_hover_resp(
     })
 }
 
+fn masm_type_size(kw: &str) -> Option<usize> {
+    match kw.to_ascii_uppercase().as_str() {
+        "DB" | "RESB" | "BYTE" | "SBYTE" => Some(1),
+        "DW" | "RESW" | "WORD" | "SWORD" => Some(2),
+        "DD" | "RESD" | "DWORD" | "SDWORD" | "REAL4" => Some(4),
+        "DF" | "FWORD" => Some(6),
+        "DQ" | "RESQ" | "QWORD" | "SQWORD" | "MMWORD" | "REAL8" => Some(8),
+        "DT" | "REST" | "TBYTE" | "TWORD" | "REAL10" => Some(10),
+        "DO" | "RESO" | "OWORD" | "XMMWORD" => Some(16),
+        "DY" | "RESY" | "YWORD" | "YMMWORD" => Some(32),
+        "DZ" | "RESZ" | "ZWORD" | "ZMMWORD" => Some(64),
+        _ => None,
+    }
+}
+
 fn is_masm_data_or_def_kw(kw: &str) -> bool {
-    matches!(
-        kw.to_ascii_uppercase().as_str(),
-        "PROC"
-            | "PROTO"
-            | "STRUCT"
-            | "STRUC"
-            | "UNION"
-            | "RECORD"
-            | "TYPEDEF"
-            | "MACRO"
-            | "EQU"
-            | "TEXTEQU"
-            | "="
-            | "LABEL"
-            | "DB"
-            | "DW"
-            | "DD"
-            | "DF"
-            | "DQ"
-            | "DT"
-            | "DO"
-            | "DY"
-            | "DZ"
-            | "RESB"
-            | "RESW"
-            | "RESD"
-            | "RESQ"
-            | "REST"
-            | "RESO"
-            | "RESY"
-            | "RESZ"
-            | "BYTE"
-            | "SBYTE"
-            | "WORD"
-            | "SWORD"
-            | "DWORD"
-            | "SDWORD"
-            | "FWORD"
-            | "QWORD"
-            | "SQWORD"
-            | "MMWORD"
-            | "TBYTE"
-            | "TWORD"
-            | "OWORD"
-            | "XMMWORD"
-            | "YWORD"
-            | "YMMWORD"
-            | "ZWORD"
-            | "ZMMWORD"
-            | "REAL4"
-            | "REAL8"
-            | "REAL10"
-    )
+    masm_type_size(kw).is_some()
+        || matches!(
+            kw.to_ascii_uppercase().as_str(),
+            "PROC"
+                | "PROTO"
+                | "STRUCT"
+                | "STRUC"
+                | "UNION"
+                | "RECORD"
+                | "TYPEDEF"
+                | "MACRO"
+                | "EQU"
+                | "TEXTEQU"
+                | "="
+                | "LABEL"
+        )
 }
 
 fn line_token_range(raw_line: &str, line_num: u32, token: &str) -> Range {
@@ -1461,10 +1439,58 @@ fn line_token_range(raw_line: &str, line_num: u32, token: &str) -> Range {
     }
 }
 
+fn parse_masm_num(s: &str) -> Option<i64> {
+    let s = s.trim();
+    if let Some(rest) = s.strip_prefix('-') {
+        return parse_masm_num(rest).map(|v| -v);
+    }
+    let clean = s.strip_prefix("0x").or_else(|| s.strip_prefix("0X"));
+    if let Some(hex) = clean {
+        return i64::from_str_radix(hex, 16).ok();
+    }
+    if let Some(hex) = s.strip_suffix(['h', 'H']) {
+        return i64::from_str_radix(hex, 16).ok();
+    }
+    if let Some(bin) = s.strip_suffix(['b', 'B'])
+        && bin.chars().all(|c| c == '0' || c == '1')
+    {
+        return i64::from_str_radix(bin, 2).ok();
+    }
+    s.parse::<i64>().ok()
+}
+
+fn count_masm_init_bytes(init: &str, elem_size: usize) -> usize {
+    let trimmed = init.trim();
+    if let Some((cnt_str, rest)) = trimmed
+        .split_once("DUP")
+        .or_else(|| trimmed.split_once("dup"))
+        && let Some(cnt) = parse_masm_num(cnt_str).and_then(|v| usize::try_from(v).ok())
+    {
+        let inner = rest.trim().trim_matches(|c| c == '(' || c == ')');
+        return cnt.saturating_mul(count_masm_init_bytes(inner, elem_size).max(elem_size));
+    }
+    let mut total = 0usize;
+    for part in trimmed.split(',') {
+        let p = part.trim();
+        if elem_size == 1 && p.starts_with('"') && p.ends_with('"') && p.len() >= 2 {
+            total += p.len() - 2;
+        } else if !p.is_empty() {
+            total += elem_size;
+        }
+    }
+    total.max(elem_size)
+}
+
 /// Extracts colonless MASM symbol definitions (`PROC`, `PROTO`, `EXTERN`, `LOCAL`,
 /// `STRUCT`/`UNION`/`RECORD`/`TYPEDEF`/`MACRO`, `EQU`/`=`, and data declarations).
 fn extract_masm_symbols(doc: &str) -> Vec<(String, SymbolKind, String, Range)> {
-    let mut out = Vec::new();
+    let mut out: Vec<(String, SymbolKind, String, Range)> = Vec::new();
+    let mut active_struct: Option<(String, usize, bool, usize)> = None;
+    let mut struct_sizes: HashMap<String, usize> = HashMap::new();
+    let mut struct_fields: HashMap<String, Vec<(String, String, Range)>> = HashMap::new();
+    let mut data_offsets: HashMap<String, usize> = HashMap::new();
+    let mut data_cursor = 0usize;
+
     for (line_idx, raw_line) in doc.lines().enumerate() {
         let code = raw_line.split(';').next().unwrap_or("").trim();
         if code.is_empty() {
@@ -1476,6 +1502,50 @@ fn extract_masm_symbols(doc: &str) -> Vec<(String, SymbolKind, String, Range)> {
             continue;
         };
         let first_upper = first.to_ascii_uppercase();
+        if matches!(
+            first_upper.as_str(),
+            ".DATA" | ".DATA?" | ".CONST" | ".CODE"
+        ) {
+            data_cursor = 0;
+            continue;
+        }
+
+        if let Some((ref st_name, ref mut offset, is_union, out_idx)) = active_struct {
+            let second = words.next().unwrap_or("");
+            if first_upper == "ENDS" || second.eq_ignore_ascii_case("ENDS") {
+                let sz = *offset;
+                let st_key = st_name.to_ascii_lowercase();
+                struct_sizes.insert(st_key, sz);
+                if let Some(entry) = out.get_mut(out_idx) {
+                    let _ = write!(entry.2, " ; size = {sz} (0x{sz:X})");
+                }
+                active_struct = None;
+                continue;
+            }
+            if let Some(elem_sz) = masm_type_size(second)
+                .or_else(|| struct_sizes.get(&second.to_ascii_lowercase()).copied())
+            {
+                let rest = code
+                    .find(second)
+                    .map_or("", |i| code[i + second.len()..].trim());
+                let field_sz = count_masm_init_bytes(rest, elem_sz);
+                let field_off = if is_union { 0 } else { *offset };
+                *offset = if is_union {
+                    (*offset).max(field_sz)
+                } else {
+                    *offset + field_sz
+                };
+                let fname = first.trim_end_matches(':');
+                let detail = format!("{code} ; +0x{field_off:02X} ({field_sz}B)");
+                let rng = line_token_range(raw_line, line_num, fname);
+                struct_fields
+                    .entry(st_name.to_ascii_lowercase())
+                    .or_default()
+                    .push((fname.to_string(), detail.clone(), rng));
+                out.push((format!("{st_name}.{fname}"), SymbolKind::FIELD, detail, rng));
+            }
+            continue;
+        }
 
         if matches!(
             first_upper.as_str(),
@@ -1514,10 +1584,12 @@ fn extract_masm_symbols(doc: &str) -> Vec<(String, SymbolKind, String, Range)> {
         let Some(second) = words.next() else {
             continue;
         };
-        if !is_masm_data_or_def_kw(second) {
+        let second_upper = second.to_ascii_uppercase();
+        let is_struct_type = struct_sizes.contains_key(&second.to_ascii_lowercase());
+        if !is_masm_data_or_def_kw(second) && !is_struct_type {
             continue;
         }
-        let kind = match second.to_ascii_uppercase().as_str() {
+        let kind = match second_upper.as_str() {
             "PROC" | "MACRO" => SymbolKind::FUNCTION,
             "PROTO" => SymbolKind::INTERFACE,
             "STRUCT" | "STRUC" | "UNION" | "RECORD" => SymbolKind::STRUCT,
@@ -1525,12 +1597,60 @@ fn extract_masm_symbols(doc: &str) -> Vec<(String, SymbolKind, String, Range)> {
             "EQU" | "TEXTEQU" | "=" => SymbolKind::CONSTANT,
             _ => SymbolKind::VARIABLE,
         };
-        out.push((
-            name.to_string(),
-            kind,
-            code.to_string(),
-            line_token_range(raw_line, line_num, name),
-        ));
+        let rng = line_token_range(raw_line, line_num, name);
+        let mut detail = code.to_string();
+
+        if matches!(second_upper.as_str(), "STRUCT" | "STRUC" | "UNION") {
+            let out_idx = out.len();
+            active_struct = Some((name.to_string(), 0, second_upper == "UNION", out_idx));
+        } else if matches!(second_upper.as_str(), "EQU" | "=") {
+            let rhs = code
+                .find(second)
+                .map_or("", |i| code[i + second.len()..].trim());
+            let evaluated = parse_masm_num(rhs).or_else(|| {
+                if let Some(after_dollar) = rhs.strip_prefix('$') {
+                    let mut val = i64::try_from(data_cursor).ok()?;
+                    for term in after_dollar.split('-') {
+                        let t = term.trim();
+                        if t.is_empty() {
+                            continue;
+                        }
+                        if let Some(&off) = data_offsets.get(&t.to_ascii_lowercase()) {
+                            val -= i64::try_from(off).ok()?;
+                        } else {
+                            val -= parse_masm_num(t)?;
+                        }
+                    }
+                    Some(val)
+                } else {
+                    None
+                }
+            });
+            if let Some(v) = evaluated {
+                let _ = write!(detail, " ; = {v} (0x{v:X})");
+            }
+        } else if let Some(elem_sz) = masm_type_size(second)
+            .or_else(|| struct_sizes.get(&second.to_ascii_lowercase()).copied())
+        {
+            let rest = code
+                .find(second)
+                .map_or("", |i| code[i + second.len()..].trim());
+            let total_sz = count_masm_init_bytes(rest, elem_sz);
+            data_offsets.insert(name.to_ascii_lowercase(), data_cursor);
+            data_cursor += total_sz;
+            if let Some(fields) = struct_fields.get(&second.to_ascii_lowercase()) {
+                for (fname, fdetail, frng) in fields {
+                    out.push((
+                        format!("{name}.{fname}"),
+                        SymbolKind::FIELD,
+                        fdetail.clone(),
+                        *frng,
+                    ));
+                }
+            }
+        }
+
+        out.push((name.to_string(), kind, detail, rng));
     }
     out
 }
@@ -1822,6 +1942,47 @@ pub fn get_comp_resp(
                     || config.is_assembler_enabled(Assembler::Avr)
                     || config.is_assembler_enabled(Assembler::Mars) =>
             {
+                if config.is_assembler_enabled(Assembler::Masm)
+                    && let Some(line) = curr_doc.lines().nth(cursor_line)
+                {
+                    let before_dot = line
+                        .get(..cursor_char.min(line.len()))
+                        .unwrap_or("")
+                        .trim_end_matches('.');
+                    let base = before_dot
+                        .rsplit(|c: char| !c.is_ascii_alphanumeric() && c != '_')
+                        .next()
+                        .unwrap_or("");
+                    if !base.is_empty() {
+                        let prefix = format!("{base}.");
+                        let field_items: Vec<CompletionItem> = extract_masm_symbols(curr_doc)
+                            .into_iter()
+                            .filter_map(|(name, kind, detail, _)| {
+                                if kind == SymbolKind::FIELD
+                                    && name
+                                        .to_ascii_lowercase()
+                                        .starts_with(&prefix.to_ascii_lowercase())
+                                {
+                                    let field_label = name[prefix.len()..].to_string();
+                                    Some(CompletionItem {
+                                        label: field_label,
+                                        kind: Some(CompletionItemKind::FIELD),
+                                        detail: Some(detail),
+                                        ..Default::default()
+                                    })
+                                } else {
+                                    None
+                                }
+                            })
+                            .collect();
+                        if !field_items.is_empty() {
+                            return Some(CompletionList {
+                                is_incomplete: true,
+                                items: field_items,
+                            });
+                        }
+                    }
+                }
                 return Some(CompletionList {
                     is_incomplete: true,
                     items: filtered_comp_list_assem(
@@ -2135,7 +2296,7 @@ pub fn get_document_symbols(
             }
         }
         for (name, kind, detail, range) in extract_masm_symbols(curr_doc) {
-            if !res.iter().any(|s| s.name == name) {
+            if kind != SymbolKind::FIELD && !res.iter().any(|s| s.name == name) {
                 #[allow(deprecated)]
                 res.push(DocumentSymbol {
                     name,
@@ -2320,7 +2481,63 @@ pub fn get_goto_def_resp(
             }
         }
 
-        for (sym_name, _, _, range) in extract_masm_symbols(curr_doc.get_content(None)) {
+        let doc_str = curr_doc.get_content(None);
+        let cursor_line = params.text_document_position_params.position.line as usize;
+        let cursor_col = params.text_document_position_params.position.character as usize;
+        if let Some(raw_line) = doc_str.lines().nth(cursor_line) {
+            let start_col = cursor_col.saturating_sub(
+                get_word_from_pos_params(curr_doc, &params.text_document_position_params).1,
+            );
+            let is_at_b = word.eq_ignore_ascii_case("b")
+                && start_col > 0
+                && raw_line.as_bytes().get(start_col - 1) == Some(&b'@');
+            let is_at_f = word.eq_ignore_ascii_case("f")
+                && start_col > 0
+                && raw_line.as_bytes().get(start_col - 1) == Some(&b'@');
+            if is_at_b || is_at_f {
+                let anon_lines: Vec<u32> = doc_str
+                    .lines()
+                    .enumerate()
+                    .filter_map(|(i, l)| {
+                        l.split(';')
+                            .next()
+                            .unwrap_or("")
+                            .trim_start()
+                            .starts_with("@@:")
+                            .then_some(i as u32)
+                    })
+                    .collect();
+                let target_line = if is_at_b {
+                    anon_lines
+                        .into_iter()
+                        .rev()
+                        .find(|&l| (l as usize) <= cursor_line)
+                } else {
+                    anon_lines.into_iter().find(|&l| (l as usize) > cursor_line)
+                };
+                if let Some(tl) = target_line {
+                    return Some(GotoDefinitionResponse::Scalar(Location {
+                        uri: params
+                            .text_document_position_params
+                            .text_document
+                            .uri
+                            .clone(),
+                        range: Range {
+                            start: Position {
+                                line: tl,
+                                character: 0,
+                            },
+                            end: Position {
+                                line: tl,
+                                character: 2,
+                            },
+                        },
+                    }));
+                }
+            }
+        }
+
+        for (sym_name, _, _, range) in extract_masm_symbols(doc_str) {
             if sym_name.eq_ignore_ascii_case(word) {
                 return Some(GotoDefinitionResponse::Scalar(Location {
                     uri: params
@@ -2334,6 +2551,30 @@ pub fn get_goto_def_resp(
         }
     }
 
+    None
+}
+
+fn find_enclosing_masm_proc_bounds(doc: &str, cursor_line: u32) -> Option<(u32, u32)> {
+    let mut start_line: Option<u32> = None;
+    for (idx, raw_line) in doc.lines().enumerate() {
+        let code = raw_line.split(';').next().unwrap_or("").trim();
+        let mut words = code.split_whitespace();
+        let Some(first) = words.next() else {
+            continue;
+        };
+        let second = words.next().unwrap_or("");
+        if second.eq_ignore_ascii_case("PROC") {
+            start_line = Some(idx as u32);
+        } else if first.eq_ignore_ascii_case("ENDP") || second.eq_ignore_ascii_case("ENDP") {
+            if let Some(s) = start_line
+                && cursor_line >= s
+                && cursor_line <= idx as u32
+            {
+                return Some((s, idx as u32));
+            }
+            start_line = None;
+        }
+    }
     None
 }
 
@@ -2363,9 +2604,27 @@ pub fn get_ref_resp(
         let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
         let (word, _) = get_word_from_pos_params(curr_doc, &params.text_document_position);
         let uri = &params.text_document_position.text_document.uri;
-        let masm_decl_ranges: HashSet<Range> = extract_masm_symbols(curr_doc.get_content(None))
+        let doc_str = curr_doc.get_content(None);
+        let cursor_line = params.text_document_position.position.line;
+        let proc_bounds = find_enclosing_masm_proc_bounds(doc_str, cursor_line);
+        let masm_syms = extract_masm_symbols(doc_str);
+        let is_proc_local = proc_bounds.is_some_and(|(ps, pe)| {
+            masm_syms.iter().any(|(sym_name, _, detail, range)| {
+                sym_name.eq(word)
+                    && range.start.line >= ps
+                    && range.start.line <= pe
+                    && detail.to_ascii_uppercase().starts_with("LOCAL ")
+            })
+        });
+        let masm_decl_ranges: HashSet<Range> = masm_syms
             .into_iter()
-            .filter(|(sym_name, _, _, _)| sym_name.eq(word))
+            .filter(|(sym_name, _, _, range)| {
+                sym_name.eq(word)
+                    && (!is_proc_local
+                        || proc_bounds.is_some_and(|(ps, pe)| {
+                            range.start.line >= ps && range.start.line <= pe
+                        }))
+            })
             .map(|(_, _, _, range)| range)
             .collect();
 
@@ -2421,7 +2680,14 @@ pub fn get_ref_resp(
                     let start = lsp_pos_of_point(cap.node.start_position());
                     let end = lsp_pos_of_point(cap.node.end_position());
                     let range = Range { start, end };
-                    if params.context.include_declaration || !masm_decl_ranges.contains(&range) {
+                    let in_scope = !is_proc_local
+                        || proc_bounds.is_some_and(|(ps, pe)| {
+                            range.start.line >= ps && range.start.line <= pe
+                        });
+                    if in_scope
+                        && (params.context.include_declaration
+                            || !masm_decl_ranges.contains(&range))
+                    {
                         refs.insert(Location {
                             uri: uri.clone(),
                             range,

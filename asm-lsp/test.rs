@@ -2489,6 +2489,99 @@ C:\\proj\\main.asm(3) : error A2008:syntax error : rcx
         );
     }
 
+    #[test]
+    fn handle_masm_structs_dollar_equ_anon_labels_and_scoped_locals() {
+        let cfg = masm_x86_64_test_config();
+        let src = r#"VEC3 STRUCT
+    x DWORD ?
+    y DWORD ?
+    z QWORD ?
+VEC3 ENDS
+
+.data
+g_vec VEC3 <>
+message db "Hello from x64 assembly!", 13, 10
+message_length equ $ - message
+
+.code
+FirstProc PROC
+    LOCAL count:DWORD
+@@:
+    mov rax, <cursor>g_vec.z
+    mov r8d, message_length
+    jmp @B
+FirstProc ENDP
+
+SecondProc PROC
+    LOCAL count:DWORD
+    mov count, 1
+SecondProc ENDP
+"#;
+        test_hover(src, "`z QWORD ? ; +0x08 (8B)`", &cfg);
+
+        let src_len = src
+            .replace("<cursor>g_vec.z", "g_vec.z")
+            .replace("mov r8d, message_length", "mov r8d, <cursor>message_length");
+        test_hover(
+            &src_len,
+            "`message_length equ $ - message ; = 26 (0x1A)`",
+            &cfg,
+        );
+
+        let clean_src = src.replace("<cursor>", "");
+        let uri = Uri::from_str("file:///structs.asm").unwrap();
+        let doc = FullTextDocument::new("asm".to_string(), 0, clean_src.clone());
+        let mut parser = Parser::new();
+        parser.set_language(&tree_sitter_asm::language()).unwrap();
+        let tree = parser.parse(&clean_src, None);
+        let mut tree_entry = TreeEntry { tree, parser };
+
+        // @B on line 17 jumps to @@: on line 14
+        let def_anon = crate::get_goto_def_resp(
+            &doc,
+            &mut tree_entry,
+            &lsp_types::GotoDefinitionParams {
+                text_document_position_params: TextDocumentPositionParams {
+                    text_document: TextDocumentIdentifier { uri: uri.clone() },
+                    position: Position {
+                        line: 17,
+                        character: 9,
+                    },
+                },
+                work_done_progress_params: WorkDoneProgressParams::default(),
+                partial_result_params: PartialResultParams::default(),
+            },
+        )
+        .expect("Expected @B to resolve to @@:");
+        if let lsp_types::GotoDefinitionResponse::Scalar(loc) = def_anon {
+            assert_eq!(loc.range.start.line, 14);
+        } else {
+            panic!("Expected scalar location for @B");
+        }
+
+        // Scoped LOCAL `count` in SecondProc (line 21..22) does not match FirstProc's `count`
+        let refs = crate::get_ref_resp(
+            &lsp_types::ReferenceParams {
+                text_document_position: TextDocumentPositionParams {
+                    text_document: TextDocumentIdentifier { uri },
+                    position: Position {
+                        line: 22,
+                        character: 9,
+                    },
+                },
+                work_done_progress_params: WorkDoneProgressParams::default(),
+                partial_result_params: PartialResultParams::default(),
+                context: lsp_types::ReferenceContext {
+                    include_declaration: true,
+                },
+            },
+            &doc,
+            &mut tree_entry,
+        );
+        assert_eq!(refs.len(), 2);
+        assert!(refs.iter().all(|r| r.range.start.line >= 20));
+    }
+
     /**************************************************************************
      * NASM Tests
      *************************************************************************/
