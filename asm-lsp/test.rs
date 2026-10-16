@@ -1789,6 +1789,74 @@ bar:
         );
     }
 
+    #[test]
+    fn handle_document_highlight_and_rename_label() {
+        let src = "foo:\n    mov eax, 0\n    jmp foo\n";
+        let uri = Uri::from_str("file:///rename.s").unwrap();
+        let doc = FullTextDocument::new("asm".to_string(), 0, src.to_string());
+        let mut parser = Parser::new();
+        parser.set_language(&tree_sitter_asm::language()).unwrap();
+        let tree = parser.parse(src, None);
+        let mut tree_entry = TreeEntry { tree, parser };
+
+        let pos_params = TextDocumentPositionParams {
+            text_document: TextDocumentIdentifier { uri: uri.clone() },
+            position: Position {
+                line: 2,
+                character: 9,
+            },
+        };
+
+        let highlights = crate::get_document_highlight_resp(
+            &lsp_types::DocumentHighlightParams {
+                text_document_position_params: pos_params.clone(),
+                work_done_progress_params: WorkDoneProgressParams::default(),
+                partial_result_params: PartialResultParams::default(),
+            },
+            &doc,
+            &mut tree_entry,
+        );
+        assert_eq!(highlights.len(), 2);
+
+        let prep = crate::get_prepare_rename_resp(&pos_params, &doc, &mut tree_entry)
+            .expect("Expected prepareRename response");
+        assert_eq!(
+            prep,
+            lsp_types::PrepareRenameResponse::RangeWithPlaceholder {
+                range: lsp_types::Range {
+                    start: Position {
+                        line: 2,
+                        character: 8,
+                    },
+                    end: Position {
+                        line: 2,
+                        character: 11,
+                    },
+                },
+                placeholder: "foo".to_string(),
+            }
+        );
+
+        let ws_edit = crate::get_rename_resp(
+            &lsp_types::RenameParams {
+                text_document_position: pos_params,
+                new_name: "bar".to_string(),
+                work_done_progress_params: WorkDoneProgressParams::default(),
+            },
+            &doc,
+            &mut tree_entry,
+        )
+        .expect("Expected WorkspaceEdit for rename");
+        let edits = &ws_edit.changes.as_ref().unwrap()[&uri];
+        assert_eq!(edits.len(), 2);
+        // Ensure the colon on `foo:` (line 0) is preserved (`end.character == 3`, not `4`)
+        assert!(
+            edits
+                .iter()
+                .any(|e| e.range.start.line == 0 && e.range.end.character == 3)
+        );
+    }
+
     // Demangling
     #[test]
     fn handle_hover_it_demangles_cpp_1() {

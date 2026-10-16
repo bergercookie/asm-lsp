@@ -14,8 +14,8 @@ use clap::{Command, FromArgMatches as _, Subcommand};
 use lsp_types::{
     CompletionItemKind, CompletionOptions, CompletionOptionsCompletionItem, DiagnosticOptions,
     DiagnosticServerCapabilities, HoverProviderCapability, InitializeParams, MessageType, OneOf,
-    PositionEncodingKind, ServerCapabilities, SignatureHelpOptions, TextDocumentSyncCapability,
-    TextDocumentSyncKind, WorkDoneProgressOptions,
+    PositionEncodingKind, RenameOptions, ServerCapabilities, SignatureHelpOptions,
+    TextDocumentSyncCapability, TextDocumentSyncKind, WorkDoneProgressOptions,
 };
 
 use anyhow::Result;
@@ -134,6 +134,13 @@ pub fn run_lsp() -> Result<()> {
     });
 
     let references_provider = Some(OneOf::Left(true));
+    let document_highlight_provider = Some(OneOf::Left(true));
+    let rename_provider = Some(OneOf::Right(RenameOptions {
+        prepare_provider: Some(true),
+        work_done_progress_options: WorkDoneProgressOptions {
+            work_done_progress: None,
+        },
+    }));
 
     let diagnostic_provider = Some(DiagnosticServerCapabilities::Options(DiagnosticOptions {
         identifier: Some(String::from("asm-lsp")),
@@ -153,6 +160,8 @@ pub fn run_lsp() -> Result<()> {
         text_document_sync,
         document_symbol_provider: Some(OneOf::Left(true)),
         references_provider,
+        document_highlight_provider,
+        rename_provider,
         diagnostic_provider,
         ..ServerCapabilities::default()
     };

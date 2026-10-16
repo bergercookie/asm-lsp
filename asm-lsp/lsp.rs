@@ -22,11 +22,13 @@ use lsp_textdocument::FullTextDocument;
 use lsp_types::notification::Notification as _;
 use lsp_types::{
     CompletionItem, CompletionItemKind, CompletionList, CompletionParams, CompletionTriggerKind,
-    Diagnostic, DocumentSymbol, DocumentSymbolParams, Documentation, GotoDefinitionParams,
-    GotoDefinitionResponse, Hover, HoverContents, HoverParams, InitializeParams, Location,
-    MarkupContent, MarkupKind, MessageType, Position, Range, ReferenceParams, SignatureHelp,
-    SignatureHelpParams, SignatureInformation, SymbolKind, TextDocumentContentChangeEvent,
-    TextDocumentPositionParams, Uri,
+    Diagnostic, DocumentHighlight, DocumentHighlightKind, DocumentHighlightParams, DocumentSymbol,
+    DocumentSymbolParams, Documentation, GotoDefinitionParams, GotoDefinitionResponse, Hover,
+    HoverContents, HoverParams, InitializeParams, Location, MarkupContent, MarkupKind, MessageType,
+    PartialResultParams, Position, PrepareRenameResponse, Range, ReferenceContext, ReferenceParams,
+    RenameParams, SignatureHelp, SignatureHelpParams, SignatureInformation, SymbolKind,
+    TextDocumentContentChangeEvent, TextDocumentPositionParams, TextEdit, Uri,
+    WorkDoneProgressParams, WorkspaceEdit,
 };
 use regex::Regex;
 use symbolic::common::{Language, Name, NameMangling};
@@ -1841,6 +1843,141 @@ pub fn get_ref_resp(
     }
 
     refs.into_iter().collect()
+}
+
+fn goto_def_at(
+    pos_params: &TextDocumentPositionParams,
+    curr_doc: &FullTextDocument,
+    tree_entry: &mut TreeEntry,
+) -> Option<GotoDefinitionResponse> {
+    get_goto_def_resp(
+        curr_doc,
+        tree_entry,
+        &GotoDefinitionParams {
+            text_document_position_params: pos_params.clone(),
+            work_done_progress_params: WorkDoneProgressParams::default(),
+            partial_result_params: PartialResultParams::default(),
+        },
+    )
+}
+
+fn refs_with_decl_at(
+    pos_params: &TextDocumentPositionParams,
+    curr_doc: &FullTextDocument,
+    tree_entry: &mut TreeEntry,
+) -> Vec<Location> {
+    get_ref_resp(
+        &ReferenceParams {
+            text_document_position: pos_params.clone(),
+            work_done_progress_params: WorkDoneProgressParams::default(),
+            partial_result_params: PartialResultParams::default(),
+            context: ReferenceContext {
+                include_declaration: true,
+            },
+        },
+        curr_doc,
+        tree_entry,
+    )
+}
+
+#[must_use]
+pub fn get_document_highlight_resp(
+    params: &DocumentHighlightParams,
+    curr_doc: &FullTextDocument,
+    tree_entry: &mut TreeEntry,
+) -> Vec<DocumentHighlight> {
+    let pos_params = &params.text_document_position_params;
+    let def_range = goto_def_at(pos_params, curr_doc, tree_entry).and_then(|resp| match resp {
+        GotoDefinitionResponse::Scalar(loc) => Some(loc.range),
+        _ => None,
+    });
+
+    refs_with_decl_at(pos_params, curr_doc, tree_entry)
+        .into_iter()
+        .map(|loc| DocumentHighlight {
+            range: loc.range,
+            kind: Some(if Some(loc.range) == def_range {
+                DocumentHighlightKind::WRITE
+            } else {
+                DocumentHighlightKind::READ
+            }),
+        })
+        .collect()
+}
+
+#[must_use]
+pub fn get_prepare_rename_resp(
+    params: &TextDocumentPositionParams,
+    curr_doc: &FullTextDocument,
+    tree_entry: &mut TreeEntry,
+) -> Option<PrepareRenameResponse> {
+    goto_def_at(params, curr_doc, tree_entry)?;
+
+    let line_contents = curr_doc.get_content(Some(Range {
+        start: Position {
+            line: params.position.line,
+            character: 0,
+        },
+        end: Position {
+            line: params.position.line,
+            character: u32::MAX,
+        },
+    }));
+    let ((start, end), _) = find_word_at_pos(line_contents, params.position.character as usize);
+    if start == end {
+        return None;
+    }
+    Some(PrepareRenameResponse::RangeWithPlaceholder {
+        range: Range {
+            start: Position {
+                line: params.position.line,
+                character: start as u32,
+            },
+            end: Position {
+                line: params.position.line,
+                character: end as u32,
+            },
+        },
+        placeholder: line_contents[start..end].to_string(),
+    })
+}
+
+#[must_use]
+pub fn get_rename_resp(
+    params: &RenameParams,
+    curr_doc: &FullTextDocument,
+    tree_entry: &mut TreeEntry,
+) -> Option<WorkspaceEdit> {
+    let refs = refs_with_decl_at(&params.text_document_position, curr_doc, tree_entry);
+    if refs.is_empty() {
+        return None;
+    }
+
+    let edits: Vec<TextEdit> = refs
+        .into_iter()
+        .map(|loc| {
+            let mut range = loc.range;
+            let text = curr_doc.get_content(Some(range));
+            let trimmed = text.trim_end_matches(|c: char| !c.is_alphanumeric() && c != '_');
+            let diff = text.len().saturating_sub(trimmed.len()) as u32;
+            range.end.character = range.end.character.saturating_sub(diff);
+            TextEdit {
+                range,
+                new_text: params.new_name.clone(),
+            }
+        })
+        .collect();
+
+    let mut changes = HashMap::new();
+    changes.insert(
+        params.text_document_position.text_document.uri.clone(),
+        edits,
+    );
+    Some(WorkspaceEdit {
+        changes: Some(changes),
+        document_changes: None,
+        change_annotations: None,
+    })
 }
 
 /// Searches for global config in ~/.config/asm-lsp, then the project's directory
