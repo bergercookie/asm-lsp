@@ -527,23 +527,8 @@ pub fn handle_diagnostics(
     };
 
     let source_entries = compile_cmds.iter().filter(|entry| match entry.file {
-        SourceFile::File(ref file) => {
-            file.canonicalize().is_ok_and(|source_path| {
-                // HACK: See comment inside `process_uri`
-                let cleaned_path = if cfg!(windows) {
-                    #[allow(clippy::option_if_let_else)]
-                    if let Some(tmp) = source_path.to_str().unwrap().strip_prefix("\\\\?\\") {
-                        warn!("Stripping Windows canonicalization prefix \"\\\\?\\\" from path");
-                        tmp.into()
-                    } else {
-                        source_path
-                    }
-                } else {
-                    source_path
-                };
-                cleaned_path.eq(&req_source_path)
-            })
-        }
+        SourceFile::File(ref file) => crate::canonicalize_clean(file)
+            .is_ok_and(|cleaned_path| cleaned_path.eq(&req_source_path)),
         SourceFile::All => true,
     });
 
