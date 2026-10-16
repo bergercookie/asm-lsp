@@ -124,7 +124,7 @@ pub fn find_word_at_pos(line: &str, col: Column) -> ((Column, Column), usize) {
     // NOTE: In a similar manner to above, '$' is added as an allowed character to account
     // for mips registers
     let is_ident_char =
-        |c: char| c.is_alphanumeric() || c == '_' || c == '.' || c == '*' || c == '$';
+        |c: char| c.is_alphanumeric() || c == '_' || c == '.' || c == '*' || c == '$' || c == '?';
 
     let start = line_
         .chars()
@@ -182,34 +182,6 @@ pub fn strip_windows_prefix(path: PathBuf) -> PathBuf {
 /// Returns `Err` if `std::fs::canonicalize` fails.
 pub fn canonicalize_clean(path: &Path) -> std::io::Result<PathBuf> {
     path.canonicalize().map(strip_windows_prefix)
-}
-
-/// Converts a filesystem `Path` into a `file://` `Uri`.
-#[must_use]
-pub fn path_to_uri(path: &Path) -> Option<Uri> {
-    let cleaned = strip_windows_prefix(path.to_path_buf());
-    let path_str = cleaned.to_str()?;
-    let normalized = if cfg!(windows) {
-        path_str.replace('\\', "/")
-    } else {
-        path_str.to_string()
-    };
-    let mut encoded = String::with_capacity(normalized.len() + 8);
-    if normalized.starts_with('/') {
-        encoded.push_str("file://");
-    } else {
-        encoded.push_str("file:///");
-    }
-    for ch in normalized.chars() {
-        match ch {
-            ' ' => encoded.push_str("%20"),
-            '#' => encoded.push_str("%23"),
-            '?' => encoded.push_str("%3F"),
-            '%' => encoded.push_str("%25"),
-            c => encoded.push(c),
-        }
-    }
-    Uri::from_str(&encoded).ok()
 }
 
 /// Sanitizes the URI path sent by an LSP client
@@ -434,35 +406,16 @@ fn get_additional_include_dirs(compile_cmds: &CompilationDatabase) -> Vec<(Sourc
             }
         };
 
-        let mut check_dir = false;
-        if let Some(args) = &entry.arguments {
-            match args {
-                CompileArgs::Flags(args) | CompileArgs::Arguments(args) => {
-                    for arg in args.iter().map(|arg| arg.trim()) {
-                        if check_dir {
-                            if let Some(resolved) =
-                                resolve_include_dir(PathBuf::from(arg), &entry_dir, &source_file)
-                            {
-                                additional_dirs.push((source_file.clone(), resolved));
-                            }
-                            check_dir = false;
-                        } else if arg.eq("-I") || arg.eq("/I") {
-                            check_dir = true;
-                        } else if let Some(rest) =
-                            arg.strip_prefix("-I").or_else(|| arg.strip_prefix("/I"))
-                            && !rest.is_empty()
-                            && let Some(resolved) =
-                                resolve_include_dir(PathBuf::from(rest), &entry_dir, &source_file)
-                        {
-                            additional_dirs.push((source_file.clone(), resolved));
-                        }
-                    }
-                }
+        let arg_list: Option<Vec<String>> = match &entry.arguments {
+            Some(CompileArgs::Flags(args) | CompileArgs::Arguments(args)) => {
+                Some(args.iter().map(|arg| arg.trim().to_string()).collect())
             }
-        } else if entry.command.is_some()
-            && let Some(args) = entry.args_from_cmd()
-        {
-            for arg in args {
+            None => entry.args_from_cmd(),
+        };
+
+        if let Some(args) = arg_list {
+            let mut check_dir = false;
+            for arg in &args {
                 if check_dir {
                     if let Some(resolved) =
                         resolve_include_dir(PathBuf::from(arg), &entry_dir, &source_file)
@@ -731,52 +684,33 @@ pub fn get_default_compile_cmd(uri: &Uri, cfg: &Config) -> CompileCommand {
         .filter(|s| !s.is_empty())
         .map_or_else(|| uri.path().to_string(), ToString::to_string);
 
-    if cfg.is_assembler_enabled(Assembler::Masm) {
-        return cfg.get_compiler().as_ref().map_or_else(
-            || CompileCommand {
-                file: SourceFile::All,
-                directory: PathBuf::new(),
-                arguments: Some(CompileArgs::Flags(vec![
-                    "/Zs".to_string(),
-                    "/nologo".to_string(),
-                ])),
-                command: None,
-                output: None,
-            },
-            |compiler| CompileCommand {
-                file: SourceFile::All,
-                directory: PathBuf::new(),
-                arguments: Some(CompileArgs::Arguments(vec![
-                    (*compiler).to_string(),
-                    "/Zs".to_string(),
-                    "/nologo".to_string(),
-                    source_arg.clone(),
-                ])),
-                command: None,
-                output: None,
-            },
-        );
-    }
+    let is_masm = cfg.is_assembler_enabled(Assembler::Masm);
+    let arguments = cfg.get_compiler().as_ref().map_or_else(
+        || {
+            if is_masm {
+                CompileArgs::Flags(vec!["/Zs".to_string(), "/nologo".to_string()])
+            } else {
+                CompileArgs::Flags(vec![source_arg.clone()])
+            }
+        },
+        |compiler| {
+            let mut args = vec![(*compiler).to_string()];
+            if is_masm {
+                args.push("/Zs".to_string());
+                args.push("/nologo".to_string());
+            }
+            args.push(source_arg.clone());
+            CompileArgs::Arguments(args)
+        },
+    );
 
-    cfg.get_compiler().as_ref().map_or_else(
-        || CompileCommand {
-            file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
-            directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
-            arguments: Some(CompileArgs::Flags(vec![source_arg.clone()])),
-            command: None,
-            output: None,
-        },
-        |compiler| CompileCommand {
-            file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
-            directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
-            arguments: Some(CompileArgs::Arguments(vec![
-                (*compiler).to_string(),
-                source_arg.clone(),
-            ])),
-            command: None,
-            output: None,
-        },
-    )
+    CompileCommand {
+        file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
+        directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
+        arguments: Some(arguments),
+        command: None,
+        output: None,
+    }
 }
 
 fn collect_command_output(output: &std::process::Output, cfg: &Config) -> String {
@@ -820,6 +754,37 @@ pub fn apply_compile_cmd(
                 .map(Path::to_path_buf)
         };
 
+    let mut run_compiler =
+        |compiler: &str, raw_flags: &[String], append_source: Option<&str>| -> bool {
+            let resolved = resolve_compiler_binary(compiler, cfg);
+            let effective_flags = if cfg.is_assembler_enabled(Assembler::Masm) {
+                ensure_masm_syntax_check_flags(raw_flags)
+            } else {
+                raw_flags.to_vec()
+            };
+            let mut cmd = Command::new(&resolved);
+            if let Some(ref dir) = working_dir {
+                cmd.current_dir(dir);
+            }
+            cmd.args(&effective_flags);
+            if let Some(src) = append_source
+                && !effective_flags.iter().any(|a| a == src)
+            {
+                cmd.arg(src);
+            }
+            match cmd.output() {
+                Ok(result) => {
+                    let output_str = collect_command_output(&result, cfg);
+                    get_diagnostics(diagnostics, &output_str, cfg);
+                    true
+                }
+                Err(e) => {
+                    warn!("Failed to launch compile command process with {compiler} -- Error: {e}");
+                    false
+                }
+            }
+        };
+
     if let Some(ref args) = compile_cmd.arguments {
         match args {
             CompileArgs::Flags(flags) => {
@@ -838,86 +803,91 @@ pub fn apply_compile_cmd(
                     |compiler| vec![compiler],
                 );
 
-                let effective_flags = if cfg.is_assembler_enabled(Assembler::Masm) {
-                    ensure_masm_syntax_check_flags(flags)
-                } else {
-                    flags.clone()
-                };
-
                 for compiler in compilers {
-                    let resolved = resolve_compiler_binary(compiler, cfg);
-                    let mut cmd = Command::new(&resolved);
-                    if let Some(ref dir) = working_dir {
-                        cmd.current_dir(dir);
-                    }
-                    cmd.args(&effective_flags);
-                    if !effective_flags.iter().any(|a| a == source_arg) {
-                        cmd.arg(source_arg);
-                    }
-                    match cmd.output() {
-                        Ok(result) => {
-                            let output_str = collect_command_output(&result, cfg);
-                            get_diagnostics(diagnostics, &output_str, cfg);
-                            if cfg.is_assembler_enabled(Assembler::Masm) {
-                                break;
-                            }
-                        }
-                        Err(e) => {
-                            warn!(
-                                "Failed to launch compile command process with {compiler} -- Error: {e}"
-                            );
-                        }
+                    if run_compiler(compiler, flags, Some(source_arg))
+                        && cfg.is_assembler_enabled(Assembler::Masm)
+                    {
+                        break;
                     }
                 }
             }
             CompileArgs::Arguments(arguments) => {
-                if arguments.len() < 2 {
-                    return;
+                if arguments.len() >= 2 {
+                    run_compiler(&arguments[0], &arguments[1..], None);
                 }
-                let resolved = resolve_compiler_binary(&arguments[0], cfg);
-                let tail_args = if cfg.is_assembler_enabled(Assembler::Masm) {
-                    ensure_masm_syntax_check_flags(&arguments[1..])
-                } else {
-                    arguments[1..].to_vec()
-                };
-                let mut cmd = Command::new(&resolved);
-                if let Some(ref dir) = working_dir {
-                    cmd.current_dir(dir);
-                }
-                let output = match cmd.args(&tail_args).output() {
-                    Ok(result) => result,
-                    Err(e) => {
-                        error!("Failed to launch compile command process -- Error: {e}");
-                        return;
-                    }
-                };
-                let output_str = collect_command_output(&output, cfg);
-                get_diagnostics(diagnostics, &output_str, cfg);
             }
         }
-    } else if let Some(args) = compile_cmd.args_from_cmd() {
-        if args.len() < 2 {
-            return;
+    } else if let Some(args) = compile_cmd.args_from_cmd()
+        && args.len() >= 2
+    {
+        run_compiler(&args[0], &args[1..], None);
+    }
+
+    if let Ok(source_text) = std::fs::read_to_string(&source_path) {
+        refine_diagnostic_ranges(diagnostics, &source_text);
+    }
+}
+
+/// Refines line-only diagnostic ranges (`character: 0..0`) against `source_text`.
+pub fn refine_diagnostic_ranges(diagnostics: &mut [Diagnostic], source_text: &str) {
+    let lines: Vec<&str> = source_text.lines().collect();
+    for diag in diagnostics {
+        if diag.range.start.line != diag.range.end.line
+            || diag.range.start.character != 0
+            || diag.range.end.character != 0
+        {
+            continue;
         }
-        let resolved = resolve_compiler_binary(&args[0], cfg);
-        let tail_args = if cfg.is_assembler_enabled(Assembler::Masm) {
-            ensure_masm_syntax_check_flags(&args[1..])
-        } else {
-            args[1..].to_vec()
+        let line_num = diag.range.start.line;
+        let Some(&raw_line) = lines.get(line_num as usize) else {
+            continue;
         };
-        let mut cmd = Command::new(&resolved);
-        if let Some(ref dir) = working_dir {
-            cmd.current_dir(dir);
+        let code_part = raw_line.split(';').next().unwrap_or(raw_line).trim_end();
+        let trimmed = code_part.trim_start();
+        if trimmed.is_empty() {
+            continue;
         }
-        let output = match cmd.args(&tail_args).output() {
-            Ok(result) => result,
-            Err(e) => {
-                error!("Failed to launch compile command process -- Error: {e}");
-                return;
-            }
+        let stmt_start = code_part.len() - trimmed.len();
+        let stmt_end = code_part.len();
+
+        let (start_col, end_col) = diag
+            .message
+            .rsplit_once(':')
+            .map(|(_, tok)| tok.split("(in macro").next().unwrap_or(tok).trim())
+            .filter(|tok| {
+                !tok.is_empty() && !tok.contains(char::is_whitespace) && tok.len() < trimmed.len()
+            })
+            .and_then(|tok| {
+                trimmed
+                    .match_indices(tok)
+                    .find(|&(idx, _)| {
+                        let before_ok = idx == 0
+                            || !trimmed[..idx]
+                                .chars()
+                                .next_back()
+                                .is_some_and(|c| c.is_alphanumeric() || c == '_');
+                        let after_idx = idx + tok.len();
+                        let after_ok = after_idx >= trimmed.len()
+                            || !trimmed[after_idx..]
+                                .chars()
+                                .next()
+                                .is_some_and(|c| c.is_alphanumeric() || c == '_');
+                        before_ok && after_ok
+                    })
+                    .map(|(idx, _)| (stmt_start + idx, stmt_start + idx + tok.len()))
+            })
+            .unwrap_or((stmt_start, stmt_end));
+
+        diag.range = Range {
+            start: Position {
+                line: line_num,
+                character: start_col as u32,
+            },
+            end: Position {
+                line: line_num,
+                character: end_col as u32,
+            },
         };
-        let output_str = collect_command_output(&output, cfg);
-        get_diagnostics(diagnostics, &output_str, cfg);
     }
 }
 
@@ -1258,6 +1228,27 @@ pub fn get_hover_resp(
             || config.is_assembler_enabled(Assembler::Mars)
         {
             // all gas, AVR, and Mars directives have a '.' prefix, some masm directives do
+            if config.is_assembler_enabled(Assembler::Masm) {
+                let uri = &params.text_document_position_params.text_document.uri;
+                let line_idx = params.text_document_position_params.position.line as usize;
+                let col = params.text_document_position_params.position.character as usize;
+                let start_col = col.saturating_sub(cursor_offset);
+                let has_at_prefix = doc_store
+                    .text_store
+                    .get_document(uri)
+                    .and_then(|d| d.get_content(None).lines().nth(line_idx))
+                    .is_some_and(|l| {
+                        start_col > 0 && l.as_bytes().get(start_col - 1) == Some(&b'@')
+                    });
+                if has_at_prefix {
+                    let at_word = format!("@{word}");
+                    let lookup =
+                        get_directive_hover_resp(&at_word, &store.names_to_info.directives, config);
+                    if lookup.is_some() {
+                        return lookup;
+                    }
+                }
+            }
             let directive_lookup =
                 get_directive_hover_resp(word, &store.names_to_info.directives, config);
             if directive_lookup.is_some() {
@@ -1400,10 +1391,155 @@ fn get_directive_hover_resp(
     })
 }
 
+fn is_masm_data_or_def_kw(kw: &str) -> bool {
+    matches!(
+        kw.to_ascii_uppercase().as_str(),
+        "PROC"
+            | "PROTO"
+            | "STRUCT"
+            | "STRUC"
+            | "UNION"
+            | "RECORD"
+            | "TYPEDEF"
+            | "MACRO"
+            | "EQU"
+            | "TEXTEQU"
+            | "="
+            | "LABEL"
+            | "DB"
+            | "DW"
+            | "DD"
+            | "DF"
+            | "DQ"
+            | "DT"
+            | "DO"
+            | "DY"
+            | "DZ"
+            | "RESB"
+            | "RESW"
+            | "RESD"
+            | "RESQ"
+            | "REST"
+            | "RESO"
+            | "RESY"
+            | "RESZ"
+            | "BYTE"
+            | "SBYTE"
+            | "WORD"
+            | "SWORD"
+            | "DWORD"
+            | "SDWORD"
+            | "FWORD"
+            | "QWORD"
+            | "SQWORD"
+            | "MMWORD"
+            | "TBYTE"
+            | "TWORD"
+            | "OWORD"
+            | "XMMWORD"
+            | "YWORD"
+            | "YMMWORD"
+            | "ZWORD"
+            | "ZMMWORD"
+            | "REAL4"
+            | "REAL8"
+            | "REAL10"
+    )
+}
+
+fn line_token_range(raw_line: &str, line_num: u32, token: &str) -> Range {
+    let col = raw_line.find(token).unwrap_or(0);
+    Range {
+        start: Position {
+            line: line_num,
+            character: col as u32,
+        },
+        end: Position {
+            line: line_num,
+            character: (col + token.len()) as u32,
+        },
+    }
+}
+
+/// Extracts colonless MASM symbol definitions (`PROC`, `PROTO`, `EXTERN`, `LOCAL`,
+/// `STRUCT`/`UNION`/`RECORD`/`TYPEDEF`/`MACRO`, `EQU`/`=`, and data declarations).
+fn extract_masm_symbols(doc: &str) -> Vec<(String, SymbolKind, String, Range)> {
+    let mut out = Vec::new();
+    for (line_idx, raw_line) in doc.lines().enumerate() {
+        let code = raw_line.split(';').next().unwrap_or("").trim();
+        if code.is_empty() {
+            continue;
+        }
+        let line_num = line_idx as u32;
+        let mut words = code.split_whitespace();
+        let Some(first) = words.next() else {
+            continue;
+        };
+        let first_upper = first.to_ascii_uppercase();
+
+        if matches!(
+            first_upper.as_str(),
+            "EXTERN" | "EXTRN" | "EXTERNDEF" | "LOCAL"
+        ) {
+            let kind = if first_upper == "LOCAL" {
+                SymbolKind::VARIABLE
+            } else {
+                SymbolKind::INTERFACE
+            };
+            for item in code[first.len()..].trim().split(',') {
+                let sym = item
+                    .split([':', '['])
+                    .next()
+                    .unwrap_or("")
+                    .split_whitespace()
+                    .last()
+                    .unwrap_or("")
+                    .trim();
+                if !sym.is_empty() && sym.chars().all(|c| c.is_ascii_alphanumeric() || c == '_') {
+                    out.push((
+                        sym.to_string(),
+                        kind,
+                        code.to_string(),
+                        line_token_range(raw_line, line_num, sym),
+                    ));
+                }
+            }
+            continue;
+        }
+
+        let name = first.trim_end_matches(':');
+        if name.is_empty() || !name.chars().all(|c| c.is_ascii_alphanumeric() || c == '_') {
+            continue;
+        }
+        let Some(second) = words.next() else {
+            continue;
+        };
+        if !is_masm_data_or_def_kw(second) {
+            continue;
+        }
+        let kind = match second.to_ascii_uppercase().as_str() {
+            "PROC" | "MACRO" => SymbolKind::FUNCTION,
+            "PROTO" => SymbolKind::INTERFACE,
+            "STRUCT" | "STRUC" | "UNION" | "RECORD" => SymbolKind::STRUCT,
+            "TYPEDEF" => SymbolKind::TYPE_PARAMETER,
+            "EQU" | "TEXTEQU" | "=" => SymbolKind::CONSTANT,
+            _ => SymbolKind::VARIABLE,
+        };
+        out.push((
+            name.to_string(),
+            kind,
+            code.to_string(),
+            line_token_range(raw_line, line_num, name),
+        ));
+    }
+    out
+}
+
 /// Returns the data associated with a given label `word`
 fn get_label_resp(word: &str, uri: &Uri, doc_store: &mut DocumentStore) -> Option<Hover> {
     if let Some(doc) = doc_store.text_store.get_document(uri) {
-        let curr_doc = doc.get_content(None).as_bytes();
+        let doc_str = doc.get_content(None);
+        let curr_doc = doc_str.as_bytes();
         if let Some(ref mut tree_entry) = doc_store.tree_store.get_mut(uri) {
             tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
             if let Some(ref tree) = tree_entry.tree {
@@ -1455,6 +1591,17 @@ fn get_label_resp(word: &str, uri: &Uri, doc_store: &mut DocumentStore) -> Optio
                         _ => {}
                     }
                 }
+            }
+        }
+        for (sym_name, _, detail, _) in extract_masm_symbols(doc_str) {
+            if sym_name.eq_ignore_ascii_case(word) {
+                return Some(Hover {
+                    contents: HoverContents::Markup(MarkupContent {
+                        kind: MarkupKind::Markdown,
+                        value: format!("`{detail}`"),
+                    }),
+                    range: None,
+                });
             }
         }
     }
@@ -1716,6 +1863,12 @@ pub fn get_comp_resp(
                 column: usize::MAX,
             },
         });
+        let masm_syms = if config.is_assembler_enabled(Assembler::Masm) {
+            extract_masm_symbols(curr_doc)
+        } else {
+            Vec::new()
+        };
+        let curr_doc_str = curr_doc;
         let curr_doc = curr_doc.as_bytes();
 
         let matches_iter = line_cursor.matches(&QUERY_DIRECTIVE, tree.root_node(), curr_doc);
@@ -1746,7 +1899,7 @@ pub fn get_comp_resp(
         // need a separate cursor to search the entire document
         let mut doc_cursor = tree_sitter::QueryCursor::new();
         let captures = doc_cursor.captures(&QUERY_LABEL, tree.root_node(), curr_doc);
-        let mut labels = HashSet::new();
+        let mut labels: HashSet<&str> = HashSet::new();
         for caps in captures.map(|c| c.0) {
             for cap in caps.captures {
                 if cap.node.end_byte() >= curr_doc.len() {
@@ -1756,6 +1909,9 @@ pub fn get_comp_resp(
                     labels.insert(text);
                 }
             }
+        }
+        for (sym_name, _, _, _) in &masm_syms {
+            labels.insert(sym_name.as_str());
         }
 
         static QUERY_INSTR_ANY: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
@@ -1834,6 +1990,32 @@ pub fn get_comp_resp(
                                 .collect(),
                         );
                     }
+                    return Some(CompletionList {
+                        is_incomplete: true,
+                        items,
+                    });
+                }
+            }
+        }
+
+        if config.is_assembler_enabled(Assembler::Masm)
+            && let Some(line) = curr_doc_str.lines().nth(cursor_line)
+        {
+            let before = line
+                .get(..cursor_char.min(line.len()))
+                .unwrap_or("")
+                .split(';')
+                .next()
+                .unwrap_or("")
+                .trim_start();
+            if before.contains(char::is_whitespace) {
+                let mut items = filtered_comp_list_arch(&completion_items.registers, config);
+                items.extend(labels.iter().map(|l| CompletionItem {
+                    label: (*l).to_string(),
+                    kind: Some(CompletionItemKind::VARIABLE),
+                    ..Default::default()
+                }));
+                if !items.is_empty() {
                     return Some(CompletionList {
                         is_incomplete: true,
                         items,
@@ -1952,6 +2134,21 @@ pub fn get_document_symbols(
                 break;
             }
         }
+        for (name, kind, detail, range) in extract_masm_symbols(curr_doc) {
+            if !res.iter().any(|s| s.name == name) {
+                #[allow(deprecated)]
+                res.push(DocumentSymbol {
+                    name,
+                    detail: Some(detail),
+                    kind,
+                    tags: None,
+                    deprecated: Some(false),
+                    range,
+                    selection_range: range,
+                    children: None,
+                });
+            }
+        }
         res
     })
 }
@@ -2025,7 +2222,13 @@ pub fn get_sig_help_resp(
                                             .as_ref()
                                             .is_some_and(|n| instr_name.eq_ignore_ascii_case(n)))
                                 {
-                                    writeln!(&mut value, "**{}**\n{form}", instr.arch).unwrap();
+                                    writeln!(
+                                        &mut value,
+                                        "**{}**\n{}",
+                                        instr.arch,
+                                        instr.format_form(form)
+                                    )
+                                    .unwrap();
                                 }
                             }
                             Arch::Z80 => {
@@ -2116,6 +2319,19 @@ pub fn get_goto_def_resp(
                 }
             }
         }
+
+        for (sym_name, _, _, range) in extract_masm_symbols(curr_doc.get_content(None)) {
+            if sym_name.eq_ignore_ascii_case(word) {
+                return Some(GotoDefinitionResponse::Scalar(Location {
+                    uri: params
+                        .text_document_position_params
+                        .text_document
+                        .uri
+                        .clone(),
+                    range,
+                }));
+            }
+        }
     }
 
     None
@@ -2140,12 +2356,18 @@ pub fn get_ref_resp(
         });
 
         static QUERY_WORD: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
-            tree_sitter::Query::new(&tree_sitter_asm::language(), "(ident) @ident").unwrap()
+            tree_sitter::Query::new(&tree_sitter_asm::language(), "[(ident) (word)] @ident")
+                .unwrap()
         });
 
         let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
         let (word, _) = get_word_from_pos_params(curr_doc, &params.text_document_position);
         let uri = &params.text_document_position.text_document.uri;
+        let masm_decl_ranges: HashSet<Range> = extract_masm_symbols(curr_doc.get_content(None))
+            .into_iter()
+            .filter(|(sym_name, _, _, _)| sym_name.eq(word))
+            .map(|(_, _, _, range)| range)
+            .collect();
 
         let mut cursor = tree_sitter::QueryCursor::new();
         if params.context.include_declaration {
@@ -2173,6 +2395,12 @@ pub fn get_ref_resp(
                     }
                 }
             }
+            for &range in &masm_decl_ranges {
+                refs.insert(Location {
+                    uri: uri.clone(),
+                    range,
+                });
+            }
         }
 
         let word_matches = cursor.matches(&QUERY_WORD, tree.root_node(), doc);
@@ -2192,10 +2420,13 @@ pub fn get_ref_resp(
                 if word.eq(text) {
                     let start = lsp_pos_of_point(cap.node.start_position());
                     let end = lsp_pos_of_point(cap.node.end_position());
-                    refs.insert(Location {
-                        uri: uri.clone(),
-                        range: Range { start, end },
-                    });
+                    let range = Range { start, end };
+                    if params.context.include_declaration || !masm_decl_ranges.contains(&range) {
+                        refs.insert(Location {
+                            uri: uri.clone(),
+                            range,
+                        });
+                    }
                 }
             }
         }
@@ -2339,8 +2570,8 @@ pub fn get_root_config(params: &InitializeParams) -> Result<RootConfig> {
 
 #[must_use]
 pub fn get_global_cfg_dirs() -> Vec<Option<PathBuf>> {
-    if cfg!(target_os = "macos") {
-        // `$HOME`/Library/Application Support/ and `$HOME`/.config/
+    if cfg!(target_os = "macos") || cfg!(target_os = "windows") {
+        // `$HOME`/Library/Application Support/ (or `%APPDATA%`) and `$HOME`/.config/
         vec![config_dir(), alt_mac_config_dir()]
     } else {
         vec![config_dir()]
@@ -2446,27 +2677,32 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
 ///
 /// Returns `Err` if the file cannot be deserialized
 fn get_project_config(params: &InitializeParams) -> Option<Result<RootConfig>> {
-    if let Some(mut path) = get_project_root(params) {
-        path.push(".asm-lsp.toml");
-        match std::fs::read_to_string(&path) {
-            Ok(config) => match toml::from_str::<RootConfig>(&config) {
-                Ok(config) => {
-                    info!(
-                        "Parsing asm-lsp project config from file -> {}",
-                        path.display()
-                    );
-                    return Some(Ok(config));
-                }
+    if let Some(root) = get_project_root(params) {
+        for ancestor in root.ancestors() {
+            let path = ancestor.join(".asm-lsp.toml");
+            if !path.is_file() {
+                continue;
+            }
+            match std::fs::read_to_string(&path) {
+                Ok(config) => match toml::from_str::<RootConfig>(&config) {
+                    Ok(config) => {
+                        info!(
+                            "Parsing asm-lsp project config from file -> {}",
+                            path.display()
+                        );
+                        return Some(Ok(config));
+                    }
+                    Err(e) => {
+                        error!(
+                            "Failed to parse project config file {} - Error: {e}",
+                            path.display()
+                        );
+                        return Some(Err(e.into()));
+                    }
+                },
                 Err(e) => {
-                    error!(
-                        "Failed to parse project config file {} - Error: {e}",
-                        path.display()
-                    );
-                    return Some(Err(e.into()));
+                    error!("Failed to read config file {} - Error: {e}", path.display());
                 }
-            },
-            Err(e) => {
-                error!("Failed to read config file {} - Error: {e}", path.display());
             }
         }
     }
@@ -2478,16 +2714,14 @@ fn get_project_config(params: &InitializeParams) -> Option<Result<RootConfig>> {
 pub fn instr_filter_targets(instr: &Instruction, config: &Config) -> Instruction {
     let mut instr = instr.clone();
 
-    if !config.is_assembler_enabled(Assembler::Gas) && !config.is_assembler_enabled(Assembler::Go) {
-        return instr;
-    }
-
     let forms = instr
         .forms
         .iter()
         .filter(|form| {
             (form.gas_name.is_some() && config.is_assembler_enabled(Assembler::Gas))
                 || (form.go_name.is_some() && config.is_assembler_enabled(Assembler::Go))
+                || (!config.is_assembler_enabled(Assembler::Gas)
+                    && !config.is_assembler_enabled(Assembler::Go))
         })
         .map(|form| {
             let mut filtered = form.clone();

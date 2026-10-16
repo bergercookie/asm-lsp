@@ -59,6 +59,37 @@ impl Default for Instruction {
     }
 }
 
+impl Instruction {
+    /// Formats a single [`InstructionForm`], using the instruction's primary mnemonic
+    /// when assembler-specific form names (`gas_name`/`go_name`) have been filtered out.
+    #[must_use]
+    pub fn format_form(&self, form: &InstructionForm) -> String {
+        if form.gas_name.is_none()
+            && form.go_name.is_none()
+            && form.z80_form.is_none()
+            && form.avr_mneumonic.is_none()
+            && matches!(self.arch, Arch::X86 | Arch::X86_64)
+        {
+            let ops: Vec<&str> = form.operands.iter().map(|op| op.type_.as_ref()).collect();
+            let sig = if ops.is_empty() {
+                format!("- `{}`", self.name)
+            } else {
+                format!("- `{} {}`", self.name, ops.join(", "))
+            };
+            let body = format!("{form}");
+            if let Some(rest) = body.strip_prefix("- ") {
+                format!("{sig} | {rest}")
+            } else if body.is_empty() {
+                sig
+            } else {
+                format!("{sig}\n\n{body}")
+            }
+        } else {
+            format!("{form}")
+        }
+    }
+}
+
 impl std::fmt::Display for Instruction {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // basic fields
@@ -72,8 +103,11 @@ impl std::fmt::Display for Instruction {
         }
 
         // instruction forms
-        let instruction_form_strs: Vec<String> =
-            self.forms.iter().map(|f| format!("{f}")).collect();
+        let instruction_form_strs: Vec<String> = self
+            .forms
+            .iter()
+            .map(|form| self.format_form(form))
+            .collect();
         for item in &instruction_form_strs {
             v.push(item.as_str());
         }
@@ -885,9 +919,24 @@ impl Arch {
             ($arch:expr, $path:literal) => {{
                 let start = std::time::Instant::now();
                 let serialized_instrs = include_bytes!($path);
-                let instructions = bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(serialized_instrs, BINCODE_CFG)
+                let mut instructions = bincode::borrow_decode_from_slice::<Vec<Instruction>, _>(serialized_instrs, BINCODE_CFG)
                     .unwrap_or_else(|e| panic!("Error deserializing {} instructions -- {}\nRegenerate serialized data with regenerate.sh", $arch, e))
                     .0;
+
+                if matches!($arch, Self::X86 | Self::X86_64)
+                    && let Some(assem) = assembler
+                {
+                    let cfg = Config {
+                        assembler: assem,
+                        instruction_set: $arch,
+                        ..Default::default()
+                    };
+                    instructions = instructions
+                        .into_iter()
+                        .map(|instr| crate::instr_filter_targets(&instr, &cfg))
+                        .filter(|instr| !instr.forms.is_empty())
+                        .collect();
+                }
 
                 info!(
                     "{} instruction set loaded in {}ms",
