@@ -982,6 +982,7 @@ pub fn get_hover_resp(
         word,
         &params.text_document_position_params.text_document.uri,
         doc_store,
+        &store.include_dirs,
     );
     if label_data.is_some() {
         return label_data;
@@ -1069,60 +1070,174 @@ fn get_directive_hover_resp(
     })
 }
 
+fn uri_from_path(path: &Path) -> Option<Uri> {
+    let raw = path.to_string_lossy();
+    let stripped = raw.strip_prefix("\\\\?\\").unwrap_or(&raw);
+    let normalized = if cfg!(windows) {
+        stripped.replace('\\', "/")
+    } else {
+        stripped.to_string()
+    };
+    let prefix = if normalized.starts_with('/') {
+        "file://"
+    } else {
+        "file:///"
+    };
+    let encoded = format!("{prefix}{}", normalized.replace(' ', "%20"));
+    Uri::from_str(&encoded).ok()
+}
+
+fn include_search_dirs(
+    source_file: &Uri,
+    include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
+) -> Vec<PathBuf> {
+    let mut dirs = Vec::new();
+    let src_path = match process_uri(source_file) {
+        UriConversion::Canonicalized(p) | UriConversion::Unchecked(p) => p,
+    };
+    if let Some(parent) = src_path.parent()
+        && !parent.as_os_str().is_empty()
+    {
+        dirs.push(parent.to_path_buf());
+    }
+    if let Some(all_dirs) = include_dirs.get(&SourceFile::All) {
+        dirs.extend(all_dirs.iter().cloned());
+    }
+    if let Some(file_dirs) = include_dirs.get(&SourceFile::File(src_path)) {
+        dirs.extend(file_dirs.iter().cloned());
+    }
+    dirs
+}
+
+fn find_include_path(
+    source_file: &Uri,
+    filename: &str,
+    include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
+) -> Option<PathBuf> {
+    let cleaned = filename
+        .trim()
+        .trim_matches(|c| c == '"' || c == '\'' || c == '<' || c == '>');
+    if cleaned.is_empty() {
+        return None;
+    }
+
+    for dir in include_search_dirs(source_file, include_dirs) {
+        let candidate = dir.join(cleaned);
+        if candidate.is_file() {
+            return Some(candidate);
+        }
+    }
+    None
+}
+
+fn resolve_included_files(
+    doc_text: &str,
+    source_file: &Uri,
+    include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
+) -> Vec<(Uri, String)> {
+    let mut out = Vec::new();
+    let mut seen = HashSet::new();
+    for raw_line in doc_text.lines() {
+        let line = raw_line.split([';', '#']).next().unwrap_or(raw_line).trim();
+        let mut parts = line.split_whitespace();
+        let Some(first) = parts.next() else {
+            continue;
+        };
+        if matches!(
+            first.to_ascii_lowercase().as_str(),
+            ".include" | "%include" | "include"
+        ) {
+            let rest = line[first.len()..].trim();
+            if let Some(path) = find_include_path(source_file, rest, include_dirs)
+                && seen.insert(path.clone())
+                && let Some(inc_uri) = uri_from_path(&path)
+                && let Ok(content) = std::fs::read_to_string(&path)
+            {
+                out.push((inc_uri, content));
+            }
+        }
+    }
+    out
+}
+
+fn find_label_data_in_tree(word: &str, curr_doc: &[u8], tree: &tree_sitter::Tree) -> Option<Hover> {
+    static QUERY_LABEL_DATA: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
+        tree_sitter::Query::new(
+            &tree_sitter_asm::language(),
+            "(
+                (label (ident) @label)
+                .
+                (meta
+                    (
+                        [
+                            (int)
+                            (string)
+                            (float)
+                        ]
+                    )
+                ) @data
+            )",
+        )
+        .unwrap()
+    });
+    let mut cursor = tree_sitter::QueryCursor::new();
+    let matches_iter = cursor.matches(&QUERY_LABEL_DATA, tree.root_node(), curr_doc);
+
+    for match_ in matches_iter {
+        let caps = match_.captures;
+        if caps.len() != 2
+            || caps[0].node.end_byte() >= curr_doc.len()
+            || caps[1].node.end_byte() >= curr_doc.len()
+        {
+            continue;
+        }
+        let label_text = caps[0].node.utf8_text(curr_doc);
+        let label_data = caps[1].node.utf8_text(curr_doc);
+        match (label_text, label_data) {
+            (Ok(label), Ok(data)) if label.eq(word) || label.trim_start_matches('.').eq(word) => {
+                return Some(Hover {
+                    contents: HoverContents::Markup(MarkupContent {
+                        kind: MarkupKind::Markdown,
+                        value: format!("`{data}`"),
+                    }),
+                    range: None,
+                });
+            }
+            _ => {}
+        }
+    }
+    None
+}
+
 /// Returns the data associated with a given label `word`
-fn get_label_resp(word: &str, uri: &Uri, doc_store: &mut DocumentStore) -> Option<Hover> {
+fn get_label_resp(
+    word: &str,
+    uri: &Uri,
+    doc_store: &mut DocumentStore,
+    include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
+) -> Option<Hover> {
     if let Some(doc) = doc_store.text_store.get_document(uri) {
-        let curr_doc = doc.get_content(None).as_bytes();
+        let doc_str = doc.get_content(None);
+        let curr_doc = doc_str.as_bytes();
         if let Some(ref mut tree_entry) = doc_store.tree_store.get_mut(uri) {
             tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
-            if let Some(ref tree) = tree_entry.tree {
-                static QUERY_LABEL_DATA: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
-                    tree_sitter::Query::new(
-                        &tree_sitter_asm::language(),
-                        "(
-                            (label (ident) @label)
-                            .
-                            (meta
-	                            (
-                                    [
-                                        (int)
-                                        (string)
-                                        (float)
-                                    ]
-                                )
-                            ) @data
-                        )",
-                    )
-                    .unwrap()
-                });
-                let mut cursor = tree_sitter::QueryCursor::new();
-                let matches_iter = cursor.matches(&QUERY_LABEL_DATA, tree.root_node(), curr_doc);
-
-                for match_ in matches_iter {
-                    let caps = match_.captures;
-                    if caps.len() != 2
-                        || caps[0].node.end_byte() >= curr_doc.len()
-                        || caps[1].node.end_byte() >= curr_doc.len()
-                    {
-                        continue;
-                    }
-                    let label_text = caps[0].node.utf8_text(curr_doc);
-                    let label_data = caps[1].node.utf8_text(curr_doc);
-                    match (label_text, label_data) {
-                        (Ok(label), Ok(data))
-                            // Some labels have a preceding '.' that we need to account for
-                            if label.eq(word) || label.trim_start_matches('.').eq(word) =>
-                        {
-                            return Some(Hover {
-                                contents: HoverContents::Markup(MarkupContent {
-                                    kind: MarkupKind::Markdown,
-                                    value: format!("`{data}`"),
-                                }),
-                                range: None,
-                            });
-                        }
-                        _ => {}
-                    }
+            if let Some(ref tree) = tree_entry.tree
+                && let Some(hover) = find_label_data_in_tree(word, curr_doc, tree)
+            {
+                return Some(hover);
+            }
+        }
+        let mut inc_parser = tree_sitter::Parser::new();
+        if inc_parser
+            .set_language(&tree_sitter_asm::language())
+            .is_ok()
+        {
+            for (_, inc_text) in resolve_included_files(doc_str, uri, include_dirs) {
+                if let Some(inc_tree) = inc_parser.parse(inc_text.as_bytes(), None)
+                    && let Some(hover) =
+                        find_label_data_in_tree(word, inc_text.as_bytes(), &inc_tree)
+                {
+                    return Some(hover);
                 }
             }
         }
@@ -1154,20 +1269,8 @@ fn get_include_resp(
 ) -> Option<Hover> {
     let mut paths = String::new();
 
-    type DirIter<'a> = Box<dyn Iterator<Item = &'a PathBuf> + 'a>;
-    let mut dir_iter = include_dirs.get(&SourceFile::All).map_or_else(
-        || Box::new(std::iter::empty()) as DirIter,
-        |dirs| Box::new(dirs.iter()) as DirIter,
-    );
-
-    if let Ok(src_path) = PathBuf::from(source_file.as_str()).canonicalize()
-        && let Some(dirs) = include_dirs.get(&SourceFile::File(src_path))
-    {
-        dir_iter = Box::new(dir_iter.chain(dirs.iter()));
-    }
-
-    for dir in dir_iter {
-        match std::fs::read_dir(dir) {
+    for dir in include_search_dirs(source_file, include_dirs) {
+        match std::fs::read_dir(&dir) {
             Ok(dir_reader) => {
                 for file in dir_reader {
                     match file {
@@ -1396,14 +1499,39 @@ pub fn get_comp_resp(
         // need a separate cursor to search the entire document
         let mut doc_cursor = tree_sitter::QueryCursor::new();
         let captures = doc_cursor.captures(&QUERY_LABEL, tree.root_node(), curr_doc);
-        let mut labels = HashSet::new();
+        let mut labels: HashSet<String> = HashSet::new();
         for caps in captures.map(|c| c.0) {
             for cap in caps.captures {
                 if cap.node.end_byte() >= curr_doc.len() {
                     continue;
                 }
                 if let Ok(text) = cap.node.utf8_text(curr_doc) {
-                    labels.insert(text);
+                    labels.insert(text.to_string());
+                }
+            }
+        }
+        let mut inc_parser = tree_sitter::Parser::new();
+        if let Ok(doc_str) = std::str::from_utf8(curr_doc)
+            && inc_parser
+                .set_language(&tree_sitter_asm::language())
+                .is_ok()
+        {
+            for (_, inc_text) in resolve_included_files(
+                doc_str,
+                &params.text_document_position.text_document.uri,
+                &HashMap::new(),
+            ) {
+                if let Some(inc_tree) = inc_parser.parse(inc_text.as_bytes(), None) {
+                    let mut inc_cursor = tree_sitter::QueryCursor::new();
+                    for (m, _) in
+                        inc_cursor.captures(&QUERY_LABEL, inc_tree.root_node(), inc_text.as_bytes())
+                    {
+                        for cap in m.captures {
+                            if let Ok(text) = cap.node.utf8_text(inc_text.as_bytes()) {
+                                labels.insert(text.to_string());
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1477,7 +1605,7 @@ pub fn get_comp_resp(
                             &mut labels
                                 .iter()
                                 .map(|l| CompletionItem {
-                                    label: (*l).to_string(),
+                                    label: l.clone(),
                                     kind: Some(CompletionItemKind::VARIABLE),
                                     ..Default::default()
                                 })
@@ -1707,52 +1835,70 @@ pub fn get_sig_help_resp(
     None
 }
 
+fn find_label_def_in_tree(
+    word: &str,
+    doc: &[u8],
+    tree: &tree_sitter::Tree,
+    uri: &Uri,
+) -> Option<GotoDefinitionResponse> {
+    static QUERY_LABEL: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
+        tree_sitter::Query::new(&tree_sitter_asm::language(), "(label) @label").unwrap()
+    });
+    let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
+    let mut cursor = tree_sitter::QueryCursor::new();
+    for match_ in cursor.matches(&QUERY_LABEL, tree.root_node(), doc) {
+        for cap in match_.captures {
+            if cap.node.end_byte() >= doc.len() {
+                continue;
+            }
+            let text = cap
+                .node
+                .utf8_text(doc)
+                .unwrap_or("")
+                .trim()
+                .trim_matches(is_not_ident_char);
+            if word.eq(text) {
+                return Some(GotoDefinitionResponse::Scalar(Location {
+                    uri: uri.clone(),
+                    range: Range {
+                        start: lsp_pos_of_point(cap.node.start_position()),
+                        end: lsp_pos_of_point(cap.node.end_position()),
+                    },
+                }));
+            }
+        }
+    }
+    None
+}
+
 pub fn get_goto_def_resp(
     curr_doc: &FullTextDocument,
     tree_entry: &mut TreeEntry,
     params: &GotoDefinitionParams,
 ) -> Option<GotoDefinitionResponse> {
-    let doc = curr_doc.get_content(None).as_bytes();
+    let doc_str = curr_doc.get_content(None);
+    let doc = doc_str.as_bytes();
+    let uri = &params.text_document_position_params.text_document.uri;
     tree_entry.tree = tree_entry.parser.parse(doc, tree_entry.tree.as_ref());
 
-    if let Some(ref tree) = tree_entry.tree {
-        static QUERY_LABEL: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
-            tree_sitter::Query::new(&tree_sitter_asm::language(), "(label) @label").unwrap()
-        });
+    let (word, _) = get_word_from_pos_params(curr_doc, &params.text_document_position_params);
+    if let Some(ref tree) = tree_entry.tree
+        && let Some(def) = find_label_def_in_tree(word, doc, tree, uri)
+    {
+        return Some(def);
+    }
 
-        let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
-        let mut cursor = tree_sitter::QueryCursor::new();
-        let matches = cursor.matches(&QUERY_LABEL, tree.root_node(), doc);
-
-        let (word, _) = get_word_from_pos_params(curr_doc, &params.text_document_position_params);
-
-        for match_ in matches {
-            for cap in match_.captures {
-                if cap.node.end_byte() >= doc.len() {
-                    continue;
-                }
-                let text = cap
-                    .node
-                    .utf8_text(doc)
-                    .unwrap_or("")
-                    .trim()
-                    .trim_matches(is_not_ident_char);
-
-                if word.eq(text) {
-                    let start = cap.node.start_position();
-                    let end = cap.node.end_position();
-                    return Some(GotoDefinitionResponse::Scalar(Location {
-                        uri: params
-                            .text_document_position_params
-                            .text_document
-                            .uri
-                            .clone(),
-                        range: Range {
-                            start: lsp_pos_of_point(start),
-                            end: lsp_pos_of_point(end),
-                        },
-                    }));
-                }
+    let mut inc_parser = tree_sitter::Parser::new();
+    if inc_parser
+        .set_language(&tree_sitter_asm::language())
+        .is_ok()
+    {
+        for (inc_uri, inc_text) in resolve_included_files(doc_str, uri, &HashMap::new()) {
+            if let Some(inc_tree) = inc_parser.parse(inc_text.as_bytes(), None)
+                && let Some(def) =
+                    find_label_def_in_tree(word, inc_text.as_bytes(), &inc_tree, &inc_uri)
+            {
+                return Some(def);
             }
         }
     }

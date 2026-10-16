@@ -804,9 +804,9 @@ mod tests {
         //      2) Said items are of the right type
         // NOTE: Both instructions and directives use the OPERATOR complection type,
         // so another means of verification should be added here
-        assert!(!resp.items.is_empty());
+        assert!(!resp.items.is_empty(), "Expected non-empty completion list");
         for comp in &resp.items {
-            assert!(comp.kind == Some(expected_kind));
+            assert_eq!(comp.kind, Some(expected_kind));
         }
     }
 
@@ -1787,6 +1787,55 @@ bar:
             r"`.float 1.1, 2.2, 3.3`",
             &gas_test_config(),
         );
+    }
+
+    #[test]
+    fn handle_cross_file_include_goto_def_and_completion() {
+        let tmp_dir = std::env::temp_dir().join(format!("asm_lsp_inc_{}", std::process::id()));
+        std::fs::create_dir_all(&tmp_dir).unwrap();
+        let inc_path = tmp_dir.join("defs.inc");
+        let main_path = tmp_dir.join("main.s");
+        std::fs::write(&inc_path, "shared_label:\n    .long 42\n").unwrap();
+        let main_src = ".include \"defs.inc\"\n    jmp shared_label\n";
+        std::fs::write(&main_path, main_src).unwrap();
+
+        let main_uri = Uri::from_str(&format!(
+            "file:///{}",
+            main_path
+                .to_string_lossy()
+                .trim_start_matches('/')
+                .replace('\\', "/")
+        ))
+        .unwrap();
+        let doc = FullTextDocument::new("asm".to_string(), 0, main_src.to_string());
+        let mut parser = Parser::new();
+        parser.set_language(&tree_sitter_asm::language()).unwrap();
+        let tree = parser.parse(main_src, None);
+        let mut tree_entry = TreeEntry { tree, parser };
+
+        let def_resp = crate::get_goto_def_resp(
+            &doc,
+            &mut tree_entry,
+            &lsp_types::GotoDefinitionParams {
+                text_document_position_params: TextDocumentPositionParams {
+                    text_document: TextDocumentIdentifier { uri: main_uri },
+                    position: Position {
+                        line: 1,
+                        character: 10,
+                    },
+                },
+                work_done_progress_params: WorkDoneProgressParams::default(),
+                partial_result_params: PartialResultParams::default(),
+            },
+        )
+        .expect("Expected cross-file definition from .include");
+        let _ = std::fs::remove_dir_all(&tmp_dir);
+        if let lsp_types::GotoDefinitionResponse::Scalar(loc) = def_resp {
+            assert!(loc.uri.path().as_str().ends_with("defs.inc"));
+            assert_eq!(loc.range.start.line, 0);
+        } else {
+            panic!("Expected scalar GotoDefinitionResponse");
+        }
     }
 
     // Demangling
