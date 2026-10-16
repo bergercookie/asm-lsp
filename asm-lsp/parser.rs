@@ -115,7 +115,7 @@ pub fn populate_riscv_registers(rst_contents: &str) -> Result<Vec<Register>> {
                     .trim_end_matches('|')
                     .split('|')
                     .collect();
-                assert!(entries.len() == 4);
+                assert_eq!(entries.len(), 4);
                 let saved_info = if entries[3].trim_ascii().is_empty() {
                     String::new()
                 } else {
@@ -369,7 +369,7 @@ fn consume_classify_table(line_iter: &mut Peekable<Lines>) {
     let info_3 = line_iter.next().unwrap();
     assert!(info_3.trim_ascii().eq("Classify Table:"));
     let empty = line_iter.next().unwrap();
-    assert!(empty.is_empty());
+    assert_eq!(empty, "");
     while let Some(next) = line_iter.peek() {
         if next.is_empty() {
             break;
@@ -413,11 +413,11 @@ pub fn populate_arm_instructions(docs_path: &PathBuf) -> Result<Vec<Instruction>
         }
         if let Ok(docs) = std::fs::read_to_string(&path) {
             if let Some((alias, aliased_instr)) = parse_arm_alias(&docs)? {
-                assert!(!aliased_instr.is_empty());
+                assert_ne!(aliased_instr, "");
                 let aliases = alias_map.entry(aliased_instr).or_default();
                 aliases.push(alias);
             } else if let Some(mut instr) = parse_arm_instruction(&docs) {
-                assert!(!instr.name.is_empty());
+                assert_ne!(instr.name, "");
                 if let Some(entry) = instructions_map.get_mut(&instr.name) {
                     entry.aliases.append(&mut instr.aliases);
                     entry.asm_templates.append(&mut instr.asm_templates);
@@ -1324,7 +1324,7 @@ pub fn populate_instructions(xml_contents: &str) -> Result<Vec<Instruction>> {
                 match e.name() {
                     QName(b"Instruction") => {
                         // finish instruction
-                        assert!(curr_instruction.arch != Arch::None);
+                        assert_ne!(curr_instruction.arch, Arch::None);
                         instructions_map
                             .insert(curr_instruction.name.clone(), curr_instruction.clone());
                     }
@@ -1476,7 +1476,7 @@ pub fn populate_avr_instructions(xml_contents: &str) -> Result<Vec<Instruction>>
                                 arch = Arch::from_str(ustr::get_str(&value)).unwrap_or_else(|e| {
                                     panic!("Failed parse Arch {} -- {e}", ustr::get_str(&value))
                                 });
-                                assert!(arch == Arch::Avr);
+                                assert_eq!(arch, Arch::Avr);
                             } else {
                                 panic!("Failed parse Arch -- no name value");
                             }
@@ -1618,7 +1618,7 @@ pub fn populate_avr_instructions(xml_contents: &str) -> Result<Vec<Instruction>>
                 match e.name() {
                     QName(b"Instruction") => {
                         // finish instruction
-                        assert!(curr_instruction.arch != Arch::None);
+                        assert_ne!(curr_instruction.arch, Arch::None);
                         instructions_map
                             .insert(curr_instruction.name.clone(), curr_instruction.clone());
                         curr_version = None;
@@ -1748,7 +1748,7 @@ pub fn populate_registers(xml_contents: &str) -> Result<Vec<Register>> {
                 match e.name() {
                     QName(b"Register") => {
                         // finish register
-                        assert!(curr_register.arch != Arch::None);
+                        assert_ne!(curr_register.arch, Arch::None);
                         registers_map.insert(curr_register.name.clone(), curr_register.clone());
                     }
                     QName(b"Flag") => {

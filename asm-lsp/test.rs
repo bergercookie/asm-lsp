@@ -804,9 +804,9 @@ mod tests {
         //      2) Said items are of the right type
         // NOTE: Both instructions and directives use the OPERATOR complection type,
         // so another means of verification should be added here
-        assert!(!resp.items.is_empty());
+        assert!(!resp.items.is_empty(), "Expected non-empty completion list");
         for comp in &resp.items {
-            assert!(comp.kind == Some(expected_kind));
+            assert_eq!(comp.kind, Some(expected_kind));
         }
     }
 
