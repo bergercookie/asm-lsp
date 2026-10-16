@@ -62,7 +62,7 @@ impl Default for Instruction {
 impl std::fmt::Display for Instruction {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // basic fields
-        let header = format!("{} [{}]", &self.name, self.arch.as_ref());
+        let header = format!("{} [{}]", self.name, self.arch.as_ref());
 
         //let mut v: Vec<&str> = vec![&header, &self.summary, "\n", "## Forms", "\n"];
         let mut v: Vec<&str> = vec![&header, &self.summary, "\n"];
@@ -534,7 +534,7 @@ impl std::fmt::Display for Directive {
         // &self.assembler {
         let header = format!(
             "{} [{}]{}",
-            &self.name,
+            self.name,
             self.assembler,
             if self.deprecated {
                 "\n**DEPRECATED**"
@@ -652,7 +652,7 @@ impl Default for Register {
 impl std::fmt::Display for Register {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // basic fields
-        let header = format!("{} [{}]", &self.name.to_uppercase(), self.arch.as_ref());
+        let header = format!("{} [{}]", self.name.to_uppercase(), self.arch.as_ref());
 
         let mut v: Vec<String> = if let Some(description_) = &self.description {
             vec![header, description_.clone(), String::from("\n")]

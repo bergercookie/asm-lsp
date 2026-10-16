@@ -1,11 +1,13 @@
 use anyhow::{Result, anyhow};
-use compile_commands::{CompilationDatabase, SourceFile};
+use compile_commands::{CompilationDatabase, CompileArgs, CompileCommand, SourceFile};
 use log::{error, info, warn};
 use lsp_server::{Connection, Message, Notification, Request, RequestId, Response};
 use lsp_types::{
     CompletionParams, Diagnostic, DidChangeTextDocumentParams, DidCloseTextDocumentParams,
-    DidOpenTextDocumentParams, DocumentSymbolParams, DocumentSymbolResponse, GotoDefinitionParams,
-    HoverParams, PublishDiagnosticsParams, ReferenceParams, SignatureHelpParams, Uri,
+    DidOpenTextDocumentParams, DocumentDiagnosticReport, DocumentDiagnosticReportResult,
+    DocumentSymbolParams, DocumentSymbolResponse, FullDocumentDiagnosticReport,
+    GotoDefinitionParams, HoverParams, PublishDiagnosticsParams, ReferenceParams,
+    RelatedFullDocumentDiagnosticReport, SignatureHelpParams, Uri,
     notification::{
         DidChangeTextDocument, DidCloseTextDocument, DidOpenTextDocument, DidSaveTextDocument,
         Notification as _, PublishDiagnostics,
@@ -143,10 +145,10 @@ pub fn handle_request(
             );
         }
         DocumentDiagnosticRequest::METHOD => {
-            let (_id, params) = cast_req!(req, DocumentDiagnosticRequest);
+            let (id, params) = cast_req!(req, DocumentDiagnosticRequest);
             let project_config = config.get_config(&params.text_document.uri);
             // Ok to unwrap, this should never be `None`
-            if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
+            let items = if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
                 let compile_cmds = get_compile_cmd_for_req(
                     config,
                     &params.text_document.uri,
@@ -156,18 +158,35 @@ pub fn handle_request(
                     "Selected compile command(s) for request: {:?}",
                     compile_cmds
                 );
-                handle_diagnostics(
-                    connection,
+                compute_diagnostics(
                     &params.text_document.uri,
                     project_config,
                     &compile_cmds,
-                )?;
-                info!(
-                    "{} request serviced in {}ms",
-                    DocumentDiagnosticRequest::METHOD,
-                    start.elapsed().as_millis()
-                );
-            }
+                    doc_store,
+                )
+            } else {
+                Vec::new()
+            };
+            let report = DocumentDiagnosticReportResult::Report(DocumentDiagnosticReport::Full(
+                RelatedFullDocumentDiagnosticReport {
+                    related_documents: None,
+                    full_document_diagnostic_report: FullDocumentDiagnosticReport {
+                        result_id: None,
+                        items,
+                    },
+                },
+            ));
+            let result = Response {
+                id,
+                result: Some(serde_json::to_value(report).unwrap()),
+                error: None,
+            };
+            connection.sender.send(Message::Response(result))?;
+            info!(
+                "{} request serviced in {}ms",
+                DocumentDiagnosticRequest::METHOD,
+                start.elapsed().as_millis()
+            );
         }
         method => warn!("Invalid request format: {method:?}"),
     }
@@ -197,6 +216,13 @@ pub fn handle_notification(
         DidOpenTextDocument::METHOD => {
             let params = cast_notif!(notif, DidOpenTextDocument);
             handle_did_open_text_document_notification(&params, doc_store);
+            publish_diagnostics_if_enabled(
+                connection,
+                &params.text_document.uri,
+                config,
+                store,
+                doc_store,
+            )?;
             info!(
                 "{} notification serviced in {}ms",
                 DidOpenTextDocument::METHOD,
@@ -206,6 +232,13 @@ pub fn handle_notification(
         DidChangeTextDocument::METHOD => {
             let params = cast_notif!(notif, DidChangeTextDocument);
             handle_did_change_text_document_notification(&params, doc_store)?;
+            publish_diagnostics_if_enabled(
+                connection,
+                &params.text_document.uri,
+                config,
+                store,
+                doc_store,
+            )?;
             info!(
                 "{} notification serviced in {}ms",
                 DidChangeTextDocument::METHOD,
@@ -223,29 +256,17 @@ pub fn handle_notification(
         }
         DidSaveTextDocument::METHOD => {
             let params = cast_notif!(notif, DidSaveTextDocument);
-            let project_config = config.get_config(&params.text_document.uri);
-            // Ok to unwrap, this should never be `None`
-            if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
-                let compile_cmds = get_compile_cmd_for_req(
-                    config,
-                    &params.text_document.uri,
-                    &store.compile_commands,
-                );
-                info!(
-                    "Selected compile command(s) for request: {:?}",
-                    compile_cmds
-                );
-                handle_diagnostics(
-                    connection,
-                    &params.text_document.uri,
-                    project_config,
-                    &compile_cmds,
-                )?;
-                info!(
-                    "Published diagnostics on save in {}ms",
-                    start.elapsed().as_millis()
-                );
-            }
+            publish_diagnostics_if_enabled(
+                connection,
+                &params.text_document.uri,
+                config,
+                store,
+                doc_store,
+            )?;
+            info!(
+                "Published diagnostics on save in {}ms",
+                start.elapsed().as_millis()
+            );
         }
         method => warn!("Invalid notification format: {method:?}"),
     }
@@ -498,22 +519,53 @@ pub fn handle_references_request(
     send_empty_resp(connection, id)
 }
 
-/// Produces diagnostics and sends a `PublishDiagnostics` notification to the client
-/// Diagnostics are only produced for the file specified by `uri`
-///
-/// # Errors
-///
-/// Returns 'Err' if the response fails to send via `connection`
-///
-/// # Panics
-///
-/// Panics if JSON encoding of the notification fails
-pub fn handle_diagnostics(
-    connection: &Connection,
+fn rewrite_cmd_for_shadow(
+    cmd: &CompileCommand,
+    orig_uri: &Uri,
+    orig_path: &std::path::Path,
+    shadow_path: &std::path::Path,
+) -> CompileCommand {
+    let orig_str = orig_path.to_str().unwrap_or_default();
+    let uri_path_str = orig_uri.path().as_str();
+    let shadow_str = shadow_path.to_str().unwrap_or_default().to_string();
+    let replace_arg = |arg: &str| -> String {
+        if (!orig_str.is_empty() && arg == orig_str) || arg == uri_path_str {
+            shadow_str.clone()
+        } else {
+            arg.to_string()
+        }
+    };
+
+    let arguments = match &cmd.arguments {
+        Some(CompileArgs::Flags(flags)) => Some(CompileArgs::Flags(
+            flags.iter().map(|f| replace_arg(f)).collect(),
+        )),
+        Some(CompileArgs::Arguments(args)) => Some(CompileArgs::Arguments(
+            args.iter().map(|a| replace_arg(a)).collect(),
+        )),
+        None => cmd
+            .args_from_cmd()
+            .map(|args| CompileArgs::Arguments(args.iter().map(|a| replace_arg(a)).collect())),
+    };
+
+    CompileCommand {
+        file: SourceFile::File(shadow_path.to_path_buf()),
+        directory: cmd.directory.clone(),
+        arguments,
+        command: None,
+        output: cmd.output.clone(),
+    }
+}
+
+/// Computes diagnostics for `uri`, using an in-memory shadow copy when the
+/// document is open in `doc_store`.
+#[must_use]
+pub fn compute_diagnostics(
     uri: &Uri,
     cfg: &Config,
     compile_cmds: &CompilationDatabase,
-) -> Result<()> {
+    doc_store: &DocumentStore,
+) -> Vec<Diagnostic> {
     let req_source_path = match process_uri(uri) {
         UriConversion::Canonicalized(p) => p,
         UriConversion::Unchecked(p) => {
@@ -526,13 +578,36 @@ pub fn handle_diagnostics(
         }
     };
 
+    let shadow_info = doc_store.text_store.get_document(uri).and_then(|doc| {
+        let file_name = req_source_path
+            .file_name()
+            .and_then(|n| n.to_str())
+            .unwrap_or("buffer.s");
+        let shadow_path =
+            std::env::temp_dir().join(format!("asm_lsp_shadow_{}_{file_name}", std::process::id()));
+        std::fs::write(&shadow_path, doc.get_content(None)).ok()?;
+        let normalized = shadow_path.to_string_lossy().replace('\\', "/");
+        let prefix = if normalized.starts_with('/') {
+            "file://"
+        } else {
+            "file:///"
+        };
+        let shadow_uri =
+            std::str::FromStr::from_str(&format!("{prefix}{}", normalized.replace(' ', "%20")))
+                .ok()?;
+        Some((shadow_path, shadow_uri))
+    });
+
+    let effective_uri = shadow_info.as_ref().map_or(uri, |(_, u)| u);
+
     let source_entries = compile_cmds.iter().filter(|entry| match entry.file {
         SourceFile::File(ref file) => {
             file.canonicalize().is_ok_and(|source_path| {
                 // HACK: See comment inside `process_uri`
                 let cleaned_path = if cfg!(windows) {
                     #[allow(clippy::option_if_let_else)]
-                    if let Some(tmp) = source_path.to_str().unwrap().strip_prefix("\\\\?\\") {
+                    if let Some(tmp) = source_path.to_str().and_then(|s| s.strip_prefix("\\\\?\\"))
+                    {
                         warn!("Stripping Windows canonicalization prefix \"\\\\?\\\" from path");
                         tmp.into()
                     } else {
@@ -551,7 +626,12 @@ pub fn handle_diagnostics(
     let mut diagnostics: Vec<Diagnostic> = Vec::new();
     for entry in source_entries {
         has_entries = true;
-        apply_compile_cmd(cfg, &mut diagnostics, uri, entry);
+        if let Some((ref shadow_path, _)) = shadow_info {
+            let shadow_cmd = rewrite_cmd_for_shadow(entry, uri, &req_source_path, shadow_path);
+            apply_compile_cmd(cfg, &mut diagnostics, effective_uri, &shadow_cmd);
+        } else {
+            apply_compile_cmd(cfg, &mut diagnostics, uri, entry);
+        }
     }
 
     // If no user-provided entries corresponded to the file, just try out
@@ -575,10 +655,36 @@ pub fn handle_diagnostics(
         apply_compile_cmd(
             cfg,
             &mut diagnostics,
-            uri,
-            &get_default_compile_cmd(uri, cfg),
+            effective_uri,
+            &get_default_compile_cmd(effective_uri, cfg),
         );
     }
+
+    if let Some((shadow_path, _)) = shadow_info {
+        let _ = std::fs::remove_file(shadow_path);
+    }
+
+    diagnostics
+}
+
+/// Produces diagnostics and sends a `PublishDiagnostics` notification to the client
+/// Diagnostics are only produced for the file specified by `uri`
+///
+/// # Errors
+///
+/// Returns 'Err' if the response fails to send via `connection`
+///
+/// # Panics
+///
+/// Panics if JSON encoding of the notification fails
+pub fn handle_diagnostics(
+    connection: &Connection,
+    uri: &Uri,
+    cfg: &Config,
+    compile_cmds: &CompilationDatabase,
+    doc_store: &DocumentStore,
+) -> Result<()> {
+    let diagnostics = compute_diagnostics(uri, cfg, compile_cmds, doc_store);
 
     let params = PublishDiagnosticsParams {
         uri: uri.clone(),
@@ -592,6 +698,25 @@ pub fn handle_diagnostics(
         params: result,
     };
     Ok(connection.sender.send(Message::Notification(notif))?)
+}
+
+fn publish_diagnostics_if_enabled(
+    connection: &Connection,
+    uri: &Uri,
+    config: &RootConfig,
+    store: &ServerStore,
+    doc_store: &DocumentStore,
+) -> Result<()> {
+    let project_config = config.get_config(uri);
+    if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
+        let compile_cmds = get_compile_cmd_for_req(config, uri, &store.compile_commands);
+        info!(
+            "Selected compile command(s) for request: {:?}",
+            compile_cmds
+        );
+        handle_diagnostics(connection, uri, project_config, &compile_cmds, doc_store)?;
+    }
+    Ok(())
 }
 
 /// Handles did open text document notifications
