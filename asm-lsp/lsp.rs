@@ -22,11 +22,11 @@ use lsp_textdocument::FullTextDocument;
 use lsp_types::notification::Notification as _;
 use lsp_types::{
     CompletionItem, CompletionItemKind, CompletionList, CompletionParams, CompletionTriggerKind,
-    Diagnostic, DocumentSymbol, DocumentSymbolParams, Documentation, GotoDefinitionParams,
-    GotoDefinitionResponse, Hover, HoverContents, HoverParams, InitializeParams, Location,
-    MarkupContent, MarkupKind, MessageType, Position, Range, ReferenceParams, SignatureHelp,
-    SignatureHelpParams, SignatureInformation, SymbolKind, TextDocumentContentChangeEvent,
-    TextDocumentPositionParams, Uri,
+    Diagnostic, DiagnosticSeverity, DocumentSymbol, DocumentSymbolParams, Documentation,
+    GotoDefinitionParams, GotoDefinitionResponse, Hover, HoverContents, HoverParams,
+    InitializeParams, Location, MarkupContent, MarkupKind, MessageType, NumberOrString, Position,
+    Range, ReferenceParams, SignatureHelp, SignatureHelpParams, SignatureInformation, SymbolKind,
+    TextDocumentContentChangeEvent, TextDocumentPositionParams, Uri,
 };
 use regex::Regex;
 use symbolic::common::{Language, Name, NameMangling};
@@ -124,7 +124,7 @@ pub fn find_word_at_pos(line: &str, col: Column) -> ((Column, Column), usize) {
     // NOTE: In a similar manner to above, '$' is added as an allowed character to account
     // for mips registers
     let is_ident_char =
-        |c: char| c.is_alphanumeric() || c == '_' || c == '.' || c == '*' || c == '$';
+        |c: char| c.is_alphanumeric() || c == '_' || c == '.' || c == '*' || c == '$' || c == '?';
 
     let start = line_
         .chars()
@@ -144,9 +144,44 @@ pub fn find_word_at_pos(line: &str, col: Column) -> ((Column, Column), usize) {
     ((start, end.map_or(col, |(i, _)| i)), col - start)
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum UriConversion {
     Canonicalized(PathBuf),
     Unchecked(PathBuf),
+}
+
+impl UriConversion {
+    #[must_use]
+    pub fn into_path_buf(self) -> PathBuf {
+        match self {
+            Self::Canonicalized(p) | Self::Unchecked(p) => p,
+        }
+    }
+}
+
+/// Strips the Windows extended-length path prefix (`\\?\`) if present.
+#[must_use]
+pub fn strip_windows_prefix(path: PathBuf) -> PathBuf {
+    if cfg!(windows)
+        && let Some(path_str) = path.to_str()
+    {
+        if let Some(unc) = path_str.strip_prefix("\\\\?\\UNC\\") {
+            return PathBuf::from(format!("\\\\{unc}"));
+        }
+        if let Some(stripped) = path_str.strip_prefix("\\\\?\\") {
+            return PathBuf::from(stripped);
+        }
+    }
+    path
+}
+
+/// Canonicalizes `path` and strips the Windows `\\?\` prefix if present.
+///
+/// # Errors
+///
+/// Returns `Err` if `std::fs::canonicalize` fails.
+pub fn canonicalize_clean(path: &Path) -> std::io::Result<PathBuf> {
+    path.canonicalize().map(strip_windows_prefix)
 }
 
 /// Sanitizes the URI path sent by an LSP client
@@ -184,26 +219,7 @@ pub fn process_uri(uri: &Uri) -> UriConversion {
     }
 
     let Ok(path) = PathBuf::from_str(&clean_path);
-    path.canonicalize()
-        .map_or(UriConversion::Unchecked(path), |canonicalized| {
-            // HACK: On Windows, when a path is canonicalized, sometimes it gets prefixed
-            // with "\\?\" -- https://stackoverflow.com/questions/41233684/why-does-my-canonicalized-path-get-prefixed-with
-            // That's great and all, but it looks like common tools (like gcc) don't handle
-            // this correctly, and you get something like the following:
-            // Error: can't open //test.s for reading: No such file or directory
-            // The solution? Just cut out the prefix and hope that doesn't break anything else
-            if cfg!(windows) {
-                #[allow(clippy::option_if_let_else)]
-                if let Some(tmp) = canonicalized.to_str().unwrap().strip_prefix("\\\\?\\") {
-                    warn!("Stripping Windows canonicalization prefix \"\\\\?\\\" from path");
-                    UriConversion::Canonicalized(tmp.into())
-                } else {
-                    UriConversion::Canonicalized(canonicalized)
-                }
-            } else {
-                UriConversion::Canonicalized(canonicalized)
-            }
-        })
+    canonicalize_clean(&path).map_or(UriConversion::Unchecked(path), UriConversion::Canonicalized)
 }
 
 /// Returns the word undernearth the cursor given the specified `TextDocumentPositionParams`
@@ -221,21 +237,16 @@ pub fn get_word_from_file_params(pos_params: &TextDocumentPositionParams) -> Res
     let line = pos_params.position.line as usize;
     let col = pos_params.position.character as usize;
 
-    let filepath = PathBuf::from(uri.as_str());
-    match filepath.canonicalize() {
-        Ok(file) => {
-            let file = match File::open(file) {
-                Ok(opened) => opened,
-                Err(e) => return Err(anyhow!("Couldn't open file -> {:?} -- Error: {e}", uri)),
-            };
-            let buf_reader = std::io::BufReader::new(file);
+    let filepath = process_uri(uri).into_path_buf();
+    let file = match File::open(&filepath) {
+        Ok(opened) => opened,
+        Err(e) => return Err(anyhow!("Couldn't open file -> {:?} -- Error: {e}", uri)),
+    };
+    let buf_reader = std::io::BufReader::new(file);
 
-            let line_conts = buf_reader.lines().nth(line).unwrap().unwrap();
-            let ((start, end), _) = find_word_at_pos(&line_conts, col);
-            Ok(String::from(&line_conts[start..end]))
-        }
-        Err(e) => Err(anyhow!("Filepath get error -- Error: {e}")),
-    }
+    let line_conts = buf_reader.lines().nth(line).unwrap().unwrap();
+    let ((start, end), _) = find_word_at_pos(&line_conts, col);
+    Ok(String::from(&line_conts[start..end]))
 }
 
 /// Returns a string slice to the word in doc specified by the position params,
@@ -316,7 +327,7 @@ fn get_default_include_dirs() -> Vec<PathBuf> {
                     !(line.contains("End of search list.")
                         || line.contains("#include <...> search starts here:"))
                 })
-                .filter_map(|line| PathBuf::from(line.trim()).canonicalize().ok())
+                .filter_map(|line| canonicalize_clean(Path::new(line.trim())).ok())
                 .for_each(|path| {
                     include_dirs.insert(path);
                 });
@@ -326,10 +337,18 @@ fn get_default_include_dirs() -> Vec<PathBuf> {
                 .skip_while(|line| !line.contains("#include <...> search starts here:"))
                 .skip(1)
                 .take_while(|line| !line.contains("End of search list."))
-                .filter_map(|line| PathBuf::from(line.trim()).canonicalize().ok())
+                .filter_map(|line| canonicalize_clean(Path::new(line.trim())).ok())
                 .for_each(|path| {
                     include_dirs.insert(path);
                 });
+        }
+    }
+
+    if let Some(env_include) = std::env::var_os("INCLUDE") {
+        for dir in std::env::split_paths(&env_include) {
+            if let Ok(canon) = canonicalize_clean(&dir) {
+                include_dirs.insert(canon);
+            }
         }
     }
 
@@ -342,8 +361,35 @@ fn get_default_include_dirs() -> Vec<PathBuf> {
 fn get_additional_include_dirs(compile_cmds: &CompilationDatabase) -> Vec<(SourceFile, PathBuf)> {
     let mut additional_dirs = Vec::new();
 
+    let resolve_include_dir = |dir: PathBuf,
+                               entry_dir: &Path,
+                               source_file: &SourceFile|
+     -> Option<PathBuf> {
+        if dir.is_absolute() {
+            return Some(canonicalize_clean(&dir).unwrap_or(dir));
+        }
+        if let Ok(full) = canonicalize_clean(&entry_dir.join(&dir)) {
+            return Some(full);
+        }
+        if let SourceFile::File(source_path) = source_file {
+            if let Some(parent) = source_path.parent()
+                && let Ok(full) = canonicalize_clean(&parent.join(&dir))
+            {
+                return Some(full);
+            }
+            if let Ok(full) = canonicalize_clean(&source_path.join(&dir)) {
+                return Some(full);
+            }
+        } else {
+            warn!(
+                "Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'"
+            );
+        }
+        None
+    };
+
     for entry in compile_cmds {
-        let Ok(entry_dir) = entry.directory.canonicalize() else {
+        let Ok(entry_dir) = canonicalize_clean(&entry.directory) else {
             continue;
         };
 
@@ -351,8 +397,8 @@ fn get_additional_include_dirs(compile_cmds: &CompilationDatabase) -> Vec<(Sourc
             SourceFile::All => SourceFile::All,
             SourceFile::File(file) => {
                 if file.is_absolute() {
-                    entry.file.clone()
-                } else if let Ok(dir) = entry_dir.join(file).canonicalize() {
+                    SourceFile::File(canonicalize_clean(file).unwrap_or_else(|_| file.clone()))
+                } else if let Ok(dir) = canonicalize_clean(&entry_dir.join(file)) {
                     SourceFile::File(dir)
                 } else {
                     continue;
@@ -360,68 +406,31 @@ fn get_additional_include_dirs(compile_cmds: &CompilationDatabase) -> Vec<(Sourc
             }
         };
 
-        let mut check_dir = false;
-        if let Some(args) = &entry.arguments {
-            // `arguments` run as the compilation step for the translation unit `file`
-            // We will try to canonicalize non-absolute paths as relative to `file`,
-            // but this isn't possible if we have a SourceFile::All. Just don't
-            // add the include directory and issue a warning in this case
-            match args {
-                CompileArgs::Flags(args) | CompileArgs::Arguments(args) => {
-                    for arg in args.iter().map(|arg| arg.trim()) {
-                        if check_dir {
-                            // current arg is preceeded by lone '-I'
-                            let dir = PathBuf::from(arg);
-                            if dir.is_absolute() {
-                                additional_dirs.push((source_file.clone(), dir));
-                            } else if let SourceFile::File(ref source_path) = source_file {
-                                if let Ok(full_include_path) = source_path.join(dir).canonicalize()
-                                {
-                                    additional_dirs.push((source_file.clone(), full_include_path));
-                                }
-                            } else {
-                                warn!(
-                                    "Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'"
-                                );
-                            }
-                            check_dir = false;
-                        } else if arg.eq("-I") {
-                            // -Irelative is stored as two separate args if parsed from `compile_flags.txt`
-                            check_dir = true;
-                        } else if arg.len() > 2 && arg.starts_with("-I") {
-                            // '-Irelative'
-                            let dir = PathBuf::from(&arg[2..]);
-                            if dir.is_absolute() {
-                                additional_dirs.push((source_file.clone(), dir));
-                            } else if let SourceFile::File(ref source_path) = source_file {
-                                if let Ok(full_include_path) = source_path.join(dir).canonicalize()
-                                {
-                                    additional_dirs.push((source_file.clone(), full_include_path));
-                                }
-                            } else {
-                                warn!(
-                                    "Additional relative include directories cannot be extracted for a compilation database entry targeting 'All'"
-                                );
-                            }
-                        }
-                    }
-                }
+        let arg_list: Option<Vec<String>> = match &entry.arguments {
+            Some(CompileArgs::Flags(args) | CompileArgs::Arguments(args)) => {
+                Some(args.iter().map(|arg| arg.trim().to_string()).collect())
             }
-        } else if entry.command.is_some()
-            && let Some(args) = entry.args_from_cmd()
-        {
-            for arg in args {
-                if arg.starts_with("-I") && arg.len() > 2 {
-                    // "All paths specified in the `command` or `file` fields must be either absolute or relative to..." the `directory` field
-                    let incl_path = PathBuf::from(&arg[2..]);
-                    if incl_path.is_absolute() {
-                        additional_dirs.push((source_file.clone(), incl_path));
-                    } else {
-                        let dir = entry_dir.join(incl_path);
-                        if let Ok(full_include_path) = dir.canonicalize() {
-                            additional_dirs.push((source_file.clone(), full_include_path));
-                        }
+            None => entry.args_from_cmd(),
+        };
+
+        if let Some(args) = arg_list {
+            let mut check_dir = false;
+            for arg in &args {
+                if check_dir {
+                    if let Some(resolved) =
+                        resolve_include_dir(PathBuf::from(arg), &entry_dir, &source_file)
+                    {
+                        additional_dirs.push((source_file.clone(), resolved));
                     }
+                    check_dir = false;
+                } else if arg.eq("-I") || arg.eq("/I") {
+                    check_dir = true;
+                } else if let Some(rest) = arg.strip_prefix("-I").or_else(|| arg.strip_prefix("/I"))
+                    && !rest.is_empty()
+                    && let Some(resolved) =
+                        resolve_include_dir(PathBuf::from(rest), &entry_dir, &source_file)
+                {
+                    additional_dirs.push((source_file.clone(), resolved));
                 }
             }
         }
@@ -561,6 +570,104 @@ pub fn get_compile_cmd_for_req(
     }
 }
 
+/// Locates `ml64.exe` or `ml.exe` in standard Visual Studio MSVC toolset directories
+/// on Windows when the binary is not already on `PATH`.
+#[must_use]
+fn find_msvc_assembler(tool_name: &str) -> Option<PathBuf> {
+    if !cfg!(windows) {
+        return None;
+    }
+    let is_64 =
+        tool_name.eq_ignore_ascii_case("ml64") || tool_name.eq_ignore_ascii_case("ml64.exe");
+    let exe_name = if is_64 { "ml64.exe" } else { "ml.exe" };
+    let target_subpath = if is_64 {
+        Path::new("bin").join("Hostx64").join("x64").join(exe_name)
+    } else {
+        Path::new("bin").join("Hostx64").join("x86").join(exe_name)
+    };
+
+    if let Some(vc_tools_dir) = std::env::var_os("VCToolsInstallDir") {
+        let candidate = PathBuf::from(vc_tools_dir).join(&target_subpath);
+        if candidate.is_file() {
+            return Some(candidate);
+        }
+    }
+
+    let roots = [
+        std::env::var_os("ProgramFiles").map(PathBuf::from),
+        std::env::var_os("ProgramFiles(x86)").map(PathBuf::from),
+        Some(PathBuf::from(r"C:\Program Files")),
+        Some(PathBuf::from(r"C:\Program Files (x86)")),
+    ];
+
+    let mut candidates = Vec::new();
+    for root in roots.into_iter().flatten() {
+        let vs_root = root.join("Microsoft Visual Studio");
+        let Ok(years) = std::fs::read_dir(vs_root) else {
+            continue;
+        };
+        for year in years.flatten() {
+            let Ok(editions) = std::fs::read_dir(year.path()) else {
+                continue;
+            };
+            for edition in editions.flatten() {
+                let msvc_root = edition.path().join("VC").join("Tools").join("MSVC");
+                let Ok(versions) = std::fs::read_dir(msvc_root) else {
+                    continue;
+                };
+                for version in versions.flatten() {
+                    let candidate = version.path().join(&target_subpath);
+                    if candidate.is_file() {
+                        candidates.push(candidate);
+                    }
+                }
+            }
+        }
+    }
+    candidates.sort();
+    candidates.pop()
+}
+
+fn resolve_compiler_binary(compiler: &str, cfg: &Config) -> String {
+    if cfg.is_assembler_enabled(Assembler::Masm)
+        && (compiler.eq_ignore_ascii_case("ml64")
+            || compiler.eq_ignore_ascii_case("ml64.exe")
+            || compiler.eq_ignore_ascii_case("ml")
+            || compiler.eq_ignore_ascii_case("ml.exe"))
+    {
+        if Command::new(compiler).arg("/?").output().is_ok() {
+            return compiler.to_string();
+        }
+        if let Some(found) = find_msvc_assembler(compiler)
+            && let Some(path_str) = found.to_str()
+        {
+            return path_str.to_string();
+        }
+    }
+    compiler.to_string()
+}
+
+fn ensure_masm_syntax_check_flags(flags: &[String]) -> Vec<String> {
+    let mut out = Vec::with_capacity(flags.len() + 2);
+    let has_syntax_or_compile = flags.iter().any(|f| {
+        f.eq_ignore_ascii_case("/Zs")
+            || f.eq_ignore_ascii_case("-Zs")
+            || f.eq_ignore_ascii_case("/c")
+            || f.eq_ignore_ascii_case("-c")
+    });
+    let has_nologo = flags
+        .iter()
+        .any(|f| f.eq_ignore_ascii_case("/nologo") || f.eq_ignore_ascii_case("-nologo"));
+    if !has_syntax_or_compile {
+        out.push("/Zs".to_string());
+    }
+    if !has_nologo {
+        out.push("/nologo".to_string());
+    }
+    out.extend(flags.iter().cloned());
+    out
+}
+
 /// Returns a default `CompileCommand` for the provided `uri`.
 ///
 /// - If the user specified a compiler in their config, it will be used.
@@ -571,25 +678,55 @@ pub fn get_compile_cmd_for_req(
 /// uninitialized to avoid unnecessary allocations. If you're using this function
 /// in a new place, please reconsider this assumption
 pub fn get_default_compile_cmd(uri: &Uri, cfg: &Config) -> CompileCommand {
-    cfg.get_compiler().as_ref().map_or_else(
-        || CompileCommand {
-            file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
-            directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
-            arguments: Some(CompileArgs::Flags(vec![uri.path().to_string()])),
-            command: None,
-            output: None,
+    let source_path = process_uri(uri).into_path_buf();
+    let source_arg = source_path
+        .to_str()
+        .filter(|s| !s.is_empty())
+        .map_or_else(|| uri.path().to_string(), ToString::to_string);
+
+    let is_masm = cfg.is_assembler_enabled(Assembler::Masm);
+    let arguments = cfg.get_compiler().as_ref().map_or_else(
+        || {
+            if is_masm {
+                CompileArgs::Flags(vec!["/Zs".to_string(), "/nologo".to_string()])
+            } else {
+                CompileArgs::Flags(vec![source_arg.clone()])
+            }
         },
-        |compiler| CompileCommand {
-            file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
-            directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
-            arguments: Some(CompileArgs::Arguments(vec![
-                (*compiler).to_string(),
-                uri.path().to_string(),
-            ])),
-            command: None,
-            output: None,
+        |compiler| {
+            let mut args = vec![(*compiler).to_string()];
+            if is_masm {
+                args.push("/Zs".to_string());
+                args.push("/nologo".to_string());
+            }
+            args.push(source_arg.clone());
+            CompileArgs::Arguments(args)
         },
-    )
+    );
+
+    CompileCommand {
+        file: SourceFile::All, // Field isn't checked when called, intentionally left in odd state here
+        directory: PathBuf::new(), // Field isn't checked when called, intentionally left uninitialized here
+        arguments: Some(arguments),
+        command: None,
+        output: None,
+    }
+}
+
+fn collect_command_output(output: &std::process::Output, cfg: &Config) -> String {
+    let stderr_str = ustr::get_string(output.stderr.clone());
+    if cfg.is_assembler_enabled(Assembler::Masm) || stderr_str.trim().is_empty() {
+        let stdout_str = ustr::get_string(output.stdout.clone());
+        if stderr_str.trim().is_empty() {
+            stdout_str
+        } else if stdout_str.trim().is_empty() {
+            stderr_str
+        } else {
+            format!("{stdout_str}\n{stderr_str}")
+        }
+    } else {
+        stderr_str
+    }
 }
 
 /// Attempts to run the given compile command and parses the resulting output. Any
@@ -602,62 +739,155 @@ pub fn apply_compile_cmd(
     compile_cmd: &CompileCommand,
 ) {
     info!("Attempting to apply compile command: {compile_cmd:?}");
-    // TODO: Consolidate this logic, a little tricky because we need to capture
-    // compile_cmd.arguments by reference, but we get an owned Vec out of args_from_cmd()...
+    let source_path = process_uri(uri).into_path_buf();
+    let source_arg = source_path
+        .to_str()
+        .filter(|s| !s.is_empty())
+        .map_or_else(|| uri.path().as_str(), |s| s);
+    let working_dir =
+        if !compile_cmd.directory.as_os_str().is_empty() && compile_cmd.directory.is_dir() {
+            Some(compile_cmd.directory.clone())
+        } else {
+            source_path
+                .parent()
+                .filter(|p| !p.as_os_str().is_empty() && p.is_dir())
+                .map(Path::to_path_buf)
+        };
+
+    let mut run_compiler =
+        |compiler: &str, raw_flags: &[String], append_source: Option<&str>| -> bool {
+            let resolved = resolve_compiler_binary(compiler, cfg);
+            let effective_flags = if cfg.is_assembler_enabled(Assembler::Masm) {
+                ensure_masm_syntax_check_flags(raw_flags)
+            } else {
+                raw_flags.to_vec()
+            };
+            let mut cmd = Command::new(&resolved);
+            if let Some(ref dir) = working_dir {
+                cmd.current_dir(dir);
+            }
+            cmd.args(&effective_flags);
+            if let Some(src) = append_source
+                && !effective_flags.iter().any(|a| a == src)
+            {
+                cmd.arg(src);
+            }
+            match cmd.output() {
+                Ok(result) => {
+                    let output_str = collect_command_output(&result, cfg);
+                    get_diagnostics(diagnostics, &output_str, cfg);
+                    true
+                }
+                Err(e) => {
+                    warn!("Failed to launch compile command process with {compiler} -- Error: {e}");
+                    false
+                }
+            }
+        };
+
     if let Some(ref args) = compile_cmd.arguments {
         match args {
             CompileArgs::Flags(flags) => {
-                let compilers = cfg
-                    .get_compiler()
-                    .as_ref()
-                    .map_or_else(|| vec!["gcc", "clang"], |compiler| vec![compiler]);
+                let compilers: Vec<&str> = cfg.get_compiler().as_ref().map_or_else(
+                    || {
+                        if cfg.is_assembler_enabled(Assembler::Masm) {
+                            if cfg.instruction_set == Arch::X86 {
+                                vec!["ml", "ml64"]
+                            } else {
+                                vec!["ml64", "ml"]
+                            }
+                        } else {
+                            vec!["gcc", "clang"]
+                        }
+                    },
+                    |compiler| vec![compiler],
+                );
 
                 for compiler in compilers {
-                    match Command::new(compiler) // default or user-supplied compiler
-                        .args(flags) // user supplied args
-                        .arg(uri.path().as_str()) // the source file in question
-                        .output()
+                    if run_compiler(compiler, flags, Some(source_arg))
+                        && cfg.is_assembler_enabled(Assembler::Masm)
                     {
-                        Ok(result) => {
-                            let output_str = ustr::get_string(result.stderr);
-                            get_diagnostics(diagnostics, &output_str, cfg);
-                        }
-                        Err(e) => {
-                            warn!(
-                                "Failed to launch compile command process with {compiler} -- Error: {e}"
-                            );
-                        }
+                        break;
                     }
                 }
             }
             CompileArgs::Arguments(arguments) => {
-                if arguments.len() < 2 {
-                    return;
+                if arguments.len() >= 2 {
+                    run_compiler(&arguments[0], &arguments[1..], None);
                 }
-                let output = match Command::new(&arguments[0]).args(&arguments[1..]).output() {
-                    Ok(result) => result,
-                    Err(e) => {
-                        error!("Failed to launch compile command process -- Error: {e}");
-                        return;
-                    }
-                };
-                let output_str = ustr::get_string(output.stderr);
-                get_diagnostics(diagnostics, &output_str, cfg);
             }
         }
-    } else if let Some(args) = compile_cmd.args_from_cmd() {
-        if args.len() < 2 {
-            return;
+    } else if let Some(args) = compile_cmd.args_from_cmd()
+        && args.len() >= 2
+    {
+        run_compiler(&args[0], &args[1..], None);
+    }
+
+    if let Ok(source_text) = std::fs::read_to_string(&source_path) {
+        refine_diagnostic_ranges(diagnostics, &source_text);
+    }
+}
+
+/// Refines line-only diagnostic ranges (`character: 0..0`) against `source_text`.
+pub fn refine_diagnostic_ranges(diagnostics: &mut [Diagnostic], source_text: &str) {
+    let lines: Vec<&str> = source_text.lines().collect();
+    for diag in diagnostics {
+        if diag.range.start.line != diag.range.end.line
+            || diag.range.start.character != 0
+            || diag.range.end.character != 0
+        {
+            continue;
         }
-        let output = match Command::new(&args[0]).args(&args[1..]).output() {
-            Ok(result) => result,
-            Err(e) => {
-                error!("Failed to launch compile command process -- Error: {e}");
-                return;
-            }
+        let line_num = diag.range.start.line;
+        let Some(&raw_line) = lines.get(line_num as usize) else {
+            continue;
         };
-        let output_str = ustr::get_string(output.stderr);
-        get_diagnostics(diagnostics, &output_str, cfg);
+        let code_part = raw_line.split(';').next().unwrap_or(raw_line).trim_end();
+        let trimmed = code_part.trim_start();
+        if trimmed.is_empty() {
+            continue;
+        }
+        let stmt_start = code_part.len() - trimmed.len();
+        let stmt_end = code_part.len();
+
+        let (start_col, end_col) = diag
+            .message
+            .rsplit_once(':')
+            .map(|(_, tok)| tok.split("(in macro").next().unwrap_or(tok).trim())
+            .filter(|tok| {
+                !tok.is_empty() && !tok.contains(char::is_whitespace) && tok.len() < trimmed.len()
+            })
+            .and_then(|tok| {
+                trimmed
+                    .match_indices(tok)
+                    .find(|&(idx, _)| {
+                        let before_ok = idx == 0
+                            || !trimmed[..idx]
+                                .chars()
+                                .next_back()
+                                .is_some_and(|c| c.is_alphanumeric() || c == '_');
+                        let after_idx = idx + tok.len();
+                        let after_ok = after_idx >= trimmed.len()
+                            || !trimmed[after_idx..]
+                                .chars()
+                                .next()
+                                .is_some_and(|c| c.is_alphanumeric() || c == '_');
+                        before_ok && after_ok
+                    })
+                    .map(|(idx, _)| (stmt_start + idx, stmt_start + idx + tok.len()))
+            })
+            .unwrap_or((stmt_start, stmt_end));
+
+        diag.range = Range {
+            start: Position {
+                line: line_num,
+                character: start_col as u32,
+            },
+            end: Position {
+                line: line_num,
+                character: end_col as u32,
+            },
+        };
     }
 }
 
@@ -671,7 +901,78 @@ pub fn apply_compile_cmd(
 /// As more assemblers are incorporated, this can be updated
 ///
 /// # Panics
-fn get_diagnostics(diagnostics: &mut Vec<Diagnostic>, tool_output: &str, cfg: &Config) {
+pub fn get_diagnostics(diagnostics: &mut Vec<Diagnostic>, tool_output: &str, cfg: &Config) {
+    if cfg.is_assembler_enabled(Assembler::Masm) {
+        static MASM_DIAG: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r"(?i)^(.+?)\((\d+)\)\s*:\s*(fatal\s+error|error|warning)\s+([A-Z]\d+)\s*:\s*(.+)$",
+            )
+            .unwrap()
+        });
+        static MASM_MACRO_CALL: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^\s+([A-Za-z0-9_@$?]+)\(\d+\):\s*Macro Called From\s*$").unwrap()
+        });
+        static MASM_MAIN_LINE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^\s+(.+?)\((\d+)\):\s*(?:Main Line Code|Macro Called From)\s*$").unwrap()
+        });
+
+        let mut lines = tool_output.lines().peekable();
+        while let Some(line) = lines.next() {
+            if let Some(caps) = MASM_DIAG.captures(line) {
+                let Ok(mut line_number) = caps[2].parse::<u32>() else {
+                    continue;
+                };
+                let sev_str = caps[3].to_ascii_lowercase();
+                let severity = if sev_str.contains("warning") {
+                    DiagnosticSeverity::WARNING
+                } else {
+                    DiagnosticSeverity::ERROR
+                };
+                let code = caps[4].to_ascii_uppercase();
+                let mut msg = caps[5].trim().to_string();
+
+                let mut active_macro: Option<String> = None;
+                while let Some(&next_line) = lines.peek() {
+                    if let Some(mac_caps) = MASM_MACRO_CALL.captures(next_line) {
+                        active_macro = Some(mac_caps[1].to_string());
+                        lines.next();
+                    } else if let Some(main_caps) = MASM_MAIN_LINE.captures(next_line) {
+                        if let Ok(caller_line) = main_caps[2].parse::<u32>() {
+                            line_number = caller_line;
+                        }
+                        if let Some(ref mac_name) = active_macro {
+                            let _ = write!(msg, " (in macro `{mac_name}`)");
+                            active_macro = None;
+                        }
+                        lines.next();
+                    } else {
+                        break;
+                    }
+                }
+
+                let diag_line = line_number.saturating_sub(1);
+                diagnostics.push(Diagnostic {
+                    range: Range {
+                        start: Position {
+                            line: diag_line,
+                            character: 0,
+                        },
+                        end: Position {
+                            line: diag_line,
+                            character: 0,
+                        },
+                    },
+                    severity: Some(severity),
+                    code: Some(NumberOrString::String(code)),
+                    source: Some("masm".to_string()),
+                    message: msg,
+                    ..Default::default()
+                });
+            }
+        }
+        return;
+    }
+
     // Special handingling for FASM assembler diagnostics
     if cfg.is_assembler_enabled(Assembler::Fasm) {
         // https://flatassembler.net/docs.php?article=manual - 1.1.3 Compile messages
@@ -927,6 +1228,27 @@ pub fn get_hover_resp(
             || config.is_assembler_enabled(Assembler::Mars)
         {
             // all gas, AVR, and Mars directives have a '.' prefix, some masm directives do
+            if config.is_assembler_enabled(Assembler::Masm) {
+                let uri = &params.text_document_position_params.text_document.uri;
+                let line_idx = params.text_document_position_params.position.line as usize;
+                let col = params.text_document_position_params.position.character as usize;
+                let start_col = col.saturating_sub(cursor_offset);
+                let has_at_prefix = doc_store
+                    .text_store
+                    .get_document(uri)
+                    .and_then(|d| d.get_content(None).lines().nth(line_idx))
+                    .is_some_and(|l| {
+                        start_col > 0 && l.as_bytes().get(start_col - 1) == Some(&b'@')
+                    });
+                if has_at_prefix {
+                    let at_word = format!("@{word}");
+                    let lookup =
+                        get_directive_hover_resp(&at_word, &store.names_to_info.directives, config);
+                    if lookup.is_some() {
+                        return lookup;
+                    }
+                }
+            }
             let directive_lookup =
                 get_directive_hover_resp(word, &store.names_to_info.directives, config);
             if directive_lookup.is_some() {
@@ -1069,10 +1391,155 @@ fn get_directive_hover_resp(
     })
 }
 
+fn is_masm_data_or_def_kw(kw: &str) -> bool {
+    matches!(
+        kw.to_ascii_uppercase().as_str(),
+        "PROC"
+            | "PROTO"
+            | "STRUCT"
+            | "STRUC"
+            | "UNION"
+            | "RECORD"
+            | "TYPEDEF"
+            | "MACRO"
+            | "EQU"
+            | "TEXTEQU"
+            | "="
+            | "LABEL"
+            | "DB"
+            | "DW"
+            | "DD"
+            | "DF"
+            | "DQ"
+            | "DT"
+            | "DO"
+            | "DY"
+            | "DZ"
+            | "RESB"
+            | "RESW"
+            | "RESD"
+            | "RESQ"
+            | "REST"
+            | "RESO"
+            | "RESY"
+            | "RESZ"
+            | "BYTE"
+            | "SBYTE"
+            | "WORD"
+            | "SWORD"
+            | "DWORD"
+            | "SDWORD"
+            | "FWORD"
+            | "QWORD"
+            | "SQWORD"
+            | "MMWORD"
+            | "TBYTE"
+            | "TWORD"
+            | "OWORD"
+            | "XMMWORD"
+            | "YWORD"
+            | "YMMWORD"
+            | "ZWORD"
+            | "ZMMWORD"
+            | "REAL4"
+            | "REAL8"
+            | "REAL10"
+    )
+}
+
+fn line_token_range(raw_line: &str, line_num: u32, token: &str) -> Range {
+    let col = raw_line.find(token).unwrap_or(0);
+    Range {
+        start: Position {
+            line: line_num,
+            character: col as u32,
+        },
+        end: Position {
+            line: line_num,
+            character: (col + token.len()) as u32,
+        },
+    }
+}
+
+/// Extracts colonless MASM symbol definitions (`PROC`, `PROTO`, `EXTERN`, `LOCAL`,
+/// `STRUCT`/`UNION`/`RECORD`/`TYPEDEF`/`MACRO`, `EQU`/`=`, and data declarations).
+fn extract_masm_symbols(doc: &str) -> Vec<(String, SymbolKind, String, Range)> {
+    let mut out = Vec::new();
+    for (line_idx, raw_line) in doc.lines().enumerate() {
+        let code = raw_line.split(';').next().unwrap_or("").trim();
+        if code.is_empty() {
+            continue;
+        }
+        let line_num = line_idx as u32;
+        let mut words = code.split_whitespace();
+        let Some(first) = words.next() else {
+            continue;
+        };
+        let first_upper = first.to_ascii_uppercase();
+
+        if matches!(
+            first_upper.as_str(),
+            "EXTERN" | "EXTRN" | "EXTERNDEF" | "LOCAL"
+        ) {
+            let kind = if first_upper == "LOCAL" {
+                SymbolKind::VARIABLE
+            } else {
+                SymbolKind::INTERFACE
+            };
+            for item in code[first.len()..].trim().split(',') {
+                let sym = item
+                    .split([':', '['])
+                    .next()
+                    .unwrap_or("")
+                    .split_whitespace()
+                    .last()
+                    .unwrap_or("")
+                    .trim();
+                if !sym.is_empty() && sym.chars().all(|c| c.is_ascii_alphanumeric() || c == '_') {
+                    out.push((
+                        sym.to_string(),
+                        kind,
+                        code.to_string(),
+                        line_token_range(raw_line, line_num, sym),
+                    ));
+                }
+            }
+            continue;
+        }
+
+        let name = first.trim_end_matches(':');
+        if name.is_empty() || !name.chars().all(|c| c.is_ascii_alphanumeric() || c == '_') {
+            continue;
+        }
+        let Some(second) = words.next() else {
+            continue;
+        };
+        if !is_masm_data_or_def_kw(second) {
+            continue;
+        }
+        let kind = match second.to_ascii_uppercase().as_str() {
+            "PROC" | "MACRO" => SymbolKind::FUNCTION,
+            "PROTO" => SymbolKind::INTERFACE,
+            "STRUCT" | "STRUC" | "UNION" | "RECORD" => SymbolKind::STRUCT,
+            "TYPEDEF" => SymbolKind::TYPE_PARAMETER,
+            "EQU" | "TEXTEQU" | "=" => SymbolKind::CONSTANT,
+            _ => SymbolKind::VARIABLE,
+        };
+        out.push((
+            name.to_string(),
+            kind,
+            code.to_string(),
+            line_token_range(raw_line, line_num, name),
+        ));
+    }
+    out
+}
+
 /// Returns the data associated with a given label `word`
 fn get_label_resp(word: &str, uri: &Uri, doc_store: &mut DocumentStore) -> Option<Hover> {
     if let Some(doc) = doc_store.text_store.get_document(uri) {
-        let curr_doc = doc.get_content(None).as_bytes();
+        let doc_str = doc.get_content(None);
+        let curr_doc = doc_str.as_bytes();
         if let Some(ref mut tree_entry) = doc_store.tree_store.get_mut(uri) {
             tree_entry.tree = tree_entry.parser.parse(curr_doc, tree_entry.tree.as_ref());
             if let Some(ref tree) = tree_entry.tree {
@@ -1126,6 +1593,17 @@ fn get_label_resp(word: &str, uri: &Uri, doc_store: &mut DocumentStore) -> Optio
                 }
             }
         }
+        for (sym_name, _, detail, _) in extract_masm_symbols(doc_str) {
+            if sym_name.eq_ignore_ascii_case(word) {
+                return Some(Hover {
+                    contents: HoverContents::Markup(MarkupContent {
+                        kind: MarkupKind::Markdown,
+                        value: format!("`{detail}`"),
+                    }),
+                    range: None,
+                });
+            }
+        }
     }
     None
 }
@@ -1153,27 +1631,46 @@ fn get_include_resp(
     include_dirs: &HashMap<SourceFile, Vec<PathBuf>>,
 ) -> Option<Hover> {
     let mut paths = String::new();
-
-    type DirIter<'a> = Box<dyn Iterator<Item = &'a PathBuf> + 'a>;
-    let mut dir_iter = include_dirs.get(&SourceFile::All).map_or_else(
-        || Box::new(std::iter::empty()) as DirIter,
-        |dirs| Box::new(dirs.iter()) as DirIter,
-    );
-
-    if let Ok(src_path) = PathBuf::from(source_file.as_str()).canonicalize()
-        && let Some(dirs) = include_dirs.get(&SourceFile::File(src_path))
-    {
-        dir_iter = Box::new(dir_iter.chain(dirs.iter()));
+    let filename = filename.trim_matches(|c| c == '"' || c == '\'' || c == '<' || c == '>');
+    if filename.is_empty() {
+        return None;
     }
 
-    for dir in dir_iter {
-        match std::fs::read_dir(dir) {
+    let mut search_dirs: Vec<PathBuf> = Vec::new();
+    let src_path = process_uri(source_file).into_path_buf();
+    if let Some(parent) = src_path.parent()
+        && !parent.as_os_str().is_empty()
+    {
+        search_dirs.push(parent.to_path_buf());
+    }
+    if let Some(dirs) = include_dirs.get(&SourceFile::All) {
+        search_dirs.extend(dirs.iter().cloned());
+    }
+    if let Some(dirs) = include_dirs.get(&SourceFile::File(src_path)) {
+        search_dirs.extend(dirs.iter().cloned());
+    }
+
+    let mut seen = HashSet::new();
+    for dir in search_dirs {
+        let candidate = dir.join(filename);
+        if candidate.is_file() {
+            let full = canonicalize_clean(&candidate).unwrap_or(candidate);
+            if seen.insert(full.clone()) {
+                writeln!(&mut paths, "file://{}", full.display()).unwrap();
+            }
+            continue;
+        }
+        match std::fs::read_dir(&dir) {
             Ok(dir_reader) => {
                 for file in dir_reader {
                     match file {
                         Ok(f) => {
-                            if f.file_name() == filename {
-                                writeln!(&mut paths, "file://{}", f.path().display()).unwrap();
+                            if f.file_name().eq_ignore_ascii_case(filename) {
+                                let full =
+                                    canonicalize_clean(&f.path()).unwrap_or_else(|_| f.path());
+                                if seen.insert(full.clone()) {
+                                    writeln!(&mut paths, "file://{}", full.display()).unwrap();
+                                }
                             }
                         }
                         Err(e) => {
@@ -1366,6 +1863,12 @@ pub fn get_comp_resp(
                 column: usize::MAX,
             },
         });
+        let masm_syms = if config.is_assembler_enabled(Assembler::Masm) {
+            extract_masm_symbols(curr_doc)
+        } else {
+            Vec::new()
+        };
+        let curr_doc_str = curr_doc;
         let curr_doc = curr_doc.as_bytes();
 
         let matches_iter = line_cursor.matches(&QUERY_DIRECTIVE, tree.root_node(), curr_doc);
@@ -1396,7 +1899,7 @@ pub fn get_comp_resp(
         // need a separate cursor to search the entire document
         let mut doc_cursor = tree_sitter::QueryCursor::new();
         let captures = doc_cursor.captures(&QUERY_LABEL, tree.root_node(), curr_doc);
-        let mut labels = HashSet::new();
+        let mut labels: HashSet<&str> = HashSet::new();
         for caps in captures.map(|c| c.0) {
             for cap in caps.captures {
                 if cap.node.end_byte() >= curr_doc.len() {
@@ -1406,6 +1909,9 @@ pub fn get_comp_resp(
                     labels.insert(text);
                 }
             }
+        }
+        for (sym_name, _, _, _) in &masm_syms {
+            labels.insert(sym_name.as_str());
         }
 
         static QUERY_INSTR_ANY: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
@@ -1484,6 +1990,32 @@ pub fn get_comp_resp(
                                 .collect(),
                         );
                     }
+                    return Some(CompletionList {
+                        is_incomplete: true,
+                        items,
+                    });
+                }
+            }
+        }
+
+        if config.is_assembler_enabled(Assembler::Masm)
+            && let Some(line) = curr_doc_str.lines().nth(cursor_line)
+        {
+            let before = line
+                .get(..cursor_char.min(line.len()))
+                .unwrap_or("")
+                .split(';')
+                .next()
+                .unwrap_or("")
+                .trim_start();
+            if before.contains(char::is_whitespace) {
+                let mut items = filtered_comp_list_arch(&completion_items.registers, config);
+                items.extend(labels.iter().map(|l| CompletionItem {
+                    label: (*l).to_string(),
+                    kind: Some(CompletionItemKind::VARIABLE),
+                    ..Default::default()
+                }));
+                if !items.is_empty() {
                     return Some(CompletionList {
                         is_incomplete: true,
                         items,
@@ -1602,6 +2134,21 @@ pub fn get_document_symbols(
                 break;
             }
         }
+        for (name, kind, detail, range) in extract_masm_symbols(curr_doc) {
+            if !res.iter().any(|s| s.name == name) {
+                #[allow(deprecated)]
+                res.push(DocumentSymbol {
+                    name,
+                    detail: Some(detail),
+                    kind,
+                    tags: None,
+                    deprecated: Some(false),
+                    range,
+                    selection_range: range,
+                    children: None,
+                });
+            }
+        }
         res
     })
 }
@@ -1657,14 +2204,31 @@ pub fn get_sig_help_resp(
                     for form in &instr.forms {
                         match instr.arch {
                             Arch::X86 | Arch::X86_64 => {
-                                if let Some(ref gas_name) = form.gas_name
+                                if config.is_assembler_enabled(Assembler::Gas)
+                                    && let Some(ref gas_name) = form.gas_name
                                     && instr_name.eq_ignore_ascii_case(gas_name)
                                 {
                                     writeln!(&mut value, "**{}**\n{form}", instr.arch).unwrap();
-                                } else if let Some(ref go_name) = form.go_name
+                                } else if config.is_assembler_enabled(Assembler::Go)
+                                    && let Some(ref go_name) = form.go_name
                                     && instr_name.eq_ignore_ascii_case(go_name)
                                 {
                                     writeln!(&mut value, "**{}**\n{form}", instr.arch).unwrap();
+                                } else if !config.is_assembler_enabled(Assembler::Gas)
+                                    && !config.is_assembler_enabled(Assembler::Go)
+                                    && (instr.name.eq_ignore_ascii_case(instr_name)
+                                        || form
+                                            .gas_name
+                                            .as_ref()
+                                            .is_some_and(|n| instr_name.eq_ignore_ascii_case(n)))
+                                {
+                                    writeln!(
+                                        &mut value,
+                                        "**{}**\n{}",
+                                        instr.arch,
+                                        instr.format_form(form)
+                                    )
+                                    .unwrap();
                                 }
                             }
                             Arch::Z80 => {
@@ -1755,6 +2319,19 @@ pub fn get_goto_def_resp(
                 }
             }
         }
+
+        for (sym_name, _, _, range) in extract_masm_symbols(curr_doc.get_content(None)) {
+            if sym_name.eq_ignore_ascii_case(word) {
+                return Some(GotoDefinitionResponse::Scalar(Location {
+                    uri: params
+                        .text_document_position_params
+                        .text_document
+                        .uri
+                        .clone(),
+                    range,
+                }));
+            }
+        }
     }
 
     None
@@ -1779,12 +2356,18 @@ pub fn get_ref_resp(
         });
 
         static QUERY_WORD: LazyLock<tree_sitter::Query> = LazyLock::new(|| {
-            tree_sitter::Query::new(&tree_sitter_asm::language(), "(ident) @ident").unwrap()
+            tree_sitter::Query::new(&tree_sitter_asm::language(), "[(ident) (word)] @ident")
+                .unwrap()
         });
 
         let is_not_ident_char = |c: char| !(c.is_alphanumeric() || c == '_');
         let (word, _) = get_word_from_pos_params(curr_doc, &params.text_document_position);
         let uri = &params.text_document_position.text_document.uri;
+        let masm_decl_ranges: HashSet<Range> = extract_masm_symbols(curr_doc.get_content(None))
+            .into_iter()
+            .filter(|(sym_name, _, _, _)| sym_name.eq(word))
+            .map(|(_, _, _, range)| range)
+            .collect();
 
         let mut cursor = tree_sitter::QueryCursor::new();
         if params.context.include_declaration {
@@ -1812,6 +2395,12 @@ pub fn get_ref_resp(
                     }
                 }
             }
+            for &range in &masm_decl_ranges {
+                refs.insert(Location {
+                    uri: uri.clone(),
+                    range,
+                });
+            }
         }
 
         let word_matches = cursor.matches(&QUERY_WORD, tree.root_node(), doc);
@@ -1831,10 +2420,13 @@ pub fn get_ref_resp(
                 if word.eq(text) {
                     let start = lsp_pos_of_point(cap.node.start_position());
                     let end = lsp_pos_of_point(cap.node.end_position());
-                    refs.insert(Location {
-                        uri: uri.clone(),
-                        range: Range { start, end },
-                    });
+                    let range = Range { start, end };
+                    if params.context.include_declaration || !masm_decl_ranges.contains(&range) {
+                        refs.insert(Location {
+                            uri: uri.clone(),
+                            range,
+                        });
+                    }
                 }
             }
         }
@@ -1885,7 +2477,7 @@ pub fn get_root_config(params: &InitializeParams) -> Result<RootConfig> {
             while project_idx < projects.len() {
                 let mut project_path = project_root.clone();
                 project_path.push(&projects[project_idx].path);
-                let Ok(canonicalized_project_path) = project_path.canonicalize() else {
+                let Ok(canonicalized_project_path) = canonicalize_clean(&project_path) else {
                     return report_err(&format!(
                         "Failed to canonicalize project path \"{}\".",
                         project_path.display()
@@ -1978,8 +2570,8 @@ pub fn get_root_config(params: &InitializeParams) -> Result<RootConfig> {
 
 #[must_use]
 pub fn get_global_cfg_dirs() -> Vec<Option<PathBuf>> {
-    if cfg!(target_os = "macos") {
-        // `$HOME`/Library/Application Support/ and `$HOME`/.config/
+    if cfg!(target_os = "macos") || cfg!(target_os = "windows") {
+        // `$HOME`/Library/Application Support/ (or `%APPDATA%`) and `$HOME`/.config/
         vec![config_dir(), alt_mac_config_dir()]
     } else {
         vec![config_dir()]
@@ -2050,8 +2642,7 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
     if let Some(folders) = &params.workspace_folders {
         // if there's multiple, just visit in order until we find a valid folder
         for folder in folders {
-            let Ok(parsed) = PathBuf::from_str(folder.uri.path().as_str());
-            if let Ok(parsed_path) = parsed.canonicalize() {
+            if let UriConversion::Canonicalized(parsed_path) = process_uri(&folder.uri) {
                 info!("Detected project root: {}", parsed_path.display());
                 return Some(parsed_path);
             }
@@ -2060,19 +2651,18 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
 
     // if workspace folders weren't set or came up empty, we check the root_uri
     #[allow(deprecated)]
-    if let Some(root_uri) = &params.root_uri {
-        let Ok(parsed) = PathBuf::from_str(root_uri.path().as_str());
-        if let Ok(parsed_path) = parsed.canonicalize() {
-            info!("Detected project root: {}", parsed_path.display());
-            return Some(parsed_path);
-        }
+    if let Some(root_uri) = &params.root_uri
+        && let UriConversion::Canonicalized(parsed_path) = process_uri(root_uri)
+    {
+        info!("Detected project root: {}", parsed_path.display());
+        return Some(parsed_path);
     }
 
     // if both `workspace_folders` and `root_uri` weren't set or came up empty, we check the root_path
     #[allow(deprecated)]
     if let Some(root_path) = &params.root_path {
         let Ok(parsed) = PathBuf::from_str(root_path.as_str());
-        if let Ok(parsed_path) = parsed.canonicalize() {
+        if let Ok(parsed_path) = canonicalize_clean(&parsed) {
             return Some(parsed_path);
         }
     }
@@ -2087,27 +2677,32 @@ fn get_project_root(params: &InitializeParams) -> Option<PathBuf> {
 ///
 /// Returns `Err` if the file cannot be deserialized
 fn get_project_config(params: &InitializeParams) -> Option<Result<RootConfig>> {
-    if let Some(mut path) = get_project_root(params) {
-        path.push(".asm-lsp.toml");
-        match std::fs::read_to_string(&path) {
-            Ok(config) => match toml::from_str::<RootConfig>(&config) {
-                Ok(config) => {
-                    info!(
-                        "Parsing asm-lsp project config from file -> {}",
-                        path.display()
-                    );
-                    return Some(Ok(config));
-                }
+    if let Some(root) = get_project_root(params) {
+        for ancestor in root.ancestors() {
+            let path = ancestor.join(".asm-lsp.toml");
+            if !path.is_file() {
+                continue;
+            }
+            match std::fs::read_to_string(&path) {
+                Ok(config) => match toml::from_str::<RootConfig>(&config) {
+                    Ok(config) => {
+                        info!(
+                            "Parsing asm-lsp project config from file -> {}",
+                            path.display()
+                        );
+                        return Some(Ok(config));
+                    }
+                    Err(e) => {
+                        error!(
+                            "Failed to parse project config file {} - Error: {e}",
+                            path.display()
+                        );
+                        return Some(Err(e.into()));
+                    }
+                },
                 Err(e) => {
-                    error!(
-                        "Failed to parse project config file {} - Error: {e}",
-                        path.display()
-                    );
-                    return Some(Err(e.into()));
+                    error!("Failed to read config file {} - Error: {e}", path.display());
                 }
-            },
-            Err(e) => {
-                error!("Failed to read config file {} - Error: {e}", path.display());
             }
         }
     }
@@ -2125,6 +2720,8 @@ pub fn instr_filter_targets(instr: &Instruction, config: &Config) -> Instruction
         .filter(|form| {
             (form.gas_name.is_some() && config.is_assembler_enabled(Assembler::Gas))
                 || (form.go_name.is_some() && config.is_assembler_enabled(Assembler::Go))
+                || (!config.is_assembler_enabled(Assembler::Gas)
+                    && !config.is_assembler_enabled(Assembler::Go))
         })
         .map(|form| {
             let mut filtered = form.clone();

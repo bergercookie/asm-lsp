@@ -804,9 +804,9 @@ mod tests {
         //      2) Said items are of the right type
         // NOTE: Both instructions and directives use the OPERATOR complection type,
         // so another means of verification should be added here
-        assert!(!resp.items.is_empty());
+        assert!(!resp.items.is_empty(), "Expected non-empty completion list");
         for comp in &resp.items {
-            assert!(comp.kind == Some(expected_kind));
+            assert_eq!(comp.kind, Some(expected_kind));
         }
     }
 
@@ -2236,6 +2236,256 @@ Operator used exclusively with INVOKE to pass the address of a variable to a pro
             ".allocstack [masm]
 MASM64: Generates a UWOP_ALLOC_SMALL or a UWOP_ALLOC_LARGE with the specified size for the current offset in the prologue.",
             &masm_test_config(),
+        );
+    }
+
+    fn masm_x86_64_test_config() -> Config {
+        Config {
+            version: None,
+            assembler: Assembler::Masm,
+            instruction_set: Arch::X86_64,
+            opts: Some(ConfigOptions::default()),
+        }
+    }
+
+    #[test]
+    fn handle_hover_masm_question_and_at_directives() {
+        test_hover(
+            ".da<cursor>ta?",
+            ".data? [masm]
+When used with .MODEL, starts a near data segment for uninitialized data (segment name _BSS).",
+            &masm_test_config(),
+        );
+        test_hover(
+            "@Cat<cursor>Str",
+            "@catstr [masm]
+Macro function (@CatStr(string1 [, string2...])) that concatenates one or more text items and returns the resulting string.",
+            &masm_test_config(),
+        );
+    }
+
+    #[test]
+    fn handle_masm_x86_64_instructions_exclude_gas_and_go_forms() {
+        let cfg = masm_x86_64_test_config();
+        test_hover(
+            "    pus<cursor>h rbx",
+            "push [x86-64]
+Push Value Onto the Stack
+
+## Forms
+
+- `push imm8`
+
+  + [imm8]   extended-size = 8
+- `push imm32`
+
+  + [imm32]  extended-size = 8
+- `push r16`
+
+  + [r16]    input = true   output = false
+- `push r64`
+
+  + [r64]    input = true   output = false
+- `push m16`
+
+  + [m16]    input = true   output = false
+- `push m64`
+
+  + [m64]    input = true   output = false",
+            &cfg,
+        );
+
+        let info = init_global_info(&cfg).expect("Failed to load info");
+        let store = init_test_store(&info);
+        assert!(
+            !store
+                .completion_items
+                .instructions
+                .iter()
+                .any(|(_, item)| item.label == "pushq" || item.label == "PUSHQ")
+        );
+        let (_, push_comp) = store
+            .completion_items
+            .instructions
+            .iter()
+            .find(|(arch, item)| *arch == Arch::X86_64 && item.label == "push")
+            .expect("Expected x86-64 push completion item");
+        if let Some(lsp_types::Documentation::MarkupContent(ref markup)) = push_comp.documentation {
+            assert!(markup.value.contains("- `push r64`"));
+            assert!(!markup.value.contains("*GAS*:"));
+            assert!(!markup.value.contains("*GO*:"));
+        } else {
+            panic!("Expected markdown documentation on push completion item");
+        }
+    }
+
+    #[test]
+    fn handle_masm_colonless_symbols_and_diagnostics() {
+        let cfg = masm_x86_64_test_config();
+        let src = r#"STD_OUTPUT_HANDLE equ -11
+.data
+message db "Hello from x64 assembly!", 13, 10
+.code
+extern WriteFile:proc
+main proc frame
+    LOCAL written:DWORD
+    lea rdx, <cursor>message
+    call WriteFile
+main endp
+end
+"#;
+        test_hover(
+            src,
+            r#"`message db "Hello from x64 assembly!", 13, 10`"#,
+            &cfg,
+        );
+
+        let clean_src = src.replace("<cursor>", "");
+        let uri = Uri::from_str("file:///hello.asm").unwrap();
+        let doc = FullTextDocument::new("asm".to_string(), 0, clean_src.clone());
+        let mut parser = Parser::new();
+        parser.set_language(&tree_sitter_asm::language()).unwrap();
+        let tree = parser.parse(&clean_src, None);
+        let mut tree_entry = TreeEntry { tree, parser };
+
+        let pos_params = TextDocumentPositionParams {
+            text_document: TextDocumentIdentifier { uri: uri.clone() },
+            position: Position {
+                line: 7,
+                character: 15,
+            },
+        };
+        let def_resp = crate::get_goto_def_resp(
+            &doc,
+            &mut tree_entry,
+            &lsp_types::GotoDefinitionParams {
+                text_document_position_params: pos_params.clone(),
+                work_done_progress_params: WorkDoneProgressParams::default(),
+                partial_result_params: PartialResultParams::default(),
+            },
+        )
+        .expect("Expected definition for MASM colonless data symbol");
+        assert_eq!(
+            def_resp,
+            lsp_types::GotoDefinitionResponse::Scalar(lsp_types::Location {
+                uri: uri.clone(),
+                range: lsp_types::Range {
+                    start: Position {
+                        line: 2,
+                        character: 0,
+                    },
+                    end: Position {
+                        line: 2,
+                        character: 7,
+                    },
+                },
+            })
+        );
+
+        let refs = crate::get_ref_resp(
+            &lsp_types::ReferenceParams {
+                text_document_position: pos_params,
+                work_done_progress_params: WorkDoneProgressParams::default(),
+                partial_result_params: PartialResultParams::default(),
+                context: lsp_types::ReferenceContext {
+                    include_declaration: true,
+                },
+            },
+            &doc,
+            &mut tree_entry,
+        );
+        assert_eq!(refs.len(), 2);
+
+        // References on `main` (parsed as `(word)` by tree-sitter-asm on `main proc` and `main endp`)
+        let main_refs = crate::get_ref_resp(
+            &lsp_types::ReferenceParams {
+                text_document_position: TextDocumentPositionParams {
+                    text_document: TextDocumentIdentifier { uri: uri.clone() },
+                    position: Position {
+                        line: 5,
+                        character: 2,
+                    },
+                },
+                work_done_progress_params: WorkDoneProgressParams::default(),
+                partial_result_params: PartialResultParams::default(),
+                context: lsp_types::ReferenceContext {
+                    include_declaration: true,
+                },
+            },
+            &doc,
+            &mut tree_entry,
+        );
+        assert_eq!(main_refs.len(), 2);
+
+        let symbols = crate::get_document_symbols(
+            &clean_src,
+            &mut tree_entry,
+            &lsp_types::DocumentSymbolParams {
+                text_document: TextDocumentIdentifier { uri },
+                work_done_progress_params: WorkDoneProgressParams::default(),
+                partial_result_params: PartialResultParams::default(),
+            },
+        )
+        .expect("Expected document symbols");
+        let sym_names: Vec<&str> = symbols.iter().map(|s| s.name.as_str()).collect();
+        assert_eq!(
+            sym_names,
+            vec![
+                "STD_OUTPUT_HANDLE",
+                "message",
+                "WriteFile",
+                "main",
+                "written"
+            ]
+        );
+
+        let ml64_output = "\
+Assembling: C:\\proj\\main.asm
+C:\\proj\\main.asm(1) : warning A4006:too many arguments in macro call
+ FOO(1): Macro Called From
+  C:\\proj\\main.asm(2): Main Line Code
+C:\\proj\\main.asm(3) : error A2008:syntax error : rcx
+";
+        let diag_src = "FOO MACRO a\n\tFOO 1, 2 ; call site\n\tmov rbx rcx ; missing comma\n";
+        let mut diags = Vec::new();
+        crate::get_diagnostics(&mut diags, ml64_output, &cfg);
+        crate::refine_diagnostic_ranges(&mut diags, diag_src);
+        assert_eq!(diags.len(), 2);
+        assert_eq!(
+            diags[0].range.start,
+            Position {
+                line: 1,
+                character: 1
+            }
+        );
+        assert_eq!(
+            diags[0].range.end,
+            Position {
+                line: 1,
+                character: 9
+            }
+        );
+        assert_eq!(
+            diags[0].severity,
+            Some(lsp_types::DiagnosticSeverity::WARNING)
+        );
+        assert_eq!(
+            diags[1].range.start,
+            Position {
+                line: 2,
+                character: 9
+            }
+        );
+        assert_eq!(
+            diags[1].range.end,
+            Position {
+                line: 2,
+                character: 12
+            }
+        );
+        assert_eq!(
+            diags[1].severity,
+            Some(lsp_types::DiagnosticSeverity::ERROR)
         );
     }
 
