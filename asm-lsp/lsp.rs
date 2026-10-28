@@ -4,13 +4,14 @@ use std::{
     collections::{HashMap, HashSet},
     convert::TryFrom as _,
     fmt::Write as _,
-    fs::{File, create_dir_all},
-    io::BufRead,
+    fs::{File, OpenOptions, create_dir_all},
+    io::{BufRead, Write},
     path::{Path, PathBuf},
     process::Command,
     str::FromStr as _,
     string::ToString as _,
     sync::LazyLock,
+    time::{SystemTime, UNIX_EPOCH},
 };
 
 use anyhow::{Result, anyhow};
@@ -592,6 +593,160 @@ pub fn get_default_compile_cmd(uri: &Uri, cfg: &Config) -> CompileCommand {
     )
 }
 
+/// A temporary copy of an open buffer. It is removed when diagnostics finish.
+struct TempSourceFile(PathBuf);
+
+impl Drop for TempSourceFile {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_file(&self.0);
+    }
+}
+
+fn create_temp_source_file(uri: &Uri, source_text: &str) -> Result<TempSourceFile> {
+    let source_path = match process_uri(uri) {
+        UriConversion::Canonicalized(path) | UriConversion::Unchecked(path) => path,
+    };
+    let parent = source_path
+        .parent()
+        .filter(|parent| !parent.as_os_str().is_empty())
+        .unwrap_or_else(|| Path::new("."));
+    let stem = source_path
+        .file_stem()
+        .and_then(|value| value.to_str())
+        .unwrap_or("source");
+    let extension = source_path
+        .extension()
+        .and_then(|value| value.to_str())
+        .unwrap_or("asm");
+
+    for attempt in 0..32 {
+        let timestamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .map_err(|error| {
+                anyhow!("System clock error while creating temporary source: {error}")
+            })?
+            .as_nanos();
+        let temp_path = parent.join(format!(
+            ".{stem}.asm-lsp-{}-{timestamp}-{attempt}.{extension}",
+            std::process::id()
+        ));
+        match OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&temp_path)
+        {
+            Ok(mut file) => {
+                if let Err(error) = file.write_all(source_text.as_bytes()) {
+                    drop(file);
+                    let _ = std::fs::remove_file(&temp_path);
+                    return Err(error.into());
+                }
+                return Ok(TempSourceFile(temp_path));
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
+            Err(error) => return Err(error.into()),
+        }
+    }
+
+    Err(anyhow!(
+        "Could not create a temporary source file for {}",
+        uri.path().as_str()
+    ))
+}
+
+/// A temporary directory used for assembler output during live diagnostics.
+/// The directory is removed when diagnostics finish.
+struct TempOutputFile {
+    path: PathBuf,
+    directory: PathBuf,
+}
+
+impl Drop for TempOutputFile {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_file(&self.path);
+        let _ = std::fs::remove_dir(&self.directory);
+    }
+}
+
+fn create_temp_output_file() -> Result<TempOutputFile> {
+    let temp_dir = std::env::temp_dir();
+
+    for attempt in 0..32 {
+        let timestamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .map_err(|error| {
+                anyhow!("System clock error while creating temporary output: {error}")
+            })?
+            .as_nanos();
+        let directory = temp_dir.join(format!(
+            "asm-lsp-output-{}-{timestamp}-{attempt}",
+            std::process::id()
+        ));
+        match std::fs::create_dir(&directory) {
+            Ok(()) => {
+                return Ok(TempOutputFile {
+                    path: directory.join("output.bin"),
+                    directory,
+                });
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
+            Err(error) => return Err(error.into()),
+        }
+    }
+
+    Err(anyhow!("Could not create a temporary output directory"))
+}
+
+fn replace_source_argument(
+    args: &mut Vec<String>,
+    uri: &Uri,
+    original_path: &Path,
+    temp_path: &Path,
+) -> usize {
+    let original_filename = original_path.file_name();
+    let index = args.iter().position(|arg| {
+        let arg_path = Path::new(arg);
+        arg == uri.path().as_str()
+            || arg_path == original_path
+            || arg_path
+                .canonicalize()
+                .is_ok_and(|canonical_path| canonical_path.as_path() == original_path)
+            || (!arg.starts_with('-') && arg_path.file_name() == original_filename)
+    });
+
+    if let Some(index) = index {
+        args[index] = temp_path.to_string_lossy().into_owned();
+        index
+    } else {
+        args.push(temp_path.to_string_lossy().into_owned());
+        args.len() - 1
+    }
+}
+
+fn prepare_live_source_args(
+    args: &[String],
+    uri: &Uri,
+    temp_path: &Path,
+    fasm_output_path: Option<&Path>,
+) -> Vec<String> {
+    let original_path = match process_uri(uri) {
+        UriConversion::Canonicalized(path) | UriConversion::Unchecked(path) => path,
+    };
+    let mut args = args.to_vec();
+    let source_index = replace_source_argument(&mut args, uri, &original_path, temp_path);
+
+    if let Some(output_path) = fasm_output_path {
+        let output_arg = output_path.to_string_lossy().into_owned();
+        let output_index = source_index + 1;
+        if output_index < args.len() && !args[output_index].starts_with('-') {
+            args[output_index] = output_arg;
+        } else {
+            args.insert(output_index, output_arg);
+        }
+    }
+    args
+}
+
 /// Attempts to run the given compile command and parses the resulting output. Any
 /// relevant output will be translated into a `Diagnostic` object and pushed into
 /// `diagnostics`
@@ -600,8 +755,35 @@ pub fn apply_compile_cmd(
     diagnostics: &mut Vec<Diagnostic>,
     uri: &Uri,
     compile_cmd: &CompileCommand,
+    source_text: Option<&str>,
 ) {
     info!("Attempting to apply compile command: {compile_cmd:?}");
+    let temp_source = match source_text {
+        Some(source_text) => match create_temp_source_file(uri, source_text) {
+            Ok(temp_source) => Some(temp_source),
+            Err(error) => {
+                error!("Failed to create temporary source for live diagnostics: {error}");
+                return;
+            }
+        },
+        None => None,
+    };
+    let live_source_path = temp_source.as_ref().map(|source| source.0.as_path());
+    let needs_fasm_output_path =
+        live_source_path.is_some() && cfg.is_assembler_enabled(Assembler::Fasm);
+    let temp_output = if needs_fasm_output_path {
+        match create_temp_output_file() {
+            Ok(output) => Some(output),
+            Err(error) => {
+                error!("Failed to create temporary output for live diagnostics: {error}");
+                return;
+            }
+        }
+    } else {
+        None
+    };
+    let live_output_path = temp_output.as_ref().map(|output| output.path.as_path());
+
     // TODO: Consolidate this logic, a little tricky because we need to capture
     // compile_cmd.arguments by reference, but we get an owned Vec out of args_from_cmd()...
     if let Some(ref args) = compile_cmd.arguments {
@@ -613,11 +795,17 @@ pub fn apply_compile_cmd(
                     .map_or_else(|| vec!["gcc", "clang"], |compiler| vec![compiler]);
 
                 for compiler in compilers {
-                    match Command::new(compiler) // default or user-supplied compiler
-                        .args(flags) // user supplied args
-                        .arg(uri.path().as_str()) // the source file in question
-                        .output()
-                    {
+                    let mut command = Command::new(compiler);
+                    command.args(flags);
+                    if let Some(source_path) = live_source_path {
+                        command.arg(source_path);
+                        if let Some(output_path) = live_output_path {
+                            command.arg(output_path);
+                        }
+                    } else {
+                        command.arg(uri.path().as_str());
+                    }
+                    match command.output() {
                         Ok(result) => {
                             let output_str = ustr::get_string(result.stderr);
                             get_diagnostics(diagnostics, &output_str, cfg);
@@ -634,7 +822,12 @@ pub fn apply_compile_cmd(
                 if arguments.len() < 2 {
                     return;
                 }
-                let output = match Command::new(&arguments[0]).args(&arguments[1..]).output() {
+                let command_args = if let Some(source_path) = live_source_path {
+                    prepare_live_source_args(&arguments[1..], uri, source_path, live_output_path)
+                } else {
+                    arguments[1..].to_vec()
+                };
+                let output = match Command::new(&arguments[0]).args(&command_args).output() {
                     Ok(result) => result,
                     Err(e) => {
                         error!("Failed to launch compile command process -- Error: {e}");
@@ -649,7 +842,12 @@ pub fn apply_compile_cmd(
         if args.len() < 2 {
             return;
         }
-        let output = match Command::new(&args[0]).args(&args[1..]).output() {
+        let command_args = if let Some(source_path) = live_source_path {
+            prepare_live_source_args(&args[1..], uri, source_path, live_output_path)
+        } else {
+            args[1..].to_vec()
+        };
+        let output = match Command::new(&args[0]).args(&command_args).output() {
             Ok(result) => result,
             Err(e) => {
                 error!("Failed to launch compile command process -- Error: {e}");

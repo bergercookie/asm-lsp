@@ -156,11 +156,16 @@ pub fn handle_request(
                     "Selected compile command(s) for request: {:?}",
                     compile_cmds
                 );
+                let source_text = doc_store
+                    .text_store
+                    .get_document(&params.text_document.uri)
+                    .map(|doc| doc.get_content(None));
                 handle_diagnostics(
                     connection,
                     &params.text_document.uri,
                     project_config,
                     &compile_cmds,
+                    source_text,
                 )?;
                 info!(
                     "{} request serviced in {}ms",
@@ -206,6 +211,27 @@ pub fn handle_notification(
         DidChangeTextDocument::METHOD => {
             let params = cast_notif!(notif, DidChangeTextDocument);
             handle_did_change_text_document_notification(&params, doc_store)?;
+
+            let project_config = config.get_config(&params.text_document.uri);
+            if project_config.opts.as_ref().unwrap().diagnostics.unwrap() {
+                let compile_cmds = get_compile_cmd_for_req(
+                    config,
+                    &params.text_document.uri,
+                    &store.compile_commands,
+                );
+                let source_text = doc_store
+                    .text_store
+                    .get_document(&params.text_document.uri)
+                    .map(|doc| doc.get_content(None));
+                handle_diagnostics(
+                    connection,
+                    &params.text_document.uri,
+                    project_config,
+                    &compile_cmds,
+                    source_text,
+                )?;
+            }
+
             info!(
                 "{} notification serviced in {}ms",
                 DidChangeTextDocument::METHOD,
@@ -235,11 +261,16 @@ pub fn handle_notification(
                     "Selected compile command(s) for request: {:?}",
                     compile_cmds
                 );
+                let source_text = doc_store
+                    .text_store
+                    .get_document(&params.text_document.uri)
+                    .map(|doc| doc.get_content(None));
                 handle_diagnostics(
                     connection,
                     &params.text_document.uri,
                     project_config,
                     &compile_cmds,
+                    source_text,
                 )?;
                 info!(
                     "Published diagnostics on save in {}ms",
@@ -513,6 +544,7 @@ pub fn handle_diagnostics(
     uri: &Uri,
     cfg: &Config,
     compile_cmds: &CompilationDatabase,
+    source_text: Option<&str>,
 ) -> Result<()> {
     let req_source_path = match process_uri(uri) {
         UriConversion::Canonicalized(p) => p,
@@ -551,7 +583,7 @@ pub fn handle_diagnostics(
     let mut diagnostics: Vec<Diagnostic> = Vec::new();
     for entry in source_entries {
         has_entries = true;
-        apply_compile_cmd(cfg, &mut diagnostics, uri, entry);
+        apply_compile_cmd(cfg, &mut diagnostics, uri, entry, source_text);
     }
 
     // If no user-provided entries corresponded to the file, just try out
@@ -577,6 +609,7 @@ pub fn handle_diagnostics(
             &mut diagnostics,
             uri,
             &get_default_compile_cmd(uri, cfg),
+            source_text,
         );
     }
 
