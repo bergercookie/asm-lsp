@@ -1,7 +1,8 @@
-use anyhow::{Result, anyhow};
+use anyhow::Result;
 use compile_commands::{CompilationDatabase, SourceFile};
 use log::{error, info, warn};
 use lsp_server::{Connection, Message, Notification, Request, RequestId, Response};
+use lsp_textdocument::FullTextDocument;
 use lsp_types::{
     CompletionParams, Diagnostic, DidChangeTextDocumentParams, DidCloseTextDocumentParams,
     DidOpenTextDocumentParams, DocumentSymbolParams, DocumentSymbolResponse, GotoDefinitionParams,
@@ -625,8 +626,9 @@ pub fn handle_did_open_text_document_notification(
 }
 
 /// Handles did change text document notifications
-/// Edits are applied to `curr_doc` and `tree`, but `tree` is not
-/// re-parsed
+///
+/// Updates the document text and applies the corresponding edits to the
+/// stored tree, which request handlers later re-parse incrementally.
 ///
 /// # Errors
 ///
@@ -639,23 +641,53 @@ pub fn handle_did_change_text_document_notification(
     params: &DidChangeTextDocumentParams,
     doc_store: &mut DocumentStore,
 ) -> Result<()> {
+    let uri = &params.text_document.uri;
+
+    // A change without a range replaces the whole document, so there is no
+    // incremental edit to apply to the tree; re-parse below instead.
+    let full_document_change = params
+        .content_changes
+        .iter()
+        .any(|change| change.range.is_none());
+
+    // LSP ranges refer to the document as it was before each change, and the
+    // changes in one notification build on each other. Compute the
+    // tree-sitter edits against a scratch copy of the current text *before*
+    // the text store is updated: computing them afterwards yields offsets
+    // that don't match the tree, leaving it with nodes past the end of the
+    // new text and panicking later in `Node::utf8_text`.
+    let edits = if full_document_change {
+        None
+    } else if let Some(content) = doc_store.text_store.get_document_content(uri, None) {
+        let mut scratch = FullTextDocument::new(String::new(), 0, content.to_string());
+        let mut edits = Vec::with_capacity(params.content_changes.len());
+        for change in &params.content_changes {
+            edits.push(text_doc_change_to_ts_edit(change, &scratch)?);
+            scratch.update(std::slice::from_ref(change), 0);
+        }
+        Some(edits)
+    } else {
+        Some(Vec::new())
+    };
+
     let raw_params = serde_json::to_value(params).unwrap();
     doc_store
         .text_store
         .listen(DidChangeTextDocument::METHOD, &raw_params);
 
-    let uri = &params.text_document.uri;
-    if let Some(ref mut doc) = doc_store.text_store.get_document(uri)
-        && let Some(tree_entry) = doc_store.tree_store.get_mut(uri)
-        && let Some(ref mut curr_tree) = tree_entry.tree
-    {
-        for change in &params.content_changes {
-            match text_doc_change_to_ts_edit(change, doc) {
-                Ok(edit) => curr_tree.edit(&edit),
-                Err(e) => {
-                    return Err(anyhow!("Bad edit info, failed to edit tree - Error: {e}"));
+    if let Some(tree_entry) = doc_store.tree_store.get_mut(uri) {
+        if let Some(edits) = edits {
+            if let Some(ref mut curr_tree) = tree_entry.tree {
+                for edit in &edits {
+                    curr_tree.edit(edit);
                 }
             }
+        } else {
+            let content = doc_store
+                .text_store
+                .get_document_content(uri, None)
+                .unwrap_or_default();
+            tree_entry.tree = tree_entry.parser.parse(content, None);
         }
     }
 

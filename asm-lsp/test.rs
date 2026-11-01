@@ -6,16 +6,20 @@ mod tests {
     use lsp_textdocument::FullTextDocument;
     use lsp_types::{
         CompletionContext, CompletionItemKind, CompletionParams, CompletionTriggerKind,
-        DidOpenTextDocumentParams, HoverContents, HoverParams, MarkupContent, MarkupKind,
-        PartialResultParams, Position, TextDocumentIdentifier, TextDocumentItem,
-        TextDocumentPositionParams, Uri, WorkDoneProgressParams,
+        DidChangeTextDocumentParams, DidOpenTextDocumentParams, DocumentSymbolParams,
+        HoverContents, HoverParams, MarkupContent, MarkupKind, PartialResultParams, Position,
+        Range, TextDocumentContentChangeEvent, TextDocumentIdentifier, TextDocumentItem,
+        TextDocumentPositionParams, Uri, VersionedTextDocumentIdentifier, WorkDoneProgressParams,
     };
     use tree_sitter::Parser;
 
+    use crate::handle::{
+        handle_did_change_text_document_notification, handle_did_open_text_document_notification,
+    };
     use crate::{
         Arch, Assembler, BINCODE_CFG, Config, ConfigOptions, Directive, DocumentStore, Instruction,
-        Register, ServerStore, TreeEntry, get_comp_resp, get_completes, get_hover_resp,
-        get_word_from_pos_params, instr_filter_targets,
+        Register, ServerStore, TreeEntry, get_comp_resp, get_completes, get_document_symbols,
+        get_hover_resp, get_word_from_pos_params, instr_filter_targets,
         parser::{
             populate_6502_instructions, populate_arm_instructions, populate_avr_directives,
             populate_avr_instructions, populate_ca65_directives, populate_mars_pseudo_instructions,
@@ -24,6 +28,7 @@ mod tests {
         },
         populate_gas_directives, populate_instructions, populate_name_to_directive_map,
         populate_name_to_instruction_map, populate_name_to_register_map, populate_registers,
+        text_doc_change_to_ts_edit,
     };
 
     const fn empty_test_config() -> Config {
@@ -3294,5 +3299,202 @@ Width: 8 bits",
             "../docs_store/directives/mars.xml",
             populate_masm_nasm_fasm_mars_directives
         );
+    }
+
+    #[test]
+    fn text_doc_change_edit_positions_are_in_bytes() {
+        // "é" is two UTF-8 bytes but one UTF-16 code unit.
+        let doc = FullTextDocument::new("asm".to_string(), 0, "é\nab\n".to_string());
+        let change = TextDocumentContentChangeEvent {
+            range: Some(Range::new(Position::new(0, 1), Position::new(0, 1))),
+            range_length: None,
+            text: "x\ny".to_string(),
+        };
+
+        let edit = text_doc_change_to_ts_edit(&change, &doc).unwrap();
+
+        assert_eq!(edit.start_byte, 2);
+        assert_eq!(edit.old_end_byte, 2);
+        assert_eq!(edit.new_end_byte, 5);
+        assert_eq!(
+            (edit.start_position.row, edit.start_position.column),
+            (0, 2)
+        );
+        assert_eq!(
+            (edit.old_end_position.row, edit.old_end_position.column),
+            (0, 2)
+        );
+        assert_eq!(
+            (edit.new_end_position.row, edit.new_end_position.column),
+            (1, 1)
+        );
+    }
+
+    fn open_document(uri: &Uri, text: &str, doc_store: &mut DocumentStore) {
+        handle_did_open_text_document_notification(
+            &DidOpenTextDocumentParams {
+                text_document: TextDocumentItem {
+                    uri: uri.clone(),
+                    language_id: "asm".to_string(),
+                    version: 0,
+                    text: text.to_string(),
+                },
+            },
+            doc_store,
+        );
+    }
+
+    fn change_document(
+        uri: &Uri,
+        changes: Vec<TextDocumentContentChangeEvent>,
+        doc_store: &mut DocumentStore,
+    ) {
+        handle_did_change_text_document_notification(
+            &DidChangeTextDocumentParams {
+                text_document: VersionedTextDocumentIdentifier {
+                    uri: uri.clone(),
+                    version: 1,
+                },
+                content_changes: changes,
+            },
+            doc_store,
+        )
+        .unwrap();
+    }
+
+    /// Asserts that the stored tree is in sync with the document text.
+    ///
+    /// Nodes pointing past the end of the text make request handlers panic in
+    /// `Node::utf8_text`, so also exercise a handler that parses from the
+    /// stored tree.
+    fn assert_tree_is_consistent(uri: &Uri, doc_store: &mut DocumentStore) {
+        let content = doc_store
+            .text_store
+            .get_document_content(uri, None)
+            .expect("document was not updated")
+            .to_string();
+        let tree = doc_store
+            .tree_store
+            .get(uri)
+            .and_then(|entry| entry.tree.as_ref())
+            .expect("no tree was stored for the document");
+
+        let mut stack = vec![tree.root_node()];
+        while let Some(node) = stack.pop() {
+            assert!(
+                node.end_byte() <= content.len(),
+                "node {:?} ends at {} but the document is {} bytes",
+                node.kind(),
+                node.end_byte(),
+                content.len()
+            );
+            assert!(node.start_byte() <= node.end_byte());
+
+            let mut cursor = node.walk();
+            if cursor.goto_first_child() {
+                loop {
+                    stack.push(cursor.node());
+                    if !cursor.goto_next_sibling() {
+                        break;
+                    }
+                }
+            }
+        }
+
+        let symbols = get_document_symbols(
+            &content,
+            doc_store.tree_store.get_mut(uri).unwrap(),
+            &DocumentSymbolParams {
+                text_document: TextDocumentIdentifier { uri: uri.clone() },
+                work_done_progress_params: WorkDoneProgressParams {
+                    work_done_token: None,
+                },
+                partial_result_params: PartialResultParams {
+                    partial_result_token: None,
+                },
+            },
+        );
+        assert!(symbols.is_some());
+    }
+
+    #[test]
+    fn did_change_keeps_tree_in_sync_with_document() {
+        let uri: Uri = Uri::from_str("file:///asm-lsp-didchange-test.s").unwrap();
+        let source = "# a long comment line that is replaced by empty lines\nlabel1:\n    ret\n";
+
+        let mut doc_store = DocumentStore::new();
+        open_document(&uri, source, &mut doc_store);
+
+        // Delete the long first line and insert ten newlines instead. The
+        // incremental InputEdit offsets must refer to `source`, not to the
+        // text after the change.
+        change_document(
+            &uri,
+            vec![TextDocumentContentChangeEvent {
+                range: Some(Range::new(Position::new(0, 0), Position::new(1, 0))),
+                range_length: None,
+                text: "\n".repeat(10),
+            }],
+            &mut doc_store,
+        );
+
+        assert_tree_is_consistent(&uri, &mut doc_store);
+    }
+
+    #[test]
+    fn did_change_applies_all_changes_in_order() {
+        let uri: Uri = Uri::from_str("file:///asm-lsp-didchange-multi-test.s").unwrap();
+
+        let mut doc_store = DocumentStore::new();
+        open_document(&uri, "aaa\nbbb\nccc\n", &mut doc_store);
+
+        // The second change's range refers to the document after the first
+        // change ("bbb\nccc\n"), not to the original text.
+        change_document(
+            &uri,
+            vec![
+                TextDocumentContentChangeEvent {
+                    range: Some(Range::new(Position::new(0, 0), Position::new(1, 0))),
+                    range_length: None,
+                    text: String::new(),
+                },
+                TextDocumentContentChangeEvent {
+                    range: Some(Range::new(Position::new(1, 0), Position::new(1, 3))),
+                    range_length: None,
+                    text: "zzzzzzz".to_string(),
+                },
+            ],
+            &mut doc_store,
+        );
+
+        assert_eq!(
+            doc_store.text_store.get_document_content(&uri, None),
+            Some("bbb\nzzzzzzz\n")
+        );
+        assert_tree_is_consistent(&uri, &mut doc_store);
+    }
+
+    #[test]
+    fn did_change_without_range_reparses_the_document() {
+        let uri: Uri = Uri::from_str("file:///asm-lsp-didchange-full-test.s").unwrap();
+
+        let mut doc_store = DocumentStore::new();
+        open_document(&uri, "old\n", &mut doc_store);
+
+        change_document(
+            &uri,
+            vec![TextDocumentContentChangeEvent {
+                range: None,
+                range_length: None,
+                text: "new\nlabel:\n    ret\n".to_string(),
+            }],
+            &mut doc_store,
+        );
+
+        assert_eq!(
+            doc_store.text_store.get_document_content(&uri, None),
+            Some("new\nlabel:\n    ret\n")
+        );
+        assert_tree_is_consistent(&uri, &mut doc_store);
     }
 }

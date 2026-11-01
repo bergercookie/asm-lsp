@@ -839,7 +839,13 @@ pub fn tree_sitter_logger(log_type: tree_sitter::LogType, message: &str) {
     }
 }
 
-/// Convert an `lsp_types::TextDocumentContentChangeEvent` to a `tree_sitter::InputEdit`
+/// Convert an `lsp_types::TextDocumentContentChangeEvent` to a
+/// `tree_sitter::InputEdit`
+///
+/// `doc` must be the document as it was **before** the change: LSP ranges
+/// refer to that state. tree-sitter counts rows and columns in bytes, while
+/// LSP positions use UTF-16 code units, so the columns are derived from the
+/// byte offsets instead of reusing `start.character`/`end.character`.
 ///
 /// # Errors
 ///
@@ -853,25 +859,39 @@ pub fn text_doc_change_to_ts_edit(
     let start = range.start;
     let end = range.end;
 
-    let start_byte = doc.offset_at(start) as usize;
-    let new_end_byte = start_byte + change.text.len();
-    let new_end_pos = doc.position_at(u32::try_from(new_end_byte)?);
+    let start_byte = doc.offset_at(start);
+    let old_end_byte = doc.offset_at(end);
+    let new_end_byte = start_byte + u32::try_from(change.text.len())?;
+
+    let start_column = start_byte - doc.offset_at(Position::new(start.line, 0));
+    let old_end_column = old_end_byte - doc.offset_at(Position::new(end.line, 0));
+
+    // The inserted text is not part of `doc` yet, so the position at the end
+    // of the insertion has to be derived from the inserted text itself.
+    let (new_end_line, new_end_column) = if let Some(last_newline) = change.text.rfind('\n') {
+        (
+            start.line + u32::try_from(change.text.matches('\n').count())?,
+            u32::try_from(change.text.len() - last_newline - 1)?,
+        )
+    } else {
+        (start.line, start_column + u32::try_from(change.text.len())?)
+    };
 
     Ok(tree_sitter::InputEdit {
-        start_byte,
-        old_end_byte: doc.offset_at(end) as usize,
-        new_end_byte,
+        start_byte: start_byte as usize,
+        old_end_byte: old_end_byte as usize,
+        new_end_byte: new_end_byte as usize,
         start_position: tree_sitter::Point {
             row: start.line as usize,
-            column: start.character as usize,
+            column: start_column as usize,
         },
         old_end_position: tree_sitter::Point {
             row: end.line as usize,
-            column: end.character as usize,
+            column: old_end_column as usize,
         },
         new_end_position: tree_sitter::Point {
-            row: new_end_pos.line as usize,
-            column: new_end_pos.character as usize,
+            row: new_end_line as usize,
+            column: new_end_column as usize,
         },
     })
 }
