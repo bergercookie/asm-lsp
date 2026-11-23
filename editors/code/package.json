@@ -52,11 +52,11 @@
         "@typescript-eslint/eslint-plugin": "^7.1.0",
         "@typescript-eslint/parser": "^7.1.0",
         "@vscode/test-electron": "^2.3.9",
-        "@vscode/vsce": "^2.29.0",
+        "@vscode/vsce": "^4.1.1",
         "esbuild": "^0.23.0",
         "eslint": "^8.57.0",
-        "typescript": "^5.3.3",
-        "prettier": "^3.0.0"
+        "prettier": "^3.0.0",
+        "typescript": "^5.3.3"
     },
     "dependencies": {
         "vscode-languageclient": "^9.0.1"
